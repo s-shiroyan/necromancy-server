@@ -3,7 +3,7 @@ Necromancy - Server
 
 # Setup
 1) Clone the repository  
-`https://github.com/necromancyonline/necromancy-server.git`
+`git clone https://github.com/necromancyonline/necromancy-server.git`
 
 2) Install .Net Core 2.2 or later  
 https://dotnet.microsoft.com/download
