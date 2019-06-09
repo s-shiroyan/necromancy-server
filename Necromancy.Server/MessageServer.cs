@@ -40,9 +40,9 @@ namespace Necromancy.Server
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
                     
-                    // TODO find proto_msg_implement_client::send_base_login
+                    // TODO find network::proto_msg_implement_client::recv_base_login_r
 
-                   // Send(socket, 0xDDEF, res); // network::proto_msg_implement_client::recv_base_check_version_r
+                   // Send(socket, 0xDDEF, res); 
                     break;
                 }
                 default:
