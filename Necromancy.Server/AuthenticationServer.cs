@@ -34,7 +34,7 @@ namespace Necromancy.Server
                     string password = buffer.ReadCString();
                     string macAddress = buffer.ReadCString();
                     int unknown = buffer.ReadInt16();
-                    _logger.Info($"[Login]Account:{accountName} Password:{password} Unknown:{unknown}");
+                    _logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
 
                     // TODO find network::proto_auth_implement_client::recv_base_authenticate_r op code
 
@@ -54,8 +54,7 @@ namespace Necromancy.Server
                     // Send(socket, 0xD773, res);
                     // Send(socket, 0xEA7E, res);
 
-                    
-                    
+
                     // Authentication Server Switch - 0x004DE650
                     // OP Codes:
                     //848c proto_auth_implement_client::recv_base_select_world_r()
@@ -81,7 +80,7 @@ namespace Necromancy.Server
                 }
                 default:
                 {
-                    _logger.Error($"[Login]OPCode: {opCode} not handled");
+                    _logger.Error($"OPCode: {opCode} not handled");
                     break;
                 }
             }
