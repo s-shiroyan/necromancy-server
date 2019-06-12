@@ -24,6 +24,51 @@ namespace Necromancy.Server
     /// 8D24 - 853F
     /// 8D24 - 853F - 0637
     /// 8D24 - 853F - 0637 - 003B
+    ///
+    /// D6AD
+    /// C680
+    /// C003
+    /// BA8B
+    /// BD6B
+    /// BE62
+    ///
+    /// EFDD
+    /// E2BE
+    /// D6ED
+    /// D6ED - 2EA
+    /// D6ED - 2EA - 48
+    ///
+    /// F8B4
+    /// F2C3
+    /// F5BF
+    /// F7F0
+    ///
+    /// F94C
+    /// FC36
+    ///
+    /// E4DE
+    /// EB6E
+    /// EEB6
+    /// 
+    /// D0AC
+    /// D0AC - C8D0
+    /// D0AC - C8D0 - 2
+    /// D0AC - C8D0 - 2 - BF
+    ///
+    /// D1A8
+    /// D2D6
+    ///
+    /// C1E6
+    /// C561
+    /// C5F1
+    ///
+    /// A535
+    /// 9D6A
+    /// 9D6A - 9AD4
+    /// 9D6A - 9AD4 - 12A
+    /// 9D6A - 9AD4 - 12A - 7F
+    /// 
+    /// 
     /// </summary>
     public class MessageServer : NecromancyServer
     {
@@ -62,7 +107,7 @@ namespace Necromancy.Server
                     res.WriteInt32(0);
                     
                     Send(socket, 0x1C83, res);
-                    //TODO find proto_msg_implement_client::send_base_login
+                    //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
                 default:
