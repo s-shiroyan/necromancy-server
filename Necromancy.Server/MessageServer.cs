@@ -12,14 +12,14 @@ namespace Necromancy.Server
     /// 0x01C6 proto_msg_implement_client::recv_union_request_set_info_r (0x19C + 0x2A)
     /// 0x01C9 proto_msg_implement_client::recv_chara_select_back_r (0x19C + 0x2A + 0x3)
     /// 0x0482 proto_msg_implement_client::recv_chara_select_r
-    /// 0x06FF
-    /// 0x0763 (0x6FF + 0x64)
-    /// 0x087D
-    /// 0x0AD3 (0x6FF + 0x64 + 0x370)
-    /// 0x0C87
-    /// 0x0E51
+    /// 0x06FF proto_msg_implement_client::recv_cash_buy_premium_r
+    /// 0x0763 proto_msg_implement_client::recv_soul_create_r (0x6FF + 0x64)
+    /// 0x0AD3 proto_msg_implement_client::recv_party_notify_update_job (0x6FF + 0x64 + 0x370)
+    /// 0x0B7D proto_msg_implement_client::recv_friend_request_load_r
+    /// 0x0C87 proto_msg_implement_client::recv_party_notify_update_pos
+    /// 0x0E51 proto_msg_implement_client::recv_party_notify_update_deadstate
     /// 
-    /// 0x1421
+    /// 0x1421 proto_msg_implement_client::recv_party_notify_update_ac
     /// 0x1688
     /// 0x1817 (0x1817)
     /// 0x182B (0x1817 + 0x14)
@@ -186,7 +186,7 @@ namespace Necromancy.Server
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
                     res.WriteInt32(0xABCDEFAB);
-                    Send(socket, 0x0482, res);
+                    Send(socket, 0x1421, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
