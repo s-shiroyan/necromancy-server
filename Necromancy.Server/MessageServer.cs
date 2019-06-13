@@ -98,7 +98,7 @@ namespace Necromancy.Server
     /// 0x9AD1 proto_msg_implement_client::recv_chara_delete_r 00 06 D1 9A 00 00 00 00
     /// 0x9AD4
     /// 0x9BFE (0x9AD4 + 0x12A)
-    /// 0x9C7D (0x9AD4 + 0x12A + 0x7F)
+    /// 0x9C7D (0x9AD4 + 0x12A + 0x7F) network::proto_msg_implement_client::recv_party_notify_update_level
     /// 0x9D6A
     /// 0x9DE2
     /// 0x9E49 (0x9DE2 + 0x67)
@@ -186,7 +186,7 @@ namespace Necromancy.Server
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
                     res.WriteInt32(0);
-                    Send(socket, 0x1935, res);
+                    Send(socket, 0x9C7D, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
