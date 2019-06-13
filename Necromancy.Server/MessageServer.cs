@@ -21,26 +21,26 @@ namespace Necromancy.Server
     /// 
     /// 0x1421 proto_msg_implement_client::recv_party_notify_update_ac
     /// 0x1688 proto_msg_implement_client::recv_easy_friend_notify_member_state
-    /// 0x1817 (0x1817)
-    /// 0x182B (0x1817 + 0x14)
+    /// 0x1817 (0x1817) ----tested all the way to 64 bytes, no string found----
+    /// 0x182B (0x1817 + 0x14) proto_msg_implement_client::recv_party_notify_dead 00 06 2B 18 00 00 00 00
     /// 0x1935 proto_msg_implement_client::recv_union_request_news_r (0x1817 + 0x14 + 0x10A)
     /// 0x1AF3 proto_msg_implement_client::recv_party_notify_update_map 00 0A F3 1A 00 00 00 00 00 00 00 00
-    /// 0x1D09
-    /// 0x1DC4
-    /// 0x1E68
-    /// 0x1EC8
+    /// 0x1D09 proto_msg_implement_client::recv_party_notify_update_body_pos 00 13 09 1D 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    /// 0x1DC4 proto_msg_implement_client::recv_party_notify_get_money 00 0E C4 1D 00 00 00 00 00 00 00 00 00 00 00 00
+    /// 0x1E68 proto_msg_implement_client::recv_union_request_secede_r 00 06 68 1E 00 00 00 00
+    /// 0x1EC8 proto_msg_implement_client::recv_chara_get_inheritinfo_r 00 1F C8 1E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     /// 
     /// 0x213A proto_msg_implement_client::recv_friend_reply_to_link_r
     /// 0x2C1C
     /// 0x2D92 proto_msg_implement_client::recv_party_notify_update_maxhp
     /// 0x2E98
     /// 
-    /// 0x31B4
-    /// 0x32FA (0x31B4 + 0x146)
-    /// 0x3310 (0x31B4 + 0x146 + 0x16)
-    /// 0x3784
-    /// 0x392F
-    /// 0x3B93
+    /// 0x31B4 proto_msg_implement_client::recv_party_notify_update_premium_service_notify_flag 00 07 B4 31 00 00 00 00 00
+    /// 0x32FA (0x31B4 + 0x146) proto_msg_implement_client::recv_party_notify_cancel_application (no structure)
+    /// 0x3310 (0x31B4 + 0x146 + 0x16) proto_msg_implement_client::recv_chara_get_list_r 00 0A 10 33 00 00 00 00 00 00 00 00
+    /// 0x3784 proto_msg_implement_client::recv_chara_notify_data_complete 00 0F 84 37 00 00 00 00 00 00 00 00 00 00 00 00 00
+    /// 0x392F proto_msg_implement_client::recv_union_reply_to_invite_r 00 0A 2F 39 00 00 00 00 00 00 00 00
+    /// 0x3B93 proto_msg_implement_client::recv_soul_update_premium_flags 00 0A 93 3B 00 00 00 00 00 00 00 00
     ///
     /// 0x4090 proto_msg_implement_client::recv_party_notify_update_map 00 13 90 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     /// 0x4426
@@ -66,9 +66,9 @@ namespace Necromancy.Server
     /// 0x6C94 proto_msg_implement_client::recv_chara_draw_bonuspoint_r
     ///
     /// 0x7205
-    /// 0x73D7
+    /// 0x73D7 proto_msg_implement_client::recv_cpf_notify_error (no structure)
     /// 0x7566
-    /// 0x755C
+    /// 0x755C proto_msg_implement_client::recv_union_notify_info 00 07 5C 75 00 00 00 00 00
     /// 0x7A60
     /// 0x7AC9 (0x7A60 + 0x69)
     /// 0x7C40 (0x7A60 + 0x69 + 0x177)
@@ -88,13 +88,13 @@ namespace Necromancy.Server
     /// 0x8EEE proto_msg_implement_client::recv_party_notify_decline_to_apply
     /// 0x8FB2 proto_msg_implement_client::recv_friend_notify_cancel_link
     ///
-    /// 0x91EE
+    /// 0x91EE proto_msg_implement_client::recv_chara_select_back_soul_select_r 00 06 EE 91 00 00 00 00
     /// 0x95E6
     /// 0x95FE proto_msg_implement_client::recv_party_notify_remove_member
     /// 0x96DB proto_msg_implement_client::recv_party_notify_update_maxap
     /// 0x9A9B
     /// 0x9AD1 proto_msg_implement_client::recv_chara_delete_r 00 06 D1 9A 00 00 00 00
-    /// 0x9AD4
+    /// 0x9AD4 proto_msg_implement_client::recv_party_notify_raise 00 06 D4 9A 00 00 00 00
     /// 0x9BFE proto_msg_implement_client::recv_friend_request_delete_friend_r (0x9AD4 + 0x12A) 
     /// 0x9C7D proto_msg_implement_client::recv_party_notify_update_level (0x9AD4 + 0x12A + 0x7F) 
     /// 0x9D6A
@@ -112,8 +112,8 @@ namespace Necromancy.Server
     /// 0xB2B7 proto_msg_implement_client::recv_soul_set_passwd_r
     /// 0xBA73 proto_msg_implement_client::recv_cpf_authentication 00 06 73 BA 00 00 00 00
     /// 0xBA8B
-    /// 0xBD6B
-    /// 0xBE62
+    /// 0xBD6B proto_msg_implement_client::recv_friend_request_link_target_r 00 0A 6B BD 00 00 00 00 00 00 00 00
+    /// 0xBE62 proto_msg_implement_client::recv_cash_get_url_r 00 07 62 BE 00 00 00 00 00
     ///
     /// 0xC003
     /// 0xC1E6 proto_msg_implement_client::recv_easy_friend_notify_delete_member 00 06 E6 C1 00 00 00 00
@@ -150,7 +150,9 @@ namespace Necromancy.Server
     /// 0x5705 proto_msg_implement_client::send_base_check_version
     /// 0xA53D proto_msg_implement_client::send_base_login
     /// 0xCE74 proto_msg_implement_client::send_soul_create
-    /// 
+    /// 0x7E62 proto_msg_implement_client::send_chara_get_createinfo
+    /// 0x733E proto_msg_implement_client::send_cash_get_url_common
+    /// 0x5208 proto_msg_implement_client::send_soul_delete
     /// </summary>
     public class MessageServer : NecromancyServer
     {
@@ -184,9 +186,11 @@ namespace Necromancy.Server
                 case 0xA53D: //network::proto_msg_implement_client::send_base_login
                 {
                     IBuffer res = new StreamBuffer();
-                    res.WriteInt32(0);
-                    res.WriteInt32(0xABCDEFAB);
-                    Send(socket, 0x853F, res);
+                    //res.WriteInt32(1); //0x831C
+                    //res.WriteInt32(0);
+                    for(int i = 0; i < 44; i++)
+                        res.WriteByte(0);
+                    Send(socket, 0x2C1C, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
