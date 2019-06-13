@@ -6,18 +6,24 @@ namespace Necromancy.Server
     /// <summary>
     /// Necromancy Authentication Server
     /// 
-    /// OP Codes: (Authentication Server Switch: 0x004DE650)
-    /// 848c proto_auth_implement_client::recv_base_select_world_r()
-    /// 174a proto_auth_implement_client::recv_base_authenticate_soe_r()
-    /// 0a53 proto_auth_implement_client::recv_base_authenticate_hangame_r
-    /// 15c7 proto_auth_implement_client::recv_base_authenticate_r
-    /// d2d6 proto_auth_implement_client::recv_base_ping_r
-    /// b717 proto_auth_implement_client::recv_base_get_worldlist_r
-    /// ba73 proto_auth_implement_client::recv_cpf_authenticate
-    /// ec0a proto_auth_implement_client::recv_base_check_version2_r
-    /// efdd proto_auth_implement_client::recv_base_check_version_r
-    /// 73d7 proto_auth_implement_client::recv_cpf_notify_error
-    /// 7eea proto_auth_implement_client::recv_base_authenticate_soe_sessionid
+    /// Recv OP Codes: (Authentication Server Switch: 0x004DE650)
+    /// 0x848C proto_auth_implement_client::recv_base_select_world_r
+    /// 0x174A proto_auth_implement_client::recv_base_authenticate_soe_r
+    /// 0x0A53 proto_auth_implement_client::recv_base_authenticate_hangame_r
+    /// 0x15C7 proto_auth_implement_client::recv_base_authenticate_r
+    /// 0xD2D6 proto_auth_implement_client::recv_base_ping_r
+    /// 0xB717 proto_auth_implement_client::recv_base_get_worldlist_r
+    /// 0xBA73 proto_auth_implement_client::recv_cpf_authenticate
+    /// 0xEC0A proto_auth_implement_client::recv_base_check_version2_r
+    /// 0xEFDD proto_auth_implement_client::recv_base_check_version_r
+    /// 0x73D7 proto_auth_implement_client::recv_cpf_notify_error
+    /// 0x7EEA proto_auth_implement_client::recv_base_authenticate_soe_sessionid
+    ///
+    /// Send OP Codes:
+    /// 0x5705 network::proto_auth_implement_client::send_base_check_version
+    /// 0xAD93 network::proto_auth_implement_client::send_base_authenticate
+    /// 0x53CF network::proto_auth_implement_client::send_base_get_worldlist
+    /// 0x203F network::proto_auth_implement_client::send_base_select_world
     /// </summary>
     public class AuthenticationServer : NecromancyServer
     {
