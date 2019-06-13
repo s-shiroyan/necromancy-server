@@ -39,7 +39,7 @@ namespace Necromancy.Server
             IBuffer buffer = new StreamBuffer();
             buffer.SetPositionStart();
             buffer.WriteInt16(size, Endianness.Big);
-            buffer.WriteInt16(opCode, Endianness.Big);
+            buffer.WriteInt16(opCode);
             buffer.WriteBytes(payload);
             socket.Send(buffer.GetAllBytes());
             PacketLogOut(buffer);
@@ -69,7 +69,7 @@ namespace Necromancy.Server
         {
             packet.SetPositionStart();
             ushort size = packet.ReadUInt16(Endianness.Big);
-            ushort opCode = packet.ReadUInt16(Endianness.Big);
+            ushort opCode = packet.ReadUInt16();
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("Packet Log:");
             sb.AppendLine($"[Type:{tag}][TotalSize:{packet.Size}] Header:[Size:{size}][OPCode:{opCode}]");
