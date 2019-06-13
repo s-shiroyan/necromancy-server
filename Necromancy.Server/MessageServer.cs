@@ -30,7 +30,7 @@ namespace Necromancy.Server
     /// 0x8D24 - (0x853F + 0x637 + 0x3B) = 0x8BB1
     ///
     /// 0xD6AD
-    /// 0xC680
+    /// 0xC680 = proto_msg_implement_client::recv_chara_create_r 00 0A 80 C6 00 00 00 00 00 00 00 00
     /// 0xC003
     /// 0xBA8B
     /// 0xBD6B
@@ -43,27 +43,27 @@ namespace Necromancy.Server
     /// 0xD6ED - (0x2EA + 0x48) = 0x332
     ///
     /// 0xF8B4 = network::proto_msg_implement_client::recv_system_notify_announce  00 04 B4 F8 00 00
-    /// 0xF2C3
-    /// 0xF5BF
-    /// 0xF7F0
+    /// 0xF2C3 = proto_msg_implement_client::recv_party_notify_update_soulrank 00 07 C3 F2 00 00 00 00 00
+    /// 0xF5BF = proto_msg_implement_client::recv_union_request_member_priv_r 00 06 BF F5 00 00 00 00
+    /// 0xF7F0 = proto_msg_implement_client::recv_party_notify_get_item 00 08 F0 F7 00 00 00 00 00 00
     ///
     /// 0xF94C
-    /// 0xFC36
+    /// 0xFC36 = proto_msg_implement_client::recv_party_notify_update_dragon 00 07 36 FC 00 00 00 00 00
     ///
-    /// 0xE4DE
-    /// 0xEB6E
-    /// 0xEEB6
+    /// 0xE4DE = proto_msg_implement_client::recv_union_request_expel_member_r 00 06 DE E4 00 00 00 00
+    /// 0xEB6E = proto_msg_implement_client::recv_system_register_error_report_r 00 06 6E EB 00 00 00 00
+    /// 0xEEB6 = proto_msg_implement_client::recv_party_notify_update_hp 00 0A B6 EE 00 00 00 00 00 00 00 00
     /// 
     /// 0xD0AC
     /// 0xD0AC - (0xC8D0) = 0xC8D0
     /// 0xD0AC - (0xC8D0 + 0x2) = 0xC8D2
     /// 0xD0AC - (0xC8D0 + 0x2 + 0xBF) = 0xC991
     ///
-    /// 0xD1A8
+    /// 0xD1A8 = proto_msg_implement_client::recv_party_notify_change_mode 00 06 A8 D1 00 00 00 00
     /// 0xD2D6
     ///
-    /// 0xC1E6
-    /// 0xC561
+    /// 0xC1E6 = proto_msg_implement_client::recv_easy_friend_notify_delete_member 00 06 E6 C1 00 00 00 00
+    /// 0xC561 = proto_msg_implement_client::recv_soul_select_r 00 07 61 C5 00 00 00 00 00
     /// 0xC5F1
     ///
     /// 0xA535
