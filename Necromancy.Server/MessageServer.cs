@@ -136,7 +136,7 @@ namespace Necromancy.Server
     /// 0xE4DE proto_msg_implement_client::recv_union_request_expel_member_r 00 06 DE E4 00 00 00 00
     /// 0xEB6E proto_msg_implement_client::recv_system_register_error_report_r 00 06 6E EB 00 00 00 00
     /// 0xEEB6 proto_msg_implement_client::recv_party_notify_update_hp 00 0A B6 EE 00 00 00 00 00 00 00 00
-    /// 0xEFDD
+    /// 0xEFDD proto_msg_implement_client::recv_base_check_version_r
     /// 
     /// 0xF2C3 proto_msg_implement_client::recv_party_notify_update_soulrank 00 07 C3 F2 00 00 00 00 00
     /// 0xF5BF proto_msg_implement_client::recv_union_request_member_priv_r 00 06 BF F5 00 00 00 00
@@ -147,6 +147,9 @@ namespace Necromancy.Server
     ///
     /// Send OP:
     /// 0xF56C proto_msg_implement_client::send_chara_get_list
+    /// 0x5705 proto_msg_implement_client::send_base_check_version
+    /// 0xA53D proto_msg_implement_client::send_base_login
+    /// 0xCE74 proto_msg_implement_client::send_soul_create
     /// 
     /// </summary>
     public class MessageServer : NecromancyServer
