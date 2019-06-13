@@ -168,7 +168,7 @@ namespace Necromancy.Server
             buffer.SetPositionStart();
 
             int size = buffer.ReadInt16(Endianness.Big);
-            int opCode = buffer.ReadInt16();
+            int opCode = buffer.ReadUInt16();
 
             switch (opCode)
             {
