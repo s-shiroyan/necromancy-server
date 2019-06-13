@@ -25,7 +25,7 @@ namespace Necromancy.Server
     /// 0x1688
     /// 0x1817 (0x1817)
     /// 0x182B (0x1817 + 0x14)
-    /// 0x1935 network::proto_msg_implement_client::recv_union_request_news_r (0x1817 + 0x14 + 0x10A)
+    /// 0x1935 proto_msg_implement_client::recv_union_request_news_r (0x1817 + 0x14 + 0x10A)
     /// 0x1AF3 proto_msg_implement_client::recv_party_notify_update_map 00 0A F3 1A 00 00 00 00 00 00 00 00
     /// 0x1D09
     /// 0x1DC4
@@ -97,8 +97,8 @@ namespace Necromancy.Server
     /// 0x9A9B
     /// 0x9AD1 proto_msg_implement_client::recv_chara_delete_r 00 06 D1 9A 00 00 00 00
     /// 0x9AD4
-    /// 0x9BFE (0x9AD4 + 0x12A)
-    /// 0x9C7D (0x9AD4 + 0x12A + 0x7F) network::proto_msg_implement_client::recv_party_notify_update_level
+    /// 0x9BFE proto_msg_implement_client::recv_friend_request_delete_friend_r (0x9AD4 + 0x12A) 
+    /// 0x9C7D proto_msg_implement_client::recv_party_notify_update_level (0x9AD4 + 0x12A + 0x7F) 
     /// 0x9D6A
     /// 0x9DE2
     /// 0x9E49 (0x9DE2 + 0x67)
@@ -141,7 +141,7 @@ namespace Necromancy.Server
     /// 0xF2C3 proto_msg_implement_client::recv_party_notify_update_soulrank 00 07 C3 F2 00 00 00 00 00
     /// 0xF5BF proto_msg_implement_client::recv_union_request_member_priv_r 00 06 BF F5 00 00 00 00
     /// 0xF7F0 proto_msg_implement_client::recv_party_notify_get_item 00 08 F0 F7 00 00 00 00 00 00
-    /// 0xF8B4 network::proto_msg_implement_client::recv_system_notify_announce  00 04 B4 F8 00 00
+    /// 0xF8B4 proto_msg_implement_client::recv_system_notify_announce  00 04 B4 F8 00 00
     /// 0xF94C proto_msg_implement_client::recv_union_result_reply_invitat2
     /// 0xFC36 proto_msg_implement_client::recv_party_notify_update_dragon 00 07 36 FC 00 00 00 00 00
     ///
@@ -186,7 +186,7 @@ namespace Necromancy.Server
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
                     res.WriteInt32(0);
-                    Send(socket, 0x9C7D, res);
+                    Send(socket, 0x9BFE, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
