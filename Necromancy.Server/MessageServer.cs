@@ -8,12 +8,10 @@ namespace Necromancy.Server
     /// 
     /// Recv OP Codes: (Authentication Server Switch: 0x004E4210)
     ///
-    /// 0x019C
-    /// 0x01C6 (0x19C + 0x2A)
-    /// 0x01C9 (0x19C + 0x2A + 0x3)
-    /// 0x02EA
-    /// 0x0332 (0x2EA + 0x48)
-    /// 0x0482
+    /// 0x019C proto_msg_implement_client::recv_union_request_invite_target_r
+    /// 0x01C6 proto_msg_implement_client::recv_union_request_set_info_r (0x19C + 0x2A)
+    /// 0x01C9 proto_msg_implement_client::recv_chara_select_back_r (0x19C + 0x2A + 0x3)
+    /// 0x0482 proto_msg_implement_client::recv_chara_select_r
     /// 0x06FF
     /// 0x0763 (0x6FF + 0x64)
     /// 0x087D
@@ -80,8 +78,8 @@ namespace Necromancy.Server
     /// 
     /// 0x831C
     /// 0x853F
-    /// 0x8B76 - (0x853F + 0x637)
-    /// 0x8BB1 - (0x853F + 0x637 + 0x3B)
+    /// 0x8B76 (0x853F + 0x637)
+    /// 0x8BB1 (0x853F + 0x637 + 0x3B)
     /// 0x8D24
     /// 0x8D52 (0x8D3A + 0x18)
     /// 0x8D74 (0x8D3A + 0x18 + 0x22)
@@ -131,6 +129,8 @@ namespace Necromancy.Server
     /// 0xD2D6
     /// 0xD6AD
     /// 0xD6ED proto_msg_implement_client::recv_party_notify_cancel_invitation 00 02 ED D6
+    /// 0xD9D7 (0xD6ED + 0x2EA)
+    /// 0xDA1F (0xD6ED + 0x2EA + 0x48)
     /// 
     /// 0xE2BE proto_msg_implement_client::recv_cash_update_r 00 0A BE E2 00 00 00 00 00 00 00 00
     /// 0xE4DE proto_msg_implement_client::recv_union_request_expel_member_r 00 06 DE E4 00 00 00 00
@@ -185,8 +185,8 @@ namespace Necromancy.Server
                 {
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
-                    res.WriteInt32(0);
-                    Send(socket, 0x9BFE, res);
+                    res.WriteInt32(0xABCDEFAB);
+                    Send(socket, 0x0482, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
