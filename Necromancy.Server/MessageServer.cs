@@ -20,7 +20,7 @@ namespace Necromancy.Server
     /// 0x0E51 proto_msg_implement_client::recv_party_notify_update_deadstate
     /// 
     /// 0x1421 proto_msg_implement_client::recv_party_notify_update_ac
-    /// 0x1688
+    /// 0x1688 proto_msg_implement_client::recv_easy_friend_notify_member_state
     /// 0x1817 (0x1817)
     /// 0x182B (0x1817 + 0x14)
     /// 0x1935 proto_msg_implement_client::recv_union_request_news_r (0x1817 + 0x14 + 0x10A)
@@ -77,7 +77,7 @@ namespace Necromancy.Server
     /// 0x7F64 proto_msg_implement_client::recv_union_notify_expelled_member
     /// 
     /// 0x831C
-    /// 0x853F
+    /// 0x853F proto_msg_implement_client::recv_union_request_change_role_r
     /// 0x8B76 (0x853F + 0x637)
     /// 0x8BB1 (0x853F + 0x637 + 0x3B)
     /// 0x8D24
@@ -186,7 +186,7 @@ namespace Necromancy.Server
                     IBuffer res = new StreamBuffer();
                     res.WriteInt32(0);
                     res.WriteInt32(0xABCDEFAB);
-                    Send(socket, 0x1421, res);
+                    Send(socket, 0x853F, res);
                     //TODO find network::proto_msg_implement_client::recv_base_login_r
                     break;
                 }
