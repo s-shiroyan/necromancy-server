@@ -1,7 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Networking.Tcp;
-
-namespace Necromancy.Server
+namespace Necromancy.Server.Packet.Id
 {
     /// <summary>
     /// Necromancy Message Server
@@ -154,70 +151,14 @@ namespace Necromancy.Server
     /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// 0x5208 proto_msg_implement_client::send_soul_delete
     /// </summary>
-    public class MessageServer : NecromancyServer
+    public enum MsgPacketId : ushort
     {
-        public override void OnReceivedData(ITcpSocket socket, byte[] data)
-        {
-            IBuffer buffer = new StreamBuffer(data);
-            PacketLogIn(buffer);
-            buffer.SetPositionStart();
-
-            int size = buffer.ReadInt16(Endianness.Big);
-            int opCode = buffer.ReadUInt16();
-
-            switch (opCode)
-            {
-                case 0x5705: //network::proto_msg_implement_client::send_base_check_version
-                {
-                    uint unknown = buffer.ReadUInt32();
-                    uint major = buffer.ReadUInt32();
-                    uint minor = buffer.ReadUInt32();
-                    _logger.Info($"{major} - {minor}");
-                    IBuffer res = new StreamBuffer();
-
-                    res.WriteInt32(0);
-                    res.WriteInt32(unknown);
-                    res.WriteInt32(major);
-                    res.WriteInt32(minor);
-
-                    Send(socket, 0xEFDD, res); //network::proto_msg_implement_client::recv_base_check_version_r
-                    break;
-                }
-                case 0xA53D: //network::proto_msg_implement_client::send_base_login
-                {
-                    IBuffer res = new StreamBuffer();
-                    //res.WriteInt32(1); //0x831C
-                    //res.WriteInt32(0);
-                    for(int i = 0; i < 8; i++)
-                        res.WriteByte(0);
-                    Send(socket, 0xA68E, res);
-                    //TODO find network::proto_msg_implement_client::recv_base_login_r
-                    break;
-                }
-                case 0xCE74: //network::proto_msg_implement_client::send_soul_create
-                {
-                    byte unknown = buffer.ReadByte();
-                    string soulName = buffer.ReadCString();
-                    _logger.Error($"Created SoulName: {soulName}");
-                    break;
-                }
-                default:
-                {
-                    _logger.Error($"OPCode: {opCode} not handled");
-                    break;
-                }
-            }
-        }
-
-        private void send__recv_chara_create_r(ITcpSocket socket)
-        {
-            IBuffer res = new StreamBuffer();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            Send(socket, 0xC680, res); //proto_msg_implement_client::recv_chara_create_r
-        }
+        send_base_check_version = 0x5705,
+        recv_base_check_version_r = 0xEFDD,
+        send_base_login = 0xA53D,
+        recv_base_login_r = 0xA68E,
+        recv_soul_select_r = 0xC561,
+        send_soul_select = 0xC44F,
+        send_soul_create = 0xCE74
     }
 }

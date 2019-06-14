@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Net;
 using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Setting;
 
 namespace Necromancy.Server
 {
@@ -14,18 +14,16 @@ namespace Necromancy.Server
         public Program()
         {
             _consoleLock = new object();
+            NecSetting setting = new NecSetting();
+
+            LogProvider.Configure<NecLogger>(setting);
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
-            AsyncEventServer auth = new AsyncEventServer(IPAddress.Any, 60000, new AuthenticationServer());
-            AsyncEventServer msg = new AsyncEventServer(IPAddress.Any, 60001, new MessageServer());
-            AsyncEventServer area = new AsyncEventServer(IPAddress.Any, 60002, new AreaServer());
-            auth.Start();
-            msg.Start();
-            area.Start();
+
+            NecServer server = new NecServer(setting);
+            server.Start();
             Console.WriteLine("Press any key to exit..");
             Console.ReadKey();
-            auth.Stop();
-            msg.Stop();
-            area.Stop();
+            server.Stop();
         }
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)
@@ -45,14 +43,14 @@ namespace Necromancy.Server
             }
 
             object tag = logWriteEventArgs.Log.Tag;
-            if (tag is string)
+            if (tag is NecLogType)
             {
                 switch (tag)
                 {
-                    case "IN":
+                    case NecLogType.In:
                         consoleColor = ConsoleColor.Green;
                         break;
-                    case "OUT":
+                    case NecLogType.Out:
                         consoleColor = ConsoleColor.Blue;
                         break;
                 }
