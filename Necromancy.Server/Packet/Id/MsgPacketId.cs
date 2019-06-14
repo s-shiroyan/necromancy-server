@@ -18,8 +18,8 @@ namespace Necromancy.Server.Packet.Id
     /// 
     /// 0x1421 proto_msg_implement_client::recv_party_notify_update_ac
     /// 0x1688 proto_msg_implement_client::recv_easy_friend_notify_member_state
-    /// 0x1817 (0x1817) ----tested all the way to 64 bytes, no string found----
-    /// 0x182B (0x1817 + 0x14) proto_msg_implement_client::recv_party_notify_dead 00 06 2B 18 00 00 00 00
+    /// 0x1817 proto_msg_implement_client::recv_friend_notify_add_member_r
+    /// 0x182B proto_msg_implement_client::recv_party_notify_dead (0x1817 + 0x14) 
     /// 0x1935 proto_msg_implement_client::recv_union_request_news_r (0x1817 + 0x14 + 0x10A)
     /// 0x1AF3 proto_msg_implement_client::recv_party_notify_update_map 00 0A F3 1A 00 00 00 00 00 00 00 00
     /// 0x1D09 proto_msg_implement_client::recv_party_notify_update_body_pos 00 13 09 1D 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
@@ -28,9 +28,9 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1EC8 proto_msg_implement_client::recv_chara_get_inheritinfo_r 00 1F C8 1E 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
     /// 
     /// 0x213A proto_msg_implement_client::recv_friend_reply_to_link_r
-    /// 0x2C1C
+    /// 0x2C1C proto_msg_implement_client::recv_party_notify_add_member
     /// 0x2D92 proto_msg_implement_client::recv_party_notify_update_maxhp
-    /// 0x2E98
+    /// 0x2E98 proto_msg_implement_client::recv_party_notify_attach_buff
     /// 
     /// 0x31B4 proto_msg_implement_client::recv_party_notify_update_premium_service_notify_flag 00 07 B4 31 00 00 00 00 00
     /// 0x32FA (0x31B4 + 0x146) proto_msg_implement_client::recv_party_notify_cancel_application (no structure)
@@ -40,19 +40,19 @@ namespace Necromancy.Server.Packet.Id
     /// 0x3B93 proto_msg_implement_client::recv_soul_update_premium_flags 00 0A 93 3B 00 00 00 00 00 00 00 00
     ///
     /// 0x4090 proto_msg_implement_client::recv_party_notify_update_map 00 13 90 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    /// 0x4426
+    /// 0x4426 proto_msg_implement_client::recv_cash_get_url_commerce_r
     /// 0x4CD5 proto_msg_implement_client::recv_party_notify_accept_to_apply
     ///
     /// 0x51EB proto_msg_implement_client::recv_union_request_detail_r
-    /// 0x5315
+    /// 0x5315 proto_msg_implement_client::recv_union_notify_joined_member
     /// 0x5386 proto_msg_implement_client::recv_refusallist_notify_remove_user_souldelete
     /// 0x542B proto_msg_implement_client::recv_party_notify_change_leader
     /// 0x557F proto_msg_implement_client::recv_union_request_set_mantle_r
-    /// 0x55FF
-    /// 0x5625
+    /// 0x55FF proto_msg_implement_client::recv_party_notify_update_ap
+    /// 0x5652 proto_msg_implement_client::recv_soul_authenticate_passwd_r
     /// 0x58F8
     /// 0x5B32 proto_msg_implement_client::recv_soul_delete_r
-    /// 0x5B94
+    /// 0x5B94 proto_msg_implement_client::recv_union_notify_growth
     /// 0x5D93 proto_msg_implement_client::recv_party_notify_cancel_recruit
     /// 0x5F0A proto_msg_implement_client::recv_union_request_disband_r
     /// 0x5F9A proto_msg_implement_client::recv_party_notify_disband
@@ -104,7 +104,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xA68E proto_msg_implement_client::recv_base_login_r
     /// 0xA878 proto_msg_implement_client::recv_union_notify_mantle
     /// 0xAAB5 proto_msg_implement_client::recv_union_notify_invite
-    /// 0xAF33
+    /// 0xAF33 proto_msg_implement_client::recv_chara_get_createinfo_r
     ///
     /// 0xB2B7 proto_msg_implement_client::recv_soul_set_passwd_r
     /// 0xBA73 proto_msg_implement_client::recv_cpf_authentication 00 06 73 BA 00 00 00 00
@@ -118,12 +118,12 @@ namespace Necromancy.Server.Packet.Id
     /// 0xC5F1
     /// 0xC680 proto_msg_implement_client::recv_chara_create_r 00 0A 80 C6 00 00 00 00 00 00 00 00
     /// 0xC8D0
-    /// 0xC8D2 - (0xC8D0 + 0x2)
+    /// 0xC8D2 proto_msg_implement_client::recv_chara_select_back_r (0xC8D0 + 0x2)
     /// 0xC991 - (0xC8D0 + 0x2 + 0xBF)
     ///
     /// 0xD0AC
     /// 0xD1A8 proto_msg_implement_client::recv_party_notify_change_mode 00 06 A8 D1 00 00 00 00
-    /// 0xD2D6
+    /// 0xD2D6 proto_msg_implement_client::recv_cash_get_url_r
     /// 0xD6AD
     /// 0xD6ED proto_msg_implement_client::recv_party_notify_cancel_invitation 00 02 ED D6
     /// 0xD9D7 (0xD6ED + 0x2EA)
