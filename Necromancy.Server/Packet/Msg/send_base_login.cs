@@ -19,12 +19,12 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
 
             res.WriteByte(1);
-            res.WriteFixedString("ABCDEFGHIJKLMNOP", 49);
+            res.WriteFixedString("Soul 1", 49);
             res.WriteByte(0xEE);
             res.WriteByte(0);
 
             res.WriteByte(2);
-            res.WriteFixedString("ABCDEFGHIJKLMNOP", 49);
+            res.WriteFixedString("Soul 2", 49);
             res.WriteByte(0xEE);
             res.WriteByte(0);
 

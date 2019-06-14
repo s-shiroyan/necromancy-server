@@ -150,6 +150,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x7E62 proto_msg_implement_client::send_chara_get_createinfo
     /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// 0x5208 proto_msg_implement_client::send_soul_delete
+    ///        proto_msg_implement_client::send_soul_set_passwd
     /// </summary>
     public enum MsgPacketId : ushort
     {
