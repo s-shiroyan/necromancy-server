@@ -2,6 +2,7 @@ using System;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Logging
 {
@@ -13,7 +14,7 @@ namespace Necromancy.Server.Logging
             Identity = identity;
             Header = packet.Header;
             LogType = logType;
-            TimeStamp = DateTime.UtcNow;
+            TimeStamp = DateTime.Now;
             Client = client;
         }
 
@@ -36,13 +37,20 @@ namespace Necromancy.Server.Logging
             log += Environment.NewLine;
             log += "----------";
             log += Environment.NewLine;
-            log += $"[{TimeStamp:HH:mm:ss}]";
+            log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
             if (Identity != null)
             {
                 log += $"[{Identity}]";
             }
 
-            log += $"[Typ:{LogType}][Id:0x{Id:X2}|{Id}][Len:{Data.Size}][Header:{HeaderHex}]";
+            log += Environment.NewLine;
+            log += $"[Id:0x{Id:X2}|{Id}][Len:{Data.Size}][Header:{HeaderHex}]";
+            string idName = GetIdName();
+            if (idName != null)
+            {
+                log += $"[{idName}]";
+            }
+
             log += Environment.NewLine;
             log += "ASCII:";
             log += Environment.NewLine;
@@ -54,6 +62,29 @@ namespace Necromancy.Server.Logging
             log += Environment.NewLine;
             log += "----------";
             return log;
+        }
+
+        public string GetIdName()
+        {
+            if (Enum.IsDefined(typeof(AuthPacketId), Id))
+            {
+                AuthPacketId authPacketId = (AuthPacketId) Id;
+                return authPacketId.ToString();
+            }
+
+            if (Enum.IsDefined(typeof(MsgPacketId), Id))
+            {
+                MsgPacketId msgPacketId = (MsgPacketId) Id;
+                return msgPacketId.ToString();
+            }
+
+            if (Enum.IsDefined(typeof(AreaPacketId), Id))
+            {
+                AreaPacketId areaPacketId = (AreaPacketId) Id;
+                return areaPacketId.ToString();
+            }
+
+            return null;
         }
     }
 }

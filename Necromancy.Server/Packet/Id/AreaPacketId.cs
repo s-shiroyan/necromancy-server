@@ -1,6 +1,6 @@
 namespace Necromancy.Server.Packet.Id
 {
-    public enum AreaPacketId
+    public enum AreaPacketId : ushort
     {
         
     }
