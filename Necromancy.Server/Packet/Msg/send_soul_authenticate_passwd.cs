@@ -1,6 +1,7 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
@@ -10,10 +11,13 @@ namespace Necromancy.Server.Packet.Msg
         {
         }
 
-        public override ushort Id => (ushort) 0;
+        public override ushort Id => (ushort) MsgPacketId.send_soul_authenticate_passwd;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            string souldPassword = packet.Data.ReadCString();
+            Logger.Info($"Entered Soul Password: {souldPassword}");
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             // res.WriteByte(1);

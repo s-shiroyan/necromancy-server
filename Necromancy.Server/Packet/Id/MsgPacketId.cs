@@ -151,6 +151,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// 0x5208 proto_msg_implement_client::send_soul_delete
     ///        proto_msg_implement_client::send_soul_set_passwd
+    /// 0xB4BB proto_msg_implement_client::send_soul_authenticate_passwd
     /// </summary>
     public enum MsgPacketId : ushort
     {
@@ -160,6 +161,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_login_r = 0xA68E,
         recv_soul_select_r = 0xC561,
         send_soul_select = 0xC44F,
-        send_soul_create = 0xCE74
+        send_soul_create = 0xCE74,
+        send_soul_authenticate_passwd = 0xB4BB
     }
 }
