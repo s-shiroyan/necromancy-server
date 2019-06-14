@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(major);
             res.WriteInt32(minor);
 
-            Router.Send(client, (ushort) 0x5652, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_base_check_version_r, res);
         }
     }
 }

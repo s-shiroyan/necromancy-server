@@ -33,8 +33,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0x2E98 proto_msg_implement_client::recv_party_notify_attach_buff
     /// 
     /// 0x31B4 proto_msg_implement_client::recv_party_notify_update_premium_service_notify_flag 00 07 B4 31 00 00 00 00 00
-    /// 0x32FA (0x31B4 + 0x146) proto_msg_implement_client::recv_party_notify_cancel_application (no structure)
-    /// 0x3310 (0x31B4 + 0x146 + 0x16) proto_msg_implement_client::recv_chara_get_list_r 00 0A 10 33 00 00 00 00 00 00 00 00
+    /// 0x32FA proto_msg_implement_client::recv_party_notify_cancel_application (0x31B4 + 0x146)  (no structure)
+    /// 0x3310 proto_msg_implement_client::recv_chara_get_list_r (0x31B4 + 0x146 + 0x16)  00 0A 10 33 00 00 00 00 00 00 00 00
     /// 0x3784 proto_msg_implement_client::recv_chara_notify_data_complete 00 0F 84 37 00 00 00 00 00 00 00 00 00 00 00 00 00
     /// 0x392F proto_msg_implement_client::recv_union_reply_to_invite_r 00 0A 2F 39 00 00 00 00 00 00 00 00
     /// 0x3B93 proto_msg_implement_client::recv_soul_update_premium_flags 00 0A 93 3B 00 00 00 00 00 00 00 00
@@ -150,7 +150,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x7E62 proto_msg_implement_client::send_chara_get_createinfo
     /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// 0x5208 proto_msg_implement_client::send_soul_delete
-    ///        proto_msg_implement_client::send_soul_set_passwd
     /// 0xB4BB proto_msg_implement_client::send_soul_authenticate_passwd
     /// </summary>
     public enum MsgPacketId : ushort
@@ -162,6 +161,9 @@ namespace Necromancy.Server.Packet.Id
         recv_soul_select_r = 0xC561,
         send_soul_select = 0xC44F,
         send_soul_create = 0xCE74,
-        send_soul_authenticate_passwd = 0xB4BB
+        send_soul_authenticate_passwd = 0xB4BB,
+        recv_soul_authenticate_passwd_r = 0x5652,
+        send_chara_get_list = 0xF56C,
+        recv_chara_get_list_r = 0x3310
     }
 }
