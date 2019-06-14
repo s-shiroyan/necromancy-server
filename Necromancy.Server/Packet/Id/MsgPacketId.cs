@@ -94,8 +94,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0x9AD4 proto_msg_implement_client::recv_party_notify_raise 00 06 D4 9A 00 00 00 00
     /// 0x9BFE proto_msg_implement_client::recv_friend_request_delete_friend_r (0x9AD4 + 0x12A) 
     /// 0x9C7D proto_msg_implement_client::recv_party_notify_update_level (0x9AD4 + 0x12A + 0x7F) 
-    /// 0x9D6A
-    /// 0x9DE2
+    /// 0x9D6A proto_msg_implement_client::recv_chara_select_back_r
+    /// 0x9DE2 proto_msg_implement_client::recv_chara_select_back_r
     /// 0x9E49 (0x9DE2 + 0x67)
     /// 
     /// 0xA0E8 (0x9DE2 + 0x67 + 0x29F)
@@ -151,6 +151,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// 0x5208 proto_msg_implement_client::send_soul_delete
     /// 0xB4BB proto_msg_implement_client::send_soul_authenticate_passwd
+    /// 0x733E proto_msg_implement_client::send_cash_get_url_common
     /// </summary>
     public enum MsgPacketId : ushort
     {
@@ -164,6 +165,9 @@ namespace Necromancy.Server.Packet.Id
         send_soul_authenticate_passwd = 0xB4BB,
         recv_soul_authenticate_passwd_r = 0x5652,
         send_chara_get_list = 0xF56C,
-        recv_chara_get_list_r = 0x3310
+        recv_chara_get_list_r = 0x3310,
+        send_cash_get_url_common = 0x733E,
+        send_chara_get_createinfo = 0x7E62,
+        recv_chara_get_createinfo_r = 0xAF33
     }
 }

@@ -17,10 +17,11 @@ namespace Necromancy.Server.Packet.Msg
         {
             string souldPassword = packet.Data.ReadCString();
             Logger.Info($"Entered Soul Password: {souldPassword}");
-            
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-             Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res);
+            res.WriteByte(0); // 0 = OK | 1 = need to change soul name
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res);
         }
     }
 }
