@@ -53,7 +53,8 @@ namespace Necromancy.Server.Packet.Msg
             //
            
             res.WriteByte(0);
-            res.WriteByte(0);
+            
+            res.WriteByte(2);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);   

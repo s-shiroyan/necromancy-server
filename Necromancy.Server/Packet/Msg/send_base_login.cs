@@ -20,12 +20,12 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);
             res.WriteFixedString("Soul 1", 49);
-            res.WriteByte(0xEE);
+            res.WriteByte(1); // Soul Level
             res.WriteByte(0);
 
             res.WriteByte(2);
             res.WriteFixedString("Soul 2", 49);
-            res.WriteByte(0xEE);
+            res.WriteByte(2); // Soul Level
             res.WriteByte(0);
 
             res.WriteByte(0); // cmp to 1

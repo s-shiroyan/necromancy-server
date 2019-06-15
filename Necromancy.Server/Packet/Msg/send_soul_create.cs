@@ -1,3 +1,5 @@
+using Arrowgene.Services.Buffers;
+using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -16,6 +18,10 @@ namespace Necromancy.Server.Packet.Msg
             byte unknown = packet.Data.ReadByte();
             string soulName = packet.Data.ReadCString();
             Logger.Info($"Created SoulName: {soulName}");
+            
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_create_r, res);
         }
     }
 }

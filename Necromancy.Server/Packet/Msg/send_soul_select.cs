@@ -16,8 +16,8 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteByte(1);
+            res.WriteInt32(0); // 0 = OK | 1 = Failed to Select Soul
+            res.WriteByte(1); // 1 = OK | 0, 2 = set password
             Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res);
         }
     }
