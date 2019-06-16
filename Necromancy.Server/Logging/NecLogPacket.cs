@@ -44,7 +44,7 @@ namespace Necromancy.Server.Logging
             }
 
             log += Environment.NewLine;
-            log += $"[Id:0x{Id:X2}|{Id}][Len:{Data.Size}][Header:{HeaderHex}]";
+            log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
             string idName = GetIdName();
             if (idName != null)
             {

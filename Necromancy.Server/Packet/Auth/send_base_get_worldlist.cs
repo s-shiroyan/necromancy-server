@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Auth
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int numEntries = 4;
+            int numEntries = 7;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(numEntries);
             for (int i = 1; i <= numEntries; i++)
