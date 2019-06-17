@@ -84,6 +84,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_cash_get_url_common(this));
             _msgConsumer.AddHandler(new send_chara_get_createinfo(this));
             _msgConsumer.AddHandler(new send_soul_set_passwd(this));
+            _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
         }
     }
 }

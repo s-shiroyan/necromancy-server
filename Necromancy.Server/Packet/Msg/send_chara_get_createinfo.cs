@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
             res.WriteByte(0); //8
 
-            res.WriteByte(0);
+            res.WriteByte(1);
 
             // 4bytes cmp, 8 -> ja
             res.WriteByte(1);
@@ -113,7 +113,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
 
             //1 byte cmp,1 -> sete (bool)
-            res.WriteByte(3);
+            res.WriteByte(1);
 
 
             for (int i = 0; i < 19; i++)
@@ -129,48 +129,48 @@ namespace Necromancy.Server.Packet.Msg
             for (int i = 0; i < 19; i++)
             {
                 //4bytes
-                res.WriteByte(0);
+                res.WriteByte((byte)i);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
 
                 //4bytes - 004948EE
-                res.WriteByte(0);
+                res.WriteByte(1);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(2);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(3);
 
                 //4bytes
-                res.WriteByte(0);
+                res.WriteByte(1);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
 
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(4);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(5);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(6);
                 // end loop
 
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(3);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(2);
                 // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(0);
+                res.WriteByte(1);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(4);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(3);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(2);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(1);
                 // Read Byte
-                res.WriteByte(0);
+                res.WriteByte(1);
                 // end     
             }
 
@@ -184,7 +184,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             //Read 1 byte
-            res.WriteByte(0);
+            res.WriteByte(1);
 
             //Read 4 byte  cmp,140 -> JA
             res.WriteByte(1); // 0 = no elf , 1 = elf
