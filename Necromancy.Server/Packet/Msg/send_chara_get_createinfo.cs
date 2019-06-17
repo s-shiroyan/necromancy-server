@@ -52,25 +52,25 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
 
             // 4bytes
-            res.WriteByte(2);
+            res.WriteByte(1);
             res.WriteByte(0); //20
             res.WriteByte(0);
             res.WriteByte(0);
 
             // 4bytes
-            res.WriteByte(2);
+            res.WriteByte(1);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
             // 4bytes
-            res.WriteByte(2);
+            res.WriteByte(1);
             res.WriteByte(0);
             res.WriteByte(0); // 30
             res.WriteByte(0);
 
             // 4bytes
-            res.WriteByte(2); //32 (point edx here)
+            res.WriteByte(1); //32 (point edx here)
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -89,7 +89,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
 
             // 2 byte
-            res.WriteByte(4);
+            res.WriteByte(1);
             res.WriteByte(0);
 
             // 2 byte
@@ -2376,7 +2376,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
             res.WriteByte(0);
             //4bytes
-            res.WriteByte(2);
+            res.WriteByte(1);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
