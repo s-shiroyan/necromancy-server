@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
 
             // 4bytes (004E90F6) cmp, 8 -> ja
-            byte entries = 8;
+            byte entries = 2;
             res.WriteByte(entries);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             // 4bytes (004E9174) cmp, 8 -> ja
-            entries = 8;
+            entries = 2;
             res.WriteByte(entries);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -43,7 +43,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             // 4bytes (004E91F4) cmp, 5 -> ja
-            entries = 5;
+            entries = 2;
             res.WriteByte(entries);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -60,7 +60,7 @@ namespace Necromancy.Server.Packet.Msg
             // end  call wizardryonline_no_encryption.4E08E0 
 
             // 4 byte cmp, 10 -> ja (0019F954) loop create class? | 004E92B3 loop read data?
-            entries = 10;
+            entries = 2;
             res.WriteByte(entries); //50
             res.WriteByte(0);
             res.WriteByte(0);
@@ -74,7 +74,7 @@ namespace Necromancy.Server.Packet.Msg
 
 
             //Read 4 byte (004E92E8) cmp,140(0x8C) -> JA (320)
-            entries = 8;
+            entries = 2;
             res.WriteByte(entries); // 0 = no elf , 1 = elf
             res.WriteByte(0);
             res.WriteByte(0);
@@ -86,7 +86,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             //4bytes cmp, E ( < 14) -> JA
-            entries = 14;
+            entries = 2;
             res.WriteByte(entries);
             res.WriteByte(0);
             res.WriteByte(0);
