@@ -11,14 +11,25 @@ namespace Necromancy.Server.Packet.Msg
         {
         }
 
-        public override ushort Id => (ushort)MsgPacketId.send_chara_select;
+        public override ushort Id => (ushort) MsgPacketId.send_chara_select;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            
-            for(int i = 0; i < 96; i++)
-            res.WriteByte(0);
+            res.WriteInt32(0); // Error
+
+            res.WriteInt32(188);
+            res.WriteInt32(17);
+            res.WriteInt32(17);
+
+            res.WriteFixedString("127.0.0.1", 65);
+            res.WriteInt16(60002);
+
+            res.WriteFloat(100); // Coords ? - x,y,z
+            res.WriteFloat(100);
+            res.WriteFloat(100);
+
+            res.WriteByte(1);
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);
         }

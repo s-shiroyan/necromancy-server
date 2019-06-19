@@ -179,7 +179,7 @@ namespace Necromancy.Server.Packet.Id
         recv_chara_draw_bonuspoint_r = 0x6AC0, //0x6C94
         send_chara_create =   0xC2B,
         recv_chara_create_r = 0xC680,
-        send_chara_select = 0x0601,
+        send_chara_select = 0x0610,
         //01920D59 | 68 507DD800              | push wizardryonline_no_encryption.D87D50            | D87D50:"network::proto_msg_implement_client::send_chara_create"
     }
 }
