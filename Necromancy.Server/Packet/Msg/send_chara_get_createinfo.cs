@@ -16,7 +16,11 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(6);
+            for (int i = 0; i < 6; i++)
+            {
+                res.WriteByte((byte)i);//specifies colors A-F
+            }
 
             // 4bytes (004E90F6) cmp, 8 -> ja
             byte entries = 6;
@@ -127,8 +131,7 @@ namespace Necromancy.Server.Packet.Msg
               //1bytes
               res.WriteByte(14); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
               //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
-            
-            
+
               // 2byte 7x loop
               // 2 bytes
               res.WriteByte(8);//STR Requirement
@@ -201,32 +204,21 @@ namespace Necromancy.Server.Packet.Msg
               // 2 byte
               res.WriteByte(12); //48 //Class Bonus LUK
               res.WriteByte(0);
-              //end loop
+            //end loop
+            
+
+            //4bytes
+            res.WriteInt32(11101);
+            //res.WriteInt32(110001);// states what is in skill slot 0 (left most), 0 = nothing
               
-              
+              //4bytes
+              res.WriteInt32(11201);// states what is in skill slot 1 (middle), 0 = nothing              
                             
               //4bytes
-              res.WriteByte(1);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0); 
-              
-              //4bytes
-              res.WriteByte(4);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0); 
-              
-                            
-              //4bytes
-              res.WriteByte(1);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0); 
-              
+              res.WriteInt32(0);// states what is in skill slot 2 (right most), 0 = nothing              
               
               //1bytes
-              res.WriteByte(2); 
+              res.WriteByte(5);//bonus roll number store?
         }
 
         private void wo_4E0970_Thief(IBuffer res)
@@ -593,7 +585,7 @@ namespace Necromancy.Server.Packet.Msg
             for (int i = 0; i < 19; i++)
             {
                 //4bytes
-                res.WriteByte((byte) i);
+                res.WriteByte((byte)i);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -671,6 +663,7 @@ namespace Necromancy.Server.Packet.Msg
             // end     
         }
 
+
         private void wo_4E3700_Elf_Female(IBuffer res) //characater creation area?
         {
             // 4 byte
@@ -697,6 +690,7 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
             }
+            //res.WriteInt32(0);
 
 
             // 004E3797
