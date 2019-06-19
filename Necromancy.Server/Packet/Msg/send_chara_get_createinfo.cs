@@ -60,16 +60,23 @@ namespace Necromancy.Server.Packet.Msg
             // end  call wizardryonline_no_encryption.4E08E0 
 
             // 4 byte cmp, 10 -> ja (0019F954) loop create class? | 004E92B3 loop read data?
-            entries = 2;
+            entries = 8;//
             res.WriteByte(entries); //50
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
-            for (int i = 0; i < entries; i++)
+            //for (int i = 0; i < entries; i++)
             {
                 // 004E9297
                 wo_4E3700(res);
+                wo_4E3700_Human_Male(res);
+                wo_4E3700_Human_Female(res);
+                wo_4E3700_Elf_Male(res);
+                wo_4E3700_Dwarf_Male(res);
+                wo_4E3700_Gnome_Female(res);
+                wo_4E3700_Prokul_Male(res);
+                wo_4E3700_Porkul_Female(res);
             }
 
 
@@ -317,16 +324,16 @@ namespace Necromancy.Server.Packet.Msg
             // end     
         }
 
-        private void wo_4E3700(IBuffer res)
+        private void wo_4E3700(IBuffer res) //characater creation area?
         {
             // 4 byte
-            res.WriteByte(1);
+            res.WriteByte(1);//race ID
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
             //4bytes
-            res.WriteByte(1);
+            res.WriteByte(1);//gender flag
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -418,7 +425,13 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
 
             // 4bytes
-            res.WriteByte(1);
+            res.WriteByte(50);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(49);//MP
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -429,41 +442,686 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);
             res.WriteByte(0);
 
-            // 4bytes
-            res.WriteByte(1);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
-            // 2byte 7x loop
+            // 2byte 7x loop    /////character stats start here
             // 2 bytes
-            res.WriteByte(1);
+            res.WriteByte(1);//STR
             res.WriteByte(0);
 
             // 2 byte
-            res.WriteByte(2);
+            res.WriteByte(2);//VIT
             res.WriteByte(0);
 
             //2 byte
-            res.WriteByte(3); //40
+            res.WriteByte(3); //40  //DEX
             res.WriteByte(0);
 
             // 2 byte
-            res.WriteByte(1);
+            res.WriteByte(1);//AGI
             res.WriteByte(0);
 
             // 2 byte
-            res.WriteByte(1);
+            res.WriteByte(1);//INT
             res.WriteByte(0); //45
 
             // 2 byte
-            res.WriteByte(2);
+            res.WriteByte(2);///PIE
             res.WriteByte(0);
 
             // 2 byte
-            res.WriteByte(3); //48
+            res.WriteByte(3); //48 //LUK
             res.WriteByte(0);
             //end loop
+        }
+
+        private void wo_4E3700_Human_Male(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(0);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(0);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Human_Female(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(0);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(1);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Elf_Male(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(1);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(0);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Dwarf_Male(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(2);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(0);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Gnome_Female(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(4);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(1);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Prokul_Male(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(3);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(0);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
+        }
+
+        private void wo_4E3700_Porkul_Female(IBuffer res) //characater creation area?
+        {
+            // 4 byte
+            res.WriteByte(3);//race ID
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(1);//gender flag
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1 byte cmp,1 -> sete (bool)
+            res.WriteByte(1);
+
+
+            for (int i = 0; i < 19; i++)
+            {
+                // 4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            // 004E3797
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte((byte)i);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                //4bytes - 004948EE
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(1);
+
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end loop
+
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+
+                // Read Byte cmp,1 -> sete (bool)
+                res.WriteByte(1);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // Read Byte
+                res.WriteByte(0);
+                // end     
+            }
+
+            // 004E37BD
+            for (int i = 0; i < 19; i++)
+            {
+                //4bytes
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+
+            //Read 1 byte (004E37C7)
+            res.WriteByte(0);
         }
     }
 }
