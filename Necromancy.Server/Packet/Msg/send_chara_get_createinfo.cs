@@ -19,31 +19,31 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
 
             // 4bytes (004E90F6) cmp, 8 -> ja
-            byte entries = 2;
-            res.WriteByte(entries);
+            byte entries = 6;
+            res.WriteByte(entries);//num of colors 6 being A-F
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
             // 004E913F (jb loop)
             for (int i = 0; i < entries; i++)
             {
-                res.WriteByte((byte) i);
+                res.WriteByte((byte) i);//specifies colors A-F
             }
 
             // 4bytes (004E9174) cmp, 8 -> ja
-            entries = 2;
-            res.WriteByte(entries);
+            entries = 6;
+            res.WriteByte(entries); //Specifies how many faces, 6 being A-F
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
             // 004E91BF (jb loop)
             for (int i = 0; i < entries; i++)
             {
-                res.WriteByte((byte) i);
+                res.WriteByte((byte)i); //face data, starts at 0 = A
             }
 
             // 4bytes (004E91F4) cmp, 5 -> ja
-            entries = 2;
+            entries = 5;//Specifies how many stat groups 5 = (Human, Elf, Dwarf, Porkul, Gnome)
             res.WriteByte(entries);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -52,15 +52,19 @@ namespace Necromancy.Server.Packet.Msg
 
 
             // 4bytes 004E921C | E8 BF76FFFF | call wizardryonline_no_encryption.4E08E0 
-            for (int i = 0; i < entries; i++)
+            //for (int i = 0; i < entries; i++)
             {
-                wo_4E08E0(res);
+                wo_4E08E0_Human_Stats(res);//holds correct data for starting stats for Humans
+                wo_4E08E0_Elf_Stats(res);//holds correct data for starting stats for Elfs
+                wo_4E08E0_Dwarf_Stats(res);//holds correct data for starting stats for Dwarf
+                wo_4E08E0_Porkul_Stats(res);//holds correct data for starting stats for Porkul
+                wo_4E08E0_Gnome_Stats(res);//holds correct data for starting stats for Gnome
             }
 
             // end  call wizardryonline_no_encryption.4E08E0 
 
             // 4 byte cmp, 10 -> ja (0019F954) loop create class? | 004E92B3 loop read data?
-            entries = 8;//
+            entries = 8;//num of entries for our group of models
             res.WriteByte(entries); //50
             res.WriteByte(0);
             res.WriteByte(0);
@@ -69,14 +73,14 @@ namespace Necromancy.Server.Packet.Msg
             //for (int i = 0; i < entries; i++)
             {
                 // 004E9297
-                wo_4E3700(res);
-                wo_4E3700_Human_Male(res);
-                wo_4E3700_Human_Female(res);
-                wo_4E3700_Elf_Male(res);
-                wo_4E3700_Dwarf_Male(res);
-                wo_4E3700_Gnome_Female(res);
-                wo_4E3700_Prokul_Male(res);
-                wo_4E3700_Porkul_Female(res);
+                wo_4E3700_Elf_Female(res);//Holds Female Elf model details
+                wo_4E3700_Human_Male(res);//Holds Male Human model details
+                wo_4E3700_Human_Female(res);//Holds Female Human model details
+                wo_4E3700_Elf_Male(res);//Holds Male Elf model details
+                wo_4E3700_Dwarf_Male(res);//Holds Male Dwarf model details
+                wo_4E3700_Gnome_Female(res);//Holds Female Gnome model details
+                wo_4E3700_Prokul_Male(res);//Holds Male Porkul model details
+                wo_4E3700_Porkul_Female(res);//Holds Female Porkul model details
             }
 
 
@@ -93,73 +97,77 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             //4bytes cmp, E ( < 14) -> JA
-            entries = 2;
-            res.WriteByte(entries);
+            entries = 4;
+            res.WriteByte(entries);//Specifies the number of Classes 4 being our max
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
             
-            for (int i = 0; i < entries; i++)
+            //for (int i = 0; i < entries; i++)
             {
-                wo_4E0970(res);
+                wo_4E0970_Fighter(res);//Holds Stats and info for Fighter Class(need to fix bonus HP+MP+Stats)
+                wo_4E0970_Priest(res);//Holds Stats and info for Priest Class(need to fix bonus HP+MP+Stats)
+                wo_4E0970_Thief(res);//Holds Stats and info for Thief Class(need to fix bonus HP+MP+Stats)
+                wo_4E0970_Mage(res);//Holds Stats and info for Mage Class(need to fix bonus HP+MP+Stats)
             }
 
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_get_createinfo_r, res);
         }
 
-        private void wo_4E0970(IBuffer res)
+        private void wo_4E0970_Fighter(IBuffer res)
         {
             //4bytes
-              res.WriteByte(1);
+              res.WriteByte(0);//Class ID Fighter = 0, Thief = 1, Mage = 2, Priest - 3
               res.WriteByte(0);
               res.WriteByte(0);
               res.WriteByte(0); 
               
               //1bytes
-              res.WriteByte(2); 
+              res.WriteByte(14); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
+              //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
             
             
               // 2byte 7x loop
               // 2 bytes
-              res.WriteByte(1);
+              res.WriteByte(8);//STR Requirement
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(2);
+              res.WriteByte(0);//VIT Requirement
               res.WriteByte(0);
 
               //2 byte
-              res.WriteByte(3); //40
+              res.WriteByte(0); //40  //DEX Requirement
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(1);
+              res.WriteByte(0);//AGI Requirement
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(1);
+              res.WriteByte(0);//INT Requirement
               res.WriteByte(0); //45
 
               // 2 byte
-              res.WriteByte(2);
+              res.WriteByte(0);//PIE Requirement
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(3); //48
+              res.WriteByte(0); //48  //LUK Requirement
               res.WriteByte(0);
               //end loop
               
               
               //4bytes
-              res.WriteByte(1);
+              res.WriteByte(12);//Class Bonus HP
               res.WriteByte(0);
               res.WriteByte(0);
               res.WriteByte(0); 
               
               //4bytes
-              res.WriteByte(5);
+              res.WriteByte(12);//Class Bonus MP
               res.WriteByte(0);
               res.WriteByte(0);
               res.WriteByte(0); 
@@ -167,31 +175,31 @@ namespace Necromancy.Server.Packet.Msg
               
               // 2byte 7x loop
               // 2 bytes
-              res.WriteByte(1);
+              res.WriteByte(12);//Class Bonus STR
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(2);
+              res.WriteByte(12);//Class Bonus VIT
               res.WriteByte(0);
 
               //2 byte
-              res.WriteByte(3); //40
+              res.WriteByte(12); //40 //Class Bonus DEX
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(1);
+              res.WriteByte(12);//Class Bonux AGI
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(1);
+              res.WriteByte(12);//Class Bonus INT
               res.WriteByte(0); //45
 
               // 2 byte
-              res.WriteByte(2);
+              res.WriteByte(12);//Class Bonus PIE
               res.WriteByte(0);
 
               // 2 byte
-              res.WriteByte(3); //48
+              res.WriteByte(12); //48 //Class Bonus LUK
               res.WriteByte(0);
               //end loop
               
@@ -220,7 +228,346 @@ namespace Necromancy.Server.Packet.Msg
               //1bytes
               res.WriteByte(2); 
         }
-        
+
+        private void wo_4E0970_Thief(IBuffer res)
+        {
+            //4bytes
+            res.WriteByte(1);//Class ID Fighter = 0, Thief = 1, Mage = 2, Priest - 3
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1bytes
+            res.WriteByte(12); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
+                               //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(0);//STR Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//VIT Requirement
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(8); //40  //DEX Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//AGI Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//INT Requirement
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(0);//PIE Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0); //48  //LUK Requirement
+            res.WriteByte(0);
+            //end loop
+
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(12);//Class Bonus STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(12); //40 //Class Bonus DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonux AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12); //48 //Class Bonus LUK
+            res.WriteByte(0);
+            //end loop
+
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(4);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //1bytes
+            res.WriteByte(2);
+        }
+
+        private void wo_4E0970_Mage(IBuffer res)
+        {
+            //4bytes
+            res.WriteByte(2);//Class ID Fighter = 0, Thief = 1, Mage = 2, Priest - 3
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1bytes
+            res.WriteByte(14); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
+                               //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(0);//STR Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//VIT Requirement
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(0); //40  //DEX Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//AGI Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(8);//INT Requirement
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(0);//PIE Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0); //48  //LUK Requirement
+            res.WriteByte(0);
+            //end loop
+
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(12);//Class Bonus STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(12); //40 //Class Bonus DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonux AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12); //48 //Class Bonus LUK
+            res.WriteByte(0);
+            //end loop
+
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(4);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //1bytes
+            res.WriteByte(2);
+        }
+
+        private void wo_4E0970_Priest(IBuffer res)
+        {
+            //4bytes
+            res.WriteByte(3);//Class ID Fighter = 0, Thief = 1, Mage = 2, Priest - 3
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //1bytes
+            res.WriteByte(10); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
+                               //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(0);//STR Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//VIT Requirement
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(0); //40  //DEX Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//AGI Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0);//INT Requirement
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(8);//PIE Requirement
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(0); //48  //LUK Requirement
+            res.WriteByte(0);
+            //end loop
+
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(12);//Class Bonus MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            // 2byte 7x loop
+            // 2 bytes
+            res.WriteByte(12);//Class Bonus STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(12); //40 //Class Bonus DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonux AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(12);//Class Bonus PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12); //48 //Class Bonus LUK
+            res.WriteByte(0);
+            //end loop
+
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            //4bytes
+            res.WriteByte(4);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+
+            //1bytes
+            res.WriteByte(2);
+        }
+
 
         private void wo_4E37F0(IBuffer res)
         {
@@ -324,7 +671,7 @@ namespace Necromancy.Server.Packet.Msg
             // end     
         }
 
-        private void wo_4E3700(IBuffer res) //characater creation area?
+        private void wo_4E3700_Elf_Female(IBuffer res) //characater creation area?
         {
             // 4 byte
             res.WriteByte(1);//race ID
@@ -415,62 +762,6 @@ namespace Necromancy.Server.Packet.Msg
 
             //Read 1 byte (004E37C7)
             res.WriteByte(1);
-        }
-
-        private void wo_4E08E0(IBuffer res)
-        {
-            res.WriteByte(1);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
-            // 4bytes
-            res.WriteByte(50);//HP
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
-            // 4bytes
-            res.WriteByte(49);//MP
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
-            // 4bytes
-            res.WriteByte(1);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
-            // 2byte 7x loop    /////character stats start here
-            // 2 bytes
-            res.WriteByte(1);//STR
-            res.WriteByte(0);
-
-            // 2 byte
-            res.WriteByte(2);//VIT
-            res.WriteByte(0);
-
-            //2 byte
-            res.WriteByte(3); //40  //DEX
-            res.WriteByte(0);
-
-            // 2 byte
-            res.WriteByte(1);//AGI
-            res.WriteByte(0);
-
-            // 2 byte
-            res.WriteByte(1);//INT
-            res.WriteByte(0); //45
-
-            // 2 byte
-            res.WriteByte(2);///PIE
-            res.WriteByte(0);
-
-            // 2 byte
-            res.WriteByte(3); //48 //LUK
-            res.WriteByte(0);
-            //end loop
         }
 
         private void wo_4E3700_Human_Male(IBuffer res) //characater creation area?
@@ -1122,6 +1413,286 @@ namespace Necromancy.Server.Packet.Msg
 
             //Read 1 byte (004E37C7)
             res.WriteByte(0);
+        }
+
+        private void wo_4E08E0_Human_Stats(IBuffer res)
+        {
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(60);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(20);//MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 2byte 7x loop    /////character stats start here
+            // 2 bytes
+            res.WriteByte(8);//STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(7);//VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(7); //40  //DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(6);//AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(8);//INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(5);///PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(8); //48 //LUK
+            res.WriteByte(0);
+            //end loop
+        }
+
+        private void wo_4E08E0_Elf_Stats(IBuffer res)
+        {
+            res.WriteByte(3);//not sure
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(50);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(30);//MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(1);//
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 2byte 7x loop    /////character stats start here
+            // 2 bytes
+            res.WriteByte(6);//STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(5);//VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(8); //40  //DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(8);//AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(10);//INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(8);///PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(4); //48 //LUK
+            res.WriteByte(0);
+            //end loop
+        }
+
+        private void wo_4E08E0_Dwarf_Stats(IBuffer res)
+        {
+            res.WriteByte(1);//not sure
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(80);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(15);//MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(1);//dont know
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 2byte 7x loop    /////character stats start here
+            // 2 bytes
+            res.WriteByte(9);//STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(8);//VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(8); //40  //DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(4);//AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(5);//INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(9);///PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(5); //48 //LUK
+            res.WriteByte(0);
+            //end loop
+        }
+
+        private void wo_4E08E0_Porkul_Stats(IBuffer res)
+        {
+            res.WriteByte(1);//not sure
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(50);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(20);//MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(1);//dont know
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 2byte 7x loop    /////character stats start here
+            // 2 bytes
+            res.WriteByte(5);//STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(6);//VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(9); //40  //DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(12);//AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(7);//INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(7);///PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(15); //48 //LUK
+            res.WriteByte(0);
+            //end loop
+        }
+
+        private void wo_4E08E0_Gnome_Stats(IBuffer res)
+        {
+            res.WriteByte(1);//not sure
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(70);//HP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(25);//MP
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 4bytes
+            res.WriteByte(1);//dont know
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            // 2byte 7x loop    /////character stats start here
+            // 2 bytes
+            res.WriteByte(7);//STR
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(7);//VIT
+            res.WriteByte(0);
+
+            //2 byte
+            res.WriteByte(4); //40  //DEX
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(7);//AGI
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(6);//INT
+            res.WriteByte(0); //45
+
+            // 2 byte
+            res.WriteByte(10);///PIE
+            res.WriteByte(0);
+
+            // 2 byte
+            res.WriteByte(6); //48 //LUK
+            res.WriteByte(0);
+            //end loop
         }
     }
 }
