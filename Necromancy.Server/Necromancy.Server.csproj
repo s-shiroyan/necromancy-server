@@ -11,8 +11,4 @@
       <PackageReference Include="Arrowgene.Services" Version="1.12.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Packet\Area" />
-    </ItemGroup>
-
 </Project>

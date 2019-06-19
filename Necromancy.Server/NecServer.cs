@@ -1,7 +1,12 @@
+using System;
+using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Auth;
+using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
 
@@ -22,7 +27,7 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
-            Setting = setting; 
+            Setting = setting;
             Router = new PacketRouter();
             _authConsumer = new NecQueueConsumer(Setting);
             _authConsumer.SetIdentity("Auth");
@@ -43,13 +48,27 @@ namespace Necromancy.Server
                 _msgConsumer
             );
 
+            _areaConsumer.ClientConnected += AreaClientConnected;
             _areaServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
                 Setting.AreaPort,
                 _areaConsumer
             );
-            
+
             LoadHandler();
+        }
+
+        /// <summary>
+        /// Called when client connected to the area server.
+        /// </summary>
+        private void AreaClientConnected(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            Router.Send(client, (ushort) AreaPacketId.recv_base_check_version_r, res);
         }
 
         public void Start()
@@ -87,6 +106,9 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
             _msgConsumer.AddHandler(new send_chara_create(this));
             _msgConsumer.AddHandler(new send_chara_select(this));
+            
+            // Area Handler
+            _areaConsumer.AddHandler(new send_base_check_version_area(this));
         }
     }
 }
