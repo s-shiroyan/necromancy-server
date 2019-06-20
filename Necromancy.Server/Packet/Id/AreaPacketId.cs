@@ -1,5 +1,175 @@
 namespace Necromancy.Server.Packet.Id
 {
+    /// <summary>
+    /// Necromancy Message Server
+    /// 
+    /// Recv OP Codes: (Area Server Switch: 0x00495B83)
+    ///
+    /// 0x86EA
+    /// 0x3DD0
+    /// 0x1F5A
+    /// 0x10DA
+    /// 0x794
+    /// 0x494
+    /// 0x2FA
+    /// 0x1Da
+    /// 0x1A6
+    /// 0x1A6 + 0x5
+    /// 0xC24E
+    /// 0xA7BF
+    /// 0x9899
+    /// 0x903A
+    /// 0x8C2F
+    /// 0x88FB
+    /// 0x8820
+    /// 0x8778
+    /// 0x8778 + 0x4
+    /// 0xDE90
+    /// 0xD170
+    /// 0xCB6D
+    /// 0xC54F
+    /// 0xC3EE
+    /// 0xC2A1 (investigate 004C2F8E)
+    /// 0xC2A1 + 0xD3 (investigate 004C2F8E)
+    /// 0xEFA4
+    /// 0xE819
+    /// 0xE1F8
+    /// 0xE051
+    /// 0xDF31
+    /// 0xDEB7
+    /// 0xDEB7 + 0xB
+    /// 0xFA0B
+    /// 0xF447
+    /// 0xF1A0
+    /// 0xEFDD (investigate 004CEC2C)
+    /// 0xEFDD + 0x4E (investigate 004CEC2C)
+    /// 0xFDB2
+    /// 0xFCC0
+    /// 0xFC28
+    /// 0xFB79
+    /// 0xFC1A
+    /// 0xFED8
+    /// 0xFE2F
+    /// 0xFDB8
+    /// 0xFDB8 + 0x31
+    /// 0xFF00 (investigate 004D13C3)
+    /// 0xFF00 + 0xD6 (investigate 004D13C3)
+    /// 0xFEB7
+    /// 0xFCF3 (investigate 004D042D)
+    /// 0xFCF3 + 0x85 (investigate 004D042D)
+    /// 0xFC75
+    /// 0xFC75 + 0x38
+    /// 0xF71C
+    /// 0xF633
+    /// 0xF495
+    /// 0xF602
+    /// 0xF95B
+    /// 0xF7E7
+    /// 0xF7E7 + 0x9
+    /// 0xF9F9
+    /// 0xF6AF
+    /// 0xF393
+    /// 0xF212
+    /// 0xF330
+    /// 0xF3A1
+    /// 0xEDA6
+    /// 0xEA1C
+    /// 0xE897 (investigate 004CC897)
+    /// 0xE897 + 0xF9 (investigate 004CC897)
+    /// 0xEE43
+    /// 0xEDB3 (investigate 004CDE73)
+    /// 0xEDB3 + 0x65 (investigate 004CDE73)
+    /// 0xEEB7 (investigate 004CE472)
+    /// 0xEEB7 + 0xD6 (investigate 004CE472)
+    /// 0xECBA
+    /// 0xEB47
+    /// 0xEB47 + 0x34
+    /// 0xED4C
+    /// 0xE748
+    /// 0xE4B2
+    /// 0xE207
+    /// 0xE462
+    /// 0xE7BB (investigate 004CC261)
+    /// 0xE7BB + 0x2C (investigate 004CC261)
+    /// 0xE526
+    /// 0xE5FF
+    /// 0xE07E (investigate 004CB292)
+    /// 0xE07E + 0xCD (investigate 004CB292)
+    /// 0xE039
+    /// 0xE039 + 0x4
+    /// 0xD688
+    /// 0xD46E
+    /// 0xD349
+    /// 0xD1CB
+    /// 0xD1A9
+    /// 0xD1A9 + 0x14
+    /// 0xDA4A
+    /// 0xD7D8
+    /// 0xD68C (investigate 004C8EE5)
+    /// 0xD68C + 0xC6 (investigate 004C8EE5)
+    /// 0xDBF1
+    /// 0xDB5E
+    /// 0xDA5C
+    /// 0xDB53
+    /// 0xDD52
+    /// 0xDC5B
+    /// 0xDC5B + 0x5B
+    /// 0xDDD3
+    /// 0xDB88
+    /// 0xD909
+    /// 0xD804
+    /// 0xD8D5
+    /// 0xD972
+    /// 0xD597
+    /// 0xD493 (investigate 004C7D1F)
+    /// 0xD493 + 0xE7 (investigate 004C7D1F)
+    /// 0xD5B5 (investigate 004C86F2)
+    /// 0xD5B5 + 0xC8 (investigate 004C86F2)
+    /// 0xD400 (investigate 004C7645)
+    /// 0xD400 + 0x3F (investigate 004C7645)
+    /// 0xD1F6
+    /// 0xD2D6
+    /// 0xCF24
+    /// 0xCC54
+    /// 0xCB94 (investigate 004C5085)
+    /// 0xCB94 + 0xA3 (investigate 004C5085)
+    /// 0xCFDC
+    /// 0xCF29 (investigate 004C5F8E)
+    /// 0xCF29 + 0x29 (investigate 004C5F8E)
+    /// 0xD04A (investigate 004C6663)
+    /// 0xD04A + 0xE9 (investigate 004C6663)
+    /// 0xCDC9
+    /// 0xCCE2
+    /// 0xCD63
+    /// 0xCE36
+    /// 0xC8AD
+    /// 0xC6F2
+    /// 0xC8AD
+    /// 0xC6F2
+    /// 0xC68B
+    /// 0xC68B + 0x64
+    /// 0xCA35
+    /// 0xC96F
+    /// 0xC9FF
+    /// 0xCAB1
+    /// 0xC701
+    /// 0xC7E1
+    /// 0xC542
+    /// 0xC444
+    /// 0xC444 + 0x36
+    /// 0xC543
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    /// 
+    /// 
+    /// </summary>
+    
     public enum AreaPacketId : ushort
     {
         send_base_check_version = 0x5705,
