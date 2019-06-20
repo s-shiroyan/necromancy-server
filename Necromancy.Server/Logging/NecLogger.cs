@@ -1,6 +1,8 @@
 using System;
+using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp;
+using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Setting;
@@ -67,6 +69,34 @@ namespace Necromancy.Server.Logging
         public void Exception(ITcpSocket socket, Exception exception)
         {
             Write(LogLevel.Error, null, $"[{socket.Identity}] {exception}");
+        }
+
+        public void LogErrorPacket(NecClient client, byte[] data, string identity)
+        {
+            IBuffer buffer = BufferProvider.Provide(data);
+            String log = $"{client.Identity} Packet Log";
+            log += Environment.NewLine;
+            log += "----------";
+            log += Environment.NewLine;
+            if (identity != null)
+            {
+                log += $"[{identity}]";
+            }
+
+            log += $"[Len:{buffer.Size}]";
+            log += Environment.NewLine;
+            log += "ASCII:";
+            log += Environment.NewLine;
+            log += buffer.ToHexString('-');
+            log += Environment.NewLine;
+            log += "HEX:";
+            log += Environment.NewLine;
+            log += buffer.ToAsciiString(true);
+            ;
+            log += Environment.NewLine;
+            log += "----------";
+
+            Write(LogLevel.Error, NecLogType.PacketError, log);
         }
 
         public void LogIncomingPacket(NecClient client, NecPacket packet, string identity)

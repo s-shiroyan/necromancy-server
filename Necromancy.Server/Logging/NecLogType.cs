@@ -4,6 +4,7 @@ namespace Necromancy.Server.Logging
     {
         In = 1,
         Out = 2,
-        Unhandled = 3
+        Unhandled = 3,
+        PacketError = 4
     }
 }

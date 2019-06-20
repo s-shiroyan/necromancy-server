@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            /*uint unknown = packet.Data.ReadUInt32();
+            uint unknown = packet.Data.ReadUInt32();
             uint major = packet.Data.ReadUInt32();
             uint minor = packet.Data.ReadUInt32();
             Logger.Info($"{major} - {minor}");
@@ -26,12 +26,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(major);
             res.WriteInt32(minor);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_base_check_version_r, res);*/
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_get_list_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_base_check_version_r, res);
         }
     }
 }

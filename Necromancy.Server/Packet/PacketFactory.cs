@@ -102,6 +102,9 @@ namespace Necromancy.Server.Packet
                     byte lengthType = _buffer.ReadByte();
                     if (!Enum.IsDefined(typeof(PacketLengthType), lengthType))
                     {
+                        _logger.Error($"PacketLengthType: '{lengthType}' not found");
+                        byte[] dataDump = _buffer.GetBytes(_buffer.Position - 1, _buffer.Size);
+                        _logger.LogErrorPacket(client, dataDump, null);
                         Reset();
                         return packets;
                     }
@@ -115,7 +118,6 @@ namespace Necromancy.Server.Packet
                     && !_readHeader
                     && _buffer.Size - _buffer.Position >= _headerSize - PacketLengthTypeSize)
                 {
-                 
                     // TODO aquire 1st byte differently incase -1 doesnt work
                     _header = _buffer.GetBytes(_buffer.Position - PacketLengthTypeSize, _headerSize);
 
