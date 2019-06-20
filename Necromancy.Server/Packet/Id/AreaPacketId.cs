@@ -290,7 +290,50 @@ namespace Necromancy.Server.Packet.Id
     /// 0x88A1 + 0xD
     /// -----
     /// 0x662F
-    /// 
+    /// 0x531B
+    /// 0x4C6F
+    /// 0x4440
+    /// 0x42B8
+    /// 0x3F38
+    /// 0x3E0B
+    /// 0x3E0B + 0x74
+    /// 0x77A7
+    /// 0x6FB2
+    /// 0x6A7A
+    /// 0x6912
+    /// 0x68AA
+    /// 0x66EC
+    /// 0x679B
+    /// 0x7FC5
+    /// 0x7CF0
+    /// 0x7A6F
+    /// 0x79A2
+    /// 0x789E
+    /// 0x793E
+    /// 0x839A
+    /// 0x825D
+    /// 0x8066 (investigate 004B1728) 
+    /// 0x8066 + 0x2B (investigate 004B1728) 
+    /// 0x855C
+    /// 0x8487 (investigate 004B2631) 
+    /// 0x8487 + 0xC2 (investigate 004B2631)
+    /// 0x85C6 (investigate 004B2C99)
+    /// 0x85C6 + 0xDF (investigate 004B2C99)
+    /// 0x8299 (investigate 004B1EE6)
+    /// 0x8299 + 0xFC (investigate 004B1EE6)
+    /// 0x7D53
+    /// 0x7D1C (investigate 004B09BA)
+    /// 0x7D1C + 0xF (investigate 004B09BA)
+    /// 0x7F34
+    /// 0x7D75
+    /// 0x7F09
+    /// 0x7F50
+    /// 0x7BB3
+    /// 0x7B5D
+    /// 0x7B5D + 0x29
+    /// 0x7CB2
+    /// 0x79A9
+    /// 0x7A5C
     /// 
     /// </summary>
     
