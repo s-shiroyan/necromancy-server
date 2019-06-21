@@ -16,8 +16,12 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteInt32(2);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_get_list_r, res);
         }
     }

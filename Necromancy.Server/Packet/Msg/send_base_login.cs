@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(2); // Soul Level
             res.WriteByte(0);
 
-            res.WriteByte(0); // cmp to 1
+            res.WriteByte(1); // cmp to 1
             res.WriteByte(0);
 
             Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res);
