@@ -1,11 +1,7 @@
 namespace Necromancy.Server.Packet.Id
 {
     /// <summary>
-    /// Necromancy Message Server
-    ///
-    ///
-    ///  
-    /// Recv OP Codes: (Area Server Switch: 0x00495B83)
+    /// Necromancy Area Server OP Codes
     ///
     /// 0x86EA
     /// 0x3DD0 - proto_area_implement_client::recv_event_soul_storage_open
@@ -630,8 +626,11 @@ namespace Necromancy.Server.Packet.Id
     
     public enum AreaPacketId : ushort
     {
+        // Recv OP Codes - Switch: 0x495B88 - ordered by op code
         send_base_check_version = 0x5705,
         recv_base_check_version_r = 0xEFDD,
         send_base_enter = 0xAE43
+        
+        // Send OP Codes - ordered by op code
     }
 }
