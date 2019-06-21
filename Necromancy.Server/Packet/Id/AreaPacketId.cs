@@ -516,7 +516,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x65C
     /// 0x661 (0x65C + 0x5)
     /// 0x780
-    /// 0x397
+    /// 0x397 - recv_stall_close_r
     /// 0x22C
     /// 0x2C5
     /// 0xF02B (0xEFDD + 0x4E) - proto_area_implement_client::recv_random_box_get_item_all_r

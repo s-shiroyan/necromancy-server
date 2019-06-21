@@ -1,3 +1,5 @@
+using Arrowgene.Services.Buffers;
+using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -13,11 +15,11 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            // IBuffer res = BufferProvider.Provide();
-            // res.WriteInt32(0);
+             IBuffer res = BufferProvider.Provide();
+             res.WriteInt32(0);
 
 
-            // Router.Send(client, (ushort) AreaPacketId.recv_base_check_version_r, res);
+             Router.Send(client, (ushort) 0x397, res);
         }
     }
 }
