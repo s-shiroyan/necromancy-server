@@ -119,37 +119,37 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD1F6
     /// 0xD2D6 - proto_area_implement_client::recv_base_ping_r
     /// 0xCF24 - proto_area_implement_client::recv_event_select_map_and_channel
-    /// 0xCC54
-    /// 0xCB94
-    /// 0xCFDC
+    /// 0xCC54 - proto_area_implement_client::recv_battle_report_action_cover
+    /// 0xCB94 - proto_area_implement_client::recv_trade_notify_interface_status
+    /// 0xCFDC - proto_area_implement_client::recv_data_notify_itemobject_data
     /// 0xCF29
     /// 0xD04A
-    /// 0xCDC9
-    /// 0xCCE2
-    /// 0xCD63
-    /// 0xCE36
-    /// 0xC8AD
-    /// 0xC6F2
-    /// 0xC8AD
-    /// 0xC6F2
-    /// 0xC68B
+    /// 0xCDC9 - proto_area_implement_client::recv_battle_report_noact_notify_dead
+    /// 0xCCE2 - proto_area_implement_client::recv_chara_move_speed_per
+    /// 0xCD63 - proto_area_implement_client::recv_dbg_select_raise_r
+    /// 0xCE36 - proto_area_implement_client::recv_battle_report_noact_notify_buff_attach_failed
+    /// 0xC8AD - proto_area_implement_client::recv_storage_deposit_item2_r
+    /// 0xC6F2 - proto_area_implement_client::recv_wanted_list_open
+    /// 0xC8AD - proto_area_implement_client::recv_storage_deposit_item2_r
+    /// 0xC6F2 - proto_area_implement_client::recv_wanted_list_open
+    /// 0xC68B - proto_area_implement_client::recv_wanted_jail_update_state
     /// 0xC6EF (0xC68B + 0x64)
-    /// 0xCA35
+    /// 0xCA35 - proto_area_implement_client::recv_battle_report_noact_notify_heal_life
     /// 0xC96F - proto_area_implement_client::recv_buff_request_detach_r
-    /// 0xC9FF
+    /// 0xC9FF - proto_area_implement_client::recv_battle_report_notify_soul_material
     /// 0xCAB1 - proto_area_implement_client::recv_talkring_create_masterring_r
     /// 0xC701 - proto_area_implement_client::recv_battle_report_action_skill_onhit
-    /// 0xC7E1
-    /// 0xC542
-    /// 0xC444
+    /// 0xC7E1 - proto_area_implement_client::recv_item_update_sp_level
+    /// 0xC542 - proto_area_implement_client::recv_skill_start_cast_self
+    /// 0xC444 - proto_area_implement_client::recv_random_box_get_item_r
     /// 0xC47A (0xC444 + 0x36)
-    /// 0xC543
+    /// 0xC543 - proto_area_implement_client::recv_skill_combo_cast_r
     /// 0x840E
-    /// 0xAF76
+    /// 0xAF76 - proto_area_implement_client::recv_battle_report_notify_attack_hitstate
     /// 0xAB14
     /// 0xA90C
-    /// 0xA7E8
-    /// 0xBD7E
+    /// 0xA7E8 - proto_area_implement_client::recv_chara_notify_map_fragment
+    /// 0xBD7E - proto_area_implement_client::recv_event_tresurebox_begin
     /// 0xBA61
     /// 0xB684
     /// 0xB586
@@ -198,7 +198,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xAA8F
     /// 0xA938
     /// 0xA9C2
-    /// 0xAADD
+    /// 0xAADD - proto_area_implement_client::recv_talkring_rename_request
     /// 0xA084
     /// 0x9D52
     /// 0x9B08
@@ -284,22 +284,22 @@ namespace Necromancy.Server.Packet.Id
     /// 0x839A
     /// 0x825D
     /// 0x8066
-    /// 0x855C
+    /// 0x855C - proto_area_implement_client::recv_party_decline_to_apply_r
     /// 0x8487
     /// 0x85C6
     /// 0x8299
     /// 0x7D53
     /// 0x7D1C
-    /// 0x7F34
-    /// 0x7D75
-    /// 0x7F09
-    /// 0x7F50
-    /// 0x7BB3
-    /// 0x7B5D
+    /// 0x7F34 - proto_area_implement_client::recv_skill_custom_slot_set_r
+    /// 0x7D75 - proto_area_implement_client::recv_union_open_window
+    /// 0x7F09 - proto_area_implement_client::recv_cash_shop_get_url_r
+    /// 0x7F50 - proto_area_implement_client::recv_skill_next_cast_r
+    /// 0x7BB3 - proto_area_implement_client::recv_party_change_leader_r
+    /// 0x7B5D - proto_area_implement_client::recv_object_point_move_r
     /// 0x7B86 (0x7B5D + 0x29)
-    /// 0x7CB2
-    /// 0x79A9
-    /// 0x7A5C
+    /// 0x7CB2 - proto_area_implement_client::recv_battle_attack_pose_start_notify
+    /// 0x79A9 - proto_area_implement_client::recv_storage_drawmoney
+    /// 0x7A5C - proto_area_implement_client::recv_chara_update_ap_cost_diff
     /// 0x73A1
     /// 0x717D
     /// 0x70B7
@@ -522,7 +522,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x397
     /// 0x22C
     /// 0x2C5
-    /// 0xF02B (0xEFDD + 0x4E) 
+    /// 0xF02B (0xEFDD + 0x4E) - proto_area_implement_client::recv_random_box_get_item_all_r
     /// 0xFFD6 (0xFF00 + 0xD6) 
     /// 0xFD78 (0xFCF3 + 0x85) 
     /// 0xE990 (0xE897 + 0xF9) 
@@ -531,9 +531,9 @@ namespace Necromancy.Server.Packet.Id
     /// 0xE7E7 (0xE7BB + 0x2C) 
     /// 0xE14B (0xE07E + 0xCD) 
     /// 0xD752 (0xD68C + 0xC6) 
-    /// 0xD57A (0xD493 + 0xE7) 
-    /// 0xD67D (0xD5B5 + 0xC8) 
-    /// 0xD43F (0xD400 + 0x3F) 
+    /// 0xD57A (0xD493 + 0xE7) - proto_area_implement_client::recv_battle_report_action_item_use
+    /// 0xD67D (0xD5B5 + 0xC8) - proto_area_implement_client::recv_chara_update_lv_detail2
+    /// 0xD43F (0xD400 + 0x3F) - proto_area_implement_client::recv_event_removetrap_skill_r2
     /// 0xCC37 (0xCB94 + 0xA3) 
     /// 0xCF52 (0xCF29 + 0x29) 
     /// 0xD133 (0xD04A + 0xE9) 
