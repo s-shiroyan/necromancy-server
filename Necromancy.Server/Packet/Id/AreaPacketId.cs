@@ -15,6 +15,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1DA - proto_area_implement_client::recv_sv_conf_option_request_r
     /// 0x1A6 - proto_area_implement_client::recv_cash_shop_get_url_common_r
     /// 0x1A6 + 0x5
+    /// -----
     /// 0xC24E - proto_area_implement_client::recv_chara_update_action_prohibit_camp
     /// 0xA7BF - proto_area_implement_client::recv_party_regist_member_recruit_r
     /// 0x9899
@@ -517,6 +518,67 @@ namespace Necromancy.Server.Packet.Id
     /// 0x11FA
     /// 0x1105
     /// 0x1198
+    /// 0x1C15
+    /// 0x1A0F
+    /// 0x18CC(investigate 0049B302)
+    /// 0x18CC + 0xF7(investigate 0049B302)
+    /// 0x1DBE
+    /// 0x1D49
+    /// 0x1C20
+    /// 0x1C20 + 0x4C
+    /// 0x1E65(investigate 0049C989)
+    /// 0x1E65 + 0xCD(investigate 0049C989)
+    /// 0x1D68
+    /// 0x1BD6
+    /// 0x1AA8
+    /// 0x1B5C
+    /// 0x1C0A
+    /// 0x170B
+    /// 0x15D0
+    /// 0x14F6
+    /// 0x15B0
+    /// 0x179D
+    /// 0x170F
+    /// 0x170F + 0x2D
+    /// 0x182B
+    /// 0x166B
+    /// 0x1701
+    /// 0x1392
+    /// 0x12A4
+    /// 0x12A4 + 0x3C
+    /// 0x1489
+    /// 0x124C
+    /// 0x124C + 0x12
+    /// -----
+    /// 0xCFF
+    /// 0x9F5
+    /// 0x8CD(investigate 004979DC)
+    /// 0x8CD + 0xD0(investigate 004979DC)
+    /// 0xEF9
+    /// 0xE45
+    /// 0xD0D
+    /// 0xE0B
+    /// 0x102E(investigate 00498F03)
+    /// 0x102E + 0x97(investigate 00498F03)
+    /// 0xECF
+    /// 0xC5F
+    /// 0xB2F
+    /// 0xBFE
+    /// 0xCE7
+    /// -----
+    /// 0x604
+    /// 0x54E(investigate 00496B4F)
+    /// 0x54E + 0xAA(investigate 00496B4F)
+    /// 0x723
+    /// 0x65C
+    /// 0x65C + 0x5
+    /// 0x780
+    /// -----
+    /// 0x397(investigate 004964AA)
+    /// 0x397 + 0x7A(investigate 004964AA)
+    /// -----
+    /// 0x22C
+    /// 0x2C5
     ///
     ///
     ///
@@ -524,6 +586,8 @@ namespace Necromancy.Server.Packet.Id
     ///
     ///
     ///
+    ///
+    /// 
     /// 
     /// 
     /// 
