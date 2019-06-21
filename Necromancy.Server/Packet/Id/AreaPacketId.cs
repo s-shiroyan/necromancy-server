@@ -156,8 +156,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xBFEA
     /// 0xBF0D
     /// 0xBD90
-    /// 0xBD99 (0xBD90 + 0x9)
-    /// 0xC1DC
+    /// 0xBD99 (0xBD90 + 0x9) - proto_area_implement_client::recv_battle_report_notify_rookie
+    /// 0xC1DC - proto_area_implement_client::recv_chara_update_notify_rookie
     /// 0xC0D8
     /// 0xC206
     /// 0xC003
