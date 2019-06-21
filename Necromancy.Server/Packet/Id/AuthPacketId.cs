@@ -1,3 +1,4 @@
+// ReSharper disable InconsistentNaming
 namespace Necromancy.Server.Packet.Id
 {
     /// <summary>
