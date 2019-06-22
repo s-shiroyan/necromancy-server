@@ -88,54 +88,54 @@ namespace Necromancy.Server.Packet.Id
     /// 0x23D3 - proto_area_implement_client::recv_chara_notify_stateflag
     /// 0x23E5 - proto_area_implement_client::recv_object_sub_target_update_notify
     /// 0x2467 - proto_area_implement_client::recv_shop_buy_r
-    /// 0x2470
-    /// 0x2478
+    /// 0x2470 - proto_area_implement_client::recv_data_notify_npc_data
+    /// 0x2478 - proto_area_implement_client::recv_chara_update_maxap
     /// 0x250E (0x2478 + 0x96) 
-    /// 0x2513
-    /// 0x2576
-    /// 0x260E
-    /// 0x2631
-    /// 0x266C
+    /// 0x2513 - proto_area_implement_client::recv_battle_report_notify_soul_point
+    /// 0x2576 - proto_area_implement_client::recv_chara_update_mp
+    /// 0x260E - proto_area_implement_client::recv_raisescale_view_close
+    /// 0x2631 - proto_area_implement_client::recv_soulmaterial_shop_notify_open
+    /// 0x266C - proto_area_implement_client::recv_quest_get_soul_mission_quest_works_r
     /// 0x267B (0x266C + 0xF)
-    /// 0x267D
-    /// 0x26B8
-    /// 0x2790
-    /// 0x27D6
-    /// 0x2849
+    /// 0x267D - proto_area_implement_client::recv_logout_cancel_request_r
+    /// 0x26B8 - proto_area_implement_client::recv_event_removetrap_release_rate_update
+    /// 0x2790 - proto_area_implement_client::recv_union_storage_move_item_r
+    /// 0x27D6 - proto_area_implement_client::recv_shortcut_request_regist_r
+    /// 0x2849 - proto_area_implement_client::recv_channel_notify
     /// 0x287A
     /// 0x28A0
-    /// 0x28E7
+    /// 0x28E7 - proto_area_implement_client::recv_chara_update_con
     /// 0x29C5 (0x28E7 + 0xDE) 
-    /// 0x2A3F
-    /// 0x2A82
+    /// 0x2A3F - proto_area_implement_client::recv_skill_tree_lost
+    /// 0x2A82 - proto_area_implement_client::recv_battle_report_action_monster_skill_exec
     /// 0x2AB0 (0x2A82 + 0x2E)
-    /// 0x2BA4
+    /// 0x2BA4 - proto_area_implement_client::recv_chara_update_ac
     /// 0x2BAB
-    /// 0x2BBF
+    /// 0x2BBF - proto_area_implement_client::recv_item_use_r
     /// 0x2C30 (0x2BBF + 0x71)
-    /// 0x2CAF
-    /// 0x2CB0
-    /// 0x2D6D
-    /// 0x2DCE
-    /// 0x2E17
-    /// 0x2F0E
-    /// 0x2FFF
-    /// 0x300A
+    /// 0x2CAF - proto_area_implement_client::recv_item_update_level
+    /// 0x2CB0 - proto_area_implement_client::recv_chara_update_lv_detail_end
+    /// 0x2D6D - proto_area_implement_client::recv_cash_shop_buy_r
+    /// 0x2DCE - proto_area_implement_client::recv_stall_set_item_price_r
+    /// 0x2E17 - proto_area_implement_client::recv_auction_update_bid_item_state
+    /// 0x2F0E - proto_area_implement_client::recv_thread_exit_r
+    /// 0x2FFF - proto_area_implement_client::recv_stall_notify_closed
+    /// 0x300A - proto_area_implement_client::recv_party_invite_r
     /// 0x30BE
     /// 0x30FB (0x30BE + 0x3D)
-    /// 0x316F
-    /// 0x3223
-    /// 0x322F
-    /// 0x3247
+    /// 0x316F - proto_area_implement_client::recv_gem_set_synthesis_r
+    /// 0x3223 - proto_area_implement_client::recv_chara_update_weight
+    /// 0x322F - proto_area_implement_client::recv_chara_update_job_attr_mp_cost_per
+    /// 0x3247 - proto_area_implement_client::recv_item_update_state
     /// 0x32ED (0x3247 + 0xA6) 
-    /// 0x32F7
-    /// 0x32FF
-    /// 0x3428
-    /// 0x3544
+    /// 0x32F7 - proto_area_implement_client::recv_event_select_push
+    /// 0x32FF - proto_area_implement_client::recv_quest_history
+    /// 0x3428 - proto_area_implement_client::recv_party_change_mode_r
+    /// 0x3544 - proto_area_implement_client::recv_npc_ggate_state_update_notify
     /// 0x362D
     /// 0x36A6 (0x362D + 0x79)
-    /// 0x36DC
-    /// 0x3806
+    /// 0x36DC - proto_area_implement_client::recv_gem_rebuild_info
+    /// 0x3806 - proto_area_implement_client::recv_base_enter_r
     /// 0x394F
     /// 0x39FD
     /// 0x3A0E
@@ -629,7 +629,7 @@ namespace Necromancy.Server.Packet.Id
         send_base_check_version = 0x5705,
         recv_base_check_version_r = 0xEFDD,
         send_base_enter = 0xAE43,
-        recv_base_enter = 0x129B
+        recv_base_enter = 0x3806
 
         // Send OP Codes - ordered by op code
     }
