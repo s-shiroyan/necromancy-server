@@ -5,13 +5,13 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_base_enter : Handler
+    public class send_data_get_self_chara_data_request : Handler
     {
-        public send_base_enter(NecServer server) : base(server)
+        public send_data_get_self_chara_data_request(NecServer server) : base(server)
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_base_enter;
+        public override ushort Id => (ushort) AreaPacketId.send_data_get_self_chara_data_request;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
              
 
 
-             Router.Send(client, (ushort) AreaPacketId.recv_base_enter, res);
+           //  Router.Send(client, (ushort) AreaPacketId.recv_base_enter, res);
         }
     }
 }
