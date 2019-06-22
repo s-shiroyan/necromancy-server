@@ -10,7 +10,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x22C - proto_area_implement_client::recv_auction_receive_gold_r
     /// 0x2C5 - proto_area_implement_client::recv_item_update_hardness
     /// 0x2FA - proto_area_implement_client::recv_charabody_notify_loot_start_cancel
-    /// 0x397 - recv_stall_close_r
+    /// 0x397 - proto_area_implement_client::recv_stall_close_r
     /// 0x411  (0x397 + 0x7A)  proto_area_implement_client::recv_skill_custom_close_r
     /// 0x494 - proto_area_implement_client::recv_event_tresurebox_select_r
     /// 0x54E - proto_area_implement_client::recv_charabody_loot_complete2_r
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x794 - proto_area_implement_client::recv_wanted_jail_update_money
     /// 0x8CD - proto_area_implement_client::recv_self_action_cost
     /// 0x99D  (0x8CD + 0xD0)  proto_area_implement_client::recv_event_end
-    /// 0x9F5  //////////NOT DONE/////////// i suspect it is the 3rd call eax down the list but also suspect it is calculated somehow
+    /// 0x9F5 - proto_area_implement_client::recv_gem_synthesis_info
     /// 0xB2F - proto_area_implement_client::recv_charabody_loot_start2_r
     /// 0xBFE - proto_area_implement_client::recv_item_drop_r
     /// 0xC5F - proto_area_implement_client::recv_dbg_option_change_r
@@ -32,20 +32,20 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD0D - proto_area_implement_client::recv_cash_shop_fitting_equip_r
     /// 0xE0B - proto_area_implement_client::recv_record_close_r
     /// 0xE45 - proto_area_implement_client::recv_job_change_notify_close
-    /// 0xECF  //////////////////NOT DONE/////////////// seems to also be calculated? none of the eax calls make it to the string on first step into for both eax calls
+    /// 0xECF - proto_area_implement_client::recv_item_cooltime_notify
     /// 0xEF9 - proto_area_implement_client::recv_chara_update_alignment
-    /// 0x102E
-    /// 0x10C5 (0x102E + 0x97) 
-    /// 0x10DA
-    /// 0x1105
-    /// 0x1198
-    /// 0x11FA
-    /// 0x124C
-    /// 0x125E (0x124C + 0x12)
-    /// 0x129B
-    /// 0x12A4
-    /// 0x12E0 (0x12A4 + 0x3C)
-    /// 0x1392
+    /// 0x102E - proto_area_implement_client::recv_trade_notify_replied
+    /// 0x10C5 (0x102E + 0x97) proto_area_implement_client::recv_dropobject_notify_access_priority
+    /// 0x10DA  ///////////////////follow to the call edx at the end, it is somewhat involved/////////////////////////////
+    /// 0x1105 - proto_area_implement_client::recv_event_union_storage_open
+    /// 0x1198 - proto_area_implement_client::recv_logout_cancel
+    /// 0x11FA - proto_area_implement_client::recv_skill_inherit_lost
+    /// 0x124C - proto_area_implement_client::recv_situation_end
+    /// 0x125E (0x124C + 0x12) proto_area_implement_client::recv_event_show_board_end
+    /// 0x129B - proto_area_implement_client::recv_battle_report_noact_notify_freeze
+    /// 0x12A4 - proto_area_implement_client::recv_charabody_self_salvage_notify
+    /// 0x12E0 (0x12A4 + 0x3C) proto_area_implement_client::recv_charabody_self_salvage_end
+    /// 0x1392 - proto_area_implement_client::recv_skill_base_notify
     /// 0x1489
     /// 0x14DA
     /// 0x14F6
@@ -61,33 +61,33 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1837
     /// 0x18CC
     /// 0x19C3 (0x18CC + 0xF7) 
-    /// 0x1A0F
-    /// 0x1AA8
-    /// 0x1B5C
-    /// 0x1BD6
-    /// 0x1C0A
-    /// 0x1C15
-    /// 0x1C20
+    /// 0x1A0F - proto_area_implement_client::recv_charabody_state_update_notify
+    /// 0x1AA8 - proto_area_implement_client::recv_situation_start
+    /// 0x1B5C - proto_area_implement_client::recv_event_start
+    /// 0x1BD6 - proto_area_implement_client::recv_quest_get_mission_quest_works_r
+    /// 0x1C0A - proto_area_implement_client::recv_skill_tree_notify
+    /// 0x1C15 - proto_area_implement_client::recv_item_update_ac
+    /// 0x1C20 - proto_area_implement_client::recv_cash_shop_fitting_unequip_r
     /// 0x1C6C (0x1C20 + 0x4C)
-    /// 0x1D49
-    /// 0x1D68
-    /// 0x1DBE
-    /// 0x1E65
+    /// 0x1D49 - proto_area_implement_client::recv_cash_shop_get_url_commerce_r
+    /// 0x1D68 - proto_area_implement_client::recv_trade_notify_invited
+    /// 0x1DBE - proto_area_implement_client::recv_battle_report_end_notify
+    /// 0x1E65 -  - proto_area_implement_client::recv_charabody_self_warpdragon_penalty
     /// 0x1F32 (0x1E65 + 0xCD) 
     /// 0x1F5A - proto_area_implement_client::recv_item_update_durability
-    /// 0x1F73
+    /// 0x1F73 - proto_area_implement_client::recv_shortcut_notify_deregist
     /// 0x201C (0x1F73 + 0xA9) 
-    /// 0x2063
-    /// 0x213C
+    /// 0x2063 - proto_area_implement_client::recv_item_update_date_end_protect
+    /// 0x213C - proto_area_implement_client::recv_item_update_date_end_protect
     /// 0x218A (0x213C + 0x4E)
-    /// 0x2246
-    /// 0x2257
-    /// 0x22E7
-    /// 0x2353
+    /// 0x2246 - proto_area_implement_client::recv_union_close_window_r
+    /// 0x2257 - proto_area_implement_client::recv_charabody_salvage_request_r
+    /// 0x22E7 - proto_area_implement_client::recv_refusallist_add_user_r
+    /// 0x2353 - proto_area_implement_client::recv_record_notify_open
     /// 0x239D (0x2353 + 0x4A)
-    /// 0x23D3
-    /// 0x23E5
-    /// 0x2467
+    /// 0x23D3 - proto_area_implement_client::recv_chara_notify_stateflag
+    /// 0x23E5 - proto_area_implement_client::recv_object_sub_target_update_notify
+    /// 0x2467 - proto_area_implement_client::recv_shop_buy_r
     /// 0x2470
     /// 0x2478
     /// 0x250E (0x2478 + 0x96) 
@@ -629,7 +629,7 @@ namespace Necromancy.Server.Packet.Id
         send_base_check_version = 0x5705,
         recv_base_check_version_r = 0xEFDD,
         send_base_enter = 0xAE43,
-        recv_base_enter = 0xEF9
+        recv_base_enter = 0x129B
 
         // Send OP Codes - ordered by op code
     }
