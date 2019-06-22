@@ -7,33 +7,33 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1A6 - proto_area_implement_client::recv_cash_shop_get_url_common_r
     /// 0x1AB (0x1A6 + 0x5)
     /// 0x1DA - proto_area_implement_client::recv_sv_conf_option_request_r
-    /// 0x22C
-    /// 0x2C5
+    /// 0x22C - proto_area_implement_client::recv_auction_receive_gold_r
+    /// 0x2C5 - proto_area_implement_client::recv_item_update_hardness
     /// 0x2FA - proto_area_implement_client::recv_charabody_notify_loot_start_cancel
     /// 0x397 - recv_stall_close_r
-    /// 0x411  (0x397 + 0x7A)  
+    /// 0x411  (0x397 + 0x7A)  proto_area_implement_client::recv_skill_custom_close_r
     /// 0x494 - proto_area_implement_client::recv_event_tresurebox_select_r
-    /// 0x54E
-    /// 0x5F8  (0x54E + 0xAA)  
-    /// 0x604
-    /// 0x65C
-    /// 0x661 (0x65C + 0x5)
-    /// 0x723
-    /// 0x780
+    /// 0x54E - proto_area_implement_client::recv_charabody_loot_complete2_r
+    /// 0x5F8  (0x54E + 0xAA)  proto_area_implement_client::recv_item_update_num
+    /// 0x604 - proto_area_implement_client::recv_battle_report_action_skill_exec
+    /// 0x65C - proto_area_implement_client::recv_union_mantle_close_r
+    /// 0x661 (0x65C + 0x5) proto_area_implement_client::recv_chara_update_ap_cost_per
+    /// 0x723 - proto_area_implement_client::recv_cloak_notify_close_r
+    /// 0x780 - proto_area_implement_client::recv_chara_update_condition_resist
     /// 0x794 - proto_area_implement_client::recv_wanted_jail_update_money
-    /// 0x8CD
-    /// 0x99D  (0x8CD + 0xD0)  
-    /// 0x9F5
-    /// 0xB2F
-    /// 0xBFE
-    /// 0xC5F
-    /// 0xCE7
-    /// 0xCFF
-    /// 0xD0D
-    /// 0xE0B
-    /// 0xE45
-    /// 0xECF
-    /// 0xEF9
+    /// 0x8CD - proto_area_implement_client::recv_self_action_cost
+    /// 0x99D  (0x8CD + 0xD0)  proto_area_implement_client::recv_event_end
+    /// 0x9F5  //////////NOT DONE/////////// i suspect it is the 3rd call eax down the list but also suspect it is calculated somehow
+    /// 0xB2F - proto_area_implement_client::recv_charabody_loot_start2_r
+    /// 0xBFE - proto_area_implement_client::recv_item_drop_r
+    /// 0xC5F - proto_area_implement_client::recv_dbg_option_change_r
+    /// 0xCE7 - proto_area_implement_client::recv_mail_open_r
+    /// 0xCFF - proto_area_implement_client::recv_party_accept_to_apply_r
+    /// 0xD0D - proto_area_implement_client::recv_cash_shop_fitting_equip_r
+    /// 0xE0B - proto_area_implement_client::recv_record_close_r
+    /// 0xE45 - proto_area_implement_client::recv_job_change_notify_close
+    /// 0xECF  //////////////////NOT DONE/////////////// seems to also be calculated? none of the eax calls make it to the string on first step into for both eax calls
+    /// 0xEF9 - proto_area_implement_client::recv_chara_update_alignment
     /// 0x102E
     /// 0x10C5 (0x102E + 0x97) 
     /// 0x10DA
@@ -628,8 +628,9 @@ namespace Necromancy.Server.Packet.Id
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
         send_base_check_version = 0x5705,
         recv_base_check_version_r = 0xEFDD,
-        send_base_enter = 0xAE43
-        
+        send_base_enter = 0xAE43,
+        recv_base_enter = 0xEF9
+
         // Send OP Codes - ordered by op code
     }
 }
