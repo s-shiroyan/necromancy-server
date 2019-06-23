@@ -634,8 +634,8 @@ namespace Necromancy.Server.Packet.Id
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
-        recv_map_enter_r, // TODO find OP
-        
+        recv_map_enter_r = 0x793E,
+
         // Send OP Codes - ordered by op code
         send_map_entry = 0x2DE3,
         send_base_check_version = 0x5705,
