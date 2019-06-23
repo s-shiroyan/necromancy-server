@@ -645,10 +645,7 @@ namespace Necromancy.Server.Packet.Id
         send_skill_request_info, // TODO find OP
         send_sv_conf_option_request, // TODO find OP
         send_shortcut_request_data, // TODO find OP
-        send_map_enter, // TODO find OP
-        
-        //send base check version
-        //send base enter
-        //send data get self
+        send_map_enter = 0x70FD,
+        send_party_request_draw_item_list = 0xEC5A
     }
 }
