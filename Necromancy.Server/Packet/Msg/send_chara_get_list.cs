@@ -38,14 +38,14 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteByte(2);//character slot, 0 for left, 1 for middle, 2 for right
-            res.WriteInt32(2);//num of characters? 0 = none, 1 = 1 character, 2 does nothing missing data maybe?
-            res.WriteFixedString("Test", 91); // 0x5B | 91x 1 byte
+            res.WriteByte(2); //character slot, 0 for left, 1 for middle, 2 for right
+            res.WriteInt32(1); //num of characters? 0 = none, 1 = 1 character, 2 does nothing missing data maybe?
+            res.WriteFixedString("Test", 91); // Name
 
-            res.WriteInt32(1);//changed nothing visibly 
-            res.WriteInt32(2);//character level stat
-            res.WriteInt32(0);//changed nothing visibly 
-            res.WriteInt32(0);//class stat 
+            res.WriteInt32(0); // 0 = Alive | 1 = Dead
+            res.WriteInt32(2); // Level
+            res.WriteInt32(1); //changed nothing visibly 
+            res.WriteInt32(0); //class stat 
             //
             res.WriteInt32(0);//race flag
             res.WriteInt32(1);//gender flag
@@ -53,10 +53,10 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0);//not sure
             //
 
-            res.WriteByte(1);//changed nothing visibly
+            res.WriteByte(0);//changed nothing visibly
             //
 
-            res.WriteInt32(1); //19x 4 byte //changed nothing visibly
+            res.WriteInt32(0); //19x 4 byte //changed nothing visibly
             res.WriteInt32(0);//changed nothing visibly
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -80,7 +80,7 @@ namespace Necromancy.Server.Packet.Msg
             //19x
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(i);
+                res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -102,7 +102,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
 
-            res.WriteInt32(1); //19x 4 byte
+            res.WriteInt32(0); //19x 4 byte
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -120,9 +120,9 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteInt32(1);
+            res.WriteInt32(0);
 
-            res.WriteInt32(2); //19x 4 byte
+            res.WriteInt32(0); //19x 4 byte
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -140,10 +140,10 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteInt32(2);
+            res.WriteInt32(0);
 
 
-            res.WriteByte(1);//changed nothing visibly
+            res.WriteByte(0);//changed nothing visibly
 
             res.WriteInt32(0);//changed nothing visibly
 
