@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             
 
-            Router.Send(client, (ushort) AreaPacketId.recv_base_enter, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);            
         }
     }
 }
