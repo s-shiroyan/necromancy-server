@@ -640,7 +640,6 @@ namespace Necromancy.Server.Packet.Id
         send_map_entry = 0x2DE3,
         send_base_check_version = 0x5705,
         send_data_get_self_chara_data_request = 0x74DD,
-        send_base_enter = 0x4898,
         send_base_enter = 0xAE43,
         send_map_get_info = 0x25D7,
         send_skill_request_info, // TODO find OP
