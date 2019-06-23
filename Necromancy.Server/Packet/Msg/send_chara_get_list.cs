@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(2);//num of characters? 0 = none, 1 = 1 character, 2 does nothing missing data maybe?
             res.WriteFixedString("Test", 91); // 0x5B | 91x 1 byte
 
-            res.WriteInt32(1);//changed nothing visibly 
+            res.WriteInt32(0); // 0 = Alive | 1 = Dead
             res.WriteInt32(2);//character level stat
             res.WriteInt32(0);//changed nothing visibly 
             res.WriteInt32(0);//class stat 
