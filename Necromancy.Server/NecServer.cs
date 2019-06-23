@@ -97,6 +97,7 @@ namespace Necromancy.Server
             // Area Handler
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
             _areaConsumer.AddHandler(new send_base_enter(this));
+            _areaConsumer.AddHandler(new send_data_get_self_chara_data_request(this));
         }
     }
 }
