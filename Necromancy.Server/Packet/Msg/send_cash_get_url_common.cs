@@ -17,8 +17,8 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt16(0);
+            res.WriteInt32(1);
+            res.WriteInt16(1);
             Router.Send(client, (ushort) MsgPacketId.recv_cash_get_url_common_r, res);
         }
     }
