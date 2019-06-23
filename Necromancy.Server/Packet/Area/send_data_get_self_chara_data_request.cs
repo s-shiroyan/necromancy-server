@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
             //hit with 0 bytes sent for some reason but also crashed..?
 
-            Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_request_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_request_r, res);            
         }
     }
 }

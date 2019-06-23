@@ -1,4 +1,5 @@
 // ReSharper disable InconsistentNaming
+
 namespace Necromancy.Server.Packet.Id
 {
     /// <summary>
@@ -622,7 +623,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x397  + 0x7A - 0x004964AA
     /// 0xC2A1 + 0xD3 - 0x004C2F8E
     /// </summary>
-
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
@@ -632,7 +632,6 @@ namespace Necromancy.Server.Packet.Id
         recv_base_enter = 0x3806,
         send_data_get_self_chara_data_request = 0x74DD,
         recv_data_get_self_chara_data_request_r = 0x3C89
-
         // Send OP Codes - ordered by op code
     }
 }
