@@ -7,7 +7,7 @@ namespace Necromancy.Server.Packet.Id
     /// </summary>
     public enum MsgPacketId : ushort
     {
-        // Recv OP Codes - Switch: 0x4E4210 - ordered by op code
+        // Recv OP Codes - Switch: 0x4E4268 - ordered by op code
         recv_union_request_invite_target_r = 0x19C,
         recv_union_request_set_info_r = 0x1C6,
         recv_chara_select_back_r = 0x1C9,

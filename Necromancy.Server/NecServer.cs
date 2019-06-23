@@ -99,6 +99,11 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_base_enter(this));
             _areaConsumer.AddHandler(new send_data_get_self_chara_data_request(this));
             _areaConsumer.AddHandler(new send_map_entry(this));
+            _areaConsumer.AddHandler(new send_map_get_info(this));
+            _areaConsumer.AddHandler(new send_map_enter(this));
+            _areaConsumer.AddHandler(new send_shortcut_request_data(this));
+            _areaConsumer.AddHandler(new send_skill_request_info(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_request(this));
         }
     }
 }
