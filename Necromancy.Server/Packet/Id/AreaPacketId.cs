@@ -626,12 +626,15 @@ namespace Necromancy.Server.Packet.Id
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-        send_base_check_version = 0x5705,
-        recv_base_check_version_r = 0xEFDD,
-        send_base_enter = 0xAE43,
+        recv_data_get_self_chara_data_request_r = 0x3C89,
         recv_base_enter = 0x3806,
-        send_data_get_self_chara_data_request = 0x74DD,
-        recv_data_get_self_chara_data_request_r = 0x3C89
+        recv_base_check_version_r = 0xEFDD,
+        recv_map_entry_r = 0xF9F9,
+
         // Send OP Codes - ordered by op code
+        send_map_entry = 0x2DE3,
+        send_base_check_version = 0x5705,
+        send_data_get_self_chara_data_request = 0x74DD,
+        send_base_enter = 0xAE43,
     }
 }
