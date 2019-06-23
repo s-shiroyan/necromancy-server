@@ -177,13 +177,13 @@ namespace Necromancy.Server.Packet.Id
     /// 0x4C8B (0x4C74 + 0x17)
     /// 0x4CF3
     /// 0x4D70 - proto_area_implement_client::recv_item_sort_r
-    /// 0x4DF8
-    /// 0x4E10
+    /// 0x4DF8  - proto_area_implement_client::recv_party_establish_r
+    /// 0x4E10 - proto_area_implement_client::recv_chara_update_lv_detail_start
     /// 0x4E8D (0x4E17 + 0x76) 
-    /// 0x4EF4
-    /// 0x4F10
-    /// 0x5016
-    /// 0x505E
+    /// 0x4EF4 - proto_area_implement_client::recv_battle_release_attack_pose_self
+    /// 0x4F10 - proto_area_implement_client::recv_battle_charge_start_r
+    /// 0x5016 - proto_area_implement_client::recv_event_system_message_timer_end
+    /// 0x505E - proto_area_implement_client::recv_quest_hint
     /// 0x50B2
     /// 0x50D1
     /// 0x5243
