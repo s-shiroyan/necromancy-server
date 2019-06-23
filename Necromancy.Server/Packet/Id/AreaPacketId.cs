@@ -202,86 +202,86 @@ namespace Necromancy.Server.Packet.Id
     /// 0x58E7 - proto_area_implement_client::recv_logout_start
     /// 0x5A5F - proto_area_implement_client::recv_create_package_r
     /// 0x5AE9 - proto_area_implement_client::recv_battle_charge_end_r
-    /// 0x5C15
-    /// 0x5C47
-    /// 0x5CF8
-    /// 0x5D52
+    /// 0x5C15 - proto_area_implement_client::recv_trade_notify_offerd
+    /// 0x5C47 - proto_area_implement_client::recv_monster_hate_on
+    /// 0x5CF8 - proto_area_implement_client::recv_event_quest_order_list_begin
+    /// 0x5D52 - proto_area_implement_client::recv_forge_sp_check_r
     /// 0x5E48 (0x5D52 + 0xF6) 
-    /// 0x5E79
-    /// 0x5EDB
+    /// 0x5E79 - proto_area_implement_client::recv_stall_buy_item_r
+    /// 0x5EDB - proto_area_implement_client::recv_event_show_board_start
     /// 0x5F1A (0x5EDB + 0x3F)
-    /// 0x5F6C
-    /// 0x6001
+    /// 0x5F6C - proto_area_implement_client::recv_chara_update_action_prohibit
+    /// 0x6001 - proto_area_implement_client::recv_message_board_close_r
     /// 0x6023 (0x6001 + 0x22)
-    /// 0x6030
-    /// 0x60E5
-    /// 0x6175
+    /// 0x6030 - proto_area_implement_client::recv_raisescale_open_cash_shop_r
+    /// 0x60E5 - proto_area_implement_client::recv_union_request_secede_result
+    /// 0x6175 - proto_area_implement_client::recv_party_decline_to_invite_r
     /// 0x61C8
-    /// 0x621A
-    /// 0x62E2
-    /// 0x63B2
-    /// 0x6510
-    /// 0x6539
-    /// 0x6547
-    /// 0x6554
-    /// 0x65A6
+    /// 0x621A - proto_area_implement_client::recv_revive_execute_r
+    /// 0x62E2 - proto_area_implement_client::recv_trade_notify_fixed
+    /// 0x63B2 - proto_area_implement_client::recv_quest_hint_remove
+    /// 0x6510 - proto_area_implement_client::recv_data_notify_debug_object_data
+    /// 0x6539 - proto_area_implement_client::recv_storage_deposit_money_r
+    /// 0x6547 - proto_area_implement_client::recv_get_thread_record_r
+    /// 0x6554 - proto_area_implement_client::recv_cash_shop2_notify_open
+    /// 0x65A6 - proto_area_implement_client::recv_chara_update_maxac
     /// 0x65EE (0x65A6 + 0x48) 
     /// 0x662F - proto_area_implement_client::recv_event_message
     /// 0x66EC - proto_area_implement_client::recv_wanted_update_state_notify
     /// 0x679B - proto_area_implement_client::recv_charabody_self_notify_abyss_stead_pos
     /// 0x68AA - proto_area_implement_client::recv_party_notify_failed_draw_all
-    /// 0x68E7
+    /// 0x68E7 - proto_area_implement_client::recv_battle_attack_next_r
     /// 0x6911 (0x68E7 + 0x2A)
     /// 0x6912 - proto_area_implement_client::recv_gem_break_r
     /// 0x692A
     /// 0x692B (0x692A + 0x1)
-    /// 0x6979
-    /// 0x6A56
+    /// 0x6979 - proto_area_implement_client::recv_party_disband_r
+    /// 0x6A56 - proto_area_implement_client::recv_event_select_exec
     /// 0x6A7A - proto_area_implement_client::recv_chara_update_ap
     /// 0x6B6A
     /// 0x6B74 (0x6B6A + 0xA)
-    /// 0x6BDC
-    /// 0x6C79
+    /// 0x6BDC - proto_area_implement_client::recv_battle_report_action_item_enchant
+    /// 0x6C79 - proto_area_implement_client::recv_data_notify_npc_ex_dragon
     /// 0x6C7B (0x6C79 + 0x2)
-    /// 0x6D46
-    /// 0x6DB4
+    /// 0x6D46 - proto_area_implement_client::recv_quest_abort_r
+    /// 0x6DB4 - proto_area_implement_client::recv_gem_cancel_piece_r
     /// 0x6DF4 (0x6DB4 + 0x40)
-    /// 0x6E06
-    /// 0x6F32
+    /// 0x6E06 - proto_area_implement_client::recv_battle_report_action_steal
+    /// 0x6F32 - proto_area_implement_client::recv_cmd_exec_r
     /// 0x6FB2 - proto_area_implement_client::recv_self_dragon_pos_notify
-    /// 0x7004
-    /// 0x708B
+    /// 0x7004 - proto_area_implement_client::recv_event_quest_report_list_begin
+    /// 0x708B - proto_area_implement_client::recv_item_move_r
     /// 0x70B7
-    /// 0x70F6
+    /// 0x70F6 - proto_area_implement_client::recv_soul_dispitem_remove_data
     /// 0x715E (0x70F6 + 0x68)
-    /// 0x717D
-    /// 0x7181
-    /// 0x732D
-    /// 0x7341
+    /// 0x717D- proto_area_implement_client::recv_object_disappear_notify
+    /// 0x7181 - proto_area_implement_client::recv_battle_report_notify_exp_bonus
+    /// 0x732D - proto_area_implement_client::recv_cash_shop_notify_open
+    /// 0x7341 - proto_area_implement_client::recv_forge_sp_execute_r
     /// 0x735E
-    /// 0x73A1
-    /// 0x73D1
+    /// 0x73A1 - proto_area_implement_client::recv_quest_get_story_quest_works_r
+    /// 0x73D1 - proto_area_implement_client::recv_self_buff_notify
     /// 0x746F (0x73D1 + 0x9E) 
     /// 0x755C
-    /// 0x7576
+    /// 0x7576 - proto_area_implement_client::recv_party_notify_remove_draw_item
     /// 0x75A5 (0x7576 + 0x2F)
     /// 0x7697
-    /// 0x772A
+    /// 0x772A - proto_area_implement_client::recv_door_close_r
     /// 0x77A7 - proto_area_implement_client::recv_event_access_object_r
     /// 0x789E
-    /// 0x793E
-    /// 0x79A2
+    /// 0x793E - proto_area_implement_client::recv_map_enter_r
+    /// 0x79A2 - proto_area_implement_client::recv_event_abort_r
     /// 0x79A9 - proto_area_implement_client::recv_storage_drawmoney
     /// 0x7A5C - proto_area_implement_client::recv_chara_update_ap_cost_diff
-    /// 0x7A6F
+    /// 0x7A6F - proto_area_implement_client::recv_cash_shop_regist_billing_zip_r
     /// 0x7B5D - proto_area_implement_client::recv_object_point_move_r
     /// 0x7B86 (0x7B5D + 0x29)
     /// 0x7BB3 - proto_area_implement_client::recv_party_change_leader_r
     /// 0x7CB2 - proto_area_implement_client::recv_battle_attack_pose_start_notify
-    /// 0x7CF0
-    /// 0x7D1C
+    /// 0x7CF0 - proto_area_implement_client::recv_wanted_list_actor
+    /// 0x7D1C - proto_area_implement_client::recv_charabody_salvage_notify_body
     /// 0x7D2B (0x7D1C + 0xF)  
-    /// 0x7D53
+    /// 0x7D53 - proto_area_implement_client::recv_event_change_cancel_sw
     /// 0x7D75 - proto_area_implement_client::recv_union_open_window
     /// 0x7F09 - proto_area_implement_client::recv_cash_shop_get_url_r
     /// 0x7F34 - proto_area_implement_client::recv_skill_custom_slot_set_r
