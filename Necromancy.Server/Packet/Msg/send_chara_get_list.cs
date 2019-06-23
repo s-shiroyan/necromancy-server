@@ -38,46 +38,39 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteByte(2); //character slot, 0 for left, 1 for middle, 2 for right
-            res.WriteInt32(1); //num of characters? 0 = none, 1 = 1 character, 2 does nothing missing data maybe?
+            res.WriteByte(2); // Slot 0 = left | 1 = middle | 2 = right
+            res.WriteInt32(2); // 0 = Not Visible | 1 = In Prision | 2 = Ok ?
             res.WriteFixedString("Test", 91); // Name
-
             res.WriteInt32(0); // 0 = Alive | 1 = Dead
             res.WriteInt32(2); // Level
-            res.WriteInt32(1); //changed nothing visibly 
-            res.WriteInt32(0); //class stat 
-            //
-            res.WriteInt32(0);//race flag
-            res.WriteInt32(1);//gender flag
-            res.WriteByte(2);//changing this byte makes hair and face change?
-            res.WriteByte(0);//not sure
-            //
+            res.WriteInt32(0);
+            res.WriteInt32(0); // Class
+            res.WriteInt32(0); // Race
+            res.WriteInt32(1); // Gender
+            res.WriteByte(2); // changing this byte makes hair and face change?
+            res.WriteByte(0);
+            res.WriteByte(0);
 
-            res.WriteByte(0);//changed nothing visibly
-            //
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
-            res.WriteInt32(0); //19x 4 byte //changed nothing visibly
-            res.WriteInt32(0);//changed nothing visibly
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            //
-
-            //19x
             for (int i = 0; i < 19; i++)
             {
                 res.WriteInt32(0);
@@ -92,37 +85,15 @@ namespace Necromancy.Server.Packet.Msg
 
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0); // bool 1 | 0
+                res.WriteByte(1); // bool
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
-
-                res.WriteByte((byte) i);
+                res.WriteByte(0);
             }
 
-
-            res.WriteInt32(0); //19x 4 byte
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            res.WriteInt32(0); //19x 4 byte
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -142,11 +113,28 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
 
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
-            res.WriteByte(0);//changed nothing visibly
-
-            res.WriteInt32(0);//changed nothing visibly
-
+            res.WriteByte(0);
+            res.WriteInt32(0);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res);
         }
     }
