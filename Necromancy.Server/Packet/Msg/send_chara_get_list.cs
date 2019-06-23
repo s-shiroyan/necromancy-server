@@ -28,35 +28,35 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyDataComplete(NecClient client)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteByte(0);
-            res2.WriteInt32(0);
-            res2.WriteInt32(0);
-            res2.WriteInt32(0);
+            res2.WriteByte(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2);
         }
 
         private void SendNotifyData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteByte(0);
-            res.WriteInt32(0);
+            res.WriteByte(1);
+            res.WriteInt32(1);
             res.WriteFixedString("Test", 91); // 0x5B | 91x 1 byte
 
-            res.WriteInt32(0);
+            res.WriteInt32(1);
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
             //
+            res.WriteInt32(1);
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteByte(0xB);
+            res.WriteByte(1);
             res.WriteByte(0);
             //
 
-            res.WriteByte(0xA);
+            res.WriteByte(1);
             //
 
-            res.WriteInt32(19); //19x 4 byte
+            res.WriteInt32(1); //19x 4 byte
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -74,7 +74,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteInt32(19);
+            res.WriteInt32(0);
             //
 
             //19x
@@ -143,7 +143,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(2);
 
 
-            res.WriteByte(0xA);
+            res.WriteByte(1);
 
             res.WriteInt32(0);
 
