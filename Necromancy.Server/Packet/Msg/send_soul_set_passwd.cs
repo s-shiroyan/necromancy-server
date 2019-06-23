@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(0xABCDEFAA);
+            res.WriteInt32(0);
             Router.Send(client, (ushort) MsgPacketId.recv_soul_set_passwd_r, res);
         }
     }

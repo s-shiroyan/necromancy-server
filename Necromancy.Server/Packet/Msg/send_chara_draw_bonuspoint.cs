@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteByte(8);
+            res.WriteByte(1); // Number of points
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_draw_bonuspoint_r, res);
         }
