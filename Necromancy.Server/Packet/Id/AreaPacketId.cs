@@ -628,13 +628,22 @@ namespace Necromancy.Server.Packet.Id
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
         recv_data_get_self_chara_data_request_r = 0x3C89,
         recv_base_enter = 0x3806,
+        recv_map_get_info_r = 0xEDA6,
         recv_base_check_version_r = 0xEFDD,
         recv_map_entry_r = 0xF9F9,
-
+        recv_shortcut_request_data_r = 0xA084,
+        recv_sv_conf_option_request_r = 0x1DA,
+        recv_map_enter_r, // TODO find OP
+        
         // Send OP Codes - ordered by op code
         send_map_entry = 0x2DE3,
         send_base_check_version = 0x5705,
         send_data_get_self_chara_data_request = 0x74DD,
         send_base_enter = 0xAE43,
+        send_map_get_info = 0x25D7,
+        send_skill_request_info, // TODO find OP
+        send_sv_conf_option_request, // TODO find OP
+        send_shortcut_request_data, // TODO find OP
+        send_map_enter, // TODO find OP
     }
 }
