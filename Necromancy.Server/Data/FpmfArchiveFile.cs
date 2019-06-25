@@ -44,7 +44,7 @@ namespace Necromancy.Server.Data
             get => _data;
             set => _data = value;
         }
-
+        
         public FpmfArchiveFile()
         {
         }
