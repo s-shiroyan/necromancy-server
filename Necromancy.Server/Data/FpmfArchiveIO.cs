@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
@@ -41,21 +42,21 @@ namespace Necromancy.Server.Data
 
         public FpmfArchive Open(string hedFilePath)
         {
-            FileInfo file = new FileInfo(hedFilePath);
-            if (!file.Exists)
+            FileInfo hedFile = new FileInfo(hedFilePath);
+            if (!hedFile.Exists)
             {
                 throw new FileNotFoundException($"File: {hedFilePath} not found.");
             }
 
-            IBuffer buffer = new StreamBuffer(hedFilePath);
+            IBuffer hedBuffer = new StreamBuffer(hedFile.FullName);
 
-            if (buffer.Size < 12)
+            if (hedBuffer.Size < 12)
             {
                 throw new Exception("File to small");
             }
 
-            buffer.SetPositionStart();
-            byte[] magicBytes = buffer.ReadBytes(4);
+            hedBuffer.SetPositionStart();
+            byte[] magicBytes = hedBuffer.ReadBytes(4);
             for (int i = 0; i < 4; i++)
             {
                 if (magicBytes[i] != MagicBytes[i])
@@ -65,65 +66,90 @@ namespace Necromancy.Server.Data
             }
 
             FpmfArchive archive = new FpmfArchive();
-            archive.Size = buffer.ReadUInt32();
-            uint unknown0 = buffer.ReadUInt32();
+            archive.Size = hedBuffer.ReadUInt32();
+            uint unknown0 = hedBuffer.ReadUInt32();
 
-            buffer = DecryptHed(buffer);
-            buffer.SetPositionStart();
+            hedBuffer = DecryptHed(hedBuffer);
+            hedBuffer.SetPositionStart();
 
-            uint unknown1 = buffer.ReadUInt32();
-            uint unknown2 = buffer.ReadUInt32();
-            byte unknown3 = buffer.ReadByte();
-            byte unknown4 = buffer.ReadByte();
-            uint unknown5 = buffer.ReadUInt32();
-            uint unknown6 = buffer.ReadUInt32();
-            int strLen = (int) unknown6 - 8;
-            string unknown7 = buffer.ReadString(strLen);
-            uint unknown8 = buffer.ReadUInt32();
-            uint unknown44 = buffer.ReadUInt32();
-            uint unknown13 = buffer.ReadUInt32();
-            uint unknown14 = buffer.ReadUInt32();
-            uint keyLen = buffer.ReadUInt32();
-            byte[] key = buffer.ReadBytes((int) keyLen);
-            uint unknown15 = buffer.ReadUInt32();
-            uint unknown16 = buffer.ReadUInt32();
-            uint unknown17 = buffer.ReadUInt32();
+            uint unknown1 = hedBuffer.ReadUInt32();
+            uint unknown2 = hedBuffer.ReadUInt32();
+            byte unknown3 = hedBuffer.ReadByte();
+            byte unknown4 = hedBuffer.ReadByte();
+            uint unknown5 = hedBuffer.ReadUInt32();
+            uint unknown6 = hedBuffer.ReadUInt32();
+            int strLen = hedBuffer.ReadByte();
+            archive.DatPath = hedBuffer.ReadString(strLen);
+            uint unknown7 = hedBuffer.ReadUInt32();
+            uint unknown8 = hedBuffer.ReadUInt32();
+            uint unknown9 = hedBuffer.ReadUInt32();
+            uint unknown10 = hedBuffer.ReadUInt32();
+            uint keyLen = hedBuffer.ReadUInt32();
+            archive.Key = hedBuffer.ReadBytes((int) keyLen);
+            uint unknown11 = hedBuffer.ReadUInt32();
+            uint unknown12 = hedBuffer.ReadUInt32();
+            uint numFiles = hedBuffer.ReadUInt32();
 
-            // index
 
-            
-            strLen = buffer.ReadByte();
-            string directoryPath = buffer.ReadString(strLen);
-            strLen = buffer.ReadByte();
-            string filePath = buffer.ReadString(strLen);
-            uint unknown18 = buffer.ReadUInt32();
-            uint unknown19 = buffer.ReadUInt32();
-            uint fileSize = buffer.ReadUInt32();
-            uint fileOffset = buffer.ReadUInt32();
-            uint unknown22 = buffer.ReadUInt32();
-            
+            Dictionary<uint, IBuffer> datBufferPool = new Dictionary<uint, IBuffer>();
+
+            for (int i = 0; i < numFiles; i++)
+            {
+                FpmfArchiveFile archiveFile = new FpmfArchiveFile();
+                strLen = hedBuffer.ReadByte();
+                archiveFile.DirectoryPath = hedBuffer.ReadString(strLen);
+                strLen = hedBuffer.ReadByte();
+                archiveFile.FilePath = hedBuffer.ReadString(strLen);
+                archiveFile.DatNumber = hedBuffer.ReadUInt32();
+                archiveFile.Offset = hedBuffer.ReadUInt32();
+                archiveFile.Size = hedBuffer.ReadUInt32();
+                uint unknown13 = hedBuffer.ReadUInt32();
+                uint unknown14 = hedBuffer.ReadUInt32();
+
+                _logger.Info($"Processing: {archiveFile.FilePath}");
+
+                IBuffer datBuffer;
+                if (datBufferPool.ContainsKey(archiveFile.DatNumber))
+                {
+                    datBuffer = datBufferPool[archiveFile.DatNumber];
+                }
+                else
+                {
+                    string datFileName = archive.DatPath.Replace("%08x", $"{archiveFile.DatNumber:X8}");
+                    string datFilePath = Path.Combine(hedFile.DirectoryName, datFileName);
+                    FileInfo datFile = new FileInfo(datFilePath);
+                    if (!datFile.Exists)
+                    {
+                        throw new FileNotFoundException($"File: {datFilePath} not found.");
+                    }
+
+                    datBuffer = new StreamBuffer(datFile.FullName);
+                    datBufferPool.Add(archiveFile.DatNumber, datBuffer);
+                }
+
+                IBuffer decrypted = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                archiveFile.Data = decrypted.GetAllBytes();
+
+                archive.AddFile(archiveFile);
+            }
+
             return archive;
         }
 
-        public void Decrypt(string hedFilePath, string outDirectoryPath)
+        public void Save(FpmfArchive archive, string directoryPath)
         {
-            FileInfo file = new FileInfo(hedFilePath);
-            if (!file.Exists)
+            DirectoryInfo directory = new DirectoryInfo(directoryPath);
+            if (!directory.Exists)
             {
-                throw new FileNotFoundException($"File: {hedFilePath} not found.");
+                throw new FileNotFoundException($"Directory: {directoryPath} not found.");
             }
 
-            DirectoryInfo directoryInfo = new DirectoryInfo(outDirectoryPath);
-            if (!directoryInfo.Exists)
+            List<FpmfArchiveFile> files = archive.GetFiles();
+            foreach (FpmfArchiveFile file in files)
             {
-                throw new FileNotFoundException($"Directory: {hedFilePath} not found.");
+                string filePath = Path.Combine(directory.FullName, file.FilePath);
+                File.WriteAllBytes(filePath, file.Data);
             }
-
-            string outPath = directoryInfo.FullName + file.Name;
-
-            IBuffer buffer = new StreamBuffer(hedFilePath);
-            buffer = DecryptHed(buffer);
-            File.WriteAllBytes(outPath, buffer.GetAllBytes());
         }
 
         /// <summary>
@@ -155,7 +181,7 @@ namespace Necromancy.Server.Data
         /// <summary>
         /// 0xA7E3F0
         /// </summary>
-        private IBuffer DecryptDat(IBuffer buffer, int fileOffset, int fileLength)
+        private IBuffer DecryptDat(IBuffer buffer, uint fileOffset, uint fileLength, byte[] key)
         {
             if (fileOffset + fileLength > buffer.Size)
             {
@@ -163,15 +189,15 @@ namespace Necromancy.Server.Data
             }
 
             int rotKeyIndex = 0;
-            buffer.Position = fileOffset;
+            buffer.Position = (int) fileOffset;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < fileLength)
             {
                 byte al = buffer.ReadByte();
-                al = (byte) (al - rotKeyIndex);
+                al = (byte) (al - key[rotKeyIndex]);
                 outBuffer.WriteByte(al);
                 rotKeyIndex++;
-                if (rotKeyIndex > RotKey.Length)
+                if (rotKeyIndex >= key.Length)
                 {
                     rotKeyIndex = 0;
                 }

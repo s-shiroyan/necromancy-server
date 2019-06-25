@@ -16,11 +16,11 @@ namespace Necromancy.Server
         {
             _consoleLock = new object();
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
-
             if (args.Length == 2)
             {
                 FpmfArchiveIO archiveIO = new FpmfArchiveIO();
-                archiveIO.Decrypt(args[0], args[1]);
+                FpmfArchive archive = archiveIO.Open(args[0]);
+                archiveIO.Save(archive, args[1]);
                 return;
             }
 
