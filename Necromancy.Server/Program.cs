@@ -8,28 +8,25 @@ namespace Necromancy.Server
 {
     internal class Program
     {
-        private static void Main(string[] args)
-        {
-            if (args.Length == 0)
-            {
-                new Program();
-            }
-            else if (args.Length == 2)
-            {
-                FpmfArchive archive = new FpmfArchive();
-                archive.Decrypt(args[0], args[1]);
-            }
-        }
+        private static void Main(string[] args) => new Program(args);
 
         private object _consoleLock;
 
-        public Program()
+        public Program(string[] args)
         {
             _consoleLock = new object();
-            NecSetting setting = new NecSetting();
-
-            LogProvider.Configure<NecLogger>(setting);
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
+
+            if (args.Length == 2)
+            {
+                FpmfArchiveIO archiveIO = new FpmfArchiveIO();
+                archiveIO.Decrypt(args[0], args[1]);
+                return;
+            }
+
+
+            NecSetting setting = new NecSetting();
+            LogProvider.Configure<NecLogger>(setting);
 
             NecServer server = new NecServer(setting);
             server.Start();
