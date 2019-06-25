@@ -141,7 +141,7 @@ namespace Necromancy.Server.Packet.Id
         send_chara_draw_bonuspoint = 0x99EC,
         send_base_login = 0xA53D,
         send_soul_authenticate_passwd = 0xB4BB,
-        send_soul_select = 0xC44F,
+        send_soul_select = 0xA869, // 0xC44F, // :0xA869
         send_soul_create = 0xCE74,
         send_chara_get_list = 0xF56C,
     }

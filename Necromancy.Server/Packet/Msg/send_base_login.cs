@@ -16,14 +16,14 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(2); 
 
-            res.WriteByte(0);
+            res.WriteByte(1);                                   
             res.WriteFixedString("Soul 1", 49);
             res.WriteByte(1); // Soul Level
             res.WriteByte(0); //bool
 
-            res.WriteByte(0);
+            res.WriteByte(2);
             res.WriteFixedString("Soul 2", 49);
             res.WriteByte(2); // Soul Level
             res.WriteByte(0); //bool
