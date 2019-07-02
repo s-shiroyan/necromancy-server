@@ -15,6 +15,11 @@ namespace Necromancy.Server.Packet.Auth
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            uint selectedWorld = packet.Data.ReadUInt32();
+
+            Logger.Info($"Selected World: {selectedWorld}");
+
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteCString("127.0.0.1"); //Message Server IP

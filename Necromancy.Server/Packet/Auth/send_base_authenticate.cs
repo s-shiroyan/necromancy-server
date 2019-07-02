@@ -22,6 +22,9 @@ namespace Necromancy.Server.Packet.Auth
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
             
             IBuffer res = BufferProvider.Provide();
+            //  0 = OK
+            // 1 = ID or Pw to long
+            // X unknown auth error, X
             res.WriteInt32(0);
             res.WriteInt32(1);
             
