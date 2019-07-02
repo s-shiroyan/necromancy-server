@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(2); 
+            res.WriteInt32(0); 
 
             res.WriteByte(1);                                   
             res.WriteFixedString("Soul 1", 49);
