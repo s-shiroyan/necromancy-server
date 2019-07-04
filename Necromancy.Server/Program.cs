@@ -1,5 +1,6 @@
 ﻿using System;
 using Arrowgene.Services.Logging;
+using Necromancy.Server.Data;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Setting;
 
@@ -7,17 +8,25 @@ namespace Necromancy.Server
 {
     internal class Program
     {
-        private static void Main(string[] args) => new Program();
+        private static void Main(string[] args) => new Program(args);
 
         private object _consoleLock;
 
-        public Program()
+        public Program(string[] args)
         {
             _consoleLock = new object();
-            NecSetting setting = new NecSetting();
-
-            LogProvider.Configure<NecLogger>(setting);
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
+            if (args.Length == 2)
+            {
+                FpmfArchiveIO archiveIO = new FpmfArchiveIO();
+                FpmfArchive archive = archiveIO.Open(args[0]);
+                archiveIO.Save(archive, args[1]);
+                return;
+            }
+
+
+            NecSetting setting = new NecSetting();
+            LogProvider.Configure<NecLogger>(setting);
 
             NecServer server = new NecServer(setting);
             server.Start();

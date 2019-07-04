@@ -27,6 +27,42 @@ namespace Necromancy.Server.Common
             return ((DateTimeOffset) dateTime).ToUnixTimeSeconds();
         }
 
+        public static string PathDifferenceEnd(string directoryInfo1, string directoryInfo2, bool unRoot)
+        {           
+            return PathDifference(new DirectoryInfo(directoryInfo1), new DirectoryInfo(directoryInfo2), unRoot);
+        }
+
+        public static string PathDifferenceEnd(FileSystemInfo directoryInfo1, FileSystemInfo directoryInfo2, bool unRoot)
+        {
+            string result;
+            if (directoryInfo1.FullName == directoryInfo2.FullName)
+            {
+                result = directoryInfo1.FullName;
+            }
+            else if (directoryInfo1.FullName.EndsWith(directoryInfo2.FullName))
+            {
+                result = directoryInfo1.FullName.Split(new[] {directoryInfo2.FullName},
+                    StringSplitOptions.RemoveEmptyEntries)[0];
+            }
+            else if (directoryInfo2.FullName.EndsWith(directoryInfo1.FullName))
+            {
+                result = directoryInfo2.FullName.Split(new[] {directoryInfo1.FullName},
+                    StringSplitOptions.RemoveEmptyEntries)[0];
+            }
+            else
+            {
+                result = "";
+            }
+
+            if (unRoot)
+            {
+                result = UnrootPath(result);
+            }
+
+            return result;
+        }
+        
+
         public static string PathDifference(string directoryInfo1, string directoryInfo2, bool unRoot)
         {
             return PathDifference(new DirectoryInfo(directoryInfo1), new DirectoryInfo(directoryInfo2), unRoot);
