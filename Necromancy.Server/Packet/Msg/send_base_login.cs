@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(2); 
 
-            res.WriteByte(1);                                   
+            res.WriteByte(1);
             res.WriteFixedString("Soul 1", 49);
             res.WriteByte(1); // Soul Level
             res.WriteByte(0); //bool
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0); //bool
             res.WriteByte(0);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res);
+        Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res);
         }
     }
 }

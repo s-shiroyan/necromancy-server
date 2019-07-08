@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
+            /*IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // Error
 
             res.WriteInt32(0);
@@ -31,7 +31,37 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(0);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);*/
+
+  
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(0);
+            res2.WriteInt32(0);
+
+            //sub_494c50
+            res2.WriteInt32(1);
+            res2.WriteInt32(2);
+            res2.WriteInt32(3);
+            res2.WriteInt16(4);
+            res2.WriteByte(1);
+
+            //sub_494B90 - dor loop
+          for(int i =0; i < 0x80; i++)  {
+                res2.WriteInt32(i);
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1);//bool 1 | 0
+                res2.WriteInt16(0);
+                res2.WriteInt16(0);
+                res2.WriteByte(0);
+                res2.WriteByte(0);
+                //
+            }
+
+
+            res2.WriteByte(1);
+
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2);
         }
     }
 }
