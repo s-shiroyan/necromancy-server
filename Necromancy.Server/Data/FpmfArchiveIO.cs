@@ -67,9 +67,22 @@ namespace Necromancy.Server.Data
             uint unknown12 = hedBuffer.ReadUInt32();
             uint numFiles = hedBuffer.ReadUInt32();
 
+            string relativeArchiveDir = archive.DatPath
+                .Replace("/%08x.dat", "")
+                .Replace("./", "")
+                .Replace('/', Path.DirectorySeparatorChar);
+            string hedPath = hedFile.FullName.Replace(".hed", "");
+            string rootPath = hedPath.Replace(relativeArchiveDir, "");
+            DirectoryInfo rootDirectory = new DirectoryInfo(rootPath);
+            if (!rootDirectory.Exists)
+            {
+                throw new FileNotFoundException(
+                    $"Could not determinate root path. (Rel:{relativeArchiveDir} Hed:{hedPath}  Root:{rootPath}");
+            }
+
+            _logger.Info($"Using Root:{rootPath}");
 
             Dictionary<uint, IBuffer> datBufferPool = new Dictionary<uint, IBuffer>();
-
             for (int i = 0; i < numFiles; i++)
             {
                 FpmfArchiveFile archiveFile = new FpmfArchiveFile();
@@ -92,8 +105,11 @@ namespace Necromancy.Server.Data
                 }
                 else
                 {
-                    string datFileName = archive.DatPath.Replace("%08x", $"{archiveFile.DatNumber:X8}");
-                    string datFilePath = Path.Combine(hedFile.DirectoryName, datFileName);
+                    string datFileName = archive.DatPath
+                        .Replace("%08x", $"{archiveFile.DatNumber:X8}")
+                        .Replace("./", "")
+                        .Replace('/', Path.DirectorySeparatorChar);
+                    string datFilePath = Path.Combine(rootDirectory.FullName, datFileName);
                     FileInfo datFile = new FileInfo(datFilePath);
                     if (!datFile.Exists)
                     {
@@ -121,16 +137,28 @@ namespace Necromancy.Server.Data
                 throw new FileNotFoundException($"Directory: {directoryPath} not found.");
             }
 
-            string rootPath = Path.Combine(directory.FullName, archive.GetDatDirectory());
-            if (!Directory.Exists(rootPath))
-            {
-                Directory.CreateDirectory(rootPath);
-            }
+
+            string relativeArchiveDir = archive.DatPath
+                .Replace("/%08x.dat", "")
+                .Replace("./", "")
+                .Replace('/', Path.DirectorySeparatorChar);
+
+            string rootPath = Path.Combine(directory.FullName, relativeArchiveDir);
 
             List<FpmfArchiveFile> files = archive.GetFiles();
             foreach (FpmfArchiveFile file in files)
             {
-                string filePath = Path.Combine(rootPath, file.FilePath);
+                string relativeFilePath = file.FilePath
+                    .Replace(".\\", "")
+                    .Replace('\\', Path.DirectorySeparatorChar);
+                string filePath = Path.Combine(rootPath, relativeFilePath);
+                
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (!Directory.Exists(fileInfo.DirectoryName))
+                {
+                    Directory.CreateDirectory(fileInfo.DirectoryName);
+                }
+                
                 File.WriteAllBytes(filePath, file.Data);
             }
         }

@@ -27,11 +27,6 @@ namespace Necromancy.Server.Data
             set => _key = value;
         }
 
-        public string GetDatDirectory()
-        {
-            return DatPath.Replace("%08x.dat", "");
-        }
-
         public FpmfArchive()
         {
             _files = new List<FpmfArchiveFile>();
