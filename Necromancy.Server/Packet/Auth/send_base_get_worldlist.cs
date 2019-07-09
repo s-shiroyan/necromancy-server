@@ -27,12 +27,6 @@ namespace Necromancy.Server.Packet.Auth
                 res.WriteInt16(0); //Current Player
             }
 
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-
             res.WriteByte(1);//cmp with worldID
             res.WriteByte(7);
             res.WriteByte(8);
