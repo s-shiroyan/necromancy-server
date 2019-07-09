@@ -50,9 +50,9 @@ namespace Necromancy.Server.Packet.Msg
           for(int i =0; i < 0x80; i++)  {
                 res2.WriteInt32(i);
                 res2.WriteFixedString($"Channel {i}", 97);
-                res2.WriteByte(1);//bool 1 | 0
-                res2.WriteInt16(0);
-                res2.WriteInt16(0);
+                res2.WriteByte(1);   //bool 1 | 0
+                res2.WriteInt16(0xFFFF);  //Max players
+                res2.WriteInt16(0xFF);  //Current players
                 res2.WriteByte(0);
                 res2.WriteByte(0);
                 //

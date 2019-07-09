@@ -17,9 +17,22 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(1);
+            res.WriteInt32(0);
 
-        Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res);
+            //sub_4E4210_2341
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("127.0.0.1", 65);
+            res.WriteInt16(60002);
+
+            //sub_484420
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteByte(1);
+            //
+
+            Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res);
         }
     }
 }

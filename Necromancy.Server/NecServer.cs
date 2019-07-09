@@ -92,6 +92,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_soul_set_passwd(this));
             _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
             _msgConsumer.AddHandler(new send_chara_create(this));
+            _msgConsumer.AddHandler(new send_channel_select(this));
             _msgConsumer.AddHandler(new send_chara_select(this));
             
             // Area Handler

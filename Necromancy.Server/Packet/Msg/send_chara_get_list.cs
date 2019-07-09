@@ -57,7 +57,7 @@ namespace Necromancy.Server.Packet.Msg
             //
 
             //I think these int32s correspond to each part of the characters item slots
-            res.WriteInt32(16); //19x 4 byte weapon type
+            res.WriteInt32(11); //19x 4 byte weapon type
             res.WriteInt32(11);//
             res.WriteInt32(11);
             res.WriteInt32(11);
