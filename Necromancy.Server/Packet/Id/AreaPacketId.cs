@@ -575,7 +575,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xFF00 - proto_area_implement_client::recv_event_quest_report_list_begin2
     /// 0xFFD6 (0xFF00 + 0xD6) proto_area_implement_client::recv_quest_hint_othermap
     /// 
-    /// Ranges:
+    /// Ranges: the opcodes are presented in order from top to bottom in the sense of the jmp operation before each group.
     /// 0xEFDD + 0x4E - 0x004CEC2C done 5 opcodes (1 ret)
     ///                 proto_area_implement_client::recv_base_check_version_r
     ///                 proto_area_implement_client::recv_chara_update_job_attr_skill_cooltime_per
@@ -703,20 +703,37 @@ namespace Necromancy.Server.Packet.Id
     /// 0x9F70 + 0x95 - 0x004B9266 
     /// 
     /// 
-    /// 0x8CC6 + 0xCC - 0x004B483D 
+    /// 0x8CC6 + 0xCC - 0x004B483D done has 5 opcodes (2 ret?)
+    ///                 proto_area_implement_client::recv_charabody_notify_loot_item
+    ///                 ret or other
+    ///                 ret
+    ///                 proto_area_implement_client::recv_escape_cancel
+    ///                 proto_area_implement_client::recv_thread_entry_message
     /// 
+    /// 0x8066 + 0x2B - 0x004B1728 done has 5 opcodes (1 ret?)
+    ///                 proto_area_implement_client::recv_data_notify_eo_data
+    ///                 no string/ret?
+    ///                 proto_area_implement_client::recv_chara_update_notify_comment
+    ///                 proto_area_implement_client::recv_event_script_play
+    ///                 proto_area_implement_client::recv_soulmaterial_shop_notify_item
     /// 
-    /// 0x8066 + 0x2B - 0x004B1728 
+    /// 0x8487 + 0xC2 - 0x004B2631 done has 4 opcodes (2 ret)
+    ///                 proto_area_implement_client::recv_item_update_weight
+    ///                 ret
+    ///                 ret
+    ///                 proto_area_implement_client::recv_temple_cure_curse_r
     /// 
+    /// 0x85C6 + 0xDF - 0x004B2C99 done has 4 opcodes
+    ///                 proto_area_implement_client::recv_soulmaterial_shop_buy_r
+    ///                 proto_area_implement_client::recv_stall_shopping_notify_aborted
+    ///                 proto_area_implement_client::recv_party_entry_draw_r
+    ///                 proto_area_implement_client::recv_temple_notify_open
     /// 
-    /// 0x8487 + 0xC2 - 0x004B2631
-    /// 
-    /// 
-    /// 0x85C6 + 0xDF - 0x004B2C99
-    /// 
-    /// 
-    /// 0x8299 + 0xFC - 0x004B1EE6
-    /// 
+    /// 0x8299 + 0xFC - 0x004B1EE6 done has 4 opcodes (1 ret)
+    ///                 proto_area_implement_client::recv_skill_tree_gain
+    ///                 proto_area_implement_client::recv_premium_service_notify_attach2
+    ///                 proto_area_implement_client::recv_buff_shop_buy_r
+    ///                 ret
     /// 
     /// 0x7D1C +  0xF - 0x004B09BA done has 4 opcodes
     ///                 proto_area_implement_client::recv_data_notify_maplink
@@ -834,7 +851,7 @@ namespace Necromancy.Server.Packet.Id
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-        recv_data_get_self_chara_data_request_r = 0x7D1C,//0x3C89
+        recv_data_get_self_chara_data_request_r = 0x8CC6,//0x3C89
         recv_base_enter_r = 0x3806,
         recv_map_get_info_r = 0xEDA6,
         recv_base_check_version_r = 0xEFDD,
