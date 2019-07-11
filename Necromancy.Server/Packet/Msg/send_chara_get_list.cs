@@ -57,7 +57,7 @@ namespace Necromancy.Server.Packet.Msg
             //
 
             //I think these int32s correspond to each part of the characters item slots
-            res.WriteInt32(11); //19x 4 byte weapon type
+            res.WriteInt32(2); //19x 4 byte weapon type
             res.WriteInt32(11);//
             res.WriteInt32(11);
             res.WriteInt32(11);
@@ -83,23 +83,23 @@ namespace Necromancy.Server.Packet.Msg
                 //-----------------------------------------1
                 res.WriteInt32(10310503);//weapon ID goes here, 15000101 buckler worked, 10310503 1h sword, 
                 res.WriteByte(0);//ID type specifier, 0 for wep, 1 for armor, 2 for accessory?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
 
-                res.WriteInt32(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
+                res.WriteInt32(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
 
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
                 res.WriteByte(0); // bool 1 | 0 //didnt change anything?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
-                res.WriteByte(0);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
 
-                res.WriteByte(0);//didnt change anything?
+                res.WriteByte(10);//didnt change anything?
 
                 for (int i = 0; i < 18; i++)
                 {
@@ -126,7 +126,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
 
-            res.WriteInt32(1); //19x 4 byte/ wep wont show up unless this is 1 also?
+            res.WriteInt32(10); //19x 4 byte/ wep type i think also? 10 makes the wep go underneath the character
             res.WriteInt32(2);
             res.WriteInt32(3);
             res.WriteInt32(4);
@@ -146,7 +146,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(18);
             res.WriteInt32(19);
 
-            res.WriteInt32(1); //19x 4 byte
+            res.WriteInt32(7); //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
             res.WriteInt32(1);
             res.WriteInt32(1);
             res.WriteInt32(1);

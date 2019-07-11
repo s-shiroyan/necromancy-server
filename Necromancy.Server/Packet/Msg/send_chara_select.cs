@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteInt32(0);
 
             //sub_494c50
-            res2.WriteInt32(1);
+            res2.WriteInt32(128);
             res2.WriteInt32(2);
             res2.WriteInt32(3);
             res2.WriteInt16(4);
@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
 
-            res2.WriteByte(1);
+            res2.WriteByte(10); //# of channels
 
             Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2);
         }

@@ -26,9 +26,9 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt16(60002);
 
             //sub_484420
-            res.WriteFloat(0);
-            res.WriteFloat(0);
-            res.WriteFloat(0);
+            res.WriteFloat(1);
+            res.WriteFloat(2);
+            res.WriteFloat(3);
             res.WriteByte(1);
             //
 
