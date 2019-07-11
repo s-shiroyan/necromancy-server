@@ -851,7 +851,7 @@ namespace Necromancy.Server.Packet.Id
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-        recv_data_get_self_chara_data_request_r = 0x8CC6,//0x3C89
+        recv_data_get_self_chara_data_request_r = 0x3C89,//0x3C89
         recv_base_enter_r = 0x3806,
         recv_map_get_info_r = 0xEDA6,
         recv_base_check_version_r = 0xEFDD,
