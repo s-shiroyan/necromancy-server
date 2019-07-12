@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xEF9 - proto_area_implement_client::recv_chara_update_alignment
     /// 0x102E - proto_area_implement_client::recv_trade_notify_replied
     /// 0x10C5 (0x102E + 0x97) proto_area_implement_client::recv_dropobject_notify_access_priority
-    /// 0x10DA  ///////////////////////////////////////////////////////////////////////////////////crashes at string point no matter the route taken
+    /// 0x10DA   no string (or is it????)
     /// 0x1105 - proto_area_implement_client::recv_event_union_storage_open
     /// 0x1198 - proto_area_implement_client::recv_logout_cancel
     /// 0x11FA - proto_area_implement_client::recv_skill_inherit_lost
@@ -104,7 +104,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x27D6 - proto_area_implement_client::recv_shortcut_request_regist_r
     /// 0x2849 - proto_area_implement_client::recv_channel_notify
     /// 0x287A   --------------------------------------------------------------not an opcode??
-    /// 0x28A0   ///////////////////////////////////////////////////////////////////////////////////crashes at string point
+    /// 0x28A0   no string
     /// 0x28E7 - proto_area_implement_client::recv_chara_update_con
     /// 0x29C5 (0x28E7 + 0xDE) ret
     /// 0x2A3F - proto_area_implement_client::recv_skill_tree_lost
@@ -122,7 +122,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x2F0E - proto_area_implement_client::recv_thread_exit_r
     /// 0x2FFF - proto_area_implement_client::recv_stall_notify_closed
     /// 0x300A - proto_area_implement_client::recv_party_invite_r
-    /// 0x30BE   ////////////////////////////////////////////////////////////////crashes mid solve, not sure why
+    /// 0x30BE - network::proto_area_implement_client::recv_get_send_package
     /// 0x30FB (0x30BE + 0x3D) proto_area_implement_client::recv_blacklist_lock_r
     /// 0x316F - proto_area_implement_client::recv_gem_set_synthesis_r
     /// 0x3223 - proto_area_implement_client::recv_chara_update_weight
@@ -139,12 +139,12 @@ namespace Necromancy.Server.Packet.Id
     /// 0x3806 - proto_area_implement_client::recv_base_enter_r
     /// 0x394F - proto_area_implement_client::recv_event_soul_rankup_open
     /// 0x39FD - proto_area_implement_client::recv_battle_report_action_skill_start_cast
-    /// 0x3A0E   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0x3A0E   ret
     /// 0x3B77 - proto_area_implement_client::recv_npc_state_update_notify
     /// 0x3B9F - proto_area_implement_client::recv_self_skill_point_notify
     /// 0x3C41 (0x3B9F + 0xA2) proto_area_implement_client::recv_help_new_data
     /// 0x3C68 - proto_area_implement_client::recv_union_request_growth_result
-    /// 0x3C81   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0x3C81   no string
     /// 0x3C89 (0x3C81 + 0x8) proto_area_implement_client::recv_data_get_self_chara_data_request_r
     /// 0x3D6C - proto_area_implement_client::recv_dbg_chara_equipped
     /// 0x3D9F - proto_area_implement_client::recv_battle_report_action_fall
@@ -175,7 +175,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x4C6F - proto_area_implement_client::recv_skill_start_cast_ex_r
     /// 0x4C74 - proto_area_implement_client::recv_map_change_force
     /// 0x4C8B (0x4C74 + 0x17) proto_area_implement_client::recv_logout_start_request_r
-    /// 0x4CF3   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0x4CF3   ret
     /// 0x4D70 - proto_area_implement_client::recv_item_sort_r
     /// 0x4DF8 - proto_area_implement_client::recv_party_establish_r
     /// 0x4E10 - proto_area_implement_client::recv_chara_update_lv_detail_start
@@ -375,8 +375,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xA6F8 (0xA611 + 0xE7) proto_area_implement_client::recv_skill_cooltime_notify
     /// 0xA7BF - proto_area_implement_client::recv_party_regist_member_recruit_r
     /// 0xA7E8 - proto_area_implement_client::recv_chara_notify_map_fragment
-    /// 0xA8BB (0xA7E8 + 0xD3) ///////////////////////////////////not sure how to solve////////////////////////////////////
-    /// 0xA90C   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xA8BB (0xA7E8 + 0xD3) ret
+    /// 0xA90C   ret
     /// 0xA938 - proto_area_implement_client::recv_battle_report_noact_notify_heal_condition
     /// 0xA9C2 - proto_area_implement_client::recv_chara_update_lv_detail
     /// 0xAA8F - proto_area_implement_client::recv_thread_create_r
@@ -416,8 +416,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xB782 - proto_area_implement_client::recv_event_request_int
     /// 0xB813 - proto_area_implement_client::recv_data_notify_eventlink
     /// 0xBA11 - proto_area_implement_client::recv_sixthsense_trap_notify
-    /// 0xBA61   ///////////////////////////////////not sure how to solve////////////////////////////////////
-    /// 0xBA71 - ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xBA61   ret
+    /// 0xBA71 - proto_area_implement_client::recv_auction_notify_open
     /// 0xBA73 network::proto_area_implement_client::recv_cpf_authenticate
     /// 0xBA89 network::proto_area_implement_client::recv_gamepot_web_notify_open
     /// 0xBB65 (0xBA71 + 0xF4) proto_area_implement_client::recv_event_union_storage_close_r
@@ -429,13 +429,13 @@ namespace Necromancy.Server.Packet.Id
     /// 0xBD7E - proto_area_implement_client::recv_event_tresurebox_begin
     /// 0xBD90 - proto_area_implement_client::recv_battle_report_notify_rookie
     /// 0xBD99 (0xBD90 + 0x9) - proto_area_implement_client::recv_battle_report_notify_rookie
-    /// 0xBF0D   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xBF0D   ret
     /// 0xBF34 - proto_area_implement_client::recv_trade_notify_money
     /// 0xBFE9 - proto_area_implement_client::recv_data_notify_gimmick_data
     /// 0xBFEA - proto_area_implement_client::recv_get_thread_all_r
     /// 0xC003 - proto_area_implement_client::recv_chat_notify_message
     /// 0xC06C (0xC026 + 0x46) --------------------------------------------------------------not an opocde?
-    /// 0xC078 (0xC003 + 0x75) ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xC078 (0xC003 + 0x75) ret
     /// 0xC0BB - proto_area_implement_client::recv_skill_aptitude_lost
     /// 0xC0D8 - proto_area_implement_client::recv_help_new_remove_r
     /// 0xC1AF (0xC0D8 + 0xD7) proto_area_implement_client::recv_wanted_list_close_r
@@ -469,16 +469,16 @@ namespace Necromancy.Server.Packet.Id
     /// 0xCDC9 - proto_area_implement_client::recv_battle_report_noact_notify_dead
     /// 0xCE36 - proto_area_implement_client::recv_battle_report_noact_notify_buff_attach_failed
     /// 0xCF24 - proto_area_implement_client::recv_event_select_map_and_channel
-    /// 0xCF29   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xCF29   ret
     /// 0xCF52 (0xCF29 + 0x29) proto_area_implement_client::recv_echo_r
     /// 0xCFDC - proto_area_implement_client::recv_data_notify_itemobject_data
-    /// 0xD04A   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xD04A   ret
     /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
     /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
     /// 0xD1A9 - proto_area_implement_client::recv_random_box_next_open_r
     /// 0xD1BD (0xD1A9 + 0x14) ///////////////////////////////////not sure how to solve////////////////////////////////////
     /// 0xD1CB - proto_area_implement_client::recv_auction_close_r
-    /// 0xD1F6   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xD1F6   no string
     /// 0xD2D6 - proto_area_implement_client::recv_base_ping_r
     /// 0xD349 - proto_area_implement_client::recv_map_fragment_flag
     /// 0xD400 - proto_area_implement_client::recv_event_removetrap_skill_r2
@@ -495,9 +495,9 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD7D8 - proto_area_implement_client::recv_battle_report_notify_invalid_target
     /// 0xD804 - proto_area_implement_client::recv_gimmick_access_object_notify
     /// 0xD8D5 - proto_area_implement_client::recv_battle_report_noact_notify_heal_mp
-    /// 0xD909   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xD909   ret
     /// 0xD972 - proto_area_implement_client::recv_chara_pose_ladderr
-    /// 0xDA4A   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xDA4A   ret
     /// 0xDA5C - proto_area_implement_client::recv_base_exitr
     /// 0xDB53 - proto_area_implement_client::recv_battle_report_action_removetrap_success
     /// 0xDB5E - proto_area_implement_client::recv_battle_report_noact_notify_buff_effect
@@ -532,12 +532,12 @@ namespace Necromancy.Server.Packet.Id
     /// 0xEB47 - proto_area_implement_client::recv_battle_report_notify_exp_bonus2
     /// 0xEB7B (0xEB47 + 0x34) proto_area_implement_client::recv_wanted_list_member (i think)
     /// 0xECBA - proto_area_implement_client::recv_shop_identify_r
-    /// 0xED4C   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xED4C - proto_area_implement_client::recv_data_notify_chara_data
     /// 0xEDA6 - proto_area_implement_client::recv_map_get_info_r
     /// 0xEDB3 - proto_area_implement_client::recv_data_notify_eo_data2
-    /// 0xEE18 (0xEDB3 + 0x65) ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xEE18 (0xEDB3 + 0x65) ret
     /// 0xEE43 - proto_area_implement_client::recv_skill_start_item_cast_r
-    /// 0xEEB7   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xEEB7   ret
     /// 0xEF8D (0xEEB7 + 0xD6) proto_area_implement_client::recv_raisescale_remove_item_r
     /// 0xEFA4 - proto_area_implement_client::recv_trade_invite_r
     /// 0xEFDD - proto_area_implement_client::recv_base_check_version_r
@@ -557,8 +557,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xF7F0 (0xF7E7 + 0x9) proto_area_implement_client::recv_party_notify_get_item
     /// 0xF95B - proto_area_implement_client::recv_emotion_notify_type
     /// 0xF9F9 - proto_area_implement_client::recv_map_entry_r
-    /// 0xFA0B   ///////////////////////////////////not sure how to solve////////////////////////////////////
-    /// 0xFB79   ///////////////////////////////////not sure how to solve////////////////////////////////////
+    /// 0xFA0B   no string
+    /// 0xFB79   no string
     /// 0xFC1A - proto_area_implement_client::recv_job_change_close_r
     /// 0xFC28 - proto_area_implement_client::recv_auction_cancel_exhibit_r
     /// 0xFC75 - proto_area_implement_client::recv_battle_report_start_notify
@@ -910,7 +910,7 @@ namespace Necromancy.Server.Packet.Id
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-        recv_data_get_self_chara_data_request_r = 0x30BE,//0x3C89
+        recv_data_get_self_chara_data_request_r = 0x3C89,//0x3C89
         recv_base_enter_r = 0x3806,
         recv_map_get_info_r = 0xEDA6,
         recv_base_check_version_r = 0xEFDD,
