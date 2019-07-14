@@ -1,1 +1,44 @@
+Wizardry Online　キャラクター選択までの手順
 
+必要なもの
+・クライアント側
+　SteamのWizonクライアントデータ
+　GitHubのnecromancy-client
+・サーバー側
+　Visual Studio
+　GitHUBのnecromancy-server
+
+クライアント側の準備
+　１  Steamに登録、次のアドレスからWizonをダウンロード　https://steamdb.info/app/221360/
+  　　ダウンロードするとSteam\steamapps\commonにWizardry Onlineフォルダが作成される。
+
+　２　GitHubからnecromancy-clientをダウンロード
+　　　https://github.com/necromancyonline/necromancy-client
+   　clone or downloadボタンをクリックし、download zipを選択
+
+　３　steamのWizardry Onlineフォルダの中身をnecromancy-client-master\files\steamのフォルダにコピー
+　　　注意：上書きはしないこと！　
+
+　４　exeファイル名の変更
+　　　WizardryOnline.exeをWizardryOnlineOld.exに変更し、代わりにWizardryOnline_no_encryption.exeをコピーしてWizardryOnline.exeに変更する。
+
+　５　start.cmdをダブルクリックするとWizonが起動します。
+　　　ただし、サーバーを立ち上げてないのでログインできません。
+
+サーバー側の準備
+　１　Visual Studio 2019 Communityをダウンロード　https://visualstudio.microsoft.com/ja/downloads/
+      .NETとC＃関連をダウンロード
+
+　２　GitHubからnecromancy-serverをダウンロード
+　　　https://github.com/necromancyonline/necromancy-server
+   　clone or downloadボタンをクリックし、download zipを選択
+
+　３　その他編集等に必要なプログラムをダウンロード
+　　  .NET Core SDK (Compatible with Visual Studio 2017)　https://dotnet.microsoft.com/download
+　　　IDE　https://code.visualstudio.com/download
+　　　C# Plugin　https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp
+
+　４　Necromancy.slnをVisualStudioで開き、デバックを開始するボタンを押す。
+
+  ５　Wizonをstart.cmdで起動しログイン
+　　（パスワードはいりません。適当に入力してもOK）
