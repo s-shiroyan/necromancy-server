@@ -146,5 +146,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_create = 0xCE74,
         send_chara_get_list = 0xF56C,
         send_channel_select = 0x2F41, //not sure the send yet
+        send_union_request_detail = 0x7950,
+        send_friend_request_load = 0xE1DF,
     }
 }

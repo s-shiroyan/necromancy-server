@@ -94,7 +94,9 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_chara_create(this));
             _msgConsumer.AddHandler(new send_channel_select(this));
             _msgConsumer.AddHandler(new send_chara_select(this));
-            
+            _msgConsumer.AddHandler(new send_union_request_detail(this));
+            _msgConsumer.AddHandler(new send_friend_request_load(this));
+
             // Area Handler
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
             _areaConsumer.AddHandler(new send_base_enter(this));
@@ -105,6 +107,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shortcut_request_data(this));
             _areaConsumer.AddHandler(new send_skill_request_info(this));
             _areaConsumer.AddHandler(new send_sv_conf_option_request(this));
+            _areaConsumer.AddHandler(new send_get_refusallist(this));
+            _areaConsumer.AddHandler(new send_quest_get_mission_quest_works(this));
+            _areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
+            _areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
         }
     }
 }
