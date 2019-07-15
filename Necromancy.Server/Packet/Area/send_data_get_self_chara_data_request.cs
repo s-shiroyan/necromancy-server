@@ -137,7 +137,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(1);//Bool
 
             //sub_483420
-            int numEntries = 2;
+            int numEntries = 19;
             res.WriteInt32(numEntries);//has to be less than 19(defines how many int32s to read?)
 
             //sub_483660
@@ -146,13 +146,13 @@ namespace Necromancy.Server.Packet.Area
 
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 19;
             res.WriteInt32(numEntries);//has to be less than 19(i think this defines the next subs #of loops)
 
             //sub_4948C0
             for (int i = 0; i < numEntries; i++)
             {
-                for (int j = 0; j < numEntries; j++)
+                for (int j = 0; j < 2; j++)
                 {
                     res.WriteInt32(j);
                     res.WriteByte((byte)j);
@@ -170,7 +170,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 19;
             res.WriteInt32(numEntries);
 
             //sub_483420
@@ -178,7 +178,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(i);
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 128;
             res.WriteInt32(numEntries);//has to be less than 128
 
             //sub_485A70
@@ -221,7 +221,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt16(1);
 
             //sub_483420
-            int numEntries = 2;
+            int numEntries = 19;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
 
             //sub_483660
@@ -229,7 +229,7 @@ namespace Necromancy.Server.Packet.Area
                 res3.WriteInt32(i);
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 19;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
 
             //sub_4948C0
@@ -253,7 +253,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 19;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
 
             //sub_483420
@@ -304,7 +304,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(11);
 
             //sub_483420
-            numEntries = 2;
+            numEntries = 128;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 128
 
             //sub_485A70
