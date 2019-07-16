@@ -75,10 +75,7 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_quest_get_soul_mission_quest_works_r, res);
 
-            SendQuestDisplay(client);
-
-            IBuffer res3 = BufferProvider.Provide();
-            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res3);
+            //SendQuestDisplay(client);
         }
 
         private void SendQuestDisplay(NecClient client)

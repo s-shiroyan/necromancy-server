@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(1001001);
+            res.WriteInt32(0);
             res.WriteByte(1);//Bool
 
             Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);            

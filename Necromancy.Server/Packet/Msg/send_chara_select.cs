@@ -9,6 +9,7 @@ namespace Necromancy.Server.Packet.Msg
     {
         public send_chara_select(NecServer server) : base(server)
         {
+
         }
 
         public override ushort Id => (ushort) MsgPacketId.send_chara_select;
@@ -44,9 +45,9 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteInt32(2);
             res2.WriteInt32(3);
             res2.WriteInt16(4);
-            res2.WriteByte(1);
+            res2.WriteByte(69);
 
-            //sub_494B90 - dor loop
+            //sub_494B90 - for loop
           for(int i =0; i < 0x80; i++)  {
                 res2.WriteInt32(i);
                 res2.WriteFixedString($"Channel {i}", 97);

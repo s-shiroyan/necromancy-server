@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xEF9 - proto_area_implement_client::recv_chara_update_alignment
     /// 0x102E - proto_area_implement_client::recv_trade_notify_replied
     /// 0x10C5 (0x102E + 0x97) proto_area_implement_client::recv_dropobject_notify_access_priority
-    /// 0x10DA   no string (or is it????)
+    /// 0x10DA   no string (or is it????) --structre: int32(5) and loop of int32() 5 times I believe
     /// 0x1105 - proto_area_implement_client::recv_event_union_storage_open
     /// 0x1198 - proto_area_implement_client::recv_logout_cancel
     /// 0x11FA - proto_area_implement_client::recv_skill_inherit_lost
@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x12A4 - proto_area_implement_client::recv_charabody_self_salvage_notify
     /// 0x12E0 (0x12A4 + 0x3C) proto_area_implement_client::recv_charabody_self_salvage_end
     /// 0x1392 - proto_area_implement_client::recv_skill_base_notify
-    /// 0x1489   ret
+    /// 0x1489   ret two int32s
     /// 0x14DA - proto_area_implement_client::recv_chara_view_landing_notify
     /// 0x14F6 - proto_area_implement_client::recv_buff_shop_notify_open
     /// 0x15B0 - proto_area_implement_client::recv_soul_dispitem_notify_data
@@ -910,6 +910,7 @@ namespace Necromancy.Server.Packet.Id
     public enum AreaPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
+        recv_map_change_force = 0x4C74,
         recv_data_get_self_chara_data_request_r = 0x3C89,
         recv_base_enter_r = 0x3806,
         recv_data_get_self_chara_data_r = 0xD1BD,
@@ -927,20 +928,21 @@ namespace Necromancy.Server.Packet.Id
         recv_quest_display_r = 0x42B8,
 
         // Send OP Codes - ordered by op code
-        send_map_entry = 0x2DE3,
         send_base_check_version = 0x5705,
-        send_data_get_self_chara_data_request = 0x74DD,
         send_base_enter = 0xAE43,
-        send_map_get_info = 0x25D7,
+        send_data_get_self_chara_data_request = 0x74DD,
         send_skill_request_info = 0x4EB5, // TODO find OP
-        send_sv_conf_option_request,// = 0x7950, // TODO find OP
-        send_shortcut_request_data = 0x6FC6, // TODO find OP
-        send_map_enter = 0x70FD,
-        send_party_request_draw_item_list = 0xEC5A,
+        send_sv_conf_option_request = 0x615E, // TODO find OP
         send_get_refusallist = 0x6C17,
-        send_soul_dispitem_request_data = 0x86FD,
+        send_party_request_draw_item_list = 0x86FD,
+        send_shortcut_request_data = 0x6FC6, // TODO find OP
         send_quest_get_mission_quest_works = 0x7C9A,
         send_quest_get_story_quest_works = 0x2A95,
-        send_quest_get_soul_mission_quest_works = 0xB090
+        send_quest_get_soul_mission_quest_works = 0xB090,
+        send_map_entry = 0x2DE3,
+        send_map_get_info = 0x25D7,
+        send_map_enter = 0x70FD,
+        send_soul_dispitem_request_data = 0xEC5A
+
     }
 }
