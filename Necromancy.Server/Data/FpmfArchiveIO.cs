@@ -172,6 +172,11 @@ namespace Necromancy.Server.Data
             byte bl = 0;
             byte al = 0;
             byte sub = 0x21;
+            
+            // Uncomment for JP client
+            // dl = 0x67;
+            // sub = 0xC7;
+            
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < buffer.Size)
