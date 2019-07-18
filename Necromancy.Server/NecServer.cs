@@ -1,13 +1,8 @@
-using System;
-using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
-using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
-using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Auth;
-using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
 
@@ -84,9 +79,9 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
             _msgConsumer.AddHandler(new send_base_login(this));
             _msgConsumer.AddHandler(new send_soul_create(this));
-            _msgConsumer.AddHandler(new send_soul_select(this));    // (fine)
+            _msgConsumer.AddHandler(new send_soul_select(this));
             _msgConsumer.AddHandler(new send_soul_select_C44F(this));
-            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));      // (fine)
+            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
             _msgConsumer.AddHandler(new send_chara_get_list(this));
             _msgConsumer.AddHandler(new send_cash_get_url_common(this));
             _msgConsumer.AddHandler(new send_chara_get_createinfo(this));
