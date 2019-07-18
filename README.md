@@ -1,6 +1,12 @@
 Necromancy - Server
 ===
 
+# Wiki
+- Index: https://github.com/necromancyonline/necromancy-server/wiki
+- ウィキペディア: https://github.com/necromancyonline/necromancy-server/wiki/%E5%85%A5%E9%96%80
+
+Please check the wiki for additional information.
+
 # Setup
 1) Clone the repository  
 `git clone https://github.com/necromancyonline/necromancy-server.git`
