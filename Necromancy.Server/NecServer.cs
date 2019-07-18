@@ -115,6 +115,19 @@ namespace Necromancy.Server
             //_areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
             //_areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
             //_areaConsumer.AddHandler(new send_party_request_draw_item_list(this));
+            _areaConsumer.AddHandler(new send_battle_attack_pose(this));
+            _areaConsumer.AddHandler(new send_battle_release_attack_pose(this));
+            _areaConsumer.AddHandler(new send_battle_attack_start(this));
+            _areaConsumer.AddHandler(new send_battle_attack_exec(this));
+            _areaConsumer.AddHandler(new send_skill_request_gain(this));
+            _areaConsumer.AddHandler(new send_quest_get_mission_quest_history(this));
+            _areaConsumer.AddHandler(new send_quest_get_story_quest_history(this));
+            _areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_history(this));
+            _areaConsumer.AddHandler(new send_cash_shop_open_by_menu(this));
+            _areaConsumer.AddHandler(new send_stall_deregist_item(this));
+            _areaConsumer.AddHandler(new send_stall_set_name(this));
+            _areaConsumer.AddHandler(new send_logout_start_request(this));
+            _areaConsumer.AddHandler(new send_logout_cancel_request(this));
         }
     }
 }

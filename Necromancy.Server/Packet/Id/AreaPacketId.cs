@@ -632,25 +632,23 @@ namespace Necromancy.Server.Packet.Id
     ///                 proto_area_implement_client::recv_event_select_ready
     /// 
     /// 0xD68C + 0xC6 - 0x004C8EE5 5 opcodes
-    ///                 proto_area_implement_client::recv_battle_attack_start_r
-    ///                 proto_area_implement_client::recv_item_update_place_change
-    ///                 proto_area_implement_client::recv_escape_start
-    ///                 proto_area_implement_client::recv_gem_set_piece_r
-    ///                 proto_area_implement_client::recv_wanted_jail_update_draw_point
+    ///         0xD690? proto_area_implement_client::recv_battle_attack_start_r             04(actually 0xD68C + 0xC6)
+    ///         0xD68E? proto_area_implement_client::recv_item_update_place_change          02(actually 0xD68C + 0x1C)
+    ///         0xD68C? proto_area_implement_client::recv_escape_start                      00(actually 0xD68C)
+    ///         0xD68D? proto_area_implement_client::recv_gem_set_piece_r                   01(actually 0xD68C + 0x18)
+    ///         0xD691? proto_area_implement_client::recv_wanted_jail_update_draw_point     03(actually 0xD68C + 0x64)
     /// 
-    /// 0xD493 + 0xE7 - 0x004C7D1F 5 opcodes (2 ret)
-    ///                 proto_area_implement_client::recv_skill_cast_cancel
-    ///                 ret
-    ///                 proto_area_implement_client::recv_shop_sell_r
-    ///                 proto_area_implement_client::recv_battle_report_action_item_use()\n
-    ///                 ret
+    /// 0xD493 + 0xE7 - 0x004C7D1F 4 opcodes (1 ret)
+    ///                 proto_area_implement_client::recv_skill_cast_cancel                 02(actually 0xD493 + 0xCA)
+    ///                 ret                                                                 03(actually 0xD493 + 0xE7)
+    ///                 proto_area_implement_client::recv_shop_sell_r                       01(actually 0xD493 + 0x65)
+    ///                 proto_area_implement_client::recv_battle_report_action_item_use()\n 00(actually 0xD493)
     /// 
-    /// 0xD5B5 + 0xC8 - 0x004C86F2 5 opcodes
-    ///                 proto_area_implement_client::recv_charabody_notify_party_join
-    ///                 proto_area_implement_client::recv_chara_update_lv_detail2
-    ///                 proto_area_implement_client::recv_soul_dispitem_request_data_r
-    ///                 proto_area_implement_client::recv_battle_report_noact_notify_heal_ac
-    ///                 proto_area_implement_client::recv_charabody_salvage_end()  reason
+    /// 0xD5B5 + 0xC8 - 0x004C86F2 4 opcodes
+    ///                 proto_area_implement_client::recv_charabody_notify_party_join           03(actually 0xD68C + 0xC8)
+    ///                 proto_area_implement_client::recv_chara_update_lv_detail2               00(actually 0xD68C)
+    ///                 proto_area_implement_client::recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
+    ///                 proto_area_implement_client::recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
     /// 
     /// 0xD400 + 0x3F - 0x004C7645 4 opcodes
     ///                 proto_area_implement_client::recv_self_soul_toggle_ability_notify
@@ -930,15 +928,29 @@ namespace Necromancy.Server.Packet.Id
         recv_data_notify_charabody_data = 0x906A,
         recv_map_change_sync_ok = 0x9AA9,
 
+        recv_battle_attack_pose = 0x0, //todo
+        recv_battle_release_attack_pose = 0x0, //todo
+        recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
+        recv_battle_attack_exec = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
+        recv_skill_request_gain_r = 0x903A,
+        recv_quest_get_mission_quest_history = 0x0,//missing recv?
+        recv_quest_get_story_quest_history = 0x0,//missing recv?
+        recv_quest_get_soul_mission_quest_history = 0x0,//missing recv?
+        recv_cash_shop_open_by_menu = 0x0,//missing recv
+        recv_stall_deregist_item_r= 0x0,//todo inside 0x18CC + 0xF7 - 0x0049B302 
+        recv_stall_set_name_r = 0x0,//todo inside 0xB1CA + 0xC8 - 0x004BE4A3
+        recv_logout_start_request_r = 0x4C8B,
+        recv_logout_cancel_request_r = 0x267D,
+
         // Send OP Codes - ordered by op code
         send_base_check_version = 0x5705,
         send_base_enter = 0xAE43,
         send_data_get_self_chara_data_request = 0x74DD,
-        send_skill_request_info = 0x4EB5, // TODO find OP
-        send_sv_conf_option_request = 0x615E, // TODO find OP
+        send_skill_request_info = 0x4EB5,
+        send_sv_conf_option_request = 0x615E,
         send_get_refusallist = 0x6C17,
         send_party_request_draw_item_list = 0x86FD,
-        send_shortcut_request_data = 0x6FC6, // TODO find OP
+        send_shortcut_request_data = 0x6FC6,
         send_quest_get_mission_quest_works = 0x7C9A,
         send_quest_get_story_quest_works = 0x2A95,
         send_quest_get_soul_mission_quest_works = 0xB090,
@@ -948,5 +960,18 @@ namespace Necromancy.Server.Packet.Id
         send_soul_dispitem_request_data = 0xEC5A,
         send_sv_conf_option_change = 0x1B99,
         send_map_change_force_r = 0x4CB0,
+        send_battle_attack_pose = 0xC137,
+        send_battle_release_attack_pose = 0x26BE,
+        send_battle_attack_start = 0x6A72,
+        send_battle_attack_exec = 0xC38D,
+        send_skill_request_gain = 0x6507,
+        send_quest_get_mission_quest_history = 0xA3E6,
+        send_quest_get_story_quest_history = 0xCB91,
+        send_quest_get_soul_mission_quest_history = 0x9E5C,
+        send_cash_shop_open_by_menu = 0x9945,
+        send_stall_deregist_item = 0xFC7D,
+        send_stall_set_name = 0xB93,
+        send_logout_start_request = 0x38FC,
+        send_logout_cancel_request = 0xB224,
     }
 }

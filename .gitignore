@@ -40,3 +40,4 @@ bld/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+Necromancy.Server/Properties/launchSettings.json
