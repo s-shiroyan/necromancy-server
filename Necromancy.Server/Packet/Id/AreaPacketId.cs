@@ -926,6 +926,9 @@ namespace Necromancy.Server.Packet.Id
         recv_quest_get_story_quest_works_r = 0x73A1,
         recv_quest_get_soul_mission_quest_works_r = 0x266C,
         recv_quest_display_r = 0x42B8,
+        recv_sv_conf_option_change = 0xAEE9,
+        recv_data_notify_charabody_data = 0x906A,
+        recv_map_change_sync_ok = 0x9AA9,
 
         // Send OP Codes - ordered by op code
         send_base_check_version = 0x5705,
@@ -942,7 +945,8 @@ namespace Necromancy.Server.Packet.Id
         send_map_entry = 0x2DE3,
         send_map_get_info = 0x25D7,
         send_map_enter = 0x70FD,
-        send_soul_dispitem_request_data = 0xEC5A
-
+        send_soul_dispitem_request_data = 0xEC5A,
+        send_sv_conf_option_change = 0x1B99,
+        send_map_change_force_r = 0x4CB0,
     }
 }

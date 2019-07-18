@@ -21,32 +21,6 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
             Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);
 
-            /*IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt32(1001001);//Error?
-            res1.WriteInt32(1001001);//Map ID?
-            res1.WriteFixedString("127.0.0.1", 65);
-            res1.WriteInt16(60002);
-
-            //sub_484420
-            res1.WriteFloat(1);
-            res1.WriteFloat(2);
-            res1.WriteFloat(3);
-            res1.WriteByte(1);
-            //
-            //Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res1);*/
-
-            /*IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(1001001);
-            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res6);
-
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(1001001);
-            res4.WriteByte(1);//Bool
-            Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res4);*/
-
-            IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt32(1001001);
-            //Router.Send(client, (ushort)AreaPacketId.recv_map_entry_r, res5);
         }
 
         private void SendDataGetSelfCharaData(NecClient client)

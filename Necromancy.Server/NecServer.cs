@@ -84,8 +84,9 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
             _msgConsumer.AddHandler(new send_base_login(this));
             _msgConsumer.AddHandler(new send_soul_create(this));
-            _msgConsumer.AddHandler(new send_soul_select(this));
-            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
+            _msgConsumer.AddHandler(new send_soul_select(this));    // (fine)
+            _msgConsumer.AddHandler(new send_soul_select_C44F(this));
+            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));      // (fine)
             _msgConsumer.AddHandler(new send_chara_get_list(this));
             _msgConsumer.AddHandler(new send_cash_get_url_common(this));
             _msgConsumer.AddHandler(new send_chara_get_createinfo(this));
@@ -104,9 +105,11 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_map_entry(this));
             _areaConsumer.AddHandler(new send_map_get_info(this));
             _areaConsumer.AddHandler(new send_map_enter(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
+            _areaConsumer.AddHandler(new send_map_change_force_r(this));
             //_areaConsumer.AddHandler(new send_shortcut_request_data(this));
             //_areaConsumer.AddHandler(new send_skill_request_info(this));
-            //_areaConsumer.AddHandler(new send_sv_conf_option_request(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_request(this));
             //_areaConsumer.AddHandler(new send_get_refusallist(this));
             //_areaConsumer.AddHandler(new send_quest_get_mission_quest_works(this));
             //_areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
