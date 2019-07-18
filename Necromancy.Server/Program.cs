@@ -24,6 +24,13 @@ namespace Necromancy.Server
                 return;
             }
 
+            if (args.Length == 1)
+            {
+                FpmfArchiveIO archiveIO = new FpmfArchiveIO();
+                archiveIO.OpenWoItm(args[0]);
+                return;
+            }
+
 
             NecSetting setting = new NecSetting();
             LogProvider.Configure<NecLogger>(setting);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 
@@ -9,6 +10,7 @@ namespace Necromancy.Server.Data
     public class FpmfArchiveIO
     {
         private static byte[] MagicBytes = {0x46, 0x50, 0x4D, 0x46};
+        private static byte[] MagicBytes_WOITM = {0x57, 0x4F, 0x49, 0x54, 0x4D};
         private ILogger _logger;
 
 
@@ -152,15 +154,92 @@ namespace Necromancy.Server.Data
                     .Replace(".\\", "")
                     .Replace('\\', Path.DirectorySeparatorChar);
                 string filePath = Path.Combine(rootPath, relativeFilePath);
-                
+
                 FileInfo fileInfo = new FileInfo(filePath);
                 if (!Directory.Exists(fileInfo.DirectoryName))
                 {
                     Directory.CreateDirectory(fileInfo.DirectoryName);
                 }
-                
+
                 File.WriteAllBytes(filePath, file.Data);
             }
+        }
+
+        /// <summary>
+        /// 0x401D20
+        /// </summary>
+        public void OpenWoItm(string itemPath)
+        {
+            FileInfo itemFile = new FileInfo(itemPath);
+            if (!itemFile.Exists)
+            {
+                throw new FileNotFoundException($"File: {itemPath} not found.");
+            }
+
+            IBuffer buffer = new StreamBuffer(itemFile.FullName);
+            buffer.SetPositionStart();
+            byte[] magicBytes = buffer.ReadBytes(5);
+            for (int i = 0; i < 5; i++)
+            {
+                if (magicBytes[i] != MagicBytes_WOITM[i])
+                {
+                    throw new Exception("Invalid WOITM File");
+                }
+            }
+
+            short unknown0 = buffer.ReadInt16(); // cmp to 1
+            List<WoItm> woItems = new List<WoItm>();
+            while (buffer.Position < buffer.Size)
+            {
+                int itemId = buffer.ReadInt32();
+                int chunkSize = buffer.ReadInt32();
+                int chunkLen = buffer.ReadInt32();
+                byte[] data = buffer.ReadBytes(chunkSize - 4);
+
+                WoItm woItm = new WoItm();
+                woItm.Id = itemId;
+                woItm.Data = data;
+                woItems.Add(woItm);
+            }
+
+            
+            // TODO decrypt data
+            byte[] key = new byte[]
+                {0x2A, 0xE3, 0x48, 0xB4, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            byte[] key1 = new byte[]
+                {0x2A, 0xE3, 0x48, 0xB4, 0x14, 0x26, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            byte[] key2 = new byte[]
+                {0x2A, 0xE3, 0x14, 0x26, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            
+            IBuffer exe = new StreamBuffer(@"C:\Games\Wizardry Online\WizardryOnline_no_encryption.exe");
+            exe.SetPositionStart();
+            
+            List<string> str = new List<string>();
+            foreach (WoItm woItem in woItems)
+            {
+                for (int j = 0; j < exe.Size - 16; j++)
+                {
+                    byte[] k = exe.GetBytes(j, 16);
+                    byte[] outp = Xor(woItem.Data, k);
+                    string test = Encoding.UTF8.GetString(outp);
+                    if (str.Contains(","))
+                    {
+                        str.Add(test);
+                        _logger.Info(test);
+                    }
+                }
+            }
+            _logger.Info("done");
+        }
+
+        public byte[] Xor(byte[] text, byte[] key)
+        {
+            byte[] xor = new byte[text.Length];
+            for (int i = 0; i < text.Length; i++)
+            {
+                xor[i] = (byte) (text[i] ^ key[i % key.Length]);
+            }
+            return xor;
         }
 
         /// <summary>
@@ -172,11 +251,11 @@ namespace Necromancy.Server.Data
             byte bl = 0;
             byte al = 0;
             byte sub = 0x21;
-            
+
             // Uncomment for JP client
             // dl = 0x67;
             // sub = 0xC7;
-            
+
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < buffer.Size)
