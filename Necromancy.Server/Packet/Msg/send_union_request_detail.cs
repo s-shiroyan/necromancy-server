@@ -5,21 +5,20 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_cash_get_url_common : Handler
+    public class send_union_request_detail : Handler
     {
-        public send_cash_get_url_common(NecServer server) : base(server)
+        public send_union_request_detail(NecServer server) : base(server)
         {
         }
 
-        public override ushort Id => (ushort) MsgPacketId.send_cash_get_url_common;
+        public override ushort Id => (ushort) MsgPacketId.send_union_request_detail;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(1);
-            res.WriteCString("www.unknownone69.com");
-            Router.Send(client, (ushort) MsgPacketId.recv_cash_get_url_common_r, res);
+           
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res);
         }
     }
 }

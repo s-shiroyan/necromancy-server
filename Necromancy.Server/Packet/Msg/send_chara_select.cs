@@ -9,13 +9,14 @@ namespace Necromancy.Server.Packet.Msg
     {
         public send_chara_select(NecServer server) : base(server)
         {
+
         }
 
         public override ushort Id => (ushort) MsgPacketId.send_chara_select;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
+            /*IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // Error
 
             res.WriteInt32(0);
@@ -31,7 +32,37 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(0);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);*/
+
+  
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(0);
+            res2.WriteInt32(0);
+
+            //sub_494c50
+            res2.WriteInt32(128);
+            res2.WriteInt32(2);
+            res2.WriteInt32(3);
+            res2.WriteInt16(4);
+            res2.WriteByte(69);
+
+            //sub_494B90 - for loop
+          for(int i =0; i < 0x80; i++)  {
+                res2.WriteInt32(i);
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1);   //bool 1 | 0
+                res2.WriteInt16(0xFFFF);  //Max players
+                res2.WriteInt16(0xFF);  //Current players
+                res2.WriteByte(0);
+                res2.WriteByte(0);
+                //
+            }
+
+
+            res2.WriteByte(10); //# of channels
+
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2);
         }
     }
 }

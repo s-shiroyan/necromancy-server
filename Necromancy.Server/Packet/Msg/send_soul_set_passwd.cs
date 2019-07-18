@@ -17,7 +17,8 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteByte(0);//Bool in JP client
+            //res.WriteCString("help");//Required for JP
             Router.Send(client, (ushort) MsgPacketId.recv_soul_set_passwd_r, res);
         }
     }

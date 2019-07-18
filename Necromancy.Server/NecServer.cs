@@ -1,13 +1,8 @@
-using System;
-using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
-using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
-using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Auth;
-using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
 
@@ -85,6 +80,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_base_login(this));
             _msgConsumer.AddHandler(new send_soul_create(this));
             _msgConsumer.AddHandler(new send_soul_select(this));
+            _msgConsumer.AddHandler(new send_soul_select_C44F(this));
             _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
             _msgConsumer.AddHandler(new send_chara_get_list(this));
             _msgConsumer.AddHandler(new send_cash_get_url_common(this));
@@ -92,8 +88,11 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_soul_set_passwd(this));
             _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
             _msgConsumer.AddHandler(new send_chara_create(this));
+            _msgConsumer.AddHandler(new send_channel_select(this));
             _msgConsumer.AddHandler(new send_chara_select(this));
-            
+            _msgConsumer.AddHandler(new send_union_request_detail(this));
+            _msgConsumer.AddHandler(new send_friend_request_load(this));
+
             // Area Handler
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
             _areaConsumer.AddHandler(new send_base_enter(this));
@@ -101,9 +100,29 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_map_entry(this));
             _areaConsumer.AddHandler(new send_map_get_info(this));
             _areaConsumer.AddHandler(new send_map_enter(this));
-            _areaConsumer.AddHandler(new send_shortcut_request_data(this));
-            _areaConsumer.AddHandler(new send_skill_request_info(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
+            _areaConsumer.AddHandler(new send_map_change_force_r(this));
+            //_areaConsumer.AddHandler(new send_shortcut_request_data(this));
+            //_areaConsumer.AddHandler(new send_skill_request_info(this));
             _areaConsumer.AddHandler(new send_sv_conf_option_request(this));
+            //_areaConsumer.AddHandler(new send_get_refusallist(this));
+            //_areaConsumer.AddHandler(new send_quest_get_mission_quest_works(this));
+            //_areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
+            //_areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
+            //_areaConsumer.AddHandler(new send_party_request_draw_item_list(this));
+            _areaConsumer.AddHandler(new send_battle_attack_pose(this));
+            _areaConsumer.AddHandler(new send_battle_release_attack_pose(this));
+            _areaConsumer.AddHandler(new send_battle_attack_start(this));
+            _areaConsumer.AddHandler(new send_battle_attack_exec(this));
+            _areaConsumer.AddHandler(new send_skill_request_gain(this));
+            _areaConsumer.AddHandler(new send_quest_get_mission_quest_history(this));
+            _areaConsumer.AddHandler(new send_quest_get_story_quest_history(this));
+            _areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_history(this));
+            _areaConsumer.AddHandler(new send_cash_shop_open_by_menu(this));
+            _areaConsumer.AddHandler(new send_stall_deregist_item(this));
+            _areaConsumer.AddHandler(new send_stall_set_name(this));
+            _areaConsumer.AddHandler(new send_logout_start_request(this));
+            _areaConsumer.AddHandler(new send_logout_cancel_request(this));
         }
     }
 }

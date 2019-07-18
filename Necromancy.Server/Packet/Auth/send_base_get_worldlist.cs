@@ -32,6 +32,7 @@ namespace Necromancy.Server.Packet.Auth
             res.WriteByte(8);
             res.WriteByte(9);
             res.WriteByte(0); // 1 = Server merge notice
+
             Router.Send(client, (ushort) AuthPacketId.recv_base_get_worldlist_r, res);
         }
     }
