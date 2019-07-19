@@ -927,6 +927,7 @@ namespace Necromancy.Server.Packet.Id
         recv_sv_conf_option_change = 0xAEE9,
         recv_data_notify_charabody_data = 0x906A,
         recv_map_change_sync_ok = 0x9AA9,
+        recv_logout_start = 0x58E7,
 
         recv_battle_attack_pose = 0x0, //todo
         recv_battle_release_attack_pose = 0x0, //todo

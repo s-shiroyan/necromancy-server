@@ -16,8 +16,12 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(2);//0 = nothing happens, 1 = logout failed:1
-            Router.Send(client, (ushort) AreaPacketId.recv_logout_start_request_r, res);            
+            res.WriteInt32(0);//0 = nothing happens, 1 = logout failed:1
+            Router.Send(client, (ushort) AreaPacketId.recv_logout_start_request_r, res);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(10);//
+            Router.Send(client, (ushort)AreaPacketId.recv_logout_start, res2);
         }
     }
 }
