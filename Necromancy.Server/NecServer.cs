@@ -123,6 +123,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_stall_set_name(this));
             _areaConsumer.AddHandler(new send_logout_start_request(this));
             _areaConsumer.AddHandler(new send_logout_cancel_request(this));
+            _areaConsumer.AddHandler(new send_event_access_object(this));
+            _areaConsumer.AddHandler(new send_chat_post_message(this));
         }
     }
 }

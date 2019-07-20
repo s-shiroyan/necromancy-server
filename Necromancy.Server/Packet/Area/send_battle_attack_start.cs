@@ -19,7 +19,17 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteByte(0);//Bool
 
-            //Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_start, res);            
+            //Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_start, res);
+
+            SendNPCStateUpdateNotify(client);
+        }
+
+        private void SendNPCStateUpdateNotify(NecClient client)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
+            Router.Send(client, (ushort)AreaPacketId.recv_npc_state_update_notify, res2);
         }
     }
 }

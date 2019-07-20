@@ -942,6 +942,13 @@ namespace Necromancy.Server.Packet.Id
         recv_stall_set_name_r = 0x0,//todo inside 0xB1CA + 0xC8 - 0x004BE4A3
         recv_logout_start_request_r = 0x4C8B,
         recv_logout_cancel_request_r = 0x267D,
+        recv_data_notify_npc_data = 0x2470,
+        recv_npc_state_update_notify = 0x3B77,
+        recv_event_access_object_r = 0x77A7,
+        recv_event_message = 0x662F,
+        recv_event_block_message = 0x8BD2,
+        recv_chat_post_message_r = 0xAF49,
+        recv_chat_notify_message = 0xC003,
 
         // Send OP Codes - ordered by op code
         send_base_check_version = 0x5705,
@@ -974,5 +981,7 @@ namespace Necromancy.Server.Packet.Id
         send_stall_set_name = 0xB93,
         send_logout_start_request = 0x38FC,
         send_logout_cancel_request = 0xB224,
+        send_event_access_object = 0x718D,
+        send_chat_post_message = 0x1132,
     }
 }
