@@ -28,11 +28,11 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res2 = BufferProvider.Provide();
 
-            res2.WriteInt32(3);//Response ID for switch cases maybe?
+            res2.WriteInt32(3);             // NPC ID (object id)
 
-            res2.WriteInt32(10000108);
+            res2.WriteInt32(10000108);      // NPC Serial ID from "npc.csv"
 
-            res2.WriteByte(0);//1 makes the name disappear and no longer selectable
+            res2.WriteByte(0);              // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
 
             res2.WriteCString("liar");//Name
 
@@ -41,30 +41,30 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteFloat(23162);//X Pos
             res2.WriteFloat(-219);//Y Pos
             res2.WriteFloat(100);//Z Pos
-            res2.WriteByte(1);//view offset
+            res2.WriteByte(90);//view offset
 
             res2.WriteInt32(19);
 
             //this is an x19 loop but i broke it up
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
-            res2.WriteInt32(2);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
+            res2.WriteInt32(-1);
 
             res2.WriteInt32(19);
 
@@ -120,21 +120,21 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteInt32(3);
             res2.WriteInt32(3);
 
-            res2.WriteInt32(10000108);//1000001
+            res2.WriteInt32(1011101);   //NPC Model from file "model_common.csv"
 
-            res2.WriteInt16(50);//Hitbox size?
+            res2.WriteInt16(100);       //NPC Model Size
 
-            res2.WriteByte(20);
+            res2.WriteByte(1);            
 
-            res2.WriteByte(20);
+            res2.WriteByte(1);
 
-            res2.WriteByte(20);
+            res2.WriteByte(1);
 
-            res2.WriteInt32(10000108);
+            res2.WriteInt32(100);
 
-            res2.WriteInt32(10000108);
+            res2.WriteInt32(100);
 
-            res2.WriteInt32(10000108);
+            res2.WriteInt32(100);
             res2.WriteFloat(1000);
             res2.WriteFloat(1000);
             res2.WriteFloat(1000);
