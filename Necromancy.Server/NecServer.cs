@@ -1,5 +1,6 @@
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Auth;
@@ -12,6 +13,7 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
+        public ClientLookup ClientLookup { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -23,6 +25,7 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
+            ClientLookup = new ClientLookup();
             Setting = setting;
             Router = new PacketRouter();
             _authConsumer = new NecQueueConsumer(Setting);
