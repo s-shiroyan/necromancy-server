@@ -49,7 +49,7 @@ namespace Necromancy.Server.Packet
         /// Send a packet to multiple clients.
         /// </summary>
         /// <param name="excepts">clients to exclude</param>
-        public void Send(List<NecClient> clients, byte id, IBuffer data, params NecClient[] excepts)
+        public void Send(List<NecClient> clients, ushort id, IBuffer data, params NecClient[] excepts)
         {
             Send(clients, new NecPacket(id, data), excepts);
         }
@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet
         /// <summary>
         /// Send a packet to everyone in the map.
         /// </summary>
-        public void Send(Map map, byte id, IBuffer data, params NecClient[] excepts)
+        public void Send(Map map, ushort id, IBuffer data, params NecClient[] excepts)
         {
             Send(map, new NecPacket(id, data), excepts);
         }
