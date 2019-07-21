@@ -51,11 +51,16 @@ namespace Necromancy.Server.Packet
         /// <param name="excepts">clients to exclude</param>
         public void Send(List<NecClient> clients, byte id, IBuffer data, params NecClient[] excepts)
         {
-            clients = GetClients(clients, excepts);
-            foreach (NecClient client in clients)
-            {
-                Send(client, id, data);
-            }
+            Send(clients, new NecPacket(id, data), excepts);
+        }
+
+
+        /// <summary>
+        /// Send a packet to everyone in the map.
+        /// </summary>
+        public void Send(Map map, byte id, IBuffer data, params NecClient[] excepts)
+        {
+            Send(map, new NecPacket(id, data), excepts);
         }
 
         /// <summary>
