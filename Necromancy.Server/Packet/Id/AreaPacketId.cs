@@ -319,7 +319,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x8F15 - proto_area_implement_client::recv_check_job_change_r
     /// 0x8F84 - proto_area_implement_client::recv_echo_notify
     /// 0x903A - proto_area_implement_client::recv_skill_request_gain_r
-    /// 0x906A - proto_area_implement_client::recv_data_notify_charabody_data
+    /// 0x906A - proto_area_implement_client::recv_data_notify_charabody_data structure: 32,64,byte,float,float,32,byte,float,float,32,byte,32,16
     /// 0x90E8 (0x906A + 0x7E) proto_area_implement_client::recv_forge_check_r
     /// 0x919C - proto_area_implement_client::recv_stall_sell_item
     /// 0x9201   no string
@@ -496,7 +496,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD804 - proto_area_implement_client::recv_gimmick_access_object_notify
     /// 0xD8D5 - proto_area_implement_client::recv_battle_report_noact_notify_heal_mp
     /// 0xD909   ret
-    /// 0xD972 - proto_area_implement_client::recv_chara_pose_ladderr
+    /// 0xD972 - proto_area_implement_client::recv_chara_pose_ladder_r
     /// 0xDA4A   ret
     /// 0xDA5C - proto_area_implement_client::recv_base_exitr
     /// 0xDB53 - proto_area_implement_client::recv_battle_report_action_removetrap_success
@@ -929,6 +929,7 @@ namespace Necromancy.Server.Packet.Id
         recv_map_change_sync_ok = 0x9AA9,
         recv_logout_start = 0x58E7,
 
+
         recv_battle_attack_pose = 0x0, //todo
         recv_battle_release_attack_pose = 0x0, //todo
         recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
@@ -949,6 +950,8 @@ namespace Necromancy.Server.Packet.Id
         recv_event_block_message = 0x8BD2,
         recv_chat_post_message_r = 0xAF49,
         recv_chat_notify_message = 0xC003,
+        recv_chara_pose_r = 0xF71C,
+        recv_chara_pose_ladder_r = 0xD972,
 
         // Send OP Codes - ordered by op code
         send_base_check_version = 0x5705,
@@ -983,5 +986,7 @@ namespace Necromancy.Server.Packet.Id
         send_logout_cancel_request = 0xB224,
         send_event_access_object = 0x718D,
         send_chat_post_message = 0x1132,
+        send_chara_pose = 0x7DE7,
+        send_chara_pose_ladder = 0x0,
     }
 }

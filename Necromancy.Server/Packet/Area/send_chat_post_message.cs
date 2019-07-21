@@ -38,7 +38,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFixedString("Soulname", 49);
             res.WriteFixedString("Charaname", 37);
             res.WriteFixedString($"{Message}", 769);
-            Router.Send(client, (ushort)AreaPacketId.recv_chat_notify_message, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
             /*
             for (int i = 0; i < 9; i++)
             {

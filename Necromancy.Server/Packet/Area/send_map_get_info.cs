@@ -38,8 +38,8 @@ namespace Necromancy.Server.Packet.Area
 
             res2.WriteCString("training center personnel");//Title
 
-            res2.WriteFloat(23162);//X Pos
-            res2.WriteFloat(-200);//Y Pos
+            res2.WriteFloat(23200);//X Pos
+            res2.WriteFloat(-50);//Y Pos
             res2.WriteFloat(3);//Z Pos
             res2.WriteByte(90);//view offset
 

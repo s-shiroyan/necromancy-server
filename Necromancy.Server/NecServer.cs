@@ -145,6 +145,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_logout_cancel_request(this));
             _areaConsumer.AddHandler(new send_event_access_object(this));
             _areaConsumer.AddHandler(new send_chat_post_message(this));
+            _areaConsumer.AddHandler(new send_chara_pose(this));
+            _areaConsumer.AddHandler(new send_chara_pose_ladder(this));
         }
     }
 }
