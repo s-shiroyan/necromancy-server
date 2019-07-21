@@ -1,5 +1,6 @@
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Auth;
@@ -12,6 +13,8 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
+        public ClientLookup ClientLookup { get; set; }
+        public MapLookup MapLookup { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -23,14 +26,19 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
+            ClientLookup = new ClientLookup();
+            MapLookup = new MapLookup();
             Setting = setting;
             Router = new PacketRouter();
             _authConsumer = new NecQueueConsumer(Setting);
             _authConsumer.SetIdentity("Auth");
+            _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(Setting);
             _msgConsumer.SetIdentity("Msg");
+            _msgConsumer.ClientDisconnected += MsgClientDisconnected;
             _areaConsumer = new NecQueueConsumer(Setting);
             _areaConsumer.SetIdentity("Area");
+            _areaConsumer.ClientDisconnected += AreaClientDisconnected;
 
             _authServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
@@ -51,6 +59,18 @@ namespace Necromancy.Server
             );
 
             LoadHandler();
+        }
+
+        private void AuthClientDisconnected(NecClient client)
+        {
+        }
+
+        private void MsgClientDisconnected(NecClient client)
+        {
+        }
+
+        private void AreaClientDisconnected(NecClient client)
+        {
         }
 
         public void Start()

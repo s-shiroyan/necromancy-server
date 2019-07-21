@@ -67,7 +67,9 @@ namespace Necromancy.Server.Setting
         [DataMember(Order = 23)] 
         public bool LogIncomingPackets { get; set; }
 
-
+        [DataMember(Order = 70)]
+        public DatabaseSettings DatabaseSettings { get; set; }
+        
         public NecSetting()
         {
             ListenIpAddress = IPAddress.Any;
@@ -81,6 +83,7 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
             LogIncomingPackets = true;
+            DatabaseSettings = new DatabaseSettings();
 
         }
 
@@ -97,6 +100,7 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;
             LogIncomingPackets = setting.LogIncomingPackets;
+            DatabaseSettings = new DatabaseSettings(setting.DatabaseSettings);
         }
     }
 }
