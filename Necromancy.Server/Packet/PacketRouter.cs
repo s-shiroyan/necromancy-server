@@ -58,6 +58,18 @@ namespace Necromancy.Server.Packet
             }
         }
 
+        /// <summary>
+        /// Send a packet to everyone in the map.
+        /// </summary>
+        public void Send(Map map, NecPacket packet, params NecClient[] excepts)
+        {
+            List<NecClient> clients = GetClients(map.ClientLookup.GetAll(), excepts);
+            foreach (NecClient client in clients)
+            {
+                Send(client, packet);
+            }
+        }
+
         private List<NecClient> GetClients(List<NecClient> clients, params NecClient[] excepts)
         {
             if (excepts.Length == 0)

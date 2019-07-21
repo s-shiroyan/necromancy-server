@@ -15,9 +15,22 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            int mapId = packet.Data.ReadInt32();
+
+
+            Map map = Server.MapLookup.Get(mapId);
+            if (map == null)
+            {
+                Logger.Error($"MapId: {mapId} not found in map lookup", client);
+                client.Socket.Close();
+                return;
+            }
+
+            map.Enter(client);
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res);
         }
     }
 }
