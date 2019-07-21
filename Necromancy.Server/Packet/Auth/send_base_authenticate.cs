@@ -20,14 +20,28 @@ namespace Necromancy.Server.Packet.Auth
             string macAddress = packet.Data.ReadCString();
             int unknown = packet.Data.ReadInt16();
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
-            
+
+            // TODO authenticate from db
+            Account account = new Account();
+            account.Name = accountName;
+            account.Id = Util.GetRandomNumber(10, 100000);
+            Character character = new Character();
+            character.Id = Util.GetRandomNumber(10, 100000);
+            character.Name = accountName;
+            //
+
+            client.Account = account;
+            client.Character = character;
+            Server.ClientLookup.Add(client);
+
+
             IBuffer res = BufferProvider.Provide();
             //  0 = OK
             // 1 = ID or Pw to long
             // X unknown auth error, X
             res.WriteInt32(0);
             res.WriteInt32(1);
-            
+
             Router.Send(client, (ushort) AuthPacketId.recv_base_authenticate_r, res);
         }
     }

@@ -21,6 +21,10 @@ namespace Necromancy.Server.Model
             UpdateIdentity();
         }
 
+        public Account Account { get; set; }
+        public Character Character { get; set; }
+        public Channel Channel { get; set; }
+        public Map Map { get; set; }
         public string Identity { get; private set; }
         public ITcpSocket Socket { get; }
         public PacketFactory PacketFactory { get; }
@@ -53,6 +57,7 @@ namespace Necromancy.Server.Model
                 _logger.Exception(this, ex);
                 return;
             }
+
             _logger.LogOutgoingPacket(this, packet);
             Socket.Send(data);
         }
