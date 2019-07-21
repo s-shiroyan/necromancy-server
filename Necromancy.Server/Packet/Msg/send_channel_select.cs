@@ -20,15 +20,15 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);//Error
 
             //sub_4E4210_2341
-            res.WriteInt32(1001002);//MapSerialID
-            res.WriteInt32(1001002);//MapID
+            res.WriteInt32(2003091);//MapSerialID
+            res.WriteInt32(2003091);//MapID
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
 
             //sub_484420
-            res.WriteFloat(1);//X Pos
-            res.WriteFloat(2);//Y Pos
-            res.WriteFloat(3);//Z Pos
+            res.WriteFloat(-2080);//X Pos
+            res.WriteFloat(-948);//Y Pos
+            res.WriteFloat(1);//Z Pos
             res.WriteByte(1);//Maybe view offset
             //
 
