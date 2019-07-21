@@ -29,10 +29,6 @@ namespace Necromancy.Server.Model
         /// </summary>
         public Map Get(int mapId)
         {
-            // TODO populate valid maps
-            // For now we always return a map because we have not populate all Ids
-            return new Map() {Id = mapId};
-
             lock (_lock)
             {
                 if (_maps.ContainsKey(mapId))
@@ -40,7 +36,13 @@ namespace Necromancy.Server.Model
                     return _maps[mapId];
                 }
 
-                return null;
+                // TODO populate valid maps
+                // For now we always return a map because we have not populate all Ids
+                Map map = new Map() {Id = mapId};
+                _maps.Add(mapId, map);
+                return map;
+
+                // return null;
             }
         }
 
