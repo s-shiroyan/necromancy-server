@@ -21,10 +21,19 @@ namespace Necromancy.Server.Packet.Auth
             int unknown = packet.Data.ReadInt16();
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
 
-            client.Account.Name = accountName;
+            // TODO authenticate from db
+            Account account = new Account();
+            account.Name = accountName;
+            account.Id = Util.GetRandomNumber(10, 100000);
+            Character character = new Character();
+            character.Id = Util.GetRandomNumber(10, 100000);
+            character.Name = accountName;
+            //
+
+            client.Account = account;
+            client.Character = character;
             Server.ClientLookup.Add(client);
-            
-            
+
 
             IBuffer res = BufferProvider.Provide();
             //  0 = OK
