@@ -11,8 +11,8 @@
         <Copyright>Copyright © 2019 Necromancy Team</Copyright>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Arrowgene.Services" Version="1.12.1"/>
-        <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2"/>
+        <PackageReference Include="Arrowgene.Services" Version="1.12.1" />
+        <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2" />
     </ItemGroup>
     <ItemGroup>
         <ContentWithTargetPath Include="Database\Schema\**">

@@ -14,6 +14,7 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup ClientLookup { get; set; }
+        public MapLookup MapLookup { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -26,6 +27,7 @@ namespace Necromancy.Server
         public NecServer(NecSetting setting)
         {
             ClientLookup = new ClientLookup();
+            MapLookup = new MapLookup();
             Setting = setting;
             Router = new PacketRouter();
             _authConsumer = new NecQueueConsumer(Setting);
@@ -61,17 +63,14 @@ namespace Necromancy.Server
 
         private void AuthClientDisconnected(NecClient client)
         {
-
         }
 
         private void MsgClientDisconnected(NecClient client)
         {
-
         }
 
         private void AreaClientDisconnected(NecClient client)
         {
-
         }
 
         public void Start()
