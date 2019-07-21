@@ -30,10 +30,13 @@ namespace Necromancy.Server
             Router = new PacketRouter();
             _authConsumer = new NecQueueConsumer(Setting);
             _authConsumer.SetIdentity("Auth");
+            _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(Setting);
             _msgConsumer.SetIdentity("Msg");
+            _msgConsumer.ClientDisconnected += MsgClientDisconnected;
             _areaConsumer = new NecQueueConsumer(Setting);
             _areaConsumer.SetIdentity("Area");
+            _areaConsumer.ClientDisconnected += AreaClientDisconnected;
 
             _authServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
@@ -54,6 +57,21 @@ namespace Necromancy.Server
             );
 
             LoadHandler();
+        }
+
+        private void AuthClientDisconnected(NecClient client)
+        {
+
+        }
+
+        private void MsgClientDisconnected(NecClient client)
+        {
+
+        }
+
+        private void AreaClientDisconnected(NecClient client)
+        {
+
         }
 
         public void Start()

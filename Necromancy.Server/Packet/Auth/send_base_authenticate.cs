@@ -22,6 +22,9 @@ namespace Necromancy.Server.Packet.Auth
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
 
             client.Account.Name = accountName;
+            Server.ClientLookup.Add(client);
+            
+            
 
             IBuffer res = BufferProvider.Provide();
             //  0 = OK
