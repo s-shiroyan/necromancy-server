@@ -131,22 +131,45 @@ namespace Necromancy.Server.Packet.Id
         recv_party_notify_update_dragon = 0xFC36,
 
         // Send OP Codes - ordered by op code
-        send_chara_create = 0xC2B,
-        send_chara_select = 0x610,
-        send_soul_delete = 0x5208,
         send_base_check_version = 0x5705,
-        send_cash_get_url_common = 0x733E,
-        send_chara_get_createinfo = 0x7E62,
-        send_soul_set_passwd = 0x8C9D,
-        send_chara_draw_bonuspoint = 0x99EC,
         send_base_login = 0xA53D,
+        send_cash_buy_premium = 0x001, // placeholder until found
+        send_cash_get_url_common = 0x733E,
+        send_cash_get_url_common_steam = 0x002, // placeholder until found
+        send_cash_update = 0x003, // placeholder until found
+        send_channel_select = 0x2F41,
+        send_chara_create = 0xC2B,
+        send_chara_delete = 0x004, // placeholder until found
+        send_chara_draw_bonuspoint = 0x99EC,
+        send_chara_get_createinfo = 0x7E62,
+        send_chara_get_inheritinfo = 0x005, // placeholder until found
+        send_chara_get_list = 0xF56C,
+        send_chara_select = 0x610,
+        send_chara_select_back = 0x006, // placeholder until found
+        send_chara_select_back_soul_select = 0x007, // placeholder until found
+        send_friend_reply_to_link2 = 0x008, // placeholder until found
+        send_friend_request_delete_friend = 0x009, // placeholder until found
+        send_friend_request_link_target = 0x010, // placeholder until found
+        send_friend_request_load = 0xE1DF,
         send_soul_authenticate_passwd = 0xB4BB,
+        send_soul_create = 0xCE74,
+        send_soul_delete = 0x5208,
+        send_soul_rename = 0x011, // placeholder until found
         send_soul_select = 0xA869, // 0xC44F, // :0xA869
         send_soul_select_C44F = 0xC44F,
-        send_soul_create = 0xCE74,
-        send_chara_get_list = 0xF56C,
-        send_channel_select = 0x2F41, //not sure the send yet
+        send_soul_set_passwd = 0x8C9D,
+        send_system_register_error_report = 0x012, // placeholder until found
+        send_union_reply_to_invite2 = 0x013, // placeholder until found
+        send_union_request_change_role = 0x014, // placeholder until found
         send_union_request_detail = 0x7950,
-        send_friend_request_load = 0xE1DF,
+        send_union_request_disband = 0x015, // placeholder until found
+        send_union_request_expel_member = 0x016, // placeholder until found
+        send_union_request_invite_target = 0x017, // placeholder until found
+        send_union_request_member_priv = 0x018, // placeholder until found
+        send_union_request_news = 0x019, // placeholder until found
+        send_union_request_secede = 0x020, // placeholder until found
+        send_union_request_set_info = 0x021, // placeholder until found
+        send_union_request_set_mantle = 0x022, // placeholder until found
+
     }
 }

@@ -98,20 +98,44 @@ namespace Necromancy.Server
             // Message Handler
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
             _msgConsumer.AddHandler(new send_base_login(this));
+            _msgConsumer.AddHandler(new send_cash_buy_premium(this));
+            _msgConsumer.AddHandler(new send_cash_get_url_common(this));
+            _msgConsumer.AddHandler(new send_cash_get_url_common_steam(this));
+            _msgConsumer.AddHandler(new send_cash_update(this));
+            _msgConsumer.AddHandler(new send_channel_select(this));
+            _msgConsumer.AddHandler(new send_chara_create(this));
+            _msgConsumer.AddHandler(new send_chara_delete(this));
+            _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
+            _msgConsumer.AddHandler(new send_chara_get_createinfo(this));
+            _msgConsumer.AddHandler(new send_chara_get_inheritinfo(this));
+            _msgConsumer.AddHandler(new send_chara_get_list(this));
+            _msgConsumer.AddHandler(new send_chara_select(this));
+            _msgConsumer.AddHandler(new send_chara_select_back(this));
+            _msgConsumer.AddHandler(new send_chara_select_back_soul_select(this));
+            _msgConsumer.AddHandler(new send_friend_reply_to_link2(this));
+            _msgConsumer.AddHandler(new send_friend_request_delete_friend(this));
+            _msgConsumer.AddHandler(new send_friend_request_link_target(this));
+            _msgConsumer.AddHandler(new send_friend_request_load(this));
+            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
             _msgConsumer.AddHandler(new send_soul_create(this));
+            _msgConsumer.AddHandler(new send_soul_delete(this));
+            _msgConsumer.AddHandler(new send_soul_rename(this));
             _msgConsumer.AddHandler(new send_soul_select(this));
             _msgConsumer.AddHandler(new send_soul_select_C44F(this));
-            _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
-            _msgConsumer.AddHandler(new send_chara_get_list(this));
-            _msgConsumer.AddHandler(new send_cash_get_url_common(this));
-            _msgConsumer.AddHandler(new send_chara_get_createinfo(this));
             _msgConsumer.AddHandler(new send_soul_set_passwd(this));
-            _msgConsumer.AddHandler(new send_chara_draw_bonuspoint(this));
-            _msgConsumer.AddHandler(new send_chara_create(this));
-            _msgConsumer.AddHandler(new send_channel_select(this));
-            _msgConsumer.AddHandler(new send_chara_select(this));
+            _msgConsumer.AddHandler(new send_system_register_error_report(this));
+            _msgConsumer.AddHandler(new send_union_reply_to_invite2(this));
+            _msgConsumer.AddHandler(new send_union_request_change_role(this));
             _msgConsumer.AddHandler(new send_union_request_detail(this));
-            _msgConsumer.AddHandler(new send_friend_request_load(this));
+            _msgConsumer.AddHandler(new send_union_request_disband(this));
+            _msgConsumer.AddHandler(new send_union_request_expel_member(this));
+            _msgConsumer.AddHandler(new send_union_request_invite_target(this));
+            _msgConsumer.AddHandler(new send_union_request_member_priv(this));
+            _msgConsumer.AddHandler(new send_union_request_news(this));
+            _msgConsumer.AddHandler(new send_union_request_secede(this));
+            _msgConsumer.AddHandler(new send_union_request_set_info(this));
+            _msgConsumer.AddHandler(new send_union_request_set_mantle(this));
+
 
             // Area Handler
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
