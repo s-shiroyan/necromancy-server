@@ -987,6 +987,6 @@ namespace Necromancy.Server.Packet.Id
         send_event_access_object = 0x718D,
         send_chat_post_message = 0x1132,
         send_chara_pose = 0x7DE7,
-        send_chara_pose_ladder = 0x0,
+        send_chara_pose_ladder = 0xE75C,
     }
 }

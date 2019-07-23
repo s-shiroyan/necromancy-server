@@ -51,8 +51,6 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(1);//gender flag
             res.WriteByte(2);//changing this byte makes hair and face change?
             res.WriteByte(0);//hair color? i think
-            //
-
             res.WriteByte(1);//changed nothing visibly
             //
 

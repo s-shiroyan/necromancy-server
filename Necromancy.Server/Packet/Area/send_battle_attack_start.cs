@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
             SendNPCStateUpdateNotify(client);
             //SendDataNotifyCharaData(client);
-            SendDataNotifyCharabodyData(client);
+            //SendDataNotifyCharabodyData(client); //needs to be fixed, causes disconnect on opposite client when moving
         }
 
         private void SendNPCStateUpdateNotify(NecClient client)
