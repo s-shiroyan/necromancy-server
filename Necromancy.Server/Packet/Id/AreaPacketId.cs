@@ -713,7 +713,7 @@ namespace Necromancy.Server.Packet.Id
     ///                     proto_area_implement_client::send_quest_get_story_quest_history,
     ///                     proto_area_implement_client::send_quest_get_soul_mission_quest_history happen after the above recv)
     ///                 proto_area_implement_client::recv_battle_report_notify_hit_effect_name
-    ///                 proto_area_implement_client::recv_comment_switch_r
+    ///                 proto_area_implement_client::recv_comment_switch_r 0xB01B
     ///                 proto_area_implement_client::recv_wanted_update_state_actor_notify
     /// 
     /// 0xB1CA + 0xC8 - 0x004BE4A3 4 opcodes
@@ -930,6 +930,7 @@ namespace Necromancy.Server.Packet.Id
         recv_logout_start = 0x58E7,
 
 
+
         recv_battle_attack_pose = 0x0, //todo
         recv_battle_release_attack_pose = 0x0, //todo
         recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
@@ -952,6 +953,14 @@ namespace Necromancy.Server.Packet.Id
         recv_chat_notify_message = 0xC003,
         recv_chara_pose_r = 0xF71C,
         recv_chara_pose_ladder_r = 0xD972,
+        recv_comment_set_r = 0x9C3A,
+        recv_comment_switch_r = 0xB025,
+        recv_refusallist_add_user_r = 0x22E7,
+        recv_blacklist_open_r = 0xDF31,
+        recv_emotion_update_type_r = 0x239D,
+        recv_blacklist_clear_r = 0x1E6B,
+        recv_blacklist_lock_r = 0x30FB,
+        recv_blacklist_unlock_r = 0x2BAB,
 
         // Send OP Codes - ordered by op code
         send_base_check_version = 0x5705,
@@ -987,6 +996,16 @@ namespace Necromancy.Server.Packet.Id
         send_event_access_object = 0x718D,
         send_chat_post_message = 0x1132,
         send_chara_pose = 0x7DE7,
-        send_chara_pose_ladder = 0x0,
+        send_chara_pose_ladder = 0xE75C,
+        send_comment_set = 0x9A13,
+        send_comment_switch = 0xECF5,
+        send_refusallist_add_user = 0xF1D5,
+        send_blacklist_open = 0xC923 ,
+        send_emotion_update_type = 0x7672,
+        send_blacklist_close = 0xC780,
+        send_blacklist_clear = 0xB742,
+        send_blacklist_lock = 0xD189,
+        send_blacklist_unlock = 0x23AD,
+        send_wanted_entry = 0xA86F,
     }
 }
