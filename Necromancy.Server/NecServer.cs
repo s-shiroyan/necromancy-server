@@ -171,6 +171,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_chat_post_message(this));
             _areaConsumer.AddHandler(new send_chara_pose(this));
             _areaConsumer.AddHandler(new send_chara_pose_ladder(this));
+            _areaConsumer.AddHandler(new send_charabody_access_start(this));
+            _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
+            _areaConsumer.AddHandler(new send_skill_start_cast(this));
         }
     }
 }

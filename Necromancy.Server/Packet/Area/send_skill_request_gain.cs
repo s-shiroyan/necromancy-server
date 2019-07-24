@@ -15,10 +15,25 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            //uint skillID = packet.Data.ReadUInt32();
+            int skillID = packet.Data.ReadInt32(),
+                 skillLevel = packet.Data.ReadInt32();
+
+            SendSkillTreeGain(client, skillID, skillLevel);
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//1 = failed to aquire skill, 0 = success? but no skill aquired 
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res);
+        }
+
+        private void SendSkillTreeGain(NecClient client, int skillID, int skillLevel)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillLevel);//Level?
+            res.WriteByte(0); //Bool
+            res.WriteByte(0); //Bool
+
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_tree_gain, res);
         }
     }
 }
