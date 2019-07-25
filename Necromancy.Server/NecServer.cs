@@ -182,6 +182,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_blacklist_unlock(this));
             _areaConsumer.AddHandler(new send_wanted_entry(this));
             _areaConsumer.AddHandler(new send_cmd_exec(this));
+            _areaConsumer.AddHandler(new send_charabody_access_start(this));
+            _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
+            _areaConsumer.AddHandler(new send_skill_start_cast(this));
         }
     }
 }
