@@ -963,6 +963,10 @@ namespace Necromancy.Server.Packet.Id
         recv_shortcut_notify_regist = 0x8BB4,
         recv_battle_report_action_skill_exec = 0x604,
         recv_skill_exec_r = 0x1C6C,
+        recv_skill_start_cast_self = 0xC542,
+        recv_skill_start_cast_r = 0xE4B2,
+        recv_skill_start_cast_ex_r = 0x4C6F,
+         recv_skill_start_item_cast_r = 0xEE43,
 
 
         // Send OP Codes - ordered by op code

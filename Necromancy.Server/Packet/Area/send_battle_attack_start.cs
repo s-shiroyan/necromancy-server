@@ -192,7 +192,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
 
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(-1);
+                res3.WriteInt32(2);
 
             numEntries = 19;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
@@ -202,7 +202,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 for (int j = 0; j < 2; j++)
                 {
-                    res3.WriteInt32(-1);
+                    res3.WriteInt32(10310503);
                     res3.WriteByte(0);
                     res3.WriteByte(0);
                     res3.WriteByte(0);
@@ -221,7 +221,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 19
 
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(-1);
+                res3.WriteInt32(3);
 
             res3.WriteInt32(2);//race
             res3.WriteInt32(2);//gender
