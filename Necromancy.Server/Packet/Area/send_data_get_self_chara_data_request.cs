@@ -43,7 +43,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt64(33); // exp needed to level
             res.WriteInt64(44); // soul exp needed to level
             res.WriteInt32(123); // current hp
-            res.WriteInt32(100); // current mp
+            res.WriteInt32(19); // current mp
             res.WriteInt32(111); // current od
             res.WriteInt32(123); // max hp
             res.WriteInt32(124); // maxmp
@@ -163,9 +163,9 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(60002);//Port
 
             //sub_484420
-            res.WriteFloat(23162);//X Pos
-            res.WriteFloat(-219);//Y Pos
-            res.WriteFloat(3);//Z Pos
+            res.WriteFloat(0);//X Pos
+            res.WriteFloat(0);//Y Pos
+            res.WriteFloat(30);//Z Pos
             res.WriteByte(1);//view offset
 
             //sub_read_int32 skill point

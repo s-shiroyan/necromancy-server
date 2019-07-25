@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
-            res3.WriteInt32(4);//character state? 2 = soul? 3 = alive but took over NPC stuff
+            res3.WriteInt32(1);
 
             //sub_481AA0
             res3.WriteCString("soulname");
@@ -44,13 +44,13 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(2);
+            res3.WriteInt32(1);
 
             //sub_483420
             res3.WriteInt32(1);//Criminal Status
 
             //sub_483470
-            res3.WriteInt16(2);
+            res3.WriteInt16(1);
 
             //sub_483420
             int numEntries = 19;
@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483660
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(2);
+                res3.WriteInt32(-1);
 
             //sub_483420
             numEntries = 19;
@@ -69,19 +69,19 @@ namespace Necromancy.Server.Packet.Area
             {
                 for (int j = 0; j < 2; j++)
                 {
-                    res3.WriteInt32(10310503);
-                    res3.WriteByte(0);
-                    res3.WriteByte(0);
-                    res3.WriteByte(0);
+                    res3.WriteInt32(j);
+                    res3.WriteByte((byte)j);
+                    res3.WriteByte((byte)(j + 1));
+                    res3.WriteByte((byte)(j + 2));
                 }
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);//Bool
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
+                res3.WriteByte(1);
+                res3.WriteByte(2);
+                res3.WriteByte(1);//Bool
+                res3.WriteByte(3);
+                res3.WriteByte(4);
+                res3.WriteByte(5);
+                res3.WriteByte(6);
+                res3.WriteByte(7);
             }
 
             //sub_483420
@@ -90,10 +90,10 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483420
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(3);
+                res3.WriteInt32(-1);
 
             //sub_4835C0
-            res3.WriteInt32(0);//1 here means crouching?
+            res3.WriteInt32(3);
 
             //sub_484660
             res3.WriteInt32(0);//race
@@ -103,25 +103,25 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(4);//hair color
 
             //sub_483420
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             //sub_4837C0
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             //sub_read_byte
-            res3.WriteByte(0);//Criminal name icon
+            res3.WriteByte(1);
 
             //sub_494890
             res3.WriteByte(1);//Bool Beginner Protection
 
             //sub_4835E0
-            res3.WriteInt32(0);//pose, 1 = sitting, 0 = standing
+            res3.WriteInt32(1);
 
             //sub_483920
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             //sub_483440
-            res3.WriteInt16(0);
+            res3.WriteInt16(1);
 
             //sub_read_byte
             res3.WriteByte(1);//no change?
@@ -133,18 +133,18 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);//title; 0 - display title, 1 - no title
 
             //sub_483580
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             //sub_483420
-            numEntries = 128;//max is 128
+            numEntries = 128;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 128
 
             //sub_485A70
-            for (int i = 0; i < numEntries; i++) // The items inside this loop cause the character to have all the bad status effects
+            for (int i = 0; i < numEntries; i++)
             {
-                res3.WriteInt32(3);
-                res3.WriteInt32(3);
-                res3.WriteInt32(3);
+                res3.WriteInt32(i);
+                res3.WriteInt32(i+1);
+                res3.WriteInt32(i+2);
             }
 
             //sub_481AA0

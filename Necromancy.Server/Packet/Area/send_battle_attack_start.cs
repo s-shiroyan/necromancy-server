@@ -2,7 +2,6 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -21,14 +20,8 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort) AreaPacketId.recv_battle_attack_start, res, client);
 
             SendNPCStateUpdateNotify(client);
-
-            float charaX = packet.Data.ReadFloat(),
-                  charaY = packet.Data.ReadFloat(),
-                  charaZ = packet.Data.ReadFloat();
-
-            Console.WriteLine($"X value: {charaX}, Y value: {charaY}, Z value: {charaZ}");
-            //SendDataNotifyCharaData(client, charaX, charaY, charaZ);
-            SendDataNotifyCharabodyData(client, charaX, charaY, charaZ); //needs to be fixed, causes disconnect on opposite client when moving
+            //SendDataNotifyCharaData(client);
+            SendDataNotifyCharabodyData(client);
         }
 
         private void SendNPCStateUpdateNotify(NecClient client)
@@ -39,7 +32,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_npc_state_update_notify, res2);
         }
 
-        private void SendDataNotifyCharaData(NecClient client, float charaX, float charaY, float charaZ)
+        private void SendDataNotifyCharaData(NecClient client)
         {
             IBuffer res3 = BufferProvider.Provide();
 
@@ -53,9 +46,9 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("charaname");
             
             //sub_484420
-            res3.WriteFloat(charaX);//X Pos 23162
-            res3.WriteFloat(charaY);//Y Pos -219
-            res3.WriteFloat(charaZ);//Z Pos     3
+            res3.WriteFloat(23162);//X Pos
+            res3.WriteFloat(-219);//Y Pos
+            res3.WriteFloat(3);//Z Pos
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
@@ -157,9 +150,9 @@ namespace Necromancy.Server.Packet.Area
             //sub_485A70
             for (int i = 0; i < numEntries; i++)
             {
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
+                res3.WriteInt32(i);
+                res3.WriteInt32(i+1);
+                res3.WriteInt32(i+2);
             }
 
             //sub_481AA0
@@ -168,21 +161,19 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.revc_data_notify_chara_data, res3, client);
         }
 
-        private void SendDataNotifyCharabodyData(NecClient client, float charaX, float charaY, float charaZ)
+        private void SendDataNotifyCharabodyData(NecClient client)
         {
             IBuffer res3 = BufferProvider.Provide();
 
-            res3.WriteInt32(0);//Has to be 0 for the character movement to take place, -1 spawns a new one on each movement,
+            res3.WriteInt32(1);
 
-            res3.WriteInt32(1000);//Character state? 2 = dead?
+            res3.WriteCString("soulname");
 
-            res3.WriteCString("soulMeme");
+            res3.WriteCString("charaname");
 
-            res3.WriteCString("charaMeme");
-
-            res3.WriteFloat(charaX);//X Pos  23162
-            res3.WriteFloat(charaY);//Y Pos   -219
-            res3.WriteFloat(charaZ);//Z Pos     10
+            res3.WriteFloat(23162);//X Pos
+            res3.WriteFloat(-219);//Y Pos
+            res3.WriteFloat(10);//Z Pos
             res3.WriteByte(1);//view offset
 
             res3.WriteInt32(1);
@@ -222,8 +213,8 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries; i++)
                 res3.WriteInt32(-1);
 
-            res3.WriteInt32(2);//race
-            res3.WriteInt32(2);//gender
+            res3.WriteInt32(1);//race
+            res3.WriteInt32(1);//gender
             res3.WriteByte(2);//hair
             res3.WriteByte(3);//face
             res3.WriteByte(4);//hair color
@@ -232,15 +223,15 @@ namespace Necromancy.Server.Packet.Area
 
             res3.WriteInt32(1);
 
-            res3.WriteInt32(2);
+            res3.WriteInt32(1);
 
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             res3.WriteByte(1);
 
             res3.WriteByte(1);//Bool
 
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res3, client);
         }
