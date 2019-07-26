@@ -16,7 +16,6 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             SendDataGetSelfCharaData(client);
-            //SendDataNotifyCharaData(client);
 
             IBuffer res2 = BufferProvider.Provide();
             Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);

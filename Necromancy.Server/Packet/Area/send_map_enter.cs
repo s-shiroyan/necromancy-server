@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);
 
-            SendDataNotifyCharaData(client);
+            //SendDataNotifyCharaData(client);
         }
 
         private void SendDataNotifyCharaData(NecClient client)
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
-            res3.WriteInt32(4);//character state? 2 = soul? 3 = alive but took over NPC stuff
+            res3.WriteInt32(0);//character state? 2 = soul? 3 = alive but took over NPC stuff, if this is 0 then no movement takes place in game, 7 makes dupes not spawn when sending it with movement
 
             //sub_481AA0
             res3.WriteCString("soulname");
@@ -44,7 +44,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(2);
+            res3.WriteInt32(0);
 
             //sub_483420
             res3.WriteInt32(1);//Criminal Status
@@ -103,10 +103,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(4);//hair color
 
             //sub_483420
-            res3.WriteInt32(0);
+            res3.WriteInt32(10);
 
             //sub_4837C0
-            res3.WriteInt32(1);
+            res3.WriteInt32(100);
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -142,9 +142,9 @@ namespace Necromancy.Server.Packet.Area
             //sub_485A70
             for (int i = 0; i < numEntries; i++)
             {
-                res3.WriteInt32(3);
-                res3.WriteInt32(3);
-                res3.WriteInt32(3);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
             }
 
             //sub_481AA0

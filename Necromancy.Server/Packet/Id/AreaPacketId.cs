@@ -967,6 +967,7 @@ namespace Necromancy.Server.Packet.Id
         recv_skill_start_cast_r = 0xE4B2,
         recv_skill_start_cast_ex_r = 0x4C6F,
          recv_skill_start_item_cast_r = 0xEE43,
+         recv_chara_update_form = 0x2479,
 
 
         // Send OP Codes - ordered by op code
