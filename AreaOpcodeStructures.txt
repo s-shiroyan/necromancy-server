@@ -410,3 +410,116 @@ recv_battle_report_notify_exp_bonus2 = 0xEB47,
 	res.WriteInt64(0);
 	
 	res.WriteInt32(0);
+	
+	
+recv_dbg_chara_unequipped = 0xEA1C,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_release_attack_pose_r = 0xE990,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_skill_failed = 0xE897,
+
+	res.WriteInt32(0);
+	
+	
+recv_item_update_spirit_eqmask = 0xE819,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_union_rename_close_r = 0xE7E7,
+
+	res.WriteInt32(0);
+	
+	
+recv_wanted_jail_open = 0xE7BB,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	
+recv_party_notify_add_draw_item = 0xE748,
+
+	res.WriteInt64(0);
+	
+	res/WriteFloat(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_quest_select_error = 0xE5FF,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_exp = 0xE526,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_union_request_rename_r = 0xE462, // afterward sends send_union_rename_close (0xC9A9)
+
+	res.WriteInt32(0);
+	
+	
+recv_party_kick_r = 0xE207,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_select_ready = 0xE1F8,
+
+	res.WriteInt32(0);
+	
+	res.WriteByte(0); // bool
+	
+	
+recv_map_update_bgm = 0xE14B,
+
+	res.WriteInt32(0);
+
+
+recv_event_quest_report = 0xE07E,
+
+	res.WriteInt32(0);
+	
+	
+recv_data_notify_goldobject_data = 0xE051,
+
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_premium_service_update_day = 0xE03D,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);

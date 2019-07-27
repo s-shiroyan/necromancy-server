@@ -512,24 +512,10 @@ namespace Necromancy.Server.Packet.Id
     /// 0xDEC2 (0xDEB7 + 0xB) proto_area_implement_client::recv_shop_title_push
     /// 0xDF31 - proto_area_implement_client::recv_blacklist_open_r
     /// 0xE039 - proto_area_implement_client::recv_shop_notify_item_sell_price
-    /// 0xE03D (0xE039 + 0x4) proto_area_implement_client::recv_premium_service_update_day
-    /// 0xE051 - proto_area_implement_client::recv_data_notify_goldobject_data
-    /// 0xE07E - proto_area_implement_client::recv_event_quest_report
-    /// 0xE14B (0xE07E + 0xCD) proto_area_implement_client::recv_map_update_bgm
-    /// 0xE1F8 - proto_area_implement_client::recv_event_select_ready
-    /// 0xE207 - proto_area_implement_client::recv_party_kick_r
-    /// 0xE462 - proto_area_implement_client::recv_union_request_rename_r
-    /// 0xE4B2 - proto_area_implement_client::recv_skill_start_cast_r
-    /// 0xE526 - proto_area_implement_client::recv_battle_report_notify_exp
-    /// 0xE5FF - proto_area_implement_client::recv_quest_select_error
-    /// 0xE748 - proto_area_implement_client::recv_party_notify_add_draw_item
-    /// 0xE7BB - proto_area_implement_client::recv_wanted_jail_open
-    /// 0xE7E7 (0xE7BB + 0x2C) proto_area_implement_client::recv_union_rename_close_r
-    /// 0xE819 - proto_area_implement_client::recv_item_update_spirit_eqmask
-    /// 0xE897 - proto_area_implement_client::recv_battle_report_action_skill_failed
-    /// 0xE990 (0xE897 + 0xF9) proto_area_implement_client::recv_battle_release_attack_pose_r
-    /// 0xEA1C - proto_area_implement_client::recv_dbg_chara_unequipped
-    /// 0xEB47 - proto_area_implement_client::recv_battle_report_notify_exp_bonus2
+  
+
+
+
 
 
 
@@ -962,8 +948,22 @@ namespace Necromancy.Server.Packet.Id
         recv_shop_identify_r = 0xECBA,
         recv_wanted_list_member = 0xEB7B,
         recv_battle_report_notify_exp_bonus2 = 0xEB47,
-
-
+        recv_dbg_chara_unequipped = 0xEA1C,
+        recv_battle_release_attack_pose_r = 0xE990,
+        recv_battle_report_action_skill_failed = 0xE897,
+        recv_item_update_spirit_eqmask = 0xE819,
+        recv_union_rename_close_r = 0xE7E7,
+        recv_wanted_jail_open = 0xE7BB,
+        recv_party_notify_add_draw_item = 0xE748,
+        recv_quest_select_error = 0xE5FF,
+        recv_battle_report_notify_exp = 0xE526,
+        recv_union_request_rename_r = 0xE462,
+        recv_party_kick_r = 0xE207,
+        recv_event_select_ready = 0xE1F8,
+        recv_map_update_bgm = 0xE14B,
+        recv_event_quest_report = 0xE07E,
+        recv_data_notify_goldobject_data = 0xE051,
+        recv_premium_service_update_day = 0xE03D,
 
         // Send OP Codes - ordered by op code
 
@@ -1205,7 +1205,7 @@ namespace Necromancy.Server.Packet.Id
         send_trade_set_money = 0x212, //opcode not found
         send_union_close_window = 0x213, //opcode not found 
         send_union_mantle_close = 0x214, //opcode not found
-        send_union_rename_close = 0x215, //opcode not found
+        send_union_rename_close = 0xC9A9, 
         send_union_request_establish = 0x216, //opcode not found
         send_union_request_rename = 0x217, //opcode not found
         send_union_storage_deposit_money = 0x218, //opcode not found
