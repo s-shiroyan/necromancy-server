@@ -548,27 +548,10 @@ namespace Necromancy.Server.Packet.Id
     /// 0xF393 - proto_area_implement_client::recv_battle_report_notify_damage_ac
     /// 0xF3A1 - proto_area_implement_client::recv_inherit_start_r
     /// 0xF447 - proto_area_implement_client::recv_shop_notify_item
-    /// 0xF495 - proto_area_implement_client::recv_party_search_recruited_member_r
-    /// 0xF602 - proto_area_implement_client::recv_raisescale_add_item_r
-    /// 0xF633 - proto_area_implement_client::recv_battle_attack_pose_end_notify
-    /// 0xF6AF - proto_area_implement_client::recv_npc_affection_rank_update_notify
-    /// 0xF71C - proto_area_implement_client::recv_chara_pose_r
-    /// 0xF7E7 - proto_area_implement_client::recv_auction_search_r
-    /// 0xF7F0 (0xF7E7 + 0x9) proto_area_implement_client::recv_party_notify_get_item
-    /// 0xF95B - proto_area_implement_client::recv_emotion_notify_type
-    /// 0xF9F9 - proto_area_implement_client::recv_map_entry_r
-    /// 0xFA0B   no string
-    /// 0xFB79   no string
-    /// 0xFC1A - proto_area_implement_client::recv_job_change_close_r
-    /// 0xFC28 - proto_area_implement_client::recv_auction_cancel_exhibit_r
-    /// 0xFC75 - proto_area_implement_client::recv_battle_report_start_notify
-    /// 0xFCAD (0xFC75 + 0x38) proto_area_implement_client::recv_cash_shop_fitting_item_update_eqmask
-    /// 0xFCC0 - proto_area_implement_client::recv_return_home_request_exec_r
-    /// 0xFCF3 - proto_area_implement_client::recv_wanted_update_reward_point
-    /// 0xFD78 (0xFCF3 + 0x85) proto_area_implement_client::recv_chara_update_mag_cast_time_per
 
 
-    /// 
+
+
     /// Ranges: the opcodes are presented in order from top to bottom in the sense of the jmp operation before each group.
     /// 0xEFDD + 0x4E - 0x004CEC2C 5 opcodes (1 ret)
     ///                 proto_area_implement_client::recv_base_check_version_r                      00(actually 0xEFDD)
@@ -903,7 +886,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         revc_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xFDB2, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -967,7 +950,22 @@ namespace Necromancy.Server.Packet.Id
         recv_event_quest_report_list_begin2 = 0xFDE9,
         recv_data_notify_monster_data = 0xFDB8,
         recv_package_all_delete_r = 0xFDB2,
-
+        recv_chara_update_mag_cast_time_per = 0xFD78,
+        recv_wanted_update_reward_point = 0xFCF3,
+        recv_return_home_request_exec_r = 0xFCC0,
+        recv_cash_shop_fitting_item_update_eqmask = 0xFCAD,
+        recv_battle_report_start_notify = 0xFC75,
+        recv_auction_cancel_exhibit_r = 0xFC28,
+        recv_job_change_close_r = 0xFC1A,
+        recv_0xFB79 = 0xFB79,
+        recv_0xFA0B = 0xFA0B,
+        recv_emotion_notify_type = 0xF95B,
+        recv_party_notify_get_item = 0xF7F0,
+        recv_auction_search_r = 0xF7E7,
+        recv_npc_affection_rank_update_notify = 0xF6AF,
+        recv_battle_attack_pose_end_notify = 0xF633,
+        recv_raisescale_add_item_r = 0xF602,
+        recv_party_search_recruited_member_r = 0xF495,
 
 
         // Send OP Codes - ordered by op code

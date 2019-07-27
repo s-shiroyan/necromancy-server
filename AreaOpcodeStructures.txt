@@ -154,3 +154,128 @@ recv_package_all_delete_r = 0xFDB2,
 	{
 		res.WriteInt32(0);
 	}
+	
+	
+recv_chara_update_mag_cast_time_per = 0xFD78, 
+
+	res.WriteFloat(0);
+	
+	
+recv_wanted_update_reward_point = 0xFCF3,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt64(0);
+	
+	
+recv_return_home_request_exec_r = 0xFCC0,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_cash_shop_fitting_item_update_eqmask = 0xFCAD,
+
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_start_notify = 0xFC75,
+
+	res.WriteInt32(0);
+	
+	
+recv_auction_cancel_exhibit_r = 0xFC28,
+
+	res.WriteInt32(0);
+	
+	
+recv_job_change_close_r = 0xFC1A,
+
+	res.WriteInt32(0);
+	
+	
+recv_emotion_notify_type = 0xF95B,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_party_notify_get_item = 0xF7F0,
+
+	res.WriteInt32(0);
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteByte(0);
+	
+	
+recv_auction_search_r = 0xF7E7,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0x64); // cmp to 0x64 = 100
+	
+	int numEntries4 = 0x64;
+	for (int i = 0; i < numEntries4; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteByte(0);
+		res.WriteFixedString("ToBeFound", 385);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+	}
+
+	
+recv_npc_affection_rank_update_notify = 0xF6AF,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_pose_end_notify = 0xF633,
+
+	res.WriteInt32(0);
+	
+	
+recv_raisescale_add_item_r = 0xF602,
+
+	res.WriteInt32(0);
+	
+	
+recv_party_search_recruited_member_r = 0xF495,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0x14); // cmp to 0x14 = 20
+	
+
+	int numEntries = 0x14;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteFixedString("charaname", 91);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0); // bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("ToBeFound", 181);
+		
+	}
