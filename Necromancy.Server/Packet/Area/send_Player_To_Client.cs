@@ -140,7 +140,7 @@ namespace Necromancy.Server.Packet.Area
             //sub_481AA0
             res3.WriteCString("nofuckingideawhatthisis");
 
-            Router.Send(client.Map, (ushort)AreaPacketId.revc_data_notify_chara_data, res3);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3);
         }
     }
 }

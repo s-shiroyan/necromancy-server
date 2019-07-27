@@ -530,24 +530,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xE990 (0xE897 + 0xF9) proto_area_implement_client::recv_battle_release_attack_pose_r
     /// 0xEA1C - proto_area_implement_client::recv_dbg_chara_unequipped
     /// 0xEB47 - proto_area_implement_client::recv_battle_report_notify_exp_bonus2
-    /// 0xEB7B (0xEB47 + 0x34) proto_area_implement_client::recv_wanted_list_member (i think)
-    /// 0xECBA - proto_area_implement_client::recv_shop_identify_r
-    /// 0xED4C - proto_area_implement_client::recv_data_notify_chara_data
-    /// 0xEDA6 - proto_area_implement_client::recv_map_get_info_r
-    /// 0xEDB3 - proto_area_implement_client::recv_data_notify_eo_data2
-    /// 0xEE18 (0xEDB3 + 0x65) ret
-    /// 0xEE43 - proto_area_implement_client::recv_skill_start_item_cast_r
-    /// 0xEEB7   ret
-    /// 0xEF8D (0xEEB7 + 0xD6) proto_area_implement_client::recv_raisescale_remove_item_r
-    /// 0xEFA4 - proto_area_implement_client::recv_trade_invite_r
-    /// 0xEFDD - proto_area_implement_client::recv_base_check_version_r
-    /// 0xF02B (0xEFDD + 0x4E) - proto_area_implement_client::recv_random_box_get_item_all_r
-    /// 0xF1A0 - proto_area_implement_client::recv_battle_attack_exec_r
-    /// 0xF212 - proto_area_implement_client::recv_battle_report_action_attack_onhit
-    /// 0xF330 - proto_area_implement_client::recv_cloak_close_r
-    /// 0xF393 - proto_area_implement_client::recv_battle_report_notify_damage_ac
-    /// 0xF3A1 - proto_area_implement_client::recv_inherit_start_r
-    /// 0xF447 - proto_area_implement_client::recv_shop_notify_item
 
 
 
@@ -884,7 +866,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_request_r = 0x3C89,
         recv_base_enter_r = 0x3806,
         recv_data_get_self_chara_data_r = 0xD1BD,
-        revc_data_notify_chara_data = 0xED4C,
+        recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
         recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
@@ -966,6 +948,21 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_attack_pose_end_notify = 0xF633,
         recv_raisescale_add_item_r = 0xF602,
         recv_party_search_recruited_member_r = 0xF495,
+        recv_shop_notify_item = 0xF447,
+        recv_inherit_start_r = 0xF3A1,
+        recv_battle_report_notify_damage_ac = 0xF393,
+        recv_cloak_close_r = 0xF330,
+        recv_0xF212 = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
+        recv_random_box_get_item_all_r = 0xF02B,
+        recv_trade_invite_r = 0xEFA4,
+        recv_raisescale_remove_item_r = 0xEF8D,
+        recv_0xEEB7 = 0xEEB7,
+        recv_0xEE18 = 0xEE18,
+        recv_data_notify_eo_data2 = 0xEDB3,
+        recv_shop_identify_r = 0xECBA,
+        recv_wanted_list_member = 0xEB7B,
+        recv_battle_report_notify_exp_bonus2 = 0xEB47,
+
 
 
         // Send OP Codes - ordered by op code

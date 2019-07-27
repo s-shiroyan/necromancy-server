@@ -37,7 +37,6 @@ recv_event_quest_report_list_begin2 = 0xFDE9,
 
 	res.WriteInt32(0x1E); // cmp to 0x1E = 30
 	
-
 	int numEntries = 0x1E;
 	for (int i = 0; i < numEntries; i++)
 	{
@@ -279,3 +278,135 @@ recv_party_search_recruited_member_r = 0xF495,
 		res.WriteFixedString("ToBeFound", 181);
 		
 	}
+	
+	
+recv_shop_notify_item = 0xF447,
+
+	res.WriteByte(0);
+	
+	res.WriteInt32(0); // item id
+	
+	res.WriteInt64(0); // item price
+	
+	res.WriteByte(0); // loops 0x10 times assuming this is stats for weapon / armor
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	
+	
+recv_inherit_start_r = 0xF3A1,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_damage_ac = 0xF393,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_cloak_close_r = 0xF330,
+
+	res.WriteInt32(0);
+	
+	
+recv_random_box_get_item_all_r = 0xF02B,
+
+	res.WriteInt32(0);
+	
+	
+recv_trade_invite_r = 0xEFA4,
+
+	res.WriteInt32(0);
+	
+	
+recv_raisescale_remove_item_r = 0xEF8D,
+
+	res.WriteInt32(0);
+	
+	
+recv_data_notify_eo_data2 = 0xEDB3,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_shop_identify_r = 0xECBA,
+
+	res.WriteInt32(0);
+	
+	
+recv_wanted_list_member = 0xEB7B,
+
+	res.WriteInt32(0x32); // cmp to 0x32 = 50
+	
+	int numEntries = 0x32;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteInt32(0);
+		res.WriteFixedString("charaname", 91);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0); // bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteInt32(0);
+		
+		res.WriteInt64(0);
+	}
+		
+		res.WriteInt32(0);
+		
+		
+recv_battle_report_notify_exp_bonus2 = 0xEB47,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
