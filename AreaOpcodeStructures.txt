@@ -37,7 +37,6 @@ recv_event_quest_report_list_begin2 = 0xFDE9,
 
 	res.WriteInt32(0x1E); // cmp to 0x1E = 30
 	
-
 	int numEntries = 0x1E;
 	for (int i = 0; i < numEntries; i++)
 	{
@@ -279,3 +278,332 @@ recv_party_search_recruited_member_r = 0xF495,
 		res.WriteFixedString("ToBeFound", 181);
 		
 	}
+	
+	
+recv_shop_notify_item = 0xF447,
+
+	res.WriteByte(0);
+	
+	res.WriteInt32(0); // item id
+	
+	res.WriteInt64(0); // item price
+	
+	res.WriteByte(0); // loops 0x10 times assuming this is stats for weapon / armor
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	res.WriteByte(0); 
+	
+	
+recv_inherit_start_r = 0xF3A1,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_damage_ac = 0xF393,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_cloak_close_r = 0xF330,
+
+	res.WriteInt32(0);
+	
+	
+recv_random_box_get_item_all_r = 0xF02B,
+
+	res.WriteInt32(0);
+	
+	
+recv_trade_invite_r = 0xEFA4,
+
+	res.WriteInt32(0);
+	
+	
+recv_raisescale_remove_item_r = 0xEF8D,
+
+	res.WriteInt32(0);
+	
+	
+recv_data_notify_eo_data2 = 0xEDB3,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_shop_identify_r = 0xECBA,
+
+	res.WriteInt32(0);
+	
+	
+recv_wanted_list_member = 0xEB7B,
+
+	res.WriteInt32(0x32); // cmp to 0x32 = 50
+	
+	int numEntries = 0x32;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteInt32(0);
+		res.WriteFixedString("charaname", 91);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0); // bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		
+		res.WriteInt32(0);
+		
+		res.WriteInt64(0);
+	}
+		
+		res.WriteInt32(0);
+		
+		
+recv_battle_report_notify_exp_bonus2 = 0xEB47,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_dbg_chara_unequipped = 0xEA1C,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_release_attack_pose_r = 0xE990,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_skill_failed = 0xE897,
+
+	res.WriteInt32(0);
+	
+	
+recv_item_update_spirit_eqmask = 0xE819,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_union_rename_close_r = 0xE7E7,
+
+	res.WriteInt32(0);
+	
+	
+recv_wanted_jail_open = 0xE7BB,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	
+recv_party_notify_add_draw_item = 0xE748,
+
+	res.WriteInt64(0);
+	
+	res/WriteFloat(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_quest_select_error = 0xE5FF,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_exp = 0xE526,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_union_request_rename_r = 0xE462, // afterward sends send_union_rename_close (0xC9A9)
+
+	res.WriteInt32(0);
+	
+	
+recv_party_kick_r = 0xE207,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_select_ready = 0xE1F8,
+
+	res.WriteInt32(0);
+	
+	res.WriteByte(0); // bool
+	
+	
+recv_map_update_bgm = 0xE14B,
+
+	res.WriteInt32(0);
+
+
+recv_event_quest_report = 0xE07E,
+
+	res.WriteInt32(0);
+	
+	
+recv_data_notify_goldobject_data = 0xE051,
+
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_premium_service_update_day = 0xE03D,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	
+recv_shop_notify_item_sell_price = 0xE039,
+
+	res.WriteInt64(0); // id?
+	
+	res.WriteInt64(0); // price?
+	
+	res.WriteInt64(0); // identify?
+	
+	res.WriteInt64(0); // curse?
+	
+	res.WriteInt64(0); // repair?
+	
+	
+recv_shop_title_push = 0xDEC2,
+
+	res.WriteCString("ShopTitle);
+
+	
+recv_cash_shop_fitting_end = 0xDEB7,
+
+	// no structure 
+	
+	
+recv_shop_notify_sell_surrogate_fee = 0xDE90,
+
+	res.WriteByte(0);
+	
+	
+recv_wanted_update_state = 0xDD52,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_removetrap_release_rate_close = 0xDCB6,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_steal_unidentified = 0xDC5B,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteCString("ToBeFound"); // most likely unidentified item name
+	
+	
+recv_cash_shop_fitting_begin = 0xDBF1,
+
+	// no structure
+	
+	
+recv_charabody_self_salvage_request_cancel = 0xDB88,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_noact_notify_buff_effect = 0xDB5E,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_removetrap_success = 0xDB53,
+
+	res.WriteInt32(0);
+	
+	
+recv_base_exit_r =  0xDA5C,
+	
+	// no structure
+	
+	
+recv_battle_report_noact_notify_heal_mp = 0xD8D5, 
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_gimmick_access_object_notify = 0xD804,
