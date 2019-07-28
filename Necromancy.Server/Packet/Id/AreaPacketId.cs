@@ -472,7 +472,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xCF29   ret
     /// 0xCF52 (0xCF29 + 0x29) proto_area_implement_client::recv_echo_r
     /// 0xCFDC - proto_area_implement_client::recv_data_notify_itemobject_data
-    /// 0xD04A   ret
+    
+    /// 0xD04A   ret (no structure)
     /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
     /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
 
@@ -958,6 +959,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xD1F6 = 0xD1F6,
         recv_auction_close_r = 0xD1CB,
         recv_random_box_next_open_r = 0xD1A9,
+        recv_chara_update_hp = 0xD133,
 
 
 

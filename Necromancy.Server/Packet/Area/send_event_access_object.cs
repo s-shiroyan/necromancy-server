@@ -15,8 +15,9 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            int objectID = packet.Data.ReadInt32();
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(10000121);
+            res.WriteInt32(3);
             Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res);
 
             //SendEventMessage(client);
@@ -26,7 +27,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendEventMessage(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(10000121);
+            res.WriteInt32(3);
             res.WriteCString("Hello world.");
             Router.Send(client, (ushort)AreaPacketId.recv_event_message, res);
         }
@@ -34,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendEventBlockMessage(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(10000121);
+            res.WriteInt32(3);
             res.WriteCString("Hello world.");
             Router.Send(client, (ushort)AreaPacketId.recv_event_block_message, res);
         }

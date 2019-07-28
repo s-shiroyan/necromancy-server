@@ -858,3 +858,137 @@ recv_random_box_next_open_r = 0xD1A9,
 	
 recv_select_package_update_r = 0xD170,
 
+	res.WriteInt32(0);
+	
+	
+recv_chara_update_hp = 0xD133,
+
+	res.WriteInt32(0);
+	
+	
+no string, 0xD04A
+
+	no structure
+	
+--------------------------------------------------------------Structures after this need to be tested.
+recv_data_notify_itemobject_data = 0xCFDC, //(caused crash)
+
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_echo_r = 0xCF52,
+
+	no structure
+	
+	
+no string, 0xCF29
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_event_select_map_and_channel = 0xCF24,
+
+	int numEntries = 0x20
+	res.WriteInt32(numEntries);
+	for(int i = 0; i < 0x20; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt16(0);
+		res.WriteByte(0);
+		for(int j = 0; j < 0x80;j++)
+		{
+			res.WriteInt32(0);
+			res.WriteFixedString("", 0x61);
+			res.WriteByte(0);//bool
+			res.WriteInt16(0);
+			res.WriteInt16(0);
+			res.WriteByte(0);
+			res.WriteByte(0);
+		}
+	}
+	
+	
+recv_battle_report_noact_notify_buff_attach_failed = 0xCE36,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_noact_notify_dead = 0xCDC9,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_dbg_select_raise_r = 0xCD63,
+
+	res.WriteInt32(0);
+	
+	
+recv_chara_move_speed_per = 0xCCE2,
+
+	res.WriteByte(0);
+	res.WriteInt16(0);
+	
+	
+recv_battle_report_action_cover = 0xCC54,
+
+	no structure
+	
+	
+recv_event_message_no_object = 0xCC37,
+
+	res.WriteCString("");//need to find max size
+	res.WriteCString("");//need to find max size
+	res.WriteCString("");//need to find max size
+	
+	
+recv_trade_notify_interface_status = 0xCB94,
+
+	res.WriteInt32(0);
+	
+	
+recv_party_notify_failed_draw = 0xCB6D,
+
+	res.WriteInt64(0);
+	
+	
+recv_talkring_create_masterring_r = 0xCAB1,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_noact_notify_heal_life = 0xCA35,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_soul_material = 0xC9FF,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);

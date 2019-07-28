@@ -60,7 +60,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483660
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(19);
+                res3.WriteInt32(2);
 
             //sub_483420
             numEntries = 19;
@@ -150,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //sub_481AA0
-            res3.WriteCString("TEST");//Comment string
+            res3.WriteCString("");//Comment string
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
         }
