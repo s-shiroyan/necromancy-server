@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(3); //color
 
             //sub_484720 - combat/leveling info
-            res.WriteInt32(2);  // ? character ID maybe?
+            res.WriteInt32(client.Character.Id);  // ? character ID maybe?
             res.WriteInt32(1); // class
             res.WriteInt16(1); // current level
             res.WriteInt64(0); // current exp

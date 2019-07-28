@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
-            res3.WriteInt32(0);//character state? 2 = soul? 3 = alive but took over NPC stuff, if this is 0 then no movement takes place in game, 7 makes dupes not spawn when sending it with movement
+            res3.WriteInt32(client.Character.Id);//Character ID
 
             //sub_481AA0
             res3.WriteCString("soulname");
@@ -44,10 +44,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(1);
+            res3.WriteInt32(2);
 
             //sub_483420
-            res3.WriteInt32(1);//Criminal Status
+            res3.WriteInt32(0);//Character pose? 6 = guard, 8 = invisible, 
 
             //sub_483470
             res3.WriteInt16(2);
@@ -96,7 +96,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(0);//race
+            res3.WriteInt32(3);//race
             res3.WriteInt32(1);//gender
             res3.WriteByte(2);//hair
             res3.WriteByte(3);//face
@@ -121,22 +121,22 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);
 
             //sub_483440
-            res3.WriteInt16(0);
+            res3.WriteInt16(65);
 
             //sub_read_byte
-            res3.WriteByte(1);//no change?
+            res3.WriteByte(255);//no change?
 
             //sub_read_byte
-            res3.WriteByte(1);//no change?
+            res3.WriteByte(255);//no change?
 
             //sub_read_int_32
             res3.WriteInt32(0);//title; 0 - display title, 1 - no title
 
             //sub_483580
-            res3.WriteInt32(0);
+            res3.WriteInt32(244);
 
             //sub_483420
-            numEntries = 128;
+            numEntries = 1;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 128
 
             //sub_485A70

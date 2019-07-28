@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             Console.WriteLine($"X value: {client.Character.X}, Y value: {client.Character.Y}, Z value: {client.Character.Z}");
-            //SendDataNotifyCharaData(client, charaX, charaY, charaZ);
+            //SendDataNotifyCharaData(client);
             //SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
             //SendCharaUpdateForm(client);
             SendObjectPointMoveNotify(client);
@@ -56,12 +56,12 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_npc_state_update_notify, res2);
         }
 
-        private void SendDataNotifyCharaData(NecClient client, float charaX, float charaY, float charaZ)
+        private void SendDataNotifyCharaData(NecClient client)
         {
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
-            res3.WriteInt32(1);// 7/6/5/4 makes it so multiple dont spawn, 3 causes character to become npc, 2 causes a crash
+            res3.WriteInt32(-1);// character id
 
             //sub_481AA0
             res3.WriteCString("soulname");
@@ -70,10 +70,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("charaname");
             
             //sub_484420
-            res3.WriteFloat(charaX);//X Pos     23162
-            res3.WriteFloat(charaY);//Y Pos     -219
-            res3.WriteFloat(charaZ);//Z Pos     3
-            res3.WriteByte(1);//view offset
+            res3.WriteFloat(client.Character.X);//X Pos     23162
+            res3.WriteFloat(client.Character.Y);//Y Pos     -219
+            res3.WriteFloat(client.Character.Z);//Z Pos     3
+            res3.WriteByte(client.Character.viewOffset);//view offset
 
             //sub_read_int32
             res3.WriteInt32(0);
@@ -168,15 +168,15 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);
 
             //sub_483420
-            numEntries = 128;
+            numEntries = 1;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 128
 
             //sub_485A70
             for (int i = 0; i < numEntries; i++)
             {
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
+                res3.WriteInt32(123);
+                res3.WriteInt32(125);
+                res3.WriteInt32(1);
             }
 
             //sub_481AA0
@@ -268,12 +268,12 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);//0 = correct client moving, 1/4/5/6/7/8/9/10 = no movement, 2 = both clients move together, 3 = take over NPC and move as npc, 
+            res.WriteInt32(client.Character.Id);//Character ID
             res.WriteFloat(client.Character.X);
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);
             res.WriteByte(client.Character.viewOffset);//View offset
-            res.WriteByte(1);
+            res.WriteByte(0);
             
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
         }

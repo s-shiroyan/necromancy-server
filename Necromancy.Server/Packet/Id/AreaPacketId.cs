@@ -475,7 +475,9 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD04A   ret
     /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
     /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
+    
     /// 0xD1A9 - proto_area_implement_client::recv_random_box_next_open_r
+    
     /// 0xD1BD (0xD1A9 + 0x14) proto_area_implement_client::recv_data_get_self_chara_data
     /// 0xD1CB - proto_area_implement_client::recv_auction_close_r
     /// 0xD1F6   no string
@@ -559,9 +561,9 @@ namespace Necromancy.Server.Packet.Id
     /// 
     /// 0xD493 + 0xE7 - 0x004C7D1F 4 opcodes (1 ret)
     ///                 proto_area_implement_client::recv_skill_cast_cancel                 02(actually 0xD493 + 0xCA)
-    ///                 ret                                                                 03(actually 0xD493 + 0xE7)
+    ///                 ret                                                                 00(actually 0xD493)
     ///                 proto_area_implement_client::recv_shop_sell_r                       01(actually 0xD493 + 0x65)
-    ///                 proto_area_implement_client::recv_battle_report_action_item_use()\n 00(actually 0xD493)
+    ///                 proto_area_implement_client::recv_battle_report_action_item_use     03(actually 0xD493+ 0xE7)
     /// 
     /// 0xD5B5 + 0xC8 - 0x004C86F2 4 opcodes
     ///                 proto_area_implement_client::recv_charabody_notify_party_join           03(actually 0xD68C + 0xC8)
@@ -833,7 +835,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xD7D8, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
