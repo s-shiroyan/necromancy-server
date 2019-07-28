@@ -457,6 +457,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xC7E1 - proto_area_implement_client::recv_item_update_sp_level
     /// 0xC8AD - proto_area_implement_client::recv_storage_deposit_item2_r
     /// 0xC96F - proto_area_implement_client::recv_buff_request_detach_r
+    
     /// 0xC9FF - proto_area_implement_client::recv_battle_report_notify_soul_material
     /// 0xCA35 - proto_area_implement_client::recv_battle_report_noact_notify_heal_life
     /// 0xCAB1 - proto_area_implement_client::recv_talkring_create_masterring_r
@@ -472,7 +473,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xCF29   ret
     /// 0xCF52 (0xCF29 + 0x29) proto_area_implement_client::recv_echo_r
     /// 0xCFDC - proto_area_implement_client::recv_data_notify_itemobject_data
-    
     /// 0xD04A   ret (no structure)
     /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
     /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
