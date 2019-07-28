@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
-            res3.WriteInt32(0);//character state? 2 = soul? 3 = alive but took over NPC stuff, if this is 0 then no movement takes place in game, 7 makes dupes not spawn when sending it with movement
+            res3.WriteInt32(20);//character state? 2 = soul? 3 = alive but took over NPC stuff, if this is 0 then no movement takes place in game, 7 makes dupes not spawn when sending it with movement
 
             //sub_481AA0
             res3.WriteCString("soulname");
@@ -44,10 +44,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(1);
+            res3.WriteInt32(2);
 
             //sub_483420
-            res3.WriteInt32(1);//Criminal Status
+            res3.WriteInt32(0);//Chara Pose
 
             //sub_483470
             res3.WriteInt16(2);
@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483660
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(2);
+                res3.WriteInt32(19);
 
             //sub_483420
             numEntries = 19;
@@ -93,20 +93,20 @@ namespace Necromancy.Server.Packet.Area
                 res3.WriteInt32(3);
 
             //sub_4835C0
-            res3.WriteInt32(0);//1 here means crouching?
+            res3.WriteInt32(20);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(0);//race
+            res3.WriteInt32(4);//race
             res3.WriteInt32(1);//gender
             res3.WriteByte(2);//hair
             res3.WriteByte(3);//face
             res3.WriteByte(4);//hair color
 
             //sub_483420
-            res3.WriteInt32(10);
+            res3.WriteInt32(0); // party id?
 
             //sub_4837C0
-            res3.WriteInt32(100);
+            res3.WriteInt32(0); // party id?
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -121,22 +121,22 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);
 
             //sub_483440
-            res3.WriteInt16(0);
+            res3.WriteInt16(65);
 
             //sub_read_byte
-            res3.WriteByte(1);//no change?
+            res3.WriteByte(255);//no change?
 
             //sub_read_byte
-            res3.WriteByte(1);//no change?
+            res3.WriteByte(255);//no change?
 
             //sub_read_int_32
             res3.WriteInt32(0);//title; 0 - display title, 1 - no title
 
             //sub_483580
-            res3.WriteInt32(0);
+            res3.WriteInt32(244);
 
             //sub_483420
-            numEntries = 128;
+            numEntries = 1;
             res3.WriteInt32(numEntries);//influences a loop that needs to be under 128
 
             //sub_485A70
@@ -148,7 +148,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //sub_481AA0
-            res3.WriteCString("");//Comment string
+            res3.WriteCString("TEST");//Comment string
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
         }

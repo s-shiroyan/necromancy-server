@@ -475,24 +475,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD04A   ret
     /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
     /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
-    /// 0xD1A9 - proto_area_implement_client::recv_random_box_next_open_r
-    /// 0xD1BD (0xD1A9 + 0x14) proto_area_implement_client::recv_data_get_self_chara_data
-    /// 0xD1CB - proto_area_implement_client::recv_auction_close_r
-    /// 0xD1F6   no string
-    /// 0xD2D6 - proto_area_implement_client::recv_base_ping_r
-    /// 0xD349 - proto_area_implement_client::recv_map_fragment_flag
-    /// 0xD400 - proto_area_implement_client::recv_event_removetrap_skill_r2
-    /// 0xD43F (0xD400 + 0x3F) - proto_area_implement_client::recv_event_removetrap_skill_r2
-    /// 0xD46E - proto_area_implement_client::recv_quest_started
-    /// 0xD493 - proto_area_implement_client::recv_battle_report_action_item_use
-    /// 0xD57A (0xD493 + 0xE7) - proto_area_implement_client::recv_battle_report_action_item_use
-    /// 0xD597 - proto_area_implement_client::recv_cash_shop_notify_item
-    /// 0xD5B5 - proto_area_implement_client::recv_chara_update_lv_detail2
-    /// 0xD67D (0xD5B5 + 0xC8) - proto_area_implement_client::recv_chara_update_lv_detail2
-    /// 0xD688 - proto_area_implement_client::recv_charabody_salvage_end
-    /// 0xD68C - proto_area_implement_client::recv_escape_start
-    /// 0xD752 (0xD68C + 0xC6) proto_area_implement_client::recv_battle_attack_start_r
-    /// 0xD7D8 - proto_area_implement_client::recv_battle_report_notify_invalid_target
 
 
 
@@ -833,7 +815,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xD7D8, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -959,7 +941,24 @@ namespace Necromancy.Server.Packet.Id
         recv_0xD909 = 0xD909,
         recv_battle_report_noact_notify_heal_mp = 0xD8D5,
         recv_gimmick_access_object_notify = 0xD804,
-        
+        recv_battle_report_notify_invalid_target = 0xD7D8,
+        recv_battle_attack_start_r = 0xD752,
+        recv_escape_start = 0xD68C,
+        recv_charabody_salvage_end = 0xD688,
+        recv_charabody_notify_party_join = 0xD67D,
+        recv_chara_update_lv_detail2 = 0xD5B5,
+        recv_cash_shop_notify_item = 0xD597,
+        recv_item_instance_unidentified = 0xD57A,
+        recv_battle_report_action_item_use = 0xD493,
+        recv_quest_started = 0xD46E,
+        recv_self_soul_toggle_ability_notify = 0xD43F,
+        recv_event_removetrap_skill_r2 = 0xD400,
+        recv_map_fragment_flag = 0xD349,
+        recv_base_ping_r = 0xD2D6,
+        recv_0xD1F6 = 0xD1F6,
+        recv_auction_close_r = 0xD1CB,
+        recv_random_box_next_open_r = 0xD1A9,
+
 
 
         // Send OP Codes - ordered by op code
@@ -1095,7 +1094,7 @@ namespace Necromancy.Server.Packet.Id
         send_package_all_delete = 0x126, //opcode not found
         send_party_accept_to_apply = 0x127, //opcode not found
         send_party_accept_to_invite = 0x128, //opcode not found
-        send_party_apply = 0x129, //opcode not found
+        send_party_apply = 0x534F, 
         send_party_cancel_member_recruit = 0x130, //opcode not found
         send_party_cancel_party_recruit = 0x131, //opcode not found
         send_party_change_leader = 0x132, //opcode not found
@@ -1125,7 +1124,7 @@ namespace Necromancy.Server.Packet.Id
         send_quest_abort = 0x150, //opcode not found
         send_quest_check_target = 0x151, //opcode not found
         send_quest_check_time_limit = 0x152, //opcode not found
-        send_quest_display = 0x153, //opcode not found
+        send_quest_display = 0x3017, 
         send_quest_get_mission_quest_history = 0xA3E6, 
         send_quest_get_mission_quest_works = 0x7C9A, 
         send_quest_get_soul_mission_quest_history = 0x9E5C, 

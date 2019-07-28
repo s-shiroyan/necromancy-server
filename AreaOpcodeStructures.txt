@@ -607,3 +607,254 @@ recv_battle_report_noact_notify_heal_mp = 0xD8D5,
 	
 	
 recv_gimmick_access_object_notify = 0xD804,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_notify_invalid_target = 0xD7D8,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_start_r = 0xD752,
+
+	res.WriteInt32(0);
+	
+	
+recv_escape_start = 0xD68C,
+
+	res.WriteInt32(0);
+	
+	
+recv_charabody_salvage_end = 0xD688,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_item_instance_unidentified = 0xD67D,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_chara_update_lv_detail2 = 0xD5B5,
+
+	res.WriteInt16(0); // level
+	
+	res.WriteInt64(0); // exp start
+	
+	res.WriteInt64(0); // exp next
+	
+	res.WriteInt64(0); // exp next 2
+	
+recv_cash_shop_notify_item = 0xD597, 
+
+	res.WriteByte(0);
+	
+	res.WriteInt32(0); // exp next
+	
+	res.WriteInt32(0); // exp next
+	
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+
+	
+	res.WriteCString("ToBeFound"); 
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0);
+	
+	res.WriteCString("ToBeFound2"); 
+	
+	res.WriteByte(0);
+	
+	res.WriteByte(0);
+	
+	
+recv_item_instance_unidentified = 0xD57A,
+
+	res.WriteInt64(0);
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(1); // bool
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	res.WriteByte(0);
+	
+	res.WriteByte(0);
+	
+	res.WriteInt16(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_item_use = 0xD493,
+
+	res.WriteInt32(0);
+	
+	
+recv_quest_started = 0xD46E, // afterwards sends send_quest_display
+
+	res.WriteInt32(0);	
+	res.WriteByte(0);
+
+	res.WriteFixedString(" ",0x61);
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+	res.WriteFixedString(" ",0x61);
+	
+	res.WriteByte(1); // bool
+	res.WriteByte(1); // bool
+
+	res.WriteInt32(0);	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+	int numEntries = 0xA;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString(" ",0x10);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+	}
+	
+	res.WriteByte(0);
+	
+	int numEntries2 = 0xC;
+	for (int i = 0; i < numEntries2; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString(" ",0x10);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+	}
+	
+	res.WriteByte(0);
+	
+	res.WriteFixedString(" ",0x181);
+	
+	res.WriteInt64(0);
+	
+	res.WriteByte(0);
+		
+	res.WriteFixedString(" ",0x181);
+	
+	int numEntries3 = 0x5;
+	for (int i = 0; i < numEntries3; i++)
+	{
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+	}
+	
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	
+	
+recv_self_soul_toggle_ability_notify = 0xD43F, 
+
+	res.WriteInt64(0);
+	
+	
+recv_event_removetrap_skill_r2 = 0xD400, 
+
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	
+
+recv_map_fragment_flag = 0xD349, 
+
+	res.WriteInt32(0); // map id
+	res.WriteInt32(0); // fragment flag
+	
+	
+recv_base_ping_r = 0xD2D6,
+
+	// no structure
+ 
+ 
+recv_0xD1F6 = 0xD1F6, 
+
+	// find struct later
+
+
+recv_auction_close_r = 0xD1CB,
+
+	res.WriteInt32(0);
+	
+	
+recv_random_box_next_open_r = 0xD1A9,
+	
+	res.WriteInt32(0);
+	
+	
+recv_select_package_update_r = 0xD170,
+
