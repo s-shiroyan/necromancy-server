@@ -586,7 +586,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 ret                                                         02(actually 0xEDB3 + 0x34)
     /// 
     /// 0xEEB7 + 0xD6 - 0x004CE472 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_object_point_move_notify      01(actually 0xEEB7 + 0x39)
+    ///                 proto_area_implement_client::recv_object_point_move_notify      01(actually 0xEEB7 + 0x39) 0xEEF0
     ///                 ret                                                             00(actually 0xEEB7)
     ///                 proto_area_implement_client::recv_raisescale_remove_item_r      03(actually 0xEEB7 + 0xD6)
     ///                 proto_area_implement_client::recv_revive_init_r                 02(actually 0xEEB7 + 0x97)
@@ -944,6 +944,7 @@ namespace Necromancy.Server.Packet.Id
         recv_chara_update_form = 0x2479,
         recv_quest_hint_othermap = 0xFFD6,
         recv_object_hp_per_update_notify = 0xFF00,
+        recv_object_point_move_notify = 0xEEF0,
         recv_cloak_notify_open = 0xFED8,
         recv_event_removetrap_select_r = 0xFEB7,
         recv_party_leave_r = 0xFE2F,
@@ -1008,6 +1009,7 @@ namespace Necromancy.Server.Packet.Id
         send_cash_shop_get_url_common_steam = 0x52, //opcode not found
         send_cash_shop_open_by_menu = 0x9945, 
         send_cash_shop_regist_billing_zip = 0x53, //opcode not found
+        send_character_view_offset = 0xE4AE, //this is not a real send, it is only for getting the view offset for the character movement
         send_chara_pose = 0x7DE7, 
         send_chara_pose_ladder = 0xE75C, 
         send_chara_view_landing = 0x54, //opcode not found

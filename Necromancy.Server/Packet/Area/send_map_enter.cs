@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);
 
-            //SendDataNotifyCharaData(client);
+            SendDataNotifyCharaData(client);
         }
 
         private void SendDataNotifyCharaData(NecClient client)
@@ -44,7 +44,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(0);
+            res3.WriteInt32(1);
 
             //sub_483420
             res3.WriteInt32(1);//Criminal Status
