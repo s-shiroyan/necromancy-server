@@ -15,6 +15,20 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+
+            // TODO authenticate from db
+            string accountName = "Soul 0";
+            Account account = new Account();
+            account.Name = accountName;
+            account.Id = Util.GetRandomNumber(10, 100000);
+            Character character = new Character();
+            character.Id = Util.GetRandomNumber(10, 100000);
+            character.Name = accountName;
+            //
+
+            client.Account = account;
+            client.Character = character;
+
             IBuffer res = BufferProvider.Provide();
 
             //res.WriteByte(1);

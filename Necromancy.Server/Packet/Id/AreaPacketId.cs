@@ -493,7 +493,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD68C - proto_area_implement_client::recv_escape_start
     /// 0xD752 (0xD68C + 0xC6) proto_area_implement_client::recv_battle_attack_start_r
     /// 0xD7D8 - proto_area_implement_client::recv_battle_report_notify_invalid_target
-    /// 0xD804 - proto_area_implement_client::recv_gimmick_access_object_notify
+
 
 
 
@@ -533,7 +533,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 ret                                                         02(actually 0xEDB3 + 0x34)
     /// 
     /// 0xEEB7 + 0xD6 - 0x004CE472 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_object_point_move_notify      01(actually 0xEEB7 + 0x39)
+    ///                 proto_area_implement_client::recv_object_point_move_notify      01(actually 0xEEB7 + 0x39) 0xEEF0
     ///                 ret                                                             00(actually 0xEEB7)
     ///                 proto_area_implement_client::recv_raisescale_remove_item_r      03(actually 0xEEB7 + 0xD6)
     ///                 proto_area_implement_client::recv_revive_init_r                 02(actually 0xEEB7 + 0x97)
@@ -833,7 +833,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xD804, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xD7D8, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -891,6 +891,7 @@ namespace Necromancy.Server.Packet.Id
         recv_chara_update_form = 0x2479,
         recv_quest_hint_othermap = 0xFFD6,
         recv_object_hp_per_update_notify = 0xFF00,
+        recv_object_point_move_notify = 0xEEF0,
         recv_cloak_notify_open = 0xFED8,
         recv_event_removetrap_select_r = 0xFEB7,
         recv_party_leave_r = 0xFE2F,
@@ -957,6 +958,8 @@ namespace Necromancy.Server.Packet.Id
         recv_0xDA4A = 0xDA4A,
         recv_0xD909 = 0xD909,
         recv_battle_report_noact_notify_heal_mp = 0xD8D5,
+        recv_gimmick_access_object_notify = 0xD804,
+        
 
 
         // Send OP Codes - ordered by op code
@@ -999,6 +1002,7 @@ namespace Necromancy.Server.Packet.Id
         send_cash_shop_get_url_common_steam = 0x52, //opcode not found
         send_cash_shop_open_by_menu = 0x9945, 
         send_cash_shop_regist_billing_zip = 0x53, //opcode not found
+        send_character_view_offset = 0xE4AE, //this is not a real send, it is only for getting the view offset for the character movement
         send_chara_pose = 0x7DE7, 
         send_chara_pose_ladder = 0xE75C, 
         send_chara_view_landing = 0x54, //opcode not found

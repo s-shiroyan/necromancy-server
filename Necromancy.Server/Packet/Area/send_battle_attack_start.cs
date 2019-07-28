@@ -21,15 +21,18 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort) AreaPacketId.recv_battle_attack_start, res, client);
 
             SendNPCStateUpdateNotify(client);
-            
-            float charaX = packet.Data.ReadFloat(),
-                  charaY = packet.Data.ReadFloat(),
-                  charaZ = packet.Data.ReadFloat();
+            if(client.Character != null)
+            {
+                client.Character.X = packet.Data.ReadFloat();
+                client.Character.Y = packet.Data.ReadFloat();
+                client.Character.Z = packet.Data.ReadFloat();
+            }
 
-            Console.WriteLine($"X value: {charaX}, Y value: {charaY}, Z value: {charaZ}");
+            Console.WriteLine($"X value: {client.Character.X}, Y value: {client.Character.Y}, Z value: {client.Character.Z}");
             //SendDataNotifyCharaData(client, charaX, charaY, charaZ);
-            SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
+            //SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
             //SendCharaUpdateForm(client);
+            SendObjectPointMoveNotify(client);
         }
 
         private void SendCharaUpdateForm(NecClient client)
@@ -259,6 +262,20 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res3, client);
+        }
+
+        private void SendObjectPointMoveNotify(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(0);//0 = correct client moving, 1/4/5/6/7/8/9/10 = no movement, 2 = both clients move together, 3 = take over NPC and move as npc, 
+            res.WriteFloat(client.Character.X);
+            res.WriteFloat(client.Character.Y);
+            res.WriteFloat(client.Character.Z);
+            res.WriteByte(client.Character.viewOffset);//View offset
+            res.WriteByte(1);
+            
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
         }
     }
 }
