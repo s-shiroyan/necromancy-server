@@ -494,27 +494,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xD752 (0xD68C + 0xC6) proto_area_implement_client::recv_battle_attack_start_r
     /// 0xD7D8 - proto_area_implement_client::recv_battle_report_notify_invalid_target
     /// 0xD804 - proto_area_implement_client::recv_gimmick_access_object_notify
-    /// 0xD8D5 - proto_area_implement_client::recv_battle_report_noact_notify_heal_mp
-    /// 0xD909   ret
-    /// 0xD972 - proto_area_implement_client::recv_chara_pose_ladder_r
-    /// 0xDA4A   ret
-    /// 0xDA5C - proto_area_implement_client::recv_base_exitr
-    /// 0xDB53 - proto_area_implement_client::recv_battle_report_action_removetrap_success
-    /// 0xDB5E - proto_area_implement_client::recv_battle_report_noact_notify_buff_effect
-    /// 0xDB88 - proto_area_implement_client::recv_charabody_self_salvage_request_cancel
-    /// 0xDBF1 - proto_area_implement_client::recv_cash_shop_fitting_begin
-    /// 0xDC5B - proto_area_implement_client::recv_battle_report_action_steal_unidentified
-    /// 0xDCB6 (0xDC5B + 0x5B) proto_area_implement_client::recv_event_removetrap_release_rate_close
-    /// 0xDD52 - proto_area_implement_client::recv_wanted_update_state
-    /// 0xDDD3 - proto_area_implement_client::recv_wanted_entry_r
-    /// 0xDE90 - proto_area_implement_client::recv_shop_notify_sell_surrogate_fee
-    /// 0xDEB7 - proto_area_implement_client::recv_cash_shop_fitting_end
-    /// 0xDEC2 (0xDEB7 + 0xB) proto_area_implement_client::recv_shop_title_push
-    /// 0xDF31 - proto_area_implement_client::recv_blacklist_open_r
-    /// 0xE039 - proto_area_implement_client::recv_shop_notify_item_sell_price
-  
-
-
 
 
 
@@ -854,7 +833,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xD804, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -964,6 +943,21 @@ namespace Necromancy.Server.Packet.Id
         recv_event_quest_report = 0xE07E,
         recv_data_notify_goldobject_data = 0xE051,
         recv_premium_service_update_day = 0xE03D,
+        recv_shop_notify_item_sell_price = 0xE039,
+        recv_shop_title_push = 0xDEC2,
+        recv_shop_notify_sell_surrogate_fee = 0xDE90,
+        recv_wanted_update_state = 0xDD52,
+        recv_event_removetrap_release_rate_close = 0xDCB6,
+        recv_battle_report_action_steal_unidentified = 0xDC5B,
+        recv_cash_shop_fitting_begin = 0xDBF1,
+        recv_charabody_self_salvage_request_cancel = 0xDB88,
+        recv_battle_report_noact_notify_buff_effect = 0xDB5E,
+        recv_battle_report_action_removetrap_success = 0xDB53,
+        recv_base_exit_r = 0xDA5C,
+        recv_0xDA4A = 0xDA4A,
+        recv_0xD909 = 0xD909,
+        recv_battle_report_noact_notify_heal_mp = 0xD8D5,
+
 
         // Send OP Codes - ordered by op code
 
