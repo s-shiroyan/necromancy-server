@@ -29,6 +29,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
+
             res3.WriteInt32(client.Character.Id);//Character ID
 
             //sub_481AA0
@@ -47,7 +48,8 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(2);
 
             //sub_483420
-            res3.WriteInt32(0);//Character pose? 6 = guard, 8 = invisible, 
+
+            res3.WriteInt32(0);//Character pose? 6 = guard, 8 = invisible,
 
             //sub_483470
             res3.WriteInt16(2);
@@ -58,7 +60,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483660
             for (int i = 0; i < numEntries; i++)
-                res3.WriteInt32(2);
+                res3.WriteInt32(19);
 
             //sub_483420
             numEntries = 19;
@@ -93,20 +95,20 @@ namespace Necromancy.Server.Packet.Area
                 res3.WriteInt32(3);
 
             //sub_4835C0
-            res3.WriteInt32(0);//1 here means crouching?
+            res3.WriteInt32(20);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(3);//race
+            res3.WriteInt32(4);//race
             res3.WriteInt32(1);//gender
             res3.WriteByte(2);//hair
             res3.WriteByte(3);//face
             res3.WriteByte(4);//hair color
 
             //sub_483420
-            res3.WriteInt32(10);
+            res3.WriteInt32(0); // party id?
 
             //sub_4837C0
-            res3.WriteInt32(100);
+            res3.WriteInt32(0); // party id?
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -148,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //sub_481AA0
-            res3.WriteCString("");//Comment string
+            res3.WriteCString("TEST");//Comment string
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
         }
