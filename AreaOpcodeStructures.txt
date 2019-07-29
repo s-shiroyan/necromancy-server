@@ -1129,3 +1129,158 @@ no string, 0xC078
 
 	res.WriteInt32(0);
 
+recv_chat_notify_message 0xC003,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31);
+	res.WriteFixedString("", 0x25);
+	res.WriteFixedString("", 0x301);
+	
+
+recv_get_thread_all_r 0xBFEA,
+
+	res.WriteInt32(0);
+	int numEntries = 0x3E8;
+	res.WriteInt32(numEntries);//less than or equal to 0x3E8
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x3D);
+		res.WriteInt32(0);
+		res.WriteInt16(0);
+	}
+
+recv_data_notify_gimmick_data 0xBFE9,
+
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+recv_trade_notify_money 0xBF34,
+
+	res.WriteInt64(0);
+
+no string 0xBF0D,
+
+	no structure
+
+recv_battle_report_notify_rookie 0xBD99,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+recv_battle_report_notify_rookie 0xBD90,
+
+	res.WriteInt32(0);
+
+recv_event_tresurebox_begin 0xBD7E,
+
+	int numEntries = 0x10;
+	res.WriteInt32(numEntries);
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+	}
+	
+
+recv_get_honor 0xBD72,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);//bool
+	
+
+recv_chara_notify_raise_downper 0xBCC2,
+
+	res.WriteByte(0);
+
+recv_quest_check_target_r 0xBCAB,
+
+	res.WriteInt32(0);
+
+recv_monster_hate_off 0xBC0A,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+recv_talkring_rename_masterring_r 0xBBA5,
+
+	res.WriteInt32(0);
+
+recv_event_union_storage_close_r 0xBB65,
+
+	res.WriteInt32(0);
+
+recv_gamepot_web_notify_open 0xBA89,
+
+	res.WriteInt32(0);
+	res.WriteCString("");//find max size
+
+recv_cpf_authenticate 0xBA73,
+
+	int numEntries = 0x80;
+	res.WriteInt32(numEntries);
+	for(int i = 0; i < numEntries; i++)
+		res.WriteByte(0);
+
+recv_auction_notify_open 0xBA71,
+
+	
+
+no string 0xBA61,
+
+	int numEntries = 0xA;
+	res.WriteInt32(numEntries);
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt16(0);
+		res.WriteInt64(0);
+		res.WriteFixedString("", 0xC1);
+	}
+
+recv_sixthsense_trap_notify 0xBA11,
+
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+
+recv_data_notify_eventlink 0xB813,
+
+	res.WriteInt32(0);
+
+recv_event_request_int 0xB782,
+
+	res.WriteCString("");//find max size
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+recv_chara_pose_notify 0xB6B1,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+no string 0xB684,
+
+	res.WriteInt32(0);
+	res.WriteCString("");//find max size
+
+recv_chara_update_notify_item_forth 0xB631,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+
+recv_trade_notify_aborted 0xB619,
+
+	res.WriteInt32(0);
+
+no string 0xB586
+
+	res.WriteInt32(0);

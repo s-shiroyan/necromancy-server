@@ -408,6 +408,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xB3F7 (0xB371 + 0x86) proto_area_implement_client::recv_battle_report_action_attack_exec
     /// 0xB417 - proto_area_implement_client::recv_charabody_self_notify_deadnext_time
     /// 0xB435 (0xB417 + 0x1E) proto_area_implement_client::recv_chara_update_alignment_param
+    
     /// 0xB586   ret
     /// 0xB619 - proto_area_implement_client::recv_trade_notify_aborted
     /// 0xB631 (0xB619 + 0x18) proto_area_implement_client::recv_chara_update_notify_item_forth
@@ -418,8 +419,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xBA11 - proto_area_implement_client::recv_sixthsense_trap_notify
     /// 0xBA61   ret
     /// 0xBA71 - proto_area_implement_client::recv_auction_notify_open
-    /// 0xBA73 network::proto_area_implement_client::recv_cpf_authenticate
-    /// 0xBA89 network::proto_area_implement_client::recv_gamepot_web_notify_open
+    /// 0xBA73   proto_area_implement_client::recv_cpf_authenticate
+    /// 0xBA89   proto_area_implement_client::recv_gamepot_web_notify_open
     /// 0xBB65 (0xBA71 + 0xF4) proto_area_implement_client::recv_event_union_storage_close_r
     /// 0xBBA5 - proto_area_implement_client::recv_talkring_rename_masterring_r
     /// 0xBC0A - proto_area_implement_client::recv_monster_hate_off
@@ -434,6 +435,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0xBFE9 - proto_area_implement_client::recv_data_notify_gimmick_data
     /// 0xBFEA - proto_area_implement_client::recv_get_thread_all_r
     /// 0xC003 - proto_area_implement_client::recv_chat_notify_message
+    
     /// 0xC06C (0xC026 + 0x46) --------------------------------------------------------------not an opocde?
     /// 0xC078 (0xC003 + 0x75) ret
     /// 0xC0BB - proto_area_implement_client::recv_skill_aptitude_lost
@@ -457,7 +459,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xC7E1 - proto_area_implement_client::recv_item_update_sp_level
     /// 0xC8AD - proto_area_implement_client::recv_storage_deposit_item2_r
     /// 0xC96F - proto_area_implement_client::recv_buff_request_detach_r
-    
     /// 0xC9FF - proto_area_implement_client::recv_battle_report_notify_soul_material
     /// 0xCA35 - proto_area_implement_client::recv_battle_report_noact_notify_heal_life
     /// 0xCAB1 - proto_area_implement_client::recv_talkring_create_masterring_r
