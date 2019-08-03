@@ -870,7 +870,7 @@ no string, 0xD04A
 
 	no structure
 	
---------------------------------------------------------------Structures after this need to be tested.
+	
 recv_data_notify_itemobject_data = 0xCFDC, //(caused crash)
 
 	res.WriteInt32(0);
@@ -905,7 +905,7 @@ no string, 0xCF29
 	
 recv_event_select_map_and_channel = 0xCF24,
 
-	int numEntries = 0x20
+	int numEntries = 0x20;
 	res.WriteInt32(numEntries);
 	for(int i = 0; i < 0x20; i++)
 	{
@@ -924,6 +924,7 @@ recv_event_select_map_and_channel = 0xCF24,
 			res.WriteByte(0);
 			res.WriteByte(0);
 		}
+		res.WriteByte(0);
 	}
 	
 	
@@ -1065,18 +1066,20 @@ recv_random_box_get_item_r = 0xC444
 recv_cash_shop2_notify_item = 0xC3EE,
 
 	res.WriteByte(0);
-	res.WriteInt32(0);
-	for(int i = 0; i < 10; i++)
-		res.WriteByte(0);
-	res.WriteCString("");//find max size
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteCString("");//find max size
-	
+    res.WriteInt32(0x10);
+    for (int i = 0; i < 0x10; i++)
+    {
+        res.WriteByte(0);
+    }
+    res.WriteCString("");//find max size
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteCString("");//find max size
 
+	
 recv_random_box_notify_open = 0xC374,
 
 	int numEntries = 10;
@@ -1100,14 +1103,15 @@ recv_chara_update_action_prohibit_camp = 0xC24E,
 	res.WriteByte(0);//bool
 
 
-recv_gem_notify_open = 0xC206,
+recv_0xC206 = 0xC206, // was previously recv_gem_notify_open
 
-	res.WriteInt32(0);
+	//no structure
 
 
 recv_chara_update_notify_rookie = 0xC1DC,
 
 	res.WriteInt32(0);
+	res.WriteByte(0);
 
 
 recv_wanted_list_close_r = 0xC1AF,
@@ -1152,8 +1156,10 @@ recv_get_thread_all_r 0xBFEA,
 		res.WriteInt16(0);
 	}
 
+	
 recv_data_notify_gimmick_data 0xBFE9,
 
+	res.WriteInt32(0);
 	res.WriteFloat(0);
 	res.WriteFloat(0);
 	res.WriteFloat(0);
@@ -1161,23 +1167,28 @@ recv_data_notify_gimmick_data 0xBFE9,
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
+	
 recv_trade_notify_money 0xBF34,
 
 	res.WriteInt64(0);
 
+	
 no string 0xBF0D,
 
 	no structure
 
-recv_battle_report_notify_rookie 0xBD99,
+	
+recv_auction_update_highest_bid 0xBD99,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
+	
 recv_battle_report_notify_rookie 0xBD90,
 
 	res.WriteInt32(0);
 
+	
 recv_event_tresurebox_begin 0xBD7E,
 
 	int numEntries = 0x10;
@@ -1199,39 +1210,98 @@ recv_chara_notify_raise_downper 0xBCC2,
 
 	res.WriteByte(0);
 
+	
 recv_quest_check_target_r 0xBCAB,
 
 	res.WriteInt32(0);
 
+	
 recv_monster_hate_off 0xBC0A,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
+	
 recv_talkring_rename_masterring_r 0xBBA5,
 
 	res.WriteInt32(0);
 
+	
 recv_event_union_storage_close_r 0xBB65,
 
 	res.WriteInt32(0);
 
+	
 recv_gamepot_web_notify_open 0xBA89,
 
 	res.WriteInt32(0);
 	res.WriteCString("");//find max size
 
+	
 recv_cpf_authenticate 0xBA73,
 
 	int numEntries = 0x80;
 	res.WriteInt32(numEntries);
 	for(int i = 0; i < numEntries; i++)
+	{
 		res.WriteByte(0);
-
-recv_auction_notify_open 0xBA71,
-
+	}
 	
+	
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [CHECK STRUCTURES AFTER HERE]
+recv_auction_notify_open 0xBA71, // !! could not figure out !!
 
+	res.WriteInt32(5); // must be <= 5
+	
+	int numEntries = 0x5;
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteByte(0);
+	
+		res.WriteByte(0);
+		res.WriteInt64(0);
+		
+	
+		res.WriteInt32(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteByte(0);
+		res.WriteFixedString("ToBeFound", 385);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+		
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+	}
+		
+	res.WriteInt32(8); // must be< = 8
+	
+	int numEntries2 = 0x8;
+	for(int i = 0; i < numEntries2; i++)
+	{
+		res.WriteByte(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteByte(0);
+		res.WriteFixedString("ToBeFound", 385);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+		
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+	}
+	
+	res.WriteByte(0); // bool
+	
+	
 no string 0xBA61,
 
 	int numEntries = 0xA;
