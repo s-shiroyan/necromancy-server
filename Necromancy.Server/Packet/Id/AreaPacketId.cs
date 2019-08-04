@@ -397,17 +397,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xB037 (0xAF7F + 0xB8) proto_area_implement_client::recv_battle_report_notify_hit_effect_name
     /// 0xB0BF - proto_area_implement_client::recv_dbg_battle_guard_start_notify
     /// 0xB0E5 - proto_area_implement_client::recv_event_removetrap_ident_trap_update
-    /// 0xB10F (0xB0E5 + 0x2A) proto_area_implement_client::recv_union_request_disband_result
-    /// 0xB195 - proto_area_implement_client::recv_stall_update_feature_item
-    /// 0xB1CA - proto_area_implement_client::recv_auction_receive_item_r
-    /// 0xB292 (0xB1CA + 0xC8) proto_area_implement_client::recv_event_removetrap_begin
-    /// 0xB317   ----------------------------------------------------------------------------not an opcode? is actually 0xB371
-    /// 0xB319 - proto_area_implement_client::recv_skill_custom_notify_open
-    /// 0xB371 - proto_area_implement_client::recv_item_update_place
-    /// 0xB39D (0xB317 + 0x86) --------------------------------------------------------------not an opocde, is actually (0xB371 + 2C)
-    /// 0xB3F7 (0xB371 + 0x86) proto_area_implement_client::recv_battle_report_action_attack_exec
-    /// 0xB417 - proto_area_implement_client::recv_charabody_self_notify_deadnext_time
-    /// 0xB435 (0xB417 + 0x1E) proto_area_implement_client::recv_chara_update_alignment_param
 
 
 
@@ -950,6 +939,18 @@ namespace Necromancy.Server.Packet.Id
         recv_chara_update_notify_item_forth = 0xB631,
         recv_trade_notify_aborted = 0xB619,
         recv_0xB586 = 0xB586,
+        recv_chara_update_alignment_param = 0xB435,
+        recv_charabody_self_notify_deadnext_time = 0xB417,
+        recv_battle_report_action_attack_exec = 0xB3F7,
+        recv_0xB39D = 0xB39D,
+        recv_item_update_place = 0xB371,
+        recv_skill_custom_notify_open = 0xB319,
+        recv_0xB317 = 0xB317,
+        recv_event_removetrap_begin = 0xB292,
+        recv_auction_receive_item_r = 0xB1CA,
+        recv_stall_update_feature_item = 0xB195,
+        recv_union_request_disband_result = 0xB10F,
+        recv_event_removetrap_ident_trap_update = 0xB0E5,
 
 
         // Send OP Codes - ordered by op code

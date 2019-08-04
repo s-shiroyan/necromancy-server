@@ -1311,6 +1311,7 @@ recv_0xBA61 = 0xBA61,
 		res.WriteFixedString("", 0xC1);
 	}
 
+	
 recv_sixthsense_trap_notify = 0xBA11,
 
 	res.WriteFloat(0);
@@ -1318,6 +1319,7 @@ recv_sixthsense_trap_notify = 0xBA11,
 	res.WriteFloat(0);
 	res.WriteFloat(0);
 
+	
 recv_data_notify_eventlink = 0xB813,
 
 	res.WriteInt32(0);
@@ -1332,6 +1334,7 @@ recv_data_notify_eventlink = 0xB813,
 	
 	res.WriteInt32(0);
 
+	
 recv_event_request_int = 0xB782,
 
 	res.WriteCString("");//find max size
@@ -1339,26 +1342,103 @@ recv_event_request_int = 0xB782,
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
+	
 recv_chara_pose_notify = 0xB6B1,
 
 	res.WriteInt32(0); // character id
 	res.WriteInt32(0); // pose id
 
+	
 recv_0xB684 = 0xB684,
 
 	res.WriteInt32(0);
 	res.WriteCString("");//find max size
 
+	
 recv_chara_update_notify_item_forth = 0xB631,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
+	
 recv_trade_notify_aborted = 0xB619,
 
 	res.WriteInt32(0);
 
 recv_0xB586 = 0xB586,
+
+	res.WriteInt32(0);
+
+	
+recv_chara_update_alignment_param = 0xB435,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_charabody_self_notify_deadnext_time = 0xB417,
+
+	res.WriteInt32(0); // time dead length
+	
+	
+recv_battle_report_action_attack_exec = 0xB3F7,
+
+	res.WriteInt32(0);
+	
+	
+recv_item_update_place = 0xB371,
+
+	res.WriteInt64(0); // item id
+	
+	res.WriteByte(0); // position 1		]
+	res.WriteByte(0); // position 2		]	} im assumming these are x/y row, and page
+	res.WriteInt16(0); // position 3 	]
+	
+	
+recv_skill_custom_notify_open = 0xB319,
+
+	// no structure
+	
+	
+recv_event_removetrap_begin = 0xB292,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0); // bool
+	
+	
+recv_auction_receive_item_r = 0xB1CA,
+
+	res.WriteInt32(0);
+	
+	
+recv_stall_update_feature_item = 0xB195,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	res.WriteInt32(0);
+	
+	res.WriteByte(0); // bool
+	
+	res.WriteInt32(0);
+	
+	
+recv_union_request_disband_result = 0xB10F,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_removetrap_ident_trap_update = 0xB0E5,
 
 	res.WriteInt32(0);
