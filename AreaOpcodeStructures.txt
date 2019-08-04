@@ -1442,3 +1442,75 @@ recv_union_request_disband_result = 0xB10F,
 recv_event_removetrap_ident_trap_update = 0xB0E5,
 
 	res.WriteInt32(0);
+	
+	
+recv_dbg_battle_guard_start_notify = 0xB0BF,
+
+	res.WriteInt32(0); // object id?
+	
+	
+recv_battle_report_notify_hit_effect_name = 0xB037,
+
+	res.WriteInt32(0);
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteCString("ToBeFound_2");
+	
+	
+recv_chara_update_notify_crime_lv = 0xAF7F,
+
+	res.WriteInt32(0);
+	
+	res.WriteByte(0);
+	
+	
+recv_battle_report_notify_attack_hitstate = 0xAF76,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_eo_base_notify_sphere = 0xAF6D,
+
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	
+	
+recv_sv_conf_option_change_r = 0xAEE9,
+
+	res.WriteInt32(0);
+	
+	
+recv_normal_system_message = 0xAE2B,
+
+	res.WriteCString("ToBeFound");
+	
+	
+recv_event_system_message_timer = 0xAE27,
+
+	res.WriteCString("ToBeFound");
+	
+	
+recv_battle_guard_start_r = 0xADC8,
+
+	res.WriteInt32(0);
+	
+	
+recv_forge_execute_r = 0xAD6D,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_gem_close_r = 0xABF2, // after sends - send_stall_set_name
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_guard_end_r = 0xAB8A,
+
+res.WriteInt32(0);

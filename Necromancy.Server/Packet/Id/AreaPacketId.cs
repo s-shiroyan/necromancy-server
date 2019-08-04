@@ -383,20 +383,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0xAADD - proto_area_implement_client::recv_talkring_rename_request
     /// 0xAB14   no string
     /// 0xAB8A - proto_area_implement_client::recv_battle_guard_end_r
-    /// 0xABC5 (0xAB8A + 0x3B) ret
-    /// 0xABF2 - proto_area_implement_client::recv_gem_close_r
-    /// 0xAD6D - proto_area_implement_client::recv_forge_execute_r
-    /// 0xADC8 (0xAD6D + 0x5B) proto_area_implement_client::recv_battle_guard_start_r
-    /// 0xAE27 - proto_area_implement_client::recv_event_system_message_timer
-    /// 0xAE2B - proto_area_implement_client::recv_normal_system_message
-    /// 0xAEE9 - proto_area_implement_client::recv_sv_conf_option_change_r
-    /// 0xAF49 - proto_area_implement_client::recv_chat_post_message_r
-    /// 0xAF6D - proto_area_implement_client::recv_eo_base_notify_sphere
-    /// 0xAF76 - proto_area_implement_client::recv_battle_report_notify_attack_hitstate
-    /// 0xAF7F - proto_area_implement_client::recv_chara_update_notify_crime_lv
-    /// 0xB037 (0xAF7F + 0xB8) proto_area_implement_client::recv_battle_report_notify_hit_effect_name
-    /// 0xB0BF - proto_area_implement_client::recv_dbg_battle_guard_start_notify
-    /// 0xB0E5 - proto_area_implement_client::recv_event_removetrap_ident_trap_update
+
+
 
 
 
@@ -951,6 +939,18 @@ namespace Necromancy.Server.Packet.Id
         recv_stall_update_feature_item = 0xB195,
         recv_union_request_disband_result = 0xB10F,
         recv_event_removetrap_ident_trap_update = 0xB0E5,
+        recv_dbg_battle_guard_start_notify = 0xB0BF,
+        recv_battle_report_notify_hit_effect_name = 0xB037,
+        recv_chara_update_notify_crime_lv = 0xAF7F,
+        recv_battle_report_notify_attack_hitstate = 0xAF76,
+        recv_eo_base_notify_sphere = 0xAF6D,
+        recv_sv_conf_option_change_r = 0xAEE9,
+        recv_normal_system_message = 0xAE2B,
+        recv_event_system_message_timer = 0xAE27,
+        recv_battle_guard_start_r = 0xADC8,
+        recv_forge_execute_r = 0xAD6D,
+        recv_gem_close_r = 0xABF2, // after sends - send_stall_set_name
+        recv_0xABC5 = 0xABC5,
 
 
         // Send OP Codes - ordered by op code
