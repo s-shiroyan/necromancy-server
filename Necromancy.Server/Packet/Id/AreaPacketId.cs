@@ -961,6 +961,7 @@ namespace Necromancy.Server.Packet.Id
         recv_auction_close_r = 0xD1CB,
         recv_random_box_next_open_r = 0xD1A9,
         recv_chara_update_hp = 0xD133,
+        recv_chara_pose_notify = 0xB6B1,
 
 
 
