@@ -408,78 +408,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0xB3F7 (0xB371 + 0x86) proto_area_implement_client::recv_battle_report_action_attack_exec
     /// 0xB417 - proto_area_implement_client::recv_charabody_self_notify_deadnext_time
     /// 0xB435 (0xB417 + 0x1E) proto_area_implement_client::recv_chara_update_alignment_param
-    
-    /// 0xB586   ret
-    /// 0xB619 - proto_area_implement_client::recv_trade_notify_aborted
-    /// 0xB631 (0xB619 + 0x18) proto_area_implement_client::recv_chara_update_notify_item_forth
-    /// 0xB684   ret
-    /// 0xB6B1 - proto_area_implement_client::recv_chara_pose_notify
-    /// 0xB782 - proto_area_implement_client::recv_event_request_int
-    /// 0xB813 - proto_area_implement_client::recv_data_notify_eventlink
-    /// 0xBA11 - proto_area_implement_client::recv_sixthsense_trap_notify
-    /// 0xBA61   ret
-    /// 0xBA71 - proto_area_implement_client::recv_auction_notify_open
-    /// 0xBA73   proto_area_implement_client::recv_cpf_authenticate
-    /// 0xBA89   proto_area_implement_client::recv_gamepot_web_notify_open
-    /// 0xBB65 (0xBA71 + 0xF4) proto_area_implement_client::recv_event_union_storage_close_r
-    /// 0xBBA5 - proto_area_implement_client::recv_talkring_rename_masterring_r
-    /// 0xBC0A - proto_area_implement_client::recv_monster_hate_off
-    /// 0xBCAB - proto_area_implement_client::recv_quest_check_target_r
-    /// 0xBCC2 - proto_area_implement_client::recv_chara_notify_raise_downper
-    /// 0xBD72 - proto_area_implement_client::recv_get_honor
-    /// 0xBD7E - proto_area_implement_client::recv_event_tresurebox_begin
-    /// 0xBD90 - proto_area_implement_client::recv_battle_report_notify_rookie
-    /// 0xBD99 (0xBD90 + 0x9) - proto_area_implement_client::recv_battle_report_notify_rookie
-    /// 0xBF0D   ret
-    /// 0xBF34 - proto_area_implement_client::recv_trade_notify_money
-    /// 0xBFE9 - proto_area_implement_client::recv_data_notify_gimmick_data
-    /// 0xBFEA - proto_area_implement_client::recv_get_thread_all_r
-    /// 0xC003 - proto_area_implement_client::recv_chat_notify_message
-    
-    /// 0xC06C (0xC026 + 0x46) --------------------------------------------------------------not an opocde?
-    /// 0xC078 (0xC003 + 0x75) ret
-    /// 0xC0BB - proto_area_implement_client::recv_skill_aptitude_lost
-    /// 0xC0D8 - proto_area_implement_client::recv_help_new_remove_r
-    /// 0xC1AF (0xC0D8 + 0xD7) proto_area_implement_client::recv_wanted_list_close_r
-    /// 0xC1DC - proto_area_implement_client::recv_chara_update_notify_rookie
-    /// 0xC206 - proto_area_implement_client::recv_gem_notify_open
-    /// 0xC24E - proto_area_implement_client::recv_chara_update_action_prohibit_camp
-    /// 0xC2A1 - proto_area_implement_client::recv_battle_report_noact_notify_knockback
-    /// 0xC374 (0xC2A1 + 0xD3) proto_area_implement_client::recv_random_box_notify_open
-    /// 0xC3EE - proto_area_implement_client::recv_cash_shop2_notify_item
-    /// 0xC444 - proto_area_implement_client::recv_random_box_get_item_r
-    /// 0xC47A (0xC444 + 0x36) proto_area_implement_client::recv_self_exp_notify
-    /// 0xC542 - proto_area_implement_client::recv_skill_start_cast_self
-    /// 0xC543 - proto_area_implement_client::recv_skill_combo_cast_r
-    /// 0xC54F - proto_area_implement_client::recv_wanted_jail_draw_point_r
-    /// 0xC68B - proto_area_implement_client::recv_wanted_jail_update_state
-    /// 0xC6EF (0xC68B + 0x64) proto_area_implement_client::recv_self_dragon_warp_notify
-    /// 0xC6F2 - proto_area_implement_client::recv_wanted_list_open
-    /// 0xC701 - proto_area_implement_client::recv_battle_report_action_skill_onhit
-    /// 0xC7E1 - proto_area_implement_client::recv_item_update_sp_level
-    /// 0xC8AD - proto_area_implement_client::recv_storage_deposit_item2_r
-    /// 0xC96F - proto_area_implement_client::recv_buff_request_detach_r
-    /// 0xC9FF - proto_area_implement_client::recv_battle_report_notify_soul_material
-    /// 0xCA35 - proto_area_implement_client::recv_battle_report_noact_notify_heal_life
-    /// 0xCAB1 - proto_area_implement_client::recv_talkring_create_masterring_r
-    /// 0xCB6D - proto_area_implement_client::recv_party_notify_failed_draw
-    /// 0xCB94 - proto_area_implement_client::recv_trade_notify_interface_status
-    /// 0xCC37 (0xCB94 + 0xA3) proto_area_implement_client::recv_event_message_no_object
-    /// 0xCC54 - proto_area_implement_client::recv_battle_report_action_cover
-    /// 0xCCE2 - proto_area_implement_client::recv_chara_move_speed_per structure: byte, int16
-    /// 0xCD63 - proto_area_implement_client::recv_dbg_select_raise_r
-    /// 0xCDC9 - proto_area_implement_client::recv_battle_report_noact_notify_dead
-    /// 0xCE36 - proto_area_implement_client::recv_battle_report_noact_notify_buff_attach_failed
-    /// 0xCF24 - proto_area_implement_client::recv_event_select_map_and_channel
-    /// 0xCF29   ret
-    /// 0xCF52 (0xCF29 + 0x29) proto_area_implement_client::recv_echo_r
-    /// 0xCFDC - proto_area_implement_client::recv_data_notify_itemobject_data
-    /// 0xD04A   ret (no structure)
-    /// 0xD133 (0xD04A + 0xE9) proto_area_implement_client::recv_chara_update_hp
-    /// 0xD170 - proto_area_implement_client::recv_select_package_update_r
-
-
-
 
 
 
@@ -961,7 +889,67 @@ namespace Necromancy.Server.Packet.Id
         recv_auction_close_r = 0xD1CB,
         recv_random_box_next_open_r = 0xD1A9,
         recv_chara_update_hp = 0xD133,
-
+        recv_0xD04A = 0xD04A,
+        recv_data_notify_itemobject_data = 0xCFDC,
+        recv_select_package_update_r = 0xD170,
+        recv_echo_r = 0xCF52,
+        recv_0xCF29 = 0xCF29,
+        recv_event_select_map_and_channel = 0xCF24,
+        recv_battle_report_noact_notify_buff_attach_failed = 0xCE36,
+        recv_battle_report_noact_notify_dead = 0xCDC9,
+        recv_dbg_select_raise_r = 0xCD63,
+        recv_chara_move_speed_per = 0xCCE2,
+        recv_battle_report_action_cover = 0xCC54,
+        recv_event_message_no_object = 0xCC37,
+        recv_trade_notify_interface_status = 0xCB94,
+        recv_party_notify_failed_draw = 0xCB6D,
+        recv_talkring_create_masterring_r = 0xCAB1,
+        recv_battle_report_noact_notify_heal_life = 0xCA35,
+        recv_battle_report_notify_soul_material = 0xC9FF,
+        recv_buff_request_detach_r = 0xC96F,
+        recv_storage_deposit_item2_r = 0xC8AD,
+        recv_item_update_sp_level = 0xC7E1,
+        recv_battle_report_action_skill_onhit = 0xC701,
+        recv_wanted_list_open = 0xC6F2,
+        recv_self_dragon_warp_notify = 0xC6EF,
+        recv_wanted_jail_update_state = 0xC68B,
+        recv_wanted_jail_draw_point_r = 0xC54F,
+        recv_skill_combo_cast_r = 0xC543,
+        recv_random_box_get_item_r = 0xC444,
+        recv_cash_shop2_notify_item = 0xC3EE,
+        recv_random_box_notify_open = 0xC374,
+        recv_battle_report_noact_notify_knockback = 0xC2A1,
+        recv_chara_update_action_prohibit_camp = 0xC24E,
+        recv_0xC206 = 0xC206,
+        recv_chara_update_notify_rookie = 0xC1DC,
+        recv_wanted_list_close_r = 0xC1AF,
+        recv_help_new_remove_r = 0xC0D8,
+        recv_skill_aptitude_lost = 0xC0BB,
+        recv_0xC078 = 0xC078,
+        recv_get_thread_all_r = 0xBFEA,
+        recv_data_notify_gimmick_data = 0xBFE9,
+        recv_trade_notify_money = 0xBF34,
+        recv_auction_update_highest_bid = 0xBD99,
+        recv_battle_report_notify_rookie = 0xBD90,
+        recv_event_tresurebox_begin = 0xBD7E,
+        recv_get_honor = 0xBD72,
+        recv_chara_notify_raise_downper = 0xBCC2,
+        recv_quest_check_target_r = 0xBCAB,
+        recv_monster_hate_off = 0xBC0A,
+        recv_talkring_rename_masterring_r = 0xBBA5,
+        recv_event_union_storage_close_r = 0xBB65,
+        recv_gamepot_web_notify_open = 0xBA89,
+        recv_cpf_authenticate = 0xBA73,
+        recv_auction_notify_open = 0xBA71,
+        recv_0xBA61 = 0xBA61,
+        recv_sixthsense_trap_notify = 0xBA11,
+        recv_data_notify_eventlink = 0xB813,
+        recv_event_request_int = 0xB782,
+        recv_chara_pose_notify = 0xB6B1,
+        recv_0xB684 = 0xB684,
+        recv_chara_update_notify_item_forth = 0xB631,
+        recv_trade_notify_aborted = 0xB619,
+        recv_0xB586 = 0xB586,
 
 
         // Send OP Codes - ordered by op code
@@ -974,7 +962,7 @@ namespace Necromancy.Server.Packet.Id
         send_auction_re_exhibit = 0x33, //opcode not found
         send_auction_receive_gold = 0x34, //opcode not found
         send_auction_receive_item = 0x35, //opcode not found
-        send_auction_search = 0x36, //opcode not found
+        send_auction_search = 0x8865, 
         send_base_check_version = 0x5705, 
         send_base_enter = 0xAE43, 
         send_battle_attack_exec = 0xC38D, 

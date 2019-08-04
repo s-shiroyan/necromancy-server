@@ -866,7 +866,7 @@ recv_chara_update_hp = 0xD133,
 	res.WriteInt32(0);
 	
 	
-no string, 0xD04A
+recv_0xD04A = 0xD04A,
 
 	no structure
 	
@@ -897,7 +897,7 @@ recv_echo_r = 0xCF52,
 	no structure
 	
 	
-no string, 0xCF29
+recv_0xCF29 = 0xCF29,
 	
 	res.WriteInt32(0);
 	res.WriteInt32(0);
@@ -1058,7 +1058,7 @@ recv_self_exp_notify = 0xC47A,
 	res.WriteByte(0);//bool
 
 
-recv_random_box_get_item_r = 0xC444
+recv_random_box_get_item_r = 0xC444,
 
 	res.WriteInt32(0);
 
@@ -1129,7 +1129,7 @@ recv_skill_aptitude_lost = 0xC0BB,
 	res.WriteInt32(0);
 
 
-no string, 0xC078
+recv_0xC078 =  0xC078,
 
 	res.WriteInt32(0);
 
@@ -1142,7 +1142,7 @@ recv_chat_notify_message 0xC003,
 	res.WriteFixedString("", 0x301);
 	
 
-recv_get_thread_all_r 0xBFEA,
+recv_get_thread_all_r = 0xBFEA,
 
 	res.WriteInt32(0);
 	int numEntries = 0x3E8;
@@ -1157,7 +1157,7 @@ recv_get_thread_all_r 0xBFEA,
 	}
 
 	
-recv_data_notify_gimmick_data 0xBFE9,
+recv_data_notify_gimmick_data = 0xBFE9,
 
 	res.WriteInt32(0);
 	res.WriteFloat(0);
@@ -1168,7 +1168,7 @@ recv_data_notify_gimmick_data 0xBFE9,
 	res.WriteInt32(0);
 
 	
-recv_trade_notify_money 0xBF34,
+recv_trade_notify_money = 0xBF34,
 
 	res.WriteInt64(0);
 
@@ -1178,18 +1178,18 @@ no string 0xBF0D,
 	no structure
 
 	
-recv_auction_update_highest_bid 0xBD99,
+recv_auction_update_highest_bid = 0xBD99,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
 	
-recv_battle_report_notify_rookie 0xBD90,
+recv_battle_report_notify_rookie = 0xBD90,
 
 	res.WriteInt32(0);
 
 	
-recv_event_tresurebox_begin 0xBD7E,
+recv_event_tresurebox_begin = 0xBD7E,
 
 	int numEntries = 0x10;
 	res.WriteInt32(numEntries);
@@ -1199,46 +1199,46 @@ recv_event_tresurebox_begin 0xBD7E,
 	}
 	
 
-recv_get_honor 0xBD72,
+recv_get_honor = 0xBD72,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 	res.WriteByte(0);//bool
 	
 
-recv_chara_notify_raise_downper 0xBCC2,
+recv_chara_notify_raise_downper = 0xBCC2,
 
 	res.WriteByte(0);
 
 	
-recv_quest_check_target_r 0xBCAB,
+recv_quest_check_target_r = 0xBCAB,
 
 	res.WriteInt32(0);
 
 	
-recv_monster_hate_off 0xBC0A,
+recv_monster_hate_off = 0xBC0A,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
 	
-recv_talkring_rename_masterring_r 0xBBA5,
+recv_talkring_rename_masterring_r = 0xBBA5,
 
 	res.WriteInt32(0);
 
 	
-recv_event_union_storage_close_r 0xBB65,
+recv_event_union_storage_close_r = 0xBB65,
 
 	res.WriteInt32(0);
 
 	
-recv_gamepot_web_notify_open 0xBA89,
+recv_gamepot_web_notify_open = 0xBA89,
 
 	res.WriteInt32(0);
 	res.WriteCString("");//find max size
 
 	
-recv_cpf_authenticate 0xBA73,
+recv_cpf_authenticate = 0xBA73,
 
 	int numEntries = 0x80;
 	res.WriteInt32(numEntries);
@@ -1248,61 +1248,59 @@ recv_cpf_authenticate 0xBA73,
 	}
 	
 	
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ [CHECK STRUCTURES AFTER HERE]
-recv_auction_notify_open 0xBA71, // !! could not figure out !!
+recv_auction_notify_open = 0xBA71, // send_auction_search is sent after
 
-	res.WriteInt32(5); // must be <= 5
+	 res.WriteInt32(5); // must be <= 5
+
+            int numEntries = 0x5;
+            for (int i = 0; i < numEntries; i++)
+            {
+
+                res.WriteByte(1);
+                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("soulname", 49);
+                res.WriteByte(1);
+                res.WriteFixedString("ToBeFound", 385);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+            }
+
+            res.WriteInt32(8); // must be< = 8
+
+            int numEntries2 = 0x8;
+            for (int i = 0; i < numEntries2; i++)
+            {
+                res.WriteByte(0);
+                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("soulname", 49);
+                res.WriteByte(0);
+                res.WriteFixedString("ToBeFound", 385);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+            }
+
+            res.WriteByte(0); // bool
 	
-	int numEntries = 0x5;
-	for(int i = 0; i < numEntries; i++)
-	{
-		res.WriteByte(0);
 	
-		res.WriteByte(0);
-		res.WriteInt64(0);
-		
-	
-		res.WriteInt32(0);
-		res.WriteInt64(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("soulname", 49);
-		res.WriteByte(0);
-		res.WriteFixedString("ToBeFound", 385);
-		res.WriteInt16(0);
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-	}
-		
-	res.WriteInt32(8); // must be< = 8
-	
-	int numEntries2 = 0x8;
-	for(int i = 0; i < numEntries2; i++)
-	{
-		res.WriteByte(0);
-		res.WriteInt64(0);
-		res.WriteInt32(0);
-		res.WriteInt64(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("soulname", 49);
-		res.WriteByte(0);
-		res.WriteFixedString("ToBeFound", 385);
-		res.WriteInt16(0);
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-	}
-	
-	res.WriteByte(0); // bool
-	
-	
-no string 0xBA61,
+recv_0xBA61 = 0xBA61,
 
 	int numEntries = 0xA;
 	res.WriteInt32(numEntries);
@@ -1313,44 +1311,54 @@ no string 0xBA61,
 		res.WriteFixedString("", 0xC1);
 	}
 
-recv_sixthsense_trap_notify 0xBA11,
+recv_sixthsense_trap_notify = 0xBA11,
 
 	res.WriteFloat(0);
 	res.WriteFloat(0);
 	res.WriteFloat(0);
 	res.WriteFloat(0);
 
-recv_data_notify_eventlink 0xB813,
+recv_data_notify_eventlink = 0xB813,
 
 	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	
+	res.WriteInt32(0);
 
-recv_event_request_int 0xB782,
+recv_event_request_int = 0xB782,
 
 	res.WriteCString("");//find max size
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
-recv_chara_pose_notify 0xB6B1,
+recv_chara_pose_notify = 0xB6B1,
 
-	res.WriteInt32(0);
-	res.WriteInt32(0);
+	res.WriteInt32(0); // character id
+	res.WriteInt32(0); // pose id
 
-no string 0xB684,
+recv_0xB684 = 0xB684,
 
 	res.WriteInt32(0);
 	res.WriteCString("");//find max size
 
-recv_chara_update_notify_item_forth 0xB631,
+recv_chara_update_notify_item_forth = 0xB631,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 
-recv_trade_notify_aborted 0xB619,
+recv_trade_notify_aborted = 0xB619,
 
 	res.WriteInt32(0);
 
-no string 0xB586
+recv_0xB586 = 0xB586,
 
 	res.WriteInt32(0);
