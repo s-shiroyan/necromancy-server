@@ -367,22 +367,22 @@ namespace Necromancy.Server.Packet.Id
     /// 0xA43B - proto_area_implement_client::recv_temple_notify_close
     /// 0xA45C - proto_area_implement_client::recv_party_search_recruited_party_r
     /// 0xA4A5 - proto_area_implement_client::recv_gimmick_access_object_r
-    /// 0xA4D3 - proto_area_implement_client::recv_party_cancel_party_recruit_r
-    /// 0xA508 - proto_area_implement_client::recv_raisescale_update_success_per
-    /// 0xA549 (0xA508 + 0x41) proto_area_implement_client::recv_auction_re_exhibit_r
-    /// 0xA54C - proto_area_implement_client::recv_get_honor_notify
-    /// 0xA611 - proto_area_implement_client::recv_item_update_physics
-    /// 0xA6F8 (0xA611 + 0xE7) proto_area_implement_client::recv_skill_cooltime_notify
-    /// 0xA7BF - proto_area_implement_client::recv_party_regist_member_recruit_r
-    /// 0xA7E8 - proto_area_implement_client::recv_chara_notify_map_fragment
-    /// 0xA8BB (0xA7E8 + 0xD3) ret
-    /// 0xA90C   ret
-    /// 0xA938 - proto_area_implement_client::recv_battle_report_noact_notify_heal_condition
-    /// 0xA9C2 - proto_area_implement_client::recv_chara_update_lv_detail
-    /// 0xAA8F - proto_area_implement_client::recv_thread_create_r
-    /// 0xAADD - proto_area_implement_client::recv_talkring_rename_request
-    /// 0xAB14   no string
-    /// 0xAB8A - proto_area_implement_client::recv_battle_guard_end_r
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /// 0xAB14   recv_job_change_paramrecv_job_change_param
+
 
 
 
@@ -722,7 +722,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xA4D3, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -951,6 +951,22 @@ namespace Necromancy.Server.Packet.Id
         recv_forge_execute_r = 0xAD6D,
         recv_gem_close_r = 0xABF2, // after sends - send_stall_set_name
         recv_0xABC5 = 0xABC5,
+        recv_talkring_rename_request = 0xAADD,
+        recv_job_change_param = 0xAB14, // structure still needs to be found see line 1526 in areaopcodestructure.txt document
+        recv_thread_create_r = 0xAA8F,
+        recv_chara_update_lv_detail = 0xA9C2,
+        recv_battle_report_noact_notify_heal_condition = 0xA938,
+        recv_0xA90C = 0xA90C,
+        recv_0xA8BB = 0xA8BB,
+        recv_chara_notify_map_fragment = 0xA7E8,
+        recv_party_regist_member_recruit_r = 0xA7BF,
+        recv_skill_cooltime_notify = 0xA6F8,
+        recv_item_update_physics = 0xA611,
+        recv_get_honor_notify = 0xA54C,
+        recv_auction_re_exhibit_r = 0xA549,
+        recv_raisescale_update_success_per = 0xA508,
+        recv_party_cancel_party_recruit_r = 0xA4D3,
+
 
 
         // Send OP Codes - ordered by op code
@@ -1186,7 +1202,7 @@ namespace Necromancy.Server.Packet.Id
         send_trade_abort = 0x204, //opcode not found
         send_trade_add_item = 0x205, //opcode not found
         send_trade_fix = 0x206, //opcode not found
-        send_trade_invite = 0x207, //opcode not found
+        send_trade_invite = 0x513A, 
         send_trade_offer = 0x208, //opcode not found
         send_trade_remove_item = 0x209, //opcode not found
         send_trade_reply = 0x210, //opcode not found

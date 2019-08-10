@@ -1513,4 +1513,102 @@ recv_gem_close_r = 0xABF2, // after sends - send_stall_set_name
 	
 recv_battle_guard_end_r = 0xAB8A,
 
-res.WriteInt32(0);
+	res.WriteInt32(0);
+
+
+recv_talkring_rename_request = 0xAADD,
+
+	res.WriteInt64(0);
+	
+	res.WriteCString("ToBeFound");
+	
+
+recv_job_change_param = 0xAB14,     {IMPORTANT!!!!!!!!!!!!!!!!!!!!]
+
+	//structure needs to be found
+	
+	
+recv_thread_create_r = 0xAA8F,
+
+	res.WriteInt32(0);
+	
+	
+recv_chara_update_lv_detail = 0xA9C2,
+
+	res.WriteInt16(0); // new level
+	
+	res.WriteInt64(0); // start exp
+	
+	res.WriteInt64(0); // exp needed for next level
+	
+	
+recv_battle_report_noact_notify_heal_condition = 0xA938,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_chara_notify_map_fragment = 0xA7E8,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0);
+	
+	
+recv_party_regist_member_recruit_r = 0xA7BF,
+
+	res.WriteInt32(0);
+	
+	
+recv_skill_cooltime_notify = 0xA6F8,
+
+	res.WriteInt32(0);
+	
+	res.WriteFloat(0);
+	
+	res.WriteFloat(0);
+	
+	
+recv_item_update_physics = 0xA611,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt16(0);
+	
+	
+recv_get_honor_notify = 0xA54C,
+
+	res.WriteInt32(1); // must be under 0x3E8 // wtf?
+	
+	int numEntries = 0x1;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteByte(0); // bool		
+	}
+	
+	
+recv_auction_re_exhibit_r = 0xA549,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_raisescale_update_success_per = 0xA508,
+
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	
+	
+recv_party_cancel_party_recruit_r = 0xA4D3,
+
+	res.WriteInt32(0);
