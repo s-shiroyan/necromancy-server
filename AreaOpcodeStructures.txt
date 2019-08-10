@@ -1525,7 +1525,119 @@ recv_talkring_rename_request = 0xAADD,
 
 recv_job_change_param = 0xAB14,     {IMPORTANT!!!!!!!!!!!!!!!!!!!!]
 
-	//structure needs to be found
+	res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    for(int i = 0; i < 7; i++)
+        {
+            res.WriteInt16(0);
+        }
+    for(int i = 0; i < 9; i++)
+        {
+            res.WriteInt16(0);
+        }
+    for(int i = 0; i < 9; i++)
+        {
+            res.WriteInt16(0);
+        }
+    for(int i = 0; i < 0xB; i++)
+        {
+			res.WriteInt16(0);
+        }
+
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt16(0);
+    res.WriteInt64(0);
+    res.WriteInt64(0);
+    res.WriteInt64(0);
+    res.WriteInt64(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteByte(0);
+	
+    for(int i = 0; i < 7; i++)
+        {
+            res.WriteInt16(0);
+        }
+    for(int i = 0; i < 9; i++)
+        {
+            res.WriteInt16(0);
+        }
+    for(int i = 0; i < 9; i++)
+            {
+                res.WriteInt16(0);
+            }
+    for(int i = 0; i < 0xB; i++)
+        {
+            res.WriteInt16(0);
+        }
+    res.WriteInt64(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+    res.WriteInt32(0);
+
+    int numEntries = 0x100;
+    res.WriteInt32(numEntries);
+    for(int i = 0; i < numEntries; i++)
+        {
+            res.WriteInt32(0);
+        }
+
+    numEntries = 0x100;
+    res.WriteInt32(numEntries);
+    for(int i = 0; i < numEntries; i++)
+        {
+            res.WriteInt32(0);
+        }
+
+    numEntries = 0x13;
+    res.WriteInt32(numEntries);
+    for(int i = 0; i < numEntries; i++)
+        {
+            res.WriteInt32(0);
+        }
+
+    numEntries = 0x13;
+    res.WriteInt32(numEntries);
+    for(int i = 0; i < numEntries; i++)
+        {
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);//bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+        }
+
+    numEntries = 0x13;
+    res.WriteInt32(numEntries);
+    for(int i = 0; i < numEntries; i++)
+        {
+             res.WriteInt32(0);
+        }
 	
 	
 recv_thread_create_r = 0xAA8F,
@@ -1791,3 +1903,86 @@ recv_get_recv_package = 0x9D96,    [PLEASE DOUBLE CHECK!!!!!!!]
 recv_cash_shop_check_billing_zip_r = 0x9D5A,
 
 	res.WriteInt32(0);
+	
+	
+recv_gem_set_support_item_r = 0x9D52,
+	
+	res.WriteInt32(0);
+	
+
+recv_self_soul_material_notify = 0x9CCF,
+
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+	res.WriteInt64(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt64(0);
+	
+	
+recv_comment_set_r = 0x9C3A,
+
+	res.WriteInt32(0); 
+	
+	
+recv_auction_update_bid_num = 0x9BC6,
+
+	res.WriteInt32(0); // auction id
+	
+	res.WriteInt32(0); // "bidnumber"?
+	
+	
+recv_item_update_enchantid = 0x9B08,
+
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_map_change_sync_ok = 0x9AA9,
+
+	// no structure
+	
+	
+recv_item_unequip_r = 0x9A79,
+
+	res.WriteInt32(0);
+	
+	
+recv_refusallist_remove_user_r = 0x9A44,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_exec_direct_r = 0x998F,
+
+	res.WriteInt32(0);
+	
+	
+recv_raisescale_move_money_r = 0x98D3,
+
+	res.WriteInt32(0);
+	
+	
+recv_door_update_notify = 0x9870,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_stall_open_r = 0x9761,
+
+	res.WriteInt32(0);
+	
+	
+recv_trade_set_money_r = 0x971B,
+
+	res.WriteInt32(0);
+	
+	
+recv_item_remove = 0x9700,
+
+	res.WriteInt64(0);

@@ -335,24 +335,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x9666 - proto_area_implement_client::recv_battle_attack_cancel_r
     /// 0x96EA - proto_area_implement_client::recv_eo_update_second_trapid
     /// 0x9700 - proto_area_implement_client::recv_item_remove
-    /// 0x971B - proto_area_implement_client::recv_trade_set_money_r
-    /// 0x9761 (0x971B + 0x46) proto_area_implement_client::recv_stall_open_r
-    /// 0x97D9   no string
-    /// 0x9870 - proto_area_implement_client::recv_door_update_notify
-    /// 0x9899   no string
-    /// 0x98D3 - proto_area_implement_client::recv_raisescale_move_money_r
-    /// 0x998F - proto_area_implement_client::recv_battle_attack_exec_direct_r
-    /// 0x9A44 - proto_area_implement_client::recv_refusallist_remove_user_r
-    /// 0x9A79 - proto_area_implement_client::recv_item_unequip_r
-    /// 0x9AA9 (0x9A79 + 0x30) proto_area_implement_client::recv_map_change_sync_ok
-    /// 0x9B08 - proto_area_implement_client::recv_item_update_enchantid
-    /// 0x9BC6 - proto_area_implement_client::recv_auction_update_bid_num
-    /// 0x9C3A (0x9BC6 + 0x74) proto_area_implement_client::recv_comment_set_r
-    /// 0x9CA1   no string
-    /// 0x9CCF - proto_area_implement_client::recv_self_soul_material_notify
-    /// 0x9D52 - proto_area_implement_client::recv_gem_set_support_item_r
-    /// 0x9D5A - proto_area_implement_client::recv_cash_shop_check_billing_zip_r
-
 
 
 
@@ -712,7 +694,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0x9700, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -942,7 +924,7 @@ namespace Necromancy.Server.Packet.Id
         recv_gem_close_r = 0xABF2, // after sends - send_stall_set_name
         recv_0xABC5 = 0xABC5,
         recv_talkring_rename_request = 0xAADD,
-        recv_job_change_param = 0xAB14, // structure still needs to be found see line 1526 in areaopcodestructure.txt document
+        recv_job_change_param = 0xAB14, 
         recv_thread_create_r = 0xAA8F,
         recv_chara_update_lv_detail = 0xA9C2,
         recv_battle_report_noact_notify_heal_condition = 0xA938,
@@ -969,8 +951,24 @@ namespace Necromancy.Server.Packet.Id
         recv_self_soul_rank_notify = 0x9E75,
         recv_cash_shop2_buy_r = 0x9E19,
         recv_dbg_message = 0x9DE2,
-        recv_get_recv_package = 0x9D96, // structure still needs work please see line 1741 in areaopcodestructure.txt document
+        recv_get_recv_package = 0x9D96, // structure still needs work please see line 1853 in areaopcodestructure.txt document
         recv_cash_shop_check_billing_zip_r = 0x9D5A,
+        recv_gem_set_support_item_r = 0x9D52,
+        recv_self_soul_material_notify = 0x9CCF,
+        recv_0x9CA1 = 0x9CA1,
+        recv_auction_update_bid_num = 0x9BC6,
+        recv_item_update_enchantid = 0x9B08,
+        recv_item_unequip_r = 0x9A79,
+        recv_refusallist_remove_user_r = 0x9A44,
+        recv_battle_attack_exec_direct_r = 0x998F,
+        recv_raisescale_move_money_r = 0x98D3,
+        recv_0x9899 = 0x9899,
+        recv_door_update_notify = 0x9870,
+        recv_0x97D9 = 0x97D9,
+        recv_stall_open_r = 0x9761,
+        recv_trade_set_money_r = 0x971B,
+        recv_item_remove = 0x9700,
+
 
 
 
