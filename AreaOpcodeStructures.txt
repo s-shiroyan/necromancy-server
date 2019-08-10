@@ -1612,3 +1612,182 @@ recv_raisescale_update_success_per = 0xA508,
 recv_party_cancel_party_recruit_r = 0xA4D3,
 
 	res.WriteInt32(0);
+	
+	
+recv_gimmick_access_object_r = 0xA4A5,
+
+	res.WriteInt32(0);
+	
+	
+recv_party_search_recruited_party_r = 0xA45C,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0x14); // cmp to 0x14
+	
+	int numEntries = 0x14;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		res.WriteInt32(0);
+		
+		res.WriteInt32(0);
+		
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteFixedString("charaname", 91);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0); // bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+	}
+	
+	
+recv_temple_notify_close = 0xA43B, // hit after -> send_stall_set_name
+
+	// no structure
+	
+	
+recv_stall_shopping_start_r = 0xA2B7, 
+
+	res.WriteInt32(0);
+	
+	
+recv_job_change_r = 0xA21E,
+
+	res.WriteInt32(0);
+	
+	
+recv_cash_shop_get_url_common_steam_r = 0xA18D,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteCString("ToBeFound");
+	
+	
+recv_chara_notify_union_data = 0xA0E3,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteCString("ToBeFound");
+	
+	
+recv_cash_shop_get_current_cash_r = 0xA005,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_chara_notify_party_leave = 0x9F70,
+
+	res.WriteInt32(0); // charaid
+	
+	
+recv_chara_update_maxhp = 0x9F31,
+
+	res.WriteInt32(0);
+	
+	
+recv_self_soul_rank_notify = 0x9E75,
+
+	res.WriteByte(0); 
+	
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	res.WriteByte(0); 
+	
+	res.WriteByte(0); 
+	
+	res.WriteByte(0); 
+	
+	res.WriteByte(0); 
+	
+	
+recv_cash_shop2_buy_r = 0x9E19,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+
+recv_dbg_message = 0x9DE2,
+
+	res.WriteByte(0); 	
+	res.WriteByte(0); 	
+	res.WriteByte(0); 
+	
+	res.WriteCString("ToBeFound");
+	
+	
+recv_get_recv_package = 0x9D96,    [PLEASE DOUBLE CHECK!!!!!!!]
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0x64); // must be =< 0x64
+	
+	int numEntries = 0x64;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("soulname", 49);
+		res.WriteFixedString("charaname", 91);
+		res.WriteFixedString("charaname_2", 91);
+		res.WriteFixedString("NoClue", 601);
+		res.WriteInt32(0);
+		res.WriteInt16(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("NoClue_2", 73);
+		res.WriteFixedString("NoClue_3", 73);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("NoClue_4", 16);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		res.WriteByte(0); // bool
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		res.WriteByte(0); // bool
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		res.WriteByte(0); // bool
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		res.WriteInt64(0);
+	}
+	
+	res.WriteInt32(0);
+	
+
+recv_cash_shop_check_billing_zip_r = 0x9D5A,
+
+	res.WriteInt32(0);

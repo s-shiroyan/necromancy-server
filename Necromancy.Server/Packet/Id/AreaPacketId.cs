@@ -352,21 +352,11 @@ namespace Necromancy.Server.Packet.Id
     /// 0x9CCF - proto_area_implement_client::recv_self_soul_material_notify
     /// 0x9D52 - proto_area_implement_client::recv_gem_set_support_item_r
     /// 0x9D5A - proto_area_implement_client::recv_cash_shop_check_billing_zip_r
-    /// 0x9D96 (0x9D5A + 0x3C) proto_area_implement_client::recv_get_recv_package
-    /// 0x9DE2 - proto_area_implement_client::recv_dbg_message
-    /// 0x9E19 - proto_area_implement_client::recv_cash_shop2_buy_r
-    /// 0x9E75 (0x9E19 + 0x5C) proto_area_implement_client::recv_self_soul_rank_notify
-    /// 0x9F31 - proto_area_implement_client::recv_chara_update_maxhp
-    /// 0x9F70 - proto_area_implement_client::recv_chara_notify_party_leave
-    /// 0xA005 (0x9F70 + 0x95) proto_area_implement_client::recv_cash_shop_get_current_cash_r
-    /// 0xA084 - proto_area_implement_client::recv_shortcut_request_data_r
-    /// 0xA0E3 - proto_area_implement_client::recv_chara_notify_union_data
-    /// 0xA18D (0xA0E3 + 0xAA) proto_area_implement_client::recv_cash_shop_get_url_common_steam_r
-    /// 0xA21E - proto_area_implement_client::recv_job_change_r
-    /// 0xA2B7 - proto_area_implement_client::recv_stall_shopping_start_r
-    /// 0xA43B - proto_area_implement_client::recv_temple_notify_close
-    /// 0xA45C - proto_area_implement_client::recv_party_search_recruited_party_r
-    /// 0xA4A5 - proto_area_implement_client::recv_gimmick_access_object_r
+
+
+
+
+
 
 
 
@@ -722,7 +712,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0xA4D3, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -966,6 +956,22 @@ namespace Necromancy.Server.Packet.Id
         recv_auction_re_exhibit_r = 0xA549,
         recv_raisescale_update_success_per = 0xA508,
         recv_party_cancel_party_recruit_r = 0xA4D3,
+        recv_gimmick_access_object_r = 0xA4A5,
+        recv_party_search_recruited_party_r = 0xA45C,
+        recv_temple_notify_close = 0xA43B,
+        recv_stall_shopping_start_r = 0xA2B7,
+        recv_job_change_r = 0xA21E,
+        recv_cash_shop_get_url_common_steam_r = 0xA18D,
+        recv_chara_notify_union_data = 0xA0E3,
+        recv_cash_shop_get_current_cash_r = 0xA005,
+        recv_chara_notify_party_leave = 0x9F70,
+        recv_chara_update_maxhp = 0x9F31,
+        recv_self_soul_rank_notify = 0x9E75,
+        recv_cash_shop2_buy_r = 0x9E19,
+        recv_dbg_message = 0x9DE2,
+        recv_get_recv_package = 0x9D96, // structure still needs work please see line 1741 in areaopcodestructure.txt document
+        recv_cash_shop_check_billing_zip_r = 0x9D5A,
+
 
 
 
