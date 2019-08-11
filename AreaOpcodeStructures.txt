@@ -1986,3 +1986,71 @@ recv_trade_set_money_r = 0x971B,
 recv_item_remove = 0x9700,
 
 	res.WriteInt64(0);
+	
+	
+recv_eo_update_second_trapid = 0x96EA,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_cancel_r = 0x9666,
+
+	res.WriteInt32(0);
+
+	
+recv_dropobject_notify_stateflag = 0x965E,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_thread_exit_message = 0x95E6,
+
+	res.WriteCString("ToBeFound");
+	
+	res.WriteCString("ToBeFound");
+	
+	res.WriteInt16(0);
+	
+	
+recv_charabody_salvage_request_cancel_r = 0x9578,
+
+	res.WriteInt32(0);
+	
+	
+recv_record_notify_param = 0x951B,
+
+	res.WriteInt32(1); // must be under 0x12c
+	
+	int numEntries = 0x1;
+	for (int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("----", 0x5B);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("----", 0x5B);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("----", 0x5B);
+	}
+	
+	
+recv_gem_rebuild_r = 0x935B,
+
+	res.WriteInt32(0);
+	
+	
+recv_equip_honor_r = 0x92DE,
+
+	res.WriteInt32(0);
+	
+	
+recv_stall_regist_item_r = 0x9289,
+
+	res.WriteInt32(0);
