@@ -1850,54 +1850,52 @@ recv_dbg_message = 0x9DE2,
 	res.WriteCString("ToBeFound");
 	
 	
-recv_get_recv_package = 0x9D96,    [PLEASE DOUBLE CHECK!!!!!!!]
+recv_get_recv_package = 0x9D96,
 
-	res.WriteInt32(0);
-	
-	res.WriteInt32(0x64); // must be =< 0x64
-	
-	int numEntries = 0x64;
-	for (int i = 0; i < numEntries; i++)
-	{
-		res.WriteInt32(0);
-		res.WriteFixedString("soulname", 49);
-		res.WriteFixedString("charaname", 91);
-		res.WriteFixedString("charaname_2", 91);
-		res.WriteFixedString("NoClue", 601);
-		res.WriteInt32(0);
-		res.WriteInt16(0);
-		res.WriteInt64(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("NoClue_2", 73);
-		res.WriteFixedString("NoClue_3", 73);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("NoClue_4", 16);
-		res.WriteByte(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-		res.WriteByte(0); // bool
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-		res.WriteByte(0); // bool
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-		res.WriteByte(0); // bool
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		
-		res.WriteInt64(0);
-	}
-	
-	res.WriteInt32(0);
+			res.WriteInt32(0);
+            int numEntries = 0x27;//max is 0x64 but it is too high
+            res.WriteInt32(numEntries);
+            for(int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x31);
+                res.WriteFixedString("", 0x5B);
+                res.WriteFixedString("", 0x5B);
+                res.WriteFixedString("", 0x259);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x49);
+                res.WriteFixedString("", 0x49);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x10);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteByte(0);//bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteByte(0);//bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteByte(0);//bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteInt64(0);
+            }
+
+            res.WriteInt32(0);
 	
 
 recv_cash_shop_check_billing_zip_r = 0x9D5A,
