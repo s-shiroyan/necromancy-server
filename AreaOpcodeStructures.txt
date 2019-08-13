@@ -1984,3 +1984,247 @@ recv_trade_set_money_r = 0x971B,
 recv_item_remove = 0x9700,
 
 	res.WriteInt64(0);
+	
+--------------------------------------------------------------Structures not tested after this point(please test them and confirm strings.)
+
+recv_eo_update_second_trapid = 0x96EA,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_cancel_r = 0x9666,
+
+	res.WriteInt32(0);
+	
+
+recv_dropobject_notify_stateflag = 0x965E,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+
+recv_thread_exit_message = 0x95E6,
+
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteInt16(0);
+	
+	
+recv_charabody_salvage_request_cancel_r = 0x9578,
+
+	res.WriteInt32(0);
+	
+	
+recv_record_notify_param = 0x951B,
+
+	int numEntries = 0x12C;
+	res.WriteInt32(numEntries);// less than or equal to 0x12C
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x5B);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x5B);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x5B);
+	}
+	
+	
+recv_gem_rebuild_r = 0x935B,
+
+	res.WriteInt32(0);
+	
+	
+recv_equip_honor_r = 0x92DE,
+
+	res.WriteInt32(0);
+	
+	
+recv_stall_regist_item_r = 0x9289,
+
+	res.WriteInt32(0);
+	
+	
+recv_random_box_close_r = 0x924E,
+
+	res.WriteInt32(0);
+	
+	
+recv_message_board_notify_update = 0x9227,
+
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	
+	
+0x9201 = 0x9201,
+
+	for(int i = 0; i < 5; i++)
+	{
+		res.WriteFixedString("", 0x31);
+		res.WriteFixedString("", 0x25);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt64(0);
+		res.WriteInt32(0);
+	}
+	res.WriteFixedString("", 0x31);
+	res.WriteFixedString("", 0x25);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+	res.WriteInt32(0);
+	
+	
+recv_stall_sell_item = 0x919C,
+
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteInt64(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt16(0);
+	res.WriteInt32(0);
+	
+	
+recv_forge_check_r = 0x90E8,
+
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+	res.WriteByte(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	
+	
+recv_data_notify_charabody_data = 0x906A,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	
+	int numEntries = 19;
+	res.WriteInt32(numEntries);//less than or equal to 19
+	for(int i = 0; i < numEntries; i++)
+		res.WriteInt32(0);
+		
+	numEntries = 19;
+	res.WriteInt32(0);
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);//bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+	}
+	
+	numEntries = 19;
+	res.WriteInt32(0);
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+	}
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);//bool
+	res.WriteInt32(0);
+	
+	
+recv_skill_request_gain_r = 0x903A,
+
+	res.WriteInt32(0);
+	
+	
+recv_echo_notify = 0x8F84,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	int numEntries = 0x4E20
+	res.WriteInt32(numEntries); //less than or equal to 0x4E20
+	for(int i = 0; i < numEntries; i++)
+		res.WriteByte(0);
+		
+		
+recv_check_job_change_r = 0x8F15,
+
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_skill_cancel = 0x8E92,
+
+	no structure
+	
+	
+recv_trade_reply_r = 0x8DBC,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_block_message_no_object = 0x8D9B,
+
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound"); // find max size
+	
+	
+0x8D92 = 0x8D92,
+
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	
