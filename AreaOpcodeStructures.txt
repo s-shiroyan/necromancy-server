@@ -2228,3 +2228,196 @@ recv_event_block_message_no_object = 0x8D9B,
 	res.WriteByte(0);
 	
 	
+recv_escape_cancel = 0x8CC6,
+
+	no structure
+	
+	
+recv_chara_update_notify_honor = 0x8C2F,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_event_block_message = 0x8BD2,
+
+	res.WriteInt32(0);
+	res.WriteCString("ToBeFound"); // find max size 
+	
+	
+recv_shortcut_notify_regist = 0x8BB4,
+
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+	res.WriteFixedString("", 0x10);
+	
+	
+recv_trade_fix_r = 0x8A06,
+
+	res.WriteInt32(0);
+	
+	
+recv_charabody_access_end = 0x89FF,
+
+	res.WriteInt32(0);
+	
+	
+recv_trade_abort_r = 0x88FB,
+
+	res.WriteInt32(0);
+	
+	
+recv_job_change_notify_exe = 0x88AE,
+
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	int numEntries = 19;
+	res.WriteInt32(numEntries); // less than or equal to 19
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+	}
+	numEntries = 19;
+	res.WriteInt32(numEntries); //less than or equal to 19
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0); //bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+	}
+	numEntries = 19;
+	res.WriteInt32(numEntries); //less than or equal to 19
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+	}
+	
+	
+recv_forge_notify_execute_result = 0x88A1,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_removetrap_ontrap = 0x8820,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_battle_report_action_attack_failed = 0x877C,
+
+	res.WriteInt32(0);
+	
+	
+recv_union_storage_deposit_money_r = 0x8778,
+
+	res.WriteInt32(0);
+	
+	
+recv_item_instance = 0x86EA,
+
+	res.WriteInt64(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x10);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt16(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	int numEntries = 2; 
+	res.WriteInt32(numEntries); // less than or equal to 2
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+	}
+	numEntries = 3;
+	res.WriteInt32(numEntries); // less than or equal to 3
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteByte(0); //bool
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+	}
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	
+	
+recv_soulmaterial_shop_buy_r = 0x86A5,
+
+	res.WriteInt32(0);
+	
+	
+recv_temple_notify_open = 0x85C6,
+
+	res.WriteByte(0);
+	
+	
+recv_party_decline_to_apply_r = 0x855C,
+
+	res.WriteInt32(0);
+	
+	
+0x8549 = 0x8549,
+
+	res.WriteInt32(0);
+	
+	
+0x8487 = 0x8487,
+
+	res.WriteInt32(0);
+	
+	
+recv_party_notify_cancel_party_recruit = 0x839A,
+
+	res.WriteInt32(0);
+	
+	
+recv_skill_tree_gain = 0x8395,
+
+	res.WriteInt32(skillID);
+    res.WriteInt32(skillLevel);//Level?
+    res.WriteByte(0); //Bool
+    res.WriteByte(0); //Bool
+	
+	
+recv_premium_service_notify_attach2 = 0x8299,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt364(0);
+	res.WriteInt32(0);
+	res.WriteByte(0); //Bool

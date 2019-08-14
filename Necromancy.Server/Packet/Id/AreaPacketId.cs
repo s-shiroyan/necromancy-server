@@ -290,6 +290,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x8066   ret
     /// 0x8091 (0x8066 + 0x2B) proto_area_implement_client::recv_event_script_play
     /// 0x825D   ret
+    
     /// 0x8299 - proto_area_implement_client::recv_premium_service_notify_attach2
     /// 0x8395 (0x8299 + 0xFC) proto_area_implement_client::recv_skill_tree_gain
     /// 0x839A - proto_area_implement_client::recv_party_notify_cancel_party_recruit
@@ -312,7 +313,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x8BD2 - proto_area_implement_client::recv_event_block_message
     /// 0x8C2F - proto_area_implement_client::recv_chara_update_notify_honor
     /// 0x8CC6 - proto_area_implement_client::recv_escape_cancel
-    
     /// 0x8D92 (0x8CC6 + 0xCC) no string
     /// 0x8D9B - proto_area_implement_client::recv_event_block_message_no_object
     /// 0x8DBC - proto_area_implement_client::recv_trade_reply_r
