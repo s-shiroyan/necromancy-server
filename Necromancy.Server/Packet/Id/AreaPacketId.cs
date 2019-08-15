@@ -257,6 +257,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x717D- proto_area_implement_client::recv_object_disappear_notify
     /// 0x7181 - proto_area_implement_client::recv_battle_report_notify_exp_bonus
     /// 0x732D - proto_area_implement_client::recv_cash_shop_notify_open
+    
     /// 0x7341 - proto_area_implement_client::recv_forge_sp_execute_r
     /// 0x735E   no string
     /// 0x73A1 - proto_area_implement_client::recv_quest_get_story_quest_works_r
@@ -290,7 +291,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x8066   ret
     /// 0x8091 (0x8066 + 0x2B) proto_area_implement_client::recv_event_script_play
     /// 0x825D   ret
-
     /// 0x8299 - proto_area_implement_client::recv_premium_service_notify_attach2
     /// 0x8395 (0x8299 + 0xFC) proto_area_implement_client::recv_skill_tree_gain
     /// 0x839A - proto_area_implement_client::recv_party_notify_cancel_party_recruit

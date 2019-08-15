@@ -2422,6 +2422,276 @@ recv_premium_service_notify_attach2 = 0x8299,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
-	res.WriteInt364(0);
+	res.WriteInt64(0);
 	res.WriteInt32(0);
 	res.WriteByte(0); //Bool
+	
+	
+0x825D = 0x825D,
+
+	no structure
+	
+	
+recv_event_script_play = 0x8091,
+
+	res.WriteCString("ToBeFound"); // find max size 
+	
+	
+0x8066 = 0x8066,
+
+	no structure
+	
+	
+recv_stall_notify_opend = 0x7FC5,
+
+	res.WriteInt32(0);
+	res.WriteCString("ToBeFound"); // find max size 
+	int numEntries = 5;
+	res.WriteInt32(numEntries); //less than or equal to 5
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteInt32(0);
+		res.WriteInt16(0);
+		res.WriteInt32(0);
+		
+		res.WriteByte(0); //Bool
+	}
+	
+	
+recv_skill_next_cast_r = 0x7F50,
+
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	
+	
+recv_skill_custom_slot_set_r = 0x7F34,
+
+	res.WriteInt32(0);
+	
+	
+recv_cash_shop_get_url_r = 0x7F09,
+
+	res.WriteInt32(0);
+	res.WriteCString("ToBeFound"); // find max size
+	
+	
+recv_union_open_window = 0x7D75,
+
+	no structure
+	
+	
+recv_event_change_cancel_sw = 0x7D53,
+
+	res.WriteByte(0); //Bool
+	
+	
+recv_auction_notify_close = 0x7D2B,
+
+	no structure
+	
+	
+recv_charabody_salvage_notify_body = 0x7D1C,
+
+	res.WriteInt32(0);
+	res.WriteCString("ToBeFound"); // find max size
+	res.WriteCString("ToBeFound"); // find max size
+	
+	
+recv_wanted_list_actor = 0x7CF0,
+
+	int numEntries = 0x1E;
+	res.WriteInt32(numEntries); //less than or equal to 0x1E
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x31);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x5B);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+	}
+	res.WriteInt32(0);
+	
+	
+recv_battle_attack_pose_start_notify = 0x7CB2,
+
+	res.WriteInt32(0);
+	
+	
+recv_party_change_leader_r = 0x7BB3,
+
+	res.WriteInt32(0);
+	
+	
+0x7B86 = 0x7B86,
+
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	
+	
+recv_object_point_move_r = 0x7B5D,
+
+	no structure
+	
+	
+recv_cash_shop_regist_billing_zip_r = 0x7A6F,
+
+	res.WriteInt32(0);
+	
+	
+recv_chara_update_ap_cost_diff = 0x7A5C,
+
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	
+	
+recv_storage_drawmoney = 0x79A9,
+
+	res.WriteInt32(0);
+	
+	
+recv_event_abort_r = 0x79A2,
+
+	res.WriteInt32(0);
+	
+	
+recv_map_enter_r = 0x793E,
+
+	res.WriteInt32(0);
+	res.WriteByte(0); //Bool
+	
+	
+recv_self_lost_notify = 0x789E,
+
+	no structure
+	
+	
+recv_event_access_object_r = 0x77A7,
+
+	res.WriteInt32(0);
+	
+	
+recv_door_close_r = 0x772A,
+
+	res.WriteInt32(0);
+	
+	
+0x7697 = 0x7697,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+recv_item_use_notify = 0x75A5,
+
+	res.WriteInt64(0);
+	res.WriteFloat(0);
+	
+	
+recv_party_notify_remove_draw_item = 0x7576,
+
+	res.WriteInt64(0);
+	
+	
+0x755C = 0x755C,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
+0x746F = 0x746F,
+
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);//bool
+	
+	
+recv_self_buff_notify = 0x73D1,
+
+	int numEntries = 0x80;
+	res.WriteInt32(numEntries);//less than or equal to 0x80
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+	}
+	
+	
+recv_quest_get_story_quest_works_r = 0x73A1,
+
+	res.WriteInt32(1);
+
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteByte(0);
+    res.WriteFixedString("channel 1", 97);
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteFixedString("channel 2", 97);
+    res.WriteByte(1); //bool
+    res.WriteByte(1); //bool
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+
+    //loop x 10
+    for (int i = 0; i < 10; i++)
+    {
+        res.WriteInt32(1);
+        res.WriteFixedString("quest1", 16);
+        res.WriteInt16(1);
+        res.WriteInt32(1);
+    }
+    res.WriteByte(1);
+
+    //loop x 12
+    for (int i = 0; i < 12; i++)
+    {
+        res.WriteInt32(1);
+        res.WriteFixedString("quest2", 16);
+        res.WriteInt16(1);
+        res.WriteInt32(1);
+    }
+    res.WriteByte(1);
+    res.WriteFixedString("idk", 385);
+    res.WriteInt64(1);
+    res.WriteByte(1);
+    res.WriteFixedString("idk_also", 385);
+
+    for (int i = 0; i < 5; i++)
+    {
+        res.WriteByte(1);
+        res.WriteInt32(1);
+        res.WriteInt32(1);
+        res.WriteInt32(1);
+        res.WriteInt32(1);
+        res.WriteInt32(1);
+    }
+    res.WriteByte(1);
+    res.WriteInt32(1);
+    res.WriteFloat(1);
+			
+			
+0x735E = 0x735E,
+
+	res.WriteInt32(0);
+	
+	
+recv_forge_sp_execute_r = 0x7341,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	
+	
