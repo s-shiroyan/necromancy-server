@@ -356,8 +356,53 @@ recv_cash_shop_get_url_commerce_r= 0x1D49,
             res.WriteCString("");//"0x801"
             res.WriteCString("");//"0x11"			
 			
+recv_trade_notify_invited= 0x1D68, 
+            
+            res.WriteInt32(0);
+
+recv_battle_report_end_notify= 0x1DBE, 
+           
+			//No Structure
 			
+recv_charabody_self_warpdragon_penalty= 0x1E65, 
+            
+            res.WriteInt32(0);
+
+recv_souleater_touch_notify= 0x1F32, 
+            
+            res.WriteInt32(0);			
 			
+recv_item_update_durability= 0x1F5A, 
+            
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+
+recv_shortcut_notify_deregist= 0x1F73, 
+            
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+recv_data_notify_soulmaterialobject_data= 0x201C, 
+            
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+       
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);	
+
 			
 
 

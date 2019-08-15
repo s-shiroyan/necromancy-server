@@ -78,6 +78,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1F5A - proto_area_implement_client::recv_item_update_durability
     /// 0x1F73 - proto_area_implement_client::recv_shortcut_notify_deregist
     /// 0x201C (0x1F73 + 0xA9)  proto_area_implement_client::recv_data_notify_soulmaterialobject_data
+    /////-----Xeno has completed everything above this comment. targeting to 0x250E
     /// 0x2063 - proto_area_implement_client::recv_item_update_date_end_protect
     /// 0x213C - proto_area_implement_client::recv_item_update_date_end_protect
     /// 0x218A (0x213C + 0x4E) ret
@@ -92,6 +93,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x2470 - proto_area_implement_client::recv_data_notify_npc_data
     /// 0x2478 - proto_area_implement_client::recv_chara_update_maxap
     /// 0x250E (0x2478 + 0x96) proto_area_implement_client::recv_data_notify_ggate_stone_data
+    /////-----Hei started here and is working down.-- Completed to 0x2ba4.!-- Targeting to 0x39FD
     /// 0x2513 - proto_area_implement_client::recv_battle_report_notify_soul_point
     /// 0x2576 - proto_area_implement_client::recv_chara_update_mp
     /// 0x260E - proto_area_implement_client::recv_raisescale_view_close
