@@ -177,4 +177,136 @@ recv_situation_end = 0x124C,
             
             //no Structure
 
+recv_battle_report_noact_notify_freeze = 0x129B, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+			
+recv_charabody_self_salvage_notify = 0x12A4, 
+            
+            res.WriteCString("31-02=2F=DEC47");
+            res.WriteCString("5b-01=5A=Dec132");
 
+recv_skill_base_notify = 0x1392, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+ret two int32s = 0x1489, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            //Error Condition - invalid structure
+			
+recv_chara_view_landing_notify = 0x14DA, 
+            
+            res.WriteInt32(0);
+
+recv_buff_shop_notify_open = 0x14F6, 
+            
+            res.WriteByte(0);
+
+recv_soul_dispitem_notify_data = 0x15B0, 
+            
+            res.WriteInt32(0);
+
+recv_shop_message_push = 0x15D0, 
+            
+            res.WriteInt32(0);
+            res.WriteCString("31-01=30=DEC48");
+
+no string = 0x166B, 
+            
+            //no structure push wizardryonline_patched.4ED2F0
+			
+recv_union_request_establish_r= 0x1701, 
+            
+            res.WriteInt32(0);
+			
+recv_dbg_battle_guard_end_notify= 0x170B, 
+            
+            res.WriteInt32(0);			
+
+recv_message_board_notify_open= 0x170F, 
+            
+            res.WriteInt32(0);
+
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+			
+recv_battle_report_notify_phy_damage_hp= 0x173C, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_battle_report_notify_hit_effect= 0x179D, 
+            
+            res.WriteInt32(0);	
+
+recv_self_soul_point_notify= 0x182B, 
+            
+            res.WriteInt32(0);
+			
+recv_job_change_select_bonuspoint_r= 0x1837, //Work in progress. stuck on last loop
+            
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+                        	
+            int numEntries = 0x7;
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt16(0);
+            }
+
+            int numEntries2 = 0x9;
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt16(0);
+            }
+
+            int numEntries3 = 0x9;
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt16(0);
+            }
+
+            int numEntries4 = 0xB; // 0xB; Compares to B(11) but ja out of loop at 5
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt16(2);
+            }
+                            
+            
+            res.WriteInt32(0);			
+
+			
+			
+			
+			
+			
+			
+
+
+
+
+
+
+
+			
+
+
+			
