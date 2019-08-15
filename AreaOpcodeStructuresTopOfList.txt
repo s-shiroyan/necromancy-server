@@ -258,7 +258,7 @@ recv_self_soul_point_notify= 0x182B,
             
             res.WriteInt32(0);
 			
-recv_job_change_select_bonuspoint_r= 0x1837, //Work in progress. stuck on last loop
+recv_job_change_select_bonuspoint_r= 0x1837, 
             
             res.WriteInt32(0);
 
@@ -273,28 +273,88 @@ recv_job_change_select_bonuspoint_r= 0x1837, //Work in progress. stuck on last l
             }
 
             int numEntries2 = 0x9;
-            for (int i = 0; i < numEntries; i++)
+            for (int i = 0; i < numEntries2; i++)
             {
                 res.WriteInt16(0);
             }
 
             int numEntries3 = 0x9;
-            for (int i = 0; i < numEntries; i++)
+            for (int i = 0; i < numEntries3; i++)
             {
                 res.WriteInt16(0);
             }
 
-            int numEntries4 = 0xB; // 0xB; Compares to B(11) but ja out of loop at 5
-            for (int i = 0; i < numEntries; i++)
+            int numEntries4 = 0xB; 
+            for (int i = 0; i < numEntries4; i++)
             {
-                res.WriteInt16(2);
+                res.WriteInt16(0);
             }
                             
             
-            res.WriteInt32(0);			
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
 
+		recv_gem_notify_close= 0x18CC, 
+
+			//No Structure
 			
+recv_battle_report_noact_notify_buff_update_time= 0x19C3, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_charabody_state_update_notify= 0x1A0F, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_situation_start= 0x1AA8, 
+            
+            res.WriteInt32(0);			
 			
+recv_event_start= 0x1B5C, 
+            
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+recv_quest_get_mission_quest_works_r= 0x1BD6, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_skill_tree_notify= 0x1C0A, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+recv_item_update_ac= 0x1C15, 
+            
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+			
+recv_cash_shop_fitting_unequip_r= 0x1C20, 
+            
+            res.WriteInt32(0);
+
+recv_skill_exec_r= 0x1C6C, 
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_cash_shop_get_url_commerce_r= 0x1D49, 
+            
+            res.WriteInt32(0);
+            res.WriteCString("");//"0x801"
+            res.WriteCString("");//"0x801"
+            res.WriteCString("");//"0x11"			
 			
 			
 			
