@@ -1,0 +1,180 @@
+recv_cash_shop_get_url_common_r = 0x1A6,
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteCString("Length 0x801");
+
+recv_sv_conf_option_request_r = 0x1DA,
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+
+            res.WriteInt32(2);
+            res.WriteInt32(2);
+
+            res.WriteInt32(3);
+            res.WriteInt32(3);
+
+            res.WriteInt32(4);
+            res.WriteInt32(4);
+
+            res.WriteInt32(5);
+            res.WriteInt32(5);
+
+            res.WriteInt32(6);
+            res.WriteInt32(6);
+
+            res.WriteInt32(1);
+
+recv_auction_receive_gold_r = 0x22C,
+            
+            res.WriteInt32(1);
+
+recv_item_update_hardness = 0x2C5,
+            
+            res.WriteInt64(1);
+            res.WriteByte(1);
+
+recv_charabody_notify_loot_start_cancel = 0x2FA,
+
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteInt16(1);
+            res.WriteCString("Length 31-2=DEC47");
+            res.WriteCString("Length 5B-1=DEC90");
+
+recv_stall_close_r = 0x397,
+
+            res.WriteInt32(1);
+
+recv_event_tresurebox_select_r = 0x494,
+
+            res.WriteInt32(1);
+
+recv_charabody_loot_complete2_r = 0x54E,
+
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+
+recv_battle_report_action_skill_exec = 0x604,
+
+            res.WriteInt32(1);
+
+recv_union_mantle_close_r = 0x65C,
+
+            res.WriteInt32(1);
+
+recv_cloak_notify_close_r = 0x723,
+
+            // no structure 
+
+recv_chara_update_condition_resist = 0x780,
+
+            res.WriteInt32(1);
+            res.WriteInt16(1);
+
+recv_wanted_jail_update_money = 0x794,
+
+            res.WriteInt64(1);
+
+recv_self_action_cost = 0x8CD,
+            
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+
+recv_gem_synthesis_info = 0x9F5,
+            
+            res.WriteInt32(1);
+
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+
+            res.WriteInt16(1);
+
+            res.WriteInt64(1);
+
+recv_charabody_loot_start2_r = 0xB2F,
+            
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+
+recv_item_drop_r = 0xBFE,
+            
+            res.WriteInt32(1);
+
+recv_dbg_option_change_r = 0xC5F,
+            
+            res.WriteInt32(1);
+
+recv_mail_open_r = 0xCE7,
+            
+            res.WriteInt32(1);
+
+recv_party_accept_to_apply_r = 0xCFF,
+            
+            res.WriteInt32(1);
+
+recv_cash_shop_fitting_equip_r = 0xD0D,
+            
+            res.WriteInt32(1);
+
+recv_record_close_r = 0xE0B,
+            
+            res.WriteInt32(1);
+
+recv_job_change_notify_close = 0xE45,
+            
+            //No Structure
+
+recv_item_cooltime_notify = 0xECF,
+            
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+
+recv_chara_update_alignment = 0xEF9,
+            
+            res.WriteInt32(1);
+
+recv_trade_notify_replied = 0x102E,
+            
+            res.WriteInt32(1);
+
+TBD push wizardryonline_patched.4D5DBF = 0x10DA, 
+            
+            res.WriteInt32(1);
+
+            res.WriteInt32(1);
+
+recv_event_union_storage_open = 0x1105, 
+            
+            res.WriteInt64(1);
+            res.WriteInt64(1);
+
+recv_logout_cancel = 0x1198,      
+          
+            //No Structure
+
+recv_skill_inherit_lost = 0x11FA, 
+            
+            res.WriteInt32(1);
+
+recv_situation_end = 0x124C, 
+            
+            //no Structure
+
+
