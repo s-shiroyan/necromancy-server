@@ -2421,3 +2421,4 @@ recv_premium_service_notify_attach2 = 0x8299,
 	res.WriteInt364(0);
 	res.WriteInt32(0);
 	res.WriteByte(0); //Bool
+	
