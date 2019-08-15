@@ -1985,29 +1985,32 @@ recv_item_remove = 0x9700,
 
 	res.WriteInt64(0);
 	
---------------------------------------------------------------Structures not tested after this point(please test them and confirm strings.)
-
+	
 recv_eo_update_second_trapid = 0x96EA,
 
 	res.WriteInt32(0);
+	
 	res.WriteInt32(0);
 	
 	
 recv_battle_attack_cancel_r = 0x9666,
 
 	res.WriteInt32(0);
-	
 
+	
 recv_dropobject_notify_stateflag = 0x965E,
 
 	res.WriteInt32(0);
+	
 	res.WriteInt32(0);
 	
-
+	
 recv_thread_exit_message = 0x95E6,
 
-	res.WriteCString("ToBeFound"); // find max size 
-	res.WriteCString("ToBeFound"); // find max size 
+	res.WriteCString("ToBeFound");
+	
+	res.WriteCString("ToBeFound");
+	
 	res.WriteInt16(0);
 	
 	
@@ -2018,20 +2021,21 @@ recv_charabody_salvage_request_cancel_r = 0x9578,
 	
 recv_record_notify_param = 0x951B,
 
-	int numEntries = 0x12C;
-	res.WriteInt32(numEntries);// less than or equal to 0x12C
-	for(int i = 0; i < numEntries; i++)
+	res.WriteInt32(1); // must be under 0x12c
+	
+	int numEntries = 0x1;
+	for (int i = 0; i < numEntries; i++)
 	{
 		res.WriteInt32(0);
-		res.WriteFixedString("", 0x5B);
+		res.WriteFixedString("----", 0x5B);
 		res.WriteInt32(0);
 		res.WriteByte(0);
 		res.WriteInt32(0);
 		res.WriteInt32(0);
-		res.WriteFixedString("", 0x5B);
+		res.WriteFixedString("----", 0x5B);
 		res.WriteInt32(0);
 		res.WriteInt32(0);
-		res.WriteFixedString("", 0x5B);
+		res.WriteFixedString("----", 0x5B);
 	}
 	
 	
@@ -2421,4 +2425,3 @@ recv_premium_service_notify_attach2 = 0x8299,
 	res.WriteInt364(0);
 	res.WriteInt32(0);
 	res.WriteByte(0); //Bool
-	
