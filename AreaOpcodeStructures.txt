@@ -1523,7 +1523,7 @@ recv_talkring_rename_request = 0xAADD,
 	res.WriteCString("ToBeFound");
 	
 
-recv_job_change_param = 0xAB14,     {IMPORTANT!!!!!!!!!!!!!!!!!!!!]
+recv_job_change_param = 0xAB14,     
 
 	res.WriteInt32(0);
     res.WriteInt32(0);
@@ -2061,18 +2061,19 @@ recv_random_box_close_r = 0x924E,
 	
 recv_message_board_notify_update = 0x9227,
 
-	res.WriteInt16(0);
-	res.WriteInt16(0);
-	res.WriteInt16(0);
-	res.WriteInt16(0);
 	
 	res.WriteInt16(0);
 	res.WriteInt16(0);
 	res.WriteInt16(0);
 	res.WriteInt16(0);
 	
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
+	res.WriteInt16(0);
 	
-0x9201 = 0x9201,
+	
+recv_0x9201 = 0x9201,
 
 	for(int i = 0; i < 5; i++)
 	{
@@ -2189,7 +2190,7 @@ recv_echo_notify = 0x8F84,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
-	int numEntries = 0x4E20
+	int numEntries = 0x4E20;
 	res.WriteInt32(numEntries); //less than or equal to 0x4E20
 	for(int i = 0; i < numEntries; i++)
 		res.WriteByte(0);
@@ -2217,7 +2218,7 @@ recv_event_block_message_no_object = 0x8D9B,
 	res.WriteCString("ToBeFound"); // find max size
 	
 	
-0x8D92 = 0x8D92,
+recv_0x8D92 = 0x8D92,
 
 	res.WriteInt32(0);
 	res.WriteFloat(0);
@@ -2395,12 +2396,12 @@ recv_party_decline_to_apply_r = 0x855C,
 	res.WriteInt32(0);
 	
 	
-0x8549 = 0x8549,
+recv_0x8549 = 0x8549,
 
 	res.WriteInt32(0);
 	
 	
-0x8487 = 0x8487,
+recv_0x8487 = 0x8487,
 
 	res.WriteInt32(0);
 	

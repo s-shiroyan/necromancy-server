@@ -305,40 +305,8 @@ namespace Necromancy.Server.Packet.Id
     /// 0x877C (0x8778 + 0x4) proto_area_implement_client::recv_battle_report_action_attack_failed
     /// 0x8820 - proto_area_implement_client::recv_battle_report_action_removetrap_ontrap
     /// 0x88A1 - proto_area_implement_client::recv_forge_notify_execute_result
-    /// 0x88AE (0x88A1 + 0xD) proto_area_implement_client::recv_job_change_notify_exe
-    /// 0x88FB - proto_area_implement_client::recv_trade_abort_r
-    /// 0x89FF - proto_area_implement_client::recv_charabody_access_end
-    /// 0x8A06 (0x89FF + 0x7) proto_area_implement_client::recv_trade_fix_r
-    /// 0x8BB4 - proto_area_implement_client::recv_shortcut_notify_regist
-    /// 0x8BD2 - proto_area_implement_client::recv_event_block_message
-    /// 0x8C2F - proto_area_implement_client::recv_chara_update_notify_honor
-    /// 0x8CC6 - proto_area_implement_client::recv_escape_cancel
-    /// 0x8D92 (0x8CC6 + 0xCC) no string
-    /// 0x8D9B - proto_area_implement_client::recv_event_block_message_no_object
-    /// 0x8DBC - proto_area_implement_client::recv_trade_reply_r
-    /// 0x8E92 - proto_area_implement_client::recv_battle_report_action_skill_cancel
-    /// 0x8F15 - proto_area_implement_client::recv_check_job_change_r
-    /// 0x8F84 - proto_area_implement_client::recv_echo_notify
-    /// 0x903A - proto_area_implement_client::recv_skill_request_gain_r
-    /// 0x906A - proto_area_implement_client::recv_data_notify_charabody_data structure: 32,64,byte,float,float,32,byte,float,float,32,byte,32,16
-    /// 0x90E8 (0x906A + 0x7E) proto_area_implement_client::recv_forge_check_r
-    /// 0x919C - proto_area_implement_client::recv_stall_sell_item
-    /// 0x9201   no string
-    /// 0x9227 (0x9201 + 0x26) proto_area_implement_client::recv_message_board_notify_update
-    /// 0x924E - proto_area_implement_client::recv_random_box_close_r
 
 
-
-
-
-
-
-
-
-
-
-
-    /// 0xAB14   recv_job_change_paramrecv_job_change_param
 
 
 
@@ -679,7 +647,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0x9289, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0x839A, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
@@ -962,7 +930,34 @@ namespace Necromancy.Server.Packet.Id
         recv_gem_rebuild_r = 0x935B,
         recv_equip_honor_r = 0x92DE,
         recv_stall_regist_item_r = 0x9289,
-
+        recv_random_box_close_r = 0x924E,
+        recv_message_board_notify_update = 0x9227,
+        recv_0x9201 = 0x9201,
+        recv_stall_sell_item = 0x919C,
+        recv_forge_check_r = 0x90E8,
+        recv_echo_notify = 0x8F84,
+        recv_check_job_change_r = 0x8F15,
+        recv_battle_report_action_skill_cancel = 0x8E92,
+        recv_trade_reply_r = 0x8DBC,
+        recv_event_block_message_no_object = 0x8D9B,
+        recv_0x8D92 = 0x8D92,
+        recv_escape_cancel = 0x8CC6,
+        recv_chara_update_notify_honor = 0x8C2F,
+        recv_trade_fix_r = 0x8A06,
+        recv_charabody_access_end = 0x89FF,
+        recv_trade_abort_r = 0x88FB,
+        recv_job_change_notify_exe = 0x88AE,
+        recv_forge_notify_execute_result = 0x88A1,
+        recv_battle_report_action_removetrap_ontrap = 0x8820,
+        recv_battle_report_action_attack_failed = 0x877C,
+        recv_union_storage_deposit_money_r = 0x8778,
+        recv_item_instance = 0x86EA,
+        recv_soulmaterial_shop_buy_r = 0x86A5,
+        recv_temple_notify_open = 0x85C6,
+        recv_party_decline_to_apply_r = 0x855C,
+        recv_0x8549 = 0x8549,
+        recv_0x8487 = 0x8487,
+        recv_party_notify_cancel_party_recruit = 0x839A,
 
 
         // Send OP Codes - ordered by op code
