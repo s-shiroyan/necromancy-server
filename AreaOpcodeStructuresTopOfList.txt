@@ -34,7 +34,7 @@ recv_item_update_hardness = 0x2C5,
             res.WriteInt64(1);
             res.WriteByte(1);
 
-recv_charabody_notify_loot_start_cancel= 0x2FA,
+recv_charabody_notify_loot_start_cancel = 0x2FA,
 
             res.WriteByte(1);
             res.WriteByte(1);
@@ -67,7 +67,7 @@ recv_cloak_notify_close_r = 0x723,
 
             // no structure 
 
-//recv_chara_update_condition_resist = 0x780,
+recv_chara_update_condition_resist = 0x780,
 
             res.WriteInt32(1);
             res.WriteInt16(1);
@@ -169,11 +169,12 @@ recv_logout_cancel = 0x1198,
           
             //No Structure
 
+recv_skill_inherit_lost = 0x11FA, 
+            
+            res.WriteInt32(1);
 
-
-
-
-
-
+recv_situation_end = 0x124C, 
+            
+            //no Structure
 
 
