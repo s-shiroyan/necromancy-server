@@ -152,6 +152,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x551E - proto_area_implement_client::recv_item_equip_r
     /// 0x5527 (0x551E + 0x9) proto_area_implement_client::recv_monster_state_update_notify
     /////-----Xeno. Block Stop
+    
     /// 0x556E - proto_area_implement_client::recv_package_notify_add
     /// 0x570B - proto_area_implement_client::recv_cash_shop_get_url_web_goods_r
     /// 0x5842 - proto_area_implement_client::recv_door_open_r
@@ -212,10 +213,9 @@ namespace Necromancy.Server.Packet.Id
     /// 0x70B7 - proto_area_implement_client::recv_stall_shopping_abort_r
     /// 0x70F6 - proto_area_implement_client::recv_soul_dispitem_remove_data
     /// 0x715E (0x70F6 + 0x68) proto_area_implement_client::recv_trade_remove_item_r
-    /// 0x717D- proto_area_implement_client::recv_object_disappear_notify
+    /// 0x717D - proto_area_implement_client::recv_object_disappear_notify
     /// 0x7181 - proto_area_implement_client::recv_battle_report_notify_exp_bonus
     /// 0x732D - proto_area_implement_client::recv_cash_shop_notify_open
-    
     /// 0x7341 - proto_area_implement_client::recv_forge_sp_execute_r
     /// 0x735E   no string
     /// 0x73A1 - proto_area_implement_client::recv_quest_get_story_quest_works_r
