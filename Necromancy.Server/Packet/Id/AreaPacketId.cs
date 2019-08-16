@@ -5,52 +5,6 @@ namespace Necromancy.Server.Packet.Id
     /// <summary>
     /// Necromancy Area Server OP Codes, starts at 0x00495B88
     ///
-    /// 0x1A6 - proto_area_implement_client::recv_cash_shop_get_url_common_r
-    /// 0x1AB (0x1A6 + 0x5) proto_area_implement_client::recv_event_block_message_end_no_object
-    /// 0x1DA - proto_area_implement_client::recv_sv_conf_option_request_r
-    /// 0x22C - proto_area_implement_client::recv_auction_receive_gold_r
-    /// 0x2C5 - proto_area_implement_client::recv_item_update_hardness
-    /// 0x2FA - proto_area_implement_client::recv_charabody_notify_loot_start_cancel
-    /// 0x397 - proto_area_implement_client::recv_stall_close_r
-    /// 0x411  (0x397 + 0x7A)  proto_area_implement_client::recv_skill_custom_close_r
-    /// 0x494 - proto_area_implement_client::recv_event_tresurebox_select_r
-    /// 0x54E - proto_area_implement_client::recv_charabody_loot_complete2_r
-    /// 0x5F8  (0x54E + 0xAA)  proto_area_implement_client::recv_item_update_num
-    /// 0x604 - proto_area_implement_client::recv_battle_report_action_skill_exec
-    /// 0x65C - proto_area_implement_client::recv_union_mantle_close_r
-    /// 0x661 (0x65C + 0x5) proto_area_implement_client::recv_chara_update_ap_cost_per
-    /// 0x723 - proto_area_implement_client::recv_cloak_notify_close_r
-    /// 0x780 - proto_area_implement_client::recv_chara_update_condition_resist
-    /// 0x794 - proto_area_implement_client::recv_wanted_jail_update_money
-    /// 0x8CD - proto_area_implement_client::recv_self_action_cost
-    /// 0x99D  (0x8CD + 0xD0)  proto_area_implement_client::recv_event_end
-    /// 0x9F5 - proto_area_implement_client::recv_gem_synthesis_info
-    /// 0xB2F - proto_area_implement_client::recv_charabody_loot_start2_r
-    /// 0xBFE - proto_area_implement_client::recv_item_drop_r
-    /// 0xC5F - proto_area_implement_client::recv_dbg_option_change_r
-    /// 0xCE7 - proto_area_implement_client::recv_mail_open_r
-    /// 0xCFF - proto_area_implement_client::recv_party_accept_to_apply_r
-    /// 0xD0D - proto_area_implement_client::recv_cash_shop_fitting_equip_r
-    /// 0xE0B - proto_area_implement_client::recv_record_close_r
-    /// 0xE45 - proto_area_implement_client::recv_job_change_notify_close
-    /// 0xECF - proto_area_implement_client::recv_item_cooltime_notify
-    /// 0xEF9 - proto_area_implement_client::recv_chara_update_alignment
-    /// 0x102E - proto_area_implement_client::recv_trade_notify_replied
-    /// 0x10C5 (0x102E + 0x97) proto_area_implement_client::recv_dropobject_notify_access_priority
-    /// 0x10DA   no string (or is it????) --structre: int32(5) and loop of int32() 5 times I believe
-    /// 0x1105 - proto_area_implement_client::recv_event_union_storage_open
-    /// 0x1198 - proto_area_implement_client::recv_logout_cancel
-    /// 0x11FA - proto_area_implement_client::recv_skill_inherit_lost
-    /// 0x124C - proto_area_implement_client::recv_situation_end
-    /// 0x125E (0x124C + 0x12) proto_area_implement_client::recv_event_show_board_end
-    /// 0x129B - proto_area_implement_client::recv_battle_report_noact_notify_freeze
-    /// 0x12A4 - proto_area_implement_client::recv_charabody_self_salvage_notify
-    /// 0x12E0 (0x12A4 + 0x3C) proto_area_implement_client::recv_charabody_self_salvage_end
-    /// 0x1392 - proto_area_implement_client::recv_skill_base_notify
-    /// 0x1489   ret two int32s
-    /// 0x14DA - proto_area_implement_client::recv_chara_view_landing_notify
-    /// 0x14F6 - proto_area_implement_client::recv_buff_shop_notify_open
-    /// 0x15B0 - proto_area_implement_client::recv_soul_dispitem_notify_data
     /// 0x15D0 - proto_area_implement_client::recv_shop_message_push
     /// 0x166B   no string
     /// 0x1701 - proto_area_implement_client::recv_union_request_establish_r
@@ -962,7 +916,49 @@ namespace Necromancy.Server.Packet.Id
         recv_0x8549 = 0x8549,
         recv_0x8487 = 0x8487,
         recv_party_notify_cancel_party_recruit = 0x839A,
-
+        recv_cash_shop_get_url_common_r = 0x1A6,
+        recv_event_block_message_end_no_object = 0x1AB,
+        recv_auction_receive_gold_r = 0x22C,
+        recv_item_update_hardness = 0x2C5,
+        recv_charabody_notify_loot_start_cancel = 0x2FA,
+        recv_stall_close_r = 0x397,
+        recv_skill_custom_close_r = 0x411,
+        recv_event_tresurebox_select_r = 0x494,
+        recv_charabody_loot_complete2_r = 0x54E,
+        recv_item_update_num = 0x5F8,
+        recv_union_mantle_close_r = 0x65C,
+        recv_chara_update_ap_cost_per = 0x661,
+        recv_cloak_notify_close_r = 0x723,
+        recv_chara_update_condition_resist = 0x780,
+        recv_wanted_jail_update_money = 0x794,
+        recv_self_action_cost = 0x8CD,
+        recv_event_end = 0x99D,
+        recv_gem_synthesis_info = 0x9F5,
+        recv_charabody_loot_start2_r = 0xB2F,
+        recv_item_drop_r = 0xBFE,
+        recv_dbg_option_change_r = 0xC5F,
+        recv_mail_open_r = 0xCE7,
+        recv_party_accept_to_apply_r = 0xCFF,
+        recv_cash_shop_fitting_equip_r = 0xD0D,
+        recv_record_close_r = 0xE0B,
+        recv_job_change_notify_close = 0xE45,
+        recv_item_cooltime_notify = 0xECF,
+        recv_chara_update_alignment = 0xEF9,
+        recv_trade_notify_replied = 0x102E,
+        recv_dropobject_notify_access_priority = 0x10C5,
+        recv_0x10DA = 0x10DA,
+        recv_event_union_storage_open = 0x1105,
+        recv_logout_cancel = 0x1198,
+        recv_skill_inherit_lost = 0x11FA,
+        recv_situation_end = 0x124C,
+        recv_event_show_board_end = 0x125E,
+        recv_battle_report_noact_notify_freeze = 0x129B,
+        recv_charabody_self_salvage_notify = 0x12A4,
+        recv_charabody_self_salvage_end = 0x12E0,
+        recv_skill_base_notify = 0x1392,
+        recv_0x1489 = 0x1489,
+        recv_chara_view_landing_notify = 0x14DA,
+        recv_buff_shop_notify_open = 0x14F6,
 
         // Send OP Codes - ordered by op code
 
