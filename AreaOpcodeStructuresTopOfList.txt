@@ -184,7 +184,7 @@ recv_dropobject_notify_access_priority = 0x10C5,
             res.WriteInt32(0);
             res.WriteInt32(0);
 			
- push wizardryonline_patched.4D5DBF = 0x10DA, //no String
+ recv_0x10DA = 0x10DA, //no String push wizardryonline_patched.4D5DBF
             
             res.WriteInt32(1);
 
@@ -257,7 +257,7 @@ recv_shop_message_push = 0x15D0,
             res.WriteInt32(0);
             res.WriteCString("31-01=30=DEC48");
 
-no string = 0x166B, 
+recv_0x166B = 0x166B, 
             
             //no structure push wizardryonline_patched.4ED2F0
 			
@@ -422,24 +422,24 @@ recv_shortcut_notify_deregist = 0x1F73,
 
 recv_data_notify_soulmaterialobject_data = 0x201C, 
             
-            res.WriteInt32(0);
+			res.WriteInt32(0);
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+			res.WriteFloat(0);//X
+			res.WriteFloat(0);//Y
+			res.WriteFloat(0);//Z
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteByte(0);
-       
-            res.WriteInt32(0);
+			res.WriteFloat(0);//X
+			res.WriteFloat(0);//Y
+			res.WriteFloat(0);//Z
+			res.WriteByte(0);
+	
+			res.WriteInt32(0);
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
 
-            res.WriteInt32(0);	
+			res.WriteInt32(0);
 
 recv_item_update_date_end_protect = 0x2063, 
             
@@ -450,7 +450,7 @@ recv_gamepot_web_close_r = 0x213C,
             
             res.WriteInt32(0);
 
-ret = 0x218A, 
+recv_0x218A = 0x218A, 
             
             res.WriteInt32(0); //No String - Goes to Error			
 
@@ -551,24 +551,26 @@ recv_shop_buy_r = 0x2467,
             
             res.WriteInt32(0);
 
-recv_data_notify_npc_data = 0x2470, //double check this one.  It works, but i cant explain why
+recv_data_notify_npc_data = 0x2470, //double check this one.  It works, but it shouldn't. i've missed something
             
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteByte(0);
             res.WriteCString("");//"0x5B"
             res.WriteCString("");//"0x5B"
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteFloat(0); //X
+            res.WriteFloat(0); //Y
+            res.WriteFloat(0); //Z
             res.WriteByte(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0);// <= 0x13
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0);// Something happens here. What is it?
             
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0);// <= 0x13
+            res.WriteInt32(0);// <= 0x13
+            
+            res.WriteInt32(0);//
+            
             res.WriteInt16(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -577,9 +579,9 @@ recv_data_notify_npc_data = 0x2470, //double check this one.  It works, but i ca
             res.WriteInt32(0);
             res.WriteInt32(0);
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0);// <= 0x80
+            res.WriteInt32(0);//possible loop here. 
+            res.WriteInt32(0);//
 
 
 recv_chara_update_maxap = 0x2478, 
@@ -593,9 +595,9 @@ recv_data_notify_ggate_stone_data = 0x250E,
             res.WriteByte(0);//
             res.WriteCString("");//"0x5B"
             res.WriteCString("");//"0x5B"
-            res.WriteInt32(0);//
-            res.WriteInt32(0);//
-            res.WriteInt32(0);//
+	        res.WriteFloat(0);//X
+	        res.WriteFloat(0);//Y
+	        res.WriteFloat(0);//Z
             res.WriteByte(0);//
             res.WriteInt32(0);//
 
@@ -605,4 +607,9 @@ recv_data_notify_ggate_stone_data = 0x250E,
             res.WriteInt32(0);//
 
             res.WriteInt32(0);//
+			
+ecv_0x3A0E = 0x3A0E, 
+            
+            res.WriteInt32(0); //No String sub_00481CB0. leads to Error condition
+			
 			
