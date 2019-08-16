@@ -121,6 +121,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x4537 - proto_area_implement_client::recv_wanted_jail_payment_r
     /// 0x462E - proto_area_implement_client::recv_event_sync
     /// 0x465C - proto_area_implement_client::recv_quest_target_count_r
+    /////-----Xeno has completed everything above this comment. to 0x3A0E
     /// 0x488D (0x4883 + 0xA) --------------------------------------------------------------not an opcode??
     /// 0x4898 (0x488E + 0xA) proto_area_implement_client::recv_battle_report_notify_exp2
     /// 0x488E - proto_area_implement_client::recv_get_refusallist_r

@@ -612,4 +612,186 @@ ecv_0x3A0E = 0x3A0E,
             
             res.WriteInt32(0); //No String sub_00481CB0. leads to Error condition
 			
+recv_npc_state_update_notify = 0x3B77, 
+           
+ 
+            res.WriteInt32(0);
+            res.WriteInt32(0);	
+
+recv_self_skill_point_notify = 0x3B9F, 
+            
+            res.WriteInt32(0);
+			
+recv_help_new_data = 0x3C41, 
+            
+            res.WriteInt32(0);//<=0xA
+
+recv_union_request_growth_result = 0x3C68, 
+            
+            res.WriteInt32(0);
+
+recv_0x3C81 = 0x3C81, 
+            //No String - push wizardryonline_patched.4D6044
+            res.WriteInt32(0);
+ 
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+
+            res.WriteFloat(0);
+
+            res.WriteFloat(0);
+
+            res.WriteByte(0);
+			
+recv_data_get_self_chara_data_request_r = 0x3C89, 
+
+            //No Structure			
+
+recv_dbg_chara_equipped = 0x3D6C, 
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+                int numEntries = 0x2;
+                for (int i = 0; i < numEntries; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    
+                }
+
+                res.WriteByte(0);
+
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                    res.WriteByte(0);
+
+            res.WriteInt32(0);
+			
+recv_battle_report_action_fall = 0x3D9F, 
+
+            //No Structure
+
+recv_event_soul_storage_open = 0x3DD0, 
+
+            res.WriteInt64(0);
+
+recv_trade_notify_problem = 0x3E0B, 
+
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+recv_charabody_self_salvage_result = 0x3E7F, 
+
+            res.WriteInt32(0);
+
+recv_0x3F2F = 0x3F2F,
+
+			//Could not find.  Suspect it's part of a range.
+			
+recv_auction_bid_r = 0x3F38, 
+
+            res.WriteInt32(0);
+
+recv_self_inherit_skill_level_notify = 0x3F5B, 
+
+            res.WriteByte(0);
+
+recv_shortcut_request_deregist_r = 0x42B6, 
+
+            res.WriteInt32(0);
+
+recv_quest_display_r = 0x42B8, 
+
+            res.WriteInt32(0);
+
+recv_gem_break_cost_r = 0x42DE, 
+
+            res.WriteInt64(0);
+
+recv_event_select_exec_winpos = 0x4404, 
+
+            res.WriteCString(""); //Length 0xC01
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+recv_union_rename_open = 0x442A, 
+
+            res.WriteCString(""); //Length 0x31
+
+recv_item_update_maxdur = 0x443C, 
+
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+
+recv_union_storage_draw_money_r = 0x4440, 
+
+            res.WriteInt32(0);
+
+recv_wanted_jail_payment_r = 0x4537, 
+
+            res.WriteInt32(0);
+
+recv_event_sync = 0x462E, 
+
+			//No Structure
+			
+recv_quest_target_count_r = 0x465C, 
+
+            res.WriteInt32(0);			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+
+
+
+
+
+
 			
