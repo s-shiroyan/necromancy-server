@@ -78,7 +78,6 @@ namespace Necromancy.Server.Packet.Id
     /// 0x1F5A - proto_area_implement_client::recv_item_update_durability
     /// 0x1F73 - proto_area_implement_client::recv_shortcut_notify_deregist
     /// 0x201C (0x1F73 + 0xA9)  proto_area_implement_client::recv_data_notify_soulmaterialobject_data
-    /////-----Xeno has completed everything above this comment. targeting to 0x250E
     /// 0x2063 - proto_area_implement_client::recv_item_update_date_end_protect
     /// 0x213C - proto_area_implement_client::recv_item_update_date_end_protect
     /// 0x218A (0x213C + 0x4E) ret
@@ -93,6 +92,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x2470 - proto_area_implement_client::recv_data_notify_npc_data
     /// 0x2478 - proto_area_implement_client::recv_chara_update_maxap
     /// 0x250E (0x2478 + 0x96) proto_area_implement_client::recv_data_notify_ggate_stone_data
+    /////-----Xeno has completed everything above this comment.
     /////-----Hei started here and is working down.-- Completed to 0x2ba4.!-- Targeting to 0x39FD
     /// 0x2513 - proto_area_implement_client::recv_battle_report_notify_soul_point
     /// 0x2576 - proto_area_implement_client::recv_chara_update_mp
@@ -141,6 +141,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x3806 - proto_area_implement_client::recv_base_enter_r
     /// 0x394F - proto_area_implement_client::recv_event_soul_rankup_open
     /// 0x39FD - proto_area_implement_client::recv_battle_report_action_skill_start_cast
+    /////-----End of Hei's Block.  Xeno. will start here next-----------------
     /// 0x3A0E   ret
     /// 0x3B77 - proto_area_implement_client::recv_npc_state_update_notify
     /// 0x3B9F - proto_area_implement_client::recv_self_skill_point_notify
@@ -196,6 +197,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x5513   no string
     /// 0x551E - proto_area_implement_client::recv_item_equip_r
     /// 0x5527 (0x551E + 0x9) proto_area_implement_client::recv_monster_state_update_notify
+    /////-----Xeno. Block Stop
     /// 0x556E - proto_area_implement_client::recv_package_notify_add
     /// 0x570B - proto_area_implement_client::recv_cash_shop_get_url_web_goods_r
     /// 0x5842 - proto_area_implement_client::recv_door_open_r
