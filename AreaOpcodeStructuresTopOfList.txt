@@ -551,6 +551,37 @@ recv_shop_buy_r = 0x2467,
             
             res.WriteInt32(0);
 
+recv_data_notify_npc_data = 0x2470, //double check this one.  It works, but it shouldn't. i've missed something
+            
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteCString("");//"0x5B"
+            res.WriteCString("");//"0x5B"
+            res.WriteFloat(0); //X
+            res.WriteFloat(0); //Y
+            res.WriteFloat(0); //Z
+            res.WriteByte(0);
+            res.WriteInt32(0);// <= 0x13
+
+            res.WriteInt32(0);// Something happens here. What is it?
+            
+            res.WriteInt32(0);// <= 0x13
+            res.WriteInt32(0);// <= 0x13
+            
+            res.WriteInt32(0);//
+            
+            res.WriteInt16(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);// <= 0x80
+            res.WriteInt32(0);//possible loop here. 
+            res.WriteInt32(0);//
 
 
 recv_chara_update_maxap = 0x2478, 
@@ -722,117 +753,9 @@ recv_quest_target_count_r = 0x465C,
 
             res.WriteInt32(0);			
 			
-recv_0x488D = 0x488D,  //Not an opcode.  discard
 
 
 
-
-
-
-recv_blacklist_unlock_r = 0x2BAB, 
-
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-
-recv_item_use_r = 0x2BBF, 
-
-            res.WriteInt32(1);
-            res.WriteFloat(1);
-			
-recv_premium_service_notify_detach = 0x2C30, 
-
-            res.WriteInt32(1);
-
-recv_item_update_level = 0x2CAF, 
-
-            res.WriteInt64(1);
-            res.WriteByte(1);
-
-recv_chara_update_lv_detail_end = 0x2CB0, 
-
-			//No Structure
-			
-recv_cash_shop_buy_r = 0x2D6D, 
-
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-			
-recv_stall_set_item_price_r = 0x2DCE, 
-
-            res.WriteInt32(1);
-
-recv_auction_update_bid_item_state = 0x2E17, 
-
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-
-recv_thread_exit_r = 0x2F0E, 
-
-            res.WriteInt32(1);
-			
-recv_stall_notify_closed = 0x2FFF, 
-
-            res.WriteInt32(1);
-
-recv_party_invite_r = 0x300A, 
-
-            res.WriteInt32(1);
-
-recv_get_send_package = 0x30BE,
-
-			res.WriteInt32(0);
-			int numEntries = 0x1E;
-			res.WriteInt32(numEntries); //less than or equal to 0x1E
-			for(int i = 0; i < numEntries; i++)
-			{
-				res.WriteInt32(0);
-				res.WriteFixedString("", 0x31);
-				res.WriteFixedString("", 0x5B);
-				res.WriteFixedString("", 0x5B);
-				res.WriteFixedString("", 0x259);
-				res.WriteInt32(0);
-				res.WriteInt16(0);
-				res.WriteInt64(0);
-				res.WriteInt32(0);
-				res.WriteFixedString("", 0x49);
-				res.WriteFixedString("", 0x49);
-				res.WriteInt32(0);
-				res.WriteInt32(0);
-				res.WriteInt32(0);
-				res.WriteInt32(0);
-				res.WriteFixedString("", 0x10);
-				res.WriteByte(0);
-				res.WriteInt32(0);
-				res.WriteInt32(0);
-				for(int i = 0; i < 3; i++)
-				{
-					res.WriteByte(0);//bool
-					res.WriteInt32(0);
-					res.WriteInt32(0);
-					res.WriteInt32(0);
-				}
-				res.WriteInt64(0);
-}
-
-recv_blacklist_lock_r = 0x30FB, 
-
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            			
-recv_gem_set_synthesis_r = 0x316F, 
-
-            res.WriteInt32(1);
-
-recv_chara_update_weight = 0x3223, 
-
-            res.WriteInt32(1);
-
-recv_chara_update_job_attr_mp_cost_per = 0x322F, 
-
-            res.WriteInt32(1);
-            res.WriteInt16(1);			
 
 
 
