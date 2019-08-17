@@ -5,6 +5,53 @@ namespace Necromancy.Server.Packet.Id
     /// <summary>
     /// Necromancy Area Server OP Codes, starts at 0x00495B88
 
+    /// 0x2513 - proto_area_implement_client::recv_battle_report_notify_soul_point
+    /// 0x2576 - proto_area_implement_client::recv_chara_update_mp
+    /// 0x260E - proto_area_implement_client::recv_raisescale_view_close
+    /// 0x2631 - proto_area_implement_client::recv_soulmaterial_shop_notify_open
+    /// 0x266C - proto_area_implement_client::recv_quest_get_soul_mission_quest_works_r
+    /// 0x267B (0x266C + 0xF) proto_area_implement_client::recv_event_quest_order
+    /// 0x267D - proto_area_implement_client::recv_logout_cancel_request_r
+    /// 0x26B8 - proto_area_implement_client::recv_event_removetrap_release_rate_update
+    /// 0x2790 - proto_area_implement_client::recv_union_storage_move_item_r
+    /// 0x27D6 - proto_area_implement_client::recv_shortcut_request_regist_r
+    /// 0x2849 - proto_area_implement_client::recv_channel_notify
+    /// 0x287A   --------------------------------------------------------------not an opcode??
+    /// 0x28A0   no string
+    /// 0x28E7 - proto_area_implement_client::recv_chara_update_con
+    /// 0x29C5 (0x28E7 + 0xDE) ret
+    /// 0x2A3F - proto_area_implement_client::recv_skill_tree_lost
+    /// 0x2A82 - proto_area_implement_client::recv_battle_report_action_monster_skill_exec
+    /// 0x2AB0 (0x2A82 + 0x2E) proto_area_implement_client::recv_chara_update_mag_mp_cost_per
+    /// 0x2BA4 - proto_area_implement_client::recv_chara_update_ac
+    /// 0x2BAB - proto_area_implement_client::recv_blacklist_unlock_r
+    /// 0x2BBF - proto_area_implement_client::recv_item_use_r
+    /// 0x2C30 (0x2BBF + 0x71) proto_area_implement_client::recv_premium_service_notify_detach
+    /// 0x2CAF - proto_area_implement_client::recv_item_update_level
+    /// 0x2CB0 - proto_area_implement_client::recv_chara_update_lv_detail_end
+    /// 0x2D6D - proto_area_implement_client::recv_cash_shop_buy_r
+    /// 0x2DCE - proto_area_implement_client::recv_stall_set_item_price_r
+    /// 0x2E17 - proto_area_implement_client::recv_auction_update_bid_item_state
+    /// 0x2F0E - proto_area_implement_client::recv_thread_exit_r
+    /// 0x2FFF - proto_area_implement_client::recv_stall_notify_closed
+    /// 0x300A - proto_area_implement_client::recv_party_invite_r
+    /// 0x30BE - network::proto_area_implement_client::recv_get_send_package
+    /// 0x30FB (0x30BE + 0x3D) proto_area_implement_client::recv_blacklist_lock_r
+    /// 0x316F - proto_area_implement_client::recv_gem_set_synthesis_r
+    /// 0x3223 - proto_area_implement_client::recv_chara_update_weight
+    /// 0x322F - proto_area_implement_client::recv_chara_update_job_attr_mp_cost_per
+    /// 0x3247 - proto_area_implement_client::recv_item_update_state
+    /// 0x32ED (0x3247 + 0xA6)  proto_area_implement_client::recv_event_change_type
+    /// 0x32F7 - proto_area_implement_client::recv_event_select_push
+    /// 0x32FF - proto_area_implement_client::recv_quest_history
+    /// 0x3428 - proto_area_implement_client::recv_party_change_mode_r
+    /// 0x3544 - proto_area_implement_client::recv_npc_ggate_state_update_notify
+    /// 0x362D - proto_area_implement_client::recv_battle_report_noact_notify_buff_attach
+    /// 0x36A6 (0x362D + 0x79) proto_area_implement_client::recv_charabody_notify_spirit
+    /// 0x36DC - proto_area_implement_client::recv_gem_rebuild_info
+    /// 0x3806 - proto_area_implement_client::recv_base_enter_r
+    /// 0x394F - proto_area_implement_client::recv_event_soul_rankup_open
+    /// 0x39FD - proto_area_implement_client::recv_battle_report_action_skill_start_cast
     /////-----Xeno has completed everything above this comment. to 0x3A0E
     /// 0x488D (0x4883 + 0xA) --------------------------------------------------------------not an opcode??
     /// 0x4898 (0x488E + 0xA) proto_area_implement_client::recv_battle_report_notify_exp2
@@ -37,7 +84,7 @@ namespace Necromancy.Server.Packet.Id
     /// 0x551E - proto_area_implement_client::recv_item_equip_r
     /// 0x5527 (0x551E + 0x9) proto_area_implement_client::recv_monster_state_update_notify
     /////-----Xeno. Block Stop
- 
+
 
     /// Ranges: the opcodes are presented in order from top to bottom in the sense of the jmp operation before each group.
     /// 0xEFDD + 0x4E - 0x004CEC2C 5 opcodes (1 ret)
@@ -373,7 +420,7 @@ namespace Necromancy.Server.Packet.Id
         recv_data_get_self_chara_data_r = 0xD1BD,
         recv_data_notify_chara_data = 0xED4C,
         recv_map_get_info_r = 0xEDA6,
-        recv_base_check_version_r = 0x839A, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0x5527, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_map_entry_r = 0xF9F9,
         recv_shortcut_request_data_r = 0xA084,
         recv_sv_conf_option_request_r = 0x1DA,
