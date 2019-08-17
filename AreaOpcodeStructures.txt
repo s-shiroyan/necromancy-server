@@ -3478,3 +3478,223 @@ recv_chara_update_job_attr_mp_cost_per = 0x322F,
 recv_self_toggle_ability_notify = 0x4B94,
 
 	res.WriteInt64(1);
+	
+	
+recv_event_select_channel = 0x4992,
+
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt16(0);
+	res.WriteByte(0);
+	
+	int numEntries = 0x80;
+	for (int i = 0; i < numEntries; i++)
+	
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("ToBefound", 0x61);
+		res.WriteByte(0); // Bool
+		res.WriteInt16(0);
+		res.WriteInt16(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+	}
+	res.WriteByte(0);
+	
+
+recv_get_refusallist_r = 0x488E,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt32(0x32); //cmp to 0x32
+	
+	int numEntries = 0x32;
+	for (int i = 0; i < numEntries; i++)	
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("ToBeFound", 0x31);
+		
+	}
+	res.WriteInt32(0x32); //cmp to 0x32
+	
+	for (int i = 0; i < numEntries; i++)	
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("ToBeFound", 0x31);
+		
+	}
+
+	
+	
+recv_battle_report_notify_exp2 = 0x4898,
+
+	res.WriteInt32(0);
+	
+	res.WriteInt64(0);
+	
+	res.WriteInt32(0);
+	
+	
+recv_event_soul_rankup_open = 0x394F,
+
+	res.WriteInt32(0);
+    res.WriteByte(0);
+    res.WriteByte(0);
+	
+	
+recv_item_update_state = 0x3247, 
+
+	res.WriteInt64(1);
+    res.WriteInt32(1);
+	
+	
+recv_event_change_type = 0x32ED,
+
+	res.WriteInt32(1);
+	
+	
+recv_event_select_push = 0x32F7, 
+
+	res.WriteCString(""); //Length 0x601
+	
+	
+recv_party_change_mode_r = 0x3428, 
+
+	res.WriteInt32(1);
+	
+	
+recv_npc_ggate_state_update_notify = 0x3544, 
+
+	res.WriteInt32(1);
+    res.WriteInt32(1);
+	
+	
+recv_base_enter_r = 0x3806,
+
+	 res.WriteInt32(0);
+	 
+	
+recv_battle_report_noact_notify_buff_attach = 0x362D, 
+
+	res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+    res.WriteInt32(1);
+	
+	
+recv_charabody_notify_spirit = 0x36A6, 
+
+	 res.WriteInt32(1);
+     res.WriteByte(1);
+	 
+	 
+recv_quest_history = 0x32FF,
+
+ int numEntries = 0x1E;
+            res.WriteInt32(numEntries); //less than or equal to 0x1E
+            for(int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteFixedString("", 0x61);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x61);
+                res.WriteByte(0);
+                res.WriteByte(0);//bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for(int j = 0; j < 0xA; j++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("", 0x10);
+                    res.WriteInt16(0);
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                for(int k = 0; k < 0xC; k++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("", 0x10);
+                    res.WriteInt16(0);
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                res.WriteFixedString("", 0x181);
+            }
+            res.WriteInt32(0);
+
+			
+recv_battle_report_action_skill_start_cast = 0x39FD,
+
+	res.WriteInt32(0);
+	
+	
+recv_gem_rebuild_info = 0x36DC, 
+
+	int numEntries = 0x10;
+    res.WriteInt32(numEntries); //less than or equal to 0x1E
+    for(int i = 0; i < numEntries; i++)
+    {
+        res.WriteByte(1);
+    }
+
+            res.WriteInt64(1);
+			
+			
+recv_chara_update_mag_mp_cost_per = 0x2AB0,
+
+	res.WriteInt16(0);
+	
+
+recv_event_quest_order = 0x267B,
+int numEntries = 0x1E;
+	res.WriteInt32(numEntries); //less than or equal to 0x1E
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteFixedString("", 0x61);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x61);
+		res.WriteByte(0);//bool
+		res.WriteByte(0);//bool
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		
+		for(int j = 0; j < 0xA; j++)
+		{
+			res.WriteInt32(0);
+			res.WriteFixedString("", 0x10);
+			res.WriteInt16(0);
+			res.WriteInt32(0);
+		}
+		res.WriteByte(0);
+		for(int k = 0; k < 0xC; k++)
+		{
+			res.WriteInt32(0);
+			res.WriteFixedString("", 0x10);
+			res.WriteInt16(0);
+			res.WriteInt32(0);
+		}
+		res.WriteByte(0);
+		
+		res.WriteFixedString("", 0x181);
+		res.WriteFixedString("", 0x181);
+		for(int l = 0; l < 0x5; l++)
+		{
+			res.WriteByte(0);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
+		}
+		res.WriteByte(0);
+	}
+	

@@ -21,11 +21,54 @@ namespace Necromancy.Server.Packet.Area
             Logger.Info($"{major} - {minor}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(unknown);
-            res.WriteInt32(major);
-            res.WriteInt32(minor);
 
+            int numEntries = 0x1E;
+            res.WriteInt32(numEntries); //less than or equal to 0x1E
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteFixedString("", 0x61);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x61);
+                res.WriteByte(0);//bool
+                res.WriteByte(0);//bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                for (int j = 0; j < 0xA; j++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("", 0x10);
+                    res.WriteInt16(0);
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                for (int k = 0; k < 0xC; k++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("", 0x10);
+                    res.WriteInt16(0);
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+
+                res.WriteFixedString("", 0x181);
+                res.WriteFixedString("", 0x181);
+                for (int l = 0; l < 0x5; l++)
+                {
+                    res.WriteByte(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+            }
+           
             Router.Send(client, (ushort) AreaPacketId.recv_base_check_version_r, res);
         }
     }
