@@ -2316,7 +2316,7 @@ recv_job_change_notify_exe = 0x88AE,
 		res.WriteInt32(0);
 	}
 	
-	
+
 recv_forge_notify_execute_result = 0x88A1,
 
 	res.WriteInt32(0);
@@ -2410,7 +2410,7 @@ recv_party_notify_cancel_party_recruit = 0x839A,
 
 	res.WriteInt32(0);
 	
-	
+//check here	
 recv_skill_tree_gain = 0x8395,
 
 	res.WriteInt32(skillID);
@@ -2428,7 +2428,7 @@ recv_premium_service_notify_attach2 = 0x8299,
 	res.WriteByte(0); //Bool
 	
 	
-0x825D = 0x825D,
+recv_0x825D = 0x825D,
 
 	no structure
 	
@@ -2438,7 +2438,7 @@ recv_event_script_play = 0x8091,
 	res.WriteCString("ToBeFound"); // find max size 
 	
 	
-0x8066 = 0x8066,
+recv_0x8066 = 0x8066,
 
 	no structure
 	
@@ -2532,7 +2532,7 @@ recv_party_change_leader_r = 0x7BB3,
 	res.WriteInt32(0);
 	
 	
-0x7B86 = 0x7B86,
+recv_0x7B86 = 0x7B86,
 
 	res.WriteInt32(0);
 	res.WriteByte(0);
@@ -2585,7 +2585,7 @@ recv_door_close_r = 0x772A,
 	res.WriteInt32(0);
 	
 	
-0x7697 = 0x7697,
+recv_0x7697 = 0x7697,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
@@ -2602,13 +2602,13 @@ recv_party_notify_remove_draw_item = 0x7576,
 	res.WriteInt64(0);
 	
 	
-0x755C = 0x755C,
+recv_0x755C = 0x755C,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
 	
 	
-0x746F = 0x746F,
+recv_0x746F = 0x746F,
 
 	res.WriteInt32(0);
 	res.WriteFloat(0);
@@ -2685,7 +2685,7 @@ recv_quest_get_story_quest_works_r = 0x73A1,
     res.WriteFloat(1);
 			
 			
-0x735E = 0x735E,
+recv_0x735E = 0x735E,
 
 	res.WriteInt32(0);
 	
@@ -2807,7 +2807,7 @@ recv_chara_update_maxmp = 0x6B74,
 	res.WriteInt32(0);
 	
 	
-0x6B6A = 0x6B6A,
+recv_0x6B6A = 0x6B6A,
 
 	res.WriteInt32(0);
 	res.WriteFloat(0);//X
@@ -2848,7 +2848,7 @@ recv_thread_enter_r = 0x692B,
 	}
 	
 	
-0x692A = 0x692A,
+recv_0x692A = 0x692A,
 
 	res.WriteInt32(0);
 	res.WriteInt32(0);
