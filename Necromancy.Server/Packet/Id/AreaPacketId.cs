@@ -289,7 +289,7 @@ namespace Necromancy.Server.Packet.Id
         recv_auction_update_bid_num = 0x9BC6,
         recv_auction_update_exhibit_item_state = 0x5307,
         recv_auction_update_highest_bid = 0xBD99,
-        recv_base_check_version_r = 0x267B, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
         recv_base_enter_r = 0x3806,
         recv_base_exit_r = 0xDA5C,
         recv_base_ping_r = 0xD2D6,
