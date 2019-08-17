@@ -335,7 +335,7 @@ recv_job_change_select_bonuspoint_r = 0x1837,
             res.WriteByte(0);
             res.WriteByte(0);
 
-		recv_gem_notify_close = 0x18CC, 
+recv_gem_notify_close = 0x18CC, 
 
 			//No Structure
 			
@@ -608,7 +608,7 @@ recv_data_notify_ggate_stone_data = 0x250E,
 
             res.WriteInt32(0);//
 			
-ecv_0x3A0E = 0x3A0E, 
+recv_0x3A0E = 0x3A0E, 
             
             res.WriteInt32(0); //No String sub_00481CB0. leads to Error condition
 			
