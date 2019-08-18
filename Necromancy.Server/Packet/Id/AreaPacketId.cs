@@ -75,7 +75,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
     ///                 recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
     /// 
-    /// 0xD400 + 0x3F - 0x004C7645 4 opcodes
+    /// 0xD400 + 0x3F - 0x004C7645 4 opcodes [Complete]
     ///                 
     ///                 recv_event_removetrap_skill_r2 = 0xD400, // Parent = 0xD400 // Range ID = 00 
     ///                 recv_battle_report_action_eq_break = 0xD426, // Parent = 0xD400 // Range ID = 01
@@ -83,7 +83,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_self_soul_toggle_ability_notify = 0xD43F, // Parent = 0xD400 // Range ID = 03
     ///                 
     /// 
-    /// 0xCB94 + 0xA3 - 0x004C5085 5 opcodes
+    /// 0xCB94 + 0xA3 - 0x004C5085 5 opcodes [Complete]
     /// 
     ///                 recv_trade_notify_interface_status = 0xCB94, // Parent = 0xCB94 // Range ID = 00 
     ///                 recv_chara_update_ability = 0xCBA2, // Parent = 0xCB94 // Range ID = 01
@@ -92,7 +92,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_event_message_no_object = 0xCC37, // Parent = 0xCB94 // Range ID = 04
     ///                           
     /// 
-    /// 0xCF29 + 0x29 - 0x004C5F8E 4 opcodes (1 ret)
+    /// 0xCF29 + 0x29 - 0x004C5F8E 4 opcodes (1 ret) [Complete]
     /// 
     ///                 recv_0xCF29 = 0xCF29, // Parent = 0xCF29 // Range ID = 00 
     ///                 recv_object_region_disappear_update_notify = 0xCF2A, // Parent = 0xCF29 // Range ID = 01
@@ -100,7 +100,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_echo_r = 0xCF52, // Parent = 0xCF29 // Range ID = 03
     ///                 
     /// 
-    /// 0xD04A + 0xE9 - 0x004C6663 4 opcodes
+    /// 0xD04A + 0xE9 - 0x004C6663 4 opcodes [Complete]
     /// 
     ///                 recv_0xD04A = 0xD04A, // Parent = 0xD04A // Range ID = 00 
     ///                 recv_escape_exec = 0xD0B7, // Parent = 0xD04A // Range ID = 01
@@ -108,7 +108,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_chara_update_hp = 0xD133, // Parent = 0xD04A // Range ID = 03
     ///                 
     /// 
-    /// 0xA7E8 + 0xD3 - 0x004BB352 5 opcodes (1 ret)
+    /// 0xA7E8 + 0xD3 - 0x004BB352 5 opcodes (1 ret) [Complete]
     /// 
     ///                 recv_chara_notify_map_fragment = 0xA7E8, // Parent = 0xA7E8 // Range ID = 00 
     ///                 recv_dbg_battle_charge_end_notify = 0xA84F, // Parent = 0xA7E8 // Range ID = 01
@@ -117,7 +117,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_0xA8BB = 0xA8BB, // Parent = 0xA7E8 // Range ID = 04
     /// 
     /// 
-    /// 0xC0D8 + 0xD7 - 0x004C21A0 4 opcodes
+    /// 0xC0D8 + 0xD7 - 0x004C21A0 4 opcodes  [Complete]
     /// 
     ///                 recv_help_new_remove_r = 0xC0D8, // Parent = 0xC0D8 // Range ID = 00 
     ///                 recv_quest_chapter_updated = 0xC119, // Parent = 0xC0D8 // Range ID = 01
@@ -125,7 +125,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_wanted_list_close_r = 0xC1AF, // Parent = 0xC0D8 // Range ID = 03
     ///                 
     /// 
-    /// 0xC206 + 0x46 - 0x004C2984 4 opcodes
+    /// 0xC206 + 0x46 - 0x004C2984 4 opcodes [Complete]
     /// 
     ///                 recv_gem_notify_open = 0xC206, // Parent = 0xC206 // Range ID = 00 
     ///                 recv_charabody_self_raisescale_end = 0xC22F, // Parent = 0xC206 // Range ID = 01
@@ -133,7 +133,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_shop_sell_surrogate_r = 0xC24C, // Parent = 0xC206 // Range ID = 03
     ///                 
     ///                 
-    /// 0xC003 + 0x75 - 0x004C1A1E 4 opcodes
+    /// 0xC003 + 0x75 - 0x004C1A1E 4 opcodes [Complete]
     /// 
     ///                 recv_chat_notify_message = 0xC003, // Parent = 0xC003 // Range ID = 00 
     ///                 recv_0xC055 = 0xC055, // Parent = 0xC003 // Range ID = 01
@@ -141,15 +141,15 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_0xC078 = 0xC078, // Parent = 0xC003 // Range ID = 03
     ///                  
     /// 
-    /// 0xBA71 + 0xF4 - 0x004C02F0 4 opcodes
+    /// 0xBA71 + 0xF4 - 0x004C02F0 4 opcodes [Complete]
     /// 
-    ///                 0xBB65 (0xBA71 + 0xF4) recv_event_union_storage_close_r = 0xBA71, // Parent = 0xBA71 // Range ID = 00  
-    ///                 0xBA89 recv_gamepot_web_notify_open = 0xBA73, // Parent = 0xBA71 // Range ID = 01
-    ///                 0xBA73 recv_cpf_authenticate = 0xBA89, // Parent = 0xBA71 // Range ID = 02
-    ///                 0xBA71 recv_auction_notify_open	= 0xBB65, // Parent = 0xBA71 // Range ID = 03
+    ///                 recv_event_union_storage_close_r = 0xBA71, // Parent = 0xBA71 // Range ID = 00  
+    ///                 recv_gamepot_web_notify_open = 0xBA73, // Parent = 0xBA71 // Range ID = 01
+    ///                 recv_cpf_authenticate = 0xBA89, // Parent = 0xBA71 // Range ID = 02
+    ///                 recv_auction_notify_open	= 0xBB65, // Parent = 0xBA71 // Range ID = 03
     ///                 
     /// 
-    /// 0xAF7F + 0xB8 - 0x004BD4CC 5 opcodes
+    /// 0xAF7F + 0xB8 - 0x004BD4CC 5 opcodes [Complete]
     /// 
     ///                 recv_chara_update_notify_crime_lv = 0xAF7F, // Parent = 0xAF7F // Range ID = 00
     ///                 recv_wanted_update_state_actor_notify = 0xAFD1, // Parent = 0xAF7F // Range ID = 01
@@ -161,7 +161,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_report_notify_hit_effect_name = 0xB037, // Parent = 0xAF7F // Range ID = 04
     ///                 
     ///                 
-    /// 0xB1CA + 0xC8 - 0x004BE4A3 4 opcodes
+    /// 0xB1CA + 0xC8 - 0x004BE4A3 4 opcodes [Complete]
     /// 
     ///                 recv_auction_receive_item_r = 0xB1CA, // Parent = 0xB1CA // Range ID = 00
     ///                 recv_stall_set_name_r = 0xB212, // Parent = 0xB1CA // Range ID = 01
@@ -177,7 +177,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_report_action_attack_exec = 0xB3F7, // Parent = 0xB371 // Range ID = 03
     ///                 
     /// 
-    /// 0xB0E5 + 0x2A - 0x004BDD95 4 opcodes
+    /// 0xB0E5 + 0x2A - 0x004BDD95 4 opcodes [Hei WIP]
     ///                 
     ///                 recv_event_removetrap_ident_trap_update = 0xB0E5, // Parent = 0xB0E5 // Range ID = 00
     ///                 recv_party_cancel_member_recruit_r = 0xB0FC, // Parent = 0xB0E5 // Range ID = 01
@@ -413,7 +413,7 @@ namespace Necromancy.Server.Packet.Id
 
     public enum AreaPacketId : ushort
     {
-        recv_base_check_version_r = 0x1052, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
         recv_0x10DA = 0x10DA,
