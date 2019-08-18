@@ -53,17 +53,23 @@ namespace Necromancy.Server.Packet.Id
     ///                 proto_area_implement_client::recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
     /// 
     /// 0xD400 + 0x3F - 0x004C7645 4 opcodes
-    ///                 proto_area_implement_client::recv_battle_report_action_eq_break
-    ///                 proto_area_implement_client::recv_storage_draw_item2_r
+    ///                 proto_area_implement_client::recv_self_soul_toggle_ability_notify   03(actually 0xD400 + 0x3F)
+    ///                 proto_area_implement_client::recv_event_removetrap_skill_r2         00(actually 0xD400)
+    ///                 proto_area_implement_client::recv_battle_report_action_eq_break     01(actually 0xD400 + 0x26)
+    ///                 proto_area_implement_client::recv_storage_draw_item2_r              02(actually 0xD400 + 0x3D)
     /// 
     /// 0xCB94 + 0xA3 - 0x004C5085 5 opcodes
-    ///                 proto_area_implement_client::recv_charabody_notify_deadstate
-    ///                 proto_area_implement_client::recv_chara_update_ability
-    ///                 proto_area_implement_client::recv_message_board_notify_close
+    ///                 proto_area_implement_client::recv_charabody_notify_deadstate    03(actually 0xCB94 + 0xA2)
+    ///                 proto_area_implement_client::recv_chara_update_ability          01(actually 0xCB94 + 0xE)
+    ///                 proto_area_implement_client::recv_event_message_no_object       04(actually 0xCB94 + 0xA3)
+    ///                 proto_area_implement_client::recv_trade_notify_interface_status 00(actually 0xCB94)
+    ///                 proto_area_implement_client::recv_message_board_notify_close    02(actually 0xCB94 + 0x29)
     /// 
     /// 0xCF29 + 0x29 - 0x004C5F8E 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_object_region_disappear_update_notify
-    ///                 proto_area_implement_client::recv_dbg_battle_charge_start_notify
+    ///                 proto_area_implement_client::recv_echo_r                                    03(actually 0xCF29 + 0x29)
+    ///                 proto_area_implement_client::recv_object_region_disappear_update_notify     01(actually 0xCF29 + 0x1)
+    ///                 ret                                                                         00(actually 0xCF29)
+    ///                 proto_area_implement_client::recv_dbg_battle_charge_start_notify            02(actually 0xCF29 + 0x2)
     /// 
     /// 0xD04A + 0xE9 - 0x004C6663 4 opcodes
     ///                 proto_area_implement_client::recv_chara_update_atk_magic_attr
