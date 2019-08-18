@@ -7,296 +7,363 @@ namespace Necromancy.Server.Packet.Id
 
     /// Ranges: the opcodes are presented in order from top to bottom in the sense of the jmp operation before each group.
     /// 0xEFDD + 0x4E - 0x004CEC2C 5 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_base_check_version_r                      00(actually 0xEFDD)
-    ///                 proto_area_implement_client::recv_chara_update_job_attr_skill_cooltime_per  01(actually 0xEFDD + 0x6)
-    ///                 proto_area_implement_client::recv_charabody_access_start_r                  02(actually 0xEFDD + 0x10)
+    ///                 recv_base_check_version_r                      00(actually 0xEFDD)
+    ///                 recv_chara_update_job_attr_skill_cooltime_per  01(actually 0xEFDD + 0x6)
+    ///                 recv_charabody_access_start_r                  02(actually 0xEFDD + 0x10)
     ///                 ret                                                                         03(actually 0xEFDD + 0x47)
-    ///                 proto_area_implement_client::recv_random_box_get_item_all_r                 04(actually 0xEFDD + 0x4E)
+    ///                 recv_random_box_get_item_all_r                 04(actually 0xEFDD + 0x4E)
     /// 
     /// 0xFF00 + 0xD6 - 0x004D13C3 4 opcodes
-    ///                 proto_area_implement_client::recv_quest_hint_othermap               00(actually 0xFF00)
-    ///                 proto_area_implement_client::recv_help_new_add()\n                  01(actually 0xFF00 + 0x3F)
-    ///                 proto_area_implement_client::recv_object_hp_per_update_notify()     03(actually 0xFF00 + 0xD6)
-    ///                 proto_area_implement_client::recv_charabody_notify_loot_start2      02(actually 0xFF00 + 0xD2)
+    ///                 recv_quest_hint_othermap               00(actually 0xFF00)
+    ///                 recv_help_new_add()\n                  01(actually 0xFF00 + 0x3F)
+    ///                 recv_object_hp_per_update_notify()     03(actually 0xFF00 + 0xD6)
+    ///                 recv_charabody_notify_loot_start2      02(actually 0xFF00 + 0xD2)
     ///                 
     /// 0xFCF3 + 0x85 - 0x004D042D 4 opcodes
-    ///                 proto_area_implement_client::recv_chara_update_mag_cast_time_per    03(actually 0xFCF3 + 0x85)
-    ///                 proto_area_implement_client::recv_wanted_update_reward_point()\n    02(actually 0xFCF3 + 0x61)
-    ///                 proto_area_implement_client::recv_premium_service_update_time()     01(actually 0xFCF3 + 0x4E)
-    ///                 proto_area_implement_client::recv_battle_report_notify_damage_mp    00(actually 0xFCF3)
+    ///                 recv_chara_update_mag_cast_time_per    03(actually 0xFCF3 + 0x85)
+    ///                 recv_wanted_update_reward_point()\n    02(actually 0xFCF3 + 0x61)
+    ///                 recv_premium_service_update_time()     01(actually 0xFCF3 + 0x4E)
+    ///                 recv_battle_report_notify_damage_mp    00(actually 0xFCF3)
     /// 
     /// 0xE897 + 0xF9 - 0x004CC897 5 opcodes (2 ret)
-    ///                 proto_area_implement_client::recv_eo_update_end_trapid                      02(actually 0xE897 + 0x28)
+    ///                 recv_eo_update_end_trapid                      02(actually 0xE897 + 0x28)
     ///                 ret                                                                         01(actually 0xE897 + 0x22)
-    ///                 proto_area_implement_client::recv_battle_release_attack_pose_r              04(actually 0xE897 + 0xF9)
+    ///                 recv_battle_release_attack_pose_r              04(actually 0xE897 + 0xF9)
     ///                 ret                                                                         03(actually 0xE897 + 0xEC)
-    ///                 proto_area_implement_client::recv_battle_report_action_skill_failed         05(actually 0xE897)
+    ///                 recv_battle_report_action_skill_failed         05(actually 0xE897)
     /// 
     /// 0xEDB3 + 0x65 - 0x004CDE73 4 opcodes (2 ret)
-    ///                 proto_area_implement_client::recv_data_notify_eo_data2      00(actually 0xEDB3)
+    ///                 recv_data_notify_eo_data2      00(actually 0xEDB3)
     ///                 ret                                                         03(actually 0xEDB3 + 0x65)
-    ///                 proto_area_implement_client::recv_trade_revert_r            01(actually 0xEDB3 + 0x6)
+    ///                 recv_trade_revert_r            01(actually 0xEDB3 + 0x6)
     ///                 ret                                                         02(actually 0xEDB3 + 0x34)
     /// 
     /// 0xEEB7 + 0xD6 - 0x004CE472 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_object_point_move_notify      01(actually 0xEEB7 + 0x39) 0xEEF0
+    ///                 recv_object_point_move_notify      01(actually 0xEEB7 + 0x39) 0xEEF0
     ///                 ret                                                             00(actually 0xEEB7)
-    ///                 proto_area_implement_client::recv_raisescale_remove_item_r      03(actually 0xEEB7 + 0xD6)
-    ///                 proto_area_implement_client::recv_revive_init_r                 02(actually 0xEEB7 + 0x97)
+    ///                 recv_raisescale_remove_item_r      03(actually 0xEEB7 + 0xD6)
+    ///                 recv_revive_init_r                 02(actually 0xEEB7 + 0x97)
     /// 
     /// 0xE7BB + 0x2C - 0x004CC261 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_shop_message_init                 01(actually 0xE7BB + 0x5)
+    ///                 recv_shop_message_init                 01(actually 0xE7BB + 0x5)
     ///                 ret                                                                 02(actually 0xE7BB + 0x14)
-    ///                 proto_area_implement_client::recv_wanted_jail_open() draw_money     00(actually 0xE7BB)
-    ///                 proto_area_implement_client::recv_union_rename_close_r              03(actually 0xE7BB + 0x2C)
+    ///                 recv_wanted_jail_open() draw_money     00(actually 0xE7BB)
+    ///                 recv_union_rename_close_r              03(actually 0xE7BB + 0x2C)
     /// 
     /// 0xE07E + 0xCD - 0x004CB292 4 opcodes
-    ///                 proto_area_implement_client::recv_map_update_bgm        03(actually 0xE07E + 0xCD)
-    ///                 proto_area_implement_client::recv_minimap_notify        02(actually 0xE07E + 0x57)
-    ///                 proto_area_implement_client::recv_event_quest_report    00(actually 0xE07E)
-    ///                 proto_area_implement_client::recv_union_mantle_open     01(actually 0xE07E + 0x28)
+    ///                 recv_map_update_bgm        03(actually 0xE07E + 0xCD)
+    ///                 recv_minimap_notify        02(actually 0xE07E + 0x57)
+    ///                 recv_event_quest_report    00(actually 0xE07E)
+    ///                 recv_union_mantle_open     01(actually 0xE07E + 0x28)
     /// 
     /// 0xD68C + 0xC6 - 0x004C8EE5 5 opcodes
-    ///         0xD690? proto_area_implement_client::recv_battle_attack_start_r             04(actually 0xD68C + 0xC6)
-    ///         0xD68E? proto_area_implement_client::recv_item_update_place_change          02(actually 0xD68C + 0x1C)
-    ///         0xD68C? proto_area_implement_client::recv_escape_start                      00(actually 0xD68C)
-    ///         0xD68D? proto_area_implement_client::recv_gem_set_piece_r                   01(actually 0xD68C + 0x18)
-    ///         0xD691? proto_area_implement_client::recv_wanted_jail_update_draw_point     03(actually 0xD68C + 0x64)
+    ///         0xD690? recv_battle_attack_start_r             04(actually 0xD68C + 0xC6)
+    ///         0xD68E? recv_item_update_place_change          02(actually 0xD68C + 0x1C)
+    ///         0xD68C? recv_escape_start                      00(actually 0xD68C)
+    ///         0xD68D? recv_gem_set_piece_r                   01(actually 0xD68C + 0x18)
+    ///         0xD691? recv_wanted_jail_update_draw_point     03(actually 0xD68C + 0x64)
     /// 
     /// 0xD493 + 0xE7 - 0x004C7D1F 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_skill_cast_cancel                 02(actually 0xD493 + 0xCA)
+    ///                 recv_skill_cast_cancel                 02(actually 0xD493 + 0xCA)
     ///                 ret                                                                 00(actually 0xD493)
-    ///                 proto_area_implement_client::recv_shop_sell_r                       01(actually 0xD493 + 0x65)
-    ///                 proto_area_implement_client::recv_battle_report_action_item_use     03(actually 0xD493+ 0xE7)
+    ///                 recv_shop_sell_r                       01(actually 0xD493 + 0x65)
+    ///                 recv_battle_report_action_item_use     03(actually 0xD493+ 0xE7)
     /// 
     /// 0xD5B5 + 0xC8 - 0x004C86F2 4 opcodes
-    ///                 proto_area_implement_client::recv_charabody_notify_party_join           03(actually 0xD68C + 0xC8)
-    ///                 proto_area_implement_client::recv_chara_update_lv_detail2               00(actually 0xD68C)
-    ///                 proto_area_implement_client::recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
-    ///                 proto_area_implement_client::recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
+    ///                 recv_charabody_notify_party_join           03(actually 0xD68C + 0xC8)
+    ///                 recv_chara_update_lv_detail2               00(actually 0xD68C)
+    ///                 recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
+    ///                 recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
     /// 
     /// 0xD400 + 0x3F - 0x004C7645 4 opcodes
-    ///                 proto_area_implement_client::recv_self_soul_toggle_ability_notify   03(actually 0xD400 + 0x3F)
-    ///                 proto_area_implement_client::recv_event_removetrap_skill_r2         00(actually 0xD400)
-    ///                 proto_area_implement_client::recv_battle_report_action_eq_break     01(actually 0xD400 + 0x26)
-    ///                 proto_area_implement_client::recv_storage_draw_item2_r              02(actually 0xD400 + 0x3D)
+    ///                 
+    ///                 recv_event_removetrap_skill_r2 = 0xD400, // Parent = 0xD400 // Range ID = 00 
+    ///                 recv_battle_report_action_eq_break = 0xD426, // Parent = 0xD400 // Range ID = 01
+    ///                 recv_storage_draw_item2_r = 0xD43D, // Parent = 0xD400 // Range ID = 02
+    ///                 recv_self_soul_toggle_ability_notify = 0xD43F, // Parent = 0xD400 // Range ID = 03
+    ///                 
     /// 
     /// 0xCB94 + 0xA3 - 0x004C5085 5 opcodes
-    ///                 proto_area_implement_client::recv_charabody_notify_deadstate    03(actually 0xCB94 + 0xA2)
-    ///                 proto_area_implement_client::recv_chara_update_ability          01(actually 0xCB94 + 0xE)
-    ///                 proto_area_implement_client::recv_event_message_no_object       04(actually 0xCB94 + 0xA3)
-    ///                 proto_area_implement_client::recv_trade_notify_interface_status 00(actually 0xCB94)
-    ///                 proto_area_implement_client::recv_message_board_notify_close    02(actually 0xCB94 + 0x29)
+    /// 
+    ///                 recv_trade_notify_interface_status = 0xCB94, // Parent = 0xCB94 // Range ID = 00 
+    ///                 recv_chara_update_ability = 0xCBA2, // Parent = 0xCB94 // Range ID = 01
+    ///                 recv_message_board_notify_close = 0xCBBD, // Parent = 0xCB94 // Range ID = 02
+    ///                 recv_charabody_notify_deadstate = 0xCC36, // Parent = 0xCB94 // Range ID = 03
+    ///                 recv_event_message_no_object = 0xCC37, // Parent = 0xCB94 // Range ID = 04
+    ///                           
     /// 
     /// 0xCF29 + 0x29 - 0x004C5F8E 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_echo_r                                    03(actually 0xCF29 + 0x29)
-    ///                 proto_area_implement_client::recv_object_region_disappear_update_notify     01(actually 0xCF29 + 0x1)
-    ///                 ret                                                                         00(actually 0xCF29)
-    ///                 proto_area_implement_client::recv_dbg_battle_charge_start_notify            02(actually 0xCF29 + 0x2)
+    /// 
+    ///                 recv_0xCF29 = 0xCF29, // Parent = 0xCF29 // Range ID = 00 
+    ///                 recv_object_region_disappear_update_notify = 0xCF2A, // Parent = 0xCF29 // Range ID = 01
+    ///                 recv_dbg_battle_charge_start_notify = 0xCF2B, // Parent = 0xCF29 // Range ID = 02
+    ///                 recv_echo_r = 0xCF52, // Parent = 0xCF29 // Range ID = 03
+    ///                 
     /// 
     /// 0xD04A + 0xE9 - 0x004C6663 4 opcodes
-    ///                 no string														00(actually 0xD04A)
-    ///                 proto_area_implement_client::recv_chara_update_hp				03(actually 0xD04A + 0xE9)
-    ///                 proto_area_implement_client::recv_chara_update_atk_magic_attr	02(actually 0xD04A + 0x71)
-    ///                 proto_area_implement_client::recv_escape_exec					01(actually 0xD04A + 0x6D)
+    /// 
+    ///                 recv_0xD04A = 0xD04A, // Parent = 0xD04A // Range ID = 00 
+    ///                 recv_escape_exec = 0xD0B7, // Parent = 0xD04A // Range ID = 01
+    ///                 recv_chara_update_atk_magic_attr = 0xD0BB, // Parent = 0xD04A // Range ID = 02
+    ///                 recv_chara_update_hp = 0xD133, // Parent = 0xD04A // Range ID = 03
+    ///                 
     /// 
     /// 0xA7E8 + 0xD3 - 0x004BB352 5 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_chara_notify_map_fragment			00(actually 0xA7E8)
-    ///                 proto_area_implement_client::recv_chara_update_maxweight			02(actually 0xA7E8 + 0x8B)
-    ///                 proto_area_implement_client::recv_charabody_salvage_notify_salvager	03(actually 0xA7E8 + 0xB8)
-    ///                 proto_area_implement_client::recv_dbg_battle_charge_end_notify		01(actually 0xA7E8 + 0x67)
-    ///                 ret																	04(actually 0xA7E8 + 0xD3)
+    /// 
+    ///                 recv_chara_notify_map_fragment = 0xA7E8, // Parent = 0xA7E8 // Range ID = 00 
+    ///                 recv_dbg_battle_charge_end_notify = 0xA84F, // Parent = 0xA7E8 // Range ID = 01
+    ///                 recv_chara_update_maxweight = 0xA873, // Parent = 0xA7E8 // Range ID = 02
+    ///                 recv_charabody_salvage_notify_salvager = 0xA8A0, // Parent = 0xA7E8 // Range ID = 03 
+    ///                 recv_0xA8BB = 0xA8BB, // Parent = 0xA7E8 // Range ID = 04
+    /// 
     /// 
     /// 0xC0D8 + 0xD7 - 0x004C21A0 4 opcodes
-    ///                 proto_area_implement_client::recv_eo_notify_disappear_schedule	02(actually 0xC0D8 + 0x9F)
-    ///                 proto_area_implement_client::recv_quest_chapter_updated			01(actually 0xC0D8 + 0x41)
-    ///                 proto_area_implement_client::recv_help_new_remove_r				00(actually 0xC0D8)
-    ///                 proto_area_implement_client::recv_wanted_list_close_r			03(actually 0xC0D8 + 0xD7)
     /// 
-    /// 0xC026 + 0x46 - 0x004C2984 4 opcodes
-    ///                 proto_area_implement_client::recv_charabody_self_raisescale_end		01(actually 0xC026 + 0x29)
-    ///                 proto_area_implement_client::recv_shop_sell_surrogate_r				03(actually 0xC026 + 0x46)
-    ///                 proto_area_implement_client::recv_gem_notify_open					00(actually 0xC026)
-    ///                 proto_area_implement_client::recv_battle_report_notify_action_bonus	02(actually 0xC026 + 0x2F)
+    ///                 recv_help_new_remove_r = 0xC0D8, // Parent = 0xC0D8 // Range ID = 00 
+    ///                 recv_quest_chapter_updated = 0xC119, // Parent = 0xC0D8 // Range ID = 01
+    ///                 recv_eo_notify_disappear_schedule = 0xC177, // Parent = 0xC0D8 // Range ID = 02
+    ///                 recv_wanted_list_close_r = 0xC1AF, // Parent = 0xC0D8 // Range ID = 03
+    ///                 
     /// 
+    /// 0xC206 + 0x46 - 0x004C2984 4 opcodes
+    /// 
+    ///                 recv_gem_notify_open = 0xC206, // Parent = 0xC206 // Range ID = 00 
+    ///                 recv_charabody_self_raisescale_end = 0xC22F, // Parent = 0xC206 // Range ID = 01
+    ///                 recv_battle_report_notify_action_bonus = 0xC235, // Parent = 0xC206 // Range ID = 02
+    ///                 recv_shop_sell_surrogate_r = 0xC24C, // Parent = 0xC206 // Range ID = 03
+    ///                 
+    ///                 
     /// 0xC003 + 0x75 - 0x004C1A1E 4 opcodes
-    ///                 ret or other													03(actually 0xC003 + 0x75)
-    ///                 proto_area_implement_client::recv_chara_update_def_magic_attr	02(actually 0xC003 + 0x64)
-    ///                 ret or other													01(actually 0xC003 + 0x52)
-    ///                 proto_area_implement_client::recv_chat_notify_message			00(actually 0xC003)
+    /// 
+    ///                 recv_chat_notify_message = 0xC003, // Parent = 0xC003 // Range ID = 00 
+    ///                 recv_0xC055 = 0xC055, // Parent = 0xC003 // Range ID = 01
+    ///                 recv_chara_update_def_magic_attr = 0xC067, // Parent = 0xC003 // Range ID = 02
+    ///                 recv_0xC078 = 0xC078, // Parent = 0xC003 // Range ID = 03
+    ///                  
     /// 
     /// 0xBA71 + 0xF4 - 0x004C02F0 4 opcodes
-    ///                 0xBA71 proto_area_implement_client::recv_auction_notify_open							03(actually 0xBA71 + 0xF4)
-    ///                 0xBA73 proto_area_implement_client::recv_cpf_authenticate								02(actually 0xBA71 + 0x18)
-    ///                 0xBA89 proto_area_implement_client::recv_gamepot_web_notify_open						01(actually 0xBA71 + 0x2)
-    ///                 0xBB65 (0xBA71 + 0xF4) proto_area_implement_client::recv_event_union_storage_close_r	00(actually 0xBA71)
+    /// 
+    ///                 0xBB65 (0xBA71 + 0xF4) recv_event_union_storage_close_r = 0xBA71, // Parent = 0xBA71 // Range ID = 00  
+    ///                 0xBA89 recv_gamepot_web_notify_open = 0xBA73, // Parent = 0xBA71 // Range ID = 01
+    ///                 0xBA73 recv_cpf_authenticate = 0xBA89, // Parent = 0xBA71 // Range ID = 02
+    ///                 0xBA71 recv_auction_notify_open	= 0xBB65, // Parent = 0xBA71 // Range ID = 03
+    ///                 
     /// 
     /// 0xAF7F + 0xB8 - 0x004BD4CC 5 opcodes
-    ///                 proto_area_implement_client::recv_chara_update_notify_crime_lv			00(actually 0xAF7F)
-    ///                 proto_area_implement_client::recv_quest_ended							03(actually 0xAF7F + 0xAD)
-    ///                     (proto_area_implement_client::send_quest_get_mission_quest_history,
-    ///                     proto_area_implement_client::send_quest_get_story_quest_history,
-    ///                     proto_area_implement_client::send_quest_get_soul_mission_quest_history happen after the above recv)
-    ///                 proto_area_implement_client::recv_battle_report_notify_hit_effect_name	04(actually 0xAF7F + 0xB8)
-    ///                 proto_area_implement_client::recv_comment_switch_r 0xB01B				02(actually 0xAF7F + 0xA6)
-    ///                 proto_area_implement_client::recv_wanted_update_state_actor_notify		01(actually 0xAF7F + 0x52)
     /// 
+    ///                 recv_chara_update_notify_crime_lv = 0xAF7F, // Parent = 0xAF7F // Range ID = 00
+    ///                 recv_wanted_update_state_actor_notify = 0xAFD1, // Parent = 0xAF7F // Range ID = 01
+    ///                 recv_comment_switch_r = 0xB025, // Parent = 0xAF7F // Range ID = 02
+    ///                 recv_quest_ended = 0xB02C, // Parent = 0xAF7F // Range ID = 03
+    ///                     send_quest_get_mission_quest_history,
+    ///                     send_quest_get_story_quest_history,
+    ///                     send_quest_get_soul_mission_quest_history happen after the above recv
+    ///                 recv_battle_report_notify_hit_effect_name = 0xB037, // Parent = 0xAF7F // Range ID = 04
+    ///                 
+    ///                 
     /// 0xB1CA + 0xC8 - 0x004BE4A3 4 opcodes
-    ///                 proto_area_implement_client::recv_event_removetrap_begin	03(actually 0xB1CA + 0xC8)
-    ///                 proto_area_implement_client::recv_buff_shop_notify_item		02(actually 0xB1CA + 0x82)
-    ///                 proto_area_implement_client::recv_stall_set_name_r			01(actually 0xB1CA + 0x48)
-    ///                 proto_area_implement_client::recv_auction_receive_item_r	00(actually 0xB1CA)
+    /// 
+    ///                 recv_auction_receive_item_r = 0xB1CA, // Parent = 0xB1CA // Range ID = 00
+    ///                 recv_stall_set_name_r = 0xB212, // Parent = 0xB1CA // Range ID = 01
+    ///                 recv_buff_shop_notify_item = 0xB24C, // Parent = 0xB1CA // Range ID = 02
+    ///                 recv_event_removetrap_begin = 0xB292, // Parent = 0xB1CA // Range ID = 03
+    ///                 
     /// 
     /// 0xB371 + 0x86 - 0x004BEB5D 4 opcodes (not 0xB317)
-    ///                 proto_area_implement_client::recv_charabody_notify_crime_lv			02(actually 0xB371 + 0x69)
-    ///                 proto_area_implement_client::recv_item_update_place					00(actually 0xB371)
-    ///                 proto_area_implement_client::recv_battle_report_action_attack_exec	03(actually 0xB371 + 0x86)
-    ///                 proto_area_implement_client::recv_auction_exhibit_r					01(actually 0xB371 + 0x1C)
+    ///                 
+    ///                 recv_item_update_place = 0xB371, // Parent = 0xB371 // Range ID = 00
+    ///                 recv_auction_exhibit_r = 0xB38D, // Parent = 0xB371 // Range ID = 01
+    ///                 recv_charabody_notify_crime_lv = 0xB3DA, // Parent = 0xB371 // Range ID = 02
+    ///                 recv_battle_report_action_attack_exec = 0xB3F7, // Parent = 0xB371 // Range ID = 03
+    ///                 
     /// 
     /// 0xB0E5 + 0x2A - 0x004BDD95 4 opcodes
-    ///                 proto_area_implement_client::recv_chara_update_lv						02(actually 0xB0E5 + 0x1D)
-    ///                 proto_area_implement_client::recv_event_removetrap_ident_trap_update	00(actually 0xB0E5)
-    ///                 proto_area_implement_client::recv_party_cancel_member_recruit_r			01(actually 0xB0E5 + 0x17)
-    ///                 proto_area_implement_client::recv_union_request_disband_result			03(actually 0xB0E5 + 0x2A)
+    ///                 
+    ///                 recv_event_removetrap_ident_trap_update = 0xB0E5, // Parent = 0xB0E5 // Range ID = 00
+    ///                 recv_party_cancel_member_recruit_r = 0xB0FC, // Parent = 0xB0E5 // Range ID = 01
+    ///                 recv_chara_update_lv = 0xB102, // Parent = 0xB0E5 // Range ID = 02
+    ///                 recv_union_request_disband_result = 0xB10F, // Parent = 0xB0E5 // Range ID = 03
+    /// 
     /// 
     /// 0xA0E3 + 0xAA - 0x004B98BB 5 opcodes
-    ///                 proto_area_implement_client::recv_self_money_notify					03(actually 0xA0E3 + 0x63)
-    ///                 proto_area_implement_client::recv_chara_notify_union_data			00(actually 0xA0E3)
-    ///                 proto_area_implement_client::recv_raisescale_request_revive_r		01(actually 0xA0E3 + 0x17)
-    ///                 proto_area_implement_client::recv_cash_shop_get_url_common_steam_r	04(actually 0xA0E3 + 0xAA)
-    ///                 proto_area_implement_client::recv_auction_cancel_bid_r				02(actually 0xA0E3 + 0x19)
+    ///                 
+    ///                 recv_chara_notify_union_data = 0xA0E3, // Parent = 0xA0E3 // Range ID = 00
+    ///                 recv_raisescale_request_revive_r = 0xA0FA, // Parent = 0xA0E3 // Range ID = 01
+    ///                 recv_auction_cancel_bid_r = 0xA0FC, // Parent = 0xA0E3 // Range ID = 02
+    ///                 recv_self_money_notify = 0xA146, // Parent = 0xA0E3 // Range ID = 03
+    ///                 recv_cash_shop_get_url_common_steam_r = 0xA18D, // Parent = 0xA0E3 // Range ID = 04
+    ///                 
     /// 
     /// 0xA508 + 0x41 - 0x004BA68E 4 opcodes
-    ///                 proto_area_implement_client::recv_skill_request_base_from_item_r	01(actually 0xA508 + 0x18)
-    ///                 proto_area_implement_client::recv_skill_custom_notify_close			02(actually 0xA508 + 0x40)
-    ///                 proto_area_implement_client::recv_raisescale_update_success_per		00(actually 0xA508)
-    ///                 proto_area_implement_client::recv_auction_re_exhibit_r				03(actually 0xA508 + 0x41)
+    /// 
+    ///                 recv_raisescale_update_success_per = 0xA508, // Parent = 0xA508 // Range ID = 00
+    ///                 recv_skill_request_base_from_item_r = 0xA520, // Parent = 0xA508 // Range ID = 01
+    ///                 recv_skill_custom_notify_close = 0xA548, // Parent = 0xA508 // Range ID = 02 
+    ///                 recv_auction_re_exhibit_r = 0xA549, // Parent = 0xA508 // Range ID = 03
+    ///                 
     /// 
     /// 0xA611 + 0xE7 - 0x004BAC6C 4 opcodes
-    ///                 proto_area_implement_client::recv_item_update_physics		00(actually 0xA611)
-    ///                 proto_area_implement_client::recv_event_removetrap_close	02(actually 0xA611 + 0x32)
-    ///                 proto_area_implement_client::recv_skill_cooltime_notify		03(actually 0xA611 + 0xE7)
-    ///                 proto_area_implement_client::recv_blacklist_update			01(actually 0xA611 + 0x29)
+    /// 
+    ///                 recv_item_update_physics = 0xA611, // Parent = 0xA611 // Range ID = 00
+    ///                 recv_blacklist_update = 0xA63A, // Parent = 0xA611 // Range ID = 01
+    ///                 recv_event_removetrap_close = 0xA643, // Parent = 0xA611 // Range ID = 02
+    ///                 recv_skill_cooltime_notify = 0xA6F8, // Parent = 0xA611 // Range ID = 03
+    ///                 
     /// 
     /// 0x9F70 + 0x95 - 0x004B9266 4 opcodes
-    ///                 proto_area_implement_client::recv_chara_notify_party_leave		00(actually 0x9F70)
-    ///                 proto_area_implement_client::recv_battle_attack_pose_self		01(actually 0x9F70 + 0x4)
-    ///                 proto_area_implement_client::recv_cash_shop_get_current_cash_r	03(actually 0x9F70 + 0x95)
-    ///                 proto_area_implement_client::recv_party_notify_recruit_request	02(actually 0x9F70 + 0x1F)
-    ///                 (proto_area_implement_client::send_party_regist_party_recruit follows the last one instantly, results in a disconnect)
+    /// 
+    ///                 recv_chara_notify_party_leave = 0x9F70, // Parent = 0x9F70 // Range ID = 00
+    ///                 recv_battle_attack_pose_self =  0x9F74, // Parent = 0x9F70 // Range ID = 01
+    ///                 recv_party_notify_recruit_request = 0x9F8F, // Parent = 0x9F70 // Range ID = 02 // after -> send_party_regist_party_recruit
+    ///                 recv_cash_shop_get_current_cash_r = 0xA005, // Parent = 0x9F70 // Range ID = 03
+    ///                 
     /// 
     /// 0x8CC6 + 0xCC - 0x004B483D has 5 opcodes (2 ret?)
-    ///                 proto_area_implement_client::recv_charabody_notify_loot_item	01(actually 0x8CC6 + 0x18)
-    ///                 ret or other													04(actually 0x8CC6 + 0xCC)
-    ///                 ret																02(actually 0x8CC6 + 0x9C)
-    ///                 proto_area_implement_client::recv_escape_cancel					00(actually 0x8CC6)
-    ///                 proto_area_implement_client::recv_thread_entry_message			03(actually 0x8CC6 + 0xAE)
+    /// 
+    ///                 recv_escape_cancel = 0x8CC6, // Parent = 0x8CC6 // Range ID = 00
+    ///                 recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
+    ///                 recv_0x8D62 = 0x8D62, // Parent = 0x8CC6 // Range ID = 02
+    ///                 recv_thread_entry_message = 0x8D74, // Parent = 0x8CC6 // Range ID = 03
+    ///                 recv_0x8D92 = 0x8D92, // Parent = 0x8CC6 // Range ID = 04
+    ///                 
     /// 
     /// 0x8066 + 0x2B - 0x004B1728 has 5 opcodes (1 ret?)
-    ///                 proto_area_implement_client::recv_data_notify_eo_data				02(actually 0x8066 + 0xF)
-    ///                 no string/ret?														00(actually 0x8066)
-    ///                 proto_area_implement_client::recv_chara_update_notify_comment		01(actually 0x8066 + 0xC)
-    ///                 proto_area_implement_client::recv_event_script_play					04(actually 0x8066 + 0x2B)
-    ///                 proto_area_implement_client::recv_soulmaterial_shop_notify_item		03(actually 0x8066 + 0x25)
+    ///                 
+    ///                 recv_0x8066 = 0x8066, // Parent = 0x8066 // Range ID = 00
+    ///                 recv_chara_update_notify_comment = 0x8072, // Parent = 0x8066 // Range ID = 01
+    ///                 recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+    ///                 recv_soulmaterial_shop_notify_item = 0x808B, // Parent = 0x8066 // Range ID = 03
+    ///                 recv_event_script_play = 0x8091, // Parent = 0x8066 // Range ID = 04
+    ///                 
     /// 
     /// 0x8487 + 0xC2 - 0x004B2631 has 4 opcodes (2 ret)
-    ///                 proto_area_implement_client::recv_item_update_weight	01(actually 0x8487 + 0x4)
-    ///                 ret														03(actually 0x8487 + 0xC2)
-    ///                 ret														00(actually 0x8487)
-    ///                 proto_area_implement_client::recv_temple_cure_curse_r	02(actually 0x8487 + 0x84)
+    /// 
+    ///                 recv_0x8487 = 0x8487, // Parent = 0x8487 // Range ID = 00
+    ///                 recv_item_update_weight = 0x848B, // Parent = 0x8487 // Range ID = 01
+    ///                 recv_temple_cure_curse_r = 0x850B, // Parent = 0x8487 // Range ID = 02
+    ///                 recv_0x8549 = 0x8549, // Parent = 0x8487 // Range ID = 03
     ///
     /// 0x85C6 + 0xDF - 0x004B2C99 4 opcodes
-    ///                 proto_area_implement_client::recv_soulmaterial_shop_buy_r			03(actually 0x85C6 + 0xDF)
-    ///                 proto_area_implement_client::recv_stall_shopping_notify_aborted		02(actually 0x85C6 + 0x9B)
-    ///                 proto_area_implement_client::recv_party_entry_draw_r				01(actually 0x85C6 + 0x24)
-    ///                 proto_area_implement_client::recv_temple_notify_open				00(actually 0x85C6)
-    /// 
+    ///                 
+    ///                 recv_temple_notify_open	= 0x85C6, // Parent = 0x85C6 // Range ID = 00
+    ///                 recv_party_entry_draw_r	= 0x85EA, // Parent = 0x85C6 // Range ID = 01
+    ///                 recv_stall_shopping_notify_aborted = 0x8661, // Parent = 0x85C6 // Range ID = 02
+    ///                 recv_soulmaterial_shop_buy_r = 0x86A5, // Parent = 0x85C6 // Range ID = 03
+    ///                 
+    ///                 
     /// 0x8299 + 0xFC - 0x004B1EE6 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_skill_tree_gain                   03(actually 0x8299 + 0xFC)
-    ///                 proto_area_implement_client::recv_premium_service_notify_attach2    00(actually 0x8299)
-    ///                 proto_area_implement_client::recv_buff_shop_buy_r                   01(actually 0x8299 + 0x8C)
-    ///                 ret                                                                 02(actually 0x8299 + 0xCB)
+    ///                 
+    ///                 recv_premium_service_notify_attach2 = 0x8299, // Parent = 0x8299 // Range ID = 00
+    ///                 recv_buff_shop_buy_r = 0x8325, // Parent = 0x8299 // Range ID = 01
+    ///                 recv_0x8364 = 0x8364, // Parent = 0x8299 // Range ID = 02
+    ///                 recv_skill_tree_gain = 0x8395, // Parent = 0x8299 // Range ID = 03
+    ///                 
     /// 
     /// 0x7D1C +  0xF - 0x004B09BA 4 opcodes
-    ///                 proto_area_implement_client::recv_data_notify_maplink				02(actually 0x7D1C + 0x9)
-    ///                 proto_area_implement_client::recv_event_union_storage_update_money	01(actually 0x7D1C + 0x5)
-    ///                 proto_area_implement_client::recv_charabody_salvage_notify_body		00(actually 0x7D1C)
-    ///                 proto_area_implement_client::recv_auction_notify_close				03(actually 0x7D1C + 0xF)
+    ///                 
+    ///                 recv_charabody_salvage_notify_body = 0x7D1C, // Parent = 0x7D1C // Range ID = 00
+    ///                 recv_event_union_storage_update_money = 0x7D21, // Parent = 0x7D1C // Range ID = 01
+    ///                 recv_data_notify_maplink = 0x7D25, // Parent = 0x7D1C // Range ID = 02
+    ///                 recv_auction_notify_close = 0x7D2B, // Parent = 0x7D1C // Range ID = 03
+    ///                 
     /// 
     /// 0x73D1 + 0x9E - 0x004AEEA5 4 opcodes
-    ///                 ret														03(actually 0x73D1 + 0x9E)
-    ///                 proto_area_implement_client::recv_self_buff_notify		00(actually 0x73D1)
-    ///                 proto_area_implement_client::recv_wanted_jail_close_r	02(actually 0x73D1 + 0x71)
-    ///                 proto_area_implement_client::recv_cpf_notify_error		01(actually 0x73D1 + 0x6)
+    ///                 
+    ///                 recv_self_buff_notify = 0x73D1, // Parent = 0x73D1 // Range ID = 00 
+    ///                 recv_cpf_notify_error = 0x73D7, // Parent = 0x73D1 // Range ID = 01
+    ///                 recv_wanted_jail_close_r = 0x7442, // Parent = 0x73D1 // Range ID = 02
+    ///                 recv_0x746F = 0x746F, // Parent = 0x73D1 // Range ID = 03
+    ///                 
     /// 
     /// 0x65A6 + 0x48 - 0x004AB883 4 opcodes
-    ///                 proto_area_implement_client::recv_chara_update_maxac						00(actually 0x65A6)
-    ///                 proto_area_implement_client::recv_gem_cancel_synthesis_r					02(actually 0x65A6 + 0x37)
-    ///                 proto_area_implement_client::recv_battle_report_notify_raise				01(actually 0x65A6 + 0x2F)
-    ///                 proto_area_implement_client::recv_battle_report_noact_notify_buff_move		03(actually 0x65A6 + 0x48)
+    /// 
+    ///                 recv_chara_update_maxac = 0x65A6, // Parent = 0x65A6 // Range ID = 00                 
+    ///                 recv_battle_report_notify_raise	= 0x65D5, // Parent = 0x65A6 // Range ID = 01
+    ///                 recv_gem_cancel_synthesis_r = 0x65DD, // Parent = 0x65A6 // Range ID = 02
+    ///                 recv_battle_report_noact_notify_buff_move = 0x65EE, // Parent = 0x65A6 // Range ID = 03
+    ///                 
     /// 
     /// 0x5D52 + 0xF6 - 0x004A9C48 4 opcodes
-    ///                 proto_area_implement_client::recv_chara_target_move_side_speed_per	01(actually 0x5D52 + 0x65)
-    ///                 proto_area_implement_client::recv_battle_attack_pose_r				02(actually 0x5D52 + 0x99)
-    ///                 proto_area_implement_client::recv_battle_guard_end_self				03(actually 0x5D52 + 0xF6)
-    ///                 proto_area_implement_client::recv_forge_sp_check_r					00(actually 0x5D52)
+    /// 
+    ///                 recv_forge_sp_check_r = 0x5D52, // Parent = 0x5D52 // Range ID = 00
+    ///                 recv_chara_target_move_side_speed_per = 0x5DB7, // Parent = 0x5D52 // Range ID = 01
+    ///                 recv_battle_attack_pose_r = 0x5DEB, // Parent = 0x5D52 // Range ID = 02
+    ///                 recv_battle_guard_end_self = 0x5E48, // Parent = 0x5D52 // Range ID = 03
+    ///                 
     /// 
     /// 0x5243 + 0xC4 - 0x004A7ED1 4 opocdes
-    ///                 proto_area_implement_client::recv_object_ac_rank_update_notify			00(actually 0x5243)
-    ///                 proto_area_implement_client::recv_shop_notify_open						02(actually 0x5243 + 0xBA)
-    ///                 proto_area_implement_client::recv_trade_add_item_r						01(actually 0x5243 + 0x86)
-    ///                 proto_area_implement_client::recv_auction_update_exhibit_item_state		03(actually 0x5243 + 0xC4)
-    ///
-    /// 0x4E17 + 0x76 - 0x004A732D 4 opcodes
-    ///                 proto_area_implement_client::recv_shop_close_r						01(actually 0x4E17 + 0x45)
-    ///                 proto_area_implement_client::recv_shop_sell_check_r					03(actually 0x4E17 + 0x76)
-    ///                 proto_area_implement_client::recv_gem_synthesis_r					02(actually 0x4E17 + 0x64)
-    ///                 proto_area_implement_client::recv_party_regist_party_recruit_r		00(actually 0x4E17)
     /// 
+    ///                 recv_object_ac_rank_update_notify = 0x5243, // Parent = 0x5243 // Range ID = 00
+    ///                 recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
+    ///                 recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+    ///                 recv_auction_update_exhibit_item_state = 0x5307, // Parent = 0x5243 // Range ID = 03
+    ///
+    /// 
+    /// 0x4E17 + 0x76 - 0x004A732D 4 opcodes
+    /// 
+    ///                 recv_party_regist_party_recruit_r = 0x4E17, // Parent = 0x4E17 // Range ID = 00
+    ///                 recv_shop_close_r = 0x4E5C, // Parent = 0x4E17 // Range ID = 01
+    ///                 recv_gem_synthesis_r = 0x4E7B, // Parent = 0x4E17 // Range ID = 02
+    ///                 recv_shop_sell_check_r = 0x4E8D, // Parent = 0x4E17 // Range ID = 03
+    ///                 
+    ///                  
     /// 0x1F73 + 0xA9 - 0x0049CF7A 5 opcodes (1 no result?)
-    ///                 proto_area_implement_client::recv_data_notify_soulmaterialobject_data	04(actually 0x1F73 + 0xA9)
-    ///                 not sure what string this is/no result									01(actually 0x1F73 + 0x4E)
-    ///                 proto_area_implement_client::recv_gem_cancel_support_item_r				03(actually 0x1F73 + 0x7B)
-    ///                 proto_area_implement_client::recv_shortcut_notify_deregist				00(actually 0x1F73)
-    ///                 proto_area_implement_client::recv_job_change_notify_open				02(actually 0x1F73 + 0x71)
+    /// 
+    ///                 recv_shortcut_notify_deregist = 0x1F73, // Parent = 0x1F73 // Range ID = 00
+    ///                 recv_0x1FC1 = 0x1FC1, // Parent = 0x1F73 // Range ID = 01
+    ///                 recv_job_change_notify_open = 0x1FE4, // Parent = 0x1F73 // Range ID = 02
+    ///                 recv_gem_cancel_support_item_r = 0x1FEE, // Parent = 0x1F73 // Range ID = 03
+    ///                 recv_data_notify_soulmaterialobject_data = 0x201C, // Parent = 0x1F73 // Range ID = 04
+    ///                 
     /// 
     /// 0x3B9F + 0xA2 - 0x004A40E1 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_self_skill_point_notify	00(actually 0x3B9F)
-    ///                 proto_area_implement_client::recv_item_update_eqmask		01(actually 0x3B9F + 0x34)
-    ///                 proto_area_implement_client::recv_help_new_data				03(actually 0x3B9F + 0xA2)
-    ///                 ret															02(actually 0x3B9F + 0x80)
+    /// 
+    ///                 recv_self_skill_point_notify = 0x3B9F, // Parent = 0x3B9F // Range ID = 00
+    ///                 recv_item_update_eqmask = 0x3BD3, // Parent = 0x3B9F // Range ID = 01
+    ///                 recv_0x3C1F = 0x3C1F, // Parent = 0x3B9F // Range ID = 02
+    ///                 recv_help_new_data = 0x3C41, // Parent = 0x3B9F // Range ID = 03
+    ///                 
     /// 
     /// 0x3247 + 0xA6 - 0x004A29D7 4 opcodes
-    ///                 proto_area_implement_client::recv_item_update_state				00(actually 0x3247)
-    ///                 proto_area_implement_client::recv_event_change_type				03(actually 0x3247 + 0xA6)
-    ///                 proto_area_implement_client::recv_gem_set_r						02(actually 0x3247 + 0x86)
-    ///                 proto_area_implement_client::recv_party_accept_to_invite_r		01(actually 0x3247 + 0x67)
     /// 
+    ///                 recv_item_update_state = 0x3247, // Parent = 0x3247 // Range ID = 00
+    ///                 recv_party_accept_to_invite_r = 0x32AE, // Parent = 0x3247 // Range ID = 01
+    ///                 recv_gem_set_r = 0x32CD, // Parent = 0x3247 // Range ID = 02
+    ///                 recv_event_change_type = 0x32ED, // Parent = 0x3247 // Range ID = 03
+    ///                 
+    ///                 
     /// 0x28E7 + 0xDE - 0x004A064B 4 opcodes (1 ret)
-    ///                 proto_area_implement_client::recv_eo_update_state	01(actually 0x28E7 + 0x16)
-    ///                 proto_area_implement_client::recv_chara_update_con	00(actually 0x28E7)
-    ///                 proto_area_implement_client::recv_shop_repair_r		02(actually 0x28E7 + 0xC8)
-    ///                 ret													03(actually 0x28E7 + 0xDE)
+    /// 
+    ///                 recv_chara_update_con = 0x28E7, // Parent = 0x28E7 // Range ID = 00
+    ///                 recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
+    ///                 recv_shop_repair_r = 0x29AF, // Parent = 0x28E7 // Range ID = 02
+    ///                 recv_0x29C5 = 0x29C5, // Parent = 0x28E7 // Range ID = 03
+    /// 
     /// 
     /// 0x2478 + 0x96 - 0x0049EE79 4 opcodes
-    ///                 proto_area_implement_client::recv_data_notify_ggate_stone_data      03(actually 0x2478 + 0x96)
-    ///                 proto_area_implement_client::recv_chara_update_maxap                00(actually 0x2478)
-    ///                 proto_area_implement_client::recv_chara_update_form                 01(actually 0x2478 + 0x1)
-    ///                 proto_area_implement_client::recv_create_send_pacakge_info          02(actually 0x2478 + 0x19)
+    ///                 	
+    ///                 recv_chara_update_maxap = 0x2478, // Parent = 0x2478 // Range ID = 00	
+    ///                 recv_chara_update_form = 0x2479, // Parent = 0x2478 // Range ID = 01	
+    ///                 recv_create_send_pacakge_info = 0x2491, // Parent = 0x2478 // Range ID = 02	
+    ///                 recv_data_notify_ggate_stone_data = 0x250E, // Parent = 0x2478 // Range ID = 03
+    ///                 
     /// 
     /// 0x18CC + 0xF7 - 0x0049B302 5 opcodes
-    ///                 recv_stall_deregist_item_r								02(actually 0x18CC + 0xA2)
-    ///                 recv_gem_notify_close									00(actually 0x18CC)
-    ///                 recv_battle_report_action_monster_skill_start_cast		01(actually 0x18CC + 0x8D)
-    ///                 recv_battle_report_noact_notify_buff_detach			03(actually 0x18CC + 0xE0)
-    ///                 recv_battle_report_noact_notify_buff_update_time		04(actually 0x18CC + 0xF7)
+    ///                 
+    ///                 recv_gem_notify_close = 0x18CC, // Parent = 0x18CC // Range ID = 00	
+    ///                 recv_battle_report_action_monster_skill_start_cast = 0x1959, // Parent = 0x18CC // Range ID = 01
+    ///                 recv_stall_deregist_item_r = 0x196E, // Parent = 0x18CC // Range ID = 02	
+    ///                 recv_battle_report_noact_notify_buff_detach	= 0x19AC, // Parent = 0x18CC // Range ID = 03
+    ///                 recv_battle_report_noact_notify_buff_update_time = 0x19C3, // Parent = 0x18CC // Range ID = 04
+    ///                 
     /// 
     /// 0x1E65 + 0xCD - 0x0049C989 4 opcodes
     /// 
     ///                 recv_charabody_self_warpdragon_penalty = 0x1E65, // Parent = 0x1E65 // Range ID = 00
     ///                 recv_blacklist_clear_r = 0x1E6B, // Parent = 0x1E65 // Range ID = 01
     ///                 recv_battle_guard_start_self = 0x1E96, // Parent = 0x1E65 // Range ID = 02
-    ///                 recv_souleater_touch_notify = 0x1F32, // Parent = 0x1E65 // Range ID = 03             
+    ///                 recv_souleater_touch_notify = 0x1F32, // Parent = 0x1E65 // Range ID = 03         
+    ///                 
     /// 
     /// 0x8CD  + 0xD0 - 0x004979DC 5 opcodes (1 ret)
     /// 
