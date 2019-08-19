@@ -74,7 +74,10 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_chara_update_lv_detail2               00(actually 0xD68C)
     ///                 recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
     ///                 recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
-    /// 
+    ///
+    
+    /// ~~~~~~~~~~~~~~~~STRINGS THAT ARE ABOVE THIS POINT HAVE NOT BEEN CALCULATED OR VERIFIED~~~~~~~~~ 
+    /// ~~~~~~~~~~~~~~~~Xeno started here, working down
     /// 0xD400 + 0x3F - 0x004C7645 4 opcodes [Complete]
     ///                 
     ///                 recv_event_removetrap_skill_r2 = 0xD400, // Parent = 0xD400 // Range ID = 00 
@@ -177,7 +180,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_report_action_attack_exec = 0xB3F7, // Parent = 0xB371 // Range ID = 03
     ///                 
     /// 
-    /// 0xB0E5 + 0x2A - 0x004BDD95 4 opcodes [Hei WIP]
+    /// 0xB0E5 + 0x2A - 0x004BDD95 4 opcodes [Complete]
     ///                 
     ///                 recv_event_removetrap_ident_trap_update = 0xB0E5, // Parent = 0xB0E5 // Range ID = 00
     ///                 recv_party_cancel_member_recruit_r = 0xB0FC, // Parent = 0xB0E5 // Range ID = 01
@@ -185,7 +188,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_union_request_disband_result = 0xB10F, // Parent = 0xB0E5 // Range ID = 03
     /// 
     /// 
-    /// 0xA0E3 + 0xAA - 0x004B98BB 5 opcodes
+    /// 0xA0E3 + 0xAA - 0x004B98BB 5 opcodes  [Complete]
     ///                 
     ///                 recv_chara_notify_union_data = 0xA0E3, // Parent = 0xA0E3 // Range ID = 00
     ///                 recv_raisescale_request_revive_r = 0xA0FA, // Parent = 0xA0E3 // Range ID = 01
@@ -194,7 +197,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_cash_shop_get_url_common_steam_r = 0xA18D, // Parent = 0xA0E3 // Range ID = 04
     ///                 
     /// 
-    /// 0xA508 + 0x41 - 0x004BA68E 4 opcodes
+    /// 0xA508 + 0x41 - 0x004BA68E 4 opcodes  [Complete]
     /// 
     ///                 recv_raisescale_update_success_per = 0xA508, // Parent = 0xA508 // Range ID = 00
     ///                 recv_skill_request_base_from_item_r = 0xA520, // Parent = 0xA508 // Range ID = 01
@@ -202,7 +205,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_auction_re_exhibit_r = 0xA549, // Parent = 0xA508 // Range ID = 03
     ///                 
     /// 
-    /// 0xA611 + 0xE7 - 0x004BAC6C 4 opcodes
+    /// 0xA611 + 0xE7 - 0x004BAC6C 4 opcodes  [Complete]
     /// 
     ///                 recv_item_update_physics = 0xA611, // Parent = 0xA611 // Range ID = 00
     ///                 recv_blacklist_update = 0xA63A, // Parent = 0xA611 // Range ID = 01
@@ -210,7 +213,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_skill_cooltime_notify = 0xA6F8, // Parent = 0xA611 // Range ID = 03
     ///                 
     /// 
-    /// 0x9F70 + 0x95 - 0x004B9266 4 opcodes
+    /// 0x9F70 + 0x95 - 0x004B9266 4 opcodes  [Complete]
     /// 
     ///                 recv_chara_notify_party_leave = 0x9F70, // Parent = 0x9F70 // Range ID = 00
     ///                 recv_battle_attack_pose_self =  0x9F74, // Parent = 0x9F70 // Range ID = 01
@@ -218,7 +221,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_cash_shop_get_current_cash_r = 0xA005, // Parent = 0x9F70 // Range ID = 03
     ///                 
     /// 
-    /// 0x8CC6 + 0xCC - 0x004B483D has 5 opcodes (2 ret?)
+    /// 0x8CC6 + 0xCC - 0x004B483D has 5 opcodes (2 ret?)  [Complete]
     /// 
     ///                 recv_escape_cancel = 0x8CC6, // Parent = 0x8CC6 // Range ID = 00
     ///                 recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
@@ -283,7 +286,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_report_noact_notify_buff_move = 0x65EE, // Parent = 0x65A6 // Range ID = 03
     ///                 
     /// 
-    /// 0x5D52 + 0xF6 - 0x004A9C48 4 opcodes
+    /// 0x5D52 + 0xF6 - 0x004A9C48 4 opcodes  [Hei Work in progress]
     /// 
     ///                 recv_forge_sp_check_r = 0x5D52, // Parent = 0x5D52 // Range ID = 00
     ///                 recv_chara_target_move_side_speed_per = 0x5DB7, // Parent = 0x5D52 // Range ID = 01
