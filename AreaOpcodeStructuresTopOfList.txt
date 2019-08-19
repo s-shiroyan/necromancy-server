@@ -1,3 +1,198 @@
+
+						
+recv_soul_dispitem_request_data_r = 0xD6D4,   
+     
+						res.WriteInt32(0);
+						
+recv_battle_report_noact_notify_heal_ac 0xD6DE,
+
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+						
+
+recv_skill_cast_cancel = 0xD55D,
+
+						//no structure
+	
+	
+recv_shop_sell_r = 0xD4F8,
+
+						res.WriteInt32(0);
+	
+
+						
+						
+
+	
+recv_item_update_place_change = 0xD6A8,
+
+				res.WriteInt64(0);
+				res.WriteByte(0);
+				res.WriteByte(0);
+				res.WriteInt16(0);
+				res.WriteInt64(0);
+				res.WriteByte(0);
+				res.WriteByte(0);
+				res.WriteInt16(0);
+	
+
+	
+recv_gem_set_piece_r = 0xD6A4,
+
+				res.WriteInt32(0);
+	
+recv_wanted_jail_update_draw_point = 0xD6F0,
+
+				res.WriteInt32(0);
+	
+	
+
+	
+recv_minimap_notify = 0xE0D5,
+
+						res.WriteInt32(0);
+	
+
+	
+recv_union_mantle_open = 0xE0A6,
+
+						res.WriteInt32(0);
+						for(int i = 0; i < 0x10; i++)
+						{
+							res.WriteByte(0);
+						}
+						
+	
+
+recv_shop_message_init = 0xE7C0,
+
+						//no structure
+	
+recv_0xE7CF = 0xE7CF,
+
+						res.WriteInt32(0);
+	
+
+	
+
+	
+	
+
+recv_object_point_move_notify = 0xEEF0,
+
+						res.WriteInt32(0);
+						res.WriteFloat(0);//x
+						res.WriteFloat(0);//y
+						res.WriteFloat(0);//z
+						res.WriteByte(0);//view offset
+						res.WriteByte(0);
+	
+
+	
+
+	
+recv_revive_init_r = 0xEF4E,
+
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+	
+	
+
+	
+recv_trade_revert_r = 0xEDB9,
+
+						res.WriteInt32(0);
+	
+recv_0xEDE7 = 0xEDE7,
+
+						//no structure
+	
+	
+
+recv_eo_update_end_trapid = 0xE8BF,
+
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+	
+recv_0xE8B9 = 0xE8B9,
+
+						res.WriteInt32(0);
+						res.WriteFloat(0);
+						res.WriteFloat(0);
+						res.WriteFloat(0);
+						res.WriteByte(0);
+						res.WriteByte(0);
+						res.WriteByte(0);
+						res.WriteInt16(0);
+						res.WriteByte(0);
+						res.WriteByte(0);
+						res.WriteByte(0);
+	
+
+	
+recv_0xE983 = 0xE983,
+
+						res.WriteCString("");//find max size
+	
+
+	
+	
+
+recv_wanted_update_reward_point = 0xFD54,
+
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+	
+recv_premium_service_update_time = 0xFD41,
+
+						res.WriteInt32(0);
+						res.WriteInt32(0);
+	
+
+	
+	
+
+	
+recv_help_new_add 0xFF3F,
+
+						res.WriteByte(0);
+						res.WriteByte(0);
+						res.WriteInt16(0);
+						res.WriteFloat(0);
+						res.WriteFloat(0);
+						res.WriteCString(""); //find max size
+						res.WriteCString(""); //find max size
+	
+
+	
+recv_charabody_notify_loot_start2 = 0xFFD2,
+
+						res.WriteInt32(0);
+						
+						
+
+	
+recv_chara_update_job_attr_skill_cooltime_per = 0xEFE3,
+
+						res.WriteInt32(0);
+						res.WriteInt16(0);
+	
+recv_charabody_access_start_r = 0xEFED,
+
+						res.WriteInt32(0);
+	
+recv_0xF024 = 0xF024,
+
+						res.WriteInt32(0);
+	
+
+
+
+///////////////-----------------\
+/////Unknown Un-tested Above\\\\\
+///////////////-----------------\
+
 recv_cash_shop_get_url_common_r = 0x1A6,
 
             res.WriteInt32(0);
@@ -1264,9 +1459,20 @@ recv_battle_report_notify_raise	= 0x65D5, // Parent = 0x65A6 // Range ID = 01
 			
 recv_gem_cancel_synthesis_r = 0x65DD, // Parent = 0x65A6 // Range ID = 02
             
-            res.WriteInt32(0);			
+            res.WriteInt32(0);		
 
 
+
+
+
+recv_chara_target_move_side_speed_per = 0x5DB7, // Parent = 0x5D52 // Range ID = 01
+            
+            res.WriteByte(0);
+            res.WriteInt16(0);			
+
+recv_battle_attack_pose_r = 0x5DEB, // Parent = 0x5D52 // Range ID = 02
+            
+            res.WriteInt32(0);
 
 
 
