@@ -1150,24 +1150,121 @@ recv_thread_entry_message = 0x8D74, // Parent = 0x8CC6 // Range ID = 03
 
 
 
+recv_chara_update_notify_comment = 0x8072, // Parent = 0x8066 // Range ID = 01
+            
+            res.WriteInt32(0);
+            res.WriteCString(""); // Length 0x181
+			
+recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+            
+            res.WriteInt32(0);
+            res.WriteFloat(0);//x
+            res.WriteFloat(0);//y
+            res.WriteFloat(0);//z
+
+                res.WriteFloat(0);//x
+                res.WriteFloat(0);//y
+                res.WriteFloat(0);//z
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+recv_soulmaterial_shop_notify_item = 0x808B, // Parent = 0x8066 // Range ID = 03
+            
+            res.WriteByte(0);
+           
+           int numEntries = 0x10;// <=0x10
+            res.WriteInt32(numEntries); //// <=0x10
+            for(int i = 0; i < numEntries; i++)
+            {
+               res.WriteByte(0);
+            } 
+
+            int numEntries2 = 0x4;// <=0x4
+            for(int i = 0; i < numEntries2; i++)
+            {
+               res.WriteInt32(0);
+            } 
+
+			
+
+
+recv_item_update_weight = 0x848B, // Parent = 0x8487 // Range ID = 01
+            
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+           
+recv_temple_cure_curse_r = 0x850B, // Parent = 0x8487 // Range ID = 02
+            
+            res.WriteInt32(0);		   
 
 
 
 
+recv_party_entry_draw_r	= 0x85EA, // Parent = 0x85C6 // Range ID = 01
+            
+            res.WriteInt32(0);
+			
+recv_stall_shopping_notify_aborted = 0x8661, // Parent = 0x85C6 // Range ID = 02
+            
+			//No Structure
+			
+			
+
+
+recv_buff_shop_buy_r = 0x8325, // Parent = 0x8299 // Range ID = 01
+            
+            res.WriteInt32(0);
+			
+recv_0x8364 = 0x8364, // Parent = 0x8299 // Range ID = 02 //No Sring  ERROR
+            
+            res.WriteInt32(0);			
 
 
 
 
+recv_event_union_storage_update_money = 0x7D21, // Parent = 0x7D1C // Range ID = 01
+            
+            res.WriteByte(0);
+            res.WriteInt64(0);
+
+recv_data_notify_maplink = 0x7D25, // Parent = 0x7D1C // Range ID = 02
+            
+            res.WriteInt32(0);
+
+                res.WriteFloat(0);
+                res.WriteFloat(0);
+                res.WriteFloat(0);
+                res.WriteByte(0);
+
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteInt32(0);
+			
+			
+			
+			
+recv_cpf_notify_error = 0x73D7, // Parent = 0x73D1 // Range ID = 01
+            
+			//no structure
+			
+recv_wanted_jail_close_r = 0x7442, // Parent = 0x73D1 // Range ID = 02
+            
+            res.WriteInt32(0);
 
 
+		
 
-
-
-
-
-
-
-
+recv_battle_report_notify_raise	= 0x65D5, // Parent = 0x65A6 // Range ID = 01
+            
+            res.WriteInt32(0);
+			
+recv_gem_cancel_synthesis_r = 0x65DD, // Parent = 0x65A6 // Range ID = 02
+            
+            res.WriteInt32(0);			
 
 
 
