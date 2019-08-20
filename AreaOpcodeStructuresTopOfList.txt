@@ -1,10 +1,10 @@
 
 						
-recv_soul_dispitem_request_data_r = 0xD6D4,   //Wrong Parent Opcode
-     
+recv_soul_dispitem_request_data_r = 0xD5FD,   
+
 						res.WriteInt32(0);
 						
-recv_battle_report_noact_notify_heal_ac 0xD6DE, //Wrong Parent Opcode
+recv_battle_report_noact_notify_heal_ac 0xD607, 
 
 						res.WriteInt32(0);
 						res.WriteInt32(0);
@@ -186,7 +186,6 @@ recv_0xF024 = 0xF024,
 
 						res.WriteInt32(0);
 	
-//////////Top of List - Middle of List Divider//////////
 
 
 	
@@ -196,9 +195,11 @@ recv_0xF024 = 0xF024,
 
 	
 recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
+						
 						res.WriteInt32(0);
 	
 recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+						
 						res.WriteInt16(0);
 						res.WriteInt32(0);
 						res.WriteInt32(0);
@@ -210,9 +211,11 @@ recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
 
 	
 recv_shop_close_r = 0x4E5C, // Parent = 0x4E17 // Range ID = 01
+						
 						res.WriteInt32(0);
 	
 recv_gem_synthesis_r = 0x4E7B, // Parent = 0x4E17 // Range ID = 02
+						
 						res.WriteInt32(0);
 	
 
@@ -220,7 +223,8 @@ recv_gem_synthesis_r = 0x4E7B, // Parent = 0x4E17 // Range ID = 02
 	
 
 	
-recv_0x1FC1 = 0x1FC1, // Parent = 0x1F73 // Range ID = 01
+recv_0x1FC1 = 0x1FC1, // Parent = 0x1F73 // Range ID = 01  // push wizardryonline_patched.4D5F32
+						
 						res.WriteInt32(0);
 						res.WriteFloat(0);
 						res.WriteFloat(0);
@@ -233,11 +237,40 @@ recv_0x1FC1 = 0x1FC1, // Parent = 0x1F73 // Range ID = 01
 						res.WriteByte(0);
 						res.WriteByte(0);
 	
-recv_job_change_notify_open = 0x1FE4, // Parent = 0x1F73 // Range ID = 02
-						res.WriteByte(0);
-						res.WriteByte(0);
+recv_job_change_notify_open = 0x1FE4, // Parent = 0x1F73 // Range ID = 02  
+						
+						res.WriteInt32(0);
+                        int numEntries = 0x7;
+                        res.WriteInt32(numEntries); //less than or equal to 0x7
+                        for(int i = 0; i < numEntries; i++)
+                        {
+                            res.WriteInt16(0);
+                        }
+                        res.WriteInt32(0);
+                        res.WriteByte(0);
+                        res.WriteInt64(0);
+                        res.WriteInt32(0);
+                        for(int i = 0; i < 0x7; i++)
+                        {
+                            res.WriteInt16(0);
+                        }
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                        for(int i = 0; i < 0x7; i++)
+                        {
+                            res.WriteInt16(0);
+                        }
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                        for(int i = 0; i < 0x10; i++)
+                        {
+                            res.WriteByte(0);
+                        }
+                        res.WriteByte(0);
 	
 recv_gem_cancel_support_item_r = 0x1FEE, // Parent = 0x1F73 // Range ID = 03
+						
 						res.WriteInt32(0);
 	
 
@@ -246,6 +279,7 @@ recv_gem_cancel_support_item_r = 0x1FEE, // Parent = 0x1F73 // Range ID = 03
 
 	
 recv_item_update_eqmask = 0x3BD3, // Parent = 0x3B9F // Range ID = 01
+						
 						res.WriteInt64(0);
 						res.WriteInt32(0);
 						
@@ -269,16 +303,19 @@ recv_item_update_eqmask = 0x3BD3, // Parent = 0x3B9F // Range ID = 01
 						res.WriteByte(0);
 	
 recv_0x3C1F = 0x3C1F, // Parent = 0x3B9F // Range ID = 02
-						res.WriteInt32(0);
+						
+						res.WriteInt32(0); // leads to error
 	
 
 						
 
 	
 recv_party_accept_to_invite_r = 0x32AE, // Parent = 0x3247 // Range ID = 01
+						
 						res.WriteInt32(0);
 	
 recv_gem_set_r = 0x32CD, // Parent = 0x3247 // Range ID = 02
+						
 						res.WriteInt32(0);
 	
 
@@ -287,10 +324,12 @@ recv_gem_set_r = 0x32CD, // Parent = 0x3247 // Range ID = 02
 
 	
 recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
+						
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 	
 recv_shop_repair_r = 0x29AF, // Parent = 0x28E7 // Range ID = 02
+						
 						res.WriteInt32(0);
 	
 
@@ -299,6 +338,7 @@ recv_shop_repair_r = 0x29AF, // Parent = 0x28E7 // Range ID = 02
 
 	
 recv_chara_update_form = 0x2479, // Parent = 0x2478 // Range ID = 01	
+						
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 						res.WriteByte(0);
@@ -306,6 +346,7 @@ recv_chara_update_form = 0x2479, // Parent = 0x2478 // Range ID = 01
 						res.WriteByte(0);
 	
 recv_create_send_pacakge_info = 0x2491, // Parent = 0x2478 // Range ID = 02	
+						
 						res.WriteInt32(0);
 						res.WriteFixedString("", 0x31);
 						res.WriteFixedString("", 0x5B);
@@ -340,30 +381,32 @@ recv_create_send_pacakge_info = 0x2491, // Parent = 0x2478 // Range ID = 02
 
 	
 recv_battle_report_action_monster_skill_start_cast = 0x1959, // Parent = 0x18CC // Range ID = 01
+						
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 						res.WriteFloat(0);
 						
 	
 recv_stall_deregist_item_r = 0x196E, // Parent = 0x18CC // Range ID = 02
+						
 						res.WriteInt32(0);
 	
 recv_battle_report_noact_notify_buff_detach	= 0x19AC, // Parent = 0x18CC // Range ID = 03
+						
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 						res.WriteByte(0);//bool
 	
-
-						res.WriteInt32(0);
-						res.WriteInt32(0);
 	
 	
 
 	
 recv_blacklist_clear_r = 0x1E6B, // Parent = 0x1E65 // Range ID = 01
+						
 						res.WriteInt32(0);
 	
 recv_battle_guard_start_self = 0x1E96, // Parent = 0x1E65 // Range ID = 02
+						
 						no structure
 	
 
@@ -371,21 +414,19 @@ recv_battle_guard_start_self = 0x1E96, // Parent = 0x1E65 // Range ID = 02
 	
 	
 
-recv_battle_report_notify_damage_hp = 0x904, // Parent = 0x8CD // Range ID = 01
+recv_battle_report_notify_damage_hp = 0x904, // Parent = 0x8CD // Range ID = 01 
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 	
-recv_0x916 = 0x916, // Parent = 0x8CD // Range ID = 02
-						res.WriteInt32(0);
+recv_0x916 = 0x916, // Parent = 0x8CD // Range ID = 02  
+						res.WriteInt32(0); // No String.  Goes to Error
 	
-recv_item_update_magic = 0x992, // Parent = 0x8CD // Range ID = 03
+recv_item_update_magic = 0x992, // Parent = 0x8CD // Range ID = 03 
 						res.WriteInt64(0);
 						res.WriteInt16(0);
 
 
-///////////////-----------------\
-/////Unknown Un-tested Above\\\\\
-///////////////-----------------\
+
 
 recv_cash_shop_get_url_common_r = 0x1A6,
 
