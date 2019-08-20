@@ -467,7 +467,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xDA4A = 0xDA4A,
         recv_0xEE18 = 0xEE18,
         recv_0xEEB7 = 0xEEB7,
-        recv_0xF212 = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
+        recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
         recv_0xFA0B = 0xFA0B,
         recv_0xFB79 = 0xFB79,
         recv_auction_bid_r = 0x3F38,
@@ -488,7 +488,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_exit_r = 0xDA5C,
         recv_base_ping_r = 0xD2D6,
         recv_battle_attack_cancel_r = 0x9666,
-        recv_battle_attack_exec = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
+        recv_battle_attack_exec_r = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
         recv_battle_attack_pose = 0x0, //todo
@@ -636,7 +636,7 @@ namespace Necromancy.Server.Packet.Id
         recv_chat_post_message_r = 0xAF49,
         recv_check_job_change_r = 0x8F15,
         recv_cloak_close_r = 0xF330,
-        recv_cloak_notify_close_r = 0x723,
+        recv_cloak_notify_close = 0x723,
         recv_cloak_notify_open = 0xFED8,
         recv_cmd_exec_r = 0x6F32,
         recv_comment_set_r = 0x9C3A,
@@ -838,11 +838,11 @@ namespace Necromancy.Server.Packet.Id
         recv_quest_chapter_target_updated = 0x6C7B,
         recv_quest_check_target_r = 0xBCAB,
         recv_quest_display_r = 0x42B8,
-        recv_quest_get_mission_quest_history = 0x0,//missing recv?
+        recv_quest_get_mission_quest_history_r = 0x0,//missing recv? added _r
         recv_quest_get_mission_quest_works_r = 0x1BD6,
-        recv_quest_get_soul_mission_quest_history = 0x0,//missing recv?
+        recv_quest_get_soul_mission_quest_history_r = 0x0,//missing recv? added _r
         recv_quest_get_soul_mission_quest_works_r = 0x266C,
-        recv_quest_get_story_quest_history = 0x0,//missing recv?
+        recv_quest_get_story_quest_history_r = 0x0,//missing recv?  added _r
         recv_quest_get_story_quest_works_r = 0x73A1,
         recv_quest_hint = 0x505E,
         recv_quest_hint_othermap = 0xFFD6,
@@ -936,7 +936,7 @@ namespace Necromancy.Server.Packet.Id
         recv_stall_update_feature_item = 0xB195,
         recv_storage_deposit_item2_r = 0xC8AD,
         recv_storage_deposit_money_r = 0x6539,
-        recv_storage_drawmoney = 0x79A9,
+        recv_storage_drawmoney_r = 0x79A9,
         recv_sv_conf_option_change = 0xAEE9,
         recv_sv_conf_option_change_r = 0xAEE9,
         recv_sv_conf_option_request_r = 0x1DA,
