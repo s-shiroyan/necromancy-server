@@ -4,7 +4,7 @@ recv_soul_dispitem_request_data_r = 0xD5FD,
 
 						res.WriteInt32(0);
 						
-recv_battle_report_noact_notify_heal_ac 0xD607, 
+recv_battle_report_noact_notify_heal_ac = 0xD607, 
 
 						res.WriteInt32(0);
 						res.WriteInt32(0);
@@ -154,7 +154,7 @@ recv_premium_service_update_time = 0xFD41,
 	
 
 	
-recv_help_new_add 0xFF3F,
+recv_help_new_add  = 0xFF3F,
 
 						res.WriteByte(0);
 						res.WriteByte(0);
@@ -614,7 +614,7 @@ recv_dropobject_notify_access_priority = 0x10C5,
             res.WriteInt32(0);
             res.WriteInt32(0);
 			
- recv_0x10DA = 0x10DA, //no String push wizardryonline_patched.4D5DBF
+recv_0x10DA = 0x10DA, //no String push wizardryonline_patched.4D5DBF
             
             res.WriteInt32(1);
 
