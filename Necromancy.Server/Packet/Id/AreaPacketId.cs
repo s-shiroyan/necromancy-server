@@ -6,74 +6,74 @@ namespace Necromancy.Server.Packet.Id
     /// Necromancy Area Server OP Codes, starts at 0x00495B88
 
     /// Ranges: the opcodes are presented in order from top to bottom in the sense of the jmp operation before each group.
-    /// 0xEFDD + 0x4E - 0x004CEC2C 5 opcodes (1 ret)  [Complete]
+    /// 0xEFDD + 0x4E - 0x004CEC2C 5 opcodes (1 ret)  [Testing]
     ///                 recv_base_check_version_r                      00(actually 0xEFDD)
     ///                 recv_chara_update_job_attr_skill_cooltime_per  01(actually 0xEFDD + 0x6)
     ///                 recv_charabody_access_start_r                  02(actually 0xEFDD + 0x10)
-    ///                 ret                                                                         03(actually 0xEFDD + 0x47)
+    ///                 ret                                            03(actually 0xEFDD + 0x47)
     ///                 recv_random_box_get_item_all_r                 04(actually 0xEFDD + 0x4E)
     /// 
-    /// 0xFF00 + 0xD6 - 0x004D13C3 4 opcodes  [Complete]
+    /// 0xFF00 + 0xD6 - 0x004D13C3 4 opcodes  [Testing]
     ///                 recv_quest_hint_othermap               00(actually 0xFF00)
     ///                 recv_help_new_add()\n                  01(actually 0xFF00 + 0x3F)
     ///                 recv_object_hp_per_update_notify()     03(actually 0xFF00 + 0xD6)
     ///                 recv_charabody_notify_loot_start2      02(actually 0xFF00 + 0xD2)
     ///                 
-    /// 0xFCF3 + 0x85 - 0x004D042D 4 opcodes  [Complete]
+    /// 0xFCF3 + 0x85 - 0x004D042D 4 opcodes  [Testing]
     ///                 recv_chara_update_mag_cast_time_per    03(actually 0xFCF3 + 0x85)
     ///                 recv_wanted_update_reward_point()\n    02(actually 0xFCF3 + 0x61)
     ///                 recv_premium_service_update_time()     01(actually 0xFCF3 + 0x4E)
     ///                 recv_battle_report_notify_damage_mp    00(actually 0xFCF3)
     /// 
-    /// 0xE897 + 0xF9 - 0x004CC897 5 opcodes (2 ret)  [Complete]
+    /// 0xE897 + 0xF9 - 0x004CC897 5 opcodes (2 ret)  [Testing]
     ///                 recv_eo_update_end_trapid                      02(actually 0xE897 + 0x28)
-    ///                 ret                                                                         01(actually 0xE897 + 0x22)
+    ///                 ret                                            01(actually 0xE897 + 0x22)
     ///                 recv_battle_release_attack_pose_r              04(actually 0xE897 + 0xF9)
-    ///                 ret                                                                         03(actually 0xE897 + 0xEC)
+    ///                 ret                                            03(actually 0xE897 + 0xEC)
     ///                 recv_battle_report_action_skill_failed         05(actually 0xE897)
     /// 
-    /// 0xEDB3 + 0x65 - 0x004CDE73 4 opcodes (2 ret)  [Complete]
+    /// 0xEDB3 + 0x65 - 0x004CDE73 4 opcodes (2 ret)  [Testing]
     ///                 recv_data_notify_eo_data2      00(actually 0xEDB3)
-    ///                 ret                                                         03(actually 0xEDB3 + 0x65)
+    ///                 ret                            03(actually 0xEDB3 + 0x65)
     ///                 recv_trade_revert_r            01(actually 0xEDB3 + 0x6)
-    ///                 ret                                                         02(actually 0xEDB3 + 0x34)
+    ///                 ret                            02(actually 0xEDB3 + 0x34)
     /// 
-    /// 0xEEB7 + 0xD6 - 0x004CE472 4 opcodes (1 ret)  [Complete]
+    /// 0xEEB7 + 0xD6 - 0x004CE472 4 opcodes (1 ret)  [Testing]
     ///                 recv_object_point_move_notify      01(actually 0xEEB7 + 0x39) 0xEEF0
-    ///                 ret                                                             00(actually 0xEEB7)
+    ///                 ret                                00(actually 0xEEB7)
     ///                 recv_raisescale_remove_item_r      03(actually 0xEEB7 + 0xD6)
     ///                 recv_revive_init_r                 02(actually 0xEEB7 + 0x97)
     /// 
-    /// 0xE7BB + 0x2C - 0x004CC261 4 opcodes (1 ret)  [Complete]
+    /// 0xE7BB + 0x2C - 0x004CC261 4 opcodes (1 ret)  [Testing]
     ///                 recv_shop_message_init                 01(actually 0xE7BB + 0x5)
-    ///                 ret                                                                 02(actually 0xE7BB + 0x14)
+    ///                 ret                                    02(actually 0xE7BB + 0x14)
     ///                 recv_wanted_jail_open() draw_money     00(actually 0xE7BB)
     ///                 recv_union_rename_close_r              03(actually 0xE7BB + 0x2C)
     /// 
-    /// 0xE07E + 0xCD - 0x004CB292 4 opcodes  [Complete]
+    /// 0xE07E + 0xCD - 0x004CB292 4 opcodes  [Testing]
     ///                 recv_map_update_bgm        03(actually 0xE07E + 0xCD)
     ///                 recv_minimap_notify        02(actually 0xE07E + 0x57)
     ///                 recv_event_quest_report    00(actually 0xE07E)
     ///                 recv_union_mantle_open     01(actually 0xE07E + 0x28)
     /// 
-    /// 0xD68C + 0xC6 - 0x004C8EE5 5 opcodes  [Complete]
+    /// 0xD68C + 0xC6 - 0x004C8EE5 5 opcodes  [Testing]
     ///         0xD690? recv_battle_attack_start_r             04(actually 0xD68C + 0xC6)
     ///         0xD68E? recv_item_update_place_change          02(actually 0xD68C + 0x1C)
     ///         0xD68C? recv_escape_start                      00(actually 0xD68C)
     ///         0xD68D? recv_gem_set_piece_r                   01(actually 0xD68C + 0x18)
     ///         0xD691? recv_wanted_jail_update_draw_point     03(actually 0xD68C + 0x64)
     /// 
-    /// 0xD493 + 0xE7 - 0x004C7D1F 4 opcodes (1 ret)  [Complete]
+    /// 0xD493 + 0xE7 - 0x004C7D1F 4 opcodes (1 ret)  [Testing]
     ///                 recv_skill_cast_cancel                 02(actually 0xD493 + 0xCA)
-    ///                 ret                                                                 00(actually 0xD493)
+    ///                 ret                                    00(actually 0xD493)
     ///                 recv_shop_sell_r                       01(actually 0xD493 + 0x65)
     ///                 recv_battle_report_action_item_use     03(actually 0xD493+ 0xE7)
     /// 
-    /// 0xD5B5 + 0xC8 - 0x004C86F2 4 opcodes  [Complete]
-    ///                 recv_charabody_notify_party_join           03(actually 0xD68C + 0xC8)
-    ///                 recv_chara_update_lv_detail2               00(actually 0xD68C)
-    ///                 recv_soul_dispitem_request_data_r          01(actually 0xD68C + 0x48)
-    ///                 recv_battle_report_noact_notify_heal_ac    02(actually 0xD68C + 0x52)
+    /// 0xD5B5 + 0xC8 - 0x004C86F2 4 opcodes  [Last one Requires Structures]
+    ///                 recv_charabody_notify_party_join           03(actually 0xD5B5 + 0xC8)
+    ///                 recv_chara_update_lv_detail2               00(actually 0xD5B5)
+    ///                 recv_soul_dispitem_request_data_r          01(actually 0xD5B5 + 0x48)
+    ///                 recv_battle_report_noact_notify_heal_ac    02(actually 0xD5B5 + 0x52)
     ///
     
     /// ~~~~~~~~~~~~~~~~STRINGS THAT ARE ABOVE THIS POINT HAVE NOT BEEN TESTED. Structures captured~~~~~~~~~ 
@@ -294,7 +294,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_guard_end_self = 0x5E48, // Parent = 0x5D52 // Range ID = 03
     ///                 
     /// 
-    /// 0x5243 + 0xC4 - 0x004A7ED1 4 opocdes
+    /// 0x5243 + 0xC4 - 0x004A7ED1 4 opocdes  [Testing]
     /// 
     ///                 recv_object_ac_rank_update_notify = 0x5243, // Parent = 0x5243 // Range ID = 00
     ///                 recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
@@ -302,7 +302,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_auction_update_exhibit_item_state = 0x5307, // Parent = 0x5243 // Range ID = 03
     ///
     /// 
-    /// 0x4E17 + 0x76 - 0x004A732D 4 opcodes
+    /// 0x4E17 + 0x76 - 0x004A732D 4 opcodes  [Testing]
     /// 
     ///                 recv_party_regist_party_recruit_r = 0x4E17, // Parent = 0x4E17 // Range ID = 00
     ///                 recv_shop_close_r = 0x4E5C, // Parent = 0x4E17 // Range ID = 01
@@ -310,7 +310,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_shop_sell_check_r = 0x4E8D, // Parent = 0x4E17 // Range ID = 03
     ///                 
     ///                  
-    /// 0x1F73 + 0xA9 - 0x0049CF7A 5 opcodes (1 no result?)
+    /// 0x1F73 + 0xA9 - 0x0049CF7A 5 opcodes (1 no result?)  [Testing]
     /// 
     ///                 recv_shortcut_notify_deregist = 0x1F73, // Parent = 0x1F73 // Range ID = 00
     ///                 recv_0x1FC1 = 0x1FC1, // Parent = 0x1F73 // Range ID = 01
@@ -319,7 +319,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_data_notify_soulmaterialobject_data = 0x201C, // Parent = 0x1F73 // Range ID = 04
     ///                 
     /// 
-    /// 0x3B9F + 0xA2 - 0x004A40E1 4 opcodes (1 ret)
+    /// 0x3B9F + 0xA2 - 0x004A40E1 4 opcodes (1 ret)  [Testing]
     /// 
     ///                 recv_self_skill_point_notify = 0x3B9F, // Parent = 0x3B9F // Range ID = 00
     ///                 recv_item_update_eqmask = 0x3BD3, // Parent = 0x3B9F // Range ID = 01
@@ -327,7 +327,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_help_new_data = 0x3C41, // Parent = 0x3B9F // Range ID = 03
     ///                 
     /// 
-    /// 0x3247 + 0xA6 - 0x004A29D7 4 opcodes
+    /// 0x3247 + 0xA6 - 0x004A29D7 4 opcodes  [Testing]
     /// 
     ///                 recv_item_update_state = 0x3247, // Parent = 0x3247 // Range ID = 00
     ///                 recv_party_accept_to_invite_r = 0x32AE, // Parent = 0x3247 // Range ID = 01
@@ -335,7 +335,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_event_change_type = 0x32ED, // Parent = 0x3247 // Range ID = 03
     ///                 
     ///                 
-    /// 0x28E7 + 0xDE - 0x004A064B 4 opcodes (1 ret)
+    /// 0x28E7 + 0xDE - 0x004A064B 4 opcodes (1 ret)  [Testing]
     /// 
     ///                 recv_chara_update_con = 0x28E7, // Parent = 0x28E7 // Range ID = 00
     ///                 recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
@@ -343,7 +343,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_0x29C5 = 0x29C5, // Parent = 0x28E7 // Range ID = 03
     /// 
     /// 
-    /// 0x2478 + 0x96 - 0x0049EE79 4 opcodes
+    /// 0x2478 + 0x96 - 0x0049EE79 4 opcodes  [Testing]
     ///                 	
     ///                 recv_chara_update_maxap = 0x2478, // Parent = 0x2478 // Range ID = 00	
     ///                 recv_chara_update_form = 0x2479, // Parent = 0x2478 // Range ID = 01	
@@ -351,7 +351,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_data_notify_ggate_stone_data = 0x250E, // Parent = 0x2478 // Range ID = 03
     ///                 
     /// 
-    /// 0x18CC + 0xF7 - 0x0049B302 5 opcodes
+    /// 0x18CC + 0xF7 - 0x0049B302 5 opcodes  [Testing]
     ///                 
     ///                 recv_gem_notify_close = 0x18CC, // Parent = 0x18CC // Range ID = 00	
     ///                 recv_battle_report_action_monster_skill_start_cast = 0x1959, // Parent = 0x18CC // Range ID = 01
@@ -360,7 +360,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_battle_report_noact_notify_buff_update_time = 0x19C3, // Parent = 0x18CC // Range ID = 04
     ///                 
     /// 
-    /// 0x1E65 + 0xCD - 0x0049C989 4 opcodes
+    /// 0x1E65 + 0xCD - 0x0049C989 4 opcodes  [Testing]
     /// 
     ///                 recv_charabody_self_warpdragon_penalty = 0x1E65, // Parent = 0x1E65 // Range ID = 00
     ///                 recv_blacklist_clear_r = 0x1E6B, // Parent = 0x1E65 // Range ID = 01
@@ -368,7 +368,7 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_souleater_touch_notify = 0x1F32, // Parent = 0x1E65 // Range ID = 03         
     ///                 
     /// 
-    /// 0x8CD  + 0xD0 - 0x004979DC 5 opcodes (1 ret)
+    /// 0x8CD  + 0xD0 - 0x004979DC 5 opcodes (1 ret)  [Testing]
     /// 
     ///                 recv_self_action_cost = 0x8CD, // Parent = 0x8CD // Range ID = 00
     ///                 recv_battle_report_notify_damage_hp = 0x904, // Parent = 0x8CD // Range ID = 01
