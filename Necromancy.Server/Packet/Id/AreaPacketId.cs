@@ -374,40 +374,35 @@ namespace Necromancy.Server.Packet.Id
     ///                 recv_event_end = 0x99D, // Parent = 0x8CD // Range ID = 04
     ///                 
     ///                 
-    /// ~~~~~~~~~~~~~~~~STRINGS THAT ARE ABOVE THIS POINT ARE COMPLETE~~~~~~~~~~~~~~~~~~~~~~~~~ Xeno.
-    /// 0x102E + 0x97 - 0x00498F03 4 opcodes
+    /// 0x102E + 0x97 - 0x00498F03 4 opcodes  [COMPLETE]
     /// 
-    ///                 recv_trade_notify_replied = 0x102E, // Parent = 0x102E // Range ID = 00                     [COMPLETE]
+    ///                 recv_trade_notify_replied = 0x102E, // Parent = 0x102E // Range ID = 00                     
     ///                 recv_gimmick_state_update = 0x1041, // Parent = 0x102E // Range ID = 01
     ///                 recv_object_region_break_update_notify = 0x1052, // Parent = 0x102E // Range ID = 02
-    ///                 recv_dropobject_notify_access_priority = 0x10C5, // Parent = 0x102E // Range ID = 03        [COMPLETE]
-
-
+    ///                 recv_dropobject_notify_access_priority = 0x10C5, // Parent = 0x102E // Range ID = 03        
     /// 
-    /// 0x54E  + 0xAA - 0x00496B4F 5 opcodes
+    /// 0x54E  + 0xAA - 0x00496B4F 5 opcodes  [COMPLETE]
     /// 
-    ///                 recv_charabody_loot_complete2_r = 0x54E, // Parent = 0x54E // Range ID = 00                 [COMPLETE]
+    ///                 recv_charabody_loot_complete2_r = 0x54E, // Parent = 0x54E // Range ID = 00                 
     ///                 recv_npc_flageffect_update_notify = 0x560, // Parent = 0x54E // Range ID = 01
     ///                 recv_event_system_message = 0x561, // Parent = 0x54E // Range ID = 02
     ///                 recv_charabody_notify_party_leave = 0x5A5, // Parent = 0x54E // Range ID = 03
-    ///                 recv_item_update_num = 0x5F8, // Parent = 0x54E // Range ID = 04                            [COMPLETE]
-
-
-    /// 0x397  + 0x7A - 0x004964AA 4 opcodes
+    ///                 recv_item_update_num = 0x5F8, // Parent = 0x54E // Range ID = 04                            
+    /// 0x397  + 0x7A - 0x004964AA 4 opcodes  [COMPLETE]
     /// 
-    ///                 recv_stall_close_r = 0x397, // Parent = 0x397 // Range ID = 00                              [COMPLETE]
+    ///                 recv_stall_close_r = 0x397, // Parent = 0x397 // Range ID = 00                              
     ///                 recv_premium_service_notify_attach = 0x3B1, // Parent = 0x397 // Range ID = 01
     ///                 recv_temple_close_r = 0x3B6, // Parent = 0x397 // Range ID = 02 // sends stall_set_name after
-    ///                 recv_skill_custom_close_r = 0x411, // Parent = 0x397 // Range ID = 03                       [COMPLETE]
+    ///                 recv_skill_custom_close_r = 0x411, // Parent = 0x397 // Range ID = 03                       
     ///                 
     /// 
-    /// 0xC2A1 + 0xD3 - 0x004C2F8E 5 opcodes 
+    /// 0xC2A1 + 0xD3 - 0x004C2F8E 5 opcodes   [COMPLETE]
     /// 
-    ///                 recv_battle_report_noact_notify_knockback = 0xC2A1, // Parent = 0xC2A1 // Range ID = 00     [COMPLETE]
-    ///                 recv_raisescale_view_open() success_per = 0xC25D, // Parent = 0xC2A1 // Range ID = 01 
+    ///                 recv_battle_report_noact_notify_knockback = 0xC2A1, // Parent = 0xC2A1 // Range ID = 00     
+    ///                 recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
     ///                 recv_quest_check_time_limit_r = 0xC2E9, // Parent = 0xC2A1 // Range ID = 02 
     ///                 recv_self_returnhome_interval = 0xC300, // Parent = 0xC2A1 // Range ID = 03 
-    ///                 recv_random_box_notify_open = 0xC374, // Parent = 0xC2A1 // Range ID = 04                   [COMPLETE]  
+    ///                 recv_random_box_notify_open = 0xC374, // Parent = 0xC2A1 // Range ID = 04                   
 
 
 
@@ -491,7 +486,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_attack_exec_r = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
-        recv_battle_attack_pose = 0x0, //todo
+        recv_battle_attack_pose_r = 0x0, // 0x5DEB  arred _r todo
         recv_battle_attack_pose_end_notify = 0xF633,
         recv_battle_attack_pose_start_notify = 0x7CB2,
         recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
@@ -570,7 +565,7 @@ namespace Necromancy.Server.Packet.Id
         recv_cash_shop_get_url_web_goods_r = 0x570B,
         recv_cash_shop_notify_item = 0xD597,
         recv_cash_shop_notify_open = 0x732D,
-        recv_cash_shop_open_by_menu = 0x0,//missing recv
+        recv_cash_shop_open_by_menu_r = 0x0,//missing recv //added _r
         recv_cash_shop_regist_billing_zip_r = 0x7A6F,
         recv_channel_notify = 0x2849,
         recv_chara_move_speed_per = 0xCCE2,
@@ -643,7 +638,7 @@ namespace Necromancy.Server.Packet.Id
         recv_comment_switch_r = 0xB025,
         recv_cpf_authenticate = 0xBA73,
         recv_create_package_r = 0x5A5F,
-        recv_data_get_self_chara_data_r = 0xD1BD,
+        recv_data_get_self_chara_data = 0xD1BD, //removed _r
         recv_data_get_self_chara_data_request_r = 0x3C89,
         recv_data_notify_chara_data = 0xED4C,
         recv_data_notify_charabody_data = 0x906A,
@@ -923,14 +918,14 @@ namespace Necromancy.Server.Packet.Id
         recv_soulmaterial_shop_notify_open = 0x2631,
         recv_stall_buy_item_r = 0x5E79,
         recv_stall_close_r = 0x397,
-        recv_stall_deregist_item_r = 0x0,//todo inside 0x18CC + 0xF7 - 0x0049B302 
+        recv_stall_deregist_item_r = 0x0,// 0x196E //todo inside 0x18CC + 0xF7 - 0x0049B302 
         recv_stall_notify_closed = 0x2FFF,
         recv_stall_notify_opend = 0x7FC5,
         recv_stall_open_r = 0x9761,
         recv_stall_regist_item_r = 0x9289,
         recv_stall_sell_item = 0x919C,
         recv_stall_set_item_price_r = 0x2DCE,
-        recv_stall_set_name_r = 0x0,//todo inside 0xB1CA + 0xC8 - 0x004BE4A3
+        recv_stall_set_name_r = 0x0,// 0xB212 //todo inside 0xB1CA + 0xC8 - 0x004BE4A3
         recv_stall_shopping_abort_r = 0x70B7,
         recv_stall_shopping_start_r = 0xA2B7,
         recv_stall_update_feature_item = 0xB195,

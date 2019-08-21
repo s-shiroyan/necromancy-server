@@ -139,12 +139,12 @@ recv_0xE983 = 0xE983,
 	
 	
 
-recv_wanted_update_reward_point = 0xFD54,
+recv_premium_service_update_time = 0xFD54,
 
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 	
-recv_premium_service_update_time = 0xFD41,
+recv_battle_report_notify_damage_mp = 0xFD41,
 
 						res.WriteInt32(0);
 						res.WriteInt32(0);
@@ -1710,14 +1710,67 @@ recv_battle_attack_pose_r = 0x5DEB, // Parent = 0x5D52 // Range ID = 02
             res.WriteInt32(0);
 
 
+//////////////
+///Bottom of List
+////////////
+
+
+recv_gimmick_state_update = 0x1041, // Parent = 0x102E // Range ID = 01
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+
+recv_object_region_break_update_notify = 0x1052, // Parent = 0x102E // Range ID = 02
+                        res.WriteInt32(0);
+                        res.WriteInt64(0);
+
+
+recv_npc_flageffect_update_notify = 0x560, // Parent = 0x54E // Range ID = 01
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+                res.WriteFloat(0);
+                res.WriteFloat(0);
+                res.WriteFloat(0);
+
+recv_event_system_message = 0x561, // Parent = 0x54E // Range ID = 02
+
+            res.WriteCString(""); // Length 0xC01
+			
+recv_charabody_notify_party_leave = 0x5A5, // Parent = 0x54E // Range ID = 03
+
+            res.WriteInt32(0);
+
+
+			
+
+recv_premium_service_notify_attach = 0x3B1, // Parent = 0x397 // Range ID = 01
+
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+			
+	recv_temple_close_r = 0x3B6, // Parent = 0x397 // Range ID = 02 // sends stall_set_name after
+
+            res.WriteInt32(0);
 
 
 
 
+recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
+            
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt16(1);			
 
 
+recv_quest_check_time_limit_r = 0xC2E9, // Parent = 0xC2A1 // Range ID = 02 
 
+            res.WriteInt32(0);
 
+recv_self_returnhome_interval = 0xC300, // Parent = 0xC2A1 // Range ID = 03 
+
+            res.WriteInt32(0);
 			
 
 
