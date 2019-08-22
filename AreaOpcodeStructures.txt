@@ -3589,7 +3589,7 @@ recv_charabody_notify_spirit = 0x36A6,
      res.WriteByte(1);
 	 
 	 
-recv_quest_history = 0x32FF,
+recv_quest_history = 0x32FF,	
 
  int numEntries = 0x1E;
             res.WriteInt32(numEntries); //less than or equal to 0x1E
