@@ -160,11 +160,11 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1001002);//MapID
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
-
+           
             //sub_484420
-            res.WriteFloat(23162);//X Pos
-            res.WriteFloat(-219);//Y Pos
-            res.WriteFloat(3);//Z Pos
+            res.WriteFloat(31271);//X Pos
+            res.WriteFloat(6768);//Y Pos
+            res.WriteFloat(-6);//Z Pos
             res.WriteByte(1);//view offset
 
             //sub_read_int32 skill point
@@ -250,7 +250,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
                 res.WriteByte(0);
 
-                res.WriteInt32(0);
+                res.WriteInt32(10310503);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
