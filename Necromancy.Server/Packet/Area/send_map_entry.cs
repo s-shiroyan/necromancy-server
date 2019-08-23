@@ -55,8 +55,8 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteFloat(3);//Z Pos
             res2.WriteByte(90);//view offset
 
+            int numEntries = 19;
             res2.WriteInt32(19);
-
             //this is an x19 loop but i broke it up
             res2.WriteInt32(-1);
             res2.WriteInt32(-1);
@@ -78,14 +78,9 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteInt32(-1);
             res2.WriteInt32(-1);
 
+            numEntries = 19;
             res2.WriteInt32(19);
-
-
-            int numEntries = 19;
-
-
             for (int i = 0; i < numEntries; i++)
-
             {
                 // loop start
                 res2.WriteInt32(10310503); // this is a loop within a loop i went ahead and broke it up
@@ -110,7 +105,6 @@ namespace Necromancy.Server.Packet.Area
             }
 
             res2.WriteInt32(19);
-
             //this is an x19 loop but i broke it up
             res2.WriteInt32(3);
             res2.WriteInt32(3);
@@ -144,7 +138,7 @@ namespace Necromancy.Server.Packet.Area
 
             res2.WriteInt32(100);
 
-            res2.WriteInt32(100);
+            res2.WriteInt32(100); //NPC visibility 0 = normal
 
             res2.WriteInt32(100);
             res2.WriteFloat(1000);

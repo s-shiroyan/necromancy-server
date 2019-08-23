@@ -23,6 +23,7 @@ namespace Necromancy.Server.Model
 
         public Account Account { get; set; }
         public Character Character { get; set; }
+        public npc npc { get; set; }
         public Channel Channel { get; set; }
         public Map Map { get; set; }
         public string Identity { get; private set; }

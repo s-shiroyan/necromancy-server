@@ -216,25 +216,26 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries);//has to be less than 19(defines how many int32s to read?)
 
             //sub_483660 type of weapon?
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
-            res.WriteInt32(2);
+            int meme = 2; //6 and 7 make the weapon go away, 19 here has weird results, 21 does a hit anim?, 22 a weird fall anim?, 23 item use+weird thingy, 
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
+            res.WriteInt32(meme);
 
 
 
@@ -245,24 +246,24 @@ namespace Necromancy.Server.Packet.Area
             //sub_4948C0
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(10310503);//item ID
+                res.WriteInt32(200101);//item ID "10900402" axe "200101" chest
+                res.WriteByte(0); //a 1 here makes the wep invisible 
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //a 1 here makes the wep invisible 
 
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
 
-                res.WriteByte(1);
-                res.WriteByte(2);
-                res.WriteByte(1);//Bool
-                res.WriteByte(3);
-                res.WriteByte(4);
-                res.WriteByte(5);
-                res.WriteByte(6);
-                res.WriteByte(7);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0); //Bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
             }
 
             //sub_483420
@@ -270,25 +271,26 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries);
 
             //sub_483420 has to be 3 for wep to be 1h sword
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
-            res.WriteInt32(3);
+            int meme1 = 3;
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
+            res.WriteInt32(meme1);
 
             //sub_483420
             numEntries = 128;
@@ -302,7 +304,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(2);
             }
 
-            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data, res);
         }
     }
 }
