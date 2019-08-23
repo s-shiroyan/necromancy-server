@@ -304,7 +304,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(2);
             }
 
-            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);
         }
     }
 }
