@@ -5,7 +5,7 @@ namespace Necromancy.Server.Packet.Id
 
     public enum AreaPacketId : ushort
     {
-        recv_base_check_version_r = 0xC206, // this is being used to test other opcodes the normal value should be (0xEFDD)
+        recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
 

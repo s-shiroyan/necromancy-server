@@ -11,7 +11,7 @@ namespace Necromancy.Server.Model
         public float Y { get; set; }
         public float Z { get; set; }
         public byte viewOffset { get; set; }
-        public int UNKNOWN1 { get; set; } //first int32 for num of items
+        //public int UNKNOWN1 { get; set; } //first int32 for num of items
         //skipping the item slot/items/anim data 
         public int npcModel { get; set; }
         public short npcModelSize { get; set; }
