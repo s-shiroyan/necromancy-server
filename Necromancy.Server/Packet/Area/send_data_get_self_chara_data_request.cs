@@ -216,26 +216,26 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries);//has to be less than 19(defines how many int32s to read?)
 
             //sub_483660 type of weapon?
-            int meme = 2; //6 and 7 make the weapon go away, 19 here has weird results, 21 does a hit anim?, 22 a weird fall anim?, 23 item use+weird thingy, 
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
-            res.WriteInt32(meme);
+            int test = 2;           //6 and 7 make the weapon go away, 19 here has weird results, 21 does a hit anim?, 22 a weird fall anim?, 23 item use+weird thingy, 
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
+            res.WriteInt32(test);
 
 
 
@@ -271,26 +271,26 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries);
 
             //sub_483420 has to be 3 for wep to be 1h sword
-            int meme1 = 3;
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
-            res.WriteInt32(meme1);
+            int test1 = 3;
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
+            res.WriteInt32(test1);
 
             //sub_483420
             numEntries = 128;
