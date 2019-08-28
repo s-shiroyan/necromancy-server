@@ -59,25 +59,25 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteInt32(19);
 
                 //this is an x19 loop but i broke it up
-                res2.WriteInt32(10310503);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
-                res2.WriteInt32(-1);
+                res2.WriteInt32(24);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
 
                 res2.WriteInt32(19);
 
@@ -89,7 +89,7 @@ namespace Necromancy.Server.Packet.Area
 
                 {
                     // loop start
-                    res2.WriteInt32(10310503); // this is a loop within a loop i went ahead and broke it up
+                    res2.WriteInt32(210901); // this is a loop within a loop i went ahead and broke it up
                     res2.WriteByte(0);
                     res2.WriteByte(0);
                     res2.WriteByte(0);

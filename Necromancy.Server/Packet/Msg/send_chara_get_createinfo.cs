@@ -682,80 +682,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+            int x = 0;
+            int[] EquipId = new int[19];
+            
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
-                res.WriteByte(1);
+
+                res.WriteInt32(00752401);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-            }
-            //res.WriteInt32(0);
+                res.WriteByte(0); //0  ????
 
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte) i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+                
 
-                //4bytes - 004948EE
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(2);
-                // Read Byte
-                res.WriteByte(3);
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
 
-                //4bytes
-                res.WriteByte(1);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(4);
-                // Read Byte
-                res.WriteByte(5);
-                // Read Byte
-                res.WriteByte(6);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(3);
-                // Read Byte
-                res.WriteByte(2);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(4);
-                // Read Byte
-                res.WriteByte(3);
-                // Read Byte
-                res.WriteByte(2);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-                // end     
+                x++;
             }
 
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(1);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
+
+
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(1);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Human_Male(IBuffer res) //characater creation area?
@@ -776,79 +797,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+            
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752101);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+                
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Human_Female(IBuffer res) //characater creation area?
@@ -869,79 +912,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+            
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752201);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Elf_Male(IBuffer res) //characater creation area?
@@ -962,79 +1027,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752301);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Dwarf_Male(IBuffer res) //characater creation area?
@@ -1055,79 +1142,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752501);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Gnome_Female(IBuffer res) //characater creation area?
@@ -1148,79 +1257,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00753001);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(3); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Prokul_Male(IBuffer res) //characater creation area?
@@ -1241,79 +1372,101 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);
 
 
-            for (int i = 0; i < 19; i++)
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
+
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752701);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E3700_Porkul_Female(IBuffer res) //characater creation area?
@@ -1333,80 +1486,101 @@ namespace Necromancy.Server.Packet.Msg
             //1 byte cmp,1 -> sete (bool)
             res.WriteByte(1);
 
+            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
+            int Armor = 25;         //Armor 25
+            int Accessory = 27;     //Accessory 26
+            int Shield = 21;        //Shield 19-21
+            int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                                     //sub_483660 
+            res.WriteInt32(Weapon); //18	    				
+            res.WriteInt32(Shield); //17 	    		
+            res.WriteInt32(Armor); //16	        			
+            res.WriteInt32(Armor); //15	        				
+            res.WriteInt32(Armor); //14	        			
+            res.WriteInt32(Armor); //13	        			
+            res.WriteInt32(Armor); //12	        				
+            res.WriteInt32(Accessory); //11	  	
+            res.WriteInt32(Accessory); //10	    			
+            res.WriteInt32(Accessory); //9	    		
+            res.WriteInt32(Accessory); //8	    			
+            res.WriteInt32(Accessory); //7	    			
+            res.WriteInt32(Armor); //6          				
+            res.WriteInt32(Armor); //5          		
+            res.WriteInt32(Armor); //4	        					
+            res.WriteInt32(Armor); //3	        				
+            res.WriteInt32(Armor); //2          				
+            res.WriteInt32(Shield + 1); //1       					
+            res.WriteInt32(22);  //0 
 
-            for (int i = 0; i < 19; i++)
+
+            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
+            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
+
+
+            //sub_483420
+            int numEntries = 19;
+
+
+            int[] EquipId = new int[19];
+
+
+            //sub_4948C0
+            for (int i = 0; i < numEntries; i++)
             {
-                // 4bytes
+
+                res.WriteInt32(00752801);//???
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteByte(0); //0  ????
+
+
+                res.WriteInt32(12341234);//???
+                res.WriteByte(0); //
+                res.WriteByte(4); //
+                res.WriteByte(1); //
+
+
+                res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(4); // testing
+                res.WriteByte(2); //Alternate texture for item model 
+                res.WriteByte(4); // seperate in assembly
+
+
             }
 
+            //sub_483420
+            numEntries = 19;//influences a loop that needs to be under 19
 
-            // 004E3797
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte((byte)i);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                //4bytes - 004948EE
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(1);
-
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end loop
-
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-
-                // Read Byte cmp,1 -> sete (bool)
-                res.WriteByte(1);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // Read Byte
-                res.WriteByte(0);
-                // end     
-            }
-
-            // 004E37BD
-            for (int i = 0; i < 19; i++)
-            {
-                //4bytes
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
+            int rr = 000;
+            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
+            res.WriteInt32(001); //Right Hand    //1 for weapon
+            res.WriteInt32(002); //Left Hand     //2 for Shield
+            res.WriteInt32(016); //Torso         //16 for torso
+            res.WriteInt32(008); //Head          //08 for head
+            res.WriteInt32(032); //Legs          //32 for legs
+            res.WriteInt32(064); //Arms          //64 for Arms
+            res.WriteInt32(128); //Feet          //128 for feet
+            res.WriteInt32(004); //???Cape
+            res.WriteInt32(rr); //???Ring
+            res.WriteInt32(rr); //???Earring
+            res.WriteInt32(rr); //???Necklace
+            res.WriteInt32(rr); //???Belt
+            res.WriteInt32(016); //Avatar Torso
+            res.WriteInt32(128); //Avatar Feet
+            res.WriteInt32(064); //Avatar Arms
+            res.WriteInt32(032); //Avatar Legs
+            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(004); //???
+            res.WriteInt32(000); //Right Hand   
 
 
             //Read 1 byte (004E37C7)
-            res.WriteByte(0);
+            res.WriteByte(19);
         }
 
         private void wo_4E08E0_Human_Stats(IBuffer res)
