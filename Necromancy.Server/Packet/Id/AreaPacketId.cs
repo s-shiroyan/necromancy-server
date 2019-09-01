@@ -687,6 +687,7 @@ namespace Necromancy.Server.Packet.Id
         recv_wanted_update_state = 0xDD52,
         recv_wanted_update_state_actor_notify = 0xAFD1,
         recv_wanted_update_state_notify = 0x66EC,
+        
 
         // Send OP Codes - ordered by op code
 
@@ -830,7 +831,7 @@ namespace Necromancy.Server.Packet.Id
         send_party_decline_to_invite = 0x135, //opcode not found
         send_party_disband = 0x136,//opcode not found
         send_party_entry_draw = 0x137, //opcode not found
-        send_party_establish = 0x138, //opcode not found
+        send_party_establish = 0xAF25, //opcode not found
         send_party_establish_2 = 0x139, //opcode not found
         send_party_establish_3 = 0x140, //opcode not found
         send_party_establish_4 = 0x226, //opcode not found
