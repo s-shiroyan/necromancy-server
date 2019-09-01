@@ -29,10 +29,10 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyDataComplete(NecClient client)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteByte(5);
-            res2.WriteInt32(5);
-            res2.WriteInt32(5);
-            res2.WriteInt32(5);
+            res2.WriteByte(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
             Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data_complete, res2);
         }
 
@@ -49,9 +49,9 @@ namespace Necromancy.Server.Packet.Msg
             foreach (int y in slot)
             {
                 IBuffer res = BufferProvider.Provide();
-                res.WriteByte(slot[E]);//character slot, 0 for left, 1 for middle, 2 for right
-                res.WriteInt32(E+1);    //  Character ID
-                res.WriteFixedString("", 91); // 0x5B | 91x 1 byte
+                res.WriteByte(1);//character slot, 0 for left, 1 for middle, 2 for right
+                res.WriteInt32(1);    //  Character ID
+                res.WriteFixedString("Character 1", 91); // 0x5B | 91x 1 byte
 
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(0);//character level stat
@@ -102,7 +102,7 @@ namespace Necromancy.Server.Packet.Msg
                 int x = 0;
                 int[] EquipId = new int[19];
 
-                string CharacterSet = "Zenkato";
+                string CharacterSet = "";
 
                 switch (CharacterSet)
                 {

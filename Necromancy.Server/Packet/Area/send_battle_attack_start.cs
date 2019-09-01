@@ -13,6 +13,8 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_battle_attack_start;
+        
+        int i = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -28,7 +30,6 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Z = packet.Data.ReadFloat();
             }
 
-            Console.WriteLine($"X value: {client.Character.X}, Y value: {client.Character.Y}, Z value: {client.Character.Z}");
             //SendDataNotifyCharaData(client);
             //SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
             //SendCharaUpdateForm(client);
@@ -273,7 +274,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);
             res.WriteByte(client.Character.viewOffset);//View offset
-            res.WriteByte(0);
+            res.WriteByte(0);//Character state?
             
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
         }

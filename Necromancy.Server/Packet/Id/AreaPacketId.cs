@@ -85,7 +85,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_exit_r = 0xDA5C,
         recv_base_ping_r = 0xD2D6,
         recv_battle_attack_cancel_r = 0x9666,
-        recv_battle_attack_exec = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
+        recv_battle_attack_exec_r = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
         recv_battle_attack_pose = 0x0, //todo

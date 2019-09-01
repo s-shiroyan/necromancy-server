@@ -17,10 +17,24 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
+            int emote = packet.Data.ReadInt32();
+
           
             res.WriteInt32(0); 
 
             Router.Send(client, (ushort) AreaPacketId.recv_emotion_update_type_r, res);
+
+            SendEmotionNotifyType(client, emote);
+        }
+
+        public void SendEmotionNotifyType(NecClient client, int emote)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(client.Character.Id); //Character ID
+            res.WriteInt32(emote); //Emote ID
+            
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_emotion_notify_type, res, client);
         }
     }
 }
