@@ -18,6 +18,8 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(0);
            
 
             Router.Send(client, (ushort) MsgPacketId.recv_soul_delete_r, res);

@@ -139,13 +139,13 @@ namespace Necromancy.Server.Packet.Id
         send_cash_update = 0x003, // placeholder until found
         send_channel_select = 0x2F41,
         send_chara_create = 0xC2B,
-        send_chara_delete = 0x004, // placeholder until found
+        send_chara_delete = 0x9057,
         send_chara_draw_bonuspoint = 0x99EC,
         send_chara_get_createinfo = 0x7E62,
         send_chara_get_inheritinfo = 0x005, // placeholder until found
         send_chara_get_list = 0xF56C,
         send_chara_select = 0x610,
-        send_chara_select_back = 0x006, // placeholder until found
+        send_chara_select_back = 0x4772, 
         send_chara_select_back_soul_select = 0x007, // placeholder until found
         send_friend_reply_to_link2 = 0x008, // placeholder until found
         send_friend_request_delete_friend = 0x009, // placeholder until found
