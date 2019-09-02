@@ -13,8 +13,6 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_battle_attack_start;
-        
-        int i = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
         {

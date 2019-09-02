@@ -616,9 +616,10 @@ recv_dropobject_notify_access_priority = 0x10C5,
 			
 recv_0x10DA = 0x10DA, //no String push wizardryonline_patched.4D5DBF
             
-            res.WriteInt32(1);
-
-            res.WriteInt32(1);
+            int numEntries = 0x5;
+            res.WriteInt32(numEntries); //less than or equal to 5
+            for(int i = 0; i < numEntries; i++)
+                res.WriteInt32(0);
 
 recv_event_union_storage_open = 0x1105, 
             
