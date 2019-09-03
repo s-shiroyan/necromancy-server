@@ -154,7 +154,7 @@ recv_battle_report_notify_damage_mp = 0xFD41,
 	
 
 	
-recv_help_new_add  = 0xFF3F,
+recv_help_new_add = 0xFF3F,
 
 						res.WriteByte(0);
 						res.WriteByte(0);
@@ -665,7 +665,7 @@ recv_skill_base_notify = 0x1392,
 
             res.WriteInt32(0);
 
-ret two int32s = 0x1489, 
+recv_0x1489 = 0x1489, 
             
             res.WriteInt32(0);
             res.WriteInt32(0);
@@ -1775,8 +1775,119 @@ recv_self_returnhome_interval = 0xC300, // Parent = 0xC2A1 // Range ID = 03
 			
 
 
+recv_0x4978 = 0x4978; //goes to error
+			res.WriteInt32(0);
+            res.WriteInt32(0);
 
+            int numEntries = 0xA;
+            res.WriteInt32(0xA);//<a
+                for(int i = 0; i < numEntries; i++)
+                {
+                    res.WriteInt16(1);
+                    int numEntries2 = 0xC1;
+                    res.WriteInt64(numEntries2);
+                    for(int j = 0; j < numEntries2; j++)
+                    {
+                        res.WriteByte(1);
+                    }
+                }
 
+recv_0x4ABB = 0x4ABB, //Goes to error
 
+			res.WriteInt32(0);
+            res.WriteInt16(0);
+            
+recv_0x4CF3 = 0x4CF3, //Goes to error
 
+			res.WriteInt32(0);
 			
+recv_0x50D1 = 0x50D1, //Goes to error
+
+			res.WriteInt32(0);			
+			
+recv_0x531B = 0x531B, //Goes to error
+
+				res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteInt16(1);
+            res.WriteFloat(1);
+            res.WriteCString("");//0x31
+            res.WriteCString("");//0x5B		
+
+recv_0x5513 = 0x5513, //Goes to error
+
+				res.WriteInt32(1);
+                res.WriteByte(1);
+                res.WriteInt32(1);
+                res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                
+                res.WriteFloat(1);//x
+                res.WriteFloat(1);//y
+                res.WriteFloat(1);//z
+                res.WriteByte(1);//offset
+                    
+                res.WriteCString("");//601
+
+recv_0xC078 = 0xC078, //Goes to push wizardryonline_patched.4D6008 
+
+				res.WriteInt32(1);
+                res.WriteInt16(1);
+                res.WriteInt16(1);
+                res.WriteInt32(1);
+               
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1);
+
+                res.WriteInt16(1);
+
+                res.WriteByte(1);
+
+                res.WriteByte(1);
+
+                res.WriteByte(1);             
+  	
+recv_0xC078 = 0xC078, //Goes to push wizardryonline_patched.??forgot to write down
+	
+	
+				res.WriteInt32(0);
+
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteFloat(0);
+                res.WriteFloat(0);
+                
+                res.WriteByte(0);
+
+                res.WriteByte(0);
+	
+recv_0xD909 = 0xD909, //Goes to Error	
+	
+				res.WriteInt32(0);
+				
+recv_0xDA4A = 0xDA4A, //Goes to Error	
+	
+				res.WriteInt32(0);
+				
+recv_0xEEB7 = 0xEEB7, //Goes to Error					
+				res.WriteInt32(0);
+                res.WriteByte(0);				
+
+recv_0xFA0B = 0xFA0B, //Goes to Error					
+				res.WriteInt32(0);	
+				
+recv_0xFB79 = 0xFB79, //Goes to Error					
+				res.WriteInt32(0);					
