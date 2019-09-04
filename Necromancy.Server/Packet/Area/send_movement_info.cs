@@ -40,9 +40,10 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.X = packet.Data.ReadFloat();
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
-                a = packet.Data.ReadByte();
-                b = packet.Data.ReadInt16();
-                c = packet.Data.ReadByte();
+                client.Character.a = packet.Data.ReadByte();
+                client.Character.b = packet.Data.ReadByte();
+                client.Character.b2 = packet.Data.ReadByte();
+                client.Character.c = packet.Data.ReadByte();
                 d = packet.Data.ReadByte();
                 e = packet.Data.ReadInt16();
                 f = packet.Data.ReadByte();
@@ -60,6 +61,26 @@ namespace Necromancy.Server.Packet.Area
 
 
             {
+                
+                IBuffer res2 = BufferProvider.Provide();
+
+                res2.WriteInt32(client.Character.Id);//Character ID
+                res2.WriteFloat(client.Character.X);
+                res2.WriteFloat(client.Character.Y);
+                res2.WriteFloat(client.Character.Z);
+
+                res2.WriteByte(0);
+                res2.WriteByte(0);
+                res2.WriteByte(0);
+                res2.WriteInt16(0);
+                res2.WriteByte(0);
+                res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+                res2.WriteByte(0);
+
+
+
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
+
                 IBuffer res = BufferProvider.Provide();
 
                 res.WriteInt32(client.Character.Id);//Character ID
@@ -71,27 +92,10 @@ namespace Necromancy.Server.Packet.Area
 
                 //Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
 
-                //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
-
-                IBuffer res2 = BufferProvider.Provide();
-
-                res2.WriteInt32(client.Character.Id);//Character ID
-                res2.WriteFloat(client.Character.X);
-                res2.WriteFloat(client.Character.Y);
-                res2.WriteFloat(client.Character.Z);
-                res2.WriteByte(client.Character.viewOffset);//View offset
-
-                res2.WriteByte(100);
-                res2.WriteByte(100);
-                res2.WriteInt16(100);
-                res2.WriteByte(100);
-                res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                res2.WriteByte(100);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
 
 
-
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
-            }  
+            }
         }
     }
 }
