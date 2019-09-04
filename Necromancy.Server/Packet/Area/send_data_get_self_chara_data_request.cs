@@ -165,7 +165,7 @@ namespace Necromancy.Server.Packet.Area
                 //sub_484420
                 res.WriteFloat(-5516);//X Pos
                 res.WriteFloat(-3896);//Y Pos
-                res.WriteFloat(100);//Z Pos
+                res.WriteFloat(0);//Z Pos
                 res.WriteByte(180);//view offset
 
                 //sub_read_int32 skill point
@@ -220,7 +220,7 @@ namespace Necromancy.Server.Packet.Area
                 int Armor = 25;         //Armor 25
                 int Accessory = 27;     //Accessory 26
                 int Shield = 21;        //Shield 19-21
-                int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                int Weapon = 4;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
                 //sub_483660 
                 res.WriteInt32(Weapon); //18	    				
                 res.WriteInt32(Shield); //17 	    		
@@ -253,7 +253,7 @@ namespace Necromancy.Server.Packet.Area
                 int x=0;
                 int[] EquipId = new int[19]; 
 
-                string CharacterSet = "Zenkato";       
+                string CharacterSet = "0";       
                 
                 switch (CharacterSet)
                 { 

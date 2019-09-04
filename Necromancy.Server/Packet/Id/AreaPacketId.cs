@@ -65,6 +65,8 @@ namespace Necromancy.Server.Packet.Id
         recv_0xF212 = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
         recv_0xFA0B = 0xFA0B,
         recv_0xFB79 = 0xFB79,
+        recv_0xE8B9 = 0xE8B9,
+        recv_0x1FC1 = 0x1FC1,
         recv_auction_bid_r = 0x3F38,
         recv_auction_cancel_bid_r = 0xA0FC,
         recv_auction_cancel_exhibit_r = 0xFC28,
@@ -85,7 +87,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_exit_r = 0xDA5C,
         recv_base_ping_r = 0xD2D6,
         recv_battle_attack_cancel_r = 0x9666,
-        recv_battle_attack_exec_r = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
+        recv_battle_attack_exec_r = 0xF1A0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
         recv_battle_attack_pose = 0x0, //todo
@@ -704,9 +706,10 @@ namespace Necromancy.Server.Packet.Id
         send_base_enter = 0xAE43, 
         send_battle_attack_exec = 0xC38D, 
         send_battle_attack_exec_direct = 0x37, //opcode not found
-        send_battle_attack_next = 0x38, //opcode not found
+        send_battle_attack_next = 0x9D74, 
         send_battle_attack_pose = 0xC137, 
-        send_battle_attack_start = 0x6A72, 
+        send_movement_info = 0x6A72, // this is a custom string 
+        send_battle_attack_start = 0x3B2D,
         send_battle_charge_end = 0x39, //opcode not found
         send_battle_charge_start = 0x40, //opcode not found
         send_battle_guard_end = 0x41, //opcode not found
