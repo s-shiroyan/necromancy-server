@@ -51,7 +51,8 @@ namespace Necromancy.Server.Packet.Area
                 i = packet.Data.ReadByte();
                 j = packet.Data.ReadByte();
                 k = packet.Data.ReadInt32();
-                l = packet.Data.ReadInt16();
+                l = packet.Data.ReadByte();
+                client.Character.movementAnim = packet.Data.ReadByte();
                 m = packet.Data.ReadByte();
                 
             }
@@ -70,8 +71,26 @@ namespace Necromancy.Server.Packet.Area
 
                 //Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
+                //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
 
+                IBuffer res2 = BufferProvider.Provide();
+
+                res2.WriteInt32(client.Character.Id);//Character ID
+                res2.WriteFloat(client.Character.X);
+                res2.WriteFloat(client.Character.Y);
+                res2.WriteFloat(client.Character.Z);
+                res2.WriteByte(client.Character.viewOffset);//View offset
+
+                res2.WriteByte(100);
+                res2.WriteByte(100);
+                res2.WriteInt16(100);
+                res2.WriteByte(100);
+                res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+                res2.WriteByte(100);
+
+
+
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
             }  
         }
     }

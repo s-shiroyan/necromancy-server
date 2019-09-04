@@ -801,7 +801,7 @@ namespace Necromancy.Server.Packet.Id
         send_gem_set_synthesis = 0x109, //opcode not found
         send_gem_synthesis = 0x110, //opcode not found
         send_get_refusallist = 0x6C17, 
-        send_gimmick_access_object = 0x111, //opcode not found
+        send_gimmick_access_object = 0xCAD8, 
         send_help_new_remove = 0x112, //opcode not found
         send_inherit_start = 0x113, //opcode not found
         send_item_drop = 0x114, //opcode not found
