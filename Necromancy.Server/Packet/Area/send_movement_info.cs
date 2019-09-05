@@ -33,6 +33,8 @@ namespace Necromancy.Server.Packet.Area
             int k = 0;
             int l = 0;
             byte m = 0;
+            
+
 
 
             if (client.Character != null)
@@ -54,33 +56,36 @@ namespace Necromancy.Server.Packet.Area
                 k = packet.Data.ReadInt32();
                 l = packet.Data.ReadByte();
                 client.Character.movementAnim = packet.Data.ReadByte();
-                m = packet.Data.ReadByte();
+                client.Character.animJump = packet.Data.ReadByte();
                 
             }
 
-
-
+           
             {
+                //for (byte xd = 0; xd < 255; xd++)
                 
-                IBuffer res2 = BufferProvider.Provide();
+                    IBuffer res2 = BufferProvider.Provide();
 
-                res2.WriteInt32(client.Character.Id);//Character ID
-                res2.WriteFloat(client.Character.X);
-                res2.WriteFloat(client.Character.Y);
-                res2.WriteFloat(client.Character.Z);
+                    res2.WriteInt32(client.Character.Id);//Character ID
+                    res2.WriteFloat(client.Character.X);
+                    res2.WriteFloat(client.Character.Y);
+                    res2.WriteFloat(client.Character.Z);
 
-                res2.WriteByte(0);
-                res2.WriteByte(0);
-                res2.WriteByte(0);
-                res2.WriteInt16(0);
-                res2.WriteByte(0);
-                res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                res2.WriteByte(0);
+                    res2.WriteByte(0);
+                    res2.WriteByte(0);
+                    res2.WriteByte(0);
+                    res2.WriteInt16(0);
+                    res2.WriteByte(0);
+                    res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+                    res2.WriteByte(client.Character.animJump);
 
 
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
 
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
+
+                    //System.Threading.Thread.Sleep(1000);
+                
                 IBuffer res = BufferProvider.Provide();
 
                 res.WriteInt32(client.Character.Id);//Character ID
