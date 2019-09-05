@@ -11,11 +11,31 @@ namespace Necromancy.Server.Model
         public int battlePose { get; set; }
         public byte charaPose { get; set; }
         public byte movementAnim { get; set; }
+        public byte animJump { get; set; }
+
         public byte a { get; set; }
         public byte b { get; set; }
         public byte b2 { get; set; }
         public byte c { get; set; }
-        public byte animJump { get; set; }
+        public byte d { get; set; }
+        public byte e { get; set; }
+        public byte e1 { get; set; }
+        public byte f { get; set; }
+        public byte g1 { get; set; }
+        public byte g2 { get; set; }
+        public byte g3 { get; set; }
+        public byte g4 { get; set; }
+        public byte h { get; set; }
+        public byte i { get; set; }
+        public byte j { get; set; }
+        public byte k { get; set; }
+        public byte k1 { get; set; }
+        public byte k2 { get; set; }
+        public byte k3 { get; set; }
+        public byte l { get; set; }
+        
+        
+        
 
 
 

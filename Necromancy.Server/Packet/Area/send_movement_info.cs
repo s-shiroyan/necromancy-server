@@ -33,29 +33,57 @@ namespace Necromancy.Server.Packet.Area
             int k = 0;
             int l = 0;
             byte m = 0;
-            
+            byte g1 = 0;
+            byte g2 = 0;
+            byte g3 = 0;
+            byte g4 = 0;
 
-
+            byte k1 = 0;
+            byte k2 = 0;
+            byte k3 = 0;
 
             if (client.Character != null)
             {
                 client.Character.X = packet.Data.ReadFloat();
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
+
+
+                //these bytes below with a varible as a name have not been confirmed this is for testing
                 client.Character.a = packet.Data.ReadByte();
+
                 client.Character.b = packet.Data.ReadByte();
                 client.Character.b2 = packet.Data.ReadByte();
+
                 client.Character.c = packet.Data.ReadByte();
-                d = packet.Data.ReadByte();
-                e = packet.Data.ReadInt16();
-                f = packet.Data.ReadByte();
-                g = packet.Data.ReadInt32();
-                h = packet.Data.ReadByte();
-                i = packet.Data.ReadByte();
-                j = packet.Data.ReadByte();
-                k = packet.Data.ReadInt32();
-                l = packet.Data.ReadByte();
+
+                client.Character.d = packet.Data.ReadByte();
+
+                client.Character.e = packet.Data.ReadByte();
+                client.Character.e1 = packet.Data.ReadByte();
+
+                client.Character.f = packet.Data.ReadByte();
+
+                client.Character.g1 = packet.Data.ReadByte();
+                client.Character.g2 = packet.Data.ReadByte();
+                client.Character.g3 = packet.Data.ReadByte();
+                client.Character.g4 = packet.Data.ReadByte();
+
+                client.Character.h = packet.Data.ReadByte();
+
+                client.Character.i = packet.Data.ReadByte();
+
+                client.Character.j = packet.Data.ReadByte();
+
+                client.Character.k = packet.Data.ReadByte();
+                client.Character.k1 = packet.Data.ReadByte();
+                client.Character.k2 = packet.Data.ReadByte();
+                client.Character.k3 = packet.Data.ReadByte();
+                
+                client.Character.l = packet.Data.ReadByte();
+
                 client.Character.movementAnim = packet.Data.ReadByte();
+
                 client.Character.animJump = packet.Data.ReadByte();
                 
             }
@@ -71,13 +99,13 @@ namespace Necromancy.Server.Packet.Area
                     res2.WriteFloat(client.Character.Y);
                     res2.WriteFloat(client.Character.Z);
 
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
+                    res2.WriteByte(0);//LOCKON TURN ANIM
+                    res2.WriteByte(client.Character.k1);//LOCKON TURN ANIM
                     res2.WriteByte(0);
                     res2.WriteInt16(0);
                     res2.WriteByte(0);
                     res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                    res2.WriteByte(client.Character.animJump);
+                    res2.WriteByte(client.Character.animJump);//JUMP/FALLING ANIM
 
 
 
