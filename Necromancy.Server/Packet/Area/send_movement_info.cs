@@ -78,13 +78,13 @@ namespace Necromancy.Server.Packet.Area
                     res2.WriteFloat(client.Character.Y);
                     res2.WriteFloat(client.Character.Z);
 
-                    res2.WriteByte(client.Character.bodyRotation1);//UPPERBODYROTATION
-                    res2.WriteByte(client.Character.bodyRotation2);//UPPERBODYROTATION
-                    res2.WriteByte(127);
+                    res2.WriteByte(0);//LOCKON ANIM & WEAPON WALK ANIM
+                    res2.WriteByte(0);//LOCKON ANIM & WEAPON WALK ANIM
+                    res2.WriteByte(0);
                     res2.WriteInt16(0);
-                    res2.WriteByte(127);
+                    res2.WriteByte(0);
                     res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                    res2.WriteByte(client.Character.animJumpFall);//JUMP/FALLING ANIM
+                    res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
 
 
 
