@@ -28,21 +28,21 @@ namespace Necromancy.Server.Packet.Area
         private void SendSkillStartCastSelf(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(1);
+            res.WriteInt32(client.Character.Id);
             res.WriteFloat(10);
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
         }
         private void SendSkillStartCast(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.Id);
             res.WriteFloat(10);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);
         }
         private void SendSkillStartCastExR(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0x3910);
+            res.WriteInt32(client.Character.Id);
             res.WriteFloat(10);
 
             res.WriteInt32(0x3910);

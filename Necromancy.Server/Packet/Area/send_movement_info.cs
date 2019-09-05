@@ -90,8 +90,8 @@ namespace Necromancy.Server.Packet.Area
 
            
             {
-                //for (byte xd = 0; xd < 255; xd++)
-                
+               // for (byte xd = 0; xd < 255; xd++)
+                {
                     IBuffer res2 = BufferProvider.Provide();
 
                     res2.WriteInt32(client.Character.Id);//Character ID
@@ -99,8 +99,8 @@ namespace Necromancy.Server.Packet.Area
                     res2.WriteFloat(client.Character.Y);
                     res2.WriteFloat(client.Character.Z);
 
-                    res2.WriteByte(0);//LOCKON TURN ANIM
-                    res2.WriteByte(client.Character.k1);//LOCKON TURN ANIM
+                    res2.WriteByte(client.Character.b2);//LOCKON TURN ANIM
+                    res2.WriteByte(client.Character.e1);//LOCKON TURN ANIM
                     res2.WriteByte(0);
                     res2.WriteInt16(0);
                     res2.WriteByte(0);
@@ -113,6 +113,7 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
 
                     //System.Threading.Thread.Sleep(1000);
+                }
                 
                 IBuffer res = BufferProvider.Provide();
 
