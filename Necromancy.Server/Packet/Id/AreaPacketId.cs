@@ -8,7 +8,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-
+        recv_0x1D09 = 0x1D09,
         recv_0x10DA = 0x10DA,
         recv_0x1489 = 0x1489,
         recv_0x166B = 0x166B,

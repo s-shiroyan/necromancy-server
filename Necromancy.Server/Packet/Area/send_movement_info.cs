@@ -15,33 +15,12 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_movement_info;
 
-        int x = 0;
+        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-            byte a = 0;
-            int b = 0;
-            byte c = 0;
-            byte d = 0;
-            int e = 0;
-            byte f = 0;
-            int g = 0;
-            byte h = 0;
-            byte i = 0;
-            byte j = 0;
-            int k = 0;
-            int l = 0;
-            byte m = 0;
-            byte g1 = 0;
-            byte g2 = 0;
-            byte g3 = 0;
-            byte g4 = 0;
-
-            byte k1 = 0;
-            byte k2 = 0;
-            byte k3 = 0;
-
+            
             if (client.Character != null)
             {
                 client.Character.X = packet.Data.ReadFloat();
@@ -53,14 +32,14 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.a = packet.Data.ReadByte();
 
                 client.Character.b = packet.Data.ReadByte();
-                client.Character.b2 = packet.Data.ReadByte();
+                client.Character.bodyRotation1 = packet.Data.ReadByte();
 
                 client.Character.c = packet.Data.ReadByte();
 
                 client.Character.d = packet.Data.ReadByte();
 
                 client.Character.e = packet.Data.ReadByte();
-                client.Character.e1 = packet.Data.ReadByte();
+                client.Character.bodyRotation2 = packet.Data.ReadByte();
 
                 client.Character.f = packet.Data.ReadByte();
 
@@ -84,7 +63,7 @@ namespace Necromancy.Server.Packet.Area
 
                 client.Character.movementAnim = packet.Data.ReadByte();
 
-                client.Character.animJump = packet.Data.ReadByte();
+                client.Character.animJumpFall = packet.Data.ReadByte();
                 
             }
 
@@ -99,13 +78,13 @@ namespace Necromancy.Server.Packet.Area
                     res2.WriteFloat(client.Character.Y);
                     res2.WriteFloat(client.Character.Z);
 
-                    res2.WriteByte(client.Character.b2);//LOCKON TURN ANIM
-                    res2.WriteByte(client.Character.e1);//LOCKON TURN ANIM
-                    res2.WriteByte(0);
+                    res2.WriteByte(client.Character.bodyRotation1);//UPPERBODYROTATION
+                    res2.WriteByte(client.Character.bodyRotation2);//UPPERBODYROTATION
+                    res2.WriteByte(127);
                     res2.WriteInt16(0);
-                    res2.WriteByte(0);
+                    res2.WriteByte(127);
                     res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                    res2.WriteByte(client.Character.animJump);//JUMP/FALLING ANIM
+                    res2.WriteByte(client.Character.animJumpFall);//JUMP/FALLING ANIM
 
 
 
@@ -124,9 +103,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(client.Character.viewOffset);//View offset
                 res.WriteByte(client.Character.viewOffset);//Character state?
 
-                //Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
+               // Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
 
 
             }
