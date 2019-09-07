@@ -19,8 +19,8 @@ namespace Necromancy.Server.Model
         public byte b1 { get; set; }
         public byte e1 { get; set; }
 
-        public byte H { get; set; }
-        public byte H2 { get; set; }
+        public byte wepEastWestAnim { get; set; }
+        public byte wepNorthSouthAnim { get; set; }
 
         public byte a { get; set; }
         public byte b { get; set; }
@@ -52,7 +52,7 @@ namespace Necromancy.Server.Model
         client.Character.e = packet.Data.ReadInt16();
         client.Character.f = packet.Data.ReadByte();
         client.Character.g = packet.Data.ReadInt32();
-        client.Character.h = packet.Data.ReadByte();
+        client.Character.wepEastWestAnim = packet.Data.ReadByte();
         client.Character.i = packet.Data.ReadByte();
         client.Character.j = packet.Data.ReadByte();
         client.Character.k = packet.Data.ReadInt32();

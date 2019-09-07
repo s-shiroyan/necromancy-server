@@ -49,7 +49,7 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.g3 = packet.Data.ReadByte();
                 client.Character.g4 = packet.Data.ReadByte();
 
-                client.Character.h = packet.Data.ReadByte();
+                client.Character.wepEastWestAnim = packet.Data.ReadByte();
 
                 client.Character.i = packet.Data.ReadByte();
 
@@ -66,57 +66,52 @@ namespace Necromancy.Server.Packet.Area
 
                 client.Character.animJumpFall = packet.Data.ReadByte();
 
-                client.Character.H2 = client.Character.xAnim;
-
-                client.Character.H = 126; //HANDLES LEFT AND RIGHT ANIMS WITH WEAPONS/SIDEWALKING   
-                client.Character.H2 = 0; // HANDLES FRONT AND BACK ANIMS WITH WEAPONS/SIDEWALKING
-
                 // the game divides the normal 360 radius by 2. giving view direction only 1-180
 
                 if (client.Character.viewOffset <= 180) // NORTH
                 {
-                    client.Character.H = 0;
-                    client.Character.H2 = 126;
+                    client.Character.wepEastWestAnim = 0;
+                    client.Character.wepNorthSouthAnim = 127;
 
                     if (client.Character.viewOffset <= 168.75) // SOUTH-EAST
                     {
-                        client.Character.H = 126;
-                        client.Character.H2 = 126;
+                        client.Character.wepEastWestAnim = 127;
+                        client.Character.wepNorthSouthAnim = 127;
 
                         if (client.Character.viewOffset <= 146.25) // EAST
                         {
-                            client.Character.H = 126;
-                            client.Character.H2 = 0;
+                            client.Character.wepEastWestAnim = 127;
+                            client.Character.wepNorthSouthAnim = 0;
 
                             if (client.Character.viewOffset <= 123.75) // SOUTH-EAST
                             {
-                                client.Character.H = 126;
-                                client.Character.H2 = 129;
+                                client.Character.wepEastWestAnim = 127;
+                                client.Character.wepNorthSouthAnim = 128;
 
                                 if (client.Character.viewOffset <= 101.25) // SOUTH
                                 {
-                                    client.Character.H = 0;
-                                    client.Character.H2 = 129;
+                                    client.Character.wepEastWestAnim = 0;
+                                    client.Character.wepNorthSouthAnim = 128;
 
                                     if (client.Character.viewOffset <= 78.75) // SOUTH-WEST
                                     {
-                                        client.Character.H = 129;
-                                        client.Character.H2 = 129;
+                                        client.Character.wepEastWestAnim = 128;
+                                        client.Character.wepNorthSouthAnim = 128;
 
                                         if (client.Character.viewOffset <= 56.25) // WEST
                                         {
-                                            client.Character.H = 129;
-                                            client.Character.H2 = 0;
+                                            client.Character.wepEastWestAnim = 128;
+                                            client.Character.wepNorthSouthAnim = 0;
 
                                             if (client.Character.viewOffset <= 33.75) // NORTH-WEST
                                             {
-                                                client.Character.H = 129;
-                                                client.Character.H2 = 126;
+                                                client.Character.wepEastWestAnim = 128;
+                                                client.Character.wepNorthSouthAnim = 127;
 
                                                 if (client.Character.viewOffset <= 11.25) // NORTH
                                                 {
-                                                    client.Character.H = 0;
-                                                    client.Character.H2 = 126;
+                                                    client.Character.wepEastWestAnim = 0;
+                                                    client.Character.wepNorthSouthAnim = 127;
                                                 }
                                             }
                                         }
@@ -129,8 +124,8 @@ namespace Necromancy.Server.Packet.Area
                 
                 if (client.Character.weaponEquipped == false)
                 {
-                    client.Character.H = 0;
-                    client.Character.H2 = 0;
+                    client.Character.wepEastWestAnim = 0;
+                    client.Character.wepNorthSouthAnim = 0;
                 }
 
                 {
@@ -144,13 +139,11 @@ namespace Necromancy.Server.Packet.Area
                         res2.WriteFloat(client.Character.Y);
                         res2.WriteFloat(client.Character.Z);
 
-                        res2.WriteByte(client.Character.H);//MOVEMENT ANIMS WITH WEAPON EQUIPPED
-                        res2.WriteByte(client.Character.H2);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
+                        res2.WriteByte(client.Character.wepEastWestAnim); //HANDLES EAST AND WEST ANIMS WITH WEAPONS
+                        res2.WriteByte(client.Character.wepNorthSouthAnim);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS
                         res2.WriteByte(0);
 
-                        //res2.WriteInt16(0);
-                        res2.WriteByte(0);
-                        res2.WriteByte(0);
+                        res2.WriteInt16(0);
 
                         res2.WriteByte(0);
                         res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
