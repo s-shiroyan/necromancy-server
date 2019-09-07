@@ -68,9 +68,49 @@ namespace Necromancy.Server.Packet.Area
 
                 client.Character.H2 = client.Character.xAnim;
 
-                client.Character.H = client.Character.e1;
-                client.Character.H2 = client.Character.xAnim;
+                client.Character.H = 0; //HANDLES LEFT AND RIGHT ANIMS WITH WEAPONS/SIDEWALKING   
+                client.Character.H2 = 0; // HANDLES FRONT AND BACK ANIMS WITH WEAPONS/SIDEWALKING
 
+                if (client.Character.viewOffset <= 255) // SOUTH-WEST
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 223) // WEST
+                {
+                    client.Character.H = 126;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 191) // SOUTH-WEST
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 159) // SOUTH
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 129;
+                }
+                else if (client.Character.viewOffset <= 127) // SOUTH-EAST
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 95) // EAST
+                {
+                    client.Character.H = 126;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 63) // NORTH-EAST
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 0;
+                }
+                else if (client.Character.viewOffset <= 31) // NORTH
+                {
+                    client.Character.H = 0;
+                    client.Character.H2 = 126;
+                }
                 if (client.Character.weaponEquipped == false)
                 {
                     client.Character.H = 0;
