@@ -13,12 +13,14 @@ namespace Necromancy.Server.Model
         public byte movementAnim { get; set; }
         public byte animJumpFall { get; set; }
         public byte xAnim { get; set; }
+        public bool weaponEquipped { get; set; }
 
 
         public byte b1 { get; set; }
         public byte e1 { get; set; }
 
         public byte H { get; set; }
+        public byte H2 { get; set; }
 
         public byte a { get; set; }
         public byte b { get; set; }

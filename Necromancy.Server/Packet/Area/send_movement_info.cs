@@ -66,73 +66,17 @@ namespace Necromancy.Server.Packet.Area
 
                 client.Character.animJumpFall = packet.Data.ReadByte();
 
+                client.Character.H2 = client.Character.xAnim;
 
-                if (client.Character.xAnim == 0x3C)
+                client.Character.H = client.Character.e1;
+                client.Character.H2 = client.Character.xAnim;
+
+                if (client.Character.weaponEquipped == false)
                 {
-                    client.Character.H = 127;
-                }
-                else if (client.Character.xAnim == 0x3D)
-                {
-                    client.Character.H = 127;
-                }
-                else if (client.Character.xAnim == 0x3E)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.xAnim == 0x3F)
-                {
-                    client.Character.H = 127;
-                }
-                else if (client.Character.xAnim == 0xBC)
-                {
-                    client.Character.H = 127;
-                }
-                else if (client.Character.xAnim == 0xBD)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.xAnim == 0xBE)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.xAnim == 0xBF)
-                {
-                    client.Character.H = 127;  
+                    client.Character.H = 0;
+                    client.Character.H2 = 0;
                 }
 
-                
-                if (client.Character.c == 0xBF)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.c == 0xBE)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.c == 0x3D)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.c == 0xBD)
-                {
-                    client.Character.H = 128;
-                }
-                else if (client.Character.c == 0x3C)
-                {
-                    client.Character.H = 126;
-                }
-                else if (client.Character.c == 0xBC)
-                {
-                    client.Character.H = 129;
-                }
-                else if (client.Character.c == 0x3F)
-                {
-                    client.Character.H = 127;
-                }
-                else if (client.Character.c == 0x3E)
-                {
-                    client.Character.H = 127;
-                }
                 {
                     // for (byte xd = 0; xd < 255; xd++)
                     {
@@ -145,7 +89,7 @@ namespace Necromancy.Server.Packet.Area
                         res2.WriteFloat(client.Character.Z);
 
                         res2.WriteByte(client.Character.H);//MOVEMENT ANIMS WITH WEAPON EQUIPPED
-                        res2.WriteByte(client.Character.xAnim);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
+                        res2.WriteByte(client.Character.H2);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
                         res2.WriteByte(0);
 
                         //res2.WriteInt16(0);
