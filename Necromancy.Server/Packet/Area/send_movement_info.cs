@@ -16,11 +16,11 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_movement_info;
 
-        
+
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            
+
 
             if (client.Character != null)
             {
@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.k1 = packet.Data.ReadByte();
                 client.Character.k2 = packet.Data.ReadByte();
                 client.Character.k3 = packet.Data.ReadByte();
-                
+
                 client.Character.l = packet.Data.ReadByte();
 
                 client.Character.movementAnim = packet.Data.ReadByte();
@@ -67,13 +67,29 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.animJumpFall = packet.Data.ReadByte();
 
 
-                if (client.Character.xAnim == 0x3E)
+                if (client.Character.xAnim == 0x3C)
                 {
                     client.Character.H = 127;
                 }
+                else if (client.Character.xAnim == 0x3D)
+                {
+                    client.Character.H = 127;
+                }
+                else if (client.Character.xAnim == 0x3E)
+                {
+                    client.Character.H = 128;
+                }
                 else if (client.Character.xAnim == 0x3F)
                 {
-                    client.Character.H = 0;
+                    client.Character.H = 127;
+                }
+                else if (client.Character.xAnim == 0xBC)
+                {
+                    client.Character.H = 127;
+                }
+                else if (client.Character.xAnim == 0xBD)
+                {
+                    client.Character.H = 128;
                 }
                 else if (client.Character.xAnim == 0xBE)
                 {
@@ -81,59 +97,83 @@ namespace Necromancy.Server.Packet.Area
                 }
                 else if (client.Character.xAnim == 0xBF)
                 {
+                    client.Character.H = 127;
+                }
+
+
+                if (client.Character.c == 0xBF)
+                {
                     client.Character.H = 128;
                 }
-
-            }
-
-            
-
-            {
-               // for (byte xd = 0; xd < 255; xd++)
+                else if (client.Character.c == 0xBE)
                 {
-                    
-                    IBuffer res2 = BufferProvider.Provide();
-
-                    res2.WriteInt32(client.Character.Id);//Character ID
-                    res2.WriteFloat(client.Character.X);
-                    res2.WriteFloat(client.Character.Y);
-                    res2.WriteFloat(client.Character.Z);
-
-                    res2.WriteByte(0);//MOVEMENT ANIMS WITH WEAPON EQUIPPED
-                    res2.WriteByte(client.Character.xAnim);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
-                    res2.WriteByte(0);
-
-                    //res2.WriteInt16(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-
-                    res2.WriteByte(0);
-                    res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                    res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
-
-
-
-
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
-
-                    
-                    //System.Threading.Thread.Sleep(1000);
+                    client.Character.H = 128;
                 }
-                
-                IBuffer res = BufferProvider.Provide();
+                else if (client.Character.c == 0x3D)
+                {
+                    client.Character.H = 128;
+                }
+                else if (client.Character.c == 0xBD)
+                {
+                    client.Character.H = 127;
+                }
+                else if (client.Character.c == 0x3C)
+                {
+                    client.Character.H = 127;
+                }
+                else if (client.Character.c == 0xBC)
+                {
+                    client.Character.H = 127;
+                }
 
-                res.WriteInt32(client.Character.Id);//Character ID
-                res.WriteFloat(client.Character.X);
-                res.WriteFloat(client.Character.Y);
-                res.WriteFloat(client.Character.Z);
-                res.WriteByte(client.Character.viewOffset);//View offset
-                res.WriteByte(0);//Character state?
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
+                {
+                    // for (byte xd = 0; xd < 255; xd++)
+                    {
 
-               // Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
+                        IBuffer res2 = BufferProvider.Provide();
+
+                        res2.WriteInt32(client.Character.Id);//Character ID
+                        res2.WriteFloat(client.Character.X);
+                        res2.WriteFloat(client.Character.Y);
+                        res2.WriteFloat(client.Character.Z);
+
+                        res2.WriteByte(client.Character.H);//MOVEMENT ANIMS WITH WEAPON EQUIPPED
+                        res2.WriteByte(client.Character.xAnim);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
+                        res2.WriteByte(0);
+
+                        //res2.WriteInt16(0);
+                        res2.WriteByte(0);
+                        res2.WriteByte(0);
+
+                        res2.WriteByte(0);
+                        res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+                        res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
 
 
+
+
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
+
+
+                        //System.Threading.Thread.Sleep(1000);
+                    }
+
+                    IBuffer res = BufferProvider.Provide();
+
+                    res.WriteInt32(client.Character.Id);//Character ID
+                    res.WriteFloat(client.Character.X);
+                    res.WriteFloat(client.Character.Y);
+                    res.WriteFloat(client.Character.Z);
+                    res.WriteByte(client.Character.viewOffset);//View offset
+                    res.WriteByte(0);//Character state?
+
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client);
+
+                   // Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
+
+
+                }
             }
         }
     }
