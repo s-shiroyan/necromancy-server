@@ -68,49 +68,65 @@ namespace Necromancy.Server.Packet.Area
 
                 client.Character.H2 = client.Character.xAnim;
 
-                client.Character.H = 0; //HANDLES LEFT AND RIGHT ANIMS WITH WEAPONS/SIDEWALKING   
+                client.Character.H = 126; //HANDLES LEFT AND RIGHT ANIMS WITH WEAPONS/SIDEWALKING   
                 client.Character.H2 = 0; // HANDLES FRONT AND BACK ANIMS WITH WEAPONS/SIDEWALKING
 
-                if (client.Character.viewOffset <= 255) // SOUTH-WEST
-                {
-                    client.Character.H = 0;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 223) // WEST
-                {
-                    client.Character.H = 126;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 191) // SOUTH-WEST
-                {
-                    client.Character.H = 0;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 159) // SOUTH
-                {
-                    client.Character.H = 0;
-                    client.Character.H2 = 129;
-                }
-                else if (client.Character.viewOffset <= 127) // SOUTH-EAST
-                {
-                    client.Character.H = 0;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 95) // EAST
-                {
-                    client.Character.H = 126;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 63) // NORTH-EAST
-                {
-                    client.Character.H = 0;
-                    client.Character.H2 = 0;
-                }
-                else if (client.Character.viewOffset <= 31) // NORTH
+                // the game divides the normal 360 radius by 2. giving view direction only 1-180
+
+                if (client.Character.viewOffset <= 180) // NORTH
                 {
                     client.Character.H = 0;
                     client.Character.H2 = 126;
+
+                    if (client.Character.viewOffset <= 168.75) // SOUTH-EAST
+                    {
+                        client.Character.H = 126;
+                        client.Character.H2 = 126;
+
+                        if (client.Character.viewOffset <= 146.25) // EAST
+                        {
+                            client.Character.H = 126;
+                            client.Character.H2 = 0;
+
+                            if (client.Character.viewOffset <= 123.75) // SOUTH-EAST
+                            {
+                                client.Character.H = 126;
+                                client.Character.H2 = 129;
+
+                                if (client.Character.viewOffset <= 101.25) // SOUTH
+                                {
+                                    client.Character.H = 0;
+                                    client.Character.H2 = 129;
+
+                                    if (client.Character.viewOffset <= 78.75) // SOUTH-WEST
+                                    {
+                                        client.Character.H = 129;
+                                        client.Character.H2 = 129;
+
+                                        if (client.Character.viewOffset <= 56.25) // WEST
+                                        {
+                                            client.Character.H = 129;
+                                            client.Character.H2 = 0;
+
+                                            if (client.Character.viewOffset <= 33.75) // NORTH-WEST
+                                            {
+                                                client.Character.H = 129;
+                                                client.Character.H2 = 126;
+
+                                                if (client.Character.viewOffset <= 11.25) // NORTH
+                                                {
+                                                    client.Character.H = 0;
+                                                    client.Character.H2 = 126;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+                
                 if (client.Character.weaponEquipped == false)
                 {
                     client.Character.H = 0;
