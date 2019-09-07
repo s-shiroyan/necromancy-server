@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System;
+using System.IO;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -19,8 +20,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-
             
+
             if (client.Character != null)
             {
                 client.Character.X = packet.Data.ReadFloat();
@@ -32,16 +33,16 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.a = packet.Data.ReadByte();
 
                 client.Character.b = packet.Data.ReadByte();
-                client.Character.bodyRotation1 = packet.Data.ReadByte();
+                client.Character.b1 = packet.Data.ReadByte();
 
                 client.Character.c = packet.Data.ReadByte();
 
                 client.Character.d = packet.Data.ReadByte();
 
                 client.Character.e = packet.Data.ReadByte();
-                client.Character.bodyRotation2 = packet.Data.ReadByte();
+                client.Character.e1 = packet.Data.ReadByte();
 
-                client.Character.f = packet.Data.ReadByte();
+                client.Character.xAnim = packet.Data.ReadByte();
 
                 client.Character.g1 = packet.Data.ReadByte();
                 client.Character.g2 = packet.Data.ReadByte();
@@ -64,13 +65,33 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.movementAnim = packet.Data.ReadByte();
 
                 client.Character.animJumpFall = packet.Data.ReadByte();
-                
+
+
+                if (client.Character.xAnim == 0x3E)
+                {
+                    client.Character.H = 127;
+                }
+                else if (client.Character.xAnim == 0x3F)
+                {
+                    client.Character.H = 0;
+                }
+                else if (client.Character.xAnim == 0xBE)
+                {
+                    client.Character.H = 128;
+                }
+                else if (client.Character.xAnim == 0xBF)
+                {
+                    client.Character.H = 128;
+                }
+
             }
 
-           
+            
+
             {
                // for (byte xd = 0; xd < 255; xd++)
                 {
+                    
                     IBuffer res2 = BufferProvider.Provide();
 
                     res2.WriteInt32(client.Character.Id);//Character ID
@@ -78,10 +99,14 @@ namespace Necromancy.Server.Packet.Area
                     res2.WriteFloat(client.Character.Y);
                     res2.WriteFloat(client.Character.Z);
 
-                    res2.WriteByte(0);//LOCKON ANIM & WEAPON WALK ANIM
-                    res2.WriteByte(0);//LOCKON ANIM & WEAPON WALK ANIM
+                    res2.WriteByte(0);//MOVEMENT ANIMS WITH WEAPON EQUIPPED
+                    res2.WriteByte(client.Character.xAnim);// ALLOWS DIAGONAL WALKING WITH WEAPON EQUIPPED
                     res2.WriteByte(0);
-                    res2.WriteInt16(0);
+
+                    //res2.WriteInt16(0);
+                    res2.WriteByte(0);
+                    res2.WriteByte(0);
+
                     res2.WriteByte(0);
                     res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
                     res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
@@ -91,6 +116,7 @@ namespace Necromancy.Server.Packet.Area
 
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
 
+                    
                     //System.Threading.Thread.Sleep(1000);
                 }
                 
@@ -101,7 +127,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);
                 res.WriteByte(client.Character.viewOffset);//View offset
-                res.WriteByte(client.Character.viewOffset);//Character state?
+                res.WriteByte(0);//Character state?
 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client); 
 
