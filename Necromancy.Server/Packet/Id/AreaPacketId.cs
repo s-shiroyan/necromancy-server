@@ -712,8 +712,8 @@ namespace Necromancy.Server.Packet.Id
         send_battle_attack_start = 0x3B2D,
         send_battle_charge_end = 0x39, //opcode not found
         send_battle_charge_start = 0x40, //opcode not found
-        send_battle_guard_end = 0x41, //opcode not found
-        send_battle_guard_start = 0x42, //opcode not found 
+        send_battle_guard_end = 0xD2E7, 
+        send_battle_guard_start = 0x4362, 
         send_battle_release_attack_pose = 0x26BE, 
         send_blacklist_clear = 0xB742, 
         send_blacklist_close = 0xC780, 

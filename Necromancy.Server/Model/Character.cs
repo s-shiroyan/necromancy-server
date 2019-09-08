@@ -14,51 +14,9 @@ namespace Necromancy.Server.Model
         public byte animJumpFall { get; set; }
         public byte xAnim { get; set; }
         public bool weaponEquipped { get; set; }
-
-
-        public byte b1 { get; set; }
-        public byte e1 { get; set; }
-
         public byte wepEastWestAnim { get; set; }
         public byte wepNorthSouthAnim { get; set; }
 
-        public byte a { get; set; }
-        public byte b { get; set; }
-        
-        public byte c { get; set; }
-        public byte d { get; set; }
-        public byte e { get; set; }
-        
-        
-        public byte g1 { get; set; }
-        public byte g2 { get; set; }
-        public byte g3 { get; set; }
-        public byte g4 { get; set; }
-        public byte h { get; set; }
-        public byte i { get; set; }
-        public byte j { get; set; }
-        public byte k { get; set; }
-        public byte k1 { get; set; }
-        public byte k2 { get; set; }
-        public byte k3 { get; set; }
-        public byte l { get; set; }
-        
-        
-        
-
-
-
-        /*client.Character.d = packet.Data.ReadByte();
-        client.Character.e = packet.Data.ReadInt16();
-        client.Character.f = packet.Data.ReadByte();
-        client.Character.g = packet.Data.ReadInt32();
-        client.Character.wepEastWestAnim = packet.Data.ReadByte();
-        client.Character.i = packet.Data.ReadByte();
-        client.Character.j = packet.Data.ReadByte();
-        client.Character.k = packet.Data.ReadInt32();
-        client.Character.l = packet.Data.ReadByte();
-        client.Character.movementAnim = packet.Data.ReadByte();
-        client.Character.m = packet.Data.ReadByte();*/
     }
 
 }

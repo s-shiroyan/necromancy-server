@@ -30,37 +30,37 @@ namespace Necromancy.Server.Packet.Area
 
 
                 //these bytes below with a varible as a name have not been confirmed this is for testing
-                client.Character.a = packet.Data.ReadByte();
+                byte a = packet.Data.ReadByte();
 
-                client.Character.b = packet.Data.ReadByte();
-                client.Character.b1 = packet.Data.ReadByte();
+                byte b = packet.Data.ReadByte();
+                byte b1 = packet.Data.ReadByte();
 
-                client.Character.c = packet.Data.ReadByte();
+                byte c = packet.Data.ReadByte();
 
-                client.Character.d = packet.Data.ReadByte();
+                byte d = packet.Data.ReadByte();
 
-                client.Character.e = packet.Data.ReadByte();
-                client.Character.e1 = packet.Data.ReadByte();
+                byte e = packet.Data.ReadByte();
+                byte e1 = packet.Data.ReadByte();
 
-                client.Character.xAnim = packet.Data.ReadByte();
+                byte f = packet.Data.ReadByte();
 
-                client.Character.g1 = packet.Data.ReadByte();
-                client.Character.g2 = packet.Data.ReadByte();
-                client.Character.g3 = packet.Data.ReadByte();
-                client.Character.g4 = packet.Data.ReadByte();
+                byte g1 = packet.Data.ReadByte();
+                byte g2 = packet.Data.ReadByte();
+                byte g3 = packet.Data.ReadByte();
+                byte g4 = packet.Data.ReadByte();
 
-                client.Character.wepEastWestAnim = packet.Data.ReadByte();
+                byte h = packet.Data.ReadByte();
 
-                client.Character.i = packet.Data.ReadByte();
+                byte i = packet.Data.ReadByte();
 
-                client.Character.j = packet.Data.ReadByte();
+                byte j = packet.Data.ReadByte();
 
-                client.Character.k = packet.Data.ReadByte();
-                client.Character.k1 = packet.Data.ReadByte();
-                client.Character.k2 = packet.Data.ReadByte();
-                client.Character.k3 = packet.Data.ReadByte();
+                byte k = packet.Data.ReadByte();
+                byte k1 = packet.Data.ReadByte();
+                byte k2 = packet.Data.ReadByte();
+                byte k3 = packet.Data.ReadByte();
 
-                client.Character.l = packet.Data.ReadByte();
+                byte l = packet.Data.ReadByte();
 
                 client.Character.movementAnim = packet.Data.ReadByte();
 

@@ -18,11 +18,34 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             
-            SendSkillStartCast(client);
+            //SendSkillStartCast(client);
             //SendSkillStartCastSelf(client);
-            SendSkillStartCastExR(client);
-            if(skillExec)
-                SendSkillExecR(client);
+           // SendSkillStartCastExR(client);
+            //if(skillExec)
+              //  SendSkillExecR(client);
+
+            int cast = packet.Data.ReadInt32();
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(cast);
+            res.WriteFloat(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_start_cast_ex_r, res, client);
+            
         }
 
         private void SendSkillStartCastSelf(NecClient client)
@@ -34,9 +57,10 @@ namespace Necromancy.Server.Packet.Area
         }
         private void SendSkillStartCast(NecClient client)
         {
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.Id);
-            res.WriteFloat(10);
+            res.WriteInt32(0);
+            res.WriteFloat(2);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);
         }
         private void SendSkillStartCastExR(NecClient client)
