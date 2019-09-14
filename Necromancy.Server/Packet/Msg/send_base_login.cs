@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Msg
             for (int i = 0; i < SoulCount; i++)
             {
                 res.WriteByte(1);
-                res.WriteFixedString($"Soul {i}", 49);
+                res.WriteFixedString($"Talin", 49);
                 res.WriteByte(1); // Soul Level
                 res.WriteByte(0); // bool   (important bool, if use value 1 - can't join in msg server character list)
             }

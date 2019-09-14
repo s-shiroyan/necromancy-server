@@ -39,8 +39,8 @@ namespace Necromancy.Server.Packet.Auth
             //  0 = OK
             // 1 = ID or Pw to long
             // X unknown auth error, X
-            res.WriteInt32(0);
-            res.WriteInt32(1);
+            res.WriteInt32(0);  // this should be something too
+            res.WriteInt32(character.Id);
 
             Router.Send(client, (ushort) AuthPacketId.recv_base_authenticate_r, res);
         }

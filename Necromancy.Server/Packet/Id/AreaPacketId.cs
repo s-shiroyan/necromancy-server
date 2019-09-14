@@ -62,7 +62,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xDA4A = 0xDA4A,
         recv_0xEE18 = 0xEE18,
         recv_0xEEB7 = 0xEEB7,
-        recv_0xF212 = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
+        recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit : Confirmed Recv String
         recv_0xFA0B = 0xFA0B,
         recv_0xFB79 = 0xFB79,
         recv_auction_bid_r = 0x3F38,

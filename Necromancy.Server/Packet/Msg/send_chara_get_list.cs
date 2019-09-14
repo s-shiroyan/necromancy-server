@@ -38,7 +38,7 @@ namespace Necromancy.Server.Packet.Msg
 
         byte[] slot = new byte[] {0,1,2,3};//3,4};
 
-        int E = 0;
+        
         string[] MyCharacters = new string[] {"Zenkato","Test1","Xeno","Kadred","Ipa","Diablo",};
         int[] MyRace = new int[]{0,4,3,3,0,2};
         int[] MyGender = new int[]{1,1,0,0,1,1};
@@ -50,7 +50,7 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyData(NecClient client)
 
         {
-
+            int E = 0;
             foreach (int y in slot)
             {
                 IBuffer res = BufferProvider.Provide();
@@ -116,7 +116,7 @@ namespace Necromancy.Server.Packet.Msg
                     ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                         break;
                     case "Zenkato":
-                        EquipId = new int[] {11400401/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
+                        EquipId = new int[] {11400303/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                         break;
                     case "Ipa":
