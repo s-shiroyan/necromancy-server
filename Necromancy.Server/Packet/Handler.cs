@@ -15,6 +15,9 @@ namespace Necromancy.Server.Packet
             Router = server.Router;
             Database = server.Database;
             Settings = server.Setting;
+            Map = server.Map;
+            Clients = server.Clients;
+            Sessions = server.Sessions;
         }
 
         public abstract ushort Id { get; }
@@ -23,6 +26,9 @@ namespace Necromancy.Server.Packet
         protected NecSetting Settings { get; }
         protected NecLogger Logger { get; }
         protected PacketRouter Router { get; }
+        protected MapLookup Map { get; }
+        protected ClientLookup Clients { get; }
+        protected SessionManager Sessions { get; }
         protected IDatabase Database { get; }
         public abstract void Handle(NecClient client, NecPacket packet);
     }

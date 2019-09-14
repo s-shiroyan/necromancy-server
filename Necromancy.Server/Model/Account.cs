@@ -16,5 +16,10 @@ namespace Necromancy.Server.Model
         public AccountStateType State { get; set; }
         public DateTime? LastLogin { get; set; }
         public DateTime Created { get; set; }
+
+        public Account()
+        {
+            Id = -1;
+        }
     }
 }

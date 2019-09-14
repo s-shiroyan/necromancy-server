@@ -15,8 +15,9 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public ClientLookup ClientLookup { get; set; }
-        public MapLookup MapLookup { get; set; }
+        public SessionManager Sessions { get; }
+        public ClientLookup Clients { get; set; }
+        public MapLookup Map { get; set; }
         public IDatabase Database { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
@@ -31,8 +32,9 @@ namespace Necromancy.Server
         {
             _logger = LogProvider.Logger<NecLogger>(this);
             Setting = new NecSetting(setting);
-            ClientLookup = new ClientLookup();
-            MapLookup = new MapLookup();
+            Clients = new ClientLookup();
+            Map = new MapLookup();
+            Sessions = new SessionManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             _authConsumer = new NecQueueConsumer(Setting);

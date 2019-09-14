@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Auth
             int unknown = packet.Data.ReadInt16();
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
 
-            Account account = Database.SelectAccount(accountName);
+            Account account = Database.SelectAccountByName(accountName);
             if (account == null)
             {
                 if (Settings.NeedRegistration)
@@ -45,14 +45,12 @@ namespace Necromancy.Server.Packet.Auth
                 return;
             }
 
-            Character character = new Character();
-            character.Id = Util.GetRandomNumber(10, 100000);
-            character.Name = accountName;
+            // TODO replace with sessionId
+            Session session = new Session(account.Id.ToString(), account);
+            Server.Sessions.StoreSession(session);
+            client.Session = session;
 
-
-            client.Account = account;
-            client.Character = character;
-            Server.ClientLookup.Add(client);
+            Server.Clients.Add(client);
             SendResponse(client, account);
         }
 

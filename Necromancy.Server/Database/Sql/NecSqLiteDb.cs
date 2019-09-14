@@ -1,8 +1,9 @@
 using System;
 using System.Data.SQLite;
 using System.IO;
+using Necromancy.Server.Database.Sql.Core;
 
-namespace Necromancy.Server.Database
+namespace Necromancy.Server.Database.Sql
 {
     /// <summary>
     /// SQLite Necromancy database.
@@ -10,6 +11,9 @@ namespace Necromancy.Server.Database
     public class SqLiteDb : NecSqlDb<SQLiteConnection, SQLiteCommand>, IDatabase
     {
         public const string MemoryDatabasePath = ":memory:";
+
+        private const string SelectAutoIncrement = "SELECT last_insert_rowid()";
+
 
         private readonly string _databasePath;
         private string _connectionString;
@@ -19,12 +23,6 @@ namespace Necromancy.Server.Database
             _databasePath = databasePath;
             Logger.Info($"Database Path: {_databasePath}");
             CreateDatabase();
-        }
-
-
-        private long GetAutoIncrement(SQLiteConnection connection)
-        {
-            return connection.LastInsertRowId;
         }
 
         private void CreateDatabase()
@@ -65,6 +63,24 @@ namespace Necromancy.Server.Database
         protected override SQLiteCommand Command(string query, SQLiteConnection connection)
         {
             return new SQLiteCommand(query, connection);
+        }
+
+        /// <summary>
+        /// Thread Safe on Connection basis.
+        /// http://www.sqlite.org/c3ref/last_insert_rowid.html
+        /// </summary>
+        protected override long AutoIncrement(SQLiteConnection connection, SQLiteCommand command)
+        {
+            return connection.LastInsertRowId;
+            // long autoIncrement = NoAutoIncrement;
+            // ExecuteReader(SelectAutoIncrement, reader =>
+            // {
+            //     if (reader.Read())
+            //     {
+            //         autoIncrement = reader.GetInt32(0);
+            //     }
+            // });
+            // return autoIncrement;
         }
 
         public override int Upsert(string table, string[] columns, object[] values, string whereColumn,

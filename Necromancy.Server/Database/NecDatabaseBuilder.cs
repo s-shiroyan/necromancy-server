@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Database.Sql;
 using Necromancy.Server.Model;
 using Necromancy.Server.Setting;
 

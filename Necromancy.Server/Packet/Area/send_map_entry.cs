@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             int mapId = packet.Data.ReadInt32();
 
 
-            Map map = Server.MapLookup.Get(mapId);
+            Map map = Server.Map.Get(mapId);
             if (map == null)
             {
                 Logger.Error($"MapId: {mapId} not found in map lookup", client);
