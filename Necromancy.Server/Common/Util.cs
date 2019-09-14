@@ -302,7 +302,7 @@ namespace Necromancy.Server.Common
         /// </summary>
         public static string CommonDirectory()
         {
-            string location = typeof(Utils).GetTypeInfo().Assembly.Location;
+            string location = typeof(Util).GetTypeInfo().Assembly.Location;
             Uri uri = new Uri(location);
             string directory = Path.GetDirectoryName(uri.LocalPath);
             return directory;
