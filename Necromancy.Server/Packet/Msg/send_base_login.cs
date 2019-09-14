@@ -31,6 +31,12 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
 
+            // TODO initialize character from database
+            session.Character = new Character();
+            session.Character.Id = Util.GetRandomNumber(1, 999);
+            session.Character.SoulId = Util.GetRandomNumber(1, 999);
+            session.Character.AccountId = session.Account.Id;
+
             client.Session = session;
             SendResponse(client);
         }

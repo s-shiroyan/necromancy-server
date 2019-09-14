@@ -28,12 +28,6 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
-            // TODO initialize character from database
-            session.Character = new Character();
-            session.Character.Id = session.Account.Id;
-            session.Character.SoulId = session.Soul.Id;
-            session.Character.AccountId = session.Account.Id;
-
             client.Session = session;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
