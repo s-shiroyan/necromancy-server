@@ -1,4 +1,6 @@
+using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
@@ -13,8 +15,10 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public ClientLookup ClientLookup { get; set; }
-        public MapLookup MapLookup { get; set; }
+        public SessionManager Sessions { get; }
+        public ClientLookup Clients { get; set; }
+        public MapLookup Map { get; set; }
+        public IDatabase Database { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -26,10 +30,13 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
-            ClientLookup = new ClientLookup();
-            MapLookup = new MapLookup();
-            Setting = setting;
+            _logger = LogProvider.Logger<NecLogger>(this);
+            Setting = new NecSetting(setting);
+            Clients = new ClientLookup();
+            Map = new MapLookup();
+            Sessions = new SessionManager();
             Router = new PacketRouter();
+            Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             _authConsumer = new NecQueueConsumer(Setting);
             _authConsumer.SetIdentity("Auth");
             _authConsumer.ClientDisconnected += AuthClientDisconnected;

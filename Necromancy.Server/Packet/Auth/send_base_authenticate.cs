@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Setting;
 
 namespace Necromancy.Server.Packet.Auth
 {
@@ -21,26 +22,51 @@ namespace Necromancy.Server.Packet.Auth
             int unknown = packet.Data.ReadInt16();
             Logger.Info($"Account:{accountName} Password:{password} Unknown:{unknown}");
 
-            // TODO authenticate from db
-            Account account = new Account();
-            account.Name = accountName;
-            account.Id = Util.GetRandomNumber(10, 100000);
-            Character character = new Character();
-            character.Id = Util.GetRandomNumber(10, 100000);
-            character.Name = accountName;
-            //
+            Account account = Database.SelectAccountByName(accountName);
+            if (account == null)
+            {
+                if (Settings.NeedRegistration)
+                {
+                    Logger.Error(client, $"AccountName: {accountName} doesn't exist");
+                    SendResponse(client, null);
+                    client.Socket.Close();
+                    return;
+                }
 
-            client.Account = account;
-            client.Character = character;
-            Server.ClientLookup.Add(client);
+                string bCryptHash = BCrypt.Net.BCrypt.HashPassword(password, NecSetting.BCryptWorkFactor);
+                account = Database.CreateAccount(accountName, "", bCryptHash);
+            }
 
+            if (!BCrypt.Net.BCrypt.Verify(password, account.Hash))
+            {
+                Logger.Error(client, $"Invalid password for AccountName: {accountName}");
+                SendResponse(client, null);
+                client.Socket.Close();
+                return;
+            }
 
+            // TODO replace with sessionId
+            Session session = new Session(account.Id.ToString(), account);
+            Server.Sessions.StoreSession(session);
+            client.Session = session;
+
+            Server.Clients.Add(client);
+            SendResponse(client, account);
+        }
+
+        private void SendResponse(NecClient client, Account account)
+        {
             IBuffer res = BufferProvider.Provide();
-            //  0 = OK
-            // 1 = ID or Pw to long
-            // X unknown auth error, X
-            res.WriteInt32(0);  // this should be something too
-            res.WriteInt32(character.Id);
+            if (account == null)
+            {
+                res.WriteInt32(1); // Error (0 = OK,  1 = ID or Pw to long)
+                res.WriteInt32(0); // Account Id
+            }
+            else
+            {
+                res.WriteInt32(0); // Error (0 = OK,  1 = ID or Pw to long)
+                res.WriteInt32(account.Id);
+            }
 
             Router.Send(client, (ushort) AuthPacketId.recv_base_authenticate_r, res);
         }
