@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
         {
             int mySkillID = packet.Data.ReadInt32();
             int mySkillTarget = packet.Data.ReadInt32();
-            //float mySkillEffectTime = packet.Data.ReadFloat();
+            
             float mySkillEffectTime = 15;
             SendSkillStartCast(client,mySkillID,mySkillEffectTime);
             //SendSkillStartCastSelf(client,mySkillID);
@@ -28,17 +28,52 @@ namespace Necromancy.Server.Packet.Area
             if(skillExec)
                 SendSkillExecR(client,mySkillID,mySkillEffectTime,mySkillTarget);
                 
+            
+            //SendSkillStartCast(client);
+            //SendSkillStartCastSelf(client);
+           // SendSkillStartCastExR(client);
+            //if(skillExec)
+              //  SendSkillExecR(client);
+
+           
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(mySkillID);
+            res.WriteFloat(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_start_cast_ex_r, res, client);
+            
         }
 
         private void SendSkillStartCast(NecClient client,int mySkillTarget,float mySkillEffectTime)
         {
             IBuffer res = BufferProvider.Provide();
+            IBuffer res2 = BufferProvider.Provide();
             res.WriteInt32(mySkillTarget);
             res.WriteFloat(mySkillEffectTime);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);
+            /////////////////////////////////////
+            res2.WriteInt32(client.Character.Id);
+            res2.WriteFloat(10);
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res2);
         }
         private void SendSkillStartCastSelf(NecClient client, int mySkillTarget)
         {
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillTarget);
             res.WriteFloat(100);
@@ -79,10 +114,13 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(1);//Character Freeze time in seconds. (stiffen time?).  you can't move for this long after casting.  cast time?
             Router.Send(client, (ushort) AreaPacketId.recv_skill_exec_r, res);
             //Console.WriteLine($"res contents : {res}");
-            ThisTest(client);
+            //ThisTest(client);
             
             skillExec = true;
         }
+
+        ////////////everything below this line is for testing other recvs.  should be removed before commit to master.
+        
         int testIntIcrement = 0;
         private void ThisTest(NecClient client)
         {
@@ -91,27 +129,17 @@ namespace Necromancy.Server.Packet.Area
             //res.WriteInt64(10800405);
             res.WriteInt32(50100302); //Camp 50100302
             res.WriteFloat(1);
-            //res.WriteInt32(888888888);
             res2.WriteInt32(888888888);
-            //res.WriteInt32(888888888);
-            //res.WriteInt32(888888888);
-            //res.WriteByte(1);
+            
             Console.WriteLine($"This is a test : {client}");
             Router.Send(client, (ushort) AreaPacketId.recv_item_use_r, res);
             Router.Send(client, (ushort) AreaPacketId.recv_chara_update_hp, res2);
             testIntIcrement+=9; 
-            SendDataNotifyNpcData(client, testIntIcrement);
+            //SendDataNotifyNpcData(client, testIntIcrement);
             
             
         }
-        
-        int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
-        int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
-        int[] NPCX = new int[] { 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 1000 };
-        int[] NPCY = new int[] { 0 , -100, -200, -300, 100, 200, 300, 400, 0, 500 };
-        int[] NPCZ = new int[] { 25, -25, -25, 25, 25, -22, -25, 25, 0, 0 };
-        int[] TestArrayInt = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-        byte[] NPCViewAngle = new byte[] { 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 };
+ 
 
         
 
@@ -119,7 +147,15 @@ namespace Necromancy.Server.Packet.Area
         private void SendDataNotifyNpcData(NecClient client,int TestInt)
         {
             int x = -1;    
-            //IBuffer res2 = BufferProvider.Provide();
+            
+                   
+            int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
+            int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
+            int[] NPCX = new int[] { 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 1000 };
+            int[] NPCY = new int[] { 0 , -100, -200, -300, 100, 200, 300, 400, 0, 500 };
+            int[] NPCZ = new int[] { 25, -25, -25, 25, 25, -22, -25, 25, 0, 0 };
+            int[] TestArrayInt = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
+            byte[] NPCViewAngle = new byte[] { 40, 41, 42, 43, 44, 45, 46, 47, 48, 49 };
 
             foreach (int y in NPCModelID)
             {
