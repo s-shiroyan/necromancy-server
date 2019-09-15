@@ -26,7 +26,7 @@ namespace Necromancy.Server
         private readonly AsyncEventServer _authServer;
         private readonly AsyncEventServer _msgServer;
         private readonly AsyncEventServer _areaServer;
-        //private readonly NecLogger _logger;
+        private readonly NecLogger _logger;
 
         public NecServer(NecSetting setting)
         {
