@@ -20,72 +20,78 @@ namespace Necromancy.Server.Packet.Area
         {
             int mySkillID = packet.Data.ReadInt32();
             int mySkillTarget = packet.Data.ReadInt32();
+            int CastingTime = 3;
 
-            SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    
-            //SendSkillStartCast(client,mySkillID,mySkillTarget);
-            //SendSkillStartCastExR(client,mySkillID,mySkillTarget);  
-            //SendSkillExecR(client,mySkillID,mySkillTarget);  
-            
+            if (mySkillTarget != 0)
+            {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
+            else
+            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
+
+            //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to.
+
+            //SendSkillStartCastExR(client,mySkillID,mySkillTarget); // TO-DO  logic for when to use this
+            //recv_skill_start_item_cast_r // To-Do .  after Items exist,  start casting based on item i.e. camp.
+            //This is only here for testing. The delay gives the above sends/recvs time to process   :To Do- write 'send_skill_exec.cs'
+            Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => {SendSkillExecR(client,mySkillID,mySkillTarget);});           
  
         }
 
         private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget)
         {
-            float CastingTime = 1;
+            Console.WriteLine($"Skill Int : {mySkillID}");
+            Console.WriteLine($"Target Int : {mySkillTarget}");
+            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            float CastingTime = 2;
             IBuffer res = BufferProvider.Provide();
-            IBuffer res2 = BufferProvider.Provide();
-            res.WriteInt32(0);//Error check     | 0 - success  1 - not enough distance, 2 or above "Error : %int32%"
+            res.WriteInt32(0);//Error check     | 0 - success  1 or above "Error : %int32%"
             res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I 
-            //if (CastingTime > 0 )
-                {
-                        Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);                     
-                }
-           
-                Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => {Console.WriteLine("Hello World");});
-                //Router.Send(client, (ushort) AreaPacketId.recv_skill_custom_notify_open, res2);
-                //SendSkillStartCastExR(client,mySkillID,mySkillTarget);               
+            //Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);                     
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res); 
 
         }
 
+        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget)
+        {
+            Console.WriteLine($"Skill Int : {mySkillID}");
+            Console.WriteLine($"Target Int : {mySkillTarget}");
+            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            float CastingTime = 2;
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(mySkillID);
+            res.WriteFloat(CastingTime);
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
+        }
 
-        int testInt = 0;
         private void SendSkillStartCastExR(NecClient client,int mySkillID,int mySkillTarget)
         {
-            testInt++;
-            float CastingTime = 0;
+            Console.WriteLine($"Skill Int : {mySkillID}");
+            Console.WriteLine($"Target Int : {mySkillTarget}");
+            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            float CastingTime = 2;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  1 or above "Error : %int32%"
             res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I 
 
-            res.WriteInt32(1234);//Consumable item 1??     ./Skill_base.csv   Column T
-            res.WriteInt32(1234);//Consumable item 2??     ./Skill_base.csv   Column V
-            res.WriteInt32(1234);//Consumable item 3??     ./Skill_base.csv   Column X 
-            res.WriteInt32(1234);//Consumable item 4??     ./Skill_base.csv   Column Z 
+            res.WriteInt32(50100104);//Consumable item 1??     ./Skill_base.csv   Column T
+            res.WriteInt32(50100104);//Consumable item 2??     ./Skill_base.csv   Column V
+            res.WriteInt32(50100104);//Consumable item 3??     ./Skill_base.csv   Column X 
+            res.WriteInt32(50100104);//Consumable item 4??     ./Skill_base.csv   Column Z 
 
-            res.WriteInt32(client.Character.Id);//
+            res.WriteInt32(mySkillID);//
 
-            res.WriteInt32(1234);//Number of items1??      ./Skill_base.csv   Column U 
-            res.WriteInt32(1234);//Number of items1??      ./Skill_base.csv   Column W 
-            res.WriteInt32(1234);//Number of items1??      ./Skill_base.csv   Column Y 
-            res.WriteInt32(1234);//Number of items1??      ./Skill_base.csv   Column AA 
+            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column U 
+            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column W 
+            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column Y 
+            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column AA 
 
             res.WriteInt32(mySkillTarget);//
-            Console.WriteLine($"My Test Int Is {testInt}");
 
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res);  
         }
 
 
 
-        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget)
-        {
-            Console.WriteLine($"Skill Int : {mySkillID}");
-            Console.WriteLine($"Target Int : {mySkillTarget}");
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(mySkillID);
-            res.WriteFloat(10);
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
-        }
+
 
         ////This should be sent from the client, the game has a send string network::proto_area_implement_client::send_skill_exec
         private void SendSkillExecR(NecClient client,int mySkillID,int mySkillTarget)
