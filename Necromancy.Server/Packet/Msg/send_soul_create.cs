@@ -17,8 +17,20 @@ namespace Necromancy.Server.Packet.Msg
         {
             byte unknown = packet.Data.ReadByte();
             string soulName = packet.Data.ReadCString();
+
+            Soul soul = new Soul();
+            soul.Name = soulName;
+            soul.AccountId = client.Account.Id;
+            if (!Database.InsertSoul(soul))
+            {
+                Logger.Error(client, $"Failed to create SoulName: {soulName}");
+                client.Socket.Close();
+                return;
+            }
+
+            client.Soul = soul;
             Logger.Info($"Created SoulName: {soulName}");
-            
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) MsgPacketId.recv_soul_create_r, res);

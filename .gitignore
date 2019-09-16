@@ -41,3 +41,5 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 Necromancy.Server/Properties/launchSettings.json
+Necromancy.Server/.vscode/launch.json
+Necromancy.Server/.vscode/tasks.json

@@ -7,7 +7,6 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_soul_select : Handler
     {
-        bool toggle = false;
         public send_soul_select(NecServer server) : base(server)
         {
         }

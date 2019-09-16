@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Arrowgene.Services.Logging;
 
-namespace Necromancy.Server.Database
+namespace Necromancy.Server.Database.Sql
 {
     public class ScriptRunner
     {

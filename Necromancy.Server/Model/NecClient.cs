@@ -21,10 +21,42 @@ namespace Necromancy.Server.Model
             UpdateIdentity();
         }
 
-        public Account Account { get; set; }
-        public Character Character { get; set; }
-        public Channel Channel { get; set; }
-        public Map Map { get; set; }
+        #region Session
+
+        public Session Session { get; set; }
+
+        public Account Account
+        {
+            get => Session.Account;
+            set => Session.Account = value;
+        }
+
+        public Soul Soul
+        {
+            get => Session.Soul;
+            set => Session.Soul = value;
+        }
+
+        public Character Character
+        {
+            get => Session.Character;
+            set => Session.Character = value;
+        }
+
+        public Channel Channel
+        {
+            get => Session.Channel;
+            set => Session.Channel = value;
+        }
+
+        public Map Map
+        {
+            get => Session.Map;
+            set => Session.Map = value;
+        }
+
+        #endregion
+
         public string Identity { get; private set; }
         public ITcpSocket Socket { get; }
         public PacketFactory PacketFactory { get; }

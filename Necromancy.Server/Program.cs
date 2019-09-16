@@ -38,7 +38,7 @@ namespace Necromancy.Server
             NecServer server = new NecServer(setting);
             server.Start();
             Console.WriteLine("Press any key to exit..");
-            Console.ReadKey();
+            Console.ReadLine();
             server.Stop();
         }
 

@@ -16,11 +16,20 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             string souldPassword = packet.Data.ReadCString();
-            Logger.Info($"Entered Soul Password: {souldPassword}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);  //  Error: 0 - Success, other vales (maybe) error code
-            res.WriteByte(0);   // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
+
+            if (client.Soul.Password != souldPassword)
+            {
+                res.WriteInt32(1); //  Error: 0 - Success, other vales (maybe) error code
+                res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
+                Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res);
+                client.Socket.Close();
+                return;
+            }
+
+            res.WriteInt32(0); //  Error: 0 - Success, other vales (maybe) error code
+            res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
             Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res);
         }
     }
