@@ -8,7 +8,7 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_skill_start_cast : Handler
     {
-        bool skillExec = false;
+
         public send_skill_start_cast(NecServer server) : base(server)
         {
         }
@@ -17,60 +17,50 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            int skillID = packet.Data.ReadInt32();
             
-            SendSkillStartCast(client);
-            //SendSkillStartCastSelf(client);
-            SendSkillStartCastExR(client);
-            if(skillExec)
-                SendSkillExecR(client);
+            //SendSkillStartCastSelf(client, skillID);
+            //SendSkillStartCast(client, skillID);
+            SendSkillStartCastExR(client, skillID);
         }
 
-        private void SendSkillStartCastSelf(NecClient client)
+        private void SendSkillStartCastSelf(NecClient client, int skillID)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(1);
-            res.WriteFloat(10);
+            res.WriteInt32(skillID);
+            res.WriteFloat(3);
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
         }
-        private void SendSkillStartCast(NecClient client)
+
+        private void SendSkillStartCast(NecClient client, int skillID)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(skillID);
+            res.WriteFloat(3);
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res);
+        }
+
+        private void SendSkillStartCastExR(NecClient client, int skillID)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteFloat(10);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);
-        }
-        private void SendSkillStartCastExR(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0x3910);
-            res.WriteFloat(10);
+            res.WriteFloat(3);
 
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
 
-            res.WriteInt32(0x30D5);
+            res.WriteInt32(skillID);
 
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
-            res.WriteInt32(0x3910);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
+            res.WriteInt32(skillID);
 
-            res.WriteInt32(0x30D5);
+            res.WriteInt32(skillID);
 
-            Thread.Sleep(5000);
-            skillExec = true;
-        }
-
-        private void SendSkillExecR(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//1 - not enough distance, 2 - unable to use skill: 2 error, 0 - success
-            res.WriteFloat(10);//Cooldown time
-            res.WriteFloat(10);//Cast time?
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_exec_r, res);
-            skillExec = false;
+            Router.Send(client, (ushort)AreaPacketId.recv_skill_start_cast_ex_r, res);
         }
     }
 }

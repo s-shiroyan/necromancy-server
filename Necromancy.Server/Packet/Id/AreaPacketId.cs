@@ -886,11 +886,11 @@ namespace Necromancy.Server.Packet.Id
         send_shortcut_request_data = 0x6FC6, 
         send_shortcut_request_deregist = 0x178, //opcode not found
         send_shortcut_request_regist = 0x8090, 
-        send_skill_cast_cancel_request = 0x179, //opcode not found
+        send_skill_cast_cancel_request = 0x4772,
         send_skill_combo_cast = 0x180, //opcode not found
         send_skill_custom_close = 0x181, //opcode not found
         send_skill_custom_slot_set = 0x182, //opcode not found
-        send_skill_exec = 0x183, //opcode not found
+        send_skill_exec = 0x2D88,
         send_skill_next_cast = 0x184, //opcode not found
         send_skill_onhit = 0x185, //opcode not found
         send_skill_request_base_from_item = 0x186, //opcode not found

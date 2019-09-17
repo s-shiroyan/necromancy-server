@@ -9,6 +9,7 @@
         <Product>Necromancy.Server</Product>
         <Version>0.0.0.0</Version>
         <Copyright>Copyright © 2019 Necromancy Team</Copyright>
+        <LangVersion>7.3</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Arrowgene.Services" Version="1.12.1" />

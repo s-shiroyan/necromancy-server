@@ -26,6 +26,7 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.X = packet.Data.ReadFloat();
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
+                client.Character.charaPose = packet.Data.ReadByte();
             }
 
             //SendDataNotifyCharaData(client);
