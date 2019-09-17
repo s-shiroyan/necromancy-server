@@ -165,7 +165,7 @@ namespace Necromancy.Server.Packet.Area
                 //sub_484420
                 res.WriteFloat(-5516);//X Pos
                 res.WriteFloat(-3896);//Y Pos
-                res.WriteFloat(100);//Z Pos
+                res.WriteFloat(0);//Z Pos
                 res.WriteByte(180);//view offset
 
                 //sub_read_int32 skill point

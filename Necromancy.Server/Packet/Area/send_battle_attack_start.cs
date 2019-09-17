@@ -14,6 +14,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort) AreaPacketId.send_battle_attack_start;
 
+        int i = 0;
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
@@ -33,8 +34,33 @@ namespace Necromancy.Server.Packet.Area
             //SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
             //SendCharaUpdateForm(client);
             SendObjectPointMoveNotify(client);
+            SendDataNotifyItemObjectData(client);
         }
 
+        private void SendDataNotifyItemObjectData(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(251001);//Object ID
+            res.WriteFloat(client.Character.X);//Initial X
+            res.WriteFloat(client.Character.Y);//Initial Y
+            res.WriteFloat(client.Character.Z);//Initial Z
+
+            res.WriteFloat(client.Character.X);//Final X
+            res.WriteFloat(client.Character.Y);//Final Y
+            res.WriteFloat(client.Character.Z);//Final Z
+            res.WriteByte(client.Character.viewOffset);//View offset
+
+            res.WriteInt32(0);// 0 here gives an indication (blue pillar thing) and makes it pickup-able
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(255);//Anim: 1 = fly from the source. (I think it has to do with odd numbers, some cause it to not be pickup-able)
+
+            res.WriteInt32(0);
+            i++;
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res);
+        }
         private void SendCharaUpdateForm(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();

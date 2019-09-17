@@ -189,6 +189,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_character_view_offset(this));
             _areaConsumer.AddHandler(new send_soul_dispitem_request_data(this));
             _areaConsumer.AddHandler(new send_skill_cast_cancel_request(this));
+            _areaConsumer.AddHandler(new send_loot_access_object(this));
         }
     }
 }

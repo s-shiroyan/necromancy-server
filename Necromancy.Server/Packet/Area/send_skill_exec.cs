@@ -16,10 +16,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            byte coolTimeID = packet.Data.ReadByte();
-            byte coolTimeID2 = packet.Data.ReadByte();
-            byte notSure = packet.Data.ReadByte();
-            int distance = packet.Data.ReadByte();
+            int targetID = packet.Data.ReadInt32();
             float X = packet.Data.ReadFloat();
             float Y = packet.Data.ReadFloat();
             float Z = packet.Data.ReadFloat();
@@ -27,8 +24,8 @@ namespace Necromancy.Server.Packet.Area
             float stickTime = packet.Data.ReadFloat();
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(distance);//1 - not enough distance, 2 - unable to use skill: 2 error, 0 - success
-            res.WriteFloat(5);//Recast time(server does a lookup here i think)
+            res.WriteInt32(0);//1 - not enough distance, 2 - unable to use skill: 2 error, 0 - success
+            res.WriteFloat(1);//Recast time(server does a lookup here i think)
             res.WriteFloat(stickTime);//Stick time(player movement stopped for this long)
             Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res);
         }

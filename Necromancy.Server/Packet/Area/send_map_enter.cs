@@ -41,7 +41,7 @@ namespace Necromancy.Server.Packet.Area
             //sub_484420
             res3.WriteFloat(23162);//X Pos
             res3.WriteFloat(-219);//Y Pos
-            res3.WriteFloat(3);//Z Pos
+            res3.WriteFloat(0);//Z Pos
             res3.WriteByte(1);//view offset
 
             //sub_read_int32

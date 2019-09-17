@@ -813,7 +813,7 @@ namespace Necromancy.Server.Packet.Id
         send_job_change_select_bonuspoint = 0x123, //opcode not found
         send_logout_cancel_request = 0xB224, 
         send_logout_start_request = 0x38FC, 
-        send_loot_access_object = 0x124, //opcode not found
+        send_loot_access_object = 0xB776,
         send_map_change_force_r = 0x4CB0, 
         send_map_enter = 0x70FD, 
         send_map_entry = 0x2DE3, 
