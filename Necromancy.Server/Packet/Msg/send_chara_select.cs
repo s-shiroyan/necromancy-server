@@ -16,24 +16,6 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            /*IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // Error
-
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            res.WriteFixedString("127.0.0.1", 65);
-            res.WriteInt16(60002);
-
-            res.WriteFloat(100); // Coords ? - x,y,z
-            res.WriteFloat(100);
-            res.WriteFloat(100);
-
-            res.WriteByte(0);
-
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);*/
-
   
             IBuffer res2 = BufferProvider.Provide();
 
