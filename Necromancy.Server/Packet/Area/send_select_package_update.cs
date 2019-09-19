@@ -15,10 +15,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int characterID = packet.Data.ReadInt16();
-            int mailNum = packet.Data.ReadInt16();
-            int operation = packet.Data.ReadInt16();
-            int unknown2 = packet.Data.ReadInt16();
+            int characterID = packet.Data.ReadInt32();
+            int operation = packet.Data.ReadInt32();
 
             IBuffer res = BufferProvider.Provide();
 
@@ -29,7 +27,7 @@ namespace Necromancy.Server.Packet.Area
             else if (operation == 0x01 || operation == 0x0)//receive message
                 res.WriteInt32(0);*/
 
-            res.WriteInt32(1);//Not sure on this,  0 is constant updates, 1 is "you have unopened mail", 2 is "no mail to delete"
+            res.WriteInt32(0);//Not sure on this,  0 is constant updates, 1 is "you have unopened mail", 2 is "no mail to delete"
             //3 is "you have %d unreceived mails. pleas check your inbox.", 4+ is "failed to send mail",
 
             Router.Send(client, (ushort) AreaPacketId.recv_select_package_update_r, res);

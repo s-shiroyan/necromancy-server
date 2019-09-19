@@ -62,11 +62,36 @@ namespace Necromancy.Server.Packet.Area
                 case "chid":
                     SendCharacterId(client);
                     break;
+                case "accs":
+                    SendLootAccessObject(client);
+                    break;
+                case "move":
+                    SendItemMove(client);
+                    break;
                 default:
                     Message = "Unrecognized command";
                     break;
             }
         }
+
+        private void SendItemMove(NecClient client)
+        {
+            //recv_item_move_r = 0x708B,
+            IBuffer res = BufferProvider.Provide();
+
+	        res.WriteInt32(69);//Error check?
+
+            Router.Send(client, (ushort)AreaPacketId.recv_item_move_r, res);
+        }
+
+        private void SendLootAccessObject(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(69);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
+        }
+
 
         private void SendCharacterId(NecClient client)
         {
