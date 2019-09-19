@@ -199,6 +199,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_battle_guard_start(this));
             _areaConsumer.AddHandler(new send_battle_guard_end(this));
             _areaConsumer.AddHandler(new send_loot_access_object(this));
+            _areaConsumer.AddHandler(new send_select_package_update(this)); 
+            _areaConsumer.AddHandler(new send_skill_exec(this));
         }
     }
 }

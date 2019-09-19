@@ -101,10 +101,10 @@ namespace Necromancy.Server.Packet.Area
                 // gold and alignment?
                 res.WriteInt64(214587); // gold
                 res.WriteInt32(187); // changed nothing visably
-                res.WriteInt32(5); // lawful
-                res.WriteInt32(3); // neutral
-                res.WriteInt32(1); // chaos
-                res.WriteInt32(113); // changed nothing visably
+                res.WriteInt32(5999999); // lawful
+                res.WriteInt32(3999999); // neutral
+                res.WriteInt32(1999999); // chaos
+                res.WriteInt32(1139999); // changed nothing visably
 
                 //sub_484980
                 res.WriteInt32(1);// changed nothing visably
@@ -335,9 +335,9 @@ namespace Necromancy.Server.Packet.Area
                 //sub_485A70
                 for (int imac = 0; imac < numEntries; imac++)//status buffs / debuffs
                 {
-                    res.WriteInt32(10); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
-                    res.WriteInt32(20);
-                    res.WriteInt32(30);
+                    res.WriteInt32(15100901); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
+                    res.WriteInt32(15100901);
+                    res.WriteInt32(15100901);
                 }
 
                 Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);

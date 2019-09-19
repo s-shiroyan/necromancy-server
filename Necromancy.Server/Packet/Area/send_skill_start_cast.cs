@@ -22,18 +22,19 @@ namespace Necromancy.Server.Packet.Area
             int mySkillTarget = packet.Data.ReadInt32();
             int CastingTime = 3;
 
-            if (mySkillTarget != 0)
-            {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
-            else
-            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
+            //if (mySkillTarget != 0)
+            //{   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
+            //else
+            //{   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
 
             //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to.
 
-            //SendSkillStartCastExR(client,mySkillID,mySkillTarget); // TO-DO  logic for when to use this
+            SendSkillStartCastExR(client,mySkillID,mySkillTarget); // TO-DO  logic for when to use this
             //recv_skill_start_item_cast_r // To-Do .  after Items exist,  start casting based on item i.e. camp.
             //This is only here for testing. The delay gives the above sends/recvs time to process   :To Do- write 'send_skill_exec.cs'
-            Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => {SendSkillExecR(client,mySkillID,mySkillTarget);});           
- 
+            //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => { SendSkillStartCastExR(client, mySkillID, mySkillTarget); });
+            //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000 * 2))).ContinueWith(t1 => { SendSkillExecR(client, mySkillID, mySkillTarget); });
+
         }
 
         private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget)
@@ -57,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"my Character ID : {client.Character.Id}");
             float CastingTime = 2;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(mySkillID);
+            res.WriteInt32(mySkillID); //previously Skill ID
             res.WriteFloat(CastingTime);
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
         }
@@ -67,24 +68,24 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Skill Int : {mySkillID}");
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
-            float CastingTime = 2;
+            float RigityTime = 2;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  1 or above "Error : %int32%"
-            res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I 
+            res.WriteFloat(RigityTime);//Rigity time (countdown before auto-cast)    ./Skill_base.csv   Column L
 
-            res.WriteInt32(50100104);//Consumable item 1??     ./Skill_base.csv   Column T
-            res.WriteInt32(50100104);//Consumable item 2??     ./Skill_base.csv   Column V
-            res.WriteInt32(50100104);//Consumable item 3??     ./Skill_base.csv   Column X 
-            res.WriteInt32(50100104);//Consumable item 4??     ./Skill_base.csv   Column Z 
+            res.WriteInt32(4);//Cast Script?     ./Skill_base.csv   Column T
+            res.WriteInt32(7);//Effect Script    ./Skill_base.csv   Column V
+            res.WriteInt32(1);//Effect ID?   ./Skill_base.csv   Column X 
+            res.WriteInt32(0);//Effect ID 2     ./Skill_base.csv   Column Z 
 
             res.WriteInt32(mySkillID);//
 
-            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column U 
-            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column W 
-            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column Y 
-            res.WriteInt32(50100104);//Number of items1??      ./Skill_base.csv   Column AA 
+            res.WriteInt32(1000);//Disatance?              ./Skill_base.csv   Column AN 
+            res.WriteInt32(200);//Height?                 ./Skill_base.csv   Column AO 
+            res.WriteInt32(0);//??                          ./Skill_base.csv   Column AP 
+            res.WriteInt32(0);//??                       ./Skill_base.csv   Column AQ 
 
-            res.WriteInt32(mySkillTarget);//
+            res.WriteInt32(15);// Effect time?
 
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res);  
         }
@@ -101,7 +102,7 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Target Int : {mySkillTarget}");
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 1 - not enough distance, 2 or above - unable to use skill: 2 error, 0 - success
-            res.WriteFloat(1);//Cool time      ./Skill_base.csv   Column J 
+            res.WriteFloat(10);//Cool time      ./Skill_base.csv   Column J 
             res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
             Router.Send(client, (ushort) AreaPacketId.recv_skill_exec_r, res);
             

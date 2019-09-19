@@ -39,8 +39,8 @@ namespace Necromancy.Server.Packet.Msg
 
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(1);
+            res.WriteInt32(0); // error check 0 is good
+            res.WriteInt32(15100901);
 
             Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res);
         }

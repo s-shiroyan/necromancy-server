@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Msg
             Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data_complete, res2);
         }
 
-        byte[] slot = new byte[] {0,1,2,3};//3,4};
+        byte[] slot = new byte[] {0,1,2,3,4};//3,4};
 
         
         string[] MyCharacters = new string[] {"Zenkato","Test1","Xeno","Kadred","Ipa","Diablo",};

@@ -879,7 +879,7 @@ namespace Necromancy.Server.Packet.Id
         send_return_home_request_exec = 0x169, //opcode not found
         send_revive_execute = 0x170, //opcode not found
         send_revive_init = 0x171, //opcode not found
-        send_select_package_update = 0x172, //opcode not found
+        send_select_package_update = 0x2A64,
         send_shop_buy = 0x173, //opcode not found
         send_shop_close = 0x174, //opcode not found
         send_shop_identify = 0x175, //opcode not found
