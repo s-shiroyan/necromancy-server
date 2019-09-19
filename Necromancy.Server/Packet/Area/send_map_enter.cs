@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("soulname");
 
             //sub_481AA0
-            res3.WriteCString("charaname");
+            res3.WriteCString("charname");
             
             //sub_484420
             res3.WriteFloat(23162);//X Pos
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(1);//view offset
 
             //sub_read_int32
-            res3.WriteInt32(2);
+            res3.WriteInt32(0);
 
             //sub_483420
 

@@ -750,7 +750,7 @@ namespace Necromancy.Server.Packet.Id
         send_cmd_exec = 0x2E64, 
         send_comment_set = 0x9A13, 
         send_comment_switch = 0xECF5, 
-        send_create_package = 0x67, //opcode not found
+        send_create_package = 0xF6D,
         send_data_get_self_chara_data_request = 0x74DD, 
         send_dbg_select_raise = 0x68, //opcode not found
         send_door_open = 0x69, //opcode not found
@@ -819,7 +819,8 @@ namespace Necromancy.Server.Packet.Id
         send_map_entry = 0x2DE3, 
         send_map_get_info = 0x25D7, 
         send_message_board_close = 0x125, //opcode not found
-        send_package_all_delete = 0x126, //opcode not found
+        send_open_mailbox = 0xEF32,
+        send_package_all_delete = 0x8E0C,
         send_party_accept_to_apply = 0x127, //opcode not found
         send_party_accept_to_invite = 0x128, //opcode not found
         send_party_apply = 0x534F, 
@@ -876,7 +877,7 @@ namespace Necromancy.Server.Packet.Id
         send_return_home_request_exec = 0x169, //opcode not found
         send_revive_execute = 0x170, //opcode not found
         send_revive_init = 0x171, //opcode not found
-        send_select_package_update = 0x172, //opcode not found
+        send_select_package_update = 0x2A64,
         send_shop_buy = 0x173, //opcode not found
         send_shop_close = 0x174, //opcode not found
         send_shop_identify = 0x175, //opcode not found

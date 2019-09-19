@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             //SendDataNotifyCharabodyData(client, charaX, charaY, charaZ);
             //SendCharaUpdateForm(client);
             SendObjectPointMoveNotify(client);
-            SendDataNotifyItemObjectData(client);
+            //SendDataNotifyItemObjectData(client);
         }
 
         private void SendDataNotifyItemObjectData(NecClient client)
