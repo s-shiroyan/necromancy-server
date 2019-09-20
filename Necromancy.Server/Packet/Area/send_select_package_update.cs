@@ -15,18 +15,24 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int characterID = packet.Data.ReadInt32();
+            bool loot = false;
+            int objectID = packet.Data.ReadInt32();
             int operation = packet.Data.ReadInt32();
             int errcode = 0;
 
             IBuffer res = BufferProvider.Provide();
 
-            /*if (operation == 0x03)//delete mail
-                res.WriteInt32(3);
+            if (operation == 0x03)//delete mail
+                res.WriteInt32(0);
             else if (operation == 0x04)//unprotect message
-                res.WriteInt32(4);
+                res.WriteInt32(0);
             else if (operation == 0x01 || operation == 0x0)//receive message
-                res.WriteInt32(0);*/
+            {
+                res.WriteInt32(0);
+                loot = true;
+            }
+            else if (operation == 0x2)//reply to message
+                res.WriteInt32(0);
 
             res.WriteInt32(errcode);//Error message Call. 0 for success. see additional options in Sys_msg.csv
                 /*
@@ -38,6 +44,20 @@ namespace Necromancy.Server.Packet.Area
                 */
 
             Router.Send(client, (ushort) AreaPacketId.recv_select_package_update_r, res);
+
+            if(loot)
+            {
+                SendLootAccessObject(client, objectID);
+                loot = false;
+            }
+        }
+
+        private void SendLootAccessObject(NecClient client, int objectID)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(objectID);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
         }
     }
 }

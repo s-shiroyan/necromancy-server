@@ -275,6 +275,8 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 }
 
+                byte[] headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
+
                 //sub_4948C0
                 for (int i = 0; i < numEntries; i++)
                 {    
@@ -284,22 +286,22 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteByte(0);
                     res.WriteByte(0); //0  ????
 
-                    
                     res.WriteInt32(12341234);//???
                     res.WriteByte(0); //
                     res.WriteByte(4); //
                     res.WriteByte(1); //
-                        x++;
                     
-                    res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                    res.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                     res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
-                        res.WriteByte(4); //Alternate texture for item model 
-                res.WriteByte(4); // seperate in assembly
-                
+                    res.WriteByte(4); //Alternate texture for item model 
+
+                    res.WriteByte(4); // seperate in assembly
+
+                    x++;
                 }
 
                 //sub_483420

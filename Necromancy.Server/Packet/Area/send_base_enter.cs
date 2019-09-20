@@ -29,6 +29,13 @@ namespace Necromancy.Server.Packet.Area
             }
 
             client.Session = session;
+            NPC NPC = new NPC();//added for mail stuff
+            NPC.objectID = Util.GetRandomNumber(40, 70);//added for mail stuff
+
+            client.NPC = NPC;//added for mail stuff
+            client.Account = account;
+            client.Character = character;
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
             Router.Send(client, (ushort) AreaPacketId.recv_base_enter_r, res);

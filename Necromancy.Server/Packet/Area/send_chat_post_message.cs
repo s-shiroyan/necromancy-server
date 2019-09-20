@@ -56,6 +56,7 @@ namespace Necromancy.Server.Packet.Area
         {
             string command = null;
             int i = 1;
+            int x = 0;
             bool cont = true;
             while (cont)
             {
@@ -65,6 +66,91 @@ namespace Necromancy.Server.Packet.Area
                 }
                 command += Message[i];
                 i++;
+            }
+            if(Message.Length >= 6)
+            {
+                switch (Message.Length)
+                {
+                    case 6:
+                        x = Message[Message.Length - 1] - '0';
+                        break;
+                    case 7:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        break;
+                    case 8:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        break;
+                    case 9:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        Console.WriteLine(x);
+                        break;
+                    case 10:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        break;
+                    case 11:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        x += (Message[Message.Length - 6] - '0') * 100000;
+                        break;
+                    case 12:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        x += (Message[Message.Length - 6] - '0') * 100000;
+                        x += (Message[Message.Length - 7] - '0') * 1000000;
+                        break;
+                    case 13:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        x += (Message[Message.Length - 6] - '0') * 100000;
+                        x += (Message[Message.Length - 7] - '0') * 1000000;
+                        x += (Message[Message.Length - 8] - '0') * 10000000;
+                        break;
+                    case 14:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        x += (Message[Message.Length - 6] - '0') * 100000;
+                        x += (Message[Message.Length - 7] - '0') * 1000000;
+                        x += (Message[Message.Length - 8] - '0') * 10000000;
+                        x += (Message[Message.Length - 9] - '0') * 100000000;
+                        break;
+                    case 15:
+                        x += Message[Message.Length - 1] - '0';
+                        x += (Message[Message.Length - 2] - '0') * 10;
+                        x += (Message[Message.Length - 3] - '0') * 100;
+                        x += (Message[Message.Length - 4] - '0') * 1000;
+                        x += (Message[Message.Length - 5] - '0') * 10000;
+                        x += (Message[Message.Length - 6] - '0') * 100000;
+                        x += (Message[Message.Length - 7] - '0') * 1000000;
+                        x += (Message[Message.Length - 8] - '0') * 10000000;
+                        x += (Message[Message.Length - 9] - '0') * 100000000;
+                        x += (Message[Message.Length - 10] - '0') * 1000000000;
+                        break;
+                    default:
+                        x = 0;
+                        break;
+                }
             }
             switch (command)
             {
@@ -89,6 +175,18 @@ namespace Necromancy.Server.Packet.Area
                 case "move":
                     SendItemMove(client);
                     break;
+                case "itis":
+                    SendItemInstance(client, x);
+                    break;
+                case "upit":
+                    SendItemUpdateState(client);
+                    break;
+                case "stuf":
+                    SendStallUpdateFeatureItem(client);
+                    break;
+                case "sssi":
+                    SendStallSellItem(client);
+                    break;
                 default:
                     Message = "Unrecognized command";
                     break;
@@ -110,7 +208,7 @@ namespace Necromancy.Server.Packet.Area
                             AdminConsoleRecvDataNotifyMonsterData(client);
                         break;
                     case "Item":
-                            AdminConsoleSoulMaterial(client);
+                            SendDataNotifyItemobjectData(client);
                         break;
                     case "Died":
                             IBuffer res4 = BufferProvider.Provide();
@@ -315,7 +413,106 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_data_notify_npc_data, res3);
             }
-        private void AdminConsoleSoulMaterial(NecClient client)
+
+        private void SendStallSellItem(NecClient client)
+        {
+            //recv_stall_sell_item = 0x919C,
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteCString("C1Str"); // find max size Character name/Soul name
+            res.WriteCString("CStr2"); // find max size Character name/Soul name
+            res.WriteInt64(25);
+            res.WriteByte(12);
+            res.WriteByte(14);
+            res.WriteInt16(16);
+            res.WriteInt32(10200101);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_stall_sell_item, res);
+        }
+
+        private void SendStallUpdateFeatureItem(NecClient client)
+        {
+            //recv_stall_update_feature_item = 0xB195,
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(client.Character.Id);
+
+            res.WriteInt32(10200101);
+            res.WriteByte(2);
+            res.WriteByte(2);
+            res.WriteByte(2);
+
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt32(9);
+
+            res.WriteByte(0); // bool
+
+            res.WriteInt32(0);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_update_feature_item, res);
+        }
+
+        private void SendItemUpdateState(NecClient client)
+        {
+            //recv_item_update_state = 0x3247, 
+            IBuffer res = BufferProvider.Provide();
+
+        	res.WriteInt64(300000);//ItemID
+            res.WriteInt32(200000);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
+
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res);
+        }
+
+        private void SendItemInstance(NecClient client, int x)
+        {
+            //recv_item_instance = 0x86EA,
+            IBuffer res = BufferProvider.Provide();
+
+	        res.WriteInt64(300000);//ItemID
+            res.WriteInt32(300000);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
+            res.WriteByte(0);//Number of "items"
+            res.WriteInt32(0);//Changed icon to broken with 10200101, changed icon to have a 100% with 2 
+            res.WriteFixedString("fixed", 0x10);
+            res.WriteByte(1);//0/2 here causes crash, 255 causes item to go away
+            res.WriteByte(1);//4 here causes crash
+            res.WriteInt16(4);
+            res.WriteInt32(-1);//Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
+            res.WriteInt32(2);//Percentage stat, 9 max i think
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteCString("cstring"); // find max size 
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt32(1);//Divides max % by this number
+            res.WriteByte(1);
+            res.WriteInt32(0);
+            int numEntries = 2;
+            res.WriteInt32(numEntries); // less than or equal to 2
+
+            //for (int i = 0; i < numEntries; i++)
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                numEntries = 3;
+            res.WriteInt32(numEntries); // less than or equal to 3
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte(0); //bool
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+            }
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0);//Guard protection toggle, 1 = on, everything else is off
+            res.WriteInt16(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res);
+        }
+
+        private void SendDataNotifyItemobjectData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
 

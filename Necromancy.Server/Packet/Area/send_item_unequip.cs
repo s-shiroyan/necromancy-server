@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int unknown = packet.Data.ReadInt32();
+            int slotNum = packet.Data.ReadInt32();
 
             IBuffer res = BufferProvider.Provide();
 

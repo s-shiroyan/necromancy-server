@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //error check
-                               /*
+                /*
                    STALL	1	You have not listed any items
                    STALL	2	Item has already been listed
                    STALL	3	You may not list the equipped items
@@ -52,10 +52,7 @@ namespace Necromancy.Server.Packet.Area
                    STALL	-215	This does not belong to you
                    STALL	-3002	Unable to buy or sell in personal shops during an event
                    STALL	GENERIC	Shop error
-
-
-                                */
-
+                */
 
             Router.Send(client, (ushort) AreaPacketId.recv_stall_set_item_price_r, res);            
         }
