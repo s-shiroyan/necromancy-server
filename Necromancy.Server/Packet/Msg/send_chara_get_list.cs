@@ -218,6 +218,8 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteInt32(1001007);//map location ID
 
                 E++;
+                if (E == 4)
+                    E = 0;
 
                 Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data, res);//SOE
                                                                                      //Router.Send(client,0xA535, res);//JP

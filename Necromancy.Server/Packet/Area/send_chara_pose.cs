@@ -17,13 +17,13 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            int pose = packet.Data.ReadInt32();
+            client.Character.charaPose = packet.Data.ReadInt32();
             
             res.WriteInt32(0);  
 
             Router.Send(client, (ushort) AreaPacketId.recv_chara_pose_r, res);
 
-            SendCharaPoseNotify(client, pose);
+            SendCharaPoseNotify(client);
         }
 
        

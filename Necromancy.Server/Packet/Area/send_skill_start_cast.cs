@@ -43,10 +43,37 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
             float CastingTime = 2;
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//Error check     | 0 - success  1 or above "Error : %int32%"
-            res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I 
-            //Router.Send(client.Map, (ushort) AreaPacketId.recv_skill_start_cast_r, res, client);                     
+            res.WriteInt32(0);//Error check     | 0 - success  
+            /* 
+            SKILLCAST_FAILED	-1	You failed to cast <skill name>
+            SKILLCAST_FAILED	-236	This skill cannot be used in town
+            SKILLCAST_FAILED	-1300	Not enough HP
+            SKILLCAST_FAILED	-1301	Not enough MP
+            SKILLCAST_FAILED	-1302	Not enough OD
+            SKILLCAST_FAILED	-1303	Not enough GP
+            SKILLCAST_FAILED	-1304	Action failed since it is not ready
+            SKILLCAST_FAILED	-1305	Skill cannot be used because you have not drawn your sword
+            SKILLCAST_FAILED	-1306	Skill cannot be used because you are casting
+            SKILLCAST_FAILED	-1307	Not enough <skill cost name>
+            SKILLCAST_FAILED	-1308	Max traps laid
+            SKILLCAST_FAILED	-1309	Skill cannot be used because it is already used in a trap
+            SKILLCAST_FAILED	-1310	Skill cannot be used because an enemy is in range of the trap
+            SKILLCAST_FAILED	-1311	No target to be added
+            SKILLCAST_FAILED	-1312	No more locations can be added for this skill
+            SKILLCAST_FAILED	-1320	Second trap has already been set
+            SKILLCAST_FAILED	-1321	End trap has already been set
+            SKILLCAST_FAILED	-1322	Ineligible target
+            SKILLCAST_FAILED	-1325	Insufficient usage count for Power Level
+            SKILLCAST_FAILED	-1326	You've used a skill that hasn't been set to a custom slot
+            SKILLCAST_FAILED	-1327	Unable to use since character level is low
+            SKILLCAST_FAILED	GENERIC	Error: <errcode>
+            SKILLCAST_FAILED	5	You can not make any more <skill cost name>
+
+            */
+
+            res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I             
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res); 
 
         }
@@ -68,10 +95,10 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Skill Int : {mySkillID}");
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
-            float RigityTime = 2;
+            float CastingTime = 2;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//Error check     | 0 - success  1 or above "Error : %int32%"
-            res.WriteFloat(RigityTime);//Rigity time (countdown before auto-cast)    ./Skill_base.csv   Column L
+            res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
+            res.WriteFloat(CastingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
 
             res.WriteInt32(4);//Cast Script?     ./Skill_base.csv   Column T
             res.WriteInt32(7);//Effect Script    ./Skill_base.csv   Column V
@@ -80,7 +107,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(mySkillID);//
 
-            res.WriteInt32(1000);//Disatance?              ./Skill_base.csv   Column AN 
+            res.WriteInt32(1000);//Distance?              ./Skill_base.csv   Column AN 
             res.WriteInt32(200);//Height?                 ./Skill_base.csv   Column AO 
             res.WriteInt32(0);//??                          ./Skill_base.csv   Column AP 
             res.WriteInt32(0);//??                       ./Skill_base.csv   Column AQ 
@@ -88,24 +115,6 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(15);// Effect time?
 
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res);  
-        }
-
-
-
-
-
-        ////This should be sent from the client, the game has a send string network::proto_area_implement_client::send_skill_exec
-        private void SendSkillExecR(NecClient client,int mySkillID,int mySkillTarget)
-        {
-            //Console.WriteLine($"Float : {mySkillEffectTime}");
-            Console.WriteLine($"Skill Int : {mySkillID}");
-            Console.WriteLine($"Target Int : {mySkillTarget}");
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//Error check     | 1 - not enough distance, 2 or above - unable to use skill: 2 error, 0 - success
-            res.WriteFloat(10);//Cool time      ./Skill_base.csv   Column J 
-            res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_exec_r, res);
-            
         }
 
     }

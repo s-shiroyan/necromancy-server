@@ -753,7 +753,7 @@ namespace Necromancy.Server.Packet.Id
         send_cmd_exec = 0x2E64, 
         send_comment_set = 0x9A13, 
         send_comment_switch = 0xECF5, 
-        send_create_package = 0x67, //opcode not found
+        send_create_package = 0xF6D,
         send_data_get_self_chara_data_request = 0x74DD, 
         send_dbg_select_raise = 0x68, //opcode not found
         send_door_open = 0x69, //opcode not found
@@ -822,7 +822,8 @@ namespace Necromancy.Server.Packet.Id
         send_map_entry = 0x2DE3, 
         send_map_get_info = 0x25D7, 
         send_message_board_close = 0x125, //opcode not found
-        send_package_all_delete = 0x126, //opcode not found
+        send_open_mailbox = 0xEF32,
+        send_package_all_delete = 0x8E0C,
         send_party_accept_to_apply = 0x127, //opcode not found
         send_party_accept_to_invite = 0x128, //opcode not found
         send_party_apply = 0x534F, 
@@ -889,11 +890,11 @@ namespace Necromancy.Server.Packet.Id
         send_shortcut_request_data = 0x6FC6, 
         send_shortcut_request_deregist = 0x178, //opcode not found
         send_shortcut_request_regist = 0x8090, 
-        send_skill_cast_cancel_request = 0x179, //opcode not found
+        send_skill_cast_cancel_request = 0x4772,
         send_skill_combo_cast = 0x180, //opcode not found
         send_skill_custom_close = 0x181, //opcode not found
         send_skill_custom_slot_set = 0x182, //opcode not found
-        send_skill_exec = 0x2D88, //opcode not found
+        send_skill_exec = 0x2D88,
         send_skill_next_cast = 0x184, //opcode not found
         send_skill_onhit = 0x185, //opcode not found
         send_skill_request_base_from_item = 0x186, //opcode not found

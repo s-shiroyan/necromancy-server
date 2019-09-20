@@ -11,7 +11,7 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort)AreaPacketId.send_loot_access_object;
+        public override ushort Id => (ushort) AreaPacketId.send_loot_access_object;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(objectID);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res);
         }
     }
 }
