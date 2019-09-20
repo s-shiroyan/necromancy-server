@@ -194,6 +194,13 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_create_package(this));
             _areaConsumer.AddHandler(new send_select_package_update(this));
             _areaConsumer.AddHandler(new send_package_all_delete(this));
+            _areaConsumer.AddHandler(new send_item_unequip(this));
+            _areaConsumer.AddHandler(new send_stall_regist_item(this));
+            _areaConsumer.AddHandler(new send_stall_set_item_price(this));
+            _areaConsumer.AddHandler(new send_stall_open(this));
+            _areaConsumer.AddHandler(new send_stall_close(this));
+            _areaConsumer.AddHandler(new send_stall_shopping_start(this));
+            _areaConsumer.AddHandler(new send_stall_shopping_abort(this));
         }
     }
 }

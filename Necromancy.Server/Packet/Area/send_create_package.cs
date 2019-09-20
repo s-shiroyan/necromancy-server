@@ -31,7 +31,8 @@ namespace Necromancy.Server.Packet.Area
 
             SendPackageNotifyAdd(client, recipient, title, content, unknownByte, unknownInt, money);
         }
-        int i = 0;
+        int i = 1;
+
         private void SendPackageNotifyAdd(NecClient client, string recipient, string title, string content,
                                          byte unknownByte, int unknownInt, long money)
         {
@@ -39,44 +40,45 @@ namespace Necromancy.Server.Packet.Area
             //recv_package_notify_add = 0x556E,
 
             res.WriteInt32(0);//Failed to send message error if not 0
-            res.WriteInt32(69);//Object ID
-            res.WriteFixedString("unknown", 0x31);//Soul name
-            res.WriteFixedString("master", 0x5B);//Character name sender?
+            res.WriteInt32(client.NPC.objectID);//Object ID
+            res.WriteFixedString("unknown", 0x31);//Soul name of sender
+            res.WriteFixedString("master", 0x5B);//Character name but of what?
             res.WriteFixedString($"{title}", 0x5B);//Title
             res.WriteFixedString($"{content}", 0x259);//Content
             res.WriteInt32(0);
             res.WriteInt16(1);//This number needs to be odd otherwise it causes a "colored" mail and causes inf loop of send_select_package_update
-            res.WriteInt64(10200101);
+            res.WriteInt64(i);
             res.WriteInt32(10200101);//Responsible for icon
             res.WriteFixedString("help", 0x49);//
             res.WriteFixedString($"me {i} ", 0x49);//Item Title
-            res.WriteInt32(-1);//Odd numbers here make the item have the title and correct icon
+            res.WriteInt32(i);//Odd numbers here make the item have the title and correct icon, 1/3 = not broken, -1/5 = broken 
             res.WriteInt32(1);
             res.WriteInt32(1);
             res.WriteInt32(1);
             res.WriteFixedString("pls", 0x10);
-            res.WriteByte(1);
+            res.WriteByte(1);//Number of items
             res.WriteInt32(1);
             res.WriteInt32(1);
 
-            res.WriteByte(1);//bool
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
+            res.WriteByte(0);//bool
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
-            res.WriteByte(1);//bool
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
+            res.WriteByte(0);//bool
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
-            res.WriteByte(1);//bool
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
+            res.WriteByte(0);//bool
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
             res.WriteInt64(money);//Transfered money
 
-            i++;
+            i += 2;
+            client.NPC.objectID++;
 
             Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res);
         }

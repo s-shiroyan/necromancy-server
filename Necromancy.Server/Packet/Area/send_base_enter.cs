@@ -15,6 +15,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            NPC NPC = new NPC();//added for mail stuff
+            NPC.objectID = 69;//added for mail stuff
 
             // TODO authenticate from db
             string accountName = "Soul 0";
@@ -26,6 +28,7 @@ namespace Necromancy.Server.Packet.Area
             character.Name = accountName;
             //
 
+            client.NPC = NPC;//added for mail stuff
             client.Account = account;
             client.Character = character;
 
