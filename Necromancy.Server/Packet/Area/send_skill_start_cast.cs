@@ -20,7 +20,11 @@ namespace Necromancy.Server.Packet.Area
         {
             int mySkillID = packet.Data.ReadInt32();
             int mySkillTarget = packet.Data.ReadInt32();
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             int CastingTime = 3;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
 
             if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
             {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }

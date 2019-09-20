@@ -202,6 +202,7 @@ namespace Necromancy.Server.Packet.Area
                 switch (SplitMessage[0])
                 {
                     case "NPC":
+                        if (SplitMessage[1] == "") { SplitMessage[1] = "0"; }
                             AdminConsoleNPC(client,Convert.ToInt32(SplitMessage[1]));
                         break;
                     case "Monster":

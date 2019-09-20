@@ -14,6 +14,7 @@ namespace Necromancy.Server.Model
         public Character Character { get; set; }
         public Channel Channel { get; set; }
         public Map Map { get; set; }
+        public NPC NPC { get; set; }
 
         public Session(string sessionKey, Account account)
         {

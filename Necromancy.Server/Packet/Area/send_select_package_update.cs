@@ -55,7 +55,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendLootAccessObject(NecClient client, int objectID)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(objectID);
+            res.WriteInt32(0); //ObjectID or error check
 
             Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
         }
