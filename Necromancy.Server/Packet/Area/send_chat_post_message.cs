@@ -106,6 +106,9 @@ namespace Necromancy.Server.Packet.Area
                     case "NPC":
                             AdminConsoleNPC(client,Convert.ToInt32(SplitMessage[1]));
                         break;
+                    case "Monster":
+                            AdminConsoleRecvDataNotifyMonsterData(client);
+                        break;
                     case "Item":
                             AdminConsoleSoulMaterial(client);
                         break;
@@ -347,7 +350,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(objectID);
                 res.WriteInt16(1);
                 res.WriteInt64(objectID);
-                res.WriteInt32(objectID);
+                res.WriteInt32(10200101);           //Responsible for icon
                 res.WriteFixedString("Ass", 0x49);
                 res.WriteFixedString("Human", 0x49);
                 res.WriteInt32(objectID);
@@ -504,6 +507,97 @@ namespace Necromancy.Server.Packet.Area
             
         }
 
+        private void AdminConsoleRecvDataNotifyMonsterData(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(Util.GetRandomNumber(55566, 55888));
+
+            res.WriteCString($"Belong Here");//Name while spawning
+
+            res.WriteCString($"I Don't");//Title
+
+            res.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150));//X Pos
+            res.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150));//Y Pos
+            res.WriteFloat(client.Character.Z);//Z Pos
+            res.WriteByte(client.Character.viewOffset);//view offset
+
+            res.WriteInt32(70101); // Monster serial ID.  70101 for Lesser Demon.  If this is invalid, you can't "loot" the monster or see it's first CString
+
+            res.WriteInt32(2070001); // Model from model_common.csv  2070001 for Lesser Demon
+
+            res.WriteInt16(100); //model size
+
+            res.WriteInt32(0x10); // cmp to 0x10 = 16
+
+            int numEntries = 0x10;
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(11111111);
+            }
+
+            res.WriteInt32(0x10); // cmp to 0x10 = 16
+
+            int numEntries2 = 0x10;
+            for (int i = 0; i < numEntries2; i++)
+            {
+                res.WriteInt32(10000000); // this was an x2 loop (i broke it down)
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteInt32(10000000);
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1);
+
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1); // bool
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1);
+                res.WriteByte(1);
+
+                res.WriteByte(1);
+            }
+
+            res.WriteInt32(0x10); // cmp to 0x10 = 16
+
+            int numEntries3 = 0x10; //equipment slots to display?
+            for (int i = 0; i < numEntries3; i++)
+
+            {
+                res.WriteInt64(1111111111111111);
+            }
+
+            res.WriteInt32(88888888); //1000 0000 here makes it stand up and not be dead.
+
+            res.WriteInt64(1000000000000000);
+
+            res.WriteInt64(1000000000000000);
+
+            res.WriteInt64(1000000000000000);
+
+            res.WriteByte(1);
+
+            res.WriteByte(1);
+
+            res.WriteInt32(10000000);
+
+            res.WriteInt32(10000000);
+
+            res.WriteInt32(0x80); // cmp to 0x80 = 128
+
+            int numEntries4 = 0x80;  //Statuses?
+            for (int i = 0; i < numEntries4; i++)
+
+            {
+                res.WriteInt32(10000000);
+                res.WriteInt32(10000000);
+                res.WriteInt32(10000000);
+            }
+
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_monster_data, res);
+        }
         /////////Int array for testing Item ID's.  Poor formatting, for easy copying from excel
         int[] itemIDs = new int[] {    100101
                                     ,   100102
