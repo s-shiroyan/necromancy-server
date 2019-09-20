@@ -115,8 +115,14 @@ namespace Necromancy.Server.Packet.Area
                     case "Died":
                             IBuffer res4 = BufferProvider.Provide();
                             Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
-                         break;
-                    case "GetLoot":
+                         break; 
+                    case "GetUItem":
+                            AdminConsoleRecvItemInstanceUnidentified(client);
+                        break;
+                    case "GetItem":
+                            AdminConsoleRecvItemInstance(client);
+                        break;
+                    case "SendMail":
                             AdminConsolePackageNotifyAdd(client);
                         break;
                     case "GetMail":
@@ -343,22 +349,22 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0);
                 res.WriteInt32(18159);
-                res.WriteFixedString("Bite", 0x31);
+                res.WriteFixedString("Bite", 0x31); //nessage recipient?
                 res.WriteFixedString("My", 0x5B);
-                res.WriteFixedString("Shiny", 0x5B);
-                res.WriteFixedString("Metal", 0x259);
+                res.WriteFixedString("Shiny", 0x5B); // message title
+                res.WriteFixedString("Metal", 0x259); //message body
                 res.WriteInt32(objectID);
                 res.WriteInt16(1);
                 res.WriteInt64(objectID);
                 res.WriteInt32(10200101);           //Responsible for icon
                 res.WriteFixedString("Ass", 0x49);
-                res.WriteFixedString("Human", 0x49);
-                res.WriteInt32(objectID);
+                res.WriteFixedString("Human", 0x49); //Item Title
+                res.WriteInt32(objectID);           //Odd numbers here make the item have the title and correct icon
                 res.WriteInt32(objectID);
                 res.WriteInt32(objectID);
                 res.WriteInt32(objectID);
                 res.WriteFixedString("!", 0x10);
-                res.WriteByte(1);
+                res.WriteByte(1);               //Item attached. 1 for yes?
                 res.WriteInt32(objectID);
                 res.WriteInt32(objectID);
                 for (int j = 0; j < 3; j++)
@@ -569,21 +575,21 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(1111111111111111);
             }
 
-            res.WriteInt32(88888888); //1000 0000 here makes it stand up and not be dead.
+            res.WriteInt32(11111110); //1000 0000 here makes it stand up and not be dead.
 
-            res.WriteInt64(1000000000000000);
+            res.WriteInt64(9999999999999999);
 
-            res.WriteInt64(1000000000000000);
+            res.WriteInt64(9999999999999999);
 
-            res.WriteInt64(1000000000000000);
-
-            res.WriteByte(1);
+            res.WriteInt64(9999999999999999);
 
             res.WriteByte(1);
 
-            res.WriteInt32(10000000);
+            res.WriteByte(1);
 
-            res.WriteInt32(10000000);
+            res.WriteInt32(99999991);
+
+            res.WriteInt32(99999991);
 
             res.WriteInt32(0x80); // cmp to 0x80 = 128
 
@@ -598,8 +604,107 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_data_notify_monster_data, res);
         }
-        /////////Int array for testing Item ID's.  Poor formatting, for easy copying from excel
-        int[] itemIDs = new int[] {    100101
+
+        private void AdminConsoleRecvItemInstanceUnidentified(NecClient client)
+        {
+            //recv_item_instance_unidentified = 0xD57A,
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt64(10001000100010002);
+
+            res.WriteCString("Make this an Axe");
+
+            res.WriteInt32(10001005);
+
+            res.WriteInt32(10001004);
+
+            res.WriteByte(0);
+
+            res.WriteInt32(10001003);
+
+            res.WriteInt32(10800405);  //Item ID for Item?
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(10800405);  //Item ID for Icon?
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(1); // bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteByte(1);
+
+            res.WriteByte(1);
+
+            res.WriteInt16(3); //count?
+
+            res.WriteInt32(10001001);
+
+            res.WriteInt64(1000100010001000);
+
+            res.WriteInt32(10001002);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
+        }
+
+        private void AdminConsoleRecvItemInstance(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            //recv_item_instance = 0x86EA,
+
+	        res.WriteInt64(10001000100010002);
+            res.WriteInt32(10800405);
+            res.WriteByte(1);               //number of items
+            res.WriteInt32(10800405);              //Icon Type. put an actual Item ID here.  10800405
+            res.WriteFixedString("WhatIsThis", 0x10);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteInt16(3);
+            res.WriteInt32(10001002);
+            res.WriteInt32(10001003);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteCString("ThisIsThis"); // find max size 
+            res.WriteInt16(4);
+            res.WriteInt16(5);
+            res.WriteInt32(10001004);
+            res.WriteByte(1);
+            res.WriteInt32(10001005);
+            int numEntries = 2;
+            res.WriteInt32(numEntries); // less than or equal to 2
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(10001006);
+            }
+            numEntries = 3;
+            res.WriteInt32(numEntries); // less than or equal to 3
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte(1); //bool
+                res.WriteInt32(10001006);
+                res.WriteInt32(10001007);
+                res.WriteInt32(10001008);
+            }
+            res.WriteInt32(10001009);
+            res.WriteInt32(10001010);
+            res.WriteInt16(6);
+            res.WriteInt32(10001011);
+            res.WriteInt16(7);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res);
+
+        }
+
+            /////////Int array for testing Item ID's.  Poor formatting, for easy copying from excel
+            int[] itemIDs = new int[] {    100101
                                     ,   100102
                                     ,   100103
                                     ,   100104

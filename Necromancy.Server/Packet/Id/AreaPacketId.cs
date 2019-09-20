@@ -808,7 +808,7 @@ namespace Necromancy.Server.Packet.Id
         send_item_equip = 0x115, //opcode not found
         send_item_move = 0x116, //opcode not found
         send_item_sort = 0x117, //opcode not found
-        send_item_unequip = 0x118, //opcode not found
+        send_item_unequip = 0xA3DE, //opcode not found
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
         send_job_change = 0x121, //opcode not found
