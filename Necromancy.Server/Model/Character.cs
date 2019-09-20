@@ -16,7 +16,7 @@ namespace Necromancy.Server.Model
         public float Z { get; set; }
         public byte viewOffset { get; set; }
         public int battlePose { get; set; }
-        public byte charaPose { get; set; }
+        public int charaPose { get; set; }
 
         public byte movementAnim { get; set; }
         public byte animJumpFall { get; set; }

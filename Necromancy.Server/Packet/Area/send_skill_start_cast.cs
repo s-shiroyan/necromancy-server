@@ -22,16 +22,20 @@ namespace Necromancy.Server.Packet.Area
             int mySkillTarget = packet.Data.ReadInt32();
             int CastingTime = 3;
 
-            //if (mySkillTarget != 0)
-            //{   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
-            //else
-            //{   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
+            if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
+            {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
 
-            //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to.
+            if (mySkillTarget == 0) // self cast skills 0 out your our target ID, even if you have something targeted.
+            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
 
-            SendSkillStartCastExR(client,mySkillID,mySkillTarget); // TO-DO  logic for when to use this
+            if (mySkillTarget > 9910024) // All NPCs have Serial ID's of 10,000,000 or greater.  all Monsters are 9910024 or less. most are only 6 digits. 9 digit monster ID's are for testing.
+            { SendSkillStartCastExR(client, mySkillID, mySkillTarget); }
+
+            //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to above.
+
+
             //recv_skill_start_item_cast_r // To-Do .  after Items exist,  start casting based on item i.e. camp.
-            //This is only here for testing. The delay gives the above sends/recvs time to process   :To Do- write 'send_skill_exec.cs'
+
             //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => { SendSkillStartCastExR(client, mySkillID, mySkillTarget); });
             //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000 * 2))).ContinueWith(t1 => { SendSkillExecR(client, mySkillID, mySkillTarget); });
 

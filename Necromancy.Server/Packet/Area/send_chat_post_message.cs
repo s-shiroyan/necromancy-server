@@ -25,14 +25,28 @@ namespace Necromancy.Server.Packet.Area
             string Message = packet.Data.ReadCString();
             
 
-
-
             SendChatNotifyMessage(client, Message, ChatType);
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); // errcode : 0 for success
+            /*
+            CHAT_MSG	GENERIC	Unknown statement error
+            CHAT_MSG	2	You are unable to whisper to yourself
+            CHAT_MSG	-802	You are not able to speak since you are not in a party
+            CHAT_MSG	-1400	Unable to find Soul.  Reason: <errmsg>
+            CHAT_MSG	-1401	You do not have an all-chat item
+            CHAT_MSG	-1402	Action failed since it is on cool down.
+            CHAT_MSG	-1403	You may not repeat phrases over and over in chat
+            CHAT_MSG	-1404	You may not shout at Soul Rank 1
+            CHAT_MSG	-1405	Action failed since it is on cool down.
+            CHAT_MSG	-2201	Target refused to accept your whisper
+            CHAT_MSG	-2202	Unable to whisper as you are on the recipient's Block List.
+            CHAT_MSG	-3000	You may not chat in all-chat during trades.
+            CHAT_MSG	-3001	You may not chat in all-chat while you have a shop open.
+             */
+
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-            Console.WriteLine("Chat Type: " + ChatType + "\nTo: " + To + "\nMessage: " + Message);
+            //Console.WriteLine("Chat Type: " + ChatType + "\nTo: " + To + "\nMessage: " + Message);
 
             if (Message[0] == '!')
                 commandParse(client, Message);
@@ -81,7 +95,7 @@ namespace Necromancy.Server.Packet.Area
             }
         }
 
-        private void SendItemMove(NecClient client)
+        private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
         {
             if (ConsoleActive == true)
             {
@@ -90,31 +104,29 @@ namespace Necromancy.Server.Packet.Area
                 switch (SplitMessage[0])
                 {
                     case "NPC":
-                        AdminConsoleNPC(client,Convert.ToInt32(SplitMessage[1]));
+                            AdminConsoleNPC(client,Convert.ToInt32(SplitMessage[1]));
                         break;
                     case "Item":
-                    AdminConsoleSoulMaterial(client);
-                    break;
+                            AdminConsoleSoulMaterial(client);
+                        break;
                     case "Died":
-                        IBuffer res4 = BufferProvider.Provide();
-                        Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
+                            IBuffer res4 = BufferProvider.Provide();
+                            Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
                          break;
                     case "GetLoot":
-                        AdminConsoleLootAccessObject(client);
+                            AdminConsolePackageNotifyAdd(client);
                         break;
                     case "GetMail":
-                        AdminConsoleSelectPackageUpdate(client);
-                        break;
-                        
-
+                            AdminConsoleSelectPackageUpdate(client);
+                        break;                 
                     case "Jump":
-                        AdminConsoleSuperJump(client, Convert.ToInt32(SplitMessage[1]));
+                            AdminConsoleSuperJump(client, Convert.ToInt32(SplitMessage[1]));
                         break;
                     case "exit":
-                        ConsoleActive = false;
+                            ConsoleActive = false;
                         break;
                     default:
-                        Message = $"Unrecognized command '{SplitMessage[0]}' ";
+                            Message = $"Unrecognized command '{SplitMessage[0]}' ";
                         break;
                 }
 
@@ -319,7 +331,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res);
         }
 
-        private void AdminConsoleLootAccessObject(NecClient client)
+        private void AdminConsolePackageNotifyAdd(NecClient client)
         {
             for (int i = 0; i < 1; i++)
             {
@@ -358,11 +370,12 @@ namespace Necromancy.Server.Packet.Area
 
                 Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res);
             }
+        }
 
-
-
-            //recv_item_move_r = 0x708B,
-            IBuffer res = BufferProvider.Provide();
+        private void SendItemMove(NecClient client)
+        {
+                //recv_item_move_r = 0x708B,
+                IBuffer res = BufferProvider.Provide();
 
 	        res.WriteInt32(69);//Error check?
 
@@ -372,7 +385,13 @@ namespace Necromancy.Server.Packet.Area
         private void SendLootAccessObject(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(69);
+            res.WriteInt32(-10);
+            /*
+                LOOT	-1	It is carrying nothing
+                LOOT	-10	No one can be looted nearby
+                LOOT	-207	No space available in inventory
+                LOOT	-1500	No permission to loot
+            */
 
             Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
         }
@@ -467,17 +486,6 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res);
         }
 
-        private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(ChatType);//Char type
-            res.WriteInt32(client.Character.Id);//Character ID
-            res.WriteFixedString("Soulname", 49);//Soul name
-            res.WriteFixedString("Charaname", 37);//Character name
-            res.WriteFixedString($"{Message}", 769);//Message contents
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
-        }
-
         private void AdminConsoleSelectPackageUpdate(NecClient client)
         {
                 int errcode = 0;
@@ -492,7 +500,7 @@ namespace Necromancy.Server.Packet.Area
 
                 */
 
-                Router.Send(client, (ushort)AreaPacketId.recv_select_package_update_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_select_package_update_r, res);
             
         }
 

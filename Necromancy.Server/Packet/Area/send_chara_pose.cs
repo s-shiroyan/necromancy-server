@@ -28,14 +28,14 @@ namespace Necromancy.Server.Packet.Area
 
        
 
-        private void SendCharaPoseNotify(NecClient client, int pose)
+        private void SendCharaPoseNotify(NecClient client)
         {
 
             
                 IBuffer res = BufferProvider.Provide();
 
                 res.WriteInt32(client.Character.Id);//Character ID
-                res.WriteInt32(pose); //Character pose
+                res.WriteInt32(client.Character.charaPose); //Character pose
 
                 
 
