@@ -612,7 +612,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt64(10001000100010002);
 
-            res.WriteCString("Make this an Axe");
+            res.WriteCString("Have Fun in Texas Hiraeth!");
 
             res.WriteInt32(10001005);
 
@@ -660,43 +660,43 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             //recv_item_instance = 0x86EA,
 
-	        res.WriteInt64(10001000100010002);
-            res.WriteInt32(10800405);
-            res.WriteByte(1);               //number of items
-            res.WriteInt32(10800405);              //Icon Type. put an actual Item ID here.  10800405
+	        res.WriteInt64(10001000100010002);  //  Assume Unique ID instance identifier.
+            res.WriteInt32(11400403);
+            res.WriteByte(4);               //number of items in stack
+            res.WriteInt32(11400403);       //% durability if set to 2.  //Icon Type. put an actual Item ID here.  10800405
             res.WriteFixedString("WhatIsThis", 0x10);
             res.WriteByte(1);
             res.WriteByte(1);
             res.WriteInt16(3);
-            res.WriteInt32(10001002);
-            res.WriteInt32(10001003);
+            res.WriteInt32(Int32.MaxValue);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
+            res.WriteInt32(-1);
             res.WriteByte(1);
             res.WriteByte(1);
             res.WriteCString("ThisIsThis"); // find max size 
             res.WriteInt16(4);
             res.WriteInt16(5);
-            res.WriteInt32(10001004);
+            res.WriteInt32(15);
             res.WriteByte(1);
-            res.WriteInt32(10001005);
+            res.WriteInt32(200);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(10001006);
+                res.WriteInt32(1);
             }
             numEntries = 3;
             res.WriteInt32(numEntries); // less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteByte(1); //bool
-                res.WriteInt32(10001006);
-                res.WriteInt32(10001007);
-                res.WriteInt32(10001008);
+                res.WriteByte(16); //bool
+                res.WriteInt32(101);
+                res.WriteInt32(101);
+                res.WriteInt32(101);
             }
-            res.WriteInt32(10001009);
-            res.WriteInt32(10001010);
-            res.WriteInt16(6);
-            res.WriteInt32(10001011);
+            res.WriteInt32(6);
+            res.WriteInt32(6);
+            res.WriteInt16(4);
+            res.WriteInt32(1);  //1 here lables the item "Gaurd".   no effect from higher numbers
             res.WriteInt16(7);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res);
