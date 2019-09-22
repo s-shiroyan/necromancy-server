@@ -23,7 +23,7 @@ namespace Necromancy.Server.Database
             switch (settings.Type)
             {
                 case DatabaseType.SQLite:
-                    database = PrepareSqlLiteDb(settings.SqLitePath);
+                    database = PrepareSqlLiteDb(settings.SqLitePath,settings);
                     break;
             }
 
@@ -36,8 +36,16 @@ namespace Necromancy.Server.Database
             return database;
         }
 
-        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
+        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath,DatabaseSettings settings)
         {
+            if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92119"))
+                {
+                Console.WriteLine($"DB Flag File not found. Creating : {Util.ExecutingDirectory()}/DBVersionFlagFile92119");
+                File.Create($"{Util.ExecutingDirectory()}/DBVersionFlagFile92119");
+                Console.WriteLine($"Deleting outdated Database file. Db.sqlite will be re-created with updated schema : {Util.ExecutingDirectory()}/db.sqlite");
+                File.Delete($"{Util.ExecutingDirectory()}/db.sqlite");
+                }
+
             SqLiteDb db = new SqLiteDb(sqlLitePath);
             ScriptRunner scriptRunner = new ScriptRunner(db);
             scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/sqlite_schema.sql"));

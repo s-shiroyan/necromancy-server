@@ -9,19 +9,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateCharacter =
-            "INSERT INTO `nec_character` (`account_id`, `soul_id`, `name`, `level`, `created`) VALUES (@account_id, @soul_id, @name, @level, @created);";
+            "INSERT INTO `nec_character` (`account_id`, `soul_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `level`, `created`) VALUES (@account_id, @soul_id, @name, @race_id, @sex_id, @hair_id, @hair_color_id, @face_id, @level, @created);";
 
         private const string SqlSelectCharacterById =
-            "SELECT `id`, `account_id`, `soul_id`, `name`, `level`, `created` FROM `nec_character` WHERE `id`=@id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `level`, `created` FROM `nec_character` WHERE `id`=@id; ";
 
         private const string SqlSelectCharactersByAccountId =
-            "SELECT `id`, `account_id`, `soul_id`, `name`, `level`, `created` FROM `nec_character` WHERE `account_id`=@account_id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `level`, `created` FROM `nec_character` WHERE `account_id`=@account_id; ";
 
         private const string SqlSelectCharactersBySoulId =
-            "SELECT `id`, `account_id`, `soul_id`, `name`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id; ";
 
         private const string SqlUpdateCharacter =
-            "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `name`=@name, `level`=@level, `created`=@created WHERE `id`=@id;";
+            "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `name`=@name, `race_id`=@race_id, `sex_id`=@sex_id, `hair_id`=@hair_id, `hair_color_id`=@hair_color_id, `face_id`=@face_id, `level`=@level, `created`=@created WHERE `id`=@id;";
 
         private const string SqlDeleteCharacter =
             "DELETE FROM `nec_character` WHERE `id`=@id;";
@@ -33,6 +33,11 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@account_id", character.AccountId);
                 AddParameter(command, "@soul_id", character.AccountId);
                 AddParameter(command, "@name", character.Name);
+                AddParameter(command, "@race_id", character.Raceid);
+                AddParameter(command, "@sex_id", character.Sexid);
+                AddParameter(command, "@hair_id", character.HairId);
+                AddParameter(command, "@hair_color_id", character.HairColorId);
+                AddParameter(command, "@face_id", character.FaceId);
                 AddParameter(command, "@level", character.Level);
                 AddParameter(command, "@created", character.Created);
             }, out long autoIncrement);
@@ -41,9 +46,10 @@ namespace Necromancy.Server.Database.Sql.Core
                 return false;
             }
 
-            character.Id = (int) autoIncrement;
+            character.Id = (int)autoIncrement;
             return true;
         }
+
 
         public Character SelectCharacterById(int characterId)
         {
@@ -94,11 +100,15 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlUpdateCharacter, command =>
             {
                 AddParameter(command, "@account_id", character.AccountId);
-                AddParameter(command, "@soul_id", character.SoulId);
+                AddParameter(command, "@soul_id", character.AccountId);
                 AddParameter(command, "@name", character.Name);
+                AddParameter(command, "@race_id", character.Raceid);
+                AddParameter(command, "@sex_id", character.Sexid);
+                AddParameter(command, "@hair_id", character.HairId);
+                AddParameter(command, "@hair_color_id", character.HairColorId);
+                AddParameter(command, "@face_id", character.FaceId);
                 AddParameter(command, "@level", character.Level);
                 AddParameter(command, "@created", character.Created);
-                AddParameter(command, "@id", character.Id);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -118,7 +128,12 @@ namespace Necromancy.Server.Database.Sql.Core
             character.SoulId = GetInt32(reader, "soul_id");
             character.Created = GetDateTime(reader, "created");
             character.Name = GetString(reader, "name");
-            character.Level = GetInt32(reader, "level");
+            character.Raceid = (byte)GetInt32(reader, "race_id");
+            character.Sexid = (byte)GetInt32(reader, "sex_id");
+            character.HairId = (byte)GetInt32(reader, "hair_id");
+            character.HairColorId = (byte)GetInt32(reader, "hair_color_id");
+            character.FaceId = (byte)GetInt32(reader, "face_id");
+            character.Level = (byte)GetInt32(reader, "level");
             return character;
         }
     }

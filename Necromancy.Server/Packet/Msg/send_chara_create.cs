@@ -38,9 +38,50 @@ namespace Necromancy.Server.Packet.Msg
             uint unknown_a = packet.Data.ReadUInt32();
 
 
+            //-------------------------------------
+            // Send Character Creation packets to Database for laster use.
+
+            Character character = new Character();
+            character.Id = character_slot_id;
+            character.Name = character_name;
+            character.Raceid = race_id;
+            character.Sexid = sex_id;
+            character.HairId = hair_id;
+            character.HairColorId = hair_color_id;
+            character.FaceId = face_id;
+            character.AccountId = client.Account.Id;
+
+            //----------------------------------------------------------
+            // Character Slot ID
+
+            if (!Database.InsertCharacter(character))
+            {
+                Logger.Error(client, $"Failed to create CharacterSlot: {character_slot_id}");
+                client.Socket.Close();
+                return;
+            }
+
+            client.Character = character;
+            Logger.Info($"Created CharacterSlot: {character_slot_id}");
+            Logger.Info($"Created CharacterName: {character_name}");
+            Logger.Info($"Created race: {race_id}");
+            Logger.Info($"Created sex: {sex_id}");
+            Logger.Info($"Created hair: {hair_id}");
+            Logger.Info($"Created hair color: {hair_color_id}");
+            Logger.Info($"Created faceid: {face_id}");
+
+            //-------------------------------------------------------------------------------
+
+            //-------------------------------------------------------------------------------
+
+
+
+
+
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // error check 0 is good
-            res.WriteInt32(15100901);
+            res.WriteInt32(0);
+            res.WriteInt32(1);
 
             Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res);
         }

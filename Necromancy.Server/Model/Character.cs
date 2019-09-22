@@ -7,10 +7,17 @@ namespace Necromancy.Server.Model
         public int Id { get; set; }
         public int AccountId { get; set; }
         public int SoulId { get; set; }
-
         public DateTime Created { get; set; }
+  
         public string Name { get; set; }
-        public int Level { get; set; }
+        public uint Raceid { get; set; }
+        public uint Sexid { get; set; }
+        public byte HairId { get; set; }
+        public byte HairColorId { get; set; }
+        public byte FaceId { get; set; }
+        public uint ClassId { get; set; }
+        public byte Level { get; set; }
+
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
@@ -30,6 +37,10 @@ namespace Necromancy.Server.Model
             Id = -1;
             AccountId = -1;
             SoulId = -1;
+
+            Level = 0;
+            Name = null;
+            Created = DateTime.Now;
         }
 
     }

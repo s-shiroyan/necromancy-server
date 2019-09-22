@@ -28,16 +28,16 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
 
                 //sub_4953B0 - characteristics
-                res.WriteInt32(3); //race
-                res.WriteInt32(0); //gender
-                res.WriteByte(0); //hair
-                res.WriteByte(5); //face
-                res.WriteByte(0); //color
+                res.WriteInt32(client.Character.Raceid); //race
+                res.WriteInt32(client.Character.Sexid);; //gender
+                res.WriteByte(client.Character.HairId); //hair
+                res.WriteByte(client.Character.FaceId); //face
+                res.WriteByte(client.Character.HairColorId); //color
 
                 //sub_484720 - combat/leveling info
                 res.WriteInt32(client.Character.Id);  // ? character ID maybe?
                 res.WriteInt32(1); // class
-                res.WriteInt16(50); // current level
+                res.WriteInt16(client.Character.Level); // current level
                 res.WriteInt64(555555550); // current exp
                 res.WriteInt64(777777712); // soul exp
                 res.WriteInt64(33); // exp needed to level

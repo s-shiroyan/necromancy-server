@@ -38,9 +38,13 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `account_id`       INTEGER                           NOT NULL,
   `soul_id`          INTEGER                           NOT NULL,
   `name`             TEXT                              NOT NULL,
+  `race_id`          INTEGER                           NOT NULL,
+  `sex_id`           INTEGER                           NOT NULL,
+  `hair_id`          SMALLINT                          NOT NULL,
+  `hair_color_id`    SMALLINT                           NOT NULL,
+  `face_id`          SMALLINT                          NOT NULL,
   `level`            INTEGER                           NOT NULL,
   `created`          DATETIME                          NOT NULL,  
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-  CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
-  CONSTRAINT `uq_nec_character_name` UNIQUE (`name`)
+  CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`)
 );

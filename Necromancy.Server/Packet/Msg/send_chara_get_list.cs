@@ -36,35 +36,37 @@ namespace Necromancy.Server.Packet.Msg
             Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data_complete, res2);
         }
 
-        byte[] slot = new byte[] {0,1,2,3,4};//3,4};
 
-        
-        string[] MyCharacters = new string[] {"Zenkato","Test1","Xeno","Kadred","Ipa","Diablo",};
-        int[] MyRace = new int[]{0,4,3,3,0,2};
-        int[] MyGender = new int[]{1,1,0,0,1,1};
-        int[] MyWeaponType = new int[]{14,8,8,8,10,10};
-        byte[] MyHair = new byte[] { 5,0,0,0,5,5};
-        
 
 
         private void SendNotifyData(NecClient client)
-
         {
+            byte[] slot = new byte[] {3,2,1 };//3,4};
+  
+
+
+            string[] MyCharacters = new string[] { "Zenkato", "Test1", "Xeno", "Kadred", "Ipa", $"{client.Character.Name}", };
+            uint[] MyRace = new uint[] { 0, 4, 3, 3, 0, client.Character.Raceid };
+            uint[] MyGender = new uint[] { 1, 1, 0, 0, 1, client.Character.Sexid };
+            int[] MyWeaponType = new int[] { 14, 8, 8, 8, 10, 10 };
+            byte[] MyHair = new byte[] { 5, 0, 0, 0, 5, client.Character.HairId };
+
+
             int E = 0;
             foreach (int y in slot)
             {
                 IBuffer res = BufferProvider.Provide();
                 res.WriteByte(slot[E]);//character slot, 0 for left, 1 for middle, 2 for right
                 res.WriteInt32(E+256);    //  Character ID
-                res.WriteFixedString(MyCharacters[E], 91); // 0x5B | 91x 1 byte
+                res.WriteFixedString(MyCharacters[slot[E] - 1], 91); // 0x5B | 91x 1 byte
 
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(0);//character level stat
                 res.WriteInt32(0);//todo (unknown)
                 res.WriteInt32(0);//class stat 
                                   //
-                res.WriteInt32(MyRace[E]);//race flag
-                res.WriteInt32(MyGender[E]);//gender flag
+                res.WriteInt32(MyRace[slot[E] - 1]);//race flag
+                res.WriteInt32(MyGender[slot[E] - 1]);//gender flag
                 res.WriteByte(0);//Hair Style
                 res.WriteByte(5);//Hair Color
                 res.WriteByte(0);//Face Style
@@ -76,7 +78,7 @@ namespace Necromancy.Server.Packet.Msg
                 int Shield = 21;        //Shield 19-21
                 //int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
                                          //sub_483660 
-                res.WriteInt32(MyWeaponType[E]); //18	    				
+                res.WriteInt32(MyWeaponType[slot[E]-1]); //18	    				
                 res.WriteInt32(Shield); //17 	    		
                 res.WriteInt32(Armor); //16	        			
                 res.WriteInt32(Armor); //15	        				
@@ -103,7 +105,7 @@ namespace Necromancy.Server.Packet.Msg
                 int x = 0;
                 int[] EquipId = new int[19];
 
-                string CharacterSet = MyCharacters[E];
+                string CharacterSet = MyCharacters[slot[E]-1];
 
                 switch (CharacterSet)
                 {
@@ -153,7 +155,7 @@ namespace Necromancy.Server.Packet.Msg
                     res.WriteByte(0); //
                     x++;
 
-                    res.WriteByte(MyHair[E]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                    res.WriteByte(MyHair[slot[E] - 1]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                     res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                     res.WriteByte(0); // testing (Theory Torso Tex)
                     res.WriteByte(0); // testing (Theory Pants Tex)

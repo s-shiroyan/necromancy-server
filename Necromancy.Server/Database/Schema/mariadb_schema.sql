@@ -43,14 +43,18 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   DEFAULT CHARSET = utf8;
   
 CREATE TABLE IF NOT EXISTS `nec_character` (
-  `id`         INT(11)             NOT NULL,
+  `id`         INT(11)             NOT NULL AUTO_INCREMENT,
   `account_id` INT(11)             NOT NULL,
   `soul_id`    INT(11)             NOT NULL,
   `name`       VARCHAR(45)         NOT NULL,
-  `level`      TINYINT(1) UNSIGNED NOT NULL,
+  `race_id`     INT(3)             NOT NULL,
+  `sex_id`      INT(3)             NOT NULL,
+  `hair_id`     SMALLINT(3)             NOT NULL,
+  `hair_color_id` SMALLINT(3)             NOT NULL,
+  `face_id`     SMALLINT(3)             NOT NULL,
+  `level`      TINYINT(3) UNSIGNED NOT NULL,
   `created`    DATETIME            NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_nec_character_name` (`name`),
   KEY `fk_nec_character_account_id` (`account_id`),
   KEY `fk_nec_character_soul_id` (`soul_id`),
   CONSTRAINT `fk_nec_soul_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
