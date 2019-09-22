@@ -23,7 +23,7 @@ namespace Necromancy.Server.Database
             switch (settings.Type)
             {
                 case DatabaseType.SQLite:
-                    database = PrepareSqlLiteDb(settings.SqLitePath,settings);
+                    database = PrepareSqlLiteDb(settings.SqLitePath);
                     break;
             }
 
@@ -36,7 +36,7 @@ namespace Necromancy.Server.Database
             return database;
         }
 
-        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath,DatabaseSettings settings)
+        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
         {
             if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92119"))
                 {
