@@ -100,7 +100,7 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlUpdateCharacter, command =>
             {
                 AddParameter(command, "@account_id", character.AccountId);
-                AddParameter(command, "@soul_id", character.AccountId);
+                AddParameter(command, "@soul_id", character.SoulId);
                 AddParameter(command, "@name", character.Name);
                 AddParameter(command, "@race_id", character.Raceid);
                 AddParameter(command, "@sex_id", character.Sexid);
@@ -109,6 +109,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@face_id", character.FaceId);
                 AddParameter(command, "@level", character.Level);
                 AddParameter(command, "@created", character.Created);
+                AddParameter(command, "@id", character.Id);
             });
             return rowsAffected > NoRowsAffected;
         }
