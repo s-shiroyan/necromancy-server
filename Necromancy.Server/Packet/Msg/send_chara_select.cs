@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Msg
 {
@@ -16,7 +17,18 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-  
+            byte CharacterIdInSelectedSlot = packet.Data.ReadByte();
+
+            foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
+            {
+                Console.WriteLine($"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                if (myCharacter.Id == CharacterIdInSelectedSlot)
+                {
+                    client.Character = myCharacter;
+                    Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                }
+            }
+
             IBuffer res2 = BufferProvider.Provide();
 
             res2.WriteInt32(0);

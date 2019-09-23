@@ -28,15 +28,23 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
 
                 //sub_4953B0 - characteristics
+                
                 res.WriteInt32(client.Character.Raceid); //race
                 res.WriteInt32(client.Character.Sexid);; //gender
                 res.WriteByte(client.Character.HairId); //hair
-                res.WriteByte(client.Character.FaceId); //face
                 res.WriteByte(client.Character.HairColorId); //color
-
-                //sub_484720 - combat/leveling info
-                res.WriteInt32(client.Character.Id);  // ? character ID maybe?
-                res.WriteInt32(1); // class
+                res.WriteByte(client.Character.FaceId); //face
+                
+            /*
+                res.WriteInt32(3); //race
+                res.WriteInt32(0); ; //gender
+                res.WriteByte(0); //Face
+                res.WriteByte(5); //hair color
+                res.WriteByte(0); //Hair Style
+            */
+            //sub_484720 - combat/leveling info
+            res.WriteInt32(client.Character.Id);  // ? character ID maybe?
+                res.WriteInt32(client.Character.ClassId); // class
                 res.WriteInt16(client.Character.Level); // current level
                 res.WriteInt64(555555550); // current exp
                 res.WriteInt64(777777712); // soul exp
@@ -250,11 +258,11 @@ namespace Necromancy.Server.Packet.Area
                 int[] EquipId = new int[19];
                 byte[] headSlot = new byte[19];
 
-                string CharacterSet = "Xeno";       
+                string CharacterSet = client.Character.Name;       
                 
                 switch (CharacterSet)
                 { 
-                    case "Xeno":
+                    case "Xeno.":
                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0 };

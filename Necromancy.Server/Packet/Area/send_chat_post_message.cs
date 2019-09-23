@@ -17,7 +17,8 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort)AreaPacketId.send_chat_post_message;
 
         bool ConsoleActive = false;
-        
+        int x = 0;
+
         public override void Handle(NecClient client, NecPacket packet)
         {
             int ChatType = packet.Data.ReadInt32();     // 0 - Area, 1 - Shout, other todo...
@@ -243,7 +244,7 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteInt32(1);      // todo, maybe, character id
                 res2.WriteFixedString($"Console", 49);
                 res2.WriteFixedString($"Admin", 37);
-                res2.WriteFixedString($"Console Command - {Message} sent", 769);
+                res2.WriteFixedString($"Console Command - {Message} sent{x}", 769);
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res2);
 
 
@@ -838,13 +839,11 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);
             res.WriteByte(0);
 
-            res.WriteByte(1);
+            res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0);                       // 0~2
+            res.WriteInt16(3);                      // bag index
 
-            res.WriteByte(1);
-
-            res.WriteInt16(3); //count?
-
-            res.WriteInt32(10001001);
+            res.WriteInt32(0b1000000000000000000000000000001);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
 
             res.WriteInt64(1000100010001000);
 
@@ -852,50 +851,50 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
         }
-
+        
         private void AdminConsoleRecvItemInstance(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             //recv_item_instance = 0x86EA,
-
-	        res.WriteInt64(10001000100010002);  //  Assume Unique ID instance identifier.
-            res.WriteInt32(11400403);
-            res.WriteByte(4);               //number of items in stack
-            res.WriteInt32(11400403);       //% durability if set to 2.  //Icon Type. put an actual Item ID here.  10800405
+            x++;
+	        res.WriteInt64(1000200030004001);  //  Assume Unique ID instance identifier. 1 here makes item green icon
+            res.WriteInt32(itemIDs[x]);
+            res.WriteByte(1);               //number of items in stack
+            res.WriteInt32(itemIDs[x]);       //0b1 normal 0b10 disconnect 
             res.WriteFixedString("WhatIsThis", 0x10);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteInt16(3);
-            res.WriteInt32(Int32.MaxValue);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
-            res.WriteInt32(-1);
-            res.WriteByte(1);
-            res.WriteByte(1);
+            res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0);                       // 0~2
+            res.WriteInt16(3);                      // bag index
+            res.WriteInt32(0b1000000000000000000000000000001);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
+            res.WriteInt32(1);
+            res.WriteByte(3);
+            res.WriteByte(3);
             res.WriteCString("ThisIsThis"); // find max size 
             res.WriteInt16(4);
             res.WriteInt16(5);
-            res.WriteInt32(15);
-            res.WriteByte(1);
-            res.WriteInt32(200);
+            res.WriteInt32(1);
+            res.WriteByte(3);
+            res.WriteInt32(1);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(1);
+                res.WriteInt32(11400403);
             }
             numEntries = 3;
             res.WriteInt32(numEntries); // less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
                 res.WriteByte(16); //bool
-                res.WriteInt32(101);
-                res.WriteInt32(101);
-                res.WriteInt32(101);
+                res.WriteInt32(11400403);
+                res.WriteInt32(11400403);
+                res.WriteInt32(11400403);
             }
-            res.WriteInt32(6);
-            res.WriteInt32(6);
-            res.WriteInt16(4);
+            res.WriteInt32(-1);
+            res.WriteInt32(-1);
+            res.WriteInt16(-1);
             res.WriteInt32(1);  //1 here lables the item "Gaurd".   no effect from higher numbers
-            res.WriteInt16(7);
+            res.WriteInt16(-1);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res);
 
