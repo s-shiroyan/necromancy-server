@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
         {
             string command = null;
             int i = 1;
-            int x = 0;
+            long x = 0;
             bool cont = true;
             while (cont)
             {
@@ -48,88 +48,19 @@ namespace Necromancy.Server.Packet.Area
             }
             if(Message.Length >= 6)
             {
-                switch (Message.Length)
+                string newString = null;
+
+                for(int k = 0; k < Message.Length-5; k++)
                 {
-                    case 6:
-                        x = Message[Message.Length - 1] - '0';
-                        break;
-                    case 7:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        break;
-                    case 8:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        break;
-                    case 9:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        Console.WriteLine(x);
-                        break;
-                    case 10:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        break;
-                    case 11:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        x += (Message[Message.Length - 6] - '0') * 100000;
-                        break;
-                    case 12:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        x += (Message[Message.Length - 6] - '0') * 100000;
-                        x += (Message[Message.Length - 7] - '0') * 1000000;
-                        break;
-                    case 13:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        x += (Message[Message.Length - 6] - '0') * 100000;
-                        x += (Message[Message.Length - 7] - '0') * 1000000;
-                        x += (Message[Message.Length - 8] - '0') * 10000000;
-                        break;
-                    case 14:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        x += (Message[Message.Length - 6] - '0') * 100000;
-                        x += (Message[Message.Length - 7] - '0') * 1000000;
-                        x += (Message[Message.Length - 8] - '0') * 10000000;
-                        x += (Message[Message.Length - 9] - '0') * 100000000;
-                        break;
-                    case 15:
-                        x += Message[Message.Length - 1] - '0';
-                        x += (Message[Message.Length - 2] - '0') * 10;
-                        x += (Message[Message.Length - 3] - '0') * 100;
-                        x += (Message[Message.Length - 4] - '0') * 1000;
-                        x += (Message[Message.Length - 5] - '0') * 10000;
-                        x += (Message[Message.Length - 6] - '0') * 100000;
-                        x += (Message[Message.Length - 7] - '0') * 1000000;
-                        x += (Message[Message.Length - 8] - '0') * 10000000;
-                        x += (Message[Message.Length - 9] - '0') * 100000000;
-                        x += (Message[Message.Length - 10] - '0') * 1000000000;
-                        break;
-                    default:
-                        x = 0;
-                        break;
+                    newString += Message[k + 5];
                 }
+
+                Int64.TryParse(newString, out long newInt);
+
+                x = newInt;//find func for string convert
+
+                Console.WriteLine("newInt should be :" + newInt);
+                Console.WriteLine("x should be :" + x);
             }
             switch (command)
             {
@@ -151,9 +82,9 @@ namespace Necromancy.Server.Packet.Area
                 case "accs":
                     SendLootAccessObject(client);
                     break;
-                case "move":
+                /*case "move":
                     SendItemMove(client);
-                    break;
+                    break;*/
                 case "itis":
                     SendItemInstance(client, x);
                     break;
@@ -188,10 +119,10 @@ namespace Necromancy.Server.Packet.Area
             res.WriteCString("C1Str"); // find max size Character name/Soul name
             res.WriteCString("CStr2"); // find max size Character name/Soul name
             res.WriteInt64(25);
-            res.WriteByte(12);
-            res.WriteByte(14);
+            res.WriteByte(0);
+            res.WriteByte(0);
             res.WriteInt16(16);
-            res.WriteInt32(10200101);
+            res.WriteInt32(client.Character.Id); //Item id
 
             Router.Send(client, (ushort)AreaPacketId.recv_stall_sell_item, res);
         }
@@ -230,25 +161,25 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res);
         }
 
-        private void SendItemInstance(NecClient client, int x)
+        private void SendItemInstance(NecClient client, long x)
         {
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 
-	        res.WriteInt64(300000);//ItemID
-            res.WriteInt32(300000);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
+	        res.WriteInt64(69);//ItemID
+            res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
             res.WriteByte(0);//Number of "items"
-            res.WriteInt32(0);//Changed icon to broken with 10200101, changed icon to have a 100% with 2 
+            res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("fixed", 0x10);
-            res.WriteByte(1);//0/2 here causes crash, 255 causes item to go away
-            res.WriteByte(1);//4 here causes crash
-            res.WriteInt16(4);
-            res.WriteInt32(-1);//Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
-            res.WriteInt32(2);//Percentage stat, 9 max i think
+            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0); // 0~2 // maybe.. more bag index?
+            res.WriteInt16(1);// bag index
+            res.WriteInt32(0);//Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
+            res.WriteInt32(1);//Percentage stat, 9 max i think
             res.WriteByte(1);
-            res.WriteByte(1);
+            res.WriteByte(3);
             res.WriteCString("cstring"); // find max size 
-            res.WriteInt16(1);
+            res.WriteInt16(2);
             res.WriteInt16(1);
             res.WriteInt32(1);//Divides max % by this number
             res.WriteByte(1);
@@ -276,16 +207,6 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res);
-        }
-
-        private void SendItemMove(NecClient client)
-        {
-            //recv_item_move_r = 0x708B,
-            IBuffer res = BufferProvider.Provide();
-
-	        res.WriteInt32(69);//Error check?
-
-            Router.Send(client, (ushort)AreaPacketId.recv_item_move_r, res);
         }
 
         private void SendLootAccessObject(NecClient client)
