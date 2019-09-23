@@ -8,13 +8,37 @@ namespace Necromancy.Server.Model
         public int AccountId { get; set; }
         public int SoulId { get; set; }
         public DateTime Created { get; set; }
-  
+
+        public byte Characterslotid { get; set; }
         public string Name { get; set; }
+
         public uint Raceid { get; set; }
+
         public uint Sexid { get; set; }
+
         public byte HairId { get; set; }
+
         public byte HairColorId { get; set; }
+
         public byte FaceId { get; set; }
+
+        public uint Alignmentid { get; set; }
+
+        public ushort Strength { get; set; }
+
+        public ushort vitality { get; set; }
+
+        public ushort dexterity { get; set; }
+
+        public ushort agility { get; set; }
+
+        public ushort intelligence { get; set; }
+
+        public ushort piety { get; set; }
+
+        public ushort luck { get; set; }
+
+
         public uint ClassId { get; set; }
         public byte Level { get; set; }
 
@@ -37,7 +61,7 @@ namespace Necromancy.Server.Model
             Id = -1;
             AccountId = -1;
             SoulId = -1;
-
+            Characterslotid = 0;
             Level = 0;
             Name = null;
             Created = DateTime.Now;
