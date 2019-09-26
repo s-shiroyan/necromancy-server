@@ -210,6 +210,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_stall_shopping_abort(this));
             _areaConsumer.AddHandler(new send_item_move(this));
             _areaConsumer.AddHandler(new send_party_establish(this));
+            _areaConsumer.AddHandler(new send_party_invite(this));
+            _areaConsumer.AddHandler(new send_party_decline_to_invite(this));
+            _areaConsumer.AddHandler(new send_party_accept_to_invite(this));
+            _areaConsumer.AddHandler(new send_party_leave(this));
         }
     }
 }
