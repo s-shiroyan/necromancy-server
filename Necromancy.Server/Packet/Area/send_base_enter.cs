@@ -29,6 +29,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             client.Session = session;
+            session.areaSocket = client.Socket;
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error

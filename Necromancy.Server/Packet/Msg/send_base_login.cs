@@ -36,6 +36,7 @@ namespace Necromancy.Server.Packet.Msg
             session.Character.Id = Util.GetRandomNumber(1, 999);
             session.Character.SoulId = Util.GetRandomNumber(1, 999);
             session.Character.AccountId = session.Account.Id;
+            session.msgSocket = client.Socket;
 
             client.Session = session;
             SendResponse(client);
