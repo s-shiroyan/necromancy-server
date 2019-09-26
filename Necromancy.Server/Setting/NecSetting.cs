@@ -6,6 +6,14 @@ namespace Necromancy.Server.Setting
     [DataContract]
     public class NecSetting
     {
+        /// <summary>
+        /// Warning:
+        /// Changing while having existing accounts requires to rehash all passwords.
+        /// The number is log2, so adding +1 doubles the time it takes.
+        /// https://wildlyinaccurate.com/bcrypt-choosing-a-work-factor/
+        /// </summary>
+        public const int BCryptWorkFactor = 10;
+        
         [IgnoreDataMember] 
         public IPAddress ListenIpAddress { get; set; }
 
@@ -54,6 +62,9 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 6)] 
         public ushort AreaPort { get; set; }
+        
+        [DataMember(Order = 10)]
+        public bool NeedRegistration { get; set; }
 
         [DataMember(Order = 20)] 
         public int LogLevel { get; set; }
@@ -69,7 +80,7 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 70)]
         public DatabaseSettings DatabaseSettings { get; set; }
-        
+
         public NecSetting()
         {
             ListenIpAddress = IPAddress.Any;
@@ -79,12 +90,12 @@ namespace Necromancy.Server.Setting
             MsgPort = 60001;
             AreaIpAddress = IPAddress.Loopback;
             AreaPort = 60002;
+            NeedRegistration = false;
             LogLevel = 0;
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
             LogIncomingPackets = true;
             DatabaseSettings = new DatabaseSettings();
-
         }
 
         public NecSetting(NecSetting setting)
@@ -96,6 +107,7 @@ namespace Necromancy.Server.Setting
             MsgPort = setting.MsgPort;
             AreaIpAddress = setting.AreaIpAddress;
             AreaPort = setting.AreaPort;
+            NeedRegistration = setting.NeedRegistration;
             LogLevel = setting.LogLevel;
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;
