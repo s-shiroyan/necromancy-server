@@ -49,11 +49,6 @@ namespace Necromancy.Server.Model
             set => Session.Channel = value;
         }
 
-        public NPC NPC
-        {
-            get => Session.NPC;
-            set => Session.NPC = value;
-        }
 
         public Map Map
         {
