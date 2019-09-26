@@ -20,13 +20,15 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
 
             Router.Send(client, (ushort) AreaPacketId.recv_stall_shopping_abort_r, res);
+
+            SendStallShoppingNotifyAborted(client);
         }
 
         private void SendStallShoppingNotifyAborted(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_shopping_notify_aborted, res, client);
+            Router.Send(client, (ushort)AreaPacketId.recv_stall_shopping_notify_aborted, res);
         }
     }
 }

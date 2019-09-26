@@ -66,7 +66,6 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
         }
-
     }
 
 }

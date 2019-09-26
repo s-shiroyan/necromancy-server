@@ -806,7 +806,7 @@ namespace Necromancy.Server.Packet.Id
         send_inherit_start = 0x113, //opcode not found
         send_item_drop = 0x114, //opcode not found
         send_item_equip = 0x115, //opcode not found
-        send_item_move = 0x8C7C, //opcode not found
+        send_item_move = 0x8C7C,
         send_item_sort = 0x117, //opcode not found
         send_item_unequip = 0xA3DE,
         send_item_use_item = 0x119, //opcode not found
@@ -835,7 +835,7 @@ namespace Necromancy.Server.Packet.Id
         send_party_decline_to_invite = 0x135, //opcode not found
         send_party_disband = 0x136,//opcode not found
         send_party_entry_draw = 0x137, //opcode not found
-        send_party_establish = 0xAF25, //opcode not found
+        send_party_establish = 0xAF25,
         send_party_establish_2 = 0x139, //opcode not found
         send_party_establish_3 = 0x140, //opcode not found
         send_party_establish_4 = 0x226, //opcode not found
