@@ -25,7 +25,6 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-            Console.WriteLine("Chat Type: " + ChatType + "\nTo: " + To + "\nMessage: " + Message);
 
             if (Message[0] == '!')
                 commandParse(client, Message);
@@ -57,10 +56,7 @@ namespace Necromancy.Server.Packet.Area
 
                 Int64.TryParse(newString, out long newInt);
 
-                x = newInt;//find func for string convert
-
-                Console.WriteLine("newInt should be :" + newInt);
-                Console.WriteLine("x should be :" + x);
+                x = newInt;
             }
             switch (command)
             {
@@ -102,14 +98,6 @@ namespace Necromancy.Server.Packet.Area
                     break;
             }
         }
-
-        /*private int intParse(int result, int place, string Message, int i)
-        {
-            if ( Message.Length == i)
-                return 0;
-            else
-                return (result + intParse((Message[Message.Length - 1] - '0') * (10 * place), Message[1], Message, i++));
-        }*///failed attempt at recursion
 
         private void SendStallSellItem(NecClient client)
         {
