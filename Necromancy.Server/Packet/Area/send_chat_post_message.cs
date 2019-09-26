@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Area
         
         public override ushort Id => (ushort)AreaPacketId.send_chat_post_message;
 
-        bool ConsoleActive = false;
+        int ConsoleActive = 0;
         int x = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
@@ -123,7 +123,7 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
         {
-            if (ConsoleActive == true)
+            if (ConsoleActive == client.Character.Id)
             {
                 string[] SplitMessage = Message.Split(':');
 
@@ -137,7 +137,7 @@ namespace Necromancy.Server.Packet.Area
                             AdminConsoleRecvDataNotifyMonsterData(client);
                         break;
                     case "Item":
-                            SendDataNotifyItemobjectData(client);
+                            SendDataNotifyItemObjectData(client);
                         break;
                     case "Died":
                             IBuffer res4 = BufferProvider.Provide();
@@ -150,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
                             AdminConsoleRecvItemInstance(client);
                         break;
                     case "SendMail":
-                            AdminConsolePackageNotifyAdd(client);
+                            SendMailOpenR(client);
                         break;
                     case "GetMail":
                             AdminConsoleSelectPackageUpdate(client);
@@ -159,7 +159,7 @@ namespace Necromancy.Server.Packet.Area
                             AdminConsoleSuperJump(client, Convert.ToInt32(SplitMessage[1]));
                         break;
                     case "exit":
-                            ConsoleActive = false;
+                            ConsoleActive = 0;
                         break;
                     default:
                             Message = $"Unrecognized command '{SplitMessage[0]}' ";
@@ -177,7 +177,7 @@ namespace Necromancy.Server.Packet.Area
 
             }
 
-            if (ConsoleActive == false)
+            if (ConsoleActive != client.Character.Id)
             {
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(ChatType);
@@ -189,7 +189,7 @@ namespace Necromancy.Server.Packet.Area
 
                 if (Message == "GodModeConsole")
                 {
-                    ConsoleActive = true;
+                    ConsoleActive = client.Character.Id;
                     IBuffer res2 = BufferProvider.Provide();
                     res2.WriteInt32(ChatType);
                     res2.WriteInt32(1);      // todo, maybe, character id

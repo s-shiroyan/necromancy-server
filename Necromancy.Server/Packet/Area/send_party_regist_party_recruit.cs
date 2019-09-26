@@ -15,17 +15,24 @@ namespace Necromancy.Server.Packet.Area
 
        public override void Handle(NecClient client, NecPacket packet)
         {
+            int objectiveID = packet.Data.ReadInt32(); // always 0, 1, or 2. based on drop down selection
+            int detailsID = packet.Data.ReadInt32(); // Can Be Dungeon ID or Quest ID based on objective
+            int targetID = packet.Data.ReadInt32(); // Unknown. possbly Target ID???
+            int otherID = packet.Data.ReadInt32(); // Selected check box under other
+            string comment = packet.Data.ReadFixedString(60); //Comment Box accepts up to 60 characters. 
+
+
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);
-            res.WriteInt32(77777777);
-            res.WriteInt32(88888888);
-            res.WriteInt32(99999999);
+            res.WriteInt32(objectiveID);
+            res.WriteInt32(detailsID);
+            res.WriteInt32(targetID);
+            res.WriteInt32(otherID);
 
 
 
 
-            //Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res);
         }
     }
 }

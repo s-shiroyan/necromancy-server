@@ -31,12 +31,12 @@ namespace Necromancy.Server.Packet.Area
         int[] TestArrayInt = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
         byte[] NPCViewAngle = new byte[] {  45, 46, 47, 48, 49 , 40, 41, 42, 43, 44};
 
-        int x = -1;
+       
 
 
         private void SendDataNotifyNpcData(NecClient client,int TestInt)
         {
-
+            int x = -1;
             //IBuffer res2 = BufferProvider.Provide();
 
             foreach (int y in NPCModelID)

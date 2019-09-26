@@ -215,6 +215,13 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_item_move(this));
             _areaConsumer.AddHandler(new send_party_regist_party_recruit(this));
             _areaConsumer.AddHandler(new send_party_establish(this));
+            _areaConsumer.AddHandler(new send_trade_invite(this));
+            _areaConsumer.AddHandler(new send_trade_reply(this));
+            _areaConsumer.AddHandler(new send_trade_set_money(this));
+            _areaConsumer.AddHandler(new send_trade_offer(this));
+            _areaConsumer.AddHandler(new send_trade_revert(this));
+            _areaConsumer.AddHandler(new send_trade_abort(this));
+            _areaConsumer.AddHandler(new send_trade_fix(this));
         }
     }
 }
