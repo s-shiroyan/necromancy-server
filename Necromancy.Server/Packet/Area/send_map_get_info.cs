@@ -147,11 +147,11 @@ namespace Necromancy.Server.Packet.Area
 
                 res2.WriteByte(237);
 
-                res2.WriteInt32(237);
+                res2.WriteInt32(11111110); //Hp Related Bitmask?  This setting makes the NPC "alive"
 
-                res2.WriteInt32(TestArrayInt[x]+TestInt); //npc Emoticon above head
+                res2.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
 
-                res2.WriteInt32(237);
+                res2.WriteInt32(11111110);
                 res2.WriteFloat(1000);
                 res2.WriteFloat(1000);
                 res2.WriteFloat(1000);

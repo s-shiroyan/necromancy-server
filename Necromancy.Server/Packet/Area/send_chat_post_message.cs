@@ -286,7 +286,7 @@ namespace Necromancy.Server.Packet.Area
                 if (ModelID <= 1) { ModelID = 1911105; }
 
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(Util.GetRandomNumber(2222222, 22222300));   // NPC ID (object id)
+                res3.WriteInt32(10000101);   // NPC ID (object id)
 
                 res3.WriteInt32(10000101);      // NPC Serial ID from "npc.csv"
 
@@ -337,12 +337,12 @@ namespace Necromancy.Server.Packet.Area
                     res3.WriteInt32(210901); // this is a loop within a loop i went ahead and broke it up
                     res3.WriteByte(0);
                     res3.WriteByte(0);
-                    res3.WriteByte(0);
+                    res3.WriteByte(3);
 
                     res3.WriteInt32(10310503);
                     res3.WriteByte(0);
                     res3.WriteByte(0);
-                    res3.WriteByte(0);
+                    res3.WriteByte(3);
 
                     res3.WriteByte(0);
                     res3.WriteByte(0);
@@ -384,17 +384,17 @@ namespace Necromancy.Server.Packet.Area
 
                 res3.WriteInt16(100);       //NPC Model Size
 
-                res3.WriteByte(237);
+                res3.WriteByte(1);
 
-                res3.WriteByte(237);
+                res3.WriteByte(1);
 
-                res3.WriteByte(237);
+                res3.WriteByte(1);
 
-                res3.WriteInt32(237);
+                res3.WriteInt32(11111000);
 
                 res3.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
 
-                res3.WriteInt32(237);
+                res3.WriteInt32(11111110);
                 res3.WriteFloat(1000);
                 res3.WriteFloat(1000);
                 res3.WriteFloat(1000);
@@ -407,9 +407,9 @@ namespace Necromancy.Server.Packet.Area
                 for (int i = 0; i<numEntries2; i++)
 
                 {
-                    res3.WriteInt32(237);
-                    res3.WriteInt32(237);
-                    res3.WriteInt32(237);
+                    res3.WriteInt32(1);
+                    res3.WriteInt32(1);
+                    res3.WriteInt32(1);
 
                 }
 
@@ -737,7 +737,7 @@ namespace Necromancy.Server.Packet.Area
             int numEntries = 0x10;
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(11111111);
+                res.WriteInt32(client.Character.Id);
             }
 
             res.WriteInt32(0x10); // cmp to 0x10 = 16
@@ -745,11 +745,11 @@ namespace Necromancy.Server.Packet.Area
             int numEntries2 = 0x10;
             for (int i = 0; i < numEntries2; i++)
             {
-                res.WriteInt32(10000000); // this was an x2 loop (i broke it down)
+                res.WriteInt32(70101); // this was an x2 loop (i broke it down)
                 res.WriteByte(1);
                 res.WriteByte(1);
                 res.WriteByte(1);
-                res.WriteInt32(10000000);
+                res.WriteInt32(70101);
                 res.WriteByte(1);
                 res.WriteByte(1);
                 res.WriteByte(1);
@@ -786,9 +786,9 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(1);
 
-            res.WriteInt32(99999991);
+            res.WriteInt32(client.Character.Id);
 
-            res.WriteInt32(99999991);
+            res.WriteInt32(client.Character.Id);
 
             res.WriteInt32(0x80); // cmp to 0x80 = 128
 

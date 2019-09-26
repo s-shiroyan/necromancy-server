@@ -213,6 +213,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_stall_shopping_start(this));
             _areaConsumer.AddHandler(new send_stall_shopping_abort(this));
             _areaConsumer.AddHandler(new send_item_move(this));
+            _areaConsumer.AddHandler(new send_party_regist_party_recruit(this));
         }
     }
 }
