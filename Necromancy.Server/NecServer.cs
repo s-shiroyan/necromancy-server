@@ -192,8 +192,36 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_charabody_access_start(this));
             _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
             _areaConsumer.AddHandler(new send_skill_start_cast(this));
+            _areaConsumer.AddHandler(new send_skill_exec(this));
             _areaConsumer.AddHandler(new send_character_view_offset(this));
             _areaConsumer.AddHandler(new send_soul_dispitem_request_data(this));
+            _areaConsumer.AddHandler(new send_movement_info(this));
+            _areaConsumer.AddHandler(new send_battle_attack_next(this));
+            _areaConsumer.AddHandler(new send_battle_guard_start(this));
+            _areaConsumer.AddHandler(new send_battle_guard_end(this));
+            _areaConsumer.AddHandler(new send_skill_cast_cancel_request(this));
+            _areaConsumer.AddHandler(new send_loot_access_object(this));
+            _areaConsumer.AddHandler(new send_open_mailbox(this));
+            _areaConsumer.AddHandler(new send_create_package(this));
+            _areaConsumer.AddHandler(new send_select_package_update(this));
+            _areaConsumer.AddHandler(new send_package_all_delete(this));
+            _areaConsumer.AddHandler(new send_item_unequip(this));
+            _areaConsumer.AddHandler(new send_stall_regist_item(this));
+            _areaConsumer.AddHandler(new send_stall_set_item_price(this));
+            _areaConsumer.AddHandler(new send_stall_open(this));
+            _areaConsumer.AddHandler(new send_stall_close(this));
+            _areaConsumer.AddHandler(new send_stall_shopping_start(this));
+            _areaConsumer.AddHandler(new send_stall_shopping_abort(this));
+            _areaConsumer.AddHandler(new send_item_move(this));
+            _areaConsumer.AddHandler(new send_party_regist_party_recruit(this));
+            _areaConsumer.AddHandler(new send_party_establish(this));
+            _areaConsumer.AddHandler(new send_trade_invite(this));
+            _areaConsumer.AddHandler(new send_trade_reply(this));
+            _areaConsumer.AddHandler(new send_trade_set_money(this));
+            _areaConsumer.AddHandler(new send_trade_offer(this));
+            _areaConsumer.AddHandler(new send_trade_revert(this));
+            _areaConsumer.AddHandler(new send_trade_abort(this));
+            _areaConsumer.AddHandler(new send_trade_fix(this));
         }
     }
 }

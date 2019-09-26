@@ -815,8 +815,8 @@ recv_cash_shop_fitting_unequip_r = 0x1C20,
 recv_skill_exec_r = 0x1C6C, 
             
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
 
 recv_cash_shop_get_url_commerce_r = 0x1D49, 
             

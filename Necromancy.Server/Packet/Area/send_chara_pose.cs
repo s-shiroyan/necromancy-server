@@ -17,23 +17,30 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            int pose = packet.Data.ReadInt32();
+            client.Character.charaPose = packet.Data.ReadInt32();
             
             res.WriteInt32(0);  
 
             Router.Send(client, (ushort) AreaPacketId.recv_chara_pose_r, res);
 
-            SendCharaPoseNotify(client, pose);
+            SendCharaPoseNotify(client);
         }
 
-        private void SendCharaPoseNotify(NecClient client, int pose)
+       
+
+        private void SendCharaPoseNotify(NecClient client)
         {
-            IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);//Character ID
-            res.WriteInt32(pose); //Character pose
+            
+                IBuffer res = BufferProvider.Provide();
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_pose_notify, res, client);
+                res.WriteInt32(client.Character.Id);//Character ID
+                res.WriteInt32(client.Character.charaPose); //Character pose
+
+                
+
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_pose_notify, res, client);
+            
         }
     }
 }

@@ -38,6 +38,14 @@ namespace Necromancy.Server.Database
 
         private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
         {
+            if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319"))
+                {
+                Console.WriteLine($"DB Flag File not found. Creating : {Util.ExecutingDirectory()}/DBVersionFlagFile92319");
+                File.Create($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319");
+                Console.WriteLine($"Deleting outdated Database file. Db.sqlite will be re-created with updated schema : {Util.ExecutingDirectory()}/db.sqlite");
+                File.Delete($"{Util.ExecutingDirectory()}/db.sqlite");
+                }
+
             SqLiteDb db = new SqLiteDb(sqlLitePath);
             ScriptRunner scriptRunner = new ScriptRunner(db);
             scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/sqlite_schema.sql"));

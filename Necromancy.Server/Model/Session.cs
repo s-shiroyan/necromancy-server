@@ -1,4 +1,5 @@
 using System;
+using Arrowgene.Services.Networking.Tcp;
 
 namespace Necromancy.Server.Model
 {
@@ -14,6 +15,8 @@ namespace Necromancy.Server.Model
         public Character Character { get; set; }
         public Channel Channel { get; set; }
         public Map Map { get; set; }
+        public ITcpSocket msgSocket { get; set; }
+        public ITcpSocket areaSocket { get; set; }
 
         public Session(string sessionKey, Account account)
         {
