@@ -848,10 +848,10 @@ namespace Necromancy.Server.Packet.Id
         send_party_kick = 0x144, //opcode not found
         send_party_leave = 0x145, //opcode not found
         send_party_pass_draw = 0x146, //opcode not found
-        send_party_regist_member_recruit = 0x147, //opcode not found
+        send_party_regist_member_recruit = 0xC342, //opcode not found
         send_party_regist_party_recruit = 0x7B6C, //opcode not found
         send_party_request_draw_item_list = 0x86FD, 
-        send_party_search_recruited_member = 0x149, //opcode not found
+        send_party_search_recruited_member = 0xCB62, 
         send_party_search_recruited_party = 0x90BD, 
         send_quest_abort = 0x150, //opcode not found
         send_quest_check_target = 0x151, //opcode not found
