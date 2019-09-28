@@ -693,10 +693,10 @@ namespace Necromancy.Server.Packet.Id
 
         // Send OP Codes - ordered by op code
 
-        send_auction_bid = 0x28, //opcode not found
-        send_auction_cancel_bid = 0x29, //opcode not found
-        send_auction_cancel_exhibit = 0x30, //opcode not found
-        send_auction_close = 0x31, //opcode not found
+        send_auction_bid = 0x63BC, 
+        send_auction_cancel_bid = 0xBC65,
+        send_auction_cancel_exhibit = 0x375B,
+        send_auction_close = 0xE732,
         send_auction_exhibit = 0x32, //opcode not found
         send_auction_re_exhibit = 0x33, //opcode not found
         send_auction_receive_gold = 0x34, //opcode not found
@@ -805,9 +805,9 @@ namespace Necromancy.Server.Packet.Id
         send_help_new_remove = 0x112, //opcode not found
         send_inherit_start = 0x113, //opcode not found
         send_item_drop = 0xBE26,
-        send_item_equip = 0x115, //opcode not found
+        send_item_equip = 0x279F,
         send_item_move = 0x8C7C,
-        send_item_sort = 0x4926,
+        send_item_sort = 0x4926, 
         send_item_unequip = 0xA3DE,
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
@@ -871,7 +871,7 @@ namespace Necromancy.Server.Packet.Id
         send_raisescale_request_revive = 0x159, //opcode not found
         send_raisescale_request_revive_event = 0x160, //opcode not found
         send_raisescale_view_close_request = 0x161, //opcode not found
-        send_random_box_close = 0x162, //opcode not found
+        send_random_box_close = 0x6ABB,
         send_random_box_get_item = 0x163, //opcode not found
         send_random_box_get_item_all = 0x164, //opcode not found
         send_random_box_next_open = 0x167, //opcode not found
@@ -882,11 +882,11 @@ namespace Necromancy.Server.Packet.Id
         send_revive_init = 0x171, //opcode not found
         send_select_package_update = 0x2A64,
         send_shop_buy = 0x173, //opcode not found
-        send_shop_close = 0x174, //opcode not found
-        send_shop_identify = 0x175, //opcode not found
+        send_shop_close = 0x2469,
+        send_shop_identify = 0x9C7E,
         send_shop_repair = 0x176, //opcode not found
-        send_shop_sell = 0x177, //opcode not found
-        send_shop_sell_check = 0x178, //opcode not found
+        send_shop_sell = 0xC9F9, 
+        send_shop_sell_check = 0xF296 ,
         send_shortcut_request_data = 0x6FC6, 
         send_shortcut_request_deregist = 0x178, //opcode not found
         send_shortcut_request_regist = 0x8090, 
@@ -923,12 +923,12 @@ namespace Necromancy.Server.Packet.Id
         send_talkring_rename_masterring = 0x201, //opcode not found
         send_temple_close = 0x202, //opcode not found
         send_temple_cure_curse = 0x203, //opcode not found
-        send_trade_abort = 0x9B38, //opcode not found
-        send_trade_add_item = 0xD060, //opcode not found
-        send_trade_fix = 0x9CC3, //opcode not found
+        send_trade_abort = 0x9B38, 
+        send_trade_add_item = 0xD060, 
+        send_trade_fix = 0x9CC3, 
         send_trade_invite = 0x513A, 
         send_trade_offer = 0xA822,
-        send_trade_remove_item = 0x6A8F,
+        send_trade_remove_item = 0x6A8F, 
         send_trade_reply = 0xE9FC,
         send_trade_revert = 0xEC63, 
         send_trade_set_money = 0x7C00,

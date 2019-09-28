@@ -24,9 +24,10 @@ namespace Necromancy.Server.Packet.Area
             int ChatType = packet.Data.ReadInt32();     // 0 - Area, 1 - Shout, other todo...
             string To = packet.Data.ReadCString();
             string Message = packet.Data.ReadCString();
-            
+
 
             SendChatNotifyMessage(client, Message, ChatType);
+            
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // errcode : 0 for success
@@ -47,7 +48,7 @@ namespace Necromancy.Server.Packet.Area
              */
 
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-
+            Console.WriteLine("Character X: " + client.Character.X + "\nCharacter Y: " + client.Character.Y + "\nCharacter Z: " + client.Character.Z);
             if (Message[0] == '!')
                 commandParse(client, Message);
         }
@@ -87,6 +88,12 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "tbox":
                     SendEventTreasureboxBegin(client);
+                    break;
+                case "auct":
+                    SendAuctionNotifyOpen(client);
+                    break;
+                case "shop":
+                    SendShopNotifyOpen(client);
                     break;
                 case "item":
                     SendDataNotifyItemObjectData(client);
@@ -401,7 +408,7 @@ namespace Necromancy.Server.Packet.Area
 	        res.WriteInt64(69);//ItemID
             res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
             res.WriteByte(0);//Number of "items"
-            res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
+            res.WriteInt32(8);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("fixed", 0x10);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2 // maybe.. more bag index?
@@ -488,6 +495,83 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Character.Id);
 
             Router.Send(client, (ushort)AreaPacketId.recv_random_box_notify_open, res);
+        }
+        
+        private void SendShopNotifyOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt16(17); 
+            /* Shop ID, 0 it's forge, 1 it's cursed, 2 Purchase shop, 3 purchase and curse, 4 it's sell, 
+                        5 sell and curse. 6 purchase and sell. 7 Purchase, Sell, Curse.
+                        
+                        8 Identify. 9 identify & curse. 10 Purchase & Identify.
+                        
+                        11 Purchase, Identify & Curse. 12 Sell And Identify
+                        
+                        13 Sell, Identify & Curse, 14 Purchase, Sell & Identify
+                        
+                        15 All of what i say before except the forge.
+                        
+                        16 Repair !
+           */
+            res.WriteInt32(0); // don't know what this shit do for the moment
+            res.WriteInt32(0); // don't know too
+            res.WriteByte(0); // Don't know too
+            Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res);
+        }
+
+        private void SendAuctionNotifyOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(5); // must be <= 5
+
+            int numEntries = 0x5;
+            for (int i = 0; i < numEntries; i++)
+            {
+
+                res.WriteByte(1); // Slots 0 to 2
+                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0); // Lowest
+                res.WriteInt32(0); // Buy Now
+                res.WriteFixedString($"{client.Soul.Name}", 49);
+                res.WriteByte(1);
+                res.WriteFixedString("Comment", 385); // Comment in the item information
+                res.WriteInt16(0); // Bid
+                res.WriteInt32(0);
+
+                res.WriteInt32(0); 
+                res.WriteInt32(0);
+
+            }
+
+            res.WriteInt32(8); // must be< = 8
+
+            int numEntries2 = 0x8;
+            for (int i = 0; i < numEntries2; i++)
+            {
+                res.WriteByte(0); // Slots 0 to 3
+                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0); // Lowest bid info
+                res.WriteInt32(0); // Buy now bid info
+                res.WriteFixedString($"{client.Soul.Name}", 49);
+                res.WriteByte(1);
+                res.WriteFixedString("Zgeg", 385); // Comment in the bid info
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0); // Bid Amount (bid info seciton)
+                res.WriteInt32(0);
+
+            }
+
+            res.WriteByte(0); // bool
+            Router.Send(client, (ushort)AreaPacketId.recv_auction_notify_open, res);
         }
 
         private void SendEventTreasureboxBegin(NecClient client)
@@ -662,15 +746,15 @@ namespace Necromancy.Server.Packet.Area
             x++;
             res.WriteInt64(10001000100010002);
 
-            res.WriteCString("Have Fun in Texas Hiraeth!");
+            res.WriteCString("Have Fun in Texas Hiraeth!"); // Item Name
 
-            res.WriteInt32(7); // Weapon/item type??
+            res.WriteInt32(7); // Item Type.   10001005 Mask Item type and stats
 
-            res.WriteInt32(10001004);
+            res.WriteInt32(10001004); 
 
-            res.WriteByte(0);
+            res.WriteByte(0); // Numbers of items
 
-            res.WriteInt32(0); //0 makes item identified.  
+            res.WriteInt32(0); // 10001003 Put The Item Unidentified. 0 put the item Identified
 
             res.WriteInt32(itemIDs[x]);  //Item ID for Item?
             res.WriteByte(0);
@@ -694,7 +778,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);                       // 0~2
             res.WriteInt16((short)x);                      // bag index 0 to 24
 
-            res.WriteInt32(0b1000000000000000000000000000001);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
+            res.WriteInt32(0);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
             res.WriteInt64(1000100010001000);
 
