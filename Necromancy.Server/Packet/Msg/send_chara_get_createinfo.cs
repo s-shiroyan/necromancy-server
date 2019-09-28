@@ -49,7 +49,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             entries = 8;//num of entries for our group of models
-            res.WriteInt32(entries); //50
+            res.WriteInt32(entries); 
 
             {
                 wo_4E3700_Elf_Female(res);//Holds Female Elf model details
@@ -65,7 +65,7 @@ namespace Necromancy.Server.Packet.Msg
 
             //Read 4 byte (004E92E8) cmp,140(0x8C) -> JA (320)
             entries = 2;
-            res.WriteInt32(entries); // 0 = no elf , 1 = elf
+            res.WriteInt32(entries);
 
 
             for (int i = 0; i < entries; i++)
@@ -107,65 +107,65 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E08E0_Elf_Stats(IBuffer res)
         {
             res.WriteInt32(1);
-            res.WriteInt32(60);//HP
-            res.WriteInt32(20);//MP
+            res.WriteInt32(50);//HP
+            res.WriteInt32(30);//MP
             res.WriteInt32(0);
 
-            res.WriteInt16(8);//STR
-            res.WriteInt16(7);//VIT
-            res.WriteInt16(7);//DEX
-            res.WriteInt16(6);//AGI
-            res.WriteInt16(8);//INT
-            res.WriteInt16(5);//PIE
-            res.WriteInt16(8);//LUK
+            res.WriteInt16(6);//STR
+            res.WriteInt16(5);//VIT
+            res.WriteInt16(8);//DEX
+            res.WriteInt16(8);//AGI
+            res.WriteInt16(10);//INT
+            res.WriteInt16(8);//PIE
+            res.WriteInt16(4);//LUK
         }
 
         private void wo_4E08E0_Dwarf_Stats(IBuffer res)
         {
             res.WriteInt32(1);
-            res.WriteInt32(60);//HP
-            res.WriteInt32(20);//MP
+            res.WriteInt32(80);//HP
+            res.WriteInt32(15);//MP
             res.WriteInt32(0);
 
-            res.WriteInt16(8);//STR
-            res.WriteInt16(7);//VIT
-            res.WriteInt16(7);//DEX
-            res.WriteInt16(6);//AGI
-            res.WriteInt16(8);//INT
-            res.WriteInt16(5);//PIE
-            res.WriteInt16(8);//LUK
+            res.WriteInt16(9);//STR
+            res.WriteInt16(8);//VIT
+            res.WriteInt16(8);//DEX
+            res.WriteInt16(4);//AGI
+            res.WriteInt16(5);//INT
+            res.WriteInt16(9);//PIE
+            res.WriteInt16(5);//LUK
         }
 
         private void wo_4E08E0_Porkul_Stats(IBuffer res)
         {
             res.WriteInt32(1);
-            res.WriteInt32(60);//HP
+            res.WriteInt32(50);//HP
             res.WriteInt32(20);//MP
             res.WriteInt32(0);
 
-            res.WriteInt16(8);//STR
-            res.WriteInt16(7);//VIT
-            res.WriteInt16(7);//DEX
-            res.WriteInt16(6);//AGI
-            res.WriteInt16(8);//INT
-            res.WriteInt16(5);//PIE
-            res.WriteInt16(8);//LUK
+            res.WriteInt16(5);//STR
+            res.WriteInt16(6);//VIT
+            res.WriteInt16(9);//DEX
+            res.WriteInt16(12);//AGI
+            res.WriteInt16(7);//INT
+            res.WriteInt16(7);//PIE
+            res.WriteInt16(15);//LUK
         }
 
         private void wo_4E08E0_Gnome_Stats(IBuffer res)
         {
             res.WriteInt32(1);
-            res.WriteInt32(60);//HP
-            res.WriteInt32(20);//MP
+            res.WriteInt32(70);//HP
+            res.WriteInt32(25);//MP
             res.WriteInt32(0);
 
-            res.WriteInt16(8);//STR
+            res.WriteInt16(7);//STR
             res.WriteInt16(7);//VIT
-            res.WriteInt16(7);//DEX
-            res.WriteInt16(6);//AGI
-            res.WriteInt16(8);//INT
-            res.WriteInt16(5);//PIE
-            res.WriteInt16(8);//LUK
+            res.WriteInt16(4);//DEX
+            res.WriteInt16(7);//AGI
+            res.WriteInt16(6);//INT
+            res.WriteInt16(10);//PIE
+            res.WriteInt16(6);//LUK
         }
 
         private void wo_4E3700_Elf_Female(IBuffer res) //characater creation area?
@@ -572,22 +572,22 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt16(0);//PIE Requirement
             res.WriteInt16(0);//LUK Requirement
 
-            res.WriteInt32(12);//Class Bonus HP
-            res.WriteInt32(12);//Class Bonus MP
+            res.WriteInt32(30);//Class Bonus HP
+            res.WriteInt32(0);//Class Bonus MP
 
-            res.WriteInt16(12);//Class Bonus STR
-            res.WriteInt16(12);//Class Bonus VIT
-            res.WriteInt16(12);//Class Bonus DEX
-            res.WriteInt16(12);//Class Bonux AGI
-            res.WriteInt16(12);;//Class Bonus INT
-            res.WriteInt16(12);//Class Bonus PIE
-            res.WriteInt16(12);//Class Bonus LUK
+            res.WriteInt16(2);//Class Bonus STR
+            res.WriteInt16(2);//Class Bonus VIT
+            res.WriteInt16(0);//Class Bonus DEX
+            res.WriteInt16(0);//Class Bonux AGI
+            res.WriteInt16(-1);;//Class Bonus INT
+            res.WriteInt16(0);//Class Bonus PIE
+            res.WriteInt16(0);//Class Bonus LUK
 
             res.WriteInt32(11101);// states what is in skill slot 0 (left most), 0 = nothing
             res.WriteInt32(11201);// states what is in skill slot 1 (middle), 0 = nothing              
             res.WriteInt32(0);// states what is in skill slot 2 (right most), 0 = nothing              
 
-            res.WriteByte(5);//bonus roll number store?
+            res.WriteByte(0);//bonus roll number store?
 
         }
 
@@ -597,30 +597,30 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(12);//Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
                               //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
 
-            res.WriteInt16(8);//STR Requirement
+            res.WriteInt16(0);//STR Requirement
             res.WriteInt16(0);//VIT Requirement
-            res.WriteInt16(0);//DEX Requirement
+            res.WriteInt16(8);//DEX Requirement
             res.WriteInt16(0);//AGI Requirement
             res.WriteInt16(0);//INT Requirement
             res.WriteInt16(0);//PIE Requirement
             res.WriteInt16(0);//LUK Requirement
 
-            res.WriteInt32(12);//Class Bonus HP
-            res.WriteInt32(12);//Class Bonus MP
+            res.WriteInt32(10);//Class Bonus HP
+            res.WriteInt32(0);//Class Bonus MP
 
-            res.WriteInt16(12);//Class Bonus STR
-            res.WriteInt16(12);//Class Bonus VIT
-            res.WriteInt16(12);//Class Bonus DEX
-            res.WriteInt16(12);//Class Bonux AGI
-            res.WriteInt16(12); ;//Class Bonus INT
-            res.WriteInt16(12);//Class Bonus PIE
-            res.WriteInt16(12);//Class Bonus LUK
+            res.WriteInt16(1);//Class Bonus STR
+            res.WriteInt16(0);//Class Bonus VIT
+            res.WriteInt16(1);//Class Bonus DEX
+            res.WriteInt16(1);//Class Bonux AGI
+            res.WriteInt16(-1); ;//Class Bonus INT
+            res.WriteInt16(-1);//Class Bonus PIE
+            res.WriteInt16(1);//Class Bonus LUK
 
-            res.WriteInt32(11101);// states what is in skill slot 0 (left most), 0 = nothing
-            res.WriteInt32(11201);// states what is in skill slot 1 (middle), 0 = nothing              
-            res.WriteInt32(0);// states what is in skill slot 2 (right most), 0 = nothing              
+            res.WriteInt32(14101);// states what is in skill slot 0 (left most), 0 = nothing
+            res.WriteInt32(14302);// states what is in skill slot 1 (middle), 0 = nothing              
+            res.WriteInt32(14803);// states what is in skill slot 2 (right most), 0 = nothing              
 
-            res.WriteByte(5);//bonus roll number store?
+            res.WriteByte(0);//bonus roll number store?
         }
 
         private void wo_4E0970_Mage(IBuffer res)
@@ -629,30 +629,30 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(14); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
                                //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
 
-            res.WriteInt16(8);//STR Requirement
+            res.WriteInt16(0);//STR Requirement
             res.WriteInt16(0);//VIT Requirement
             res.WriteInt16(0);//DEX Requirement
             res.WriteInt16(0);//AGI Requirement
-            res.WriteInt16(0);//INT Requirement
+            res.WriteInt16(8);//INT Requirement
             res.WriteInt16(0);//PIE Requirement
             res.WriteInt16(0);//LUK Requirement
 
-            res.WriteInt32(12);//Class Bonus HP
-            res.WriteInt32(12);//Class Bonus MP
+            res.WriteInt32(0);//Class Bonus HP
+            res.WriteInt32(50);//Class Bonus MP
 
-            res.WriteInt16(12);//Class Bonus STR
-            res.WriteInt16(12);//Class Bonus VIT
-            res.WriteInt16(12);//Class Bonus DEX
-            res.WriteInt16(12);//Class Bonux AGI
-            res.WriteInt16(12); ;//Class Bonus INT
-            res.WriteInt16(12);//Class Bonus PIE
-            res.WriteInt16(12);//Class Bonus LUK
+            res.WriteInt16(-1);//Class Bonus STR
+            res.WriteInt16(0);//Class Bonus VIT
+            res.WriteInt16(0);//Class Bonus DEX
+            res.WriteInt16(0);//Class Bonux AGI
+            res.WriteInt16(+2); ;//Class Bonus INT
+            res.WriteInt16(+1);//Class Bonus PIE
+            res.WriteInt16(0);//Class Bonus LUK
 
-            res.WriteInt32(11101);// states what is in skill slot 0 (left most), 0 = nothing
-            res.WriteInt32(11201);// states what is in skill slot 1 (middle), 0 = nothing              
+            res.WriteInt32(13101);// states what is in skill slot 0 (left most), 0 = nothing
+            res.WriteInt32(13404);// states what is in skill slot 1 (middle), 0 = nothing              
             res.WriteInt32(0);// states what is in skill slot 2 (right most), 0 = nothing              
 
-            res.WriteByte(5);//bonus roll number store?
+            res.WriteByte(0);//bonus roll number store?
         }
 
         private void wo_4E0970_Priest(IBuffer res)
@@ -662,30 +662,30 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(10); //Alignment Requirements 0/1 = Fully Locked, 2/3 = Lawful, 4/5 = Neutral. 6/7 = Lawful/Neutral,
                                //8/9 = Chaotic, 10/11 = Lawful/Chaotic, 12/13 = Neutral Chaotic, 14/15 = Fully unlocked, 16+ = fully locked
 
-            res.WriteInt16(8);//STR Requirement
+            res.WriteInt16(0);//STR Requirement
             res.WriteInt16(0);//VIT Requirement
             res.WriteInt16(0);//DEX Requirement
             res.WriteInt16(0);//AGI Requirement
             res.WriteInt16(0);//INT Requirement
-            res.WriteInt16(0);//PIE Requirement
+            res.WriteInt16(8);//PIE Requirement
             res.WriteInt16(0);//LUK Requirement
 
-            res.WriteInt32(12);//Class Bonus HP
-            res.WriteInt32(12);//Class Bonus MP
+            res.WriteInt32(20);//Class Bonus HP
+            res.WriteInt32(40);//Class Bonus MP
 
-            res.WriteInt16(12);//Class Bonus STR
-            res.WriteInt16(12);//Class Bonus VIT
-            res.WriteInt16(12);//Class Bonus DEX
-            res.WriteInt16(12);//Class Bonux AGI
-            res.WriteInt16(12); ;//Class Bonus INT
-            res.WriteInt16(12);//Class Bonus PIE
-            res.WriteInt16(12);//Class Bonus LUK
+            res.WriteInt16(0);//Class Bonus STR
+            res.WriteInt16(1);//Class Bonus VIT
+            res.WriteInt16(0);//Class Bonus DEX
+            res.WriteInt16(-1);//Class Bonux AGI
+            res.WriteInt16(0); ;//Class Bonus INT
+            res.WriteInt16(2);//Class Bonus PIE
+            res.WriteInt16(0);//Class Bonus LUK
 
-            res.WriteInt32(11101);// states what is in skill slot 0 (left most), 0 = nothing
-            res.WriteInt32(11201);// states what is in skill slot 1 (middle), 0 = nothing              
+            res.WriteInt32(12501);// states what is in skill slot 0 (left most), 0 = nothing
+            res.WriteInt32(12601);// states what is in skill slot 1 (middle), 0 = nothing              
             res.WriteInt32(0);// states what is in skill slot 2 (right most), 0 = nothing              
 
-            res.WriteByte(5);//bonus roll number store?
+            res.WriteByte(0);//bonus roll number store?
         }
 
 
