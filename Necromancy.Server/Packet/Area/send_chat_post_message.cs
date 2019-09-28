@@ -87,7 +87,10 @@ namespace Necromancy.Server.Packet.Area
                     SendRandomBoxNotifyOpen(client);
                     break;
                 case "tbox":
-                    SendEventTreasureboxBegin(client);
+                    SendEventTreasureboxBegin(client);  
+                    break;
+                case "gems":
+                    GemNotifyOpen(client);
                     break;
                 case "mant":
                     SendUnionMantleOpen(client);
@@ -420,7 +423,7 @@ namespace Necromancy.Server.Packet.Area
 	        res.WriteInt64(69);//ItemID
             res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
             res.WriteByte(0);//Number of "items"
-            res.WriteInt32(8);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
+            res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("fixed", 0x10);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2 // maybe.. more bag index?
@@ -508,6 +511,11 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_random_box_notify_open, res);
         }
+        private void GemNotifyOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_gem_notify_open, res);
+        }
         private void SendUnionMantleOpen(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
@@ -557,11 +565,11 @@ namespace Necromancy.Server.Packet.Area
                         
                         16 Repair ! 17 repair and curse. 18 Repair and purchase;
                         
-                        19 repair, purchass, cursed. 20 Repair and sell
+                        19 repair, purchase, cursed. 20 Repair and sell
            */
             res.WriteInt32(0); // don't know what this shit do for the moment
-            res.WriteInt32(2); // don't know too
-            res.WriteByte(3); // Don't know too
+            res.WriteInt32(0); // don't know too
+            res.WriteByte(0); // Don't know too
             Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res);
         }
 
@@ -793,20 +801,19 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteCString("Have Fun in Texas Hiraeth!"); // Item Name
 
-            res.WriteInt32(7); // Item Type.   10001005 Mask Item type and stats
+            res.WriteInt32(55); // Item Type.   10001005 Mask Item type and stats. Refer To ItemType.csv                      (58 map pc        55 gem)
+            res.WriteInt32(0);
 
-            res.WriteInt32(3); 
+            res.WriteByte(3); // Numbers of items
 
-            res.WriteByte(0); // Numbers of items
+            res.WriteInt32(0); /* 10001003 Put The Item Unidentified. 0 put the item Identified 
+            1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
 
-            res.WriteInt32(8); /* 10001003 Put The Item Unidentified. 0 put the item Identified 
-            1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/ 
-
-            res.WriteInt32(10800405);  //Item ID for Item?
+            res.WriteInt32(80000101); //Item ID for Item?
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
-            res.WriteInt32(10800405);  //Item ID for Icon?
+            res.WriteInt32(80000101); //Item ID for Icon?
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -820,18 +827,19 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);
             res.WriteByte(0);
 
-            res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
-            res.WriteByte(0);                       // 0~2
-            res.WriteInt16(3);                      // bag index
+            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0); // 0~2
+            res.WriteInt16(3); // bag index
 
-            res.WriteInt32(0b1);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) (0b1, 0b10, 0b100, 0b1000, 0b10000  (bitmask))
+            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) (0b1, 0b10, 0b100, 0b1000, 0b10000  (bitmask))
 
             res.WriteInt64(0);
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res);
         }
+        
         
         private void AdminConsoleRecvItemInstance(NecClient client)
         {

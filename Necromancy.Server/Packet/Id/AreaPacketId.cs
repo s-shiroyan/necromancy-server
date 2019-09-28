@@ -103,6 +103,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_guard_end_self = 0x5E48,
         recv_battle_guard_start_r = 0xADC8,
         recv_battle_guard_start_self = 0x1E96,
+        recv_battle_life_notify = 0x01111, // opcode not found
         recv_battle_release_attack_pose = 0x0, //todo
         recv_battle_release_attack_pose_r = 0xE990,
         recv_battle_release_attack_pose_self = 0x4EF4,
@@ -697,7 +698,7 @@ namespace Necromancy.Server.Packet.Id
         send_auction_cancel_bid = 0xBC65,
         send_auction_cancel_exhibit = 0x375B,
         send_auction_close = 0xE732,
-        send_auction_exhibit = 0x32, //opcode not found
+        send_auction_exhibit = 0xED52, 
         send_auction_re_exhibit = 0x33, //opcode not found
         send_auction_receive_gold = 0x34, //opcode not found
         send_auction_receive_item = 0x35, //opcode not found
@@ -793,7 +794,7 @@ namespace Necromancy.Server.Packet.Id
         send_gem_cancel_piece = 0x101, //opcode not found
         send_gem_cancel_support_item = 0x102, //opcode not found
         send_gem_cancel_synthesis = 0x103, //opcode not found
-        send_gem_close = 0x104, //opcode not found
+        send_gem_close = 0x483D,
         send_gem_rebuild = 0x105, //opcode not found
         send_gem_set = 0x106, //opcode not found
         send_gem_set_piece = 0x107, //opcode not found
@@ -921,8 +922,8 @@ namespace Necromancy.Server.Packet.Id
         send_sv_conf_option_request = 0x615E, 
         send_talkring_create_masterring = 0x200, //opcode not found
         send_talkring_rename_masterring = 0x201, //opcode not found
-        send_temple_close = 0x202, //opcode not found
-        send_temple_cure_curse = 0x203, //opcode not found
+        send_temple_close = 0xEF39, //opcode not found
+        send_temple_cure_curse = 0x4A11,
         send_trade_abort = 0x9B38, 
         send_trade_add_item = 0xD060, 
         send_trade_fix = 0x9CC3, 
@@ -932,20 +933,20 @@ namespace Necromancy.Server.Packet.Id
         send_trade_reply = 0xE9FC,
         send_trade_revert = 0xEC63, 
         send_trade_set_money = 0x7C00,
-        send_union_close_window = 0x213, //opcode not found 
-        send_union_mantle_close = 0x214, //opcode not found
+        send_union_close_window = 0x225A,
+        send_union_mantle_close = 0xCF06,
         send_union_rename_close = 0xC9A9, 
-        send_union_request_establish = 0x216, //opcode not found
+        send_union_request_establish = 0x9956,
         send_union_request_rename = 0x217, //opcode not found
         send_union_storage_deposit_money = 0x218, //opcode not found
         send_union_storage_draw_money = 0x219, //opcode not found
         send_union_storage_move_item = 0x220, //opcode not found
         send_update_honor = 0x221, //opcode not found
         send_wanted_entry = 0xA86F, 
-        send_wanted_jail_close = 0x222, //opcode not found
-        send_wanted_jail_draw_point = 0x223, //opcode not found
-        send_wanted_jail_payment = 0x224, //opcode not found
-        send_wanted_list_close = 0x225, //opcode not found
+        send_wanted_jail_close = 0x86D8, 
+        send_wanted_jail_draw_point = 0x309E,
+        send_wanted_jail_payment = 0x1C6,
+        send_wanted_list_close = 0xABCD,
         
                   
     }
