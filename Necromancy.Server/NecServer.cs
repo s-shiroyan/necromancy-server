@@ -214,6 +214,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_decline_to_invite(this));
             _areaConsumer.AddHandler(new send_party_accept_to_invite(this));
             _areaConsumer.AddHandler(new send_party_leave(this));
+            _areaConsumer.AddHandler(new send_item_equip(this));
+            _areaConsumer.AddHandler(new send_item_drop(this));
+            _areaConsumer.AddHandler(new send_item_sort(this));
         }
     }
 }

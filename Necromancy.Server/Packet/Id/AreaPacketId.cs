@@ -801,10 +801,10 @@ namespace Necromancy.Server.Packet.Id
         send_gimmick_access_object = 0x111, //opcode not found
         send_help_new_remove = 0x112, //opcode not found
         send_inherit_start = 0x113, //opcode not found
-        send_item_drop = 0x114, //opcode not found
-        send_item_equip = 0x115, //opcode not found
+        send_item_drop = 0xBE26,
+        send_item_equip = 0x279F,
         send_item_move = 0x8C7C,
-        send_item_sort = 0x117, //opcode not found
+        send_item_sort = 0x4926,
         send_item_unequip = 0xA3DE,
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
