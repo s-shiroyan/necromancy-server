@@ -32,10 +32,10 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res);
 
-            SendPartyNotifyEstablish(client);
+            SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClient);
         }
 
-        private void SendPartyNotifyEstablish(NecClient client)
+        private void SendPartyNotifyEstablish(NecClient client, int partyType, int normItemDist, int rareItemDist, int targetClient)
         {
             //01-8F-02-AC-D0
             byte[] byteArr = new byte[658] { 0x01, 0x8F, 0x02, 0xAC, 0xD0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -55,16 +55,50 @@ namespace Necromancy.Server.Packet.Area
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
             IBuffer res = BufferProvider.Provide();
 
+            res.WriteInt32(client.Character.Id);//Party maker client id
+            res.WriteInt32(partyType);//Party type
+            res.WriteInt32(normItemDist);//Normal item distribution
+            res.WriteInt32(rareItemDist);//Rare item distribution
+            res.WriteInt32(69);
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            for (int i = 0; i < 4; i++)
+            //for (int i = 0; i < 4; i++)
             {
+                res.WriteInt32(client.Character.Id);
+                res.WriteInt32(0);
+                res.WriteFixedString("asf", 0x31); //size is 0x31
+                res.WriteFixedString("asdf", 0x5B); //size is 0x5B
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);//bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x31); //size is 0x31
+                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);//bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("", 0x31); //size is 0x31
+                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);//bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+
                 res.WriteInt32(0);
                 res.WriteInt32(0);
                 res.WriteFixedString("", 0x31); //size is 0x31
@@ -78,9 +112,11 @@ namespace Necromancy.Server.Packet.Area
             }
             res.WriteByte(0);
 
-            for (int i = 5; i < 658-1; i++)
+            res.SetPositionStart();
+
+            for (int i = 5; i < 658 - 1; i++)
             {
-                byteArr[i] += 1;// res.ReadByte();
+                byteArr[i] += res.ReadByte();
             }
 
             //Router.Send(client, (ushort)MsgPacketId.recv_party_notify_establish, res);
