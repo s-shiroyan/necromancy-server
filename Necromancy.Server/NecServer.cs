@@ -206,6 +206,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_select_package_update(this));
             _areaConsumer.AddHandler(new send_package_all_delete(this));
             _areaConsumer.AddHandler(new send_item_unequip(this));
+            _areaConsumer.AddHandler(new send_item_sort(this));
+            _areaConsumer.AddHandler(new send_item_drop(this));
+            _areaConsumer.AddHandler(new send_item_equip(this));
+            _areaConsumer.AddHandler(new send_random_box_close(this));
             _areaConsumer.AddHandler(new send_stall_regist_item(this));
             _areaConsumer.AddHandler(new send_stall_set_item_price(this));
             _areaConsumer.AddHandler(new send_stall_open(this));
@@ -218,6 +222,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_trade_invite(this));
             _areaConsumer.AddHandler(new send_trade_reply(this));
             _areaConsumer.AddHandler(new send_trade_set_money(this));
+            _areaConsumer.AddHandler(new send_trade_add_item(this));
+            _areaConsumer.AddHandler(new send_trade_remove_item(this));
             _areaConsumer.AddHandler(new send_trade_offer(this));
             _areaConsumer.AddHandler(new send_trade_revert(this));
             _areaConsumer.AddHandler(new send_trade_abort(this));
@@ -227,9 +233,25 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_regist_member_recruit(this));
             _areaConsumer.AddHandler(new send_trade_add_item(this));
             _areaConsumer.AddHandler(new send_trade_remove_item(this));
-
-
-
+            _areaConsumer.AddHandler(new send_shop_close(this));
+            _areaConsumer.AddHandler(new send_shop_identify(this));
+            _areaConsumer.AddHandler(new send_shop_sell_check(this));
+            _areaConsumer.AddHandler(new send_shop_sell(this));
+            _areaConsumer.AddHandler(new send_temple_cure_curse(this));
+            _areaConsumer.AddHandler(new send_temple_close(this));
+            _areaConsumer.AddHandler(new send_auction_search(this));
+            _areaConsumer.AddHandler(new send_auction_close(this));
+            _areaConsumer.AddHandler(new send_auction_bid(this));
+            _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
+            _areaConsumer.AddHandler(new send_auction_exhibit(this));
+            _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
+            _areaConsumer.AddHandler(new send_wanted_jail_close(this));
+            _areaConsumer.AddHandler(new send_wanted_jail_draw_point(this));
+            _areaConsumer.AddHandler(new send_wanted_jail_payment(this));
+            _areaConsumer.AddHandler(new send_wanted_list_close(this));
+            _areaConsumer.AddHandler(new send_union_request_establish(this));
+            _areaConsumer.AddHandler(new send_union_mantle_close(this));
+            _areaConsumer.AddHandler(new send_union_close_window(this));
         }
     }
 }

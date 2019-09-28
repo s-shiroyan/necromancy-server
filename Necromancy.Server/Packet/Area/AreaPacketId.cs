@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x755C = 0x755C,
         recv_0x7697 = 0x7697,
         recv_0x7B86 = 0x7B86,
-        recv_0x8066 = 0x8066, //:L"<area> - RecvException. func = %d, code = %d\n"
+        recv_0x8066 = 0x8066,
         recv_0x825D = 0x825D,
         recv_0x8364 = 0x8364,
         recv_0x8487 = 0x8487,
@@ -794,7 +794,7 @@ namespace Necromancy.Server.Packet.Id
         send_gem_cancel_piece = 0x101, //opcode not found
         send_gem_cancel_support_item = 0x102, //opcode not found
         send_gem_cancel_synthesis = 0x103, //opcode not found
-        send_gem_close = 0x483D,
+        send_gem_close = 0x104, //opcode not found
         send_gem_rebuild = 0x105, //opcode not found
         send_gem_set = 0x106, //opcode not found
         send_gem_set_piece = 0x107, //opcode not found
@@ -849,10 +849,10 @@ namespace Necromancy.Server.Packet.Id
         send_party_kick = 0x144, //opcode not found
         send_party_leave = 0x145, //opcode not found
         send_party_pass_draw = 0x146, //opcode not found
-        send_party_regist_member_recruit = 0xC342, //opcode not found
+        send_party_regist_member_recruit = 0x147, //opcode not found
         send_party_regist_party_recruit = 0x7B6C, //opcode not found
         send_party_request_draw_item_list = 0x86FD, 
-        send_party_search_recruited_member = 0xCB62, 
+        send_party_search_recruited_member = 0xCB62, //opcode not found
         send_party_search_recruited_party = 0x90BD, 
         send_quest_abort = 0x150, //opcode not found
         send_quest_check_target = 0x151, //opcode not found

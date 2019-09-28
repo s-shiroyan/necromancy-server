@@ -26,14 +26,14 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries4; i++)
             {
                 res.WriteInt32(0);
-                res.WriteInt64(0);
-                res.WriteInt32(0);
-                res.WriteInt32(0);
-                res.WriteFixedString($"{client.Soul.Name}", 49);
+                res.WriteInt64(2);
+                res.WriteInt32(3); // Lowest
+                res.WriteInt32(4); // Buy Now
+                res.WriteFixedString($"{client.Soul.Name}", 49); // Soul Name Of Sellers
                 res.WriteByte(0);
-                res.WriteFixedString("ToBeFound", 385);
-                res.WriteInt16(0);
-                res.WriteInt32(0);
+                res.WriteFixedString("Viagra for your sword", 385); // Comment section
+                res.WriteInt16(5); // Bid
+                res.WriteInt32(999999); // Item remaining time
             }
             Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_search_r, res);
         }
