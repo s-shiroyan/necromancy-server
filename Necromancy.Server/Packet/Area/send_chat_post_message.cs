@@ -175,7 +175,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res2 = BufferProvider.Provide();
                 res2.WriteInt32(ChatType);
-                res2.WriteInt32(1);      // todo, maybe, character id
+                res2.WriteInt32(client.Character.Id);
                 res2.WriteFixedString($"Console", 49);
                 res2.WriteFixedString($"Admin", 37);
                 res2.WriteFixedString($"Console Command - {Message} sent{x}", 769);
@@ -188,7 +188,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(ChatType);
-                res.WriteInt32(1);      // todo, maybe, character id
+                res.WriteInt32(client.Character.Id);
                 res.WriteFixedString($"{client.Soul.Name}", 49);
                 res.WriteFixedString($"{client.Character.Id}", 37);
                 res.WriteFixedString($"{Message}", 769);
@@ -199,7 +199,7 @@ namespace Necromancy.Server.Packet.Area
                     ConsoleActive = client.Character.Id;
                     IBuffer res2 = BufferProvider.Provide();
                     res2.WriteInt32(ChatType);
-                    res2.WriteInt32(1);      // todo, maybe, character id
+                    res2.WriteInt32(client.Character.Id);
                     res2.WriteFixedString($"Admin", 49);
                     res2.WriteFixedString($"Console", 37);
                     res2.WriteFixedString($"Admin Console Activated. Type 'exit' to escape", 769);
