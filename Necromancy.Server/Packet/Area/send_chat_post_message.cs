@@ -89,6 +89,18 @@ namespace Necromancy.Server.Packet.Area
                 case "tbox":
                     SendEventTreasureboxBegin(client);
                     break;
+                case "mant":
+                    SendUnionMantleOpen(client);
+                    break;
+                case "unio":
+                    SendUnionOpenWindow(client);  
+                    break;
+                case "list":
+                    SendWantedListOpen(client); 
+                    break;
+                case "jail":
+                    SendWantedJailOpen(client); 
+                    break;
                 case "auct":
                     SendAuctionNotifyOpen(client);
                     break;
@@ -496,11 +508,42 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_random_box_notify_open, res);
         }
+        private void SendUnionMantleOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            for(int i = 0; i < 0x10; i++)
+            {
+                res.WriteByte(0);
+            }
+            Router.Send(client, (ushort)AreaPacketId.recv_union_mantle_open, res);
+        }
+        private void SendUnionOpenWindow(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res);
+        }
+        private void SendWantedListOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt64(9999); // Bounty points.
+            res.WriteInt32(0);
+            res.WriteInt32(0);  // When i change list doesn't open anymore, don't know what is it
+            Router.Send(client, (ushort)AreaPacketId.recv_wanted_list_open, res);
+        }
+        private void SendWantedJailOpen(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(1); // 1 make all 3 option availabe ?  and 0 unvailable ?
+	
+            res.WriteInt64(70); // Bail
+            Router.Send(client, (ushort)AreaPacketId.recv_wanted_jail_open, res);
+        }
         
         private void SendShopNotifyOpen(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt16(17); 
+            res.WriteInt16(20); 
             /* Shop ID, 0 it's forge, 1 it's cursed, 2 Purchase shop, 3 purchase and curse, 4 it's sell, 
                         5 sell and curse. 6 purchase and sell. 7 Purchase, Sell, Curse.
                         
@@ -512,11 +555,13 @@ namespace Necromancy.Server.Packet.Area
                         
                         15 All of what i say before except the forge.
                         
-                        16 Repair !
+                        16 Repair ! 17 repair and curse. 18 Repair and purchase;
+                        
+                        19 repair, purchass, cursed. 20 Repair and sell
            */
             res.WriteInt32(0); // don't know what this shit do for the moment
-            res.WriteInt32(0); // don't know too
-            res.WriteByte(0); // Don't know too
+            res.WriteInt32(2); // don't know too
+            res.WriteByte(3); // Don't know too
             Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res);
         }
 
@@ -529,7 +574,7 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries; i++)
             {
 
-                res.WriteByte(1); // Slots 0 to 2
+                res.WriteByte(0); // Slots 0 to 2
                 // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
 
                 res.WriteInt32(0);
@@ -537,7 +582,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(0); // Lowest
                 res.WriteInt32(0); // Buy Now
                 res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteByte(1);
+                res.WriteByte(1); // 1 permit to show item in the search section ??
                 res.WriteFixedString("Comment", 385); // Comment in the item information
                 res.WriteInt16(0); // Bid
                 res.WriteInt32(0);
@@ -560,7 +605,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(0); // Lowest bid info
                 res.WriteInt32(0); // Buy now bid info
                 res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteByte(1);
+                res.WriteByte(1); // Change nothing ??
                 res.WriteFixedString("Zgeg", 385); // Comment in the bid info
                 res.WriteInt16(0);
                 res.WriteInt32(0);
@@ -750,11 +795,12 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(7); // Item Type.   10001005 Mask Item type and stats
 
-            res.WriteInt32(10001004); 
+            res.WriteInt32(3); 
 
             res.WriteByte(0); // Numbers of items
 
-            res.WriteInt32(0); // 10001003 Put The Item Unidentified. 0 put the item Identified
+            res.WriteInt32(8); /* 10001003 Put The Item Unidentified. 0 put the item Identified 
+            1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/ 
 
             res.WriteInt32(10800405);  //Item ID for Item?
             res.WriteByte(0);
@@ -778,11 +824,11 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);                       // 0~2
             res.WriteInt16(3);                      // bag index
 
-            res.WriteInt32(0);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
+            res.WriteInt32(0b1);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) (0b1, 0b10, 0b100, 0b1000, 0b10000  (bitmask))
 
-            res.WriteInt64(1000100010001000);
+            res.WriteInt64(0);
 
-            res.WriteInt32(10001002);
+            res.WriteInt32(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
         }
