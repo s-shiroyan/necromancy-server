@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x755C = 0x755C,
         recv_0x7697 = 0x7697,
         recv_0x7B86 = 0x7B86,
-        recv_0x8066 = 0x8066,
+        recv_0x8066 = 0x8066, //:L"<area> - RecvException. func = %d, code = %d\n"
         recv_0x825D = 0x825D,
         recv_0x8364 = 0x8364,
         recv_0x8487 = 0x8487,
@@ -804,10 +804,10 @@ namespace Necromancy.Server.Packet.Id
         send_gimmick_access_object = 0xCAD8, 
         send_help_new_remove = 0x112, //opcode not found
         send_inherit_start = 0x113, //opcode not found
-        send_item_drop = 0x114, //opcode not found
+        send_item_drop = 0xBE26,
         send_item_equip = 0x115, //opcode not found
         send_item_move = 0x8C7C,
-        send_item_sort = 0x117, //opcode not found
+        send_item_sort = 0x4926,
         send_item_unequip = 0xA3DE,
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
@@ -924,11 +924,11 @@ namespace Necromancy.Server.Packet.Id
         send_temple_close = 0x202, //opcode not found
         send_temple_cure_curse = 0x203, //opcode not found
         send_trade_abort = 0x9B38, //opcode not found
-        send_trade_add_item = 0x205, //opcode not found
+        send_trade_add_item = 0xD060, //opcode not found
         send_trade_fix = 0x9CC3, //opcode not found
         send_trade_invite = 0x513A, 
         send_trade_offer = 0xA822,
-        send_trade_remove_item = 0x209, //opcode not found
+        send_trade_remove_item = 0x6A8F,
         send_trade_reply = 0xE9FC,
         send_trade_revert = 0xEC63, 
         send_trade_set_money = 0x7C00,

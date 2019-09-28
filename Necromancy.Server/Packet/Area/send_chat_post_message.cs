@@ -659,24 +659,24 @@ namespace Necromancy.Server.Packet.Area
         {
             //recv_item_instance_unidentified = 0xD57A,
             IBuffer res = BufferProvider.Provide();
-
+            x++;
             res.WriteInt64(10001000100010002);
 
             res.WriteCString("Have Fun in Texas Hiraeth!");
 
-            res.WriteInt32(10001005);
+            res.WriteInt32(7); // Weapon/item type??
 
             res.WriteInt32(10001004);
 
             res.WriteByte(0);
 
-            res.WriteInt32(10001003);
+            res.WriteInt32(0); //0 makes item identified.  
 
-            res.WriteInt32(10800405);  //Item ID for Item?
+            res.WriteInt32(itemIDs[x]);  //Item ID for Item?
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
-            res.WriteInt32(10800405);  //Item ID for Icon?
+            res.WriteInt32(x);  //????
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -692,7 +692,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0);                       // 0~2
-            res.WriteInt16(3);                      // bag index
+            res.WriteInt16((short)x);                      // bag index 0 to 24
 
             res.WriteInt32(0b1000000000000000000000000000001);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
 
@@ -711,11 +711,11 @@ namespace Necromancy.Server.Packet.Area
 	        res.WriteInt64(1000200030004001);  //  Assume Unique ID instance identifier. 1 here makes item green icon
             res.WriteInt32(itemIDs[x]);
             res.WriteByte(1);               //number of items in stack
-            res.WriteInt32(itemIDs[x]);       //0b1 normal 0b10 disconnect 
+            res.WriteInt32(0);       //0b1 normal 0b10 disconnect 
             res.WriteFixedString("WhatIsThis", 0x10);
             res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0);                       // 0~2
-            res.WriteInt16(3);                      // bag index
+            res.WriteInt16(4);                      // bag index
             res.WriteInt32(0b1000000000000000000000000000001);              //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc
             res.WriteInt32(1);
             res.WriteByte(3);

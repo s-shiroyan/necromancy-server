@@ -15,12 +15,14 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int unknown = packet.Data.ReadInt16();
-            int fromSlot = packet.Data.ReadInt32();
+            //int unknown = packet.Data.ReadInt16();
+            int fromSlot = packet.Data.ReadInt32(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
+            int toSlot = packet.Data.ReadInt32();
+            int itemCount = packet.Data.ReadByte(); //last byte is stack count?
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(00); //error check. 0 to work
+            res.WriteInt32(toSlot); //error check. 0 to work
 
             /*
                 ITEMUSE	GENERIC	Unable to use this item right now

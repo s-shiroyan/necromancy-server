@@ -225,6 +225,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_search_recruited_party(this));
             _areaConsumer.AddHandler(new send_party_search_recruited_member(this));
             _areaConsumer.AddHandler(new send_party_regist_member_recruit(this));
+            _areaConsumer.AddHandler(new send_trade_add_item(this));
+            _areaConsumer.AddHandler(new send_trade_remove_item(this));
+
+
 
         }
     }
