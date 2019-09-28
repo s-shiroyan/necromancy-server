@@ -34,25 +34,11 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(ChatType);
-            res.WriteInt32(1);      // todo, maybe, character id
+            res.WriteInt32(client.Character.Id);//Character id
             res.WriteFixedString("Soulname", 49);
             res.WriteFixedString("Charaname", 37);
             res.WriteFixedString($"{Message}", 769);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
-            /*
-            for (int i = 0; i < 9; i++)
-            {
-                IBuffer res = BufferProvider.Provide();
-
-                res.WriteInt32(i);
-                res.WriteInt32(1);      // todo, maybe, character id
-                res.WriteFixedString("Soulname", 49);
-                res.WriteFixedString("Charaname", 37);
-                res.WriteFixedString($"Chat Type: " + i, 769);
-                Router.Send(client, (ushort)AreaPacketId.recv_chat_notify_message, res);
-                System.Threading.Thread.Sleep(5000);
-            }
-            */
         }
     }
 }
