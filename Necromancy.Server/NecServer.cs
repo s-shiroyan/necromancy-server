@@ -208,7 +208,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_item_unequip(this));
             _areaConsumer.AddHandler(new send_item_sort(this));
             _areaConsumer.AddHandler(new send_item_drop(this));
-            _areaConsumer.AddHandler(new send_item_equip(this));
+            //_areaConsumer.AddHandler(new send_item_equip(this));
             _areaConsumer.AddHandler(new send_random_box_close(this));
             _areaConsumer.AddHandler(new send_stall_regist_item(this));
             _areaConsumer.AddHandler(new send_stall_set_item_price(this));
@@ -231,8 +231,6 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_search_recruited_party(this));
             _areaConsumer.AddHandler(new send_party_search_recruited_member(this));
             _areaConsumer.AddHandler(new send_party_regist_member_recruit(this));
-            _areaConsumer.AddHandler(new send_trade_add_item(this));
-            _areaConsumer.AddHandler(new send_trade_remove_item(this));
             _areaConsumer.AddHandler(new send_shop_close(this));
             _areaConsumer.AddHandler(new send_shop_identify(this));
             _areaConsumer.AddHandler(new send_shop_sell_check(this));
