@@ -190,7 +190,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(ChatType);
                 res.WriteInt32(1);      // todo, maybe, character id
                 res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteFixedString($"{client.Character.SoulId}", 37);
+                res.WriteFixedString($"{client.Character.Id}", 37);
                 res.WriteFixedString($"{Message}", 769);
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
 

@@ -33,64 +33,54 @@ namespace Necromancy.Server.Logging
 
         public string ToLogText()
         {
-            if (GetIdName() == "send_movement_info")
+            String log = $"{Client.Identity} Packet Log";
+            log += Environment.NewLine;
+            log += "----------";
+            log += Environment.NewLine;
+            log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+            if (Identity != null)
             {
-                String log = "";
-                //String log = $"{Client.Identity} Packet Log";
-                //log += Environment.NewLine;
-                //log += "----------";
-                //log += Environment.NewLine;
-                //log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
-                if (Identity != null)
-                {
-                    //log += $"[{Identity}]";
-                }
-
-                //log += Environment.NewLine;
-                //log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
-                string idName = GetIdName();
-                if (idName != null)
-                {
-                    //log += $"[{idName}]";
-                }
-
-                //log += Environment.NewLine;
-                //log += "ASCII:";
-                //log += Environment.NewLine;
-                //log += Ascii;
-                //log += Environment.NewLine;
-                //log += "HEX:";
-                //log += Environment.NewLine;
-                log += Hex;
-                //log += Environment.NewLine;
-                //log += "----------";
-                return log;
+                log += $"[{Identity}]";
             }
-            else
+
+            log += Environment.NewLine;
+            log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+            string idName = GetIdName();
+            if (idName != null)
             {
-                String log = $"";
-                return log;
+                log += $"[{idName}]";
             }
-                
+
+            log += Environment.NewLine;
+            log += "ASCII:";
+            log += Environment.NewLine;
+            log += Ascii;
+            log += Environment.NewLine;
+            log += "HEX:";
+            log += Environment.NewLine;
+            log += Hex;
+            log += Environment.NewLine;
+            log += "----------";
+            return log;
         }
 
         public string GetIdName()
         {
             if (Enum.IsDefined(typeof(AuthPacketId), Id))
             {
-                AuthPacketId authPacketId = (AuthPacketId) Id;
+                AuthPacketId authPacketId = (AuthPacketId)Id;
                 return authPacketId.ToString();
             }
 
             if (Enum.IsDefined(typeof(MsgPacketId), Id))
             {
-                MsgPacketId msgPacketId = (MsgPacketId) Id;
+                MsgPacketId msgPacketId = (MsgPacketId)Id;
                 return msgPacketId.ToString();
             }
 
             if (Enum.IsDefined(typeof(AreaPacketId), Id))
             {
-                AreaPacketId areaPacketId = (AreaPacketId) Id;
+                AreaPacketId areaPacketId = (AreaPacketId)Id;
                 return areaPacketId.ToString();
             }
 

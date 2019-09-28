@@ -22,9 +22,11 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);
 
         }
-
+        //Temporary fix for "duplicate Client IDs when loading at the same time"
+        int i = 0;
         private void SendDataGetSelfCharaData(NecClient client)
         {
+            i++;
                 IBuffer res = BufferProvider.Provide();
 
                 //sub_4953B0 - characteristics
@@ -34,7 +36,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(client.Character.HairId); //hair
                 res.WriteByte(client.Character.HairColorId); //color
                 res.WriteByte(client.Character.FaceId); //face
-                
+
             /*
                 res.WriteInt32(3); //race
                 res.WriteInt32(0); ; //gender
@@ -43,7 +45,8 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0); //Hair Style
             */
             //sub_484720 - combat/leveling info
-            res.WriteInt32(client.Character.Id);  // ? character ID maybe?
+            Console.WriteLine($"Character ID Loading : {client.Character.Id}");
+            res.WriteInt32(client.Character.Id+i);  // ? character ID maybe?
                 res.WriteInt32(client.Character.ClassId); // class
                 res.WriteInt16(client.Character.Level); // current level
                 res.WriteInt64(555555550); // current exp
