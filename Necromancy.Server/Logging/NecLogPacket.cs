@@ -33,35 +33,45 @@ namespace Necromancy.Server.Logging
 
         public string ToLogText()
         {
-            String log = $"{Client.Identity} Packet Log";
-            log += Environment.NewLine;
-            log += "----------";
-            log += Environment.NewLine;
-            log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
-            if (Identity != null)
+            if (GetIdName() == "send_movement_info")
             {
-                log += $"[{Identity}]";
-            }
+                String log = "";
+                //String log = $"{Client.Identity} Packet Log";
+                //log += Environment.NewLine;
+                //log += "----------";
+                //log += Environment.NewLine;
+                //log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                if (Identity != null)
+                {
+                    //log += $"[{Identity}]";
+                }
 
-            log += Environment.NewLine;
-            log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
-            string idName = GetIdName();
-            if (idName != null)
+                //log += Environment.NewLine;
+                //log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+                string idName = GetIdName();
+                if (idName != null)
+                {
+                    //log += $"[{idName}]";
+                }
+
+                //log += Environment.NewLine;
+                //log += "ASCII:";
+                //log += Environment.NewLine;
+                //log += Ascii;
+                //log += Environment.NewLine;
+                //log += "HEX:";
+                //log += Environment.NewLine;
+                log += Hex;
+                //log += Environment.NewLine;
+                //log += "----------";
+                return log;
+            }
+            else
             {
-                log += $"[{idName}]";
+                String log = $"";
+                return log;
             }
-
-            log += Environment.NewLine;
-            log += "ASCII:";
-            log += Environment.NewLine;
-            log += Ascii;
-            log += Environment.NewLine;
-            log += "HEX:";
-            log += Environment.NewLine;
-            log += Hex;
-            log += Environment.NewLine;
-            log += "----------";
-            return log;
+                
         }
 
         public string GetIdName()
