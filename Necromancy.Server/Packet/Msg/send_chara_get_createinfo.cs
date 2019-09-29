@@ -212,11 +212,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -268,11 +268,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -324,11 +324,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -380,11 +380,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -437,11 +437,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -495,11 +495,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -552,11 +552,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -609,11 +609,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
