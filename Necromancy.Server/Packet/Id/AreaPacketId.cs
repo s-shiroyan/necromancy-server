@@ -542,6 +542,7 @@ namespace Necromancy.Server.Packet.Id
         recv_refusallist_add_user_r = 0x22E7,
         recv_refusallist_remove_user_r = 0x9A44,
         recv_return_home_request_exec_r = 0xFCC0,
+        recv_revive_init_r = 0xEF4E,
         recv_revive_execute_r = 0x621A,
         recv_select_package_update_r = 0xD170,
         recv_self_action_cost = 0x8CD,
@@ -854,8 +855,8 @@ namespace Necromancy.Server.Packet.Id
         send_party_request_draw_item_list = 0x86FD, 
         send_party_search_recruited_member = 0xCB62, //opcode not found
         send_party_search_recruited_party = 0x90BD, 
-        send_quest_abort = 0x150, //opcode not found
-        send_quest_check_target = 0x151, //opcode not found
+        send_quest_abort = 0xD247,
+        send_quest_check_target = 0x1E86,
         send_quest_check_time_limit = 0x152, //opcode not found
         send_quest_display = 0x3017, 
         send_quest_get_mission_quest_history = 0xA3E6, 

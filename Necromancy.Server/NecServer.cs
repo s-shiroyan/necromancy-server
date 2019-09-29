@@ -247,6 +247,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_request_establish(this));
             _areaConsumer.AddHandler(new send_union_mantle_close(this));
             _areaConsumer.AddHandler(new send_union_close_window(this));
+            _areaConsumer.AddHandler(new send_quest_abort(this));
+            _areaConsumer.AddHandler(new send_quest_check_target(this));
+            _areaConsumer.AddHandler(new send_gem_close(this));
         }
     }
 }
