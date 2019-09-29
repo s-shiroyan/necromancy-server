@@ -176,14 +176,21 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752401, 752401, 752401, 752401, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -201,32 +208,45 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E3700_Human_Male(IBuffer res) //characater creation area?
         {
-            // 4 byte
+
             res.WriteInt32(0);//race ID
             res.WriteInt32(0);//gender flag
 
             res.WriteByte(1);//bool
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752101, 752101, 752101, 752101, 0 , 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -244,14 +264,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E3700_Human_Female(IBuffer res) //characater creation area?
@@ -262,14 +288,21 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752201, 752201, 752201, 752201, 0 , 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -287,14 +320,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E3700_Elf_Male(IBuffer res) //characater creation area?
@@ -305,14 +344,21 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752301, 752301, 752301, 752301, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -330,14 +376,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
 
         }
 
@@ -349,14 +401,21 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752501, 752501, 752501, 752501, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -374,17 +433,25 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
+
         private void wo_4E3700_Gnome_Female(IBuffer res) //characater creation area?
+
         {
             // 4 byte
             res.WriteInt32(4);//race ID
@@ -392,14 +459,21 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 753001, 753001, 753001, 753001, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -417,14 +491,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E3700_Prokul_Male(IBuffer res) //characater creation area?
@@ -436,14 +516,21 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752701, 752701, 752701, 752701, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -461,14 +548,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E3700_Porkul_Female(IBuffer res) //characater creation area?
@@ -480,14 +573,21 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
+            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22 };
+            int x = 0;
+            int xx = 0;
+            int xxx = 0;
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(WeaponContainer[x]);
+
+                x++;
             }
 
+            int[] EquipmentContainer = new int[] { 0, 0, 260103, 110504, 360103, 460103, 560103, 0, 0, 0, 0, 0, 752801, 752801, 752801, 752801, 0, 0, 0 };
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(EquipmentContainer[xx]);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -505,14 +605,20 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
+
+                xx++;
             }
+
+            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(SoltContainer[xxx]);
+
+                xxx++;
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E37F0(IBuffer res)
@@ -554,7 +660,7 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteInt32(0);
             }
 
-            res.WriteByte(0);
+            res.WriteByte(19); // how many items to display
         }
 
         private void wo_4E0970_Fighter(IBuffer res)
