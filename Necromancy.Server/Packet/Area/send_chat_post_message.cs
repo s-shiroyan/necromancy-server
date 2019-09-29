@@ -207,13 +207,15 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
 
 	        res.WriteInt64(69);//ItemID
-            res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
+            res.WriteInt32(10800405);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
             res.WriteByte(1);//Number of "items"
-            res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
+            res.WriteInt32(10800405);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("fixed", 0x10);
+
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2 // maybe.. more bag index?
             res.WriteInt16(1);// bag index
+
             res.WriteInt32(0);//Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
             res.WriteInt32(1);//Percentage stat, 9 max i think
             res.WriteByte(0);
@@ -223,19 +225,19 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(0);
             res.WriteInt32(1);//Divides max % by this number
             res.WriteByte(0);
-            res.WriteInt32(10800405);
+            res.WriteInt32(0);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
 
             //for (int i = 0; i < numEntries; i++)
-                res.WriteInt32(10800405);
-                res.WriteInt32(10800405);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
 
                 numEntries = 3;
             res.WriteInt32(numEntries); // less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteByte(0); //bool
+                res.WriteByte(1); //bool
                 res.WriteInt32(0);
                 res.WriteInt32(0);
                 res.WriteInt32(0);
