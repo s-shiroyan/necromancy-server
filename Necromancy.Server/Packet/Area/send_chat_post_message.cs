@@ -97,7 +97,7 @@ namespace Necromancy.Server.Packet.Area
                     SendStallSellItem(client);
                     break;
                 default:
-                    Message = "Unrecognized command";
+                    Message = $"Unrecognized command{command}";
                     break;
             }
         }
@@ -110,13 +110,13 @@ namespace Necromancy.Server.Packet.Area
 
 	        res.WriteInt64(77);//Item Object ID
 
-            res.WriteCString("Anime Katana");//Name
+            res.WriteCString("Xeno Died");//Name
 
-            res.WriteInt32(1);//Wep type
+            res.WriteInt32(9);//Item type, 9 = 2h axe, 47 = bag
 
-            res.WriteInt32(10001004);
+            res.WriteInt32(3);//Equip type? 0 = no slots highlited, 1 = right hand.
 
-            res.WriteByte(0);//Number of items
+            res.WriteByte(1);//Number of items
 
             res.WriteInt32(0);//Item status 0 = identified
 
@@ -131,14 +131,14 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(0);
             res.WriteByte(0);
-            res.WriteByte(0); // bool
+            res.WriteByte(1); // bool
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
-            res.WriteByte(0);// 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0);// 0 = adventure bag. 1 = character equipment, 2 = royal bag
             res.WriteByte(0);// 0~2
             res.WriteInt16(3);// bag index
 
@@ -208,7 +208,7 @@ namespace Necromancy.Server.Packet.Area
 
 	        res.WriteInt64(69);//ItemID
             res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
-            res.WriteByte(0);//Number of "items"
+            res.WriteByte(1);//Number of "items"
             res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("fixed", 0x10);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
@@ -216,20 +216,20 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(1);// bag index
             res.WriteInt32(0);//Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
             res.WriteInt32(1);//Percentage stat, 9 max i think
-            res.WriteByte(1);
-            res.WriteByte(3);
+            res.WriteByte(0);
+            res.WriteByte(0);
             res.WriteCString("cstring"); // find max size 
-            res.WriteInt16(2);
-            res.WriteInt16(1);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
             res.WriteInt32(1);//Divides max % by this number
-            res.WriteByte(1);
-            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteInt32(10800405);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
 
             //for (int i = 0; i < numEntries; i++)
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteInt32(10800405);
+                res.WriteInt32(10800405);
 
                 numEntries = 3;
             res.WriteInt32(numEntries); // less than or equal to 3
