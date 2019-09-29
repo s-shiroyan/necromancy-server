@@ -100,12 +100,12 @@ namespace Necromancy.Server.Common
                  * 
                  * the gnomes uses 00753001 for some reason
                  */
-                res.WriteInt32(RASByte);
+                res.WriteInt32(RASByte); //Equipment ID from iteminfo.csv
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0); //0  ????
+                res.WriteByte(0); 
 
-                res.WriteInt32(12341234);//???
+                res.WriteInt32(12341234); //No Effect
                 res.WriteByte(0); //
                 res.WriteByte(4); //
                 res.WriteByte(1); //

@@ -125,16 +125,16 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries; i++)
             {
 
-                res3.WriteInt32(EquipId[x]);//???
+                res3.WriteInt32(EquipId[x]);//Equipment ID from iteminfo.csv
                 res3.WriteByte(0);
                 res3.WriteByte(0);
-                res3.WriteByte(0); //0  ????
+                res3.WriteByte(0); 
 
 
-                res3.WriteInt32(12341234);//???
-                res3.WriteByte(0); //
-                res3.WriteByte(4); //
-                res3.WriteByte(1); //
+                res3.WriteInt32(0);
+                res3.WriteByte(0); 
+                res3.WriteByte(0); 
+                res3.WriteByte(0); 
                 x++;
 
                 res3.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif

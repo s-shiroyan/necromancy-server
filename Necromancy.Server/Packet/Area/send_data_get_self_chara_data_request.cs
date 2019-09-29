@@ -298,22 +298,22 @@ namespace Necromancy.Server.Packet.Area
                 for (int i = 0; i < numEntries; i++)
                 {    
                      
-                    res.WriteInt32(EquipId[x]);//???
+                    res.WriteInt32(EquipId[x]);//Equipment ID from iteminfo.csv
                     res.WriteByte(0); 
                     res.WriteByte(0);
-                    res.WriteByte(0); //0  ????
+                    res.WriteByte(0); 
 
-                    res.WriteInt32(12341234);//???
+                    res.WriteInt32(0);
                     res.WriteByte(0); //
-                    res.WriteByte(4); //
-                    res.WriteByte(1); //
+                    res.WriteByte((byte)x); //No Effect
+                    res.WriteByte((byte)x); //No Effect
                     
                     res.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                     res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                    res.WriteByte(4); // testing
-                    res.WriteByte(4); // testing
-                    res.WriteByte(4); // testing
-                    res.WriteByte(4); // testing
+                    res.WriteByte(4); // testing. Suspect Helmet Texture
+                    res.WriteByte(4); // testing. Suspect Torso Texture
+                    res.WriteByte(4); // testing. Suspect Pants Texture
+                    res.WriteByte(4); // testing. Suspect Shield Texture
                     res.WriteByte(4); //Alternate texture for item model 
 
                     res.WriteByte(4); // seperate in assembly
@@ -352,11 +352,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(numEntries);//has to be less than 128
                 
                 //sub_485A70
-                for (int imac = 0; imac < numEntries; imac++)//status buffs / debuffs
+                for (int j = 0; j < numEntries; j++)//status buffs / debuffs
                 {
-                    res.WriteInt32(15100901); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
-                    res.WriteInt32(15100901);
-                    res.WriteInt32(15100901);
+                    res.WriteInt32(0); 
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
                 }
 
                 Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);

@@ -16,7 +16,6 @@ namespace Necromancy.Server.Packet.Area
         
         public override ushort Id => (ushort)AreaPacketId.send_chat_post_message;
 
-        int ConsoleActive = 0;
         int x = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
@@ -26,7 +25,6 @@ namespace Necromancy.Server.Packet.Area
             string Message = packet.Data.ReadCString();
 
 
-            SendChatNotifyMessage(client, Message, ChatType);
             
 
             IBuffer res = BufferProvider.Provide();
@@ -48,14 +46,35 @@ namespace Necromancy.Server.Packet.Area
              */
 
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-            Console.WriteLine("Character X: " + client.Character.X + "\nCharacter Y: " + client.Character.Y + "\nCharacter Z: " + client.Character.Z);
+
+            //Parse "!" at the begging of a chat message to access the console commands below
             if (Message[0] == '!')
-                commandParse(client, Message);
+               Message = commandParse(client, Message);
+
+            SendChatNotifyMessage(client, Message, ChatType);
+
         }
 
-        private void commandParse(NecClient client, string Message)
+        /// <summary>
+        /// Begin Console commands and Test funtions below.   To be or restricted to GM use at a later time.
+        /// </summary>
+
+        private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(ChatType);
+            res.WriteInt32(client.Character.Id);
+            res.WriteFixedString($"{client.Soul.Name}", 49);
+            res.WriteFixedString($"{client.Character.Name}", 37);
+            res.WriteFixedString($"{Message}", 769);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
+        }
+
+        private string commandParse(NecClient client, string Message)
         {
             string command = null;
+            string[] SplitMessage = Message.Split('!',':');
             int i = 1;
             long x = 0;
             bool cont = true;
@@ -141,106 +160,64 @@ namespace Necromancy.Server.Packet.Area
                     SendStallSellItem(client);
                     break;
                 default:
-                    Message = "Unrecognized command";
+                    //Message = $"Unrecognized command {command}" ;
+                    command = "unrecognized";
                     break;
             }
-        }
-
-        private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
-        {
-            if (ConsoleActive == client.Character.Id)
+            switch (SplitMessage[1])
             {
-                string[] SplitMessage = Message.Split(':');
-
-                switch (SplitMessage[0])
-                {
-                    case "NPC":
-                        if (SplitMessage[1] == "") { SplitMessage[1] = "0"; }
-                            AdminConsoleNPC(client,Convert.ToInt32(SplitMessage[1]));
-                        break;
-                    case "Monster":
-                            AdminConsoleRecvDataNotifyMonsterData(client);
-                        break;
-                    case "Item":
-                            SendDataNotifyItemObjectData(client);
-                        break;
-                    case "Died":
-                            IBuffer res4 = BufferProvider.Provide();
-                            Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
-                         break; 
-                    case "GetUItem":
-                            AdminConsoleRecvItemInstanceUnidentified(client);
-                        break;
-                    case "GetItem":
-                            AdminConsoleRecvItemInstance(client);
-                        break;
-                    case "SendMail":
-                            SendMailOpenR(client);
-                        break;
-                    case "GetMail":
-                            AdminConsoleSelectPackageUpdate(client);
-                        break;                 
-                    case "Jump":
-                            AdminConsoleSuperJump(client, Convert.ToInt32(SplitMessage[1]));
-                        break;
-                    case "exit":
-                            ConsoleActive = 0;
-                        break;
-                    default:
-                            Message = $"Unrecognized command '{SplitMessage[0]}' ";
-                        break;
-                }
-
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteInt32(ChatType);
-                res2.WriteInt32(client.Character.Id);
-                res2.WriteFixedString($"Console", 49);
-                res2.WriteFixedString($"Admin", 37);
-                res2.WriteFixedString($"Console Command - {Message} sent{x}", 769);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res2);
-
-
+                case "NPC":
+                    if (SplitMessage[2] == "") { SplitMessage[2] = "0"; }
+                    AdminConsoleNPC(client, Convert.ToInt32(SplitMessage[2]));
+                    break;
+                case "Monster":
+                    AdminConsoleRecvDataNotifyMonsterData(client);
+                    break;
+                case "Item":
+                    SendDataNotifyItemObjectData(client);
+                    break;
+                case "Died":
+                    IBuffer res4 = BufferProvider.Provide();
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
+                    break;
+                case "GetUItem":
+                    AdminConsoleRecvItemInstanceUnidentified(client);
+                    break;
+                case "GetItem":
+                    AdminConsoleRecvItemInstance(client);
+                    break;
+                case "SendMail":
+                    SendMailOpenR(client);
+                    break;
+                case "GetMail":
+                    AdminConsoleSelectPackageUpdate(client);
+                    break;
+                default:
+                    SplitMessage[1] = "unrecognized";
+                    //Message = $"Unrecognized command '{SplitMessage[1]}' ";
+                    break;
             }
-
-            if (ConsoleActive != client.Character.Id)
+            if (command == "unrecognized" && SplitMessage[1] == "unrecognized")
             {
-                IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(ChatType);
-                res.WriteInt32(client.Character.Id);
-                res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteFixedString($"{client.Character.Id}", 37);
-                res.WriteFixedString($"{Message}", 769);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
-
-                if (Message == "GodModeConsole")
-                {
-                    ConsoleActive = client.Character.Id;
-                    IBuffer res2 = BufferProvider.Provide();
-                    res2.WriteInt32(ChatType);
-                    res2.WriteInt32(client.Character.Id);
-                    res2.WriteFixedString($"Admin", 49);
-                    res2.WriteFixedString($"Console", 37);
-                    res2.WriteFixedString($"Admin Console Activated. Type 'exit' to escape", 769);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res2);
-                }
+                Message = $"Unrecognized command - {Message}";
             }
-            
-
-
+            else
+            {
+                Message = $"Sent command - {Message}";
+            }
+            return Message;
         }
 
-        private void AdminConsoleSuperJump(NecClient client, int Height)
-        {
-            client.Character.Z += Height;  //It's not that easy.   Teleport to be done later.
-        }
+
+
         private void AdminConsoleNPC(NecClient client, int ModelID)
         {
-                if (ModelID <= 1) { ModelID = 1911105; }
+                if (ModelID <= 1) { ModelID = NPCModelID[Util.GetRandomNumber(1, 10)]; }
 
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(10000101);   // NPC ID (object id)
+                res3.WriteInt32(NPCModelID[Util.GetRandomNumber(1,10)]);   // NPC ID (object id)
 
-                res3.WriteInt32(10000101);      // NPC Serial ID from "npc.csv"
+                res3.WriteInt32((NPCSerialID[Util.GetRandomNumber(1, 10)]));      // NPC Serial ID from "npc.csv"
 
                 res3.WriteByte(0);              // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
 
@@ -618,7 +595,7 @@ namespace Necromancy.Server.Packet.Area
                         
                         19 repair, purchase, cursed. 20 Repair and sell
            */
-            res.WriteInt32(0); // don't know what this shit do for the moment
+            res.WriteInt32(0); // don't know
             res.WriteInt32(0); // don't know too
             res.WriteByte(0); // Don't know too
             Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res);
@@ -940,36 +917,11 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-            /////////Int array for testing Item ID's.  Poor formatting, for easy copying from excel
-            int[] itemIDs = new int[] {    100101
-                                    ,   100102
-                                    ,   100103
-                                    ,   100104
-                                    ,   100105
-                                    ,   100106
-                                    ,   100107
-                                    ,   100108
-                                    ,   100109
-                                    ,   100110
-                                    ,   100191
-                                    ,   100201
-                                    ,   100202
-                                    ,   100203
-                                    ,   100204
-                                    ,   100205
-                                    ,   100206
-                                    ,   100207
-                                    ,   100208
-                                    ,   100209
-                                    ,   100210
-                                    ,   100214
-                                    ,   100301
-                                    ,   100302
-                                    ,   100303
-                                    ,   100304
-                                    ,   100305
-
-                                    };
+        /////////Int array for testing Item ID's.  Poor formatting, for easy copying from excel
+        int[] itemIDs = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                    ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+        int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
+        int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
 
     }
 }
