@@ -18,34 +18,25 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
 
             byte entries = 6;
+            res.WriteInt32(entries);
+            for (int i = 0; i < 6; i++)
+            {
+                res.WriteByte((byte)i);//specifies colors A-F
+            }
 
-            res.WriteInt32(6);//num of hairstyles 6 being A-F 
+            res.WriteInt32(entries);//num of colors 6 being A-F
 
-            res.WriteByte(0);//specifies hair A-F
-            res.WriteByte(1);//specifies hair A-F
-            res.WriteByte(2);//specifies hair A-F
-            res.WriteByte(3);//specifies hair A-F
-            res.WriteByte(4);//specifies hair A-F
-            res.WriteByte(0);//specifies hair A-F
+            for (int i = 0; i < entries; i++)
+            {
+                res.WriteByte((byte) i);//specifies colors A-F
+            }
 
-            res.WriteInt32(6);//num of colors 6 being A-F 
+            res.WriteInt32(entries);//Specifies how many faces, 6 being A-F
 
-            res.WriteByte(0);//specifies colors A-F
-            res.WriteByte(1);//specifies colors A-F
-            res.WriteByte(2);//specifies colors A-F
-            res.WriteByte(3);//specifies colors A-F
-            res.WriteByte(4);//specifies colors A-F
-            res.WriteByte(5);//specifies colors A-F
-
-
-            res.WriteInt32(6);//Specifies how many faces, 6 being A-F
-
-            res.WriteByte(0);//specifies face A-F
-            res.WriteByte(1);//specifies face A-F
-            res.WriteByte(2);//specifies face A-F
-            res.WriteByte(3);//specifies face A-F
-            res.WriteByte(4);//specifies face A-F
-            res.WriteByte(0);//specifies face A-F
+            for (int i = 0; i < entries; i++)
+            {
+                res.WriteByte((byte)i); //face data, starts at 0 = A
+            }
 
             entries = 5;//Specifies how many stat groups 5 = (Human, Elf, Dwarf, Porkul, Gnome)
             res.WriteInt32(entries);
@@ -221,11 +212,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -333,11 +324,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -389,11 +380,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -446,11 +437,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -504,11 +495,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -561,11 +552,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }
@@ -618,11 +609,11 @@ namespace Necromancy.Server.Packet.Msg
                 xx++;
             }
 
-            int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+            int[] SlotContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
 
             for (int i = 0; i < 19; i++)
             {
-                res.WriteInt32(SoltContainer[xxx]);
+                res.WriteInt32(SlotContainer[xxx]);
 
                 xxx++;
             }

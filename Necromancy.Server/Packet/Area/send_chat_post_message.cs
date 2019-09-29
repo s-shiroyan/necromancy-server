@@ -183,9 +183,6 @@ namespace Necromancy.Server.Packet.Area
                     case "Jump":
                             AdminConsoleSuperJump(client, Convert.ToInt32(SplitMessage[1]));
                         break;
-                    case "logout":
-                        LogOut(client);
-                        break;
                     case "exit":
                             ConsoleActive = 0;
                         break;
@@ -232,32 +229,6 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-        private void LogOut(NecClient client)
-        {
-            byte[] byteArr = new byte[20] { 0x00, 0x12, 0xDD, 0xEF, 0, 0, 0, 0, 0, 0, 0, 0,
-                0 ,0 ,0 ,0 ,0, 0, 0, 0};
-
-            IBuffer res = BufferProvider.Provide();
-
-
-            res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteInt32(0xE1F50501);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt32(0x25E6852C);
-
-
-            res.SetPositionStart();
-
-            for (int i = 4; i < 20; i++)
-            {
-                byteArr[i] += res.ReadByte();
-            }
-
-            client.Session.msgSocket.Send(byteArr);
-        }
         private void AdminConsoleSuperJump(NecClient client, int Height)
         {
             client.Character.Z += Height;  //It's not that easy.   Teleport to be done later.
