@@ -718,29 +718,40 @@ namespace Necromancy.Server.Packet.Area
 
         private void LogOut(NecClient client)
         {
-            byte[] byteArr = new byte[20] { 0x00, 0x12, 0xDD, 0xEF, 0, 0, 0, 0, 0, 0, 0, 0,
-                0 ,0 ,0 ,0 ,0, 0, 0, 0};
+            byte[] byteArr = new byte[8] { 0x00, 0x06, 0xEE, 0x91, 0, 0, 0, 0 };
 
             IBuffer res = BufferProvider.Provide();
 
-
             res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteInt32(0xE1F50501);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt32(0x25E6852C);
-
 
             res.SetPositionStart();
 
-            for (int i = 4; i < 20; i++)
+            for (int i = 4; i < 8; i++)
             {
                 byteArr[i] += res.ReadByte();
             }
 
             client.Session.msgSocket.Send(byteArr);
+
+            System.Threading.Thread.Sleep(4000);
+
+            byte[] byteArrr = new byte[9] { 0x00, 0x07, 0x52, 0x56, 0, 0, 0, 0, 0 };
+
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(0);
+            res2.WriteByte(0);
+
+            res2.SetPositionStart();
+
+            for (int i = 4; i < 9; i++)
+            {
+                byteArrr[i] += res2.ReadByte();
+            }
+
+            client.Session.msgSocket.Send(byteArrr);
+
+
         }
         private void AdminConsoleSelectPackageUpdate(NecClient client)
         {
