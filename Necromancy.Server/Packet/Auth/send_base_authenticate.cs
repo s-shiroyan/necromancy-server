@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Auth
                 }
 
                 string bCryptHash = BCrypt.Net.BCrypt.HashPassword(password, NecSetting.BCryptWorkFactor);
-                account = Database.CreateAccount(accountName, "", bCryptHash);
+                account = Database.CreateAccount(accountName, accountName, bCryptHash);
             }
 
             if (!BCrypt.Net.BCrypt.Verify(password, account.Hash))

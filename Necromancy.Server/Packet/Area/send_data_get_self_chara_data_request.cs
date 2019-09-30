@@ -22,32 +22,43 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);
 
         }
-
+        //Temporary fix for "duplicate Client IDs when loading at the same time"
+        int i = 0;
         private void SendDataGetSelfCharaData(NecClient client)
         {
+            i++;
                 IBuffer res = BufferProvider.Provide();
 
                 //sub_4953B0 - characteristics
-                res.WriteInt32(4); //race
-                res.WriteInt32(1); //gender
-                res.WriteByte(0); //hair
-                res.WriteByte(5); //face
-                res.WriteByte(0); //color
+                
+                res.WriteInt32(client.Character.Raceid); //race
+                res.WriteInt32(client.Character.Sexid);; //gender
+                res.WriteByte(client.Character.HairId); //hair
+                res.WriteByte(client.Character.HairColorId); //color
+                res.WriteByte(client.Character.FaceId); //face
 
-                //sub_484720 - combat/leveling info
-                res.WriteInt32(client.Character.Id);  // ? character ID maybe?
-                res.WriteInt32(1); // class
-                res.WriteInt16(1); // current level
-                res.WriteInt64(0); // current exp
-                res.WriteInt64(12); // soul exp
+            /*
+                res.WriteInt32(3); //race
+                res.WriteInt32(0); ; //gender
+                res.WriteByte(0); //Face
+                res.WriteByte(5); //hair color
+                res.WriteByte(0); //Hair Style
+            */
+            //sub_484720 - combat/leveling info
+            Console.WriteLine($"Character ID Loading : {client.Character.Id}");
+            res.WriteInt32(client.Character.Id+i);  // ? character ID maybe?
+                res.WriteInt32(client.Character.ClassId); // class
+                res.WriteInt16(client.Character.Level); // current level
+                res.WriteInt64(555555550); // current exp
+                res.WriteInt64(777777712); // soul exp
                 res.WriteInt64(33); // exp needed to level
                 res.WriteInt64(44); // soul exp needed to level
-                res.WriteInt32(123); // current hp
-                res.WriteInt32(100); // current mp
-                res.WriteInt32(111); // current od
-                res.WriteInt32(123); // max hp
-                res.WriteInt32(124); // maxmp
-                res.WriteInt32(189); // max od
+                res.WriteInt32(1234); // current hp
+                res.WriteInt32(400); // current mp
+                res.WriteInt32(400); // current od
+                res.WriteInt32(1234); // max hp
+                res.WriteInt32(400); // maxmp
+                res.WriteInt32(400); // max od
                 res.WriteInt32(164); // current gp
                 res.WriteInt32(155); // map gp
                 res.WriteInt32(1238); // value/100 = current weight
@@ -101,10 +112,10 @@ namespace Necromancy.Server.Packet.Area
                 // gold and alignment?
                 res.WriteInt64(214587); // gold
                 res.WriteInt32(187); // changed nothing visably
-                res.WriteInt32(5); // lawful
-                res.WriteInt32(3); // neutral
-                res.WriteInt32(1); // chaos
-                res.WriteInt32(113); // changed nothing visably
+                res.WriteInt32(5999999); // lawful
+                res.WriteInt32(3999999); // neutral
+                res.WriteInt32(1999999); // chaos
+                res.WriteInt32(1139999); // changed nothing visably
 
                 //sub_484980
                 res.WriteInt32(1);// changed nothing visably
@@ -162,10 +173,10 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFixedString("127.0.0.1", 65);//IP
                 res.WriteInt16(60002);//Port
             
-                //sub_484420
-                res.WriteFloat(-5516);//X Pos
-                res.WriteFloat(-3896);//Y Pos
-                res.WriteFloat(100);//Z Pos
+                //sub_484420 // Map Spawn coord
+                res.WriteFloat(1600);//X Pos
+                res.WriteFloat(0);//Y Pos
+                res.WriteFloat(0);//Z Pos
                 res.WriteByte(180);//view offset
 
                 //sub_read_int32 skill point
@@ -220,7 +231,7 @@ namespace Necromancy.Server.Packet.Area
                 int Armor = 25;         //Armor 25
                 int Accessory = 27;     //Accessory 26
                 int Shield = 21;        //Shield 19-21
-                int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+                int Weapon = 8;         //0 Knuckle, 1 Dagger, 3 1hSword, 8 1h axe, 9 2hAxe, 10 spear, 11 blunt, 14 staff, 15 crossbow
                 //sub_483660 
                 res.WriteInt32(Weapon); //18	    				
                 res.WriteInt32(Shield); //17 	    		
@@ -241,43 +252,47 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(Armor); //2          				
                 res.WriteInt32(Shield+1); //1       					
                 res.WriteInt32(22);  //0 
-                
-                
-                //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
-                //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
-
+              
 
                 //sub_483420
                 numEntries = 19;
                 res.WriteInt32(numEntries);//has to be less than 19
                 int x=0;
-                int[] EquipId = new int[19]; 
+                int[] EquipId = new int[19];
+                byte[] headSlot = new byte[19];
 
-                string CharacterSet = "Zenkato";       
+                string CharacterSet = client.Character.Name;       
                 
                 switch (CharacterSet)
                 { 
-                    case "Xeno":
-                     EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    case "Xeno.":
+                    EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                    ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0 };
                     break;
                     case "Kadred":
                      EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                     headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     case "Zenkato":
                      EquipId = new int[] {11400403/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                     headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     case "Ipa":
                      EquipId = new int[] {11300506/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                     headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     default:
                      EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                     headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 004, 0, 0 };
                     break;
                 }
+
+                
 
                 //sub_4948C0
                 for (int i = 0; i < numEntries; i++)
@@ -288,22 +303,22 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteByte(0);
                     res.WriteByte(0); //0  ????
 
-                    
                     res.WriteInt32(12341234);//???
                     res.WriteByte(0); //
                     res.WriteByte(4); //
                     res.WriteByte(1); //
-                        x++;
                     
-                    res.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                    res.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                     res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
                     res.WriteByte(4); // testing
-                        res.WriteByte(4); //Alternate texture for item model 
-                res.WriteByte(4); // seperate in assembly
-                
+                    res.WriteByte(4); //Alternate texture for item model 
+
+                    res.WriteByte(4); // seperate in assembly
+
+                    x++;
                 }
 
                 //sub_483420
@@ -339,9 +354,9 @@ namespace Necromancy.Server.Packet.Area
                 //sub_485A70
                 for (int imac = 0; imac < numEntries; imac++)//status buffs / debuffs
                 {
-                    res.WriteInt32(10); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
-                    res.WriteInt32(20);
-                    res.WriteInt32(30);
+                    res.WriteInt32(15100901); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
+                    res.WriteInt32(15100901);
+                    res.WriteInt32(15100901);
                 }
 
                 Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);

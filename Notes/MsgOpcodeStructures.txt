@@ -1,4 +1,4 @@
-0x004DE6A0 location for first opcode, 122 opcodes, 116 recv strings
+004E4268 location for first opcode, 122 opcodes, 116 recv strings
 -----------------------------------------------------------------------------------------------------------
 0x831C
 string: no string

@@ -4,6 +4,7 @@ using Necromancy.Server.Data;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Setting;
 
+
 namespace Necromancy.Server
 {
     internal class Program
