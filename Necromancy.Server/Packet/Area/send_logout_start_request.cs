@@ -70,7 +70,7 @@ namespace Necromancy.Server.Packet.Area
 
                     client.Session.msgSocket.Send(byteArr);
 
-                    System.Threading.Thread.Sleep(4000);
+                    System.Threading.Thread.Sleep(4100);
 
                     byte[] byteArrr = new byte[9] { 0x00, 0x07, 0x52, 0x56, 0, 0, 0, 0, 0 };
 
