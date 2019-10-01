@@ -770,8 +770,8 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_report_list_end = 0x76, //opcode not found
         send_event_quest_report_r = 0x77, //opcode not found
         send_event_quest_report_select = 0x78, //opcode not found
-        send_event_removetrap_end = 0x79, //opcode not found
-        send_event_removetrap_select = 0x80, //opcode not found
+        send_event_removetrap_end = 0x87CD,
+        send_event_removetrap_select = 0x4CE9,
         send_event_removetrap_skill = 0x81, //opcode not found
         send_event_request_int_r = 0x82, //opcode not found
         send_event_script_play_r = 0x83, //opcode not found
@@ -779,7 +779,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_select_exec_r = 0x85, //opcode not found
         send_event_select_map_and_channel_r = 0x86, //opcode not found
         send_event_soul_rankup_close = 0x87, //opcode not found
-        send_event_soul_storage_close = 0x88, //opcode not found
+        send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x89, //opcode not found
         send_event_system_message_timer_r = 0x90, //opcode not found
         send_event_tresurebox_end = 0x91, //opcode not found
@@ -915,10 +915,10 @@ namespace Necromancy.Server.Packet.Id
         send_stall_set_name = 0xB93, 
         send_stall_shopping_abort = 0x53E3,
         send_stall_shopping_start = 0xB248,
-        send_storage_deposit_item = 0x196, //opcode not found
-        send_storage_deposit_money = 0x197, //opcode not found
+        send_storage_deposit_item = 0x2FA4,
+        send_storage_deposit_money = 0xA40B,
         send_storage_draw_item = 0x198, //opcode not found
-        send_storage_draw_money = 0x199, //opcode not found
+        send_storage_draw_money = 0xCE05,
         send_sv_conf_option_change = 0x1B99, 
         send_sv_conf_option_request = 0x615E, 
         send_talkring_create_masterring = 0x200, //opcode not found

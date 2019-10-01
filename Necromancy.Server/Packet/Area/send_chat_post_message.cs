@@ -110,8 +110,14 @@ namespace Necromancy.Server.Packet.Area
                 case "rbox":
                     SendRandomBoxNotifyOpen(client);
                     break;
-                case "atak":
-                    SendAttackStart(client);
+                case "trap":
+                    SendTrapEvent(client);
+                    break;
+                case "mess":
+                    SendMessageEvent(client);
+                    break;
+                case "stor":
+                    SendSoulStorageEvent(client);
                     break;
                 case "salv":
                     SendSalvageNotifyBody(client);
@@ -568,13 +574,60 @@ namespace Necromancy.Server.Packet.Area
 
 
         }
-        private void SendAttackStart(NecClient client)
+
+        private void SendTrapEvent(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(0);
-            res.WriteInt32(100);
-            Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res);
-  
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
+
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(10); // Percent
+
+            res2.WriteInt32(0);
+
+            res2.WriteByte(1); // bool  change chest image  1 = gold
+            Router.Send(client, (ushort)AreaPacketId.recv_event_removetrap_begin, res2);
+
+        }
+
+        private void SendMessageEvent(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0);
+            res2.WriteCString("Wake up Samurai we have a city to burn"); // find max size
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message, res2);
+
+        }
+        private void SendSoulStorageEvent(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
+
+            IBuffer res0 = BufferProvider.Provide();
+            res0.WriteInt64(3); // Gold in the storage
+            Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res0);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt64(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res2);
+
+          /*  IBuffer res1 = BufferProvider.Provide();
+            res1.WriteByte(1);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res1); */
+
         }
         private void SendSalvageNotifyBody(NecClient client)
         {
