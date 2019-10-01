@@ -232,6 +232,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shop_identify(this));
             _areaConsumer.AddHandler(new send_shop_sell_check(this));
             _areaConsumer.AddHandler(new send_shop_sell(this));
+            _areaConsumer.AddHandler(new Send_shop_repair(this));
             _areaConsumer.AddHandler(new send_temple_cure_curse(this));
             _areaConsumer.AddHandler(new send_temple_close(this));
             _areaConsumer.AddHandler(new send_auction_search(this));

@@ -745,11 +745,11 @@ namespace Necromancy.Server.Packet.Id
         send_charabody_loot_start2 = 0x58, //opcode not found
         send_charabody_loot_start2_cancel = 0x59, //opcode not found
         send_charabody_loot_start3 = 0x60, //opcode not found
-        send_charabody_salvage_abort = 0x61, //opcode not found
+        send_charabody_salvage_abort = 0x6FFC,
         send_charabody_salvage_request = 0x62, //opcode not found
         send_charabody_salvage_request_cancel = 0x63, //opcode not found
         send_charabody_self_salvage_abort = 0x64, //opcode not found
-        send_charabody_self_salvage_notify_r = 0x65, //opcode not found
+        send_charabody_self_salvage_notify_r = 0xAAF9,
         send_chat_post_message = 0x1132, 
         send_check_job_change = 0x66,//opcode not found
         send_cmd_exec = 0x2E64, 
@@ -804,7 +804,7 @@ namespace Necromancy.Server.Packet.Id
         send_gem_synthesis = 0x110, //opcode not found
         send_get_refusallist = 0x6C17, 
         send_gimmick_access_object = 0xCAD8, 
-        send_help_new_remove = 0x112, //opcode not found
+        send_help_new_remove = 0x12E7,
         send_inherit_start = 0x113, //opcode not found
         send_item_drop = 0xBE26,
         send_item_equip = 0x279F,
@@ -886,7 +886,7 @@ namespace Necromancy.Server.Packet.Id
         send_shop_buy = 0x173, //opcode not found
         send_shop_close = 0x2469,
         send_shop_identify = 0x9C7E,
-        send_shop_repair = 0x176, //opcode not found
+        send_shop_repair = 0xED5C, 
         send_shop_sell = 0xC9F9, 
         send_shop_sell_check = 0xF296 ,
         send_shortcut_request_data = 0x6FC6, 
