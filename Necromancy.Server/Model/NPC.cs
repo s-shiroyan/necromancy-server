@@ -2,6 +2,7 @@ namespace Necromancy.Server.Model
 {
     public class NPC
     {
+        public int mapID { get; set; }
         public int objectID { get; set; }
         public int npcID { get; set; }
         public int serialID { get; set; }

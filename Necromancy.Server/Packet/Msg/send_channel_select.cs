@@ -20,8 +20,8 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);//Error
 
             //sub_4E4210_2341  // impacts map spawn ID
-            res.WriteInt32(2001007);//MapSerialID
-            res.WriteInt32(2001007);//MapID
+            res.WriteInt32(client.Character.MapId);//MapSerialID
+            res.WriteInt32(client.Character.MapId);//MapID
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
 

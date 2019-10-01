@@ -168,16 +168,16 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(69); // changed nothing visably
 
                 //sub_484B00 map ip and connection
-                res.WriteInt32(1001007);//MapSerialID
-                res.WriteInt32(1001007);//MapID
+                res.WriteInt32(client.Character.MapId);//MapSerialID
+                res.WriteInt32(client.Character.MapId);//MapID
                 res.WriteFixedString("127.0.0.1", 65);//IP
                 res.WriteInt16(60002);//Port
             
                 //sub_484420 // Map Spawn coord
-                res.WriteFloat(1600);//X Pos
-                res.WriteFloat(0);//Y Pos
-                res.WriteFloat(0);//Z Pos
-                res.WriteByte(180);//view offset
+                res.WriteFloat(-5516);//X Pos
+                res.WriteFloat(3896);//Y Pos
+                res.WriteFloat(2);//Z Pos
+                res.WriteByte(15);//view offset
 
                 //sub_read_int32 skill point
                 res.WriteInt32(101); // skill point

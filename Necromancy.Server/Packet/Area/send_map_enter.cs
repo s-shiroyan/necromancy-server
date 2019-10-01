@@ -33,16 +33,16 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(client.Character.Id);//Character ID
 
             //sub_481AA0
-            res3.WriteCString("soulname");
+            res3.WriteCString(client.Character.Name);
 
             //sub_481AA0
-            res3.WriteCString("charaname");
+            res3.WriteCString(client.Soul.Name);
 
             //sub_484420
-            res3.WriteFloat(-5516);//X Pos
-            res3.WriteFloat(-3896);//Y Pos
-            res3.WriteFloat(0);//Z Pos
-            res3.WriteByte(180);//view offset
+            res3.WriteFloat(client.Character.X);//X Pos
+            res3.WriteFloat(client.Character.Y);//Y Pos
+            res3.WriteFloat(client.Character.Z);//Z Pos
+            res3.WriteByte(client.Character.viewOffset);//view offset
 
             //sub_read_int32
             res3.WriteInt32(6);
@@ -85,17 +85,13 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(22);  //0 
 
 
-            //int[] EquipId = new int[] {15200601,15200601/*Shield* */,20000101/*Quiver*/,100101,200101,300101,400101,500101,690101/*Cape*/
-            //,30102401,30200103,30300101,30400112,70000201/*talkring*/,160801,260801,360801,460801,10800405/*Weapon*/ };
-
-
             //sub_483420
             numEntries = 19;
             res3.WriteInt32(numEntries);//has to be less than 19
             int x = 0;
             int[] EquipId = new int[19];
 
-            string CharacterSet = "";
+            string CharacterSet = client.Character.Name;
 
             switch (CharacterSet)
             {
@@ -178,11 +174,11 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(4);//race
-            res3.WriteInt32(1);//gender
-            res3.WriteByte(2);//hair
-            res3.WriteByte(3);//face
-            res3.WriteByte(4);//hair color
+            res3.WriteInt32(client.Character.Raceid);//race
+            res3.WriteInt32(client.Character.Sexid);//gender
+            res3.WriteByte(client.Character.HairId);//hair
+            res3.WriteByte(client.Character.FaceId);//face
+            res3.WriteByte(client.Character.HairColorId);//hair color
 
             //sub_483420
             res3.WriteInt32(0); // party id?
@@ -194,7 +190,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(0);//Criminal name icon
 
             //sub_494890
-            res3.WriteByte(1);//Bool Beginner Protection
+            res3.WriteByte(0);//Bool Beginner Protection
 
             //sub_4835E0
             res3.WriteInt32(0);//pose, 1 = sitting, 0 = standing
@@ -212,7 +208,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteByte(255);//no change?
 
             //sub_read_int_32
-            res3.WriteInt32(0);//title; 0 - display title, 1 - no title
+            res3.WriteInt32(1);//title; 0 - display title, 1 - no title
 
             //sub_483580
             res3.WriteInt32(244);

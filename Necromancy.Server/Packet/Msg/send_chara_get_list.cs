@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet.Msg
 
         private void SendNotifyData(NecClient client)
         {
-            byte[] slot = new byte[] {1,3,2 };//3,4}; 
+            byte[] slot = new byte[] {1,3,2,4,5,6,7 };//3,4}; 
 
 
             string[] MyCharacters = new string[] { "Zenkato", "Test1", "Xeno", "Kadred", "Ipa", $"{client.Character.Name}", };
@@ -228,7 +228,7 @@ namespace Necromancy.Server.Packet.Msg
 
                     res.WriteByte(19);//changed nothing visibly
 
-                    res.WriteInt32(1001007);//map location ID
+                    res.WriteInt32(client.Character.MapId);//map location ID
 
                     E++;
                     if (E == 4)
@@ -406,7 +406,7 @@ namespace Necromancy.Server.Packet.Msg
 
                     res.WriteByte(19);//changed nothing visibly
 
-                    res.WriteInt32(1001007);//map location ID
+                    res.WriteInt32(client.Character.MapId);//map location ID
 
                     E++;
                     if (E == 4)
