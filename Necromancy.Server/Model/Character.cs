@@ -55,6 +55,7 @@ namespace Necromancy.Server.Model
         public bool weaponEquipped { get; set; }
         public byte wepEastWestAnim { get; set; }
         public byte wepNorthSouthAnim { get; set; }
+        public byte logoutCanceled { get; set; }
 
         public Character()
         {
@@ -65,6 +66,7 @@ namespace Necromancy.Server.Model
             Level = 0;
             Name = null;
             Created = DateTime.Now;
+            logoutCanceled = 0;
         }
     }
 

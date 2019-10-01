@@ -2,6 +2,8 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -15,76 +17,92 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            int CastingTime = 10;
+            client.Character.logoutCanceled = 0;
+
+            IBuffer res = BufferProvider.Provide();
+            IBuffer res2 = BufferProvider.Provide();
+
+            res.WriteInt32(0);//0 = nothing happens, 1 = logout failed:1
+            Router.Send(client, (ushort)AreaPacketId.recv_logout_start_request_r, res);
+
+
+            res2.WriteInt32(10);
+            Router.Send(client, (ushort)AreaPacketId.recv_logout_start, res2);
+
+            Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith(t1 => { LogOutRequest(client, packet); });
+
+        }
+        private void LogOutRequest(NecClient client, NecPacket packet)
+            {
 
             byte logOutType = packet.Data.ReadByte();
             byte x = packet.Data.ReadByte();
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//0 = nothing happens, 1 = logout failed:1
-            Router.Send(client, (ushort)AreaPacketId.recv_logout_start_request_r, res);
-
             IBuffer res2 = BufferProvider.Provide();
+            IBuffer res3 = BufferProvider.Provide();
+            IBuffer res4 = BufferProvider.Provide();
 
-            if (logOutType == 0x00)
+            if (client.Character.logoutCanceled == 0)
             {
-
-                res.WriteInt32(0);
-
-                Router.Send(client, (ushort)0xD68C, res2);
-            }
-
-            if (logOutType == 0x01)
-            {
-                byte[] byteArr = new byte[8] { 0x00, 0x06, 0xEE, 0x91, 0, 0, 0, 0 };
-
-                IBuffer res3 = BufferProvider.Provide();
-
-                res3.WriteInt32(0);
-
-                res3.SetPositionStart();
-
-                for (int i = 4; i < 8; i++)
+                if (logOutType == 0x00)
                 {
-                    byteArr[i] += res3.ReadByte();
+
+                    res.WriteInt32(0);
+
+                    Router.Send(client, (ushort)0xD68C, res2);
                 }
 
-                client.Session.msgSocket.Send(byteArr);
-
-                System.Threading.Thread.Sleep(4000);
-
-                byte[] byteArrr = new byte[9] { 0x00, 0x07, 0x52, 0x56, 0, 0, 0, 0, 0 };
-
-                IBuffer res4 = BufferProvider.Provide();
-
-                res4.WriteInt32(0);
-                res4.WriteByte(0);
-
-                res4.SetPositionStart();
-
-                for (int i = 4; i < 9; i++)
+                if (logOutType == 0x01)
                 {
-                    byteArrr[i] += res4.ReadByte();
+                    byte[] byteArr = new byte[8] { 0x00, 0x06, 0xEE, 0x91, 0, 0, 0, 0 };
+
+
+                    res3.WriteInt32(0);
+
+                    res3.SetPositionStart();
+
+                    for (int i = 4; i < 8; i++)
+                    {
+                        byteArr[i] += res3.ReadByte();
+                    }
+
+                    client.Session.msgSocket.Send(byteArr);
+
+                    System.Threading.Thread.Sleep(4000);
+
+                    byte[] byteArrr = new byte[9] { 0x00, 0x07, 0x52, 0x56, 0, 0, 0, 0, 0 };
+
+                    res4.WriteInt32(0);
+                    res4.WriteByte(0);
+
+                    res4.SetPositionStart();
+
+                    for (int i = 4; i < 9; i++)
+                    {
+                        byteArrr[i] += res4.ReadByte();
+                    }
+
+                    client.Session.msgSocket.Send(byteArrr);
                 }
 
-                client.Session.msgSocket.Send(byteArrr);
-            }
-
-            if (logOutType == 0x02)
-            {
-                byte[] byteArr = new byte[8] { 0x00, 0x06, 0xC9, 0x01, 0, 0, 0, 0 };
-
-                res2.WriteInt32(0);
-
-                res2.SetPositionStart();
-
-                for (int i = 4; i < 8; i++)
+                if (logOutType == 0x02)
                 {
-                    byteArr[i] += res2.ReadByte();
+                    byte[] byteArr = new byte[8] { 0x00, 0x06, 0xC9, 0x01, 0, 0, 0, 0 };
+
+                    res2.WriteInt32(0);
+
+                    res2.SetPositionStart();
+
+                    for (int i = 4; i < 8; i++)
+                    {
+                        byteArr[i] += res2.ReadByte();
+                    }
+
+                    client.Session.msgSocket.Send(byteArr);
                 }
-
-                client.Session.msgSocket.Send(byteArr);
             }
-
         }
     }
 }
