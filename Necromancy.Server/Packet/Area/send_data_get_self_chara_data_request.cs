@@ -175,7 +175,7 @@ namespace Necromancy.Server.Packet.Area
             
                 //sub_484420 // Map Spawn coord
                 res.WriteFloat(-5516);//X Pos
-                res.WriteFloat(3896);//Y Pos
+                res.WriteFloat(-3896);//Y Pos
                 res.WriteFloat(2);//Z Pos
                 res.WriteByte(15);//view offset
 

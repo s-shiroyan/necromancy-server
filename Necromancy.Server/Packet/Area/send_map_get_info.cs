@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -37,26 +38,40 @@ namespace Necromancy.Server.Packet.Area
         private void SendDataNotifyNpcData(NecClient client,int TestInt)
         {
             int x = -1;
-            //IBuffer res2 = BufferProvider.Provide();
+            int parsedStringToNumber;
 
-            foreach (int y in NPCModelID)
-            {
+            
+            string[][] jaggedArray = FileReader.GameFileReader(client);
+            foreach (string[] ary1 in jaggedArray)
+            {                
                 x++;
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteInt32(x+44444444);             // NPC ID (object id)
-
-                res2.WriteInt32(NPCSerialID[x]) ;      // NPC Serial ID from "npc.csv"
+                
+                //Not All SerialIDs in CSV are numeric.  catching the strings and seting a random ID.
+                bool success = Int32.TryParse(ary1[1], out parsedStringToNumber);
+                if (success)
+                {
+                    res2.WriteInt32(parsedStringToNumber);             // NPC ID (object id)
+                    res2.WriteInt32(parsedStringToNumber);      // NPC Serial ID from "npc.csv"
+                }
+                else
+                {
+                    int randomSerialID = Util.GetRandomNumber(90000010, 90000099);
+                    res2.WriteInt32(randomSerialID);             // NPC ID (object id)
+                    res2.WriteInt32(randomSerialID);      // NPC Serial ID from "npc.csv"
+                }
+                             
 
                 res2.WriteByte(0);              // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
 
-                res2.WriteCString($"NPC Name : {x}");//Name
+                res2.WriteCString(ary1[6]);//Name
 
-                res2.WriteCString($"NPC Title : {x}");//Title
+                res2.WriteCString(ary1[7]);//Title
 
-                res2.WriteFloat(NPCX[x]);//X Pos
-                res2.WriteFloat(NPCY[x]);//Y Pos
-                res2.WriteFloat(NPCZ[x]);//Z Pos
-                res2.WriteByte(NPCViewAngle[x]);//view offset
+                res2.WriteFloat(Int32.Parse(ary1[3]));//X Pos
+                res2.WriteFloat(Int32.Parse(ary1[4]));//Y Pos
+                res2.WriteFloat(Int32.Parse(ary1[5]));//Z Pos
+                res2.WriteByte((byte)Util.GetRandomNumber(1,180));//view offset
 
                 res2.WriteInt32(19);
 
@@ -135,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteInt32(3);
                 res2.WriteInt32(3);
 
-                res2.WriteInt32(NPCModelID[x]);   //NPC Model from file "model_common.csv"
+                res2.WriteInt32(Int32.Parse(ary1[8]));   //NPC Model from file "model_common.csv"
                 
 
 
@@ -151,7 +166,7 @@ namespace Necromancy.Server.Packet.Area
 
                 res2.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
 
-                res2.WriteInt32(11111110);
+                res2.WriteInt32(Int32.Parse(ary1[2]));
                 res2.WriteFloat(1000);
                 res2.WriteFloat(1000);
                 res2.WriteFloat(1000);

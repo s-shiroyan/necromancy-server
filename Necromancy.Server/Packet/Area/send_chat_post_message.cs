@@ -198,6 +198,9 @@ namespace Necromancy.Server.Packet.Area
                 case "logout":
                     LogOut(client);
                     break;
+                case "ReadFile":
+                    FileReader.GameFileReader(client);
+                    break;
                 default:
                     SplitMessage[1] = "unrecognized";
                     //Message = $"Unrecognized command '{SplitMessage[1]}' ";
