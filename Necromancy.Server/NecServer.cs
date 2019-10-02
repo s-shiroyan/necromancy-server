@@ -151,7 +151,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_map_entry(this));
             _areaConsumer.AddHandler(new send_map_get_info(this));
             _areaConsumer.AddHandler(new send_map_enter(this));
-            //_areaConsumer.AddHandler(new send_sv_conf_option_change(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
             _areaConsumer.AddHandler(new send_map_change_force_r(this));
             //_areaConsumer.AddHandler(new send_shortcut_request_data(this));
             //_areaConsumer.AddHandler(new send_skill_request_info(this));
@@ -232,6 +232,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shop_identify(this));
             _areaConsumer.AddHandler(new send_shop_sell_check(this));
             _areaConsumer.AddHandler(new send_shop_sell(this));
+            _areaConsumer.AddHandler(new Send_shop_repair(this));
             _areaConsumer.AddHandler(new send_temple_cure_curse(this));
             _areaConsumer.AddHandler(new send_temple_close(this));
             _areaConsumer.AddHandler(new send_auction_search(this));
@@ -240,6 +241,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
             _areaConsumer.AddHandler(new send_auction_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
+            _areaConsumer.AddHandler(new send_storage_deposit_money(this));
+            _areaConsumer.AddHandler(new send_storage_deposit_item(this));
+            _areaConsumer.AddHandler(new send_storage_draw_money(this));
             _areaConsumer.AddHandler(new send_wanted_jail_close(this));
             _areaConsumer.AddHandler(new send_wanted_jail_draw_point(this));
             _areaConsumer.AddHandler(new send_wanted_jail_payment(this));
@@ -254,6 +258,12 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_item_equip(this));
             _areaConsumer.AddHandler(new send_item_drop(this));
             _areaConsumer.AddHandler(new send_item_sort(this));
+            _areaConsumer.AddHandler(new send_quest_abort(this));
+            _areaConsumer.AddHandler(new send_quest_check_target(this));
+            _areaConsumer.AddHandler(new send_gem_close(this));
+            _areaConsumer.AddHandler(new send_event_removetrap_select(this));
+            _areaConsumer.AddHandler(new send_event_removetrap_end(this));
+            _areaConsumer.AddHandler(new send_event_tresurebox_end(this));
         }
     }
 }
