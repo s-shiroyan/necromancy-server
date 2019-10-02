@@ -43,7 +43,6 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
             IBuffer res3 = BufferProvider.Provide();
             IBuffer res4 = BufferProvider.Provide();
-            IBuffer res5 = BufferProvider.Provide();
 
             if (client.Character.logoutCanceled == 0)
             {

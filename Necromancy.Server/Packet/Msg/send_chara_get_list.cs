@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(0xFFFFFFFF);
+            res.WriteInt32(1);
             Router.Send(client, (ushort)MsgPacketId.recv_chara_get_list_r, res);
 
 
@@ -30,10 +30,10 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyDataComplete(NecClient client)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteByte(0xFF);
-            res2.WriteInt32(0xFFFFFFFF);
-            res2.WriteInt32(0xFFF);
-            res2.WriteInt32(0xFFFFFFFF);
+            res2.WriteByte(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
+            res2.WriteInt32(1);
             Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data_complete, res2);
         }
 
@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet.Msg
 
         private void SendNotifyData(NecClient client)
         {
-            byte[] slot = new byte[] {1,3,2,5,4}; 
+            byte[] slot = new byte[] {1,3,2 };//3,4}; 
 
 
             string[] MyCharacters = new string[] { "Zenkato", "Test1", "Xeno", "Kadred", "Ipa", $"{client.Character.Name}", };
@@ -231,7 +231,7 @@ namespace Necromancy.Server.Packet.Msg
                     res.WriteInt32(1001007);//map location ID
 
                     E++;
-                    if (E == 6)
+                    if (E == 4)
                         E = 0;
 
                     Router.Send(client, (ushort)MsgPacketId.recv_chara_notify_data, res);//SOE
