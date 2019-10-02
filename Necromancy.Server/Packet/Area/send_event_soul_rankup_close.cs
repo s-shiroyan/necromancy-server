@@ -6,14 +6,14 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class Send_event_soul_storage_close : Handler
+    public class send_event_soul_rankup_close : Handler
     {
-        public Send_event_soul_storage_close(NecServer server) : base(server)
+        public send_event_soul_rankup_close(NecServer server) : base(server)
         {
         }
 
 
-        public override ushort Id => (ushort)AreaPacketId.send_event_soul_storage_close;
+        public override ushort Id => (ushort)AreaPacketId.send_event_soul_rankup_close;
 
         public override void Handle(NecClient client, NecPacket packet)
         {

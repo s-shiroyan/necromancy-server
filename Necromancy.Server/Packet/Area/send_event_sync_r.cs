@@ -6,22 +6,22 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class Send_event_soul_storage_close : Handler
+    public class send_event_sync_r : Handler
     {
-        public Send_event_soul_storage_close(NecServer server) : base(server)
+        public send_event_sync_r(NecServer server) : base(server)
         {
         }
 
 
-        public override ushort Id => (ushort)AreaPacketId.send_event_soul_storage_close;
+        public override ushort Id => (ushort)AreaPacketId.send_event_sync_r;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_sync, res);
         }
+
 
     }
 }
