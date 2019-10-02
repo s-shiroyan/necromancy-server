@@ -26,9 +26,9 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt16(60002);//Port
 
             //sub_484420   //  does not impact map spawn coord
-            res.WriteFloat(0);//X Pos
-            res.WriteFloat(-8600);//Y Pos
-            res.WriteFloat(15000);//Z Pos
+            res.WriteFloat(client.Character.X);//X Pos
+            res.WriteFloat(client.Character.Y);//Y Pos
+            res.WriteFloat(client.Character.Z);//Z Pos
             res.WriteByte(1);//View offset
             //
 

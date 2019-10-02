@@ -31,15 +31,16 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res2 = BufferProvider.Provide();
 
-            res2.WriteInt32(0);
-            res2.WriteInt32(0);
+            res2.WriteInt32(0); // error check
+            res2.WriteInt32(0); // error check
 
             //sub_494c50
             res2.WriteInt32(128);
             res2.WriteInt32(2);
             res2.WriteInt32(3);
             res2.WriteInt16(4);
-            res2.WriteByte(69);
+                //sub_4834C0
+                res2.WriteByte(69);
 
             //sub_494B90 - for loop
           for(int i =0; i < 0x80; i++)  {

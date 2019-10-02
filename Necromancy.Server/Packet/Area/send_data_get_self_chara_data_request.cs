@@ -172,11 +172,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(client.Character.MapId);//MapID
                 res.WriteFixedString("127.0.0.1", 65);//IP
                 res.WriteInt16(60002);//Port
-            
+
                 //sub_484420 // Map Spawn coord
-                res.WriteFloat(-5516);//X Pos
-                res.WriteFloat(-3896);//Y Pos
-                res.WriteFloat(2);//Z Pos
+                res.WriteFloat(client.Character.X);//X Pos
+                res.WriteFloat(client.Character.Y);//Y Pos
+                res.WriteFloat(client.Character.Z);//Z Pos
                 res.WriteByte(15);//view offset
 
                 //sub_read_int32 skill point

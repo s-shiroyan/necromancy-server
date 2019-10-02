@@ -68,7 +68,11 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
             logoutCanceled = 0;
-            MapId = 1001007;
+            //Settings for Map Entry until settings are databased.
+            MapId = 1001001;
+            X = 1608;
+            Y = -3958;
+            Z = -19;
         }
     }
 

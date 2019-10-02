@@ -260,8 +260,8 @@ namespace Necromancy.Server.Packet.Area
 
         private void AdminConsoleNPC(NecClient client, int ModelID)
         {
-            if (ModelID <= 1) { ModelID = NPCModelID[Util.GetRandomNumber(1, 10)]; }
-
+            if (ModelID <= 1) { ModelID = NPCModelID[Util.GetRandomNumber(1, 10)]; } // pick random model if you don't specify an ID.
+            int numEntries = 0; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteInt32(NPCModelID[Util.GetRandomNumber(1, 10)]);   // NPC ID (object id)
 
@@ -278,34 +278,15 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteFloat(client.Character.Z);//Z Pos
             res3.WriteByte(client.Character.viewOffset);//view offset
 
-            res3.WriteInt32(19);
+            res3.WriteInt32(numEntries); // # Items to Equip
 
-            //this is an x19 loop but i broke it up
-            res3.WriteInt32(24);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
+            for (int i = 0; i < numEntries; i++)
 
-            res3.WriteInt32(19);
+            {
+                res3.WriteInt32(24);
+            }
 
-
-            int numEntries = 19;
-
+            res3.WriteInt32(numEntries); // # Items to Equip
 
             for (int i = 0; i < numEntries; i++)
 
@@ -332,28 +313,14 @@ namespace Necromancy.Server.Packet.Area
 
             }
 
-            res3.WriteInt32(19);
+            res3.WriteInt32(numEntries); // # Items to Equip
 
-            //this is an x19 loop but i broke it up
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
+            for (int i = 0; i < numEntries; i++) // Item type bitmask per slot
+
+            {
+                res3.WriteInt32(1);
+
+            }
 
             res3.WriteInt32(ModelID);   //NPC Model from file "model_common.csv"
 
@@ -1257,15 +1224,17 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);
-            res.WriteInt32(MapID);
+            //sub_4E4210_2341  // impacts map spawn ID
+            res.WriteInt32(client.Character.MapId);//MapSerialID
+            res.WriteInt32(client.Character.MapId);//MapID
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
 
-            res.WriteFloat(100);//x coord
-            res.WriteFloat(100);//y coord
-            res.WriteFloat(100);//z coord
-            res.WriteByte(1);//view offset maybe?
+            //sub_484420   //  does not impact map spawn coord
+            res.WriteFloat(client.Character.X);//X Pos
+            res.WriteFloat(client.Character.Y);//Y Pos
+            res.WriteFloat(client.Character.Z);//Z Pos
+            res.WriteByte(1);//View offset
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res);
 

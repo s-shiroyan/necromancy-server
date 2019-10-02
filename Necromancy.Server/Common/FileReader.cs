@@ -17,21 +17,22 @@ namespace Necromancy.Server.Common
             string[] lines = System.IO.File.ReadAllLines(newPath/*,shiftJis*/);
             int matchCount = 0;
             int lastMatchRow = 0;
-            for (int i = 0; i < lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++) 
             {
                 if (lines[i].StartsWith($"{client.Character.MapId}") || (lines[i].StartsWith($"#{client.Character.MapId}")))
                 {
                     matchCount++;
-                    lastMatchRow = i;
+                    lastMatchRow = i+1; 
                 }
             }
             Console.WriteLine($"MatchCount : {matchCount}");
             Console.WriteLine($"lastMatchRow : {lastMatchRow}");
             string[][] jaggedArray = new string[matchCount][];
-            int rowStop = lastMatchRow - matchCount;
+            int rowStop = lastMatchRow - matchCount; 
+            Console.WriteLine($"lastMatchRow : {rowStop}");
             for (int i = rowStop; i < lastMatchRow; i++)
             {
-                if (lines[i].StartsWith("#"))
+                if (lines[i - rowStop].StartsWith("#"))
                 {
                     //# is commented out to not load.  populating space with empty string
                     string[] npcRowStringArray = new string[] { "0", "0", "0", "0", "0", "0", "0", "0", "0" };
@@ -39,20 +40,20 @@ namespace Necromancy.Server.Common
                 }
                 else
                 {
-                    string[] npcRowStringArray = lines[i].Split(',');
+                    string[] npcRowStringArray = lines[i - rowStop].Split(',');
                     jaggedArray[i - rowStop] = npcRowStringArray;
                 }
 
             }
             //For debugging
-            foreach (string[] ary1 in jaggedArray)
+           /* foreach (string[] ary1 in jaggedArray)
             {
                 foreach (string ary2 in ary1)
                 {
-                    //Console.WriteLine(ary2);
+                    Console.WriteLine(ary2);
                 }
             }
-
+            */
             return jaggedArray;
 
 
