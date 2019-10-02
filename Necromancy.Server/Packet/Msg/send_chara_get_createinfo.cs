@@ -60,11 +60,11 @@ namespace Necromancy.Server.Packet.Msg
             entries = 8;//num of entries for our group of models
             res.WriteInt32(entries); 
 
-            {
-                wo_4E3700_Elf_Female(res);//Holds Female Elf model details
+            {  
                 wo_4E3700_Human_Male(res);//Holds Male Human model details
                 wo_4E3700_Human_Female(res);//Holds Female Human model details
                 wo_4E3700_Elf_Male(res);//Holds Male Elf model details
+                wo_4E3700_Elf_Female(res);//Holds Female Elf model details
                 wo_4E3700_Dwarf_Male(res);//Holds Male Dwarf model details
                 wo_4E3700_Gnome_Female(res);//Holds Female Gnome model details
                 wo_4E3700_Prokul_Male(res);//Holds Male Porkul model details
@@ -73,16 +73,20 @@ namespace Necromancy.Server.Packet.Msg
 
 
             //Read 4 byte (004E92E8) cmp,140(0x8C) -> JA (320)
-            entries = 2;
+            entries = 32;
             res.WriteInt32(entries);
+            
 
+                wo_4E37F0_HumanMaleClassGear(res);
+                wo_4E37F0_HumanFemaleClassGear(res);
+                wo_4E37F0_ElfMaleClassGear(res);
+                wo_4E37F0_ElfFemaleClassGear(res);
+                wo_4E37F0_DwarfMaleClassGear(res);
+                wo_4E37F0_GnomeFemaleClassGear(res);
+                wo_4E37F0_PorkulMaleClassGear(res);
+                wo_4E37F0_PorkulFemaleClassGear(res);
+            
 
-            for (int i = 0; i < entries; i++)
-            {
-                wo_4E37F0(res);
-            }
-
-            //4bytes cmp, E ( < 14) -> JA
             entries = 4;
             res.WriteInt32(entries);//Specifies the number of Classes 4 being our max
 
@@ -630,46 +634,914 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(19); // how many items to display
         }
 
-        private void wo_4E37F0(IBuffer res)
+        private void wo_4E37F0_HumanMaleClassGear(IBuffer res)
         {
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            for (int i = 0; i < 19; i++)
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
             {
-                res.WriteInt32(0);
-            }
+                
+                res.WriteInt32(0);//race
+                res.WriteInt32(0);//gender
+                res.WriteInt32(classSlot);//class
 
-            for (int i = 0; i < 19; i++)
+                int[] WeaponContainer0 = new int[] { 3 , 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4 , 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250101, 550101, 450101, 350101, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250101, 550101, 450101, 350101, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250101, 550101, 450101, 350101, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250101, 550101, 450101, 350101, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+        private void wo_4E37F0_HumanFemaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
             {
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
 
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteInt32(0);//race
+                res.WriteInt32(1);//gender
+                res.WriteInt32(classSlot);//class
 
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);//bool
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0); ;
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250201, 550201, 450201, 350201, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250201, 550201, 450201, 350201, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250201, 550201, 450201, 350201, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250201, 550201, 450201, 350201, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
             }
+        }
 
 
-            for (int i = 0; i < 19; i++)
+        private void wo_4E37F0_ElfMaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
             {
-                res.WriteInt32(0);
-            }
 
-            res.WriteByte(19); // how many items to display
+                res.WriteInt32(1);//race
+                res.WriteInt32(0);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250301, 550301, 450301, 350301, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250301, 550301, 450301, 350301, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250301, 550301, 450301, 350301, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250301, 550301, 450301, 350301, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+
+        private void wo_4E37F0_ElfFemaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
+            {
+
+                res.WriteInt32(1);//race
+                res.WriteInt32(1);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250401, 550401, 450401, 350401, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250401, 550401, 450401, 350401, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250401, 550401, 450401, 350401, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250401, 550401, 450401, 350401, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+
+        private void wo_4E37F0_DwarfMaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
+            {
+
+                res.WriteInt32(2);//race
+                res.WriteInt32(0);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250501, 550501, 450501, 350501, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250501, 550501, 450501, 350501, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250501, 550501, 450501, 350501, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250501, 550501, 450501, 350501, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+
+        private void wo_4E37F0_GnomeFemaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
+            {
+
+                res.WriteInt32(4);//race
+                res.WriteInt32(1);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 251001, 551001, 451001, 351001, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 251001, 551001, 451001, 351001, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 251001, 551001, 451001, 351001, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 251001, 551001, 451001, 351001, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+
+        private void wo_4E37F0_PorkulMaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
+            {
+
+                res.WriteInt32(3);//race
+                res.WriteInt32(0);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250701, 550701, 450701, 350701, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250701, 550701, 450701, 350701, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250701, 550701, 450701, 350701, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250701, 550701, 450701, 350701, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
+        }
+
+
+        private void wo_4E37F0_PorkulFemaleClassGear(IBuffer res)
+        {
+            int classSlot = 0;
+            for (int load = 0; load < 4; load++)
+            {
+
+                res.WriteInt32(3);//race
+                res.WriteInt32(1);//gender
+                res.WriteInt32(classSlot);//class
+
+                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21 };
+
+                int x = 0;
+                int xx = 0;
+                int xxx = 0;
+                if (classSlot == 0)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer0[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 1)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer1[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 2)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer2[x]);
+
+                        x++;
+                    }
+                }
+                if (classSlot == 3)
+                {
+                    for (int i = 0; i < 19; i++)
+                    {
+                        res.WriteInt32(WeaponContainer3[x]);
+
+                        x++;
+                    }
+                }
+                int[] EQC0 = new int[] { 10300101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250801, 550801, 450801, 350801, 120101, 0, 0 };
+                int[] EQC1 = new int[] { 10200101, 15000101, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250801, 550801, 450801, 350801, 120101, 0, 0 };
+                int[] EQC2 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250801, 550801, 450801, 350801, 120101, 0, 0 };
+                int[] EQC3 = new int[] { 11300101, 0, 0, 120101, 0, 0, 0, 0, 0, 0, 0, 0, 250801, 550801, 450801, 350801, 120101, 0, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    if (classSlot == 0)
+                    {
+                        res.WriteInt32(EQC0[xx]);
+                    }
+                    if (classSlot == 1)
+                    {
+                        res.WriteInt32(EQC1[xx]);
+                    }
+                    if (classSlot == 2)
+                    {
+                        res.WriteInt32(EQC2[xx]);
+                    }
+                    if (classSlot == 3)
+                    {
+                        res.WriteInt32(EQC3[xx]);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);//bool
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+
+                    xx++;
+                }
+
+                int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0 };
+
+                for (int i = 0; i < 19; i++)
+                {
+                    res.WriteInt32(SoltContainer[xxx]);
+
+                    xxx++;
+                }
+
+                res.WriteByte(19); // how many items to display
+
+                classSlot++;
+            }
         }
 
         private void wo_4E0970_Fighter(IBuffer res)

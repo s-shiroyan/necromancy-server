@@ -17,8 +17,8 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(1001001);
-            res.WriteInt32(1001001);
+            res.WriteInt32(client.Character.MapId);
+            res.WriteInt32(client.Character.MapId);
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
 

@@ -56,6 +56,7 @@ namespace Necromancy.Server.Model
         public byte wepEastWestAnim { get; set; }
         public byte wepNorthSouthAnim { get; set; }
         public byte logoutCanceled { get; set; }
+        public int MapId { get; set; }
 
         public Character()
         {
@@ -67,6 +68,7 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
             logoutCanceled = 0;
+            MapId = 1001007;
         }
     }
 
