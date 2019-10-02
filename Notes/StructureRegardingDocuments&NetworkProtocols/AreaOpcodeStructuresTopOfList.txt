@@ -815,8 +815,8 @@ recv_cash_shop_fitting_unequip_r = 0x1C20,
 recv_skill_exec_r = 0x1C6C, 
             
             res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
 
 recv_cash_shop_get_url_commerce_r = 0x1D49, 
             
@@ -1891,3 +1891,79 @@ recv_0xFA0B = 0xFA0B, //Goes to Error
 				
 recv_0xFB79 = 0xFB79, //Goes to Error					
 				res.WriteInt32(0);					
+
+///////////////////////////////////////Updated 9/27/19				
+recv_0x692A = 0x692A; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);		
+
+recv_0x6B6A = 0x6B6A; //Goes to 016711D6 | 68 03494D00       | push wizardryonline_patched.4D4903                                          |
+            res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+			res.WriteByte(1);
+
+            res.WriteByte(1);	
+
+recv_0x735E = 0x735E; //Goes to Error
+            res.WriteInt32(0);			
+			
+recv_0x746F = 0x746F; //Goes to Error  // 73D1 + 9E
+            res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteByte(1);	
+
+recv_0x755C = 0x755C; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);	
+
+recv_0x7697 = 0x7697; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+			
+recv_0x7B86 = 0x7B86; //Goes to Error // 7B5D + 29
+            res.WriteInt32(0);
+            res.WriteByte(1);
+
+recv_0x8066 = 0x8066; // No Structure.  Goes to 004D464D | 68 D84CD600       | push wizardryonline_patched.D64CD8  | D64CD8:L"<area> - RecvException. func = %d, code = %d\n"
+			
+recv_0x825D = 0x825D; // No Structure.
+
+recv_0x97D9 = 0x97D9 //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+			
+recv_0x9899 = 0x9899 // No Structure.  
+
+recv_0x9CA1 = 0x9CA1 //Goes to Error
+            res.WriteInt32(0);
+            res.WriteCString(""); //0x31
+            res.WriteCString(""); //0x5B
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+			
+recv_0xA8BB = 0xA8BB // Goes to Error 
+            res.WriteInt32(0);
+            for (int i = 0; i < 5; i++)
+            {
+              
+                res.WriteFixedString("", 0x31);
+                res.WriteFixedString("", 0x25);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0);
+            }
+
+            res.WriteFixedString("", 0x31);
+            res.WriteFixedString("", 0x25);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);			

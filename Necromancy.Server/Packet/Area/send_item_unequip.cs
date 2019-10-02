@@ -19,7 +19,15 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);
+            res.WriteInt32(00); //error check. 0 to work
+
+            /*
+            ERR_UNEQUIP 1
+            ERR_UNEQUIP - 203
+            ERR_UNEQUIP - 201
+            ERR_UNEQUIP - 208
+            ERR_UNEQUIP GENERIC
+            */
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res);
         }

@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Msg
             // TODO initialize character from database
             session.Character = new Character();
             session.Character.Id = Util.GetRandomNumber(1, 999);
-            session.Character.SoulId = Util.GetRandomNumber(1, 999);
+            session.Character.SoulId = session.Account.Id; // TO DO  .  Query Soul ID by Account ID.    Account ID == Soul ID for now....
             session.Character.AccountId = session.Account.Id;
             session.msgSocket = client.Socket;
 

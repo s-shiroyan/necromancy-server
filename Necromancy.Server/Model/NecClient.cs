@@ -21,9 +21,6 @@ namespace Necromancy.Server.Model
             UpdateIdentity();
         }
 
-
-        public NPC NPC { get; set; }
-
         #region Session
 
         public Session Session { get; set; }
@@ -51,6 +48,7 @@ namespace Necromancy.Server.Model
             get => Session.Channel;
             set => Session.Channel = value;
         }
+
 
         public Map Map
         {

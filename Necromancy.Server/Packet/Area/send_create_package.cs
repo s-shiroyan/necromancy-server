@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Area
             //recv_package_notify_add = 0x556E,
 
             res.WriteInt32(0);//Failed to send message error if not 0
-            res.WriteInt32(client.NPC.objectID);//Object ID
+            res.WriteInt32(Util.GetRandomNumber(100,200));//Object ID
             res.WriteFixedString("unknown", 0x31);//Soul name of sender
             res.WriteFixedString("master", 0x5B);//Character name but of what?
             res.WriteFixedString($"{title}", 0x5B);//Title
@@ -78,7 +78,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt64(money);//Transfered money
 
             i += 2;
-            client.NPC.objectID++;
+            
 
             Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res);
         }

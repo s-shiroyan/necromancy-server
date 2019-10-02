@@ -26,14 +26,21 @@ namespace Necromancy.Server.Packet.Area
             SendCharaPoseNotify(client);
         }
 
+       
+
         private void SendCharaPoseNotify(NecClient client)
         {
-            IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);//Character ID
-            res.WriteInt32(client.Character.charaPose); //Character pose
+            
+                IBuffer res = BufferProvider.Provide();
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_pose_notify, res, client);
+                res.WriteInt32(client.Character.Id);//Character ID
+                res.WriteInt32(client.Character.charaPose); //Character pose
+
+                
+
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_pose_notify, res, client);
+            
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Necromancy.Server.Packet.Area
             bool loot = false;
             int objectID = packet.Data.ReadInt32();
             int operation = packet.Data.ReadInt32();
+            int errcode = 0;
 
             IBuffer res = BufferProvider.Provide();
 
@@ -33,8 +34,14 @@ namespace Necromancy.Server.Packet.Area
             else if (operation == 0x2)//reply to message
                 res.WriteInt32(0);
 
-            //res.WriteInt32(0);//Not sure on this,  0 is constant updates, 1 is "you have unopened mail", 2 is "no mail to delete"
-            //3 is "you have %d unreceived mails. pleas check your inbox.", 4+ is "failed to send mail",
+            res.WriteInt32(errcode);//Error message Call. 0 for success. see additional options in Sys_msg.csv
+                /*
+                1	You have unopened mails	SYSTEM_WARNING
+                2	No mails to delete	SYSTEM_WARNING
+                3	You have %d unreceived mails. Please check your inbox.	SYSTEM_WARNING
+                -2414	Mail title includes banned words	SYSTEM_WARNING
+
+                */
 
             Router.Send(client, (ushort) AreaPacketId.recv_select_package_update_r, res);
 
@@ -48,7 +55,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendLootAccessObject(NecClient client, int objectID)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(objectID);
+            res.WriteInt32(0); //ObjectID or error check
 
             Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
         }

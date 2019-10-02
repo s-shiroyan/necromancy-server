@@ -8,7 +8,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
-
+        recv_0x1D09 = 0x1D09,
         recv_0x10DA = 0x10DA,
         recv_0x1489 = 0x1489,
         recv_0x166B = 0x166B,
@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x755C = 0x755C,
         recv_0x7697 = 0x7697,
         recv_0x7B86 = 0x7B86,
-        recv_0x8066 = 0x8066,
+        recv_0x8066 = 0x8066, //:L"<area> - RecvException. func = %d, code = %d\n"
         recv_0x825D = 0x825D,
         recv_0x8364 = 0x8364,
         recv_0x8487 = 0x8487,
@@ -62,9 +62,11 @@ namespace Necromancy.Server.Packet.Id
         recv_0xDA4A = 0xDA4A,
         recv_0xEE18 = 0xEE18,
         recv_0xEEB7 = 0xEEB7,
-        recv_0xF212 = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit
+        recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit : Confirmed Recv String
         recv_0xFA0B = 0xFA0B,
         recv_0xFB79 = 0xFB79,
+        recv_0xE8B9 = 0xE8B9,
+        recv_0x1FC1 = 0x1FC1,
         recv_auction_bid_r = 0x3F38,
         recv_auction_cancel_bid_r = 0xA0FC,
         recv_auction_cancel_exhibit_r = 0xFC28,
@@ -85,7 +87,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_exit_r = 0xDA5C,
         recv_base_ping_r = 0xD2D6,
         recv_battle_attack_cancel_r = 0x9666,
-        recv_battle_attack_exec_r = 0x0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
+        recv_battle_attack_exec_r = 0xF1A0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
         recv_battle_attack_pose = 0x0, //todo
@@ -101,6 +103,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_guard_end_self = 0x5E48,
         recv_battle_guard_start_r = 0xADC8,
         recv_battle_guard_start_self = 0x1E96,
+        recv_battle_life_notify = 0x01111, // opcode not found
         recv_battle_release_attack_pose = 0x0, //todo
         recv_battle_release_attack_pose_r = 0xE990,
         recv_battle_release_attack_pose_self = 0x4EF4,
@@ -539,6 +542,7 @@ namespace Necromancy.Server.Packet.Id
         recv_refusallist_add_user_r = 0x22E7,
         recv_refusallist_remove_user_r = 0x9A44,
         recv_return_home_request_exec_r = 0xFCC0,
+        recv_revive_init_r = 0xEF4E,
         recv_revive_execute_r = 0x621A,
         recv_select_package_update_r = 0xD170,
         recv_self_action_cost = 0x8CD,
@@ -691,11 +695,11 @@ namespace Necromancy.Server.Packet.Id
 
         // Send OP Codes - ordered by op code
 
-        send_auction_bid = 0x28, //opcode not found
-        send_auction_cancel_bid = 0x29, //opcode not found
-        send_auction_cancel_exhibit = 0x30, //opcode not found
-        send_auction_close = 0x31, //opcode not found
-        send_auction_exhibit = 0x32, //opcode not found
+        send_auction_bid = 0x63BC, 
+        send_auction_cancel_bid = 0xBC65,
+        send_auction_cancel_exhibit = 0x375B,
+        send_auction_close = 0xE732,
+        send_auction_exhibit = 0xED52, 
         send_auction_re_exhibit = 0x33, //opcode not found
         send_auction_receive_gold = 0x34, //opcode not found
         send_auction_receive_item = 0x35, //opcode not found
@@ -704,13 +708,14 @@ namespace Necromancy.Server.Packet.Id
         send_base_enter = 0xAE43, 
         send_battle_attack_exec = 0xC38D, 
         send_battle_attack_exec_direct = 0x37, //opcode not found
-        send_battle_attack_next = 0x38, //opcode not found
+        send_battle_attack_next = 0x9D74, 
         send_battle_attack_pose = 0xC137, 
-        send_battle_attack_start = 0x6A72, 
+        send_movement_info = 0x6A72, // this is a custom string 
+        send_battle_attack_start = 0x3B2D,
         send_battle_charge_end = 0x39, //opcode not found
         send_battle_charge_start = 0x40, //opcode not found
-        send_battle_guard_end = 0x41, //opcode not found
-        send_battle_guard_start = 0x42, //opcode not found 
+        send_battle_guard_end = 0xD2E7, 
+        send_battle_guard_start = 0x4362, 
         send_battle_release_attack_pose = 0x26BE, 
         send_blacklist_clear = 0xB742, 
         send_blacklist_close = 0xC780, 
@@ -740,11 +745,11 @@ namespace Necromancy.Server.Packet.Id
         send_charabody_loot_start2 = 0x58, //opcode not found
         send_charabody_loot_start2_cancel = 0x59, //opcode not found
         send_charabody_loot_start3 = 0x60, //opcode not found
-        send_charabody_salvage_abort = 0x61, //opcode not found
+        send_charabody_salvage_abort = 0x6FFC,
         send_charabody_salvage_request = 0x62, //opcode not found
         send_charabody_salvage_request_cancel = 0x63, //opcode not found
         send_charabody_self_salvage_abort = 0x64, //opcode not found
-        send_charabody_self_salvage_notify_r = 0x65, //opcode not found
+        send_charabody_self_salvage_notify_r = 0xAAF9,
         send_chat_post_message = 0x1132, 
         send_check_job_change = 0x66,//opcode not found
         send_cmd_exec = 0x2E64, 
@@ -765,8 +770,8 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_report_list_end = 0x76, //opcode not found
         send_event_quest_report_r = 0x77, //opcode not found
         send_event_quest_report_select = 0x78, //opcode not found
-        send_event_removetrap_end = 0x79, //opcode not found
-        send_event_removetrap_select = 0x80, //opcode not found
+        send_event_removetrap_end = 0x87CD,
+        send_event_removetrap_select = 0x4CE9,
         send_event_removetrap_skill = 0x81, //opcode not found
         send_event_request_int_r = 0x82, //opcode not found
         send_event_script_play_r = 0x83, //opcode not found
@@ -774,10 +779,10 @@ namespace Necromancy.Server.Packet.Id
         send_event_select_exec_r = 0x85, //opcode not found
         send_event_select_map_and_channel_r = 0x86, //opcode not found
         send_event_soul_rankup_close = 0x87, //opcode not found
-        send_event_soul_storage_close = 0x88, //opcode not found
+        send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x89, //opcode not found
         send_event_system_message_timer_r = 0x90, //opcode not found
-        send_event_tresurebox_end = 0x91, //opcode not found
+        send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found
         send_event_union_storage_close = 0x93, //opcode not found
         send_forge_check = 0x94, //opcode not found
@@ -790,7 +795,7 @@ namespace Necromancy.Server.Packet.Id
         send_gem_cancel_piece = 0x101, //opcode not found
         send_gem_cancel_support_item = 0x102, //opcode not found
         send_gem_cancel_synthesis = 0x103, //opcode not found
-        send_gem_close = 0x104, //opcode not found
+        send_gem_close = 0x483D,
         send_gem_rebuild = 0x105, //opcode not found
         send_gem_set = 0x106, //opcode not found
         send_gem_set_piece = 0x107, //opcode not found
@@ -798,8 +803,8 @@ namespace Necromancy.Server.Packet.Id
         send_gem_set_synthesis = 0x109, //opcode not found
         send_gem_synthesis = 0x110, //opcode not found
         send_get_refusallist = 0x6C17, 
-        send_gimmick_access_object = 0x111, //opcode not found
-        send_help_new_remove = 0x112, //opcode not found
+        send_gimmick_access_object = 0xCAD8, 
+        send_help_new_remove = 0x12E7,
         send_inherit_start = 0x113, //opcode not found
         send_item_drop = 0xBE26,
         send_item_equip = 0x279F,
@@ -845,13 +850,13 @@ namespace Necromancy.Server.Packet.Id
         send_party_kick = 0x144, //opcode not found
         send_party_leave = 0x5F80,
         send_party_pass_draw = 0x146, //opcode not found
-        send_party_regist_member_recruit = 0x147, //opcode not found
-        send_party_regist_party_recruit = 0x148, //opcode not found
+        send_party_regist_member_recruit = 0xC342, //opcode not found
+        send_party_regist_party_recruit = 0x7B6C, //opcode not found
         send_party_request_draw_item_list = 0x86FD, 
-        send_party_search_recruited_member = 0x149, //opcode not found
+        send_party_search_recruited_member = 0xCB62, 
         send_party_search_recruited_party = 0x90BD, 
-        send_quest_abort = 0x150, //opcode not found
-        send_quest_check_target = 0x151, //opcode not found
+        send_quest_abort = 0xD247,
+        send_quest_check_target = 0x1E86,
         send_quest_check_time_limit = 0x152, //opcode not found
         send_quest_display = 0x3017, 
         send_quest_get_mission_quest_history = 0xA3E6, 
@@ -868,7 +873,7 @@ namespace Necromancy.Server.Packet.Id
         send_raisescale_request_revive = 0x159, //opcode not found
         send_raisescale_request_revive_event = 0x160, //opcode not found
         send_raisescale_view_close_request = 0x161, //opcode not found
-        send_random_box_close = 0x162, //opcode not found
+        send_random_box_close = 0x6ABB,
         send_random_box_get_item = 0x163, //opcode not found
         send_random_box_get_item_all = 0x164, //opcode not found
         send_random_box_next_open = 0x167, //opcode not found
@@ -879,11 +884,11 @@ namespace Necromancy.Server.Packet.Id
         send_revive_init = 0x171, //opcode not found
         send_select_package_update = 0x2A64,
         send_shop_buy = 0x173, //opcode not found
-        send_shop_close = 0x174, //opcode not found
-        send_shop_identify = 0x175, //opcode not found
-        send_shop_repair = 0x176, //opcode not found
-        send_shop_sell = 0x177, //opcode not found
-        send_shop_sell_check = 0x178, //opcode not found
+        send_shop_close = 0x2469,
+        send_shop_identify = 0x9C7E,
+        send_shop_repair = 0xED5C, 
+        send_shop_sell = 0xC9F9, 
+        send_shop_sell_check = 0xF296 ,
         send_shortcut_request_data = 0x6FC6, 
         send_shortcut_request_deregist = 0x178, //opcode not found
         send_shortcut_request_regist = 0x8090, 
@@ -910,39 +915,39 @@ namespace Necromancy.Server.Packet.Id
         send_stall_set_name = 0xB93, 
         send_stall_shopping_abort = 0x53E3,
         send_stall_shopping_start = 0xB248,
-        send_storage_deposit_item = 0x196, //opcode not found
-        send_storage_deposit_money = 0x197, //opcode not found
+        send_storage_deposit_item = 0x2FA4,
+        send_storage_deposit_money = 0xA40B,
         send_storage_draw_item = 0x198, //opcode not found
-        send_storage_draw_money = 0x199, //opcode not found
+        send_storage_draw_money = 0xCE05,
         send_sv_conf_option_change = 0x1B99, 
         send_sv_conf_option_request = 0x615E, 
         send_talkring_create_masterring = 0x200, //opcode not found
         send_talkring_rename_masterring = 0x201, //opcode not found
-        send_temple_close = 0x202, //opcode not found
-        send_temple_cure_curse = 0x203, //opcode not found
-        send_trade_abort = 0x204, //opcode not found
-        send_trade_add_item = 0x205, //opcode not found
-        send_trade_fix = 0x206, //opcode not found
+        send_temple_close = 0xEF39, //opcode not found
+        send_temple_cure_curse = 0x4A11,
+        send_trade_abort = 0x9B38, 
+        send_trade_add_item = 0xD060, 
+        send_trade_fix = 0x9CC3, 
         send_trade_invite = 0x513A, 
-        send_trade_offer = 0x208, //opcode not found
-        send_trade_remove_item = 0x209, //opcode not found
-        send_trade_reply = 0x210, //opcode not found
-        send_trade_revert = 0x211, //opcode not found
-        send_trade_set_money = 0x212, //opcode not found
-        send_union_close_window = 0x213, //opcode not found 
-        send_union_mantle_close = 0x214, //opcode not found
+        send_trade_offer = 0xA822,
+        send_trade_remove_item = 0x6A8F, 
+        send_trade_reply = 0xE9FC,
+        send_trade_revert = 0xEC63, 
+        send_trade_set_money = 0x7C00,
+        send_union_close_window = 0x225A,
+        send_union_mantle_close = 0xCF06,
         send_union_rename_close = 0xC9A9, 
-        send_union_request_establish = 0x216, //opcode not found
+        send_union_request_establish = 0x9956,
         send_union_request_rename = 0x217, //opcode not found
         send_union_storage_deposit_money = 0x218, //opcode not found
         send_union_storage_draw_money = 0x219, //opcode not found
         send_union_storage_move_item = 0x220, //opcode not found
         send_update_honor = 0x221, //opcode not found
         send_wanted_entry = 0xA86F, 
-        send_wanted_jail_close = 0x222, //opcode not found
-        send_wanted_jail_draw_point = 0x223, //opcode not found
-        send_wanted_jail_payment = 0x224, //opcode not found
-        send_wanted_list_close = 0x225, //opcode not found
+        send_wanted_jail_close = 0x86D8, 
+        send_wanted_jail_draw_point = 0x309E,
+        send_wanted_jail_payment = 0x1C6,
+        send_wanted_list_close = 0xABCD,
         
                   
     }

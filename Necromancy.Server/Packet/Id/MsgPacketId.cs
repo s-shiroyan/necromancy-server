@@ -169,7 +169,7 @@ namespace Necromancy.Server.Packet.Id
         send_union_request_news = 0x019, // placeholder until found
         send_union_request_secede = 0x020, // placeholder until found
         send_union_request_set_info = 0x021, // placeholder until found
-        send_union_request_set_mantle = 0x022, // placeholder until found
+        send_union_request_set_mantle = 0x5088,
         send_comment_set = 0xFC37,
     }
 }

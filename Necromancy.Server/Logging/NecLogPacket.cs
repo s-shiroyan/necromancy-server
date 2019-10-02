@@ -68,19 +68,19 @@ namespace Necromancy.Server.Logging
         {
             if (Enum.IsDefined(typeof(AuthPacketId), Id))
             {
-                AuthPacketId authPacketId = (AuthPacketId) Id;
+                AuthPacketId authPacketId = (AuthPacketId)Id;
                 return authPacketId.ToString();
             }
 
             if (Enum.IsDefined(typeof(MsgPacketId), Id))
             {
-                MsgPacketId msgPacketId = (MsgPacketId) Id;
+                MsgPacketId msgPacketId = (MsgPacketId)Id;
                 return msgPacketId.ToString();
             }
 
             if (Enum.IsDefined(typeof(AreaPacketId), Id))
             {
-                AreaPacketId areaPacketId = (AreaPacketId) Id;
+                AreaPacketId areaPacketId = (AreaPacketId)Id;
                 return areaPacketId.ToString();
             }
 

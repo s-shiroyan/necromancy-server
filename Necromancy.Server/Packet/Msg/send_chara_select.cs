@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Msg
 {
@@ -16,25 +17,18 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            /*IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // Error
+            byte CharacterIdInSelectedSlot = packet.Data.ReadByte();
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
+            {
+                Console.WriteLine($"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                if (myCharacter.Id == CharacterIdInSelectedSlot)
+                {
+                    client.Character = myCharacter;
+                    Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                }
+            }
 
-            res.WriteFixedString("127.0.0.1", 65);
-            res.WriteInt16(60002);
-
-            res.WriteFloat(100); // Coords ? - x,y,z
-            res.WriteFloat(100);
-            res.WriteFloat(100);
-
-            res.WriteByte(0);
-
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res);*/
-
-  
             IBuffer res2 = BufferProvider.Provide();
 
             res2.WriteInt32(0);

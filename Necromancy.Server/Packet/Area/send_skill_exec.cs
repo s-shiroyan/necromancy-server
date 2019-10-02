@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System.Threading;
+using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -12,21 +13,33 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_skill_exec;
+        public override ushort Id => (ushort)AreaPacketId.send_skill_exec;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int targetID = packet.Data.ReadInt32();
+
+            int myTargetID = packet.Data.ReadInt32();
+
             float X = packet.Data.ReadFloat();
             float Y = packet.Data.ReadFloat();
             float Z = packet.Data.ReadFloat();
-            //float cooldownTime = packet.Data.ReadFloat();
-            float stickTime = packet.Data.ReadFloat();
+         
+            int errcode = packet.Data.ReadInt32();
 
+            Console.WriteLine($"myTargetID : {myTargetID}");
+            Console.WriteLine($"Target location : X-{X}Y-{Y}Z-{Z}");
+            Console.WriteLine($"ErrorCode : {errcode}");
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//1 - not enough distance, 2 - unable to use skill: 2 error, 0 - success
-            res.WriteFloat(1);//Recast time(server does a lookup here i think)
-            res.WriteFloat(stickTime);//Stick time(player movement stopped for this long)
+            res.WriteInt32(errcode);//see sys_msg.csv
+            /*
+                -1      Unable to use skill
+                -1322   Incorrect target
+                -1325   Insufficient usage count for Power Level
+                1       Not enough distance
+                GENERIC Unable to use skill: < errcode >
+            */
+            res.WriteFloat(1);//Cool time      ./Skill_base.csv   Column J 
+            res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
             Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res);
         }
     }
