@@ -175,46 +175,22 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "sssi":
                     SendStallSellItem(client);
-                    break;
-                default:
-                    //Message = $"Unrecognized command {command}" ;
-                    command = "unrecognized";
-                    break;
-                case "Died":
-                    IBuffer res4 = BufferProvider.Provide();
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4);
-                    break;
-                case "GetUItem":
-                    AdminConsoleRecvItemInstanceUnidentified(client);
-                    break;
-                case "ClearUItem":
-                    AdminConsoleRecvItemInstanceUnidentifiedClear(client);
-                    break;
-                case "GetItem":
-                    AdminConsoleRecvItemInstance(client);
-                    break;
-                case "SendMail":
-                    SendMailOpenR(client);
-                    break;
-                case "GetMail":
-                    AdminConsoleSelectPackageUpdate(client);
-                    break;
-                case "logout":
-                    LogOut(client);
-                    break;
+                    break;               
                 default:
                     SplitMessage[1] = "unrecognized";
                     //Message = $"Unrecognized command '{SplitMessage[1]}' ";
                     break;
             }
+
             if (command == "unrecognized" && SplitMessage[1] == "unrecognized")
-            {
-                Message = $"Unrecognized command - {Message}";
-            }
+                {
+                    Message = $"Unrecognized command - {Message}";
+                }
             else
-            {
-                Message = $"Sent command - {Message}";
-            }
+                {
+                    Message = $"Sent command - {Message}";
+                }
+
             switch (SplitMessage[1])
             {
                 case "NPC":

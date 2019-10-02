@@ -13,12 +13,9 @@ namespace Necromancy.Server.Common
         public static string[][] GameFileReader(NecClient client)
         {
             //var shiftJis = Encoding.GetEncoding(932); // CSV files are in this encording.  To-Do. Figure out encoding loading. 
-            string fileName = @"C:\Github\necromancy-server\Necromancy.Server\Database/TempNPCData.csv";
             string newPath = Path.GetFullPath(Path.Combine(Util.ExecutingDirectory(), @"..\..\..\")) + "Database/TempNPCData.csv";
-            string fileName2 = @"..\" + Directory.GetCurrentDirectory();
-            System.Console.WriteLine($"Contents of CSV file {fileName} = ");
             System.Console.WriteLine($"Contents of CSV file {newPath} = ");
-            string[] lines = System.IO.File.ReadAllLines(fileName/*,shiftJis*/);
+            string[] lines = System.IO.File.ReadAllLines(newPath/*,shiftJis*/);
             int matchCount = 0;
             int lastMatchRow = 0;
             for (int i = 0; i < lines.Length; i++)
