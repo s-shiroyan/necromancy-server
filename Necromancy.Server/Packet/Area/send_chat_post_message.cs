@@ -604,7 +604,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0);
-            res2.WriteCString("Wake up Samurai we have a city to burn"); // find max size
+            res2.WriteCString("Wake up Samurai we have a city to burn"); // find max size   show the text of the message
             Router.Send(client, (ushort)AreaPacketId.recv_event_message, res2);
 
         }
@@ -826,6 +826,17 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendEventTreasureboxBegin(NecClient client)
         {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0);
+            res2.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2);
+
+
+            IBuffer res3 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res3);
+
+
             //recv_event_tresurebox_begin = 0xBD7E,
             IBuffer res = BufferProvider.Provide();
 
@@ -851,6 +862,11 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(100101);
 
             Router.Send(client, (ushort)AreaPacketId.recv_event_tresurebox_begin, res);
+
+
+         /*   IBuffer res4 = BufferProvider.Provide();
+            res4.WriteByte(3);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res4); */
         }
 
         private void SendDataNotifyItemObjectData(NecClient client)

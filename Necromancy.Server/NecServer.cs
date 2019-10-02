@@ -256,6 +256,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_gem_close(this));
             _areaConsumer.AddHandler(new send_event_removetrap_select(this));
             _areaConsumer.AddHandler(new send_event_removetrap_end(this));
+            _areaConsumer.AddHandler(new send_event_tresurebox_end(this));
         }
     }
 }
