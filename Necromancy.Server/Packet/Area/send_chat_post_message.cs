@@ -177,19 +177,10 @@ namespace Necromancy.Server.Packet.Area
                     SendStallSellItem(client);
                     break;               
                 default:
-                    SplitMessage[1] = "unrecognized";
-                    //Message = $"Unrecognized command '{SplitMessage[1]}' ";
+                    command = "unrecognized";
                     break;
             }
-
-            if (command == "unrecognized" && SplitMessage[1] == "unrecognized")
-                {
-                    Message = $"Unrecognized command - {Message}";
-                }
-            else
-                {
-                    Message = $"Sent command - {Message}";
-                }
+  
 
             switch (SplitMessage[1])
             {
@@ -210,9 +201,6 @@ namespace Necromancy.Server.Packet.Area
                 case "GetUItem":
                     AdminConsoleRecvItemInstanceUnidentified(client);
                     break;
-                case "ClearUItem":
-                    AdminConsoleRecvItemInstanceUnidentifiedClear(client);
-                    break;
                 case "GetItem":
                     AdminConsoleRecvItemInstance(client);
                     break;
@@ -227,6 +215,10 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "ReadFile":
                     FileReader.GameFileReader(client);
+                    break;
+                case "MapChange":
+                    if (SplitMessage[2] == "") { SplitMessage[2] = "0"; }
+                    SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
                     break;
                 default:
                     SplitMessage[1] = "unrecognized";
@@ -1187,57 +1179,6 @@ namespace Necromancy.Server.Packet.Area
 
             }
         }
-        private void AdminConsoleRecvItemInstanceUnidentifiedClear(NecClient client)
-        {
-            for (int i = 0; i < 19; i++)
-            {
-                //recv_item_instance_unidentified = 0xD57A,
-                IBuffer res = BufferProvider.Provide();
-
-                res.WriteInt64(10001000100010002 + i);
-
-                res.WriteCString("Have Fun in Texas Hiraeth!"); // Item Name
-
-                res.WriteInt32(EquipItemType[x] - 1); // Item Type.   10001005 Mask Item type and stats. Refer To ItemType.csv                      (58 map pc        55 gem)
-                res.WriteInt32(0);
-
-                res.WriteByte(1); // Numbers of items
-
-                res.WriteInt32(0); /* 10001003 Put The Item Unidentified. 0 put the item Identified 
-            1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
-
-                res.WriteInt32(0);  //Item ID for Icon
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteInt32(2);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteByte(1);
-                res.WriteByte(0);
-                res.WriteByte(1); // bool
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
-                res.WriteByte(0);                       // 0~2
-                res.WriteInt16((short)x);                      // bag index 0 to 24
-
-                res.WriteInt32(EquipBitMask[x]); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) (0b1, 0b10, 0b100, 0b1000, 0b10000  (bitmask))
-
-                res.WriteInt64(2);
-
-                res.WriteInt32(2);
-                x++;
-                Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
-                if (x >= 19) x = 0;
-            }
-        }
 
 
         private void AdminConsoleRecvItemInstance(NecClient client)
@@ -1292,9 +1233,38 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
+        private void SendMapChangeForce(NecClient client, int MapID)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(0);
+            res.WriteInt32(MapID);
+            res.WriteFixedString("127.0.0.1", 65);//IP
+            res.WriteInt16(60002);//Port
+
+            res.WriteFloat(100);//x coord
+            res.WriteFloat(100);//y coord
+            res.WriteFloat(100);//z coord
+            res.WriteByte(1);//view offset maybe?
+
+            Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res);
+
+            SendMapChangeSyncOk(client);
+            client.Character.MapId = MapID;
+        }
+
+        private void SendMapChangeSyncOk(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_map_change_sync_ok, res);
+        }
+    
+
         /////////Int array for testing Item ID's. 
         int[] itemIDs = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
-                    ,30300101/*Necklace*/,30200107/*Earring*/,30400105/*Belt*/,30100106/*Ring*/,70000101/*Talk Ring*/,160801/*Avatar Head */,260801/*Avatar Torso*/,360801/*Avatar Pants*/,460801/*Avatar Hands*/,560801/*Avatar Feet*/ };
+                    ,30300101/*Necklace*/,30200107/*Earring*/,30400105/*Belt*/,30100106/*Ring*/,70000101/*Talk Ring*/,160801/*Avatar Head */,260801/*Avatar Torso*/,360801/*Avatar Pants*/,460801/*Avatar Hands*/,560801/*Avatar Feet*/,1,2,3 };
         int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
         int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
         //int[] EquipBitMask = new int[] { 0b1, 0b10, 0b100, 0b1000, 0b10000, 0b100000, 0b1000000, 0b10000000, 0b100000000, 0b1000000000, 0b10000000000, 0b100000000000, 0b1000000000000, 0b10000000000000, 0b100000000000000, 0b10000000000000000, 0b10000000000000000, 0b1000000000000000000, 0b10000000000000000000 };
