@@ -96,10 +96,40 @@ namespace Necromancy.Server.Packet.Area
                 case "sssi":
                     SendStallSellItem(client);
                     break;
+                case "cpfa":
+                    SendCpfAuthenticate(client);
+                    break;
+                case "cpfn":
+                    SendCpfNotifyError(client);
+                    break;
                 default:
                     Message = $"Unrecognized command{command}";
                     break;
             }
+        }
+
+        private void SendCpfNotifyError(NecClient client)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            
+            Router.Send(client, (ushort)AreaPacketId.recv_cpf_notify_error, res);
+
+        }
+
+        private void SendCpfAuthenticate(NecClient client)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+
+            int numEntries = 0x80;
+            res.WriteInt32(numEntries);
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte(0);
+            }
+            Router.Send(client, (ushort)AreaPacketId.recv_cpf_authenticate, res);
+
         }
 
         private void SendItemInstanceUnidentified(NecClient client, long x)

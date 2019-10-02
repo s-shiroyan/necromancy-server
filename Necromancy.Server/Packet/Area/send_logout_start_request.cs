@@ -22,6 +22,14 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(10);//
             Router.Send(client, (ushort)AreaPacketId.recv_logout_start, res2);
+
+            IBuffer res3 = BufferProvider.Provide();
+
+            Router.Send(client, (ushort)AreaPacketId.recv_base_exit_r, res3);
+
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(client.Character.Id);
+            Router.Send(client, (ushort)AreaPacketId.recv_thread_exit_r, res4);
         }
     }
 }
