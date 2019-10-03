@@ -19,11 +19,21 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteByte(0);//Bool
 
-            Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res);
 
             SendDataNotifyCharaData(client);
-        }
 
+            if (client.Character.NewCharaProtocol == true)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+
+                res2.WriteInt32(2); //1 = cinematic, 0 Just start the event without cinematic
+                res2.WriteByte(0);
+
+                Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2);
+            }
+
+        }
         private void SendDataNotifyCharaData(NecClient client)
         {
             IBuffer res3 = BufferProvider.Provide();

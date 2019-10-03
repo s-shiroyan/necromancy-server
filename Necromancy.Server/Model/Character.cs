@@ -57,6 +57,8 @@ namespace Necromancy.Server.Model
         public byte wepNorthSouthAnim { get; set; }
         public byte logoutCanceled { get; set; }
         public int MapId { get; set; }
+        public bool NewCharaProtocol { get; set; }
+
 
         public Character()
         {
@@ -68,6 +70,7 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
             logoutCanceled = 0;
+            NewCharaProtocol = false;
             //Settings for Map Entry until settings are databased.
             MapId = 1001001;
             X = 1608;

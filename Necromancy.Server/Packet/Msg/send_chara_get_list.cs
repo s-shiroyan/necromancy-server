@@ -8,6 +8,7 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_get_list : Handler
     {
+
         public send_chara_get_list(NecServer server) : base(server)
         {
         }
@@ -17,6 +18,9 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+
+            client.Character.NewCharaProtocol = false;
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(0xFFFFFFFF);
