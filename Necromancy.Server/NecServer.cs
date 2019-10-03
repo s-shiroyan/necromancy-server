@@ -254,6 +254,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_item_equip(this));
             _areaConsumer.AddHandler(new send_item_drop(this));
             _areaConsumer.AddHandler(new send_item_sort(this));
+            _areaConsumer.AddHandler(new send_help_new_remove(this));
         }
     }
 }
