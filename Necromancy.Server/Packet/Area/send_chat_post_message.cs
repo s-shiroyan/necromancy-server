@@ -107,6 +107,9 @@ namespace Necromancy.Server.Packet.Area
                 case "rbox":
                     SendRandomBoxNotifyOpen(client);
                     break;
+                case "test":
+                    SendTestEvent(client);
+                    break;
                 case "trap":
                     SendTrapEvent(client);
                     break;
@@ -562,32 +565,57 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
+        private void SendTestEvent(NecClient client)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
+            res2.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2);
+
+
+            IBuffer res = BufferProvider.Provide();
+     //lllll
+            Router.Send(client, (ushort)AreaPacketId.recv_event_request_int, res);
+
+
+        }
+
+
         private void SendTrapEvent(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
             res.WriteByte(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
 
+            IBuffer res0 = BufferProvider.Provide();
+            res0.WriteCString("Boobs Trap !"); // find max size  Text display at the top of the screen
+            res0.WriteInt32(1);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res0);
+
+
             IBuffer res2 = BufferProvider.Provide();
 
-            res2.WriteInt32(10); // Percent
+            res2.WriteInt32(Util.GetRandomNumber(0, 100)); // Percent
 
             res2.WriteInt32(0);
 
             res2.WriteByte(1); // bool  change chest image  1 = gold
             Router.Send(client, (ushort)AreaPacketId.recv_event_removetrap_begin, res2);
 
+
         }
 
         private void SendMessageEvent(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0);// 1 = cinematic
             res.WriteByte(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
+
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0);
@@ -598,18 +626,16 @@ namespace Necromancy.Server.Packet.Area
         private void SendSoulStorageEvent(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); //1 = cinematic
             res.WriteByte(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_event_start, res);
+
 
             IBuffer res0 = BufferProvider.Provide();
             res0.WriteInt64(3); // Gold in the storage
             Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res0);
 
-            IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt64(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res2);
 
           /*  IBuffer res1 = BufferProvider.Provide();
             res1.WriteByte(1);

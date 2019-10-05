@@ -240,6 +240,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
             _areaConsumer.AddHandler(new send_auction_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
+            _areaConsumer.AddHandler(new send_storage_deposit_money(this));
+            _areaConsumer.AddHandler(new send_storage_draw_money(this));
+            _areaConsumer.AddHandler(new send_storage_deposit_item(this));
+            _areaConsumer.AddHandler(new send_storage_draw_money(this));
             _areaConsumer.AddHandler(new send_wanted_jail_close(this));
             _areaConsumer.AddHandler(new send_wanted_jail_draw_point(this));
             _areaConsumer.AddHandler(new send_wanted_jail_payment(this));
@@ -255,6 +259,20 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_item_drop(this));
             _areaConsumer.AddHandler(new send_item_sort(this));
             _areaConsumer.AddHandler(new send_help_new_remove(this));
+            _areaConsumer.AddHandler(new send_quest_abort(this));
+            _areaConsumer.AddHandler(new send_quest_check_target(this));
+            _areaConsumer.AddHandler(new send_gem_close(this));
+            _areaConsumer.AddHandler(new send_event_sync_r(this));
+            _areaConsumer.AddHandler(new Send_event_soul_storage_close(this));
+            _areaConsumer.AddHandler(new send_event_removetrap_select(this));
+            _areaConsumer.AddHandler(new send_event_removetrap_end(this));
+            _areaConsumer.AddHandler(new send_event_tresurebox_end(this));
+            _areaConsumer.AddHandler(new send_event_soul_rankup_close(this));
+            _areaConsumer.AddHandler(new send_event_select_channel_r(this));
+            _areaConsumer.AddHandler(new send_event_quest_order_r(this));
+            _areaConsumer.AddHandler(new send_event_script_play_r(this));
+            _areaConsumer.AddHandler(new send_event_select_exec_r(this));
+            _areaConsumer.AddHandler(new send_event_request_int_r(this));
         }
     }
 }
