@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -20,6 +21,9 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);//Bool
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res);
+            Console.WriteLine($"Entering Map: {client.Character.MapId}");
+            Console.WriteLine($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
+
 
             SendDataNotifyCharaData(client);
 

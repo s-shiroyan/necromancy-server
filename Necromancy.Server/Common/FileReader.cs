@@ -40,9 +40,10 @@ namespace Necromancy.Server.Common
                 }
                 else
                 {
-                    string[] npcRowStringArray = lines[i - rowStop].Split(',');
+                    string[] npcRowStringArray = lines[i].Split(',');
                     jaggedArray[i - rowStop] = npcRowStringArray;
                 }
+                Console.WriteLine($"Processed file row {i}");
 
             }
             //For debugging

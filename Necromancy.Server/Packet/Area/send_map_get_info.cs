@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res);
-           
+         
             SendDataNotifyNpcData(client);
         }
        
@@ -32,13 +32,13 @@ namespace Necromancy.Server.Packet.Area
             int parsedStringToNumber;
             int numEntries = 0; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
             int numEntries2 = 0; //number of status effects.  128 Max.   setting to 0 for noise reduction in console
-            int Row = 0;
+            int npcCount = 0;
 
             string[][] jaggedArray = FileReader.GameFileReader(client); //Reads a manually created CSV file to load NPCs per Client.Character.MapID based on settings from map_symbol.csv and npc.csv
             foreach (string[] ary1 in jaggedArray)
             {
-                Row++;
-                Console.WriteLine($"Loading NPC Row : {Row} from TempNPCData.csv with values {ary1[1]}, {ary1[2]}, {ary1[3]}, {ary1[4]}, {ary1[5]}, {ary1[6]}, {ary1[7]},");
+                npcCount++;
+                Console.WriteLine($"Loading NPC Number: {npcCount} from TempNPCData.csv with values {ary1[1]}, {ary1[2]}, {ary1[3]}, {ary1[4]}, {ary1[5]}, {ary1[6]}, {ary1[7]},");
                 IBuffer res2 = BufferProvider.Provide();
                 
                 //Not All SerialIDs in CSV are numeric.  catching the strings and seting a random ID.

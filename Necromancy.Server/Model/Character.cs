@@ -72,10 +72,10 @@ namespace Necromancy.Server.Model
             logoutCanceled = 0;
             NewCharaProtocol = false;
             //Settings for Map Entry until settings are databased.
-            MapId = 1001001;
-            X = 1608;
-            Y = -3958;
-            Z = -19;
+            MapId = 1001002;
+            X = 23162;
+            Y = -219;
+            Z = -7;
         }
     }
 

@@ -18,6 +18,7 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             byte CharacterIdInSelectedSlot = packet.Data.ReadByte();
+            Console.WriteLine($"Character ID In Selected Slot = {CharacterIdInSelectedSlot}");
 
             foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
             {

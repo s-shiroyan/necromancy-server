@@ -1967,3 +1967,13 @@ recv_0xA8BB = 0xA8BB // Goes to Error
             res.WriteInt32(0);
             res.WriteInt64(0);
             res.WriteInt32(0);			
+			
+recv_self_dragon_pos_notify	= 0x6FB2;
+
+			res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+			
+			res.WriteByte(1);
