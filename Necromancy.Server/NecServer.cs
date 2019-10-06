@@ -122,6 +122,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_friend_reply_to_link2(this));
             _msgConsumer.AddHandler(new send_friend_request_delete_friend(this));
             _msgConsumer.AddHandler(new send_friend_request_link_target(this));
+            _msgConsumer.AddHandler(new send_friend_accept_request_link(this));
             _msgConsumer.AddHandler(new send_friend_request_load(this));
             _msgConsumer.AddHandler(new send_soul_authenticate_passwd(this));
             _msgConsumer.AddHandler(new send_soul_create(this));
@@ -131,9 +132,10 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_soul_select_C44F(this));
             _msgConsumer.AddHandler(new send_soul_set_passwd(this));
             _msgConsumer.AddHandler(new send_system_register_error_report(this));
+            _msgConsumer.AddHandler(new send_skill_request_info(this));
             _msgConsumer.AddHandler(new send_union_reply_to_invite2(this));
             _msgConsumer.AddHandler(new send_union_request_change_role(this));
-            _msgConsumer.AddHandler(new send_union_request_detail(this));
+            _msgConsumer.AddHandler(new Send_union_request_detail(this));
             _msgConsumer.AddHandler(new send_union_request_disband(this));
             _msgConsumer.AddHandler(new send_union_request_expel_member(this));
             _msgConsumer.AddHandler(new send_union_request_invite_target(this));
@@ -266,6 +268,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_event_script_play_r(this));
             _areaConsumer.AddHandler(new send_event_select_exec_r(this));
             _areaConsumer.AddHandler(new send_event_request_int_r(this));
+            _areaConsumer.AddHandler(new send_charabody_self_salvage_notify_r(this));
         }
     }
 }

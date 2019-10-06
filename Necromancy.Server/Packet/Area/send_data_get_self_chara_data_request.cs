@@ -50,9 +50,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(777777712); // soul exp
                 res.WriteInt64(33); // exp needed to level
                 res.WriteInt64(44); // soul exp needed to level
-                res.WriteInt32(1234); // current hp
+                res.WriteInt32(800); // current hp
                 res.WriteInt32(400); // current mp
-                res.WriteInt32(400); // current od
+                res.WriteInt32(399); // current od
                 res.WriteInt32(1234); // max hp
                 res.WriteInt32(400); // maxmp
                 res.WriteInt32(400); // max od
@@ -78,9 +78,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(45); // earth
                 res.WriteInt16(33); // light
                 res.WriteInt16(12); // dark
-                res.WriteInt16(145); // changed nothing visably
-                res.WriteInt16(85); // changed nothing visably
-                res.WriteInt16(96); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // mag def atrb
                 res.WriteInt16(5); // fire
@@ -89,9 +89,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(45); // earth
                 res.WriteInt16(33); // light
                 res.WriteInt16(12); // dark
-                res.WriteInt16(145); // changed nothing visably
-                res.WriteInt16(85); // changed nothing visably
-                res.WriteInt16(96); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 //status change resistance
                 res.WriteInt16(215); // fire
@@ -100,24 +100,25 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(455); // earth
                 res.WriteInt16(333); // light
                 res.WriteInt16(1222); // dark
-                res.WriteInt16(1445); // changed nothing visably
-                res.WriteInt16(858); // changed nothing visably
-                res.WriteInt16(962); // changed nothing visably
-                res.WriteInt16(968); // changed nothing visably
-                res.WriteInt16(9688); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // gold and alignment?
-                res.WriteInt64(214587); // gold
+                res.WriteInt64(1000); // gold
                 res.WriteInt32(187); // changed nothing visably
                 res.WriteInt32(5999999); // lawful
                 res.WriteInt32(3999999); // neutral
                 res.WriteInt32(1999999); // chaos
-                res.WriteInt32(1139999); // changed nothing visably
+                res.WriteInt32(0); // show title ?  0 show adventurer hopeful, 1 desactivate ?
+                
 
                 //sub_484980
-                res.WriteInt32(1);// changed nothing visably
-                res.WriteInt32(1);// changed nothing visably
-                res.WriteInt32(1);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
 
                 // characters stats
                 res.WriteInt16(24); // str
@@ -129,51 +130,51 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(90); // luk
 
                 // nothing
-                res.WriteInt16(51); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(10); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(87); // changed nothing visably
-                res.WriteInt16(122); // changed nothing visably
-                res.WriteInt16(14); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
 
                 // nothing
-                res.WriteInt16(51); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(10); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(87); // changed nothing visably
-                res.WriteInt16(122); // changed nothing visably
-                res.WriteInt16(14); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // nothing
-                res.WriteInt16(51); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(10); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(87); // changed nothing visably
-                res.WriteInt16(122); // changed nothing visably
-                res.WriteInt16(14); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
-                //sub_484B00 map ip and connection
-                res.WriteInt32(1001007);//MapSerialID
-                res.WriteInt32(1001007);//MapID
+                //sub_484B00 map ip and connection   // Doesn't impact the map spawn ?
+                res.WriteInt32(1001001);//MapSerialID      
+                res.WriteInt32(1001001);//MapID
                 res.WriteFixedString("127.0.0.1", 65);//IP
                 res.WriteInt16(60002);//Port
-            
-                //sub_484420 // Map Spawn coord
-                res.WriteFloat(1600);//X Pos
-                res.WriteFloat(0);//Y Pos
-                res.WriteFloat(0);//Z Pos
+
+            //sub_484420 // Map Spawn coord
+                res.WriteFloat(-1618);//X Pos
+                res.WriteFloat(1203);//Y Pos
+                res.WriteFloat(70);//Z Pos
                 res.WriteByte(180);//view offset
 
                 //sub_read_int32 skill point
@@ -189,21 +190,21 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(12); // max soul points
                 res.WriteByte(0); // 0 is white,1 yellow 2 red 3+ skull
                 res.WriteByte(0); //Bool
-                res.WriteByte(12); // changed nothing visably
-                res.WriteByte(72); // changed nothing visably
-                res.WriteByte(43); // changed nothing visably
-                res.WriteByte(75); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
 
                 //sub_read_3-int16 unknown
-                res.WriteInt16(55); // changed nothing visably
-                res.WriteInt16(66); // changed nothing visably
-                res.WriteInt16(77); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 //sub_4833D0
-                res.WriteInt64(6);// changed nothing visably
+                res.WriteInt64(0);// changed nothing visably
 
                 //sub_4833D0
-                res.WriteInt64(7);// changed nothing visably
+                res.WriteInt64(0);// changed nothing visably
 
                 //sub_4834A0
                 res.WriteFixedString("", 97);//Shopname
@@ -227,8 +228,8 @@ namespace Necromancy.Server.Packet.Area
                 //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
                 int Armor = 25;         //Armor 25
                 int Accessory = 27;     //Accessory 26
-                int Shield = 21;        //Shield 19-21
-                int Weapon = 8;         //0 Knuckle, 1 Dagger, 3 1hSword, 8 1h axe, 9 2hAxe, 10 spear, 11 blunt, 14 staff, 15 crossbow
+                int Shield = 20;        //Shield 19-21
+                int Weapon = 15;         //0 Knuckle, 1 Dagger, 3 1hSword, 8 1h axe, 9 2hAxe, 10 spear, 11 blunt, 14 staff, 15 crossbow
                 //sub_483660 
                 res.WriteInt32(Weapon); //18	    				
                 res.WriteInt32(Shield); //17 	    		
@@ -247,7 +248,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(Armor); //4	        					
                 res.WriteInt32(Armor); //3	        				
                 res.WriteInt32(Armor); //2          				
-                res.WriteInt32(Shield+1); //1       					
+                res.WriteInt32(Shield); //1       					
                 res.WriteInt32(22);  //0 
               
 
@@ -263,27 +264,27 @@ namespace Necromancy.Server.Packet.Area
                 switch (CharacterSet)
                 { 
                     case "Xeno.":
-                    EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                    EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
                     ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0 };
                     break;
                     case "Kadred":
-                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     case "Zenkato":
-                     EquipId = new int[] {11400403/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
+                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     case "Ipa":
-                     EquipId = new int[] {11300506/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
                     ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                     default:
-                     EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                     EquipId = new int[] {11500102/*Weapon*/,15000102/*Shield* */,20000101/*Arrow*/,101601/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
                     ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 004, 0, 0 };
                     break;

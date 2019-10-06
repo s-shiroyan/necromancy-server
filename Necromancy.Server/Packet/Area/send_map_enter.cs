@@ -33,15 +33,15 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(client.Character.Id);//Character ID
 
             //sub_481AA0
-            res3.WriteCString("soulname");
+            res3.WriteCString($"{client.Soul.Name}");
 
             //sub_481AA0
-            res3.WriteCString("charaname");
+            res3.WriteCString($"{client.Character.Name}");
 
             //sub_484420
-            res3.WriteFloat(-5516);//X Pos
-            res3.WriteFloat(-3896);//Y Pos
-            res3.WriteFloat(0);//Z Pos
+            res3.WriteFloat(-1618);//X Pos
+            res3.WriteFloat(1203);//Y Pos
+            res3.WriteFloat(70);//Z Pos
             res3.WriteByte(180);//view offset
 
             //sub_read_int32
@@ -61,8 +61,8 @@ namespace Necromancy.Server.Packet.Area
             //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
             int Armor = 25;         //Armor 25
             int Accessory = 27;     //Accessory 26
-            int Shield = 21;        //Shield 19-21
-            int Weapon = 4;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
+            int Shield = 20;        //Shield 19-21
+            int Weapon = 15;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
                                      //sub_483660 
             res3.WriteInt32(Weapon); //18	    				
             res3.WriteInt32(Shield); //17 	    		
@@ -81,7 +81,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(Armor); //4	        					
             res3.WriteInt32(Armor); //3	        				
             res3.WriteInt32(Armor); //2          				
-            res3.WriteInt32(Shield + 1); //1       					
+            res3.WriteInt32(Shield); //1       					
             res3.WriteInt32(22);  //0 
 
 
@@ -116,7 +116,7 @@ namespace Necromancy.Server.Packet.Area
                     ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     break;
                 default:
-                    EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                    EquipId = new int[] {11500102/*Weapon*/,15000102/*Shield* */,260103/*Torso*/,101601/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     break;
             }
@@ -178,17 +178,17 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(4);//race
-            res3.WriteInt32(1);//gender
-            res3.WriteByte(2);//hair
-            res3.WriteByte(3);//face
-            res3.WriteByte(4);//hair color
+            res3.WriteInt32(client.Character.Raceid);//race
+            res3.WriteInt32(client.Character.Sexid);//gender
+            res3.WriteByte(client.Character.HairId);//hair
+            res3.WriteByte(client.Character.FaceId);//face
+            res3.WriteByte(client.Character.HairColorId);//hair color
 
             //sub_483420
             res3.WriteInt32(0); // party id?
 
             //sub_4837C0
-            res3.WriteInt32(0); // party id?
+            res3.WriteInt32(1); // party id? // i don't think sooo'
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -233,8 +233,23 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("");//Comment string
 
 
+
+
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
+            SendMapBGM(client);
             client.Character.weaponEquipped = false;
         }
+
+          private void SendMapBGM(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(100401);
+
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_map_update_bgm, res, client);
+
+
+        } 
     }
 }

@@ -20,8 +20,20 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.Id);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, client);
-            
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start, res, client);
+
+            SendBattleAttackStartR(client);
+
+        }
+
+
+        private void SendBattleAttackStartR(NecClient client)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(client.Character.Id);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_start_r, res4);
+
+
         }
     }
 }
