@@ -37,13 +37,6 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(client.Character.HairColorId); //color
                 res.WriteByte(client.Character.FaceId); //face
 
-            /*
-                res.WriteInt32(3); //race
-                res.WriteInt32(0); ; //gender
-                res.WriteByte(0); //Face
-                res.WriteByte(5); //hair color
-                res.WriteByte(0); //Hair Style
-            */
             //sub_484720 - combat/leveling info
             Console.WriteLine($"Character ID Loading : {client.Character.Id}");
             res.WriteInt32(client.Character.Id);  // ? character ID maybe?
@@ -53,14 +46,14 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(777777712); // soul exp
                 res.WriteInt64(33); // exp needed to level
                 res.WriteInt64(44); // soul exp needed to level
-                res.WriteInt32(1234); // current hp
+                res.WriteInt32(1020); // current hp
                 res.WriteInt32(400); // current mp
                 res.WriteInt32(400); // current od
-                res.WriteInt32(1234); // max hp
+                res.WriteInt32(1040); // max hp
                 res.WriteInt32(400); // maxmp
                 res.WriteInt32(400); // max od
-                res.WriteInt32(164); // current gp
-                res.WriteInt32(155); // map gp
+                res.WriteInt32(200); // current gp
+                res.WriteInt32(200); // map gp
                 res.WriteInt32(1238); // value/100 = current weight
                 res.WriteInt32(1895); // value/100 = max weight
                 res.WriteByte(200); // condition
@@ -110,12 +103,12 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(9688); // changed nothing visably
 
                 // gold and alignment?
-                res.WriteInt64(214587); // gold
+                res.WriteInt64(client.Character.AdventureBagGold); // gold
                 res.WriteInt32(187); // changed nothing visably
-                res.WriteInt32(5999999); // lawful
-                res.WriteInt32(3999999); // neutral
-                res.WriteInt32(1999999); // chaos
-                res.WriteInt32(1139999); // changed nothing visably
+                res.WriteInt32(600000); // lawful
+                res.WriteInt32(5000); // neutral
+                res.WriteInt32(4000); // chaos
+                res.WriteInt32(3000); // changed nothing visably
 
                 //sub_484980
                 res.WriteInt32(1);// changed nothing visably
@@ -123,13 +116,13 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(1);// changed nothing visably
 
                 // characters stats
-                res.WriteInt16(24); // str
-                res.WriteInt16(28); // vit
-                res.WriteInt16(35); // dex
-                res.WriteInt16(89); // agi
-                res.WriteInt16(42); // int
-                res.WriteInt16(52); // pie
-                res.WriteInt16(90); // luk
+                res.WriteInt16(client.Character.Strength); // str
+                res.WriteInt16(client.Character.vitality ); // vit
+                res.WriteInt16(client.Character.dexterity ); // dex
+                res.WriteInt16(client.Character.agility); // agi
+                res.WriteInt16(client.Character.intelligence); // int
+                res.WriteInt16(client.Character.piety); // pie
+                res.WriteInt16(client.Character.luck); // luk
 
                 // nothing
                 res.WriteInt16(51); // changed nothing visably
@@ -247,9 +240,10 @@ namespace Necromancy.Server.Packet.Area
                 int Armor = 25;         //Armor 25
                 int Accessory = 27;     //Accessory 26
                 int Shield = 21;        //Shield 19-21
-                int Weapon = 8;         //0 Knuckle, 1 Dagger, 3 1hSword, 8 1h axe, 9 2hAxe, 10 spear, 11 blunt, 14 staff, 15 crossbow
+                //int Weapon = 8;         //0 Knuckle, 1 Dagger, 3 1hSword, 8 1h axe, 9 2hAxe, 10 spear, 11 blunt, 14 staff, 15 crossbow
+                
                 //sub_483660 
-                res.WriteInt32(Weapon); //18	    				
+                res.WriteInt32(client.Character.WeaponType); //18	    				
                 res.WriteInt32(Shield); //17 	    		
                 res.WriteInt32(Armor); //16	        			
                 res.WriteInt32(Armor); //15	        				
@@ -281,7 +275,7 @@ namespace Necromancy.Server.Packet.Area
                 
                 switch (CharacterSet)
                 { 
-                    case "Xeno.":
+                    case "Talin":
                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0 };
@@ -301,7 +295,11 @@ namespace Necromancy.Server.Packet.Area
                     ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
-                    default:
+                    case "Test1":
+                    EquipId = new int[] {11500102/*Weapon*/,15100801/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                        ,690101,690101,690101,261101/*Avatar Torso*/,561101/*Avatar Feet*/,461101/*Avatar Arms */,361101/*Avatar Legs*/,161101/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    break;
+                default:
                      EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 004, 0, 0 };

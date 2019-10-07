@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyData(NecClient client)
         {
 
-            int[] MyWeaponType = new int[] { 14, 8, 8, 8, 10, 10 };
+            int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
 
             //Database.SelectCharacterBySoulId(client.Character.SoulId);
             Console.WriteLine($"this is my SoulID {client.Character.SoulId}");
@@ -61,11 +61,12 @@ namespace Necromancy.Server.Packet.Msg
                 foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
                 {
                     Console.WriteLine($"Loading data from database for {myCharacter.Name}");
-                    IBuffer res = BufferProvider.Provide();
-                    //myCharacter.Characterslotid--;
                     Console.WriteLine($"Loading Character to Slot : {myCharacter.Characterslotid}");
+
+                    IBuffer res = BufferProvider.Provide();
+
                     res.WriteByte(myCharacter.Characterslotid);//character slot, 0 for left, 1 for middle, 2 for right
-                    res.WriteInt32(myCharacter.Id + 256);    //  Character ID
+                    res.WriteInt32(myCharacter.Id);    //  Character ID
                     res.WriteFixedString(myCharacter.Name, 91); // 0x5B | 91x 1 byte
 
                     res.WriteInt32(0); // 0 = Alive | 1 = Dead
@@ -117,7 +118,7 @@ namespace Necromancy.Server.Packet.Msg
 
                     switch (CharacterSet)
                     {
-                        case "Xeno.":
+                        case "Talin":
                             EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                         ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                             break;
@@ -138,7 +139,7 @@ namespace Necromancy.Server.Packet.Msg
                         ,690101,690101,690101,260701/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360701/*Avatar Legs*/,160104/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                             break;
                         case "Test1":
-                            EquipId = new int[] {10910405/*Weapon*/,15100801/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                            EquipId = new int[] {11500102/*Weapon*/,15100801/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                         ,690101,690101,690101,261101/*Avatar Torso*/,561101/*Avatar Feet*/,461101/*Avatar Arms */,361101/*Avatar Legs*/,161101/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                             break;
                         default:

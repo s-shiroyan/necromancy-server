@@ -9,10 +9,6 @@ namespace Necromancy.Server.Packet.Area
 
     public class send_storage_draw_money : Handler
     {
-
-        public int DrawnMoney { get; set; }
-
-
         public send_storage_draw_money(NecServer server) : base(server)
         {
 
@@ -22,35 +18,20 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-
-            int Balance, DrawMoney;
-
-            Balance = 500;
-            DrawMoney = 100;
-           /* int Balance = packet.Data.ReadInt32();
-            int DrawMoney = packet.Data.ReadInt32();
-            Storage Money = new Storage();
-            Money.Withdraw = DrawMoney;
-            Money.Balance = Balance;
-            */
-
-            if (Balance != DrawMoney)
-            {
-                Console.WriteLine("you don't have enough money in your storage");
-            }
-            else
-            { 
-                Balance += DrawMoney;
-
-            }
+            int WithdrawGold = packet.Data.ReadInt32();
+            int unKnown = packet.Data.ReadInt32();
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_storage_drawmoney, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_storage_drawmoney, res);
+
+            client.Character.AdventureBagGold += WithdrawGold; //Updates your Character.AdventureBagGold
+            client.Soul.WarehouseGold -= WithdrawGold; //Updates your Soul.warehouseGold
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt64(Balance + DrawnMoney);  // Get The money you withdraw
+            res2.WriteInt64(client.Character.AdventureBagGold); // Sets your Adventure Bag Gold
             Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res2);
+
         }
 
     }

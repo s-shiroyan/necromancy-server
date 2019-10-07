@@ -25,7 +25,9 @@ namespace Necromancy.Server.Packet.Msg
                 Console.WriteLine($"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
                 if (myCharacter.Id == CharacterIdInSelectedSlot)
                 {
+                    int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
                     client.Character = myCharacter;
+                    client.Character.WeaponType = MyWeaponType[client.Character.Characterslotid];
                     Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
                 }
             }
@@ -65,7 +67,7 @@ namespace Necromancy.Server.Packet.Msg
                 //sub_494c50
                 res2.WriteInt32(128);
                 res2.WriteInt32(2);
-                res2.WriteInt32(3);
+                res2.WriteInt32(88888888);
                 res2.WriteInt16(4);
                 //sub_4834C0
                 res2.WriteByte(69);

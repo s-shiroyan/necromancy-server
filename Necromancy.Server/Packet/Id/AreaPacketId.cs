@@ -707,7 +707,7 @@ namespace Necromancy.Server.Packet.Id
         send_base_check_version = 0x5705, 
         send_base_enter = 0xAE43, 
         send_battle_attack_exec = 0xC38D, 
-        send_battle_attack_exec_direct = 0x37, //opcode not found
+        send_battle_attack_exec_direct = 0x7024,
         send_battle_attack_next = 0x9D74, 
         send_battle_attack_pose = 0xC137, 
         send_movement_info = 0x6A72, // this is a custom string 
@@ -772,7 +772,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_report_select = 0x78, //opcode not found
         send_event_removetrap_end = 0x87CD,
         send_event_removetrap_select = 0x4CE9,
-        send_event_removetrap_skill = 0x81, //opcode not found
+        send_event_removetrap_skill = 0xC3F0,
         send_event_request_int_r = 0x60, 
         send_event_script_play_r = 0xA3B5,
         send_event_select_channel_r = 0x1C22,

@@ -154,6 +154,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
             _areaConsumer.AddHandler(new send_base_enter(this));
             _areaConsumer.AddHandler(new send_battle_attack_exec(this));
+            _areaConsumer.AddHandler(new send_battle_attack_exec_direct(this));
             _areaConsumer.AddHandler(new send_battle_attack_next(this));
             _areaConsumer.AddHandler(new send_battle_attack_pose(this));
             _areaConsumer.AddHandler(new send_battle_attack_start(this));
@@ -181,6 +182,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_event_quest_order_r(this));
             _areaConsumer.AddHandler(new send_event_removetrap_end(this));
             _areaConsumer.AddHandler(new send_event_removetrap_select(this));
+            _areaConsumer.AddHandler(new send_event_removetrap_skill(this));
             _areaConsumer.AddHandler(new send_event_request_int_r(this));
             _areaConsumer.AddHandler(new send_event_script_play_r(this));
             _areaConsumer.AddHandler(new send_event_select_channel_r(this));

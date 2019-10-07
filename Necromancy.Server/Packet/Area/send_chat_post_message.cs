@@ -223,25 +223,11 @@ namespace Necromancy.Server.Packet.Area
                     if (SplitMessage[2] == "") { SplitMessage[2] = "0"; }
                     SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
                     break;
-                case "ChannelChange":
+                case "TestRecv":
                     IBuffer res = BufferProvider.Provide();
 
-                    res.WriteInt32(0);//Error
-                    client.Character.MapId = 1001001;
-                    //sub_4E4210_2341  // impacts map spawn ID
-                    res.WriteInt32(client.Character.MapId);//MapSerialID
-                    res.WriteInt32(client.Character.MapId);//MapID
-                    res.WriteFixedString("127.0.0.1", 65);//IP
-                    res.WriteInt16(60002);//Port
-
-                    //sub_484420   //  does not impact map spawn coord
-                    res.WriteFloat(0);//X Pos
-                    res.WriteFloat(-8600);//Y Pos
-                    res.WriteFloat(15000);//Z Pos
-                    res.WriteByte(1);//View offset
-                                     //
-
-                    Router.Send(client, (ushort)MsgPacketId.recv_channel_select_r, res);
+                    //res.WriteInt32(0);//errorcheck
+                    Router.Send(client, (ushort)AreaPacketId.recv_battle_report_action_attack_onhit, res);
                     break;
                 default:
                     SplitMessage[1] = "unrecognized";
@@ -633,7 +619,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res0 = BufferProvider.Provide();
-            res0.WriteInt64(3); // Gold in the storage
+            res0.WriteInt64(client.Soul.WarehouseGold); // Gold in the storage
             Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res0);
 
 

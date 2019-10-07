@@ -58,6 +58,9 @@ namespace Necromancy.Server.Model
         public byte logoutCanceled { get; set; }
         public int MapId { get; set; }
         public bool NewCharaProtocol { get; set; }
+        public int WeaponType { get; set; }
+        public int AdventureBagGold { get; set; }
+
 
 
         public Character()
@@ -71,6 +74,8 @@ namespace Necromancy.Server.Model
             Created = DateTime.Now;
             logoutCanceled = 0;
             NewCharaProtocol = false;
+            WeaponType = 8;
+            AdventureBagGold = 80706050;
             //Settings for Map Entry until settings are databased.
             MapId = 1001002;
             X = 23162;
