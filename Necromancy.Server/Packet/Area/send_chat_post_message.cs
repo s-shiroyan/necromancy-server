@@ -225,8 +225,6 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "TestRecv":
                     IBuffer res = BufferProvider.Provide();
-
-                    //res.WriteInt32(0);//errorcheck
                     Router.Send(client, (ushort)AreaPacketId.recv_battle_report_action_attack_onhit, res);
                     break;
                 default:
@@ -952,9 +950,10 @@ namespace Necromancy.Server.Packet.Area
         private void AdminConsoleRecvDataNotifyMonsterData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(Util.GetRandomNumber(55566, 55888));
+            int MonsterUniqueId = Util.GetRandomNumber(55566, 55888);
+            res.WriteInt32(MonsterUniqueId);
 
-            res.WriteCString($"Demon Bardock");//Name while spawning
+            res.WriteCString($"Demon Bardock{MonsterUniqueId}");//Name while spawning
 
             res.WriteCString($"Titan");//Title
 
@@ -1023,9 +1022,9 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(0);
 
-            res.WriteInt32(1);
+            res.WriteInt32(900); //Current HP
 
-            res.WriteInt32(1);
+            res.WriteInt32(1000); //Max HP
 
             res.WriteInt32(0x80); // cmp to 0x80 = 128
 
@@ -1038,33 +1037,20 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(1);
             }
 
-
-
             Router.Send(client, (ushort)AreaPacketId.recv_data_notify_monster_data, res);
 
-            IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(client.Character.Id);
-            Router.Send(client, (ushort)AreaPacketId.recv_charabody_access_start_r, res3);
 
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(1);
-            res4.WriteInt32(1);
-            Router.Send(client, (ushort)AreaPacketId.recv_charabody_loot_start2_r, res4);
-
-            IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt32(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_loot_start2, res5);
 
             IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt32(70101);
-
-            res1.WriteInt32(1);
+            res1.WriteInt32(0);
+            res1.WriteInt32(MonsterUniqueId);
             Router.Send(client, (ushort)AreaPacketId.recv_monster_hate_on, res1);
 
-            IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(70101);
 
-            res2.WriteInt32(1);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0);
+            res2.WriteInt32(MonsterUniqueId);
             Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res2);
 
 
@@ -1263,7 +1249,7 @@ namespace Necromancy.Server.Packet.Area
 
             //Add a wait statement here
         }
-    
+
 
         /////////Int array for testing Item ID's. 
         int[] itemIDs = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/

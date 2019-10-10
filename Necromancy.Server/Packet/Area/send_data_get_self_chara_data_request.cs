@@ -22,11 +22,10 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);
 
         }
-        //Temporary fix for "duplicate Client IDs when loading at the same time"
-        int i = 0;
+
         private void SendDataGetSelfCharaData(NecClient client)
         {
-            i++;
+
                 IBuffer res = BufferProvider.Provide();
 
                 //sub_4953B0 - characteristics
@@ -285,7 +284,7 @@ namespace Necromancy.Server.Packet.Area
                     ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
-                    case "Zenkato":
+                    case "Zakura":
                      EquipId = new int[] {11400403/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                      headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };

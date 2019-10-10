@@ -21,12 +21,15 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);//Bool
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res);
-            Console.WriteLine($"Entering Map: {client.Character.MapId}");
+            Console.WriteLine($"{client.Character.Name} {client.Soul.Name} Entering Map: {client.Character.MapId}");
             Console.WriteLine($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
 
-
-            SendDataNotifyCharaData(client);
-
+            //This makes each joined client re-send their notify when new clients connect.
+            foreach (NecClient thisNecClient in client.Map.ClientLookup.GetAll())
+            {
+                SendDataNotifyCharaData(client, thisNecClient);
+            }   
+        
             if (client.Character.NewCharaProtocol == true)
             {
                 IBuffer res2 = BufferProvider.Provide();
@@ -38,25 +41,25 @@ namespace Necromancy.Server.Packet.Area
             }
 
         }
-        private void SendDataNotifyCharaData(NecClient client)
+        private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
         {
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
 
-            res3.WriteInt32(client.Character.Id);//Character ID
+            res3.WriteInt32(thisNecClient.Character.Id);//Character ID
 
             //sub_481AA0
-            res3.WriteCString(client.Character.Name);
+            res3.WriteCString(thisNecClient.Soul.Name);
 
             //sub_481AA0
-            res3.WriteCString(client.Soul.Name);
+            res3.WriteCString(thisNecClient.Character.Name);
 
             //sub_484420
-            res3.WriteFloat(client.Character.X);//X Pos
-            res3.WriteFloat(client.Character.Y);//Y Pos
-            res3.WriteFloat(client.Character.Z);//Z Pos
-            res3.WriteByte(client.Character.viewOffset);//view offset
+            res3.WriteFloat(thisNecClient.Character.X);//X Pos
+            res3.WriteFloat(thisNecClient.Character.Y);//Y Pos
+            res3.WriteFloat(thisNecClient.Character.Z);//Z Pos
+            res3.WriteByte(thisNecClient.Character.viewOffset);//view offset
 
             //sub_read_int32
             res3.WriteInt32(6);
@@ -104,30 +107,40 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(numEntries);//has to be less than 19
             int x = 0;
             int[] EquipId = new int[19];
+            byte[] headSlot = new byte[19];
 
-            string CharacterSet = client.Character.Name;
+            string CharacterSet = thisNecClient.Character.Name;
 
             switch (CharacterSet)
             {
-                case "Xeno":
-                    EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                case "Talin":
+                    EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,210701/*Torso*/,110301/*head*/,360103/*legs*/,410505/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                    ,690101,690101,690101,210701/*Avatar Torso*/,560103/*Avatar Feet*/,410505/*Avatar Arms */,360103/*Avatar Legs*/,110301/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0 };
                     break;
                 case "Kadred":
                     EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
-                case "Zenkato":
+                case "Zakura":
                     EquipId = new int[] {11400403/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
                     break;
                 case "Ipa":
                     EquipId = new int[] {11300506/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0 };
+                    break;
+                case "Test1":
+                    EquipId = new int[] {11500102/*Weapon*/,15100801/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
+                        ,690101,690101,690101,261101/*Avatar Torso*/,561101/*Avatar Feet*/,461101/*Avatar Arms */,361101/*Avatar Legs*/,161101/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
                     break;
                 default:
                     EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
                     ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
+                    headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 004, 0, 0 };
                     break;
             }
 
@@ -140,22 +153,22 @@ namespace Necromancy.Server.Packet.Area
                 res3.WriteByte(0);
                 res3.WriteByte(0); //0  ????
 
-
                 res3.WriteInt32(12341234);//???
                 res3.WriteByte(0); //
                 res3.WriteByte(4); //
                 res3.WriteByte(1); //
-                x++;
 
-                res3.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res3.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res3.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                 res3.WriteByte(4); // testing
                 res3.WriteByte(4); // testing
                 res3.WriteByte(4); // testing
                 res3.WriteByte(4); // testing
                 res3.WriteByte(4); //Alternate texture for item model 
+
                 res3.WriteByte(4); // seperate in assembly
 
+                x++;
             }
 
             //sub_483420
@@ -188,11 +201,11 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(client.Character.Raceid);//race
-            res3.WriteInt32(client.Character.Sexid);//gender
-            res3.WriteByte(client.Character.HairId);//hair
-            res3.WriteByte(client.Character.FaceId);//face
-            res3.WriteByte(client.Character.HairColorId);//hair color
+            res3.WriteInt32(thisNecClient.Character.Raceid);//race
+            res3.WriteInt32(thisNecClient.Character.Sexid);//gender
+            res3.WriteByte(thisNecClient.Character.HairId);//hair
+            res3.WriteByte(thisNecClient.Character.HairColorId);//hair color
+            res3.WriteByte(thisNecClient.Character.FaceId);//face
 
             //sub_483420
             res3.WriteInt32(0); // party id?
@@ -243,8 +256,8 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("");//Comment string
 
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
-            client.Character.weaponEquipped = false;
+            Router.Send(thisNecClient.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, thisNecClient);
+            //client.Character.weaponEquipped = false;
         }
     }
 }
