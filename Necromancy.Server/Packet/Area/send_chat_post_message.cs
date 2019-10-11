@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
             int ChatType = packet.Data.ReadInt32();     // 0 - Area, 1 - Shout, other todo...
             string To = packet.Data.ReadCString();
             string Message = packet.Data.ReadCString();
-          
+
 
 
 
@@ -46,9 +46,9 @@ namespace Necromancy.Server.Packet.Area
              */
 
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-                
 
-            
+
+
             //Parse "!" at the begging of a chat message to access the console commands below
             if (Message[0] == '!')
                 Message = commandParse(client, Message);
@@ -123,10 +123,10 @@ namespace Necromancy.Server.Packet.Area
                     SendSalvageNotifyBody(client);
                     break;
                 case "ques":
-                    QuestStarted(client); 
+                    QuestStarted(client);
                     break;
                 case "tbox":
-                    SendEventTreasureboxBegin(client); 
+                    SendEventTreasureboxBegin(client);
                     break;
                 case "gems":
                     GemNotifyOpen(client);
@@ -178,12 +178,12 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "sssi":
                     SendStallSellItem(client);
-                    break;               
+                    break;
                 default:
                     command = "unrecognized";
                     break;
             }
-  
+
 
             switch (SplitMessage[1])
             {
@@ -223,9 +223,15 @@ namespace Necromancy.Server.Packet.Area
                     if (SplitMessage[2] == "") { SplitMessage[2] = "0"; }
                     SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
                     break;
+                case "MapEntry":
+                    SendMapEntry(client, Convert.ToInt32(SplitMessage[2]));
+                    break;
                 case "TestRecv":
                     IBuffer res = BufferProvider.Provide();
                     Router.Send(client, (ushort)AreaPacketId.recv_battle_report_action_attack_onhit, res);
+                    break;
+                case "Move": 
+                    Move(client);
                     break;
                 default:
                     SplitMessage[1] = "unrecognized";
@@ -243,6 +249,27 @@ namespace Necromancy.Server.Packet.Area
             return Message;
         }
 
+        private void Move(NecClient client)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(client.Character.Id);//Character ID
+            res2.WriteFloat(client.Character.X + 100);
+            res2.WriteFloat(client.Character.Y + 100);
+            res2.WriteFloat(client.Character.Z+100);
+
+            res2.WriteByte(client.Character.wepEastWestAnim); //HANDLES EAST AND WEST ANIMS WITH WEAPONS
+            res2.WriteByte(client.Character.wepNorthSouthAnim);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS
+            res2.WriteByte(6); // I DUNNO BUT IT WORKS
+
+            res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG
+
+            res2.WriteByte(0);// DONT TOUCH >.> CAUSES VISUAL TELEPORTING
+            res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+            res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
+
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_0xE8B9, res2, client);
+        }
 
 
         private void AdminConsoleNPC(NecClient client, int ModelID)
@@ -1218,7 +1245,27 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-        private void SendMapChangeForce(NecClient client, int MapID)
+        private void SendMapEntry(NecClient client,int myMapId)
+        {
+            int mapId = myMapId;
+
+
+            Map map = Server.Map.Get(mapId);
+            if (map == null)
+            {
+                Logger.Error($"MapId: {mapId} not found in map lookup", client);
+                //client.Socket.Close();
+                return;
+            }
+
+            map.Enter(client);
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res);
+        }
+
+private void SendMapChangeForce(NecClient client, int MapID)
         {
             IBuffer res = BufferProvider.Provide();
 
