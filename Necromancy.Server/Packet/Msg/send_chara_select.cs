@@ -1,6 +1,7 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Setting;
 using Necromancy.Server.Packet.Id;
 using System;
 
@@ -29,6 +30,16 @@ namespace Necromancy.Server.Packet.Msg
                     client.Character = myCharacter;
                     client.Character.WeaponType = MyWeaponType[client.Character.Characterslotid];
                     Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+
+                    //Settings for Map Entry until settings are databased.
+                    client.Character.MapId = 9009001;//Set your map here. See reference table in "MapSettings.CS"
+                    string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
+
+                    client.Character.X = float.Parse(theMapSettings[6]);
+                    client.Character.Y = float.Parse(theMapSettings[7]);
+                    client.Character.Z = float.Parse(theMapSettings[8]);
+                    //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
+                    break;
                 }
             }
             if (CharacterIdInSelectedSlot < 6)

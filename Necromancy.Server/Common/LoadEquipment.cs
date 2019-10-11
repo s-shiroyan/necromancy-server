@@ -101,12 +101,12 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0);
                 res.WriteByte(0); //0  ????
 
-                res.WriteInt32(headSlot[x]);//???
+                res.WriteInt32(0);//???
                 res.WriteByte(0); //
                 res.WriteByte(0); //
                 res.WriteByte(0); //                
 
-                res.WriteByte(000);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                 res.WriteByte(0); // testing (Theory Torso Tex)
                 res.WriteByte(0); // testing (Theory Pants Tex)

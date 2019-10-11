@@ -76,11 +76,7 @@ namespace Necromancy.Server.Model
             NewCharaProtocol = false;
             WeaponType = 8;
             AdventureBagGold = 80706050;
-            //Settings for Map Entry until settings are databased.
-            MapId = 1001002;
-            X = 23162;
-            Y = -219;
-            Z = -7;
+            
         }
     }
 

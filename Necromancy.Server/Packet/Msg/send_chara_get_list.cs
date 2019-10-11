@@ -51,9 +51,7 @@ namespace Necromancy.Server.Packet.Msg
 
             //Database.SelectCharacterBySoulId(client.Character.SoulId);
             Console.WriteLine($"this is my SoulID {client.Character.SoulId}");
-            Console.WriteLine($"this is my SoulID {client.Character.SoulId}");
-            Console.WriteLine($"this is my SoulID {client.Character.SoulId}");
-     
+ 
 
             if (Database.SelectCharacterBySoulId(client.Character.SoulId) != null)
             {

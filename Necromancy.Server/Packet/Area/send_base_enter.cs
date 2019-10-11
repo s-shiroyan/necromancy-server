@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
+
 namespace Necromancy.Server.Packet.Area
 {
     public class send_base_enter : Handler
@@ -18,6 +19,7 @@ namespace Necromancy.Server.Packet.Area
             int accountId = packet.Data.ReadInt32();
             int unknown = packet.Data.ReadInt32();
             byte[] unknown1 = packet.Data.ReadBytes(20); // Suspect SessionId
+
 
             // TODO replace with sessionId
             Session session = Server.Sessions.GetSession(accountId.ToString());
