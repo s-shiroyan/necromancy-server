@@ -273,7 +273,7 @@ namespace Necromancy.Server
             //_areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
             //_areaConsumer.AddHandler(new send_shortcut_request_data(this));
             //_areaConsumer.AddHandler(new send_skill_request_info(this));
-            //_areaConsumer.AddHandler(new send_sv_conf_option_change(this));
+            _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
 
         }
     }
