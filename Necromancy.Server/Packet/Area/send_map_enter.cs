@@ -29,16 +29,16 @@ namespace Necromancy.Server.Packet.Area
             {
                 SendDataNotifyCharaData(client, thisNecClient);
             }   
-        
-            if (client.Character.NewCharaProtocol == true)
+            //Commenting out code until a fix can be found.  This causes your character to be frozen upon map entry.   
+           /* if (client.Character.NewCharaProtocol == true)
             {
                 IBuffer res2 = BufferProvider.Provide();
 
-                res2.WriteInt32(2); //1 = cinematic, 0 Just start the event without cinematic
+                res2.WriteInt32(1); //1 = cinematic, 0 Just start the event without cinematic
                 res2.WriteByte(0);
-
+                client.Character.NewCharaProtocol = false;
                 Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2);
-            }
+            }*/
 
         }
         private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
