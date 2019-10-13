@@ -60,6 +60,7 @@ namespace Necromancy.Server.Model
         public bool NewCharaProtocol { get; set; }
         public int WeaponType { get; set; }
         public int AdventureBagGold { get; set; }
+        public byte soulFormState { get; set; }
 
 
 

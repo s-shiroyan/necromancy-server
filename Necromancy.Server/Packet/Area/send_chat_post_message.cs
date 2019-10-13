@@ -592,7 +592,7 @@ namespace Necromancy.Server.Packet.Area
         private void Revive(NecClient client)
         {
 
-            if (client.Character.State == 1)
+            if (client.Character.soulFormState == 1)
             {
                 /* IBuffer res1 = BufferProvider.Provide();
                  res1.WriteInt32(client.Character.Id);
@@ -608,7 +608,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0); // 0 = sucess to revive, 1 = failed to revive
-                client.Character.State -= 1;
+                client.Character.soulFormState  -= 1;
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_raisescale_request_revive_r, res);
 
                 IBuffer res2 = BufferProvider.Provide();
@@ -618,7 +618,7 @@ namespace Necromancy.Server.Packet.Area
 
             }
 
-            else if (client.Character.State == 0)
+            else if (client.Character.soulFormState == 0)
             {
 
 

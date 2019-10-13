@@ -18,10 +18,11 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res,res2 = BufferProvider.Provide();
+            IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //0 means success
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, client);
 
+            IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(client.Character.Id);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start, res2, client);
 

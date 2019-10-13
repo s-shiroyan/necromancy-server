@@ -135,7 +135,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_skill_request_info(this));
             _msgConsumer.AddHandler(new send_union_reply_to_invite2(this));
             _msgConsumer.AddHandler(new send_union_request_change_role(this));
-            _msgConsumer.AddHandler(new Send_union_request_detail(this));
+            //_msgConsumer.AddHandler(new Send_union_request_detail(this));
             _msgConsumer.AddHandler(new send_union_request_disband(this));
             _msgConsumer.AddHandler(new send_union_request_expel_member(this));
             _msgConsumer.AddHandler(new send_union_request_invite_target(this));
