@@ -105,7 +105,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(0); // party id?
 
             //sub_4837C0
-            res3.WriteInt32(0); // party id?
+            res3.WriteInt32(1); // party id? // i don't think sooo'
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -151,7 +151,21 @@ namespace Necromancy.Server.Packet.Area
 
 
             Router.Send(thisNecClient.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, thisNecClient);
-            //client.Character.weaponEquipped = false;
+
+            SendMapBGM(client);
+            client.Character.weaponEquipped = false;
         }
+
+          private void SendMapBGM(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(100401);
+
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_map_update_bgm, res, client);
+
+
+        } 
     }
 }

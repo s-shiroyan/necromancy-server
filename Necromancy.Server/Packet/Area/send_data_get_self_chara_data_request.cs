@@ -69,9 +69,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(45); // earth
                 res.WriteInt16(33); // light
                 res.WriteInt16(12); // dark
-                res.WriteInt16(145); // changed nothing visably
-                res.WriteInt16(85); // changed nothing visably
-                res.WriteInt16(96); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // mag def atrb
                 res.WriteInt16(5); // fire
@@ -80,9 +80,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(45); // earth
                 res.WriteInt16(33); // light
                 res.WriteInt16(12); // dark
-                res.WriteInt16(145); // changed nothing visably
-                res.WriteInt16(85); // changed nothing visably
-                res.WriteInt16(96); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 //status change resistance
                 res.WriteInt16(215); // fire
@@ -91,11 +91,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(455); // earth
                 res.WriteInt16(333); // light
                 res.WriteInt16(1222); // dark
-                res.WriteInt16(1445); // changed nothing visably
-                res.WriteInt16(858); // changed nothing visably
-                res.WriteInt16(962); // changed nothing visably
-                res.WriteInt16(968); // changed nothing visably
-                res.WriteInt16(9688); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // gold and alignment?
                 res.WriteInt64(client.Character.AdventureBagGold); // gold
@@ -103,12 +103,12 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(600000); // lawful
                 res.WriteInt32(5000); // neutral
                 res.WriteInt32(4000); // chaos
-                res.WriteInt32(3000); // changed nothing visably
+                res.WriteInt32(0); // show title ?  0 show adventurer hopeful, 1 desactivate ?
 
                 //sub_484980
-                res.WriteInt32(1);// changed nothing visably
-                res.WriteInt32(1);// changed nothing visably
-                res.WriteInt32(1);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
+                res.WriteInt32(0);// changed nothing visably
 
                 // characters stats
                 res.WriteInt16(client.Character.Strength); // str
@@ -120,27 +120,27 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(client.Character.luck); // luk
 
                 // nothing
-                res.WriteInt16(51); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(10); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(87); // changed nothing visably
-                res.WriteInt16(122); // changed nothing visably
-                res.WriteInt16(14); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
 
                 // nothing
-                res.WriteInt16(51); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(10); // changed nothing visably
-                res.WriteInt16(25); // changed nothing visably
-                res.WriteInt16(87); // changed nothing visably
-                res.WriteInt16(122); // changed nothing visably
-                res.WriteInt16(14); // changed nothing visably
-                res.WriteInt16(73); // changed nothing visably
-                res.WriteInt16(69); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 // nothing
                 res.WriteInt16(51); // changed nothing visably
@@ -196,21 +196,21 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(12); // max soul points
                 res.WriteByte(0); // 0 is white,1 yellow 2 red 3+ skull
                 res.WriteByte(0); //Bool
-                res.WriteByte(12); // changed nothing visably
-                res.WriteByte(72); // changed nothing visably
-                res.WriteByte(43); // changed nothing visably
-                res.WriteByte(75); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
+                res.WriteByte(0); // changed nothing visably
 
                 //sub_read_3-int16 unknown
-                res.WriteInt16(55); // changed nothing visably
-                res.WriteInt16(66); // changed nothing visably
-                res.WriteInt16(77); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
+                res.WriteInt16(0); // changed nothing visably
 
                 //sub_4833D0
-                res.WriteInt64(6);// changed nothing visably
+                res.WriteInt64(0);// changed nothing visably
 
                 //sub_4833D0
-                res.WriteInt64(7);// changed nothing visably
+                res.WriteInt64(0);// changed nothing visably
 
                 //sub_4834A0
                 res.WriteFixedString("", 97);//Shopname
