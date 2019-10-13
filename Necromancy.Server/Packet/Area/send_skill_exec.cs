@@ -40,7 +40,29 @@ namespace Necromancy.Server.Packet.Area
             */
             res.WriteFloat(1);//Cool time      ./Skill_base.csv   Column J 
             res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
-            Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res);
+            skillEffect(client);
         }
+        private void skillEffect(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(1); // 0 = nothing, 1 = activate effect
+            res.WriteFloat(client.Character.X);//x
+            res.WriteFloat(client.Character.Y + 50);//y
+            res.WriteFloat(client.Character.Z + 120);//z
+
+            res.WriteFloat(client.Character.X);//x
+            res.WriteFloat(client.Character.Y + 50);//y
+            res.WriteFloat(client.Character.Z + 120);//z
+
+            res.WriteInt32(1210371); // effect id
+            res.WriteInt32(4);
+            res.WriteInt32(6);
+
+            res.WriteInt32(1);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_eo_data, res);
+        }
+
+
     }
 }
