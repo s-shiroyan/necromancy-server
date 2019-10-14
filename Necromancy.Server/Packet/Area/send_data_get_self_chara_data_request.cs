@@ -103,7 +103,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(600000); // lawful
                 res.WriteInt32(5000); // neutral
                 res.WriteInt32(4000); // chaos
-                res.WriteInt32(0); // show title ?  0 show adventurer hopeful, 1 desactivate ?
+                res.WriteInt32(Util.GetRandomNumber(90400101, 90400130)); // title from honor.csv
 
                 //sub_484980
                 res.WriteInt32(0);// changed nothing visably

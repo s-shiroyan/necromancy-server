@@ -37,20 +37,38 @@ namespace Necromancy.Server.Packet.Area
 
                 byte c = packet.Data.ReadByte(); // some sort of direction modified var
 
-                byte d = packet.Data.ReadByte();
-
+                //XY movement on the Map
+                byte d = packet.Data.ReadByte(); //Camera Z related to character
                 byte e = packet.Data.ReadByte();
                 byte e1 = packet.Data.ReadByte(); // direction char is moving based from the view of camera? if that makes sense
+                byte f = packet.Data.ReadByte(); // Character Movement Direction //Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
+                                                /*
+                                                View Offset : Packet Value 
+                                                        0-29    = 63
+                                                        30-40   = 62
+                                                        41-42   = 61
+                                                        43      = 59
+                                                        44      = 60
+                                                        45      = 188
+                                                        46-47   = 189 
+                                                        48-59   = 190
+                                                        60-119  = 191
+                                                        120-130 = 190
+                                                        131-133 = 189
+                                                        133-144 = 188
+                                                        135     = 60
+                                                        136-138 = 61
+                                                        139-149 = 62
+                                                        150-179 = 63
+                                                */
 
-                byte f = packet.Data.ReadByte(); // also some sort of direction modified var
+                float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
 
-                int Incline = packet.Data.ReadInt32();
-                
                 byte h = packet.Data.ReadByte();
 
                 byte i = packet.Data.ReadByte();
 
-                byte j = packet.Data.ReadByte();
+                byte j = packet.Data.ReadByte(); //movement type?
 
                 byte k = packet.Data.ReadByte();
                 byte k1 = packet.Data.ReadByte();
@@ -59,10 +77,23 @@ namespace Necromancy.Server.Packet.Area
 
                 byte l = packet.Data.ReadByte();
 
-                client.Character.movementAnim = packet.Data.ReadByte();
+                client.Character.movementAnim = packet.Data.ReadByte(); //Character Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
 
-                client.Character.animJumpFall = packet.Data.ReadByte();
-                
+                client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
+                                                                        //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
+                                                                        //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
+                                                                        //81  jumping up,                //84  jumping down       //85 landing
+
+                if (j != 0)
+                {
+                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}]");
+                    //Console.WriteLine($"[][][] [{a}][{b}][{b1}][{c}]i32[{d}][{e}][{e1}][{f}] [] [{h}][{i}]J[{j}][{k}][{k1}][{k2}][{k3}][{l}] [] []");
+                    Console.WriteLine($"i32[{d}][{e}][{e1}][{f}]");
+                }
+                else
+                {
+                    Console.WriteLine($"Movement Stop Reset");
+                }
                 // the game divides the normal 359 radius by 2. giving view direction only 1-180
 
                 if (client.Character.viewOffset <= 180) // NORTH
