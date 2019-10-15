@@ -78,7 +78,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.SetPositionStart();
 
-            for (int i = 5; i < 658 - 1; i++)
+            for (int i = 5; i < 839 - 1; i++)
             {
                 byteArr[i] += res.ReadByte();
             }
