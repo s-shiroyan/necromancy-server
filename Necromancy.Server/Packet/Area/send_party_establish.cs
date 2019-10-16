@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_party_establish : Handler
+    public class send_party_establish : ClientHandler
     {
         public send_party_establish(NecServer server) : base(server)
         {
@@ -30,7 +30,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
 
             SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClient);
         }
@@ -119,9 +119,10 @@ namespace Necromancy.Server.Packet.Area
                 byteArr[i] += res.ReadByte();
             }
 
-            //Router.Send(client, (ushort)MsgPacketId.recv_party_notify_establish, res);
-            //Router.Send(client.Session.msgSocket, (ushort)MsgPacketId.recv_party_notify_establish, res);
-            client.Session.msgSocket.Send(byteArr);
+            //Router.Send(client, (ushort)MsgPacketId.recv_party_notify_establish, res, ServerType.Area);
+            //Router.Send(client.Session.msgSocket, (ushort)MsgPacketId.recv_party_notify_establish, res, ServerType.Area);
+            // TODO use packet format 
+            //  client.MsgConnection.Send(byteArr);
         }
 
         private void SendPartyRegistMemberRecruit(NecClient client)
@@ -130,7 +131,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
         }
 
         private void SendPartyNotifyRecruitRequest(NecClient client, int partyType, int normItemDist, int rareItemDist, int targetClient)
@@ -142,7 +143,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(normItemDist);
             res.WriteInt32(rareItemDist);
             res.WriteInt32(targetClient);
-            Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
         }
 
         private void SendPartyInvite(NecClient client, int targetClient)
@@ -152,7 +153,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_party_invite_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_invite_r, res, ServerType.Area);
         }
 
         private void SendPartyApply(NecClient client, int targetClient)
@@ -163,7 +164,7 @@ namespace Necromancy.Server.Packet.Area
 
         	res.WriteInt32(targetClient);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_apply_r, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_apply_r, res, ServerType.Area);
         }
 
         private void SendCharaNotifyPartyJoin(NecClient client)
@@ -175,7 +176,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteInt32(0);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_party_join, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
         }
 
         private void SendPartyChangeLeader(NecClient client)
@@ -185,7 +186,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(client.Character.Id);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_change_leader_r, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_change_leader_r, res, ServerType.Area);
         }
     }
 }

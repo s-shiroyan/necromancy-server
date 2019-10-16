@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_select_channel_r : Handler
+    public class send_event_select_channel_r : ClientHandler
     {
         public send_event_select_channel_r(NecServer server) : base(server)
         {
@@ -38,14 +38,14 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
             }
             res.WriteByte(4); // Numbers of channel, 0 = no channel
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_channel, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_channel, res, ServerType.Area);
             SendEventEnd(client);
         }
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area, client);
 
         }
 

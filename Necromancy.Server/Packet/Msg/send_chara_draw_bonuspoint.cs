@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_draw_bonuspoint : Handler
+    public class send_chara_draw_bonuspoint : ClientHandler
     {
         public send_chara_draw_bonuspoint(NecServer server) : base(server)
         {
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteByte(bonusPoints); // Number of points
 
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_draw_bonuspoint_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_draw_bonuspoint_r, res, ServerType.Msg);
         }
     }
 }

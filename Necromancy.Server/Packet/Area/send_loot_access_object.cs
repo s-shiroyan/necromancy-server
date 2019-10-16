@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_loot_access_object : Handler
+    public class send_loot_access_object : ClientHandler
     {
         public send_loot_access_object(NecServer server) : base(server)
         {
@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(objectID);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
         }
     }
 }

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_quest_order_r : Handler
+    public class send_event_quest_order_r : ClientHandler
     {
         public send_event_quest_order_r(NecServer server) : base(server)
         {
@@ -64,7 +64,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(0);
             }
             res.WriteByte(1); // Add more completion requirement, Collect, Mob kill, ect.., 2 = 2 requirement !! 1 = 1requirement !! 0 = 0requirement.
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_quest_order, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_quest_order, res, ServerType.Area);
 
 
             SendEventEnd(client);
@@ -73,7 +73,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area, client);
 
         }
 

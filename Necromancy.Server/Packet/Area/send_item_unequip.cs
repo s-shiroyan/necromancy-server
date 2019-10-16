@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_unequip : Handler
+    public class send_item_unequip : ClientHandler
     {
         public send_item_unequip(NecServer server) : base(server)
         {
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             ERR_UNEQUIP GENERIC
             */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
             SendCharaUnequipped(client);
         }
 
@@ -44,7 +44,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(EquipBitMask[x]);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_dbg_chara_unequipped, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_dbg_chara_unequipped, res, ServerType.Area, client);
 
         }
 

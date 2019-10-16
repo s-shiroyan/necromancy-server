@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_union_mantle_close : Handler
+    public class send_union_mantle_close : ClientHandler
     {
         public send_union_mantle_close(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_union_mantle_close_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_union_mantle_close_r, res, ServerType.Area);
         }
 
     }

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_wanted_jail_payment : Handler
+    public class send_wanted_jail_payment : ClientHandler
     {
         public send_wanted_jail_payment(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_payment_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_payment_r, res, ServerType.Area);
         }
 
     }

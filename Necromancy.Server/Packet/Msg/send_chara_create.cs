@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_create : Handler
+    public class send_chara_create : ClientHandler
     {
         public send_chara_create(NecServer server) : base(server)
         {
@@ -66,7 +66,7 @@ namespace Necromancy.Server.Packet.Msg
             if (!Database.InsertCharacter(character))
             {
                 Logger.Error(client, $"Failed to create CharacterSlot: {character_slot_id}");
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 
@@ -101,7 +101,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(1);
 
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res, ServerType.Msg);
         }
     }
 }

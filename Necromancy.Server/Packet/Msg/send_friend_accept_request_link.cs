@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_friend_accept_request_link : Handler
+    public class send_friend_accept_request_link : ClientHandler
     {
         public send_friend_accept_request_link(NecServer server) : base(server)
         {
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);  // 0 = sucess, 1 = Request was not approved
             res.WriteInt32(0); // ??
-            Router.Send(client, (ushort)MsgPacketId.recv_friend_reply_to_link_r, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_friend_reply_to_link_r, res, ServerType.Msg);
             NotifyFriendInvite(client);
         }
 
@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            Router.Send(client, (ushort)MsgPacketId.recv_friend_notify_add_member_r, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_friend_notify_add_member_r, res, ServerType.Msg);
         } 
     }
 }

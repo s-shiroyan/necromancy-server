@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_wanted_jail_draw_point : Handler
+    public class send_wanted_jail_draw_point : ClientHandler
     {
         public send_wanted_jail_draw_point(NecServer server) : base(server)
         {
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0); // if 1 Message = Bail Paid
             res.WriteInt32(Util.GetRandomNumber(0, 150)); // Roll number you get when you roll
             res.WriteByte(0);//bool
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_draw_point_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_draw_point_r, res, ServerType.Area);
         }
 
     }

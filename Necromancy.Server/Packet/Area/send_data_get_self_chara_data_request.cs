@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_data_get_self_chara_data_request : Handler
+    public class send_data_get_self_chara_data_request : ClientHandler
     {
         public send_data_get_self_chara_data_request(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             SendDataGetSelfCharaData(client);
 
             IBuffer res2 = BufferProvider.Provide();
-            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
 
         }
 
@@ -258,7 +258,7 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteInt32(15100901);
                 }
 
-                Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res);
+                Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
             
 
             

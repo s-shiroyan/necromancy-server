@@ -7,7 +7,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_select : Handler
+    public class send_chara_select : ClientHandler
     {
         public send_chara_select(NecServer server) : base(server)
         {
@@ -62,7 +62,7 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);//View offset
                                  //
 
-                Router.Send(client, (ushort)MsgPacketId.recv_channel_select_r, res);
+                Router.Send(client, (ushort)MsgPacketId.recv_channel_select_r, res, ServerType.Msg);
 
                 client.Character.NewCharaProtocol = true;
 
@@ -99,7 +99,7 @@ namespace Necromancy.Server.Packet.Msg
 
                 res2.WriteByte(10); //# of channels
 
-                Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2);
+                Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
             }
         }
     }

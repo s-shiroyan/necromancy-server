@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_script_play_r : Handler
+    public class send_event_script_play_r : ClientHandler
     {
         public send_event_script_play_r(NecServer server) : base(server)
         {
@@ -20,14 +20,14 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteCString("ToBeFound"); // find max size 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_script_play, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
             SendEventEnd(client);
         }
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area, client);
 
         }
 

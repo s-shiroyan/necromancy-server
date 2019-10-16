@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_friend_reply_to_link2 : Handler
+    public class send_friend_reply_to_link2 : ClientHandler
     {
         public send_friend_reply_to_link2(NecServer server) : base(server)
         {
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteInt32(1); // 0  = msg friend added
 
-            Router.Send(client, (ushort)MsgPacketId.recv_friend_result_reply_link2, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_friend_result_reply_link2, res, ServerType.Msg);
         }
     }
 }
