@@ -7,6 +7,7 @@ using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp;
 using Arrowgene.Services.Networking.Tcp.Consumer;
 using Arrowgene.Services.Networking.Tcp.Consumer.BlockingQueueConsumption;
+using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
@@ -25,7 +26,7 @@ namespace Necromancy.Server
         private readonly NecLogger _logger;
         private readonly object _lock;
         private readonly int _maxUnitOfOrder;
-        private string _identity;
+        private ServerType _serverType;
         private NecSetting _setting;
         private volatile bool _isRunning;
 
@@ -38,25 +39,17 @@ namespace Necromancy.Server
         public Action Started;
         public Action Stopped;
 
-        public void SetIdentity(string identity)
-        {
-            if (!string.IsNullOrEmpty(identity))
-            {
-                _identity = identity;
-            }
-        }
-
-        public NecQueueConsumer(NecSetting setting)
+        public NecQueueConsumer(ServerType serverType, NecSetting setting, AsyncEventSettings socketSetting)
         {
             _setting = setting;
             _logger = LogProvider.Logger<NecLogger>(this);
-            _maxUnitOfOrder = 2; // TODO read from setting
+            _maxUnitOfOrder = socketSetting.MaxUnitOfOrder;
             _queues = new BlockingCollection<ClientEvent>[_maxUnitOfOrder];
             _threads = new Thread[_maxUnitOfOrder];
             _lock = new object();
             _handlers = new Dictionary<int, IHandler>();
             _clients = new Dictionary<ITcpSocket, NecClient>();
-            _identity = "";
+            _serverType = serverType;
         }
 
         public void Clear()
@@ -82,7 +75,7 @@ namespace Necromancy.Server
 
             if (_handlers.ContainsKey(handler.Id))
             {
-                _logger.Error($"[{_identity}] HandlerId: {handler.Id} already exists");
+                _logger.Error($"[{_serverType}] HandlerId: {handler.Id} already exists");
             }
             else
             {
@@ -102,7 +95,7 @@ namespace Necromancy.Server
             {
                 if (!_clients.ContainsKey(socket))
                 {
-                    _logger.Error(socket, $"[{_identity}] Client does not exist in lookup");
+                    _logger.Error(socket, $"[{_serverType}] Client does not exist in lookup");
                     return;
                 }
 
@@ -118,11 +111,11 @@ namespace Necromancy.Server
                     if (handler.ExpectedSize != NoExpectedSize && packet.Data.Size < handler.ExpectedSize)
                     {
                         _logger.Error(client,
-                            $"[{_identity}] Ignoring Packed (Id:{packet.Id}) is smaller ({packet.Data.Size}) than expected ({handler.ExpectedSize})");
+                            $"[{_serverType}] Ignoring Packed (Id:{packet.Id}) is smaller ({packet.Data.Size}) than expected ({handler.ExpectedSize})");
                         continue;
                     }
 
-                    _logger.LogIncomingPacket(client, packet, _identity);
+                    _logger.LogIncomingPacket(client, packet, _serverType);
                     packet.Data.SetPositionStart();
                     try
                     {
@@ -135,7 +128,7 @@ namespace Necromancy.Server
                 }
                 else
                 {
-                    _logger.LogUnknownIncomingPacket(client, packet, _identity);
+                    _logger.LogUnknownIncomingPacket(client, packet, _serverType);
                 }
             }
         }
@@ -147,13 +140,13 @@ namespace Necromancy.Server
             {
                 if (!_clients.ContainsKey(socket))
                 {
-                    _logger.Error(socket, $"[{_identity}] Disconnected client does not exist in lookup");
+                    _logger.Error(socket, $"[{_serverType}] Disconnected client does not exist in lookup");
                     return;
                 }
 
                 client = _clients[socket];
                 _clients.Remove(socket);
-                _logger.Debug($"[{_identity}] Clients Count: {_clients.Count}");
+                _logger.Debug($"[{_serverType}] Clients Count: {_clients.Count}");
             }
 
             Action<NecClient> onClientDisconnected = ClientDisconnected;
@@ -169,16 +162,16 @@ namespace Necromancy.Server
                 }
             }
 
-            _logger.Info(client, $"[{_identity}] Client disconnected");
+            _logger.Info(client, $"[{_serverType}] Client disconnected");
         }
 
         private void HandleConnected(ITcpSocket socket)
         {
-            NecClient client = new NecClient(socket, new PacketFactory(_setting));
+            NecClient client = new NecClient(socket, new PacketFactory(_setting), _serverType);
             lock (_lock)
             {
                 _clients.Add(socket, client);
-                _logger.Debug($"[{_identity}] Clients Count: {_clients.Count}");
+                _logger.Debug($"[{_serverType}] Clients Count: {_clients.Count}");
             }
 
             Action<NecClient> onClientConnected = ClientConnected;
@@ -194,7 +187,7 @@ namespace Necromancy.Server
                 }
             }
 
-            _logger.Info(client, $"[{_identity}] Client connected");
+            _logger.Info(client, $"[{_serverType}] Client connected");
         }
 
         private void Consume(int unitOfOrder)
@@ -235,8 +228,8 @@ namespace Necromancy.Server
                 int uuo = i;
                 _queues[i] = new BlockingCollection<ClientEvent>();
                 _threads[i] = new Thread(() => Consume(uuo));
-                _threads[i].Name = $"[{_identity}] Consumer: {i}";
-                _logger.Info($"[{_identity}] Starting Consumer: {i}");
+                _threads[i].Name = $"[{_serverType}] Consumer: {i}";
+                _logger.Info($"[{_serverType}] Starting Consumer: {i}");
                 _threads[i].Start();
             }
         }
@@ -272,9 +265,9 @@ namespace Necromancy.Server
             for (int i = 0; i < _maxUnitOfOrder; i++)
             {
                 Thread consumerThread = _threads[i];
-                _logger.Info($"[{_identity}] Shutting Consumer: {i} down...");
+                _logger.Info($"[{_serverType}] Shutting Consumer: {i} down...");
                 Service.JoinThread(consumerThread, 10000, _logger);
-                _logger.Info($"[{_identity}] Consumer: {i} ended.");
+                _logger.Info($"[{_serverType}] Consumer: {i} ended.");
                 _threads[i] = null;
             }
         }

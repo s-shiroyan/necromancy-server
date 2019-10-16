@@ -37,32 +37,32 @@ namespace Necromancy.Server
             Sessions = new SessionManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
-            _authConsumer = new NecQueueConsumer(Setting);
-            _authConsumer.SetIdentity("Auth");
+            _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
-            _msgConsumer = new NecQueueConsumer(Setting);
-            _msgConsumer.SetIdentity("Msg");
+            _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);
             _msgConsumer.ClientDisconnected += MsgClientDisconnected;
-            _areaConsumer = new NecQueueConsumer(Setting);
-            _areaConsumer.SetIdentity("Area");
+            _areaConsumer = new NecQueueConsumer(ServerType.Area, Setting, Setting.AreaSocketSettings);
             _areaConsumer.ClientDisconnected += AreaClientDisconnected;
 
             _authServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
                 Setting.AuthPort,
-                _authConsumer
+                _authConsumer,
+                Setting.AuthSocketSettings
             );
 
             _msgServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
                 Setting.MsgPort,
-                _msgConsumer
+                _msgConsumer,
+                Setting.MsgSocketSettings
             );
 
             _areaServer = new AsyncEventServer(
                 Setting.ListenIpAddress,
                 Setting.AreaPort,
-                _areaConsumer
+                _areaConsumer,
+                Setting.AreaSocketSettings
             );
 
             LoadHandler();

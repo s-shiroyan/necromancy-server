@@ -99,29 +99,29 @@ namespace Necromancy.Server.Logging
             Write(LogLevel.Error, NecLogType.PacketError, log);
         }
 
-        public void LogIncomingPacket(NecClient client, NecPacket packet, string identity)
+        public void LogIncomingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.In, identity);
+                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.In, serverType);
                 Packet(logPacket);
             }
         }
 
-        public void LogUnknownIncomingPacket(NecClient client, NecPacket packet, string identity)
+        public void LogUnknownIncomingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogUnknownIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Unhandled, identity);
+                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Unhandled, serverType);
                 Packet(logPacket);
             }
         }
 
-        public void LogOutgoingPacket(NecClient client, NecPacket packet)
+        public void LogOutgoingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogOutgoingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Out);
+                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Out, serverType);
                 Packet(logPacket);
             }
         }

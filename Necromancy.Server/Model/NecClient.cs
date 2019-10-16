@@ -13,11 +13,12 @@ namespace Necromancy.Server.Model
     {
         private readonly NecLogger _logger;
 
-        public NecClient(ITcpSocket clientSocket, PacketFactory packetFactory)
+        public NecClient(ITcpSocket clientSocket, PacketFactory packetFactory, ServerType serverType)
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            PacketFactory = packetFactory;
             Socket = clientSocket;
+            PacketFactory = packetFactory;
+            ServerType = serverType;
             UpdateIdentity();
         }
 
@@ -61,6 +62,7 @@ namespace Necromancy.Server.Model
         public string Identity { get; private set; }
         public ITcpSocket Socket { get; }
         public PacketFactory PacketFactory { get; }
+        public ServerType ServerType { get; }
 
         public List<NecPacket> Receive(byte[] data)
         {
@@ -91,7 +93,7 @@ namespace Necromancy.Server.Model
                 return;
             }
 
-            _logger.LogOutgoingPacket(this, packet);
+            _logger.LogOutgoingPacket(this, packet, ServerType);
             Socket.Send(data);
         }
 
