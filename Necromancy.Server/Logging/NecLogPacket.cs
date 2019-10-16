@@ -8,17 +8,17 @@ namespace Necromancy.Server.Logging
 {
     public class NecLogPacket : NecPacket
     {
-        public NecLogPacket(NecClient client, NecPacket packet, NecLogType logType, ServerType serverType)
+        public NecLogPacket(string clientIdentity, NecPacket packet, NecLogType logType, ServerType serverType)
             : base(packet.Id, packet.Data.Clone())
         {
             ServerType = serverType;
             Header = packet.Header;
             LogType = logType;
             TimeStamp = DateTime.Now;
-            Client = client;
+            ClientIdentity = clientIdentity;
         }
         
-        public NecClient Client { get; }
+        public string ClientIdentity { get; }
         public NecLogType LogType { get; }
         public DateTime TimeStamp { get; }
         public ServerType ServerType { get; }
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Logging
 
         public string ToLogText()
         {
-            String log = $"{Client.Identity} Packet Log";
+            String log = $"{ClientIdentity} Packet Log";
             log += Environment.NewLine;
             log += "----------";
             log += Environment.NewLine;

@@ -4,7 +4,6 @@ using Necromancy.Server.Data;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Setting;
 
-
 namespace Necromancy.Server
 {
     internal class Program
@@ -37,10 +36,23 @@ namespace Necromancy.Server
             LogProvider.Configure<NecLogger>(setting);
 
             NecServer server = new NecServer(setting);
+            Console.WriteLine("Press E-key to exit..");
             server.Start();
-            Console.WriteLine("Press any key to exit..");
-            Console.ReadLine();
-            server.Stop();
+            bool readKey = true;
+            while (readKey)
+            {
+                ConsoleKeyInfo keyInfo = Console.ReadKey();
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.E:
+                        Console.WriteLine("Exiting...");
+                        readKey = false;
+                        server.Stop();
+                        break;
+                }
+            }
+
+            Console.WriteLine("Ended");
         }
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)

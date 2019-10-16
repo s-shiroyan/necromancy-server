@@ -51,6 +51,11 @@ namespace Necromancy.Server.Logging
             Write(LogLevel.Error, null, $"{client.Identity} {exception}");
         }
 
+        public void Exception(NecConnection connection, Exception exception)
+        {
+            Write(LogLevel.Error, null, $"{connection.Identity} {exception}");
+        }
+
         public void Info(ITcpSocket socket, string message, params object[] args)
         {
             Write(LogLevel.Info, null, $"[{socket.Identity}] {message}", args);
@@ -103,7 +108,7 @@ namespace Necromancy.Server.Logging
         {
             if (_setting.LogIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.In, serverType);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.In, serverType);
                 Packet(logPacket);
             }
         }
@@ -112,7 +117,7 @@ namespace Necromancy.Server.Logging
         {
             if (_setting.LogUnknownIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Unhandled, serverType);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.Unhandled, serverType);
                 Packet(logPacket);
             }
         }
@@ -121,7 +126,16 @@ namespace Necromancy.Server.Logging
         {
             if (_setting.LogOutgoingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client, packet, NecLogType.Out, serverType);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.Out, serverType);
+                Packet(logPacket);
+            }
+        }
+
+        public void LogOutgoingPacket(NecConnection connection, NecPacket packet, ServerType serverType)
+        {
+            if (_setting.LogOutgoingPackets)
+            {
+                NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.Out, serverType);
                 Packet(logPacket);
             }
         }

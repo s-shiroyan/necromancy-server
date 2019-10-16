@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 
@@ -13,13 +10,9 @@ namespace Necromancy.Server.Model
     {
         private readonly NecLogger _logger;
 
-        public NecClient(ITcpSocket clientSocket, PacketFactory packetFactory, ServerType serverType)
+        public NecClient()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            Socket = clientSocket;
-            PacketFactory = packetFactory;
-            ServerType = serverType;
-            UpdateIdentity();
         }
 
         #region Session
@@ -60,46 +53,28 @@ namespace Necromancy.Server.Model
         #endregion
 
         public string Identity { get; private set; }
-        public ITcpSocket Socket { get; }
-        public PacketFactory PacketFactory { get; }
-        public ServerType ServerType { get; }
 
-        public List<NecPacket> Receive(byte[] data)
+        public NecConnection AuthConnection { get; set; }
+        public NecConnection MsgConnection { get; set; }
+        public NecConnection AreaConnection { get; set; }
+
+        public void Send(NecPacket packet, ServerType serverType)
         {
-            List<NecPacket> packets;
-            try
+            switch (serverType)
             {
-                packets = PacketFactory.Read(data, this);
+                case ServerType.Area:
+                    AreaConnection.Send(packet);
+                    break;
+                case ServerType.Msg:
+                    MsgConnection.Send(packet);
+                    break;
+                case ServerType.Auth:
+                    AuthConnection.Send(packet);
+                    break;
+                default:
+                    _logger.Error(this, "Invalid ServerType");
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.Exception(this, ex);
-                packets = new List<NecPacket>();
-            }
-
-            return packets;
-        }
-
-        public void Send(NecPacket packet)
-        {
-            byte[] data;
-            try
-            {
-                data = PacketFactory.Write(packet, this);
-            }
-            catch (Exception ex)
-            {
-                _logger.Exception(this, ex);
-                return;
-            }
-
-            _logger.LogOutgoingPacket(this, packet, ServerType);
-            Socket.Send(data);
-        }
-
-        public void UpdateIdentity()
-        {
-            Identity = $"[{Socket.Identity}]";
         }
     }
 }

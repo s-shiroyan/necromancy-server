@@ -22,7 +22,7 @@ namespace Necromancy.Server
         private readonly BlockingCollection<ClientEvent>[] _queues;
         private readonly Thread[] _threads;
         private readonly Dictionary<int, IHandler> _handlers;
-        private readonly Dictionary<ITcpSocket, NecClient> _clients;
+        private readonly Dictionary<ITcpSocket, NecConnection> _connections;
         private readonly NecLogger _logger;
         private readonly object _lock;
         private readonly int _maxUnitOfOrder;
@@ -48,7 +48,7 @@ namespace Necromancy.Server
             _threads = new Thread[_maxUnitOfOrder];
             _lock = new object();
             _handlers = new Dictionary<int, IHandler>();
-            _clients = new Dictionary<ITcpSocket, NecClient>();
+            _connections = new Dictionary<ITcpSocket, NecConnection>();
             _serverType = serverType;
         }
 
@@ -90,19 +90,19 @@ namespace Necromancy.Server
                 return;
             }
 
-            NecClient client;
+            NecConnection connection;
             lock (_lock)
             {
-                if (!_clients.ContainsKey(socket))
+                if (!_connections.ContainsKey(socket))
                 {
                     _logger.Error(socket, $"[{_serverType}] Client does not exist in lookup");
                     return;
                 }
 
-                client = _clients[socket];
+                connection = _connections[socket];
             }
 
-            List<NecPacket> packets = client.Receive(data);
+            List<NecPacket> packets = connection.Receive(data);
             foreach (NecPacket packet in packets)
             {
                 if (_handlers.ContainsKey(packet.Id))
@@ -135,18 +135,18 @@ namespace Necromancy.Server
 
         private void HandleDisconnected(ITcpSocket socket)
         {
-            NecClient client;
+            NecConnection connection;
             lock (_lock)
             {
-                if (!_clients.ContainsKey(socket))
+                if (!_connections.ContainsKey(socket))
                 {
                     _logger.Error(socket, $"[{_serverType}] Disconnected client does not exist in lookup");
                     return;
                 }
 
-                client = _clients[socket];
-                _clients.Remove(socket);
-                _logger.Debug($"[{_serverType}] Clients Count: {_clients.Count}");
+                connection = _connections[socket];
+                _connections.Remove(socket);
+                _logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
             }
 
             Action<NecClient> onClientDisconnected = ClientDisconnected;
@@ -167,11 +167,11 @@ namespace Necromancy.Server
 
         private void HandleConnected(ITcpSocket socket)
         {
-            NecClient client = new NecClient(socket, new PacketFactory(_setting), _serverType);
+            NecConnection connection = new NecConnection(socket, new PacketFactory(_setting), _serverType);
             lock (_lock)
             {
-                _clients.Add(socket, client);
-                _logger.Debug($"[{_serverType}] Clients Count: {_clients.Count}");
+                _connections.Add(socket, connection);
+                _logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
             }
 
             Action<NecClient> onClientConnected = ClientConnected;
