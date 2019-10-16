@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             // No Response OP code
-            // Router.Send(client, (ushort) 0x0000, res);            
+            // Router.Send(client, (ushort) 0x0000, res, ServerType.Area);            
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
            
 
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_delete_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_delete_r, res, ServerType.Msg);
         }
     }
 }

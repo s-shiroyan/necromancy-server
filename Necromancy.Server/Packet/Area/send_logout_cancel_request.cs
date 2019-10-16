@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);//Ready to discover
 
-            Router.Send(client, (ushort) AreaPacketId.recv_logout_cancel_request_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_logout_cancel_request_r, res, ServerType.Area);
         }
     }
 }

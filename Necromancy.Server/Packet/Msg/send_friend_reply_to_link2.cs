@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteInt32(1); // 0  = msg friend added
 
-            Router.Send(client, (ushort)MsgPacketId.recv_friend_result_reply_link2, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_friend_result_reply_link2, res, ServerType.Msg);
         }
     }
 }

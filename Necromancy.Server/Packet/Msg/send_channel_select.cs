@@ -32,7 +32,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//View offset
             //
 
-            Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res, ServerType.Msg);
         }
     }
 }

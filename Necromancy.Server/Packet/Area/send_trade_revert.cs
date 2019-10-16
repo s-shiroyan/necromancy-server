@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // error check?
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_revert_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_revert_r, res, ServerType.Area);
             recvTradeNotifyRevert(client);
         }
 
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0); //?
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_trade_notify_reverted, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_trade_notify_reverted, res, ServerType.Area, client);
 
         }
     }

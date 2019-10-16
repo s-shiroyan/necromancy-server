@@ -49,7 +49,7 @@ namespace Necromancy.Server.Packet.Area
             
 
 
-            Router.Send(client, (ushort) AreaPacketId.recv_blacklist_open_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_blacklist_open_r, res, ServerType.Area);
         }
     }
 }

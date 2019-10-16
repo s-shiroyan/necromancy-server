@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(myRefusalListAddIdPart1);
             res.WriteInt32(999);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_refusallist_add_user_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_refusallist_add_user_r, res, ServerType.Area);
         }
     }
 }

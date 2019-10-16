@@ -20,11 +20,11 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //0 means success
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area, client);
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(client.Character.Id);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start, res2, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start, res2, ServerType.Area, client);
 
             SendBattleAttackStartR(client);
 
@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteInt32(client.Character.Id);
-            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_start_r, res4);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_start_r, res4, ServerType.Area);
 
 
         }

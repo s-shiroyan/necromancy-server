@@ -15,7 +15,6 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public SessionManager Sessions { get; }
         public ClientLookup Clients { get; set; }
         public MapLookup Map { get; set; }
         public IDatabase Database { get; set; }
@@ -34,7 +33,6 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
             Clients = new ClientLookup();
             Map = new MapLookup();
-            Sessions = new SessionManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);

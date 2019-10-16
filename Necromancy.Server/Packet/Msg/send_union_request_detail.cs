@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
            
-            Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res, ServerType.Msg);
         }
     }
 }

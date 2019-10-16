@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_stall_shopping_abort_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_stall_shopping_abort_r, res, ServerType.Area);
 
             SendStallShoppingNotifyAborted(client);
         }
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            Router.Send(client, (ushort)AreaPacketId.recv_stall_shopping_notify_aborted, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_stall_shopping_notify_aborted, res, ServerType.Area);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             int myGoldOffer = packet.Data.ReadInt32();
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // error check.  must be 0 to succeed
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_set_money_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_set_money_r, res, ServerType.Area);
         }
 
     }

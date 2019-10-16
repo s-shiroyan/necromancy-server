@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); 
             res.WriteByte(0); // bool in JP client TODO what is it in US???
-            Router.Send(client, (ushort) MsgPacketId.recv_soul_set_passwd_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_set_passwd_r, res, ServerType.Msg);
         }
     }
 }

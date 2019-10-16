@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);
             res.WriteFloat(1);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res, ServerType.Area);            
         }
     }
 }

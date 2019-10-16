@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteByte(bonusPoints); // Number of points
 
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_draw_bonuspoint_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_draw_bonuspoint_r, res, ServerType.Msg);
         }
     }
 }

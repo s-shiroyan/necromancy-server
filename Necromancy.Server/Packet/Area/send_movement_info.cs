@@ -238,7 +238,7 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, client);
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);
 
 
                         //System.Threading.Thread.Sleep(1000);
@@ -253,9 +253,9 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteByte(client.Character.viewOffset);//View offset
                     res.WriteByte(0);//Character state?
 
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, client);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area, client);
 
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, client);
+                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
 
 
                 }

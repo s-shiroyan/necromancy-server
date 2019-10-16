@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Logging;
@@ -13,47 +14,16 @@ namespace Necromancy.Server.Model
         public NecClient()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
+            Creation = DateTime.Now;
         }
 
-        #region Session
-
-        public Session Session { get; set; }
-
-        public Account Account
-        {
-            get => Session.Account;
-            set => Session.Account = value;
-        }
-
-        public Soul Soul
-        {
-            get => Session.Soul;
-            set => Session.Soul = value;
-        }
-
-        public Character Character
-        {
-            get => Session.Character;
-            set => Session.Character = value;
-        }
-
-        public Channel Channel
-        {
-            get => Session.Channel;
-            set => Session.Channel = value;
-        }
-
-
-        public Map Map
-        {
-            get => Session.Map;
-            set => Session.Map = value;
-        }
-
-        #endregion
-
+        public DateTime Creation { get; }
         public string Identity { get; private set; }
-
+        public Account Account { get; set; }
+        public Soul Soul { get; set; }
+        public Character Character { get; set; }
+        public Channel Channel { get; set; }
+        public Map Map { get; set; }
         public NecConnection AuthConnection { get; set; }
         public NecConnection MsgConnection { get; set; }
         public NecConnection AreaConnection { get; set; }

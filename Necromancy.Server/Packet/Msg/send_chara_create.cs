@@ -101,7 +101,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
             res.WriteInt32(1);
 
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res);
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res, ServerType.Msg);
         }
     }
 }

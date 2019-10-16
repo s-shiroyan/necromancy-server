@@ -24,11 +24,11 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
 
             res.WriteInt32(0);//0 = nothing happens, 1 = logout failed:1
-            Router.Send(client, (ushort)AreaPacketId.recv_logout_start_request_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_logout_start_request_r, res, ServerType.Area);
 
 
             res2.WriteInt32(10);
-            Router.Send(client, (ushort)AreaPacketId.recv_logout_start, res2);
+            Router.Send(client, (ushort)AreaPacketId.recv_logout_start, res2, ServerType.Area);
 
             Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith(t1 => { LogOutRequest(client, packet); });
 
@@ -52,7 +52,7 @@ namespace Necromancy.Server.Packet.Area
 
                     res.WriteInt32(0);
 
-                    Router.Send(client, (ushort)0xD68C, res2);
+                    Router.Send(client, (ushort)0xD68C, res2, ServerType.Area);
                 }
 
                 if (logOutType == 0x01)

@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);//Failed to send message error if not 0
 
-            Router.Send(client, (ushort) AreaPacketId.recv_create_package_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_create_package_r, res, ServerType.Area);
 
             SendPackageNotifyAdd(client, recipient, title, content, unknownByte, unknownInt, money);
         }
@@ -80,7 +80,7 @@ namespace Necromancy.Server.Packet.Area
             i += 2;
             
 
-            Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res, ServerType.Area);
         }
     }
 }

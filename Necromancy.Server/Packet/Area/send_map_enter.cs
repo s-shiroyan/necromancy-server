@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteByte(0);//Bool
 
-            Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res, ServerType.Area);
             Console.WriteLine($"{client.Character.Name} {client.Soul.Name} Entering Map: {client.Character.MapId}");
             Console.WriteLine($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
 
@@ -150,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("");//Comment string
 
 
-            Router.Send(thisNecClient.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, thisNecClient);
+            Router.Send(thisNecClient.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, ServerType.Area, thisNecClient);
 
             SendMapBGM(client);
             client.Character.weaponEquipped = false;
@@ -163,7 +163,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(100401);
 
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_map_update_bgm, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_map_update_bgm, res, ServerType.Area, client);
 
 
         } 

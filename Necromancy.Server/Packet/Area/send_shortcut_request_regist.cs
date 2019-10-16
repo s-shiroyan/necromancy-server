@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(skillSlot);
             res.WriteInt64(skillID);
             res.WriteFixedString("SkillName", 16);//size is 0x10
-            Router.Send(client, (ushort) AreaPacketId.recv_shortcut_notify_regist, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_shortcut_notify_regist, res, ServerType.Area);            
         }
     }
 }

@@ -20,13 +20,13 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
             SendEventRemoveTrapClose(client);
         }
         private void SendEventRemoveTrapClose(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_close, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_close, res, ServerType.Area, client);
 
         }
 

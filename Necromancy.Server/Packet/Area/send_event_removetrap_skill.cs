@@ -23,8 +23,8 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //Error check - 0 for success
             res.WriteFloat(22); //Re-cast time in seconds.  To-Do.  Database lookup Skill_Base.CSV   Select where Column A = disarmingSkill, return Column J (cooldown time).
-            //Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_skill_r2, res);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_removetrap_skill_r2, res);
+            //Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_skill_r2, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_removetrap_skill_r2, res, ServerType.Area);
         }
 
     }

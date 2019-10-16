@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             
             res.WriteInt32(0);  
 
-            Router.Send(client, (ushort) AreaPacketId.recv_chara_pose_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_chara_pose_r, res, ServerType.Area);
 
             SendCharaPoseNotify(client);
         }
@@ -39,7 +39,7 @@ namespace Necromancy.Server.Packet.Area
 
                 
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_pose_notify, res, client);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_pose_notify, res, ServerType.Area, client);
             
         }
     }

@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             
-            Router.Send(client, (ushort) AreaPacketId.recv_battle_release_attack_pose_r, res);  
+            Router.Send(client, (ushort) AreaPacketId.recv_battle_release_attack_pose_r, res, ServerType.Area);  
 
             SendBatttleAttackPoseEndNotify(client);          
         }
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             
             res.WriteInt32(client.Character.Id);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area, client);
 
             client.Character.weaponEquipped = false;
         }

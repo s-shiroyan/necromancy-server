@@ -19,14 +19,14 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_close_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_close_r, res, ServerType.Area);
             SendAuctionNotifyClose(client);
         }
 
         private void SendAuctionNotifyClose(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_notify_close, res, client);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_notify_close, res, ServerType.Area, client);
 
         }
     }

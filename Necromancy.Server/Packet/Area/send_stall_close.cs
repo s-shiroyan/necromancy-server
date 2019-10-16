@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_stall_close_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_stall_close_r, res, ServerType.Area);
 
             SendStallNotifyClosed(client);
         }
@@ -30,7 +30,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(client.Character.Id);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_notify_closed, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_notify_closed, res, ServerType.Area);
         }
     }
 }

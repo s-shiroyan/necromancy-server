@@ -43,7 +43,7 @@ namespace Necromancy.Server.Packet.Area
 
                 */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_select_package_update_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_select_package_update_r, res, ServerType.Area);
 
             if(loot)
             {
@@ -57,7 +57,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //ObjectID or error check
 
-            Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
         }
     }
 }

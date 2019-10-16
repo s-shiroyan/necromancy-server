@@ -7,7 +7,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_base_login : ClientHandler
+    public class send_base_login : ConnectionHandler
     {
         public send_base_login(NecServer server) : base(server)
         {
@@ -17,33 +17,32 @@ namespace Necromancy.Server.Packet.Msg
 
         public const int SoulCount = 2;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void Handle(NecConnection connection, NecPacket packet)
         {
             int accountId = packet.Data.ReadInt32();
             byte[] unknown = packet.Data.ReadBytes(20); // Suspect SessionId
             // TODO replace with sessionId
-            Session session = Server.Sessions.GetSession(accountId.ToString());
-            if (session == null)
+            NecClient client = Server.Clients.GetByAccountId(accountId);
+            if (client == null)
             {
-                Logger.Error(client, $"AccountId: {accountId} has no active session");
-                SendResponse(client);
-                client.Socket.Close();
+                Logger.Error(connection, $"AccountId: {accountId} has no active session");
+                // TODO refactor null check
+                SendResponse(connection, client);
+                connection.Socket.Close();
                 return;
             }
 
             // TODO initialize character from database
-            session.Character = new Character();
-            session.Character.Id = Util.GetRandomNumber(1, 999);
-            session.Character.SoulId = session.Account.Id; // TO DO  .  Query Soul ID by Account ID.    Account ID == Soul ID for now....
-            session.Character.AccountId = session.Account.Id;
-            session.msgSocket = client.Socket;
-
-            client.Session = session;
-            SendResponse(client);
+            client.Character = new Character();
+            client.Character.Id = Util.GetRandomNumber(1, 999);
+            client.Character.SoulId = client.Account.Id; // TO DO  .  Query Soul ID by Account ID.    Account ID == Soul ID for now....
+            client.Character.AccountId = client.Account.Id;
+            client.MsgConnection = connection;
+            SendResponse(connection, client);
         }
 
 
-        private void SendResponse(NecClient client)
+        private void SendResponse(NecConnection connection, NecClient client)
         {
             List<Soul> souls = Database.SelectSoulsByAccountId(client.Account.Id);
             if (souls.Count <= 0)
@@ -65,7 +64,7 @@ namespace Necromancy.Server.Packet.Msg
 
                 resq.WriteByte(0); // bool
                 resq.WriteByte(0);
-                Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, resq);
+                Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, resq, ServerType.Msg);
                 return;
             }
 
@@ -94,7 +93,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(0); // bool
             res.WriteByte(0);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res, ServerType.Msg);
         }
     }
 }

@@ -28,8 +28,8 @@ namespace Necromancy.Server.Packet.Auth
                 if (Settings.NeedRegistration)
                 {
                     Logger.Error(connection, $"AccountName: {accountName} doesn't exist");
-                    SendResponse(client, null);
-                    client.Socket.Close();
+                    SendResponse(connection, null);
+                    connection.Socket.Close();
                     return;
                 }
 
@@ -40,21 +40,19 @@ namespace Necromancy.Server.Packet.Auth
             if (!BCrypt.Net.BCrypt.Verify(password, account.Hash))
             {
                 Logger.Error(connection, $"Invalid password for AccountName: {accountName}");
-                SendResponse(client, null);
-                client.Socket.Close();
+                SendResponse(connection, null);
+                connection.Socket.Close();
                 return;
             }
-
-            // TODO replace with sessionId
-            Session session = new Session(account.Id.ToString(), account);
-            Server.Sessions.StoreSession(session);
-            client.Session = session;
-
+            
+            NecClient client = new NecClient();
+            client.AuthConnection = connection;
             Server.Clients.Add(client);
-            SendResponse(client, account);
+            
+            SendResponse(connection, account);
         }
 
-        private void SendResponse(NecClient client, Account account)
+        private void SendResponse(NecConnection connection, Account account)
         {
             IBuffer res = BufferProvider.Provide();
             if (account == null)
@@ -68,7 +66,7 @@ namespace Necromancy.Server.Packet.Auth
                 res.WriteInt32(account.Id);
             }
 
-            Router.Send(client, (ushort) AuthPacketId.recv_base_authenticate_r, res);
+            Router.Send(connection, (ushort) AuthPacketId.recv_base_authenticate_r, res);
         }
     }
 }

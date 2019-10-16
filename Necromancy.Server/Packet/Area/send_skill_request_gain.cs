@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Area
             //uint skillID = packet.Data.ReadUInt32();
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//1 = failed to aquire skill, 0 = success? but no skill aquired 
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res, ServerType.Area);            
         }
 
         private void SendSkillTreeGain(NecClient client, int skillID, int skillLevel)
@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0); //Bool
             res.WriteByte(0); //Bool
 
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_tree_gain, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_tree_gain, res, ServerType.Area);
         }
     }
 }

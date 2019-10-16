@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(3);
             res.WriteFixedString("soul name", 49);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_get_refusallist_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_get_refusallist_r, res, ServerType.Area);
         }
     }
 }

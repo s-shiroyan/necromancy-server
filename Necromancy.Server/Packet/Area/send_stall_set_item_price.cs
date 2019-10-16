@@ -54,7 +54,7 @@ namespace Necromancy.Server.Packet.Area
                    STALL	GENERIC	Shop error
                 */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_stall_set_item_price_r, res);            
+            Router.Send(client, (ushort) AreaPacketId.recv_stall_set_item_price_r, res, ServerType.Area);            
         }
     }
 }

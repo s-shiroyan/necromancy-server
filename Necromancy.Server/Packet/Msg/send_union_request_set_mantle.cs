@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Msg
            
             res.WriteInt32(0);
             
-            Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_mantle_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_mantle_r, res, ServerType.Msg);
         }
 
     }

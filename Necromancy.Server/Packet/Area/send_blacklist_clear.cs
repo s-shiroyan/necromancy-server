@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-            Router.Send(client, (ushort)AreaPacketId.recv_blacklist_clear_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_blacklist_clear_r, res, ServerType.Area);
             
         }
     }

@@ -19,15 +19,15 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(client.Character.MapId);
             res.WriteInt32(client.Character.MapId);
-            res.WriteFixedString("127.0.0.1", 65);//IP
-            res.WriteInt16(60002);//Port
+            res.WriteFixedString("127.0.0.1", 65); //IP
+            res.WriteInt16(60002); //Port
 
-            res.WriteFloat(100);//x coord
-            res.WriteFloat(100);//y coord
-            res.WriteFloat(100);//z coord
-            res.WriteByte(1);//view offset maybe?
+            res.WriteFloat(100); //x coord
+            res.WriteFloat(100); //y coord
+            res.WriteFloat(100); //z coord
+            res.WriteByte(1); //view offset maybe?
 
-            Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_change_force, res, ServerType.Area);
 
             SendMapChangeSyncOk(client);
         }
@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_map_change_sync_ok,res);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_change_sync_ok, res, ServerType.Area);
         }
     }
 }
