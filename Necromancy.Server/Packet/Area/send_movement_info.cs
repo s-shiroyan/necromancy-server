@@ -29,17 +29,17 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Z = packet.Data.ReadFloat();
 
 
-                //Suspect Camera related bytes Similar to X Y Z Below
+                //X? movement on the Map. Only triggers if you deviate from the X Axis (test on tall Ladders or by walking/running a perfect straight line on X
                 byte a = packet.Data.ReadByte();
                 byte b = packet.Data.ReadByte();
-                byte b1 = packet.Data.ReadByte();
-                byte c = packet.Data.ReadByte(); // some sort of direction modified var
+                byte b1 = packet.Data.ReadByte();//Character X Alignment with the Map X Axis (128 for perfect, 0 for 90Degree offset)
+                byte c = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
 
-                //X? movement on the Map. Only triggers if you deviate from the Y Axis (test on tall Ladders or by walking/running a perfect straight line on Y
+                //Y? movement on the Map. Only triggers if you deviate from the Y Axis (test on tall Ladders or by walking/running a perfect straight line on Y
                 byte d = packet.Data.ReadByte(); 
                 byte e = packet.Data.ReadByte();
-                byte e1 = packet.Data.ReadByte(); //Character Y Allignment with the Map Y Axis (0 for perfect, 128 for 90Degree offset)
-                byte f = packet.Data.ReadByte(); //Character facing Direction 
+                byte e1 = packet.Data.ReadByte(); //Character Y Alignment with the Map Y Axis (128 for perfect, 0 for 90Degree offset)
+                byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
                                                  /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
                                                  View Offset : Packet Value 
                                                          0-29    = 63
@@ -62,16 +62,16 @@ namespace Necromancy.Server.Packet.Area
 
                 float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
 
-                //Y axis movent on the map?  Need additional testing.  
-                byte h = packet.Data.ReadByte();
-                byte i = packet.Data.ReadByte();
-                byte j = packet.Data.ReadByte(); //movement type?
-                byte k = packet.Data.ReadByte();
+                //Movement related variables
+                byte h = packet.Data.ReadByte(); //Accelerate and Decelerate animation? related. Becomes 0 when stable speed/animation reached
+                byte i = packet.Data.ReadByte(); //Accelerate and Decelerate speed?     related. Becomes 0 when stable speed/animation reached
+                byte j = packet.Data.ReadByte(); //movement type/Speed   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
+                byte k = packet.Data.ReadByte(); //Direction related
 
-                //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistantly impacted by Jump
+                //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistently impacted by Jump
                 byte k1 = packet.Data.ReadByte();
                 byte k2 = packet.Data.ReadByte();
-                byte k3 = packet.Data.ReadByte();//Character X Allignment with the Map X Axis (0 for perfect, 128 for 90Degree offset)
+                byte k3 = packet.Data.ReadByte();//Character Z Alignment with the Map Z Axis (128 for perfect Alignment)
                 byte l = packet.Data.ReadByte();//Character facing Direction 
                                                 /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
                                                 View Offset : Packet Value 
@@ -102,9 +102,12 @@ namespace Necromancy.Server.Packet.Area
 
                 if (j != 0)
                 {
-                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}]");
-                    Console.WriteLine($"[][][] [{a}][{b}][{b1}][{c}] BoF[{d}][{e}][{e1}][{f}] []  [{h}][{i}][{j}][{k}]     BoF2[{k1}][{k2}][{k3}][{l}] [] []");
-                    Console.WriteLine($"View Offset:{client.Character.viewOffset} BytesofFocus[{d}][{e}][{e1}][{f}]         Bytes of Focus 2 [{k1}][{k2}][{k3}][{l}]");
+                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    //Console.WriteLine($"[][][] MyXvsMapX[{a}][{b}][{b1}][{c}] MyYvsMapY[{d}][{e}][{e1}][{f}] []  Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]     MyZvsMapZ[{k1}][{k2}][{k3}][{l}] [] []");
+                    Console.WriteLine($"MyXvsMapX[{a}][{b}][{b1}][{c}]");
+                    Console.WriteLine($"MyYvsMapY[{d}][{e}][{e1}][{f}]");
+                    Console.WriteLine($"Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]");
+                    Console.WriteLine($"MyZvsMapZ[{k1}][{k2}][{k3}][{l}]");
                 }
                 else
                 {
