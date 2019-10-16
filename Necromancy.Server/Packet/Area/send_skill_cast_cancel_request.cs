@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_cast_cancel_request : Handler
+    public class send_skill_cast_cancel_request : ClientHandler
     {
         public send_skill_cast_cancel_request(NecServer server) : base(server)
         {
@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client, (ushort)AreaPacketId.recv_skill_cast_cancel, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_skill_cast_cancel, res, ServerType.Area);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet
             Reset();
         }
 
-        public byte[] Write(NecPacket packet, NecClient client)
+        public byte[] Write(NecPacket packet)
         {
             // TODO update arrowgene service to write uint*
 
@@ -76,7 +76,7 @@ namespace Necromancy.Server.Packet
             return buffer.GetAllBytes();
         }
 
-        public List<NecPacket> Read(byte[] data, NecClient client)
+        public List<NecPacket> Read(byte[] data)
         {
             List<NecPacket> packets = new List<NecPacket>();
             if (_buffer == null)

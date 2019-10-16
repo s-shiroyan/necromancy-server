@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_move : Handler
+    public class send_item_move : ClientHandler
     {
         public send_item_move(NecServer server) : base(server)
         {
@@ -43,7 +43,7 @@ namespace Necromancy.Server.Packet.Area
 
             */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
         }
     }
 }

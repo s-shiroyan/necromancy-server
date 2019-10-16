@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_trade_invite : Handler
+    public class send_trade_invite : ClientHandler
     {
         public send_trade_invite(NecServer server) : base(server)
         {
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);  // error check.  1 auto cancels the trade,  0 "the trade has been presented to %d. Awaiting response"
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_invite_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_invite_r, res, ServerType.Area);
             SendTradeInviteNotify(client);
         }
         
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Area
             
             res.WriteInt32(client.Character.Id);
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_notify_invited, res, client);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_notify_invited, res, ServerType.Area, client);
 
         }
 

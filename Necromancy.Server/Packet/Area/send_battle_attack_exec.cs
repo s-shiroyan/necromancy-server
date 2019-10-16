@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_battle_attack_exec : Handler
+    public class send_battle_attack_exec : ClientHandler
     {
         public send_battle_attack_exec(NecServer server) : base(server)
         {
@@ -22,8 +22,8 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(111501);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_exec_r, res, client);
-            Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_exec_direct_r, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_exec_r, res, ServerType.Area, client);
+            Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_exec_direct_r, res, ServerType.Area);
 
 
             //SendBattleAteckExecDirect(client);
@@ -56,7 +56,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.Id);
             res.WriteInt32(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_battle_report_notify_damage_hp, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_report_notify_damage_hp, res, ServerType.Area);
 
 
         }

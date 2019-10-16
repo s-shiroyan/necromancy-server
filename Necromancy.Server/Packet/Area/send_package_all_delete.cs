@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_package_all_delete : Handler
+    public class send_package_all_delete : ClientHandler
     {
         public send_package_all_delete(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_package_all_delete_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_package_all_delete_r, res, ServerType.Area);
         }
     }
 }

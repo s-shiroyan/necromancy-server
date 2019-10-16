@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_get_info : Handler
+    public class send_map_get_info : ClientHandler
     {
         public send_map_get_info(NecServer server) : base(server)
         {
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Character.MapId);
 
 
-            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
          
             SendDataNotifyNpcData(client);
         }
@@ -143,7 +143,7 @@ namespace Necromancy.Server.Packet.Area
 
                 }
 
-                Router.Send(client, (ushort)AreaPacketId.recv_data_notify_npc_data, res2);
+                Router.Send(client, (ushort)AreaPacketId.recv_data_notify_npc_data, res2, ServerType.Area);
             }
         }
     }

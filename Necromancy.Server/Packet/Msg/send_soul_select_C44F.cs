@@ -6,7 +6,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_soul_select_C44F : Handler
+    public class send_soul_select_C44F : ClientHandler
     {
         public send_soul_select_C44F(NecServer server) : base(server)
         {
@@ -32,8 +32,8 @@ namespace Necromancy.Server.Packet.Msg
             {
                 Logger.Error(client, $"Soul with name: '{soulName}' not found");
                 res.WriteInt32(1); // 0 = OK | 1 = Failed to return to soul selection
-                Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res);
-                client.Socket.Close();
+                Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res, ServerType.Msg);
+                client.Close();
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(1); // bool - 0 = Set New Password | 1 = Enter Password
             }
 
-            Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res, ServerType.Msg);
         }
     }
 }

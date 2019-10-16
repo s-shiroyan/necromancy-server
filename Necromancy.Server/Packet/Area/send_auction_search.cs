@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_search : Handler
+    public class send_auction_search : ClientHandler
     {
         public send_auction_search(NecServer server) : base(server)
         {
@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(5); // Bid
                 res.WriteInt32(999999); // Item remaining time
             }
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_search_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_search_r, res, ServerType.Area);
         }
 
     }

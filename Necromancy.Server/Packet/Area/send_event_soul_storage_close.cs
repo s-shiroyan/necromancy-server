@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class Send_event_soul_storage_close : Handler
+    public class Send_event_soul_storage_close : ClientHandler
     {
         public Send_event_soul_storage_close(NecServer server) : base(server)
         {
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
         }
 
     }

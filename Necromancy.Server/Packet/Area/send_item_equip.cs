@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_equip : Handler
+    public class send_item_equip : ClientHandler
     {
         public send_item_equip(NecServer server) : base(server)
         {
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_start_cast : Handler
+    public class send_skill_start_cast : ClientHandler
     {
         public send_skill_start_cast(NecServer server) : base(server)
         {
@@ -82,7 +82,7 @@ namespace Necromancy.Server.Packet.Area
             */
 
             res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I             
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res); 
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res, ServerType.Area); 
 
         }
 
@@ -95,7 +95,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillID); //previously Skill ID
             res.WriteFloat(CastingTime);
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res, ServerType.Area);
         }
 
         private void SendSkillStartCastExR(NecClient client,int mySkillID,int mySkillTarget)
@@ -122,7 +122,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(15);// Effect time?
 
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res);  
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res, ServerType.Area);  
         }
 
     }

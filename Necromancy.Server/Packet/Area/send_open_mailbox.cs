@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_open_mailbox : Handler
+    public class send_open_mailbox : ClientHandler
     {
         public send_open_mailbox(NecServer server) : base(server)
         {
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.Id);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res, ServerType.Area);
         }
     }
 }

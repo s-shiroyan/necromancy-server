@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_request_int_r : Handler
+    public class send_event_request_int_r : ClientHandler
     {
         public send_event_request_int_r(NecServer server) : base(server)
         {
@@ -23,14 +23,14 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);
             res.WriteInt32(2);
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_request_int, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_request_int, res, ServerType.Area);
             SendEventEnd(client);
         }
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area, client);
 
         }
 

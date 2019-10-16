@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_stall_open : Handler
+    public class send_stall_open : ClientHandler
     {
         public send_stall_open(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_stall_open_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_stall_open_r, res, ServerType.Area);
 
             SendStallNotifyOpend(client);
         }
@@ -95,7 +95,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(0); //Bool
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_notify_opend, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_stall_notify_opend, res, ServerType.Area, client);
 	    }
     }
 }
