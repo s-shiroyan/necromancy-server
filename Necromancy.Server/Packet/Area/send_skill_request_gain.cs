@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_request_gain : Handler
+    public class send_skill_request_gain : ClientHandler
     {
         public send_skill_request_gain(NecServer server) : base(server)
         {

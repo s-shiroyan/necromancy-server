@@ -7,7 +7,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_select : Handler
+    public class send_chara_select : ClientHandler
     {
         public send_chara_select(NecServer server) : base(server)
         {

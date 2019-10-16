@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_movement_info : Handler
+    public class send_movement_info : ClientHandler
     {
         public send_movement_info(NecServer server) : base(server)
         {

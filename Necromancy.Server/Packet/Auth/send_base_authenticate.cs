@@ -6,7 +6,7 @@ using Necromancy.Server.Setting;
 
 namespace Necromancy.Server.Packet.Auth
 {
-    public class send_base_authenticate : Handler
+    public class send_base_authenticate : ConnectionHandler
     {
         public send_base_authenticate(NecServer server) : base(server)
         {
@@ -14,7 +14,7 @@ namespace Necromancy.Server.Packet.Auth
 
         public override ushort Id => (ushort) AuthPacketId.send_base_authenticate;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void Handle(NecConnection connection, NecPacket packet)
         {
             string accountName = packet.Data.ReadCString();
             string password = packet.Data.ReadCString();
@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Auth
             {
                 if (Settings.NeedRegistration)
                 {
-                    Logger.Error(client, $"AccountName: {accountName} doesn't exist");
+                    Logger.Error(connection, $"AccountName: {accountName} doesn't exist");
                     SendResponse(client, null);
                     client.Socket.Close();
                     return;
@@ -39,7 +39,7 @@ namespace Necromancy.Server.Packet.Auth
 
             if (!BCrypt.Net.BCrypt.Verify(password, account.Hash))
             {
-                Logger.Error(client, $"Invalid password for AccountName: {accountName}");
+                Logger.Error(connection, $"Invalid password for AccountName: {accountName}");
                 SendResponse(client, null);
                 client.Socket.Close();
                 return;

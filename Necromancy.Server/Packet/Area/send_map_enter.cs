@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_enter : Handler
+    public class send_map_enter : ClientHandler
     {
         public send_map_enter(NecServer server) : base(server)
         {

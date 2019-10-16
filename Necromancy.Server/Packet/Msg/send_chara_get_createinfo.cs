@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_get_createinfo : Handler
+    public class send_chara_get_createinfo : ClientHandler
     {
         public send_chara_get_createinfo(NecServer server) : base(server)
         {

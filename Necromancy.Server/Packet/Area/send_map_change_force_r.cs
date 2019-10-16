@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_change_force_r : Handler
+    public class send_map_change_force_r : ClientHandler
     {
         public send_map_change_force_r(NecServer server) : base(server)
         {

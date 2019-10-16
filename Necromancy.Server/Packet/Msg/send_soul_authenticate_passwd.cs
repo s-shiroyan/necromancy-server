@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_soul_authenticate_passwd : Handler
+    public class send_soul_authenticate_passwd : ClientHandler
     {
         public send_soul_authenticate_passwd(NecServer server) : base(server)
         {

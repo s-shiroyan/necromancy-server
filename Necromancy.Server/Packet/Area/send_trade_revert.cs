@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_trade_revert : Handler
+    public class send_trade_revert : ClientHandler
     {
         public send_trade_revert(NecServer server) : base(server)
         {

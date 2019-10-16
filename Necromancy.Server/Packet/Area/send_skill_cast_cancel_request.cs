@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_cast_cancel_request : Handler
+    public class send_skill_cast_cancel_request : ClientHandler
     {
         public send_skill_cast_cancel_request(NecServer server) : base(server)
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_quest_abort : Handler
+    public class send_quest_abort : ClientHandler
     {
         public send_quest_abort(NecServer server) : base(server)
         {

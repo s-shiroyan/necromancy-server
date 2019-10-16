@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_emotion_update_type : Handler
+    public class send_emotion_update_type : ClientHandler
     {
         public send_emotion_update_type(NecServer server) : base(server)
         {

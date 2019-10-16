@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_chara_pose_ladder : Handler
+    public class send_chara_pose_ladder : ClientHandler
     {
         public send_chara_pose_ladder(NecServer server) : base(server)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_access_object : Handler
+    public class send_event_access_object : ClientHandler
     {
         public send_event_access_object(NecServer server) : base(server)
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_union_close_window : Handler
+    public class send_union_close_window : ClientHandler
     {
         public send_union_close_window(NecServer server) : base(server)
         {

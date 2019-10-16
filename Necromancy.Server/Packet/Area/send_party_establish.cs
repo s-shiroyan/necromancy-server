@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_party_establish : Handler
+    public class send_party_establish : ClientHandler
     {
         public send_party_establish(NecServer server) : base(server)
         {

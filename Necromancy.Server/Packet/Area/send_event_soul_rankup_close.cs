@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_soul_rankup_close : Handler
+    public class send_event_soul_rankup_close : ClientHandler
     {
         public send_event_soul_rankup_close(NecServer server) : base(server)
         {

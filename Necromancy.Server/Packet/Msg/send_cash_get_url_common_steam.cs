@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_cash_get_url_common_steam : Handler
+    public class send_cash_get_url_common_steam : ClientHandler
     {
         public send_cash_get_url_common_steam(NecServer server) : base(server)
         {

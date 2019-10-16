@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Auth
 {
-    public class send_base_get_worldlist : Handler
+    public class send_base_get_worldlist : ClientHandler
     {
         public send_base_get_worldlist(NecServer server) : base(server)
         {

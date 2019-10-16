@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_comment_set : Handler
+    public class send_comment_set : ClientHandler
     {
         public send_comment_set(NecServer server) : base(server)
         {

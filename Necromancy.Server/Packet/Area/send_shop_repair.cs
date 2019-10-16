@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class Send_shop_repair : Handler
+    public class Send_shop_repair : ClientHandler
     {
         public Send_shop_repair(NecServer server) : base(server)
         {

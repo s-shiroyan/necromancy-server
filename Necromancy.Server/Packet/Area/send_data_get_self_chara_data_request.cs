@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_data_get_self_chara_data_request : Handler
+    public class send_data_get_self_chara_data_request : ClientHandler
     {
         public send_data_get_self_chara_data_request(NecServer server) : base(server)
         {

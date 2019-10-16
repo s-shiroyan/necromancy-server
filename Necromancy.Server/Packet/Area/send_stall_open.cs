@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_stall_open : Handler
+    public class send_stall_open : ClientHandler
     {
         public send_stall_open(NecServer server) : base(server)
         {

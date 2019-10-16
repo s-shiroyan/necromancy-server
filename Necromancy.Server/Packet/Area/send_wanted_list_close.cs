@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_wanted_list_close : Handler
+    public class send_wanted_list_close : ClientHandler
     {
         public send_wanted_list_close(NecServer server) : base(server)
         {

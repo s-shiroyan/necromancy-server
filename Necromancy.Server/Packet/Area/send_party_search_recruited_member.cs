@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_party_search_recruited_member : Handler
+    public class send_party_search_recruited_member : ClientHandler
     {
         public send_party_search_recruited_member(NecServer server) : base(server)
         {

@@ -7,7 +7,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_exec : Handler
+    public class send_skill_exec : ClientHandler
     {
         public send_skill_exec(NecServer server) : base(server)
         {

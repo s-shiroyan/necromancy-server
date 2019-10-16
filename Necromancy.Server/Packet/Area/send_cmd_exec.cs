@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_cmd_exec : Handler
+    public class send_cmd_exec : ClientHandler
     {
         public send_cmd_exec(NecServer server) : base(server)
         {

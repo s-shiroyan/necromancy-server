@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_cancel_exhibit : Handler
+    public class send_auction_cancel_exhibit : ClientHandler
     {
         public send_auction_cancel_exhibit(NecServer server) : base(server)
         {

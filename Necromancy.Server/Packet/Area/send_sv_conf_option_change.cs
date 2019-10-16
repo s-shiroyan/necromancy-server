@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_sv_conf_option_change : Handler
+    public class send_sv_conf_option_change : ClientHandler
     {
         public send_sv_conf_option_change(NecServer server) : base(server)
         {

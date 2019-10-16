@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_sort : Handler
+    public class send_item_sort : ClientHandler
     {
         public send_item_sort(NecServer server) : base(server)
         {

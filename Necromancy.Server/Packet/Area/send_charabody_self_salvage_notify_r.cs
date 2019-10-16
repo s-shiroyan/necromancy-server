@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_charabody_self_salvage_notify_r : Handler
+    public class send_charabody_self_salvage_notify_r : ClientHandler
     {
         public send_charabody_self_salvage_notify_r(NecServer server) : base(server)
         {

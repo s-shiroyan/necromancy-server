@@ -7,7 +7,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_base_login : Handler
+    public class send_base_login : ClientHandler
     {
         public send_base_login(NecServer server) : base(server)
         {

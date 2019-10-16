@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_stall_deregist_item : Handler
+    public class send_stall_deregist_item : ClientHandler
     {
         public send_stall_deregist_item(NecServer server) : base(server)
         {

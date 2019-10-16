@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_select_back_soul_select : Handler
+    public class send_chara_select_back_soul_select : ClientHandler
     {
         public send_chara_select_back_soul_select(NecServer server) : base(server)
         {

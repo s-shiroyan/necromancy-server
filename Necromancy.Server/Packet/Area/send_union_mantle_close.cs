@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_union_mantle_close : Handler
+    public class send_union_mantle_close : ClientHandler
     {
         public send_union_mantle_close(NecServer server) : base(server)
         {

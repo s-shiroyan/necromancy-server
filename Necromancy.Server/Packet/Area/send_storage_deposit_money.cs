@@ -7,7 +7,7 @@ using System;
 namespace Necromancy.Server.Packet.Area
 {
 
-    public class send_storage_deposit_money : Handler
+    public class send_storage_deposit_money : ClientHandler
     {
         public send_storage_deposit_money(NecServer server) : base(server)
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_trade_set_money : Handler
+    public class send_trade_set_money : ClientHandler
     {
         public send_trade_set_money(NecServer server) : base(server)
         {

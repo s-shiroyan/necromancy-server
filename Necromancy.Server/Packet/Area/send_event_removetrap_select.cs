@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_removetrap_select : Handler
+    public class send_event_removetrap_select : ClientHandler
     {
         public send_event_removetrap_select(NecServer server) : base(server)
         {

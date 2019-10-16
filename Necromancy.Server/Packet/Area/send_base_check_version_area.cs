@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_base_check_version_area : Handler
+    public class send_base_check_version_area : ClientHandler
     {
         public send_base_check_version_area(NecServer server) : base(server)
         {

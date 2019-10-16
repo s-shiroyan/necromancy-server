@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_soul_dispitem_request_data : Handler
+    public class send_soul_dispitem_request_data : ClientHandler
     {
         public send_soul_dispitem_request_data(NecServer server) : base(server)
         {

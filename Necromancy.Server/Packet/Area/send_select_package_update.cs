@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_select_package_update : Handler
+    public class send_select_package_update : ClientHandler
     {
         public send_select_package_update(NecServer server) : base(server)
         {

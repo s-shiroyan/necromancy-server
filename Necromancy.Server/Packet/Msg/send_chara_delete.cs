@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_delete : Handler
+    public class send_chara_delete : ClientHandler
     {
         public send_chara_delete(NecServer server) : base(server)
         {

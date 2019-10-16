@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_union_request_change_role : Handler
+    public class send_union_request_change_role : ClientHandler
     {
         public send_union_request_change_role(NecServer server) : base(server)
         {

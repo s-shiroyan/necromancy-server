@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_help_new_remove : Handler
+    public class send_help_new_remove : ClientHandler
     {
         public send_help_new_remove(NecServer server) : base(server)
         {

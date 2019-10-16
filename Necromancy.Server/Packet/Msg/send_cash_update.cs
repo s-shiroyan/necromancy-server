@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_cash_update : Handler
+    public class send_cash_update : ClientHandler
     {
         public send_cash_update(NecServer server) : base(server)
         {

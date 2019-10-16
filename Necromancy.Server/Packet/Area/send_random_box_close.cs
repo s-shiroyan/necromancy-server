@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_random_box_close : Handler
+    public class send_random_box_close : ClientHandler
     {
         public send_random_box_close(NecServer server) : base(server)
         {

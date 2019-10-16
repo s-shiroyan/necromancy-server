@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_battle_attack_start : Handler
+    public class send_battle_attack_start : ClientHandler
     {
         public send_battle_attack_start(NecServer server) : base(server)
         {

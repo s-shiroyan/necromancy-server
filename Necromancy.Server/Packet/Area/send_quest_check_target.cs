@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_quest_check_target : Handler
+    public class send_quest_check_target : ClientHandler
     {
         public send_quest_check_target(NecServer server) : base(server)
         {

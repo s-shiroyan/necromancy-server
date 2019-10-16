@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_search : Handler
+    public class send_auction_search : ClientHandler
     {
         public send_auction_search(NecServer server) : base(server)
         {

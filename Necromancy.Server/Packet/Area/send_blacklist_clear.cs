@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_blacklist_clear : Handler
+    public class send_blacklist_clear : ClientHandler
     {
         public send_blacklist_clear(NecServer server) : base(server)
         {

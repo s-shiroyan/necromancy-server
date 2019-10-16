@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_union_request_establish : Handler
+    public class send_union_request_establish : ClientHandler
     {
         public send_union_request_establish(NecServer server) : base(server)
         {

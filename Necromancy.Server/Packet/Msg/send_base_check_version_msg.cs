@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_base_check_version_msg : Handler
+    public class send_base_check_version_msg : ClientHandler
     {
         public send_base_check_version_msg(NecServer server) : base(server)
         {

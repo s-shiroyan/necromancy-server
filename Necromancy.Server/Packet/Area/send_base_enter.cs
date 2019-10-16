@@ -6,7 +6,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_base_enter : Handler
+    public class send_base_enter : ConnectionHandler
     {
         public send_base_enter(NecServer server) : base(server)
         {
@@ -14,7 +14,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort) AreaPacketId.send_base_enter;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void Handle(NecConnection connection, NecPacket packet)
         {
             int accountId = packet.Data.ReadInt32();
             int unknown = packet.Data.ReadInt32();
@@ -25,8 +25,8 @@ namespace Necromancy.Server.Packet.Area
             Session session = Server.Sessions.GetSession(accountId.ToString());
             if (session == null)
             {
-                Logger.Error(client, $"AccountId: {accountId} has no active session");
-                client.Socket.Close();
+                Logger.Error(connection, $"AccountId: {accountId} has no active session");
+                connection.Socket.Close();
                 return;
             }
 
@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
-            Router.Send(client, (ushort) AreaPacketId.recv_base_enter_r, res);
+            Router.Send(connection, (ushort) AreaPacketId.recv_base_enter_r, res);
         }
     }
 }

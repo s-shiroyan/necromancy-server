@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_close : Handler
+    public class send_auction_close : ClientHandler
     {
         public send_auction_close(NecServer server) : base(server)
         {

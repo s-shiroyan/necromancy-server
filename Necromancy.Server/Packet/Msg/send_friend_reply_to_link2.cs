@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_friend_reply_to_link2 : Handler
+    public class send_friend_reply_to_link2 : ClientHandler
     {
         public send_friend_reply_to_link2(NecServer server) : base(server)
         {

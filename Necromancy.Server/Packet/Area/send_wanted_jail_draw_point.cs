@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_wanted_jail_draw_point : Handler
+    public class send_wanted_jail_draw_point : ClientHandler
     {
         public send_wanted_jail_draw_point(NecServer server) : base(server)
         {

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_loot_access_object : Handler
+    public class send_loot_access_object : ClientHandler
     {
         public send_loot_access_object(NecServer server) : base(server)
         {

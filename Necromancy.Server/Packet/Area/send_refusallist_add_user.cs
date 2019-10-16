@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_refusallist_add_user : Handler
+    public class send_refusallist_add_user : ClientHandler
     {
         public send_refusallist_add_user(NecServer server) : base(server)
         {

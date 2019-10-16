@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_soul_create : Handler
+    public class send_soul_create : ClientHandler
     {
         public send_soul_create(NecServer server) : base(server)
         {

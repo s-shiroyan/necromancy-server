@@ -30,6 +30,5 @@ namespace Necromancy.Server.Packet
         protected ClientLookup Clients { get; }
         protected SessionManager Sessions { get; }
         protected IDatabase Database { get; }
-        public abstract void Handle(NecClient client, NecPacket packet);
     }
 }

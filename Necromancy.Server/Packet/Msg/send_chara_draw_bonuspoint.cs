@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_draw_bonuspoint : Handler
+    public class send_chara_draw_bonuspoint : ClientHandler
     {
         public send_chara_draw_bonuspoint(NecServer server) : base(server)
         {

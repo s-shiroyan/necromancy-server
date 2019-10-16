@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_unequip : Handler
+    public class send_item_unequip : ClientHandler
     {
         public send_item_unequip(NecServer server) : base(server)
         {

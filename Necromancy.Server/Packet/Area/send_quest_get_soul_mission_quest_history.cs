@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_quest_get_soul_mission_quest_history : Handler
+    public class send_quest_get_soul_mission_quest_history : ClientHandler
     {
         public send_quest_get_soul_mission_quest_history(NecServer server) : base(server)
         {

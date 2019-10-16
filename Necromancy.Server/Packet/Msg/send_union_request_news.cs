@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_union_request_news : Handler
+    public class send_union_request_news : ClientHandler
     {
         public send_union_request_news(NecServer server) : base(server)
         {

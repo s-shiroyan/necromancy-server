@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_stall_shopping_abort : Handler
+    public class send_stall_shopping_abort : ClientHandler
     {
         public send_stall_shopping_abort(NecServer server) : base(server)
         {

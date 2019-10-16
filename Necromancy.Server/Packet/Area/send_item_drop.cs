@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_drop : Handler
+    public class send_item_drop : ClientHandler
     {
         public send_item_drop(NecServer server) : base(server)
         {

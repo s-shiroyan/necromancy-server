@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_get_info : Handler
+    public class send_map_get_info : ClientHandler
     {
         public send_map_get_info(NecServer server) : base(server)
         {

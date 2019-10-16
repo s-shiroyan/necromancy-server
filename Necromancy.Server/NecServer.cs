@@ -68,15 +68,15 @@ namespace Necromancy.Server
             LoadHandler();
         }
 
-        private void AuthClientDisconnected(NecClient client)
+        private void AuthClientDisconnected(NecConnection client)
         {
         }
 
-        private void MsgClientDisconnected(NecClient client)
+        private void MsgClientDisconnected(NecConnection client)
         {
         }
 
-        private void AreaClientDisconnected(NecClient client)
+        private void AreaClientDisconnected(NecConnection client)
         {
         }
 

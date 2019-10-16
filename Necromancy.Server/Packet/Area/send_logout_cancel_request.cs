@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_logout_cancel_request : Handler
+    public class send_logout_cancel_request : ClientHandler
     {
         public send_logout_cancel_request(NecServer server) : base(server)
         {

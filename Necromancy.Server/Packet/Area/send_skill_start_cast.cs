@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_skill_start_cast : Handler
+    public class send_skill_start_cast : ClientHandler
     {
         public send_skill_start_cast(NecServer server) : base(server)
         {

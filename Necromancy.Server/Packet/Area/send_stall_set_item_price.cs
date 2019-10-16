@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_stall_set_item_price : Handler
+    public class send_stall_set_item_price : ClientHandler
     {
         public send_stall_set_item_price(NecServer server) : base(server)
         {

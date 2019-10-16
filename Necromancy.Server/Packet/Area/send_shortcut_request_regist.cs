@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_shortcut_request_regist : Handler
+    public class send_shortcut_request_regist : ClientHandler
     {
         public send_shortcut_request_regist(NecServer server) : base(server)
         {
