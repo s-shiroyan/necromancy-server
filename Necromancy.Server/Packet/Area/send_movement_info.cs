@@ -29,20 +29,51 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Z = packet.Data.ReadFloat();
 
 
-                //these bytes below with a varible as a name have not been confirmed this is for testing
+                //Suspect Camera related bytes Similar to X Y Z Below
                 byte a = packet.Data.ReadByte();
-
                 byte b = packet.Data.ReadByte();
                 byte b1 = packet.Data.ReadByte();
-
                 byte c = packet.Data.ReadByte(); // some sort of direction modified var
 
-                //XY movement on the Map
-                byte d = packet.Data.ReadByte(); //Camera Z related to character
+                //X? movement on the Map. Only triggers if you deviate from the Y Axis (test on tall Ladders or by walking/running a perfect straight line on Y
+                byte d = packet.Data.ReadByte(); 
                 byte e = packet.Data.ReadByte();
-                byte e1 = packet.Data.ReadByte(); // direction char is moving based from the view of camera? if that makes sense
-                byte f = packet.Data.ReadByte(); // Character Movement Direction //Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                /*
+                byte e1 = packet.Data.ReadByte(); //Character Y Allignment with the Map Y Axis (0 for perfect, 128 for 90Degree offset)
+                byte f = packet.Data.ReadByte(); //Character facing Direction 
+                                                 /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
+                                                 View Offset : Packet Value 
+                                                         0-29    = 63
+                                                         30-40   = 62
+                                                         41-42   = 61
+                                                         43      = 59
+                                                         44      = 60
+                                                         45      = 188
+                                                         46-47   = 189 
+                                                         48-59   = 190
+                                                         60-119  = 191
+                                                         120-130 = 190
+                                                         131-133 = 189
+                                                         133-144 = 188
+                                                         135     = 60
+                                                         136-138 = 61
+                                                         139-149 = 62
+                                                         150-179 = 63
+                                                 */
+
+                float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
+
+                //Y axis movent on the map?  Need additional testing.  
+                byte h = packet.Data.ReadByte();
+                byte i = packet.Data.ReadByte();
+                byte j = packet.Data.ReadByte(); //movement type?
+                byte k = packet.Data.ReadByte();
+
+                //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistantly impacted by Jump
+                byte k1 = packet.Data.ReadByte();
+                byte k2 = packet.Data.ReadByte();
+                byte k3 = packet.Data.ReadByte();//Character X Allignment with the Map X Axis (0 for perfect, 128 for 90Degree offset)
+                byte l = packet.Data.ReadByte();//Character facing Direction 
+                                                /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
                                                 View Offset : Packet Value 
                                                         0-29    = 63
                                                         30-40   = 62
@@ -62,22 +93,7 @@ namespace Necromancy.Server.Packet.Area
                                                         150-179 = 63
                                                 */
 
-                float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
-
-                byte h = packet.Data.ReadByte();
-
-                byte i = packet.Data.ReadByte();
-
-                byte j = packet.Data.ReadByte(); //movement type?
-
-                byte k = packet.Data.ReadByte();
-                byte k1 = packet.Data.ReadByte();
-                byte k2 = packet.Data.ReadByte();
-                byte k3 = packet.Data.ReadByte();
-
-                byte l = packet.Data.ReadByte();
-
-                client.Character.movementAnim = packet.Data.ReadByte(); //Character Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
+                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
 
                 client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
                                                                         //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
@@ -87,8 +103,8 @@ namespace Necromancy.Server.Packet.Area
                 if (j != 0)
                 {
                     Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}]");
-                    //Console.WriteLine($"[][][] [{a}][{b}][{b1}][{c}]i32[{d}][{e}][{e1}][{f}] [] [{h}][{i}]J[{j}][{k}][{k1}][{k2}][{k3}][{l}] [] []");
-                    Console.WriteLine($"i32[{d}][{e}][{e1}][{f}]");
+                    Console.WriteLine($"[][][] [{a}][{b}][{b1}][{c}] BoF[{d}][{e}][{e1}][{f}] []  [{h}][{i}][{j}][{k}]     BoF2[{k1}][{k2}][{k3}][{l}] [] []");
+                    Console.WriteLine($"View Offset:{client.Character.viewOffset} BytesofFocus[{d}][{e}][{e1}][{f}]         Bytes of Focus 2 [{k1}][{k2}][{k3}][{l}]");
                 }
                 else
                 {
