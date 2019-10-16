@@ -57,6 +57,7 @@ namespace Necromancy.Server.Model
         public byte wepNorthSouthAnim { get; set; }
         public byte logoutCanceled { get; set; }
         public int MapId { get; set; }
+        public int lastCast { get; set; }
 
         public Character()
         {
