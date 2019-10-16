@@ -20,15 +20,15 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);//Error
 
             //sub_4E4210_2341  // impacts map spawn ID
-            res.WriteInt32(2001007);//MapSerialID
-            res.WriteInt32(2001007);//MapID
+            res.WriteInt32(client.Character.MapId);//MapSerialID
+            res.WriteInt32(client.Character.MapId);//MapID
             res.WriteFixedString("127.0.0.1", 65);//IP
             res.WriteInt16(60002);//Port
 
             //sub_484420   //  does not impact map spawn coord
-            res.WriteFloat(0);//X Pos
-            res.WriteFloat(-8600);//Y Pos
-            res.WriteFloat(15000);//Z Pos
+            res.WriteFloat(client.Character.X);//X Pos
+            res.WriteFloat(client.Character.Y);//Y Pos
+            res.WriteFloat(client.Character.Z);//Z Pos
             res.WriteByte(1);//View offset
             //
 

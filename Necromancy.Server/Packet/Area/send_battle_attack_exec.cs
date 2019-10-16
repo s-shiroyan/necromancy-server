@@ -20,9 +20,57 @@ namespace Necromancy.Server.Packet.Area
             int Unknown2 = packet.Data.ReadInt32();
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(TargetID);
+            res.WriteInt32(111501);
 
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_exec_r, res, client);
             Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_exec_direct_r, res);
+
+
+            //SendBattleAteckExecDirect(client);
+           /* SendReportAcctionAtackExec(client);
+            SendReportDamageHP(client);
+            SendBattleReportstartNotify(client); */
         }
+
+        /*private void SendBattleReportstartNotify(NecClient client)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(client.Character.Id);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_report_start_notify, res4);
+
+
+        }
+
+
+        private void SendReportAcctionAtackExec(NecClient client)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(client.Character.Id);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_report_action_attack_exec, res4);
+
+
+        }
+
+        private void SendReportDamageHP(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_report_notify_damage_hp, res);
+
+
+        }
+
+        /*   private void SendBattleAteckExecDirect(NecClient client)
+            {
+                IBuffer res4 = BufferProvider.Provide();
+                res4.WriteInt32(client.Character.Id);
+                Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_exec_direct_r, res4); */
+
+
     }
-}
+
+
+
+    }
+

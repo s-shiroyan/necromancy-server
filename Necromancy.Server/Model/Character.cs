@@ -55,6 +55,14 @@ namespace Necromancy.Server.Model
         public bool weaponEquipped { get; set; }
         public byte wepEastWestAnim { get; set; }
         public byte wepNorthSouthAnim { get; set; }
+        public byte logoutCanceled { get; set; }
+        public int MapId { get; set; }
+        public bool NewCharaProtocol { get; set; }
+        public int WeaponType { get; set; }
+        public int AdventureBagGold { get; set; }
+        public byte soulFormState { get; set; }
+
+
 
         public Character()
         {
@@ -65,6 +73,11 @@ namespace Necromancy.Server.Model
             Level = 0;
             Name = null;
             Created = DateTime.Now;
+            logoutCanceled = 0;
+            NewCharaProtocol = false;
+            WeaponType = 8;
+            AdventureBagGold = 80706050;
+            
         }
     }
 
