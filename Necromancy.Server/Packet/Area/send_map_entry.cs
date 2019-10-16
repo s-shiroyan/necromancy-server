@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Area
             if (map == null)
             {
                 Logger.Error($"MapId: {mapId} not found in map lookup", client);
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 

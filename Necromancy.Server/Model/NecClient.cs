@@ -46,5 +46,12 @@ namespace Necromancy.Server.Model
                     break;
             }
         }
+
+        public void Close()
+        {
+            AuthConnection?.Socket.Close();
+            MsgConnection?.Socket.Close();
+            AreaConnection?.Socket.Close();
+        }
     }
 }

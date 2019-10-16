@@ -35,9 +35,11 @@ namespace Necromancy.Server.Packet.Msg
             // TODO initialize character from database
             client.Character = new Character();
             client.Character.Id = Util.GetRandomNumber(1, 999);
-            client.Character.SoulId = client.Account.Id; // TO DO  .  Query Soul ID by Account ID.    Account ID == Soul ID for now....
+            // TODO Query Soul ID by Account ID. Account ID == Soul ID for now....
+            client.Character.SoulId = client.Account.Id;
             client.Character.AccountId = client.Account.Id;
             client.MsgConnection = connection;
+            connection.Client = client;
             SendResponse(connection, client);
         }
 

@@ -121,7 +121,8 @@ namespace Necromancy.Server.Packet.Area
 
             //Router.Send(client, (ushort)MsgPacketId.recv_party_notify_establish, res, ServerType.Area);
             //Router.Send(client.Session.msgSocket, (ushort)MsgPacketId.recv_party_notify_establish, res, ServerType.Area);
-            client.Session.msgSocket.Send(byteArr);
+            // TODO use packet format 
+            //  client.MsgConnection.Send(byteArr);
         }
 
         private void SendPartyRegistMemberRecruit(NecClient client)

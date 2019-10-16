@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Msg
             if (!Database.InsertSoul(soul))
             {
                 Logger.Error(client, $"Failed to create SoulName: {soulName}");
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 

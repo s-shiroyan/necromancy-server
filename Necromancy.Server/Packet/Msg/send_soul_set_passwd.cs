@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Msg
             if (!Database.UpdateSoul(soul))
             {
                 Logger.Error(client, $"Failed to save password for SoulId: {soul.Id}");
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 

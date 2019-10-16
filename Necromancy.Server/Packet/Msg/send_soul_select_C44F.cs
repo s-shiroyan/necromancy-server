@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Msg
                 Logger.Error(client, $"Soul with name: '{soulName}' not found");
                 res.WriteInt32(1); // 0 = OK | 1 = Failed to return to soul selection
                 Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res, ServerType.Msg);
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 

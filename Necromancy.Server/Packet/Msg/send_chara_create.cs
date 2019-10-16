@@ -66,7 +66,7 @@ namespace Necromancy.Server.Packet.Msg
             if (!Database.InsertCharacter(character))
             {
                 Logger.Error(client, $"Failed to create CharacterSlot: {character_slot_id}");
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 

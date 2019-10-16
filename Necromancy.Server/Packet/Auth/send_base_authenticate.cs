@@ -44,11 +44,13 @@ namespace Necromancy.Server.Packet.Auth
                 connection.Socket.Close();
                 return;
             }
-            
+
             NecClient client = new NecClient();
+            client.Account = account;
             client.AuthConnection = connection;
+            connection.Client = client;
             Server.Clients.Add(client);
-            
+
             SendResponse(connection, account);
         }
 

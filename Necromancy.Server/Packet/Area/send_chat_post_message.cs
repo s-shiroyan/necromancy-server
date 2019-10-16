@@ -1290,7 +1290,8 @@ namespace Necromancy.Server.Packet.Area
                 byteArr[i] += res.ReadByte();
             }
 
-            client.Session.msgSocket.Send(byteArr);
+            // TODO use packet format 
+            //  client.MsgConnection.Send(byteArr);
 
             System.Threading.Thread.Sleep(4000);
 
@@ -1308,7 +1309,8 @@ namespace Necromancy.Server.Packet.Area
                 byteArrr[i] += res2.ReadByte();
             }
 
-            client.Session.msgSocket.Send(byteArrr);
+            // TODO use packet format 
+            //  client.MsgConnection.Send(byteArr);
         }
 
         private void AdminConsoleSelectPackageUpdate(NecClient client)

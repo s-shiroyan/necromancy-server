@@ -29,7 +29,8 @@ namespace Necromancy.Server.Packet.Area
             }
 
             client.AreaConnection = connection;
-
+            connection.Client = client;
+            
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
             Router.Send(connection, (ushort) AreaPacketId.recv_base_enter_r, res);
