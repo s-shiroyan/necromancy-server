@@ -65,9 +65,23 @@ Open the `necromancy.sln`-file
 ## Packet
 
 # Guidelines
-##Best Practise
+## Best Practise
 - Own the Code: extract solutions, discard libraries
 - Annotate functions with documentation comments (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments)
+
+## C# Coding Standards and Naming Conventions
+| Object Name               | Notation    | Char Mask          | Underscores |
+|:--------------------------|:------------|:-------------------|:------------|
+| Class name                | PascalCase  | [A-z][0-9]         | No          |
+| Constructor name          | PascalCase  | [A-z][0-9]         | No          |
+| Method name               | PascalCase  | [A-z][0-9]         | No          |
+| Method arguments          | camelCase   | [A-z][0-9]         | No          |
+| Local variables           | camelCase   | [A-z][0-9]         | No          |
+| Constants name            | PascalCase  | [A-z][0-9]         | No          |
+| Field name                | _camelCase  | [A-z][0-9]         | Yes         |
+| Properties name           | PascalCase  | [A-z][0-9]         | No          |
+| Delegate name             | PascalCase  | [A-z]              | No          |
+| Enum type name            | PascalCase  | [A-z]              | No          |
 
 # Attribution
 ## Contributors
