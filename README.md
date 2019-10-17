@@ -10,6 +10,10 @@ Server Emulator for the Online Game Wizardry Online.
   - [VS Code](#vs-code)
   - [IntelliJ Rider](#intellij-rider)
 - [Project](#project)
+  - [Common](#common)
+  - [Data](#data)  
+  - [Database](#database)
+  - [Packet](#packet)
 - [Guidelines](#guidelines)
 - [Attribution](#attribution)
   - [Contributers](#contributers)
@@ -55,10 +59,15 @@ https://www.jetbrains.com/rider/
 Open the `necromancy.sln`-file
 
 # Project
-
+## Common
+## Data
+## Database
+## Packet
 
 # Guidelines
-
+##Best Practise
+- Own the Code: extract solutions, discard libraries
+- Annotate functions with documentation comments (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments)
 
 # Attribution
 ## Contributors
@@ -69,12 +78,12 @@ Open the `necromancy.sln`-file
 - taewyth [@taewyth](https://github.com/taewyth) 
 - koffeeMist [@koffeeMist](https://github.com/koffeeMist) 
 - WIZONMAGLOVE [@WIZONMAGLOVE](https://github.com/WIZONMAGLOVE) 
-- Sebastian Heinz [@sebastian-heinz](https://github.com/sebastian-heinz)
+- Nothilvien [@sebastian-heinz](https://github.com/sebastian-heinz)
 
 ## 3rd Parties and Libraries
 - System.Data.SQLite (https://system.data.sqlite.org/)
+- MySqlConnector (https://www.nuget.org/packages/MySqlConnector)
 - bcrypt.net (https://github.com/BcryptNet/bcrypt.net)
-- xUnit.net (https://github.com/xunit/xunit)
 - .NET Standard (https://github.com/dotnet/standard)
 - Arrowgene.Services (https://github.com/Arrowgene/Arrowgene.Services)
 
