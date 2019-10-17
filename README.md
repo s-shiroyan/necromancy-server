@@ -66,8 +66,9 @@ Open the `necromancy.sln`-file
 
 # Guidelines
 ## Best Practise
-- Own the Code: extract solutions, discard libraries
-- Annotate functions with documentation comments (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments)
+- Do not use Console.WriteLine etc, use the specially designed logger.
+- Own the Code: extract solutions, discard libraries.
+- Annotate functions with documentation comments (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments).
 
 ## C# Coding Standards and Naming Conventions
 | Object Name               | Notation    | Char Mask          | Underscores |

@@ -18,7 +18,7 @@
         <PackageReference Include="System.Data.SQLite.Core" Version="1.0.111" />
     </ItemGroup>
     <ItemGroup>
-        <ContentWithTargetPath Include="Database\Schema\**">
+        <ContentWithTargetPath Include="Database\Script\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Database\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>

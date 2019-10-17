@@ -36,19 +36,14 @@ namespace Necromancy.Server.Database
             return database;
         }
 
-        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
+        private NecSqLiteDb PrepareSqlLiteDb(string sqLitePath)
         {
-            if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319"))
-                {
-                Console.WriteLine($"DB Flag File not found. Creating : {Util.ExecutingDirectory()}/DBVersionFlagFile92319");
-                File.Create($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319");
-                Console.WriteLine($"Deleting outdated Database file. Db.sqlite will be re-created with updated schema : {Util.ExecutingDirectory()}/db.sqlite");
-                File.Delete($"{Util.ExecutingDirectory()}/db.sqlite");
-                }
-
-            SqLiteDb db = new SqLiteDb(sqlLitePath);
+            sqLitePath = sqLitePath.Replace(".sqlite", $".v{NecSqLiteDb.Version}.sqlite");
+            NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
             ScriptRunner scriptRunner = new ScriptRunner(db);
-            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/sqlite_schema.sql"));
+            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/schema_sqlite.sql"));
+            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/data_item.sql"));
+            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/data_npc.sql"));
             return db;
         }
     }
