@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
             int ChatType = packet.Data.ReadInt32();     // 0 - Area, 1 - Shout, other todo...
             string To = packet.Data.ReadCString();
             string Message = packet.Data.ReadCString();
-          
+
 
 
 
@@ -46,9 +46,9 @@ namespace Necromancy.Server.Packet.Area
              */
 
             Router.Send(client, (ushort)AreaPacketId.recv_chat_post_message_r, res);
-                
 
-            
+
+
             //Parse "!" at the begging of a chat message to access the console commands below
             if (Message[0] == '!')
                 Message = commandParse(client, Message);
@@ -71,9 +71,6 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFixedString($"{client.Character.Name}", 37);
             res.WriteFixedString($"{Message}", 769);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_chat_notify_message, res);
-            
-            Console.WriteLine("Character X: "+client.Character.X + "\n Character Y: "+client.Character.Y + "\n Character Z: "+client.Character.Z); // GnomeBoobs
-            
         }
 
         private string commandParse(NecClient client, string Message)
@@ -132,10 +129,10 @@ namespace Necromancy.Server.Packet.Area
                     SendSalvageNotifyBody(client);
                     break;
                 case "ques":
-                    QuestStarted(client); 
+                    QuestStarted(client);
                     break;
                 case "tbox":
-                    SendEventTreasureboxBegin(client); 
+                    SendEventTreasureboxBegin(client);
                     break;
                 case "gems":
                     GemNotifyOpen(client);
@@ -189,10 +186,11 @@ namespace Necromancy.Server.Packet.Area
                     SendStallSellItem(client);
                     break;
                 default:
-                    //Message = $"Unrecognized command {command}" ;
                     command = "unrecognized";
                     break;
             }
+
+
             switch (SplitMessage[1])
             {
                 case "NPC":
@@ -212,9 +210,6 @@ namespace Necromancy.Server.Packet.Area
                 case "GetUItem":
                     AdminConsoleRecvItemInstanceUnidentified(client);
                     break;
-                case "ClearUItem":
-                    AdminConsoleRecvItemInstanceUnidentifiedClear(client);
-                    break;
                 case "GetItem":
                     AdminConsoleRecvItemInstance(client);
                     break;
@@ -226,6 +221,23 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case "logout":
                     LogOut(client);
+                    break;
+                case "ReadFile":
+                    FileReader.GameFileReader(client);
+                    break;
+                case "MapChange":
+                    if (SplitMessage[2] == "") { SplitMessage[2] = "0"; }
+                    SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
+                    break;
+                case "MapEntry":
+                    SendMapEntry(client, Convert.ToInt32(SplitMessage[2]));
+                    break;
+                case "TestRecv":
+                    IBuffer res = BufferProvider.Provide();
+                    Router.Send(client, (ushort)AreaPacketId.recv_battle_report_action_attack_onhit, res);
+                    break;
+                case "Move": 
+                    Move(client);
                     break;
                 default:
                     SplitMessage[1] = "unrecognized";
@@ -243,12 +255,33 @@ namespace Necromancy.Server.Packet.Area
             return Message;
         }
 
+        private void Move(NecClient client)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(client.Character.Id);//Character ID
+            res2.WriteFloat(client.Character.X + 100);
+            res2.WriteFloat(client.Character.Y + 100);
+            res2.WriteFloat(client.Character.Z+100);
+
+            res2.WriteByte(client.Character.wepEastWestAnim); //HANDLES EAST AND WEST ANIMS WITH WEAPONS
+            res2.WriteByte(client.Character.wepNorthSouthAnim);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS
+            res2.WriteByte(6); // I DUNNO BUT IT WORKS
+
+            res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG
+
+            res2.WriteByte(0);// DONT TOUCH >.> CAUSES VISUAL TELEPORTING
+            res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
+            res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
+
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_0xE8B9, res2, client);
+        }
 
 
         private void AdminConsoleNPC(NecClient client, int ModelID)
         {
-            if (ModelID <= 1) { ModelID = NPCModelID[Util.GetRandomNumber(1, 10)]; }
-
+            if (ModelID <= 1) { ModelID = NPCModelID[Util.GetRandomNumber(1, 10)]; } // pick random model if you don't specify an ID.
+            int numEntries = 0; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteInt32(NPCModelID[Util.GetRandomNumber(1, 10)]);   // NPC ID (object id)
 
@@ -265,34 +298,15 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteFloat(client.Character.Z);//Z Pos
             res3.WriteByte(client.Character.viewOffset);//view offset
 
-            res3.WriteInt32(19);
+            res3.WriteInt32(numEntries); // # Items to Equip
 
-            //this is an x19 loop but i broke it up
-            res3.WriteInt32(24);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
-            res3.WriteInt32(1);
+            for (int i = 0; i < numEntries; i++)
 
-            res3.WriteInt32(19);
+            {
+                res3.WriteInt32(24);
+            }
 
-
-            int numEntries = 19;
-
+            res3.WriteInt32(numEntries); // # Items to Equip
 
             for (int i = 0; i < numEntries; i++)
 
@@ -319,32 +333,16 @@ namespace Necromancy.Server.Packet.Area
 
             }
 
-            res3.WriteInt32(19);
+            res3.WriteInt32(numEntries); // # Items to Equip
 
-            //this is an x19 loop but i broke it up
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
-            res3.WriteInt32(3);
+            for (int i = 0; i < numEntries; i++) // Item type bitmask per slot
+
+            {
+                res3.WriteInt32(1);
+
+            }
 
             res3.WriteInt32(ModelID);   //NPC Model from file "model_common.csv"
-
-
 
             res3.WriteInt16(100);       //NPC Model Size
 
@@ -483,7 +481,7 @@ namespace Necromancy.Server.Packet.Area
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt64(69);//ItemID
+            res.WriteInt64(10800405);//ItemID
             res.WriteInt32((int)x);//Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
             res.WriteByte(0);//Number of "items"
             res.WriteInt32(0);//Item status, in multiples of numbers, 8 = blessed/cursed/both 
@@ -594,7 +592,7 @@ namespace Necromancy.Server.Packet.Area
         private void Revive(NecClient client)
         {
 
-            if (client.Character.State == 1)
+            if (client.Character.soulFormState == 1)
             {
                 /* IBuffer res1 = BufferProvider.Provide();
                  res1.WriteInt32(client.Character.Id);
@@ -610,7 +608,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0); // 0 = sucess to revive, 1 = failed to revive
-                client.Character.State -= 1;
+                client.Character.soulFormState  -= 1;
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_raisescale_request_revive_r, res);
 
                 IBuffer res2 = BufferProvider.Provide();
@@ -620,7 +618,7 @@ namespace Necromancy.Server.Packet.Area
 
             }
 
-            else if (client.Character.State == 0)
+            else if (client.Character.soulFormState == 0)
             {
 
 
@@ -656,11 +654,17 @@ namespace Necromancy.Server.Packet.Area
             // Check the list to know what recv do
 
 
+
+
+            // recv_dbg_message get a message in the chat, maybe it's the message for item ?
+
             // recv_data_notify_eventlink spawn the aura for changing area for event
 
             // recv_data_notify_maplink spawn the aura for changing map
 
             //recv_data_notify_goldobject_data permit to get item or gold?
+
+            //recv_data_notify_soulmaterialobject_data permit to get the soulmaterial object
 
             //recv_data_notify_eo_data permit to get the effect, of spell, and other things
 
@@ -685,7 +689,64 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-            IBuffer res = BufferProvider.Provide(); // It's the aura portal for event
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);//bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_eqmask, res);
+
+
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
+
+            res.WriteCString("Hello i am you, and who you are ?");
+            Router.Send(client, (ushort)AreaPacketId.recv_dbg_message, res);
+
+
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // ID
+
+
+            res.WriteFloat(client.Character.X);//x
+            res.WriteFloat(client.Character.Y + 50);//y
+            res.WriteFloat(client.Character.Z + 2);//z
+
+
+            res.WriteFloat(client.Character.X);//x
+            res.WriteFloat(client.Character.Y + 50);//y
+            res.WriteFloat(client.Character.Z + 2);//z
+            res.WriteByte(0);
+
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0); // Jump animation, 0 = no jump, 1 = jump
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_soulmaterialobject_data, res);
+
+            /*IBuffer res = BufferProvider.Provide(); // It's the aura portal for event
             res.WriteInt32(0); // ID
 
             res.WriteFloat(client.Character.X);//x
@@ -989,7 +1050,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res0 = BufferProvider.Provide();
-            res0.WriteInt64(3); // Gold in the storage
+            res0.WriteInt64(client.Soul.WarehouseGold); // Gold in the storage
             Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res0);
 
 
@@ -1291,29 +1352,40 @@ namespace Necromancy.Server.Packet.Area
 
         private void LogOut(NecClient client)
         {
-            byte[] byteArr = new byte[20] { 0x00, 0x12, 0xDD, 0xEF, 0, 0, 0, 0, 0, 0, 0, 0,
-                0 ,0 ,0 ,0 ,0, 0, 0, 0};
+            byte[] byteArr = new byte[8] { 0x00, 0x06, 0xEE, 0x91, 0, 0, 0, 0 };
 
             IBuffer res = BufferProvider.Provide();
 
-
             res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteInt32(0xE1F50501);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt32(0x25E6852C);
-
 
             res.SetPositionStart();
 
-            for (int i = 4; i < 20; i++)
+            for (int i = 4; i < 8; i++)
             {
                 byteArr[i] += res.ReadByte();
             }
 
             client.Session.msgSocket.Send(byteArr);
+
+            System.Threading.Thread.Sleep(4000);
+
+            byte[] byteArrr = new byte[9] { 0x00, 0x07, 0x52, 0x56, 0, 0, 0, 0, 0 };
+
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt32(0);
+            res2.WriteByte(0);
+
+            res2.SetPositionStart();
+
+            for (int i = 4; i < 9; i++)
+            {
+                byteArrr[i] += res2.ReadByte();
+            }
+
+            client.Session.msgSocket.Send(byteArrr);
+
+
         }
         private void AdminConsoleSelectPackageUpdate(NecClient client)
         {
@@ -1336,9 +1408,10 @@ namespace Necromancy.Server.Packet.Area
         private void AdminConsoleRecvDataNotifyMonsterData(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(900102); // Monster ID, same id, juste respawn the monster
+            int MonsterUniqueId = Util.GetRandomNumber(55566, 55888);
+            res.WriteInt32(MonsterUniqueId);
 
-            res.WriteCString($"Demon Bardock");//Name while spawning
+            res.WriteCString($"Demon Bardock{MonsterUniqueId}");//Name while spawning
 
             res.WriteCString($"Titan");//Title
 
@@ -1413,9 +1486,9 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteByte(0);
 
-            res.WriteInt32(600); // Current HP
+            res.WriteInt32(900); //Current HP
 
-            res.WriteInt32(880); // Max HP
+            res.WriteInt32(1000); //Max HP
 
             res.WriteInt32(0x80); // cmp to 0x80 = 128
 
@@ -1432,15 +1505,21 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt32(11);
             res5.WriteInt32(0);
+            res5.WriteInt32(MonsterUniqueId);
             Router.Send(client, (ushort)AreaPacketId.recv_monster_hate_on, res5);
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(11);
-            res6.WriteInt32(1);
+            res6.WriteInt32(0);
+            res6.WriteInt32(MonsterUniqueId);
             Router.Send(client, (ushort)AreaPacketId.recv_battle_report_notify_damage_hp, res6);
 
+
+
+            IBuffer res80 = BufferProvider.Provide();
+            res80.WriteByte(0);
+            res80.WriteInt16(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_chara_target_move_side_speed_per, res80);
             /*IBuffer res81 = BufferProvider.Provide();
             res81.WriteInt32(11);
 
@@ -1536,7 +1615,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
                 res.WriteByte(0);
 
-                res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment, 2 = royal bag
+                res.WriteByte(2);                       // 0 = adventure bag. 1 = character equipment, 2 = royal bag
                 res.WriteByte(0);                       // 0~2
                 res.WriteInt16((short)x);               // bag index 0 to 24
 
@@ -1598,12 +1677,51 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(client, (ushort)AreaPacketId.recv_item_update_date_end_protect, res9);
 
 
-                IBuffer res12 = BufferProvider.Provide();
+                IBuffer res11 = BufferProvider.Provide();
+                res11.WriteInt64(10001000100010002 + i);
+                res11.WriteByte((byte)Util.GetRandomNumber(0, 100)); // Hardness
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res11);
+
+
+                IBuffer res1 = BufferProvider.Provide();
+                res1.WriteInt64(itemIDs[x]); //10001000100010002 + i   put stuff unidentified and get the status equipped  , 0 put stuff identified
+                res1.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res1);
+
+
+                IBuffer res13 = BufferProvider.Provide();
+
+                res13.WriteInt64(10001000100010002 + i);
+                res13.WriteInt32(EquipBitMask[x]); // Permit to get the armor on the chara
+
+                res13.WriteInt32(itemIDs[x]); // List of items that gonna be equip on the chara
+                res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+                res13.WriteByte(0);
+                res13.WriteByte((byte)Util.GetRandomNumber(0, 100)); //1 = stop flickering but you don't have the armor anymore
+
+                res13.WriteInt32(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);//bool
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0); // 1 = body pink texture
+                res13.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_eqmask, res13);
+
+
+
+                /*IBuffer res12 = BufferProvider.Provide();
                 res12.WriteInt32(client.Character.Id);
                 res12.WriteInt32(EquipBitMask[x]);
 
                 int numEntries = 0x2;
-                for ( i = 0; i < numEntries; i++)
+                for (i = 0; i < numEntries; i++)
                 {
                     res12.WriteInt32(EquipBitMask[x]);
                     res12.WriteByte(0);
@@ -1624,66 +1742,9 @@ namespace Necromancy.Server.Packet.Area
                 res12.WriteByte(0);
 
                 res12.WriteInt32(EquipBitMask[x]);
-                Router.Send(client, (ushort)AreaPacketId.recv_dbg_chara_equipped, res12);
+                Router.Send(client, (ushort)AreaPacketId.recv_dbg_chara_equipped, res12); */
 
 
-                IBuffer res1 = BufferProvider.Provide();
-                res1.WriteInt64(itemIDs[x]); //10001000100010002 + i   put stuff unidentified and get the status equipped  , 0 put stuff identified
-                res1.WriteInt32(0);
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res1);
-
-
-            }
-        }
-        private void AdminConsoleRecvItemInstanceUnidentifiedClear(NecClient client)
-        {
-            for (int i = 0; i < 19; i++)
-            {
-                //recv_item_instance_unidentified = 0xD57A,
-                IBuffer res = BufferProvider.Provide();
-
-                res.WriteInt64(10001000100010002 + i);
-
-                res.WriteCString("Have Fun in Texas Hiraeth!"); // Item Name
-
-                res.WriteInt32(EquipItemType[x] - 1); // Item Type.   10001005 Mask Item type and stats. Refer To ItemType.csv                      (58 map pc        55 gem)
-                res.WriteInt32(0);
-
-                res.WriteByte(1); // Numbers of items
-
-                res.WriteInt32(0); /* 10001003 Put The Item Unidentified. 0 put the item Identified 
-            1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
-
-                res.WriteInt32(0);  //Item ID for Icon
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteInt32(2);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteByte(1);
-                res.WriteByte(0);
-                res.WriteByte(1); // bool
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteByte(0);                       // 0 = adventure bag. 1 = character equipment
-                res.WriteByte(0);                       // 0~2
-                res.WriteInt16((short)x);                      // bag index 0 to 24
-
-                res.WriteInt32(EquipBitMask[x]); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) (0b1, 0b10, 0b100, 0b1000, 0b10000  (bitmask))
-
-                res.WriteInt64(2);
-
-                res.WriteInt32(2);
-                x++;
-                Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res);
-                if (x >= 19) x = 0;
             }
         }
 
@@ -1740,10 +1801,63 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
+        private void SendMapEntry(NecClient client,int myMapId)
+        {
+            int mapId = myMapId;
+
+
+            Map map = Server.Map.Get(mapId);
+            if (map == null)
+            {
+                Logger.Error($"MapId: {mapId} not found in map lookup", client);
+                //client.Socket.Close();
+                return;
+            }
+
+            map.Enter(client);
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res);
+        }
+
+private void SendMapChangeForce(NecClient client, int MapID)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            //sub_4E4210_2341  // impacts map spawn ID
+            res.WriteInt32(client.Character.MapId);//MapSerialID
+            res.WriteInt32(client.Character.MapId);//MapID
+            res.WriteFixedString("127.0.0.1", 65);//IP
+            res.WriteInt16(60002);//Port
+
+            //sub_484420   //  does not impact map spawn coord
+            res.WriteFloat(client.Character.X);//X Pos
+            res.WriteFloat(client.Character.Y);//Y Pos
+            res.WriteFloat(client.Character.Z);//Z Pos
+            res.WriteByte(1);//View offset
+
+            Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res);
+
+            SendMapChangeSyncOk(client);
+            client.Character.MapId = MapID;
+        }
+
+        private void SendMapChangeSyncOk(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_map_change_sync_ok, res);
+
+            //Add a wait statement here
+        }
+
+
         /////////Int array for testing Item ID's. 
-        int[] itemIDs = new int[] {11300304/*Weapon*/,15000102/*Shield* */,20000101/*Arrow*/,101601/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
-                    ,30300101/*Necklace*/,30200107/*Earring*/,30400105/*Belt*/,30100106/*Ring*/,70000101/*Talk Ring*/,161401/*Avatar Head */,261401/*Avatar Torso*/,360801/*Avatar Pants*/,161401/*Avatar Hands*/,561401/*Avatar Feet*/ };
-        int[] NPCModelID = new int[] { 10800405, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
+        int[] itemIDs = new int[] {10800405/*Weapon*/,15100901/*Shield* */,20000101/*Arrow*/,110301/*head*/,210701/*Torso*/,360103/*Pants*/,401201/*Hands*/,560103/*Feet*/,690101/*Cape*/
+                    ,30300101/*Necklace*/,30200107/*Earring*/,30400105/*Belt*/,30100106/*Ring*/,70000101/*Talk Ring*/,160801/*Avatar Head */,260801/*Avatar Torso*/,360801/*Avatar Pants*/,460801/*Avatar Hands*/,560801/*Avatar Feet*/,1,2,3 };
+        int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
         int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
         //int[] EquipBitMask = new int[] { 0b1, 0b10, 0b100, 0b1000, 0b10000, 0b100000, 0b1000000, 0b10000000, 0b100000000, 0b1000000000, 0b10000000000, 0b100000000000, 0b1000000000000, 0b10000000000000, 0b100000000000000, 0b10000000000000000, 0b10000000000000000, 0b1000000000000000000, 0b10000000000000000000 };
         int[] EquipBitMask = new int[] { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152 };
