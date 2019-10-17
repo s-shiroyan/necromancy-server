@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_soul_create : Handler
+    public class send_soul_create : ClientHandler
     {
         public send_soul_create(NecServer server) : base(server)
         {
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Msg
             if (!Database.InsertSoul(soul))
             {
                 Logger.Error(client, $"Failed to create SoulName: {soulName}");
-                client.Socket.Close();
+                client.Close();
                 return;
             }
 
@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client, (ushort) MsgPacketId.recv_soul_create_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_create_r, res, ServerType.Msg);
         }
     }
 }

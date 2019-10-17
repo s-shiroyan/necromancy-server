@@ -159,17 +159,6 @@ namespace Necromancy.Server.Database.Sql
             parameter.DbType = type;
             return parameter;
         }
-        ///added by Xeno.  delete this tag after success.  Never had success, fix or delete
-        protected DbParameter Parameter(TCom command, string name, object value, string name2, object value2, DbType type)
-        {
-            DbParameter parameter = command.CreateParameter();
-            parameter.ParameterName = name;
-            parameter.Value = value;
-            parameter.ParameterName = name2;
-            parameter.Value = value2;
-            parameter.DbType = type;
-            return parameter;
-        }
 
         protected DbParameter Parameter(TCom command, string name, string value)
         {
@@ -179,12 +168,6 @@ namespace Necromancy.Server.Database.Sql
         protected void AddParameter(TCom command, string name, object value, DbType type)
         {
             DbParameter parameter = Parameter(command, name, value, type);
-            command.Parameters.Add(parameter);
-        }
-        ///added by Xeno.  delete this tag after success.  Never had success, fix or delete
-        protected void AddParameter(TCom command, string name, int value, string name2, byte value2)
-        {
-            DbParameter parameter = Parameter(command, name, value, name2, value, DbType.Int32);
             command.Parameters.Add(parameter);
         }
 

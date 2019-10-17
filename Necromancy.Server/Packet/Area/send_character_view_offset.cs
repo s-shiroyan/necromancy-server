@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_character_view_offset : Handler
+    public class send_character_view_offset : ClientHandler
     {
         public send_character_view_offset(NecServer server) : base(server)
         {
@@ -20,6 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
             if(client.Character != null)
                 client.Character.viewOffset = view;
+            Console.WriteLine($"View Offset = {view}");
         }
     }
 }

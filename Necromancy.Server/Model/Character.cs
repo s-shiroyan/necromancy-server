@@ -59,6 +59,14 @@ namespace Necromancy.Server.Model
         public int MapId { get; set; }
         public int lastCast { get; set; }
 
+        public bool NewCharaProtocol { get; set; }
+        public int WeaponType { get; set; }
+        public int AdventureBagGold { get; set; }
+        public byte soulFormState { get; set; }
+
+
+
+
         public Character()
         {
             Id = -1;
@@ -69,7 +77,10 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
             logoutCanceled = 0;
-            MapId = 1001007;
+            NewCharaProtocol = false;
+            WeaponType = 8;
+            AdventureBagGold = 80706050;
+            
         }
     }
 

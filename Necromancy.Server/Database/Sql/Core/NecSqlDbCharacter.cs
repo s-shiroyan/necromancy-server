@@ -19,10 +19,7 @@ namespace Necromancy.Server.Database.Sql.Core
 
         private const string SqlSelectCharactersBySoulId =
             "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id; ";
-
-        private const string SqlSelectCharactersBySoulIdAndSlotId =
-            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id && `character_slot_id`=@character_slot_id; ";
-        
+ 
         private const string SqlUpdateCharacter =
             "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `character_slot_id`=@character_slot_id,  `name`=@name, `race_id`=@race_id, `sex_id`=@sex_id, `hair_id`=@hair_id, `hair_color_id`=@hair_color_id, `face_id`=@face_id, `alignment_id`=@alignment_id, `strength`=@strength, `vitality`=@vitality, `dexterity`=@dexterity, `agility`=@agility, `intelligence`=@intelligence, `piety`=@piety, `luck`=@luck, `class_id`=@class_id, `level`=@level, `created`=@created WHERE `id`=@id;";
 
@@ -106,21 +103,6 @@ namespace Necromancy.Server.Database.Sql.Core
                     }
                 });
             return characters;
-        }
-
-
-        public Character SelectCharacterBySoulIdAndSlotId(int soulId, byte character_slot_id)
-        {
-            Character character = null;
-            ExecuteReader(SqlSelectCharacterById,
-                command => { AddParameter(command, "@soul_id", soulId, "@character_slot_id", character_slot_id); }, reader =>
-                {
-                    if (reader.Read())
-                    {
-                        character = ReadCharacter(reader);
-                    }
-                });
-            return character;
         }
 
             public bool UpdateCharacter(Character character)

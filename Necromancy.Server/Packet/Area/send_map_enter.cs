@@ -2,10 +2,11 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_enter : Handler
+    public class send_map_enter : ClientHandler
     {
         public send_map_enter(NecServer server) : base(server)
         {
@@ -19,30 +20,46 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteByte(0);//Bool
 
-            Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res, ServerType.Area);
+            Console.WriteLine($"{client.Character.Name} {client.Soul.Name} Entering Map: {client.Character.MapId}");
+            Console.WriteLine($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
 
-            SendDataNotifyCharaData(client);
+            //This makes each joined client re-send their notify when new clients connect.
+            foreach (NecClient thisNecClient in client.Map.ClientLookup.GetAll())
+            {
+                SendDataNotifyCharaData(client, thisNecClient);
+            }   
+            //Commenting out code until a fix can be found.  This causes your character to be frozen upon map entry.   
+           /* if (client.Character.NewCharaProtocol == true)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+
+                res2.WriteInt32(1); //1 = cinematic, 0 Just start the event without cinematic
+                res2.WriteByte(0);
+                client.Character.NewCharaProtocol = false;
+                Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2);
+            }*/
+
         }
-
-        private void SendDataNotifyCharaData(NecClient client)
+        private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
         {
             IBuffer res3 = BufferProvider.Provide();
 
             //sub_read_int32
 
-            res3.WriteInt32(client.Character.Id);//Character ID
+            res3.WriteInt32(thisNecClient.Character.Id);//Character ID
 
             //sub_481AA0
-            res3.WriteCString(client.Character.Name);
+            res3.WriteCString(thisNecClient.Soul.Name);
 
             //sub_481AA0
-            res3.WriteCString(client.Soul.Name);
+            res3.WriteCString(thisNecClient.Character.Name);
 
             //sub_484420
-            res3.WriteFloat(client.Character.X);//X Pos
-            res3.WriteFloat(client.Character.Y);//Y Pos
-            res3.WriteFloat(client.Character.Z);//Z Pos
-            res3.WriteByte(client.Character.viewOffset);//view offset
+            res3.WriteFloat(thisNecClient.Character.X);//X Pos
+            res3.WriteFloat(thisNecClient.Character.Y);//Y Pos
+            res3.WriteFloat(thisNecClient.Character.Z);//Z Pos
+            res3.WriteByte(thisNecClient.Character.viewOffset);//view offset
 
             //sub_read_int32
             res3.WriteInt32(6);
@@ -58,133 +75,37 @@ namespace Necromancy.Server.Packet.Area
             int numEntries = 19;
             res3.WriteInt32(numEntries);//has to be less than 19(defines how many int32s to read?)
 
-            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
-            int Armor = 25;         //Armor 25
-            int Accessory = 27;     //Accessory 26
-            int Shield = 21;        //Shield 19-21
-            int Weapon = 4;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
-                                     //sub_483660 
-            res3.WriteInt32(Weapon); //18	    				
-            res3.WriteInt32(Shield); //17 	    		
-            res3.WriteInt32(Armor); //16	        			
-            res3.WriteInt32(Armor); //15	        				
-            res3.WriteInt32(Armor); //14	        			
-            res3.WriteInt32(Armor); //13	        			
-            res3.WriteInt32(Armor); //12	        				
-            res3.WriteInt32(Accessory); //11	  	
-            res3.WriteInt32(Accessory); //10	    			
-            res3.WriteInt32(Accessory); //9	    		
-            res3.WriteInt32(Accessory); //8	    			
-            res3.WriteInt32(Accessory); //7	    			
-            res3.WriteInt32(Armor); //6          				
-            res3.WriteInt32(Armor); //5          		
-            res3.WriteInt32(Armor); //4	        					
-            res3.WriteInt32(Armor); //3	        				
-            res3.WriteInt32(Armor); //2          				
-            res3.WriteInt32(Shield + 1); //1       					
-            res3.WriteInt32(22);  //0 
+            //Consolidated Frequently Used Code
+            LoadEquip.SlotSetup(res3, thisNecClient.Character);
 
 
             //sub_483420
             numEntries = 19;
             res3.WriteInt32(numEntries);//has to be less than 19
-            int x = 0;
-            int[] EquipId = new int[19];
 
-            string CharacterSet = client.Character.Name;
+            //Consolidated Frequently Used Code
+            LoadEquip.EquipItems(res3, thisNecClient.Character);
 
-            switch (CharacterSet)
-            {
-                case "Xeno":
-                    EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
-                    break;
-                case "Kadred":
-                    EquipId = new int[] {10800405/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,260801/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,160801/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
-                    break;
-                case "Zenkato":
-                    EquipId = new int[] {11400403/*Weapon*/,0/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,510301/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,260801/*Avatar Torso*/,510301/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,100403/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
-                    break;
-                case "Ipa":
-                    EquipId = new int[] {11300506/*Weapon*/,15100901/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,00252401/*Avatar Torso*/,560801/*Avatar Feet*/,460801/*Avatar Arms */,360801/*Avatar Legs*/,121901/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
-                    break;
-                default:
-                    EquipId = new int[] {10800405/*Weapon*/,15200702/*Shield* */,260103/*Torso*/,110504/*head*/,360103/*legs*/,460103/*Arms*/,560103/*Feet*/,690101,690101/*Cape*/
-                    ,690101,690101,690101,261401/*Avatar Torso*/,561401/*Avatar Feet*/,461401/*Avatar Arms */,361401/*Avatar Legs*/,161401/*Avatar Head*/,690101,20000101/*Weapon Related*/ };
-                    break;
-            }
-
-            //sub_4948C0
-            for (int i = 0; i < numEntries; i++)
-            {
-
-                res3.WriteInt32(EquipId[x]);//???
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0); //0  ????
-
-
-                res3.WriteInt32(12341234);//???
-                res3.WriteByte(0); //
-                res3.WriteByte(4); //
-                res3.WriteByte(1); //
-                x++;
-
-                res3.WriteByte(00);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-                res3.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                res3.WriteByte(4); // testing
-                res3.WriteByte(4); // testing
-                res3.WriteByte(4); // testing
-                res3.WriteByte(4); // testing
-                res3.WriteByte(4); //Alternate texture for item model 
-                res3.WriteByte(4); // seperate in assembly
-
-            }
 
             //sub_483420
             numEntries = 19;//influences a loop that needs to be under 19
             res3.WriteInt32(numEntries);
 
-            int rr = 000;
-            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
-            res3.WriteInt32(001); //Right Hand    //1 for weapon
-            res3.WriteInt32(002); //Left Hand     //2 for Shield
-            res3.WriteInt32(016); //Torso         //16 for torso
-            res3.WriteInt32(008); //Head          //08 for head
-            res3.WriteInt32(032); //Legs          //32 for legs
-            res3.WriteInt32(064); //Arms          //64 for Arms
-            res3.WriteInt32(128); //Feet          //128 for feet
-            res3.WriteInt32(004); //???Cape
-            res3.WriteInt32(rr); //???Ring
-            res3.WriteInt32(rr); //???Earring
-            res3.WriteInt32(rr); //???Necklace
-            res3.WriteInt32(rr); //???Belt
-            res3.WriteInt32(016); //Avatar Torso
-            res3.WriteInt32(128); //Avatar Feet
-            res3.WriteInt32(064); //Avatar Arms
-            res3.WriteInt32(032); //Avatar Legs
-            res3.WriteInt32(008); //Avatar Head  
-            res3.WriteInt32(004); //???
-            res3.WriteInt32(000); //Right Hand 
+            //Consolidated Frequently Used Code
+            LoadEquip.EquipSlotBitMask(res3, thisNecClient.Character);
+
 
             //sub_4835C0
             res3.WriteInt32(0);//1 here means crouching?
 
             //sub_484660
-            res3.WriteInt32(client.Character.Raceid);//race
-            res3.WriteInt32(client.Character.Sexid);//gender
-            res3.WriteByte(client.Character.HairId);//hair
-            res3.WriteByte(client.Character.FaceId);//face
-            res3.WriteByte(client.Character.HairColorId);//hair color
+            LoadEquip.BasicTraits(res3, thisNecClient.Character);
 
             //sub_483420
             res3.WriteInt32(0); // party id?
 
             //sub_4837C0
-            res3.WriteInt32(0); // party id?
+            res3.WriteInt32(1); // party id? // i don't think sooo'
 
             //sub_read_byte
             res3.WriteByte(0);//Criminal name icon
@@ -229,8 +150,22 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString("");//Comment string
 
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, client);
+            Router.Send(thisNecClient.Map, (ushort)AreaPacketId.recv_data_notify_chara_data, res3, ServerType.Area, thisNecClient);
+
+            SendMapBGM(client);
             client.Character.weaponEquipped = false;
         }
+
+          private void SendMapBGM(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(100401);
+
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_map_update_bgm, res, ServerType.Area, client);
+
+
+        } 
     }
 }

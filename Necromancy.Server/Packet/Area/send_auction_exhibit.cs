@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_exhibit : Handler
+    public class send_auction_exhibit : ClientHandler
     {
         public send_auction_exhibit(NecServer server) : base(server)
         {
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt64(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_exhibit_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_exhibit_r, res, ServerType.Area);
         }
 
     }

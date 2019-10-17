@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_removetrap_select : Handler
+    public class send_event_removetrap_select : ClientHandler
     {
         public send_event_removetrap_select(NecServer server) : base(server)
         {
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_select_r, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_select_r, res, ServerType.Area);
         }
 
     }

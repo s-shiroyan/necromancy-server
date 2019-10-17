@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_wanted_list_close : Handler
+    public class send_wanted_list_close : ClientHandler
     {
         public send_wanted_list_close(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_list_close_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_list_close_r, res, ServerType.Area);
         }
 
     }

@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_shop_close : Handler
+    public class send_shop_close : ClientHandler
     {
         public send_shop_close(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_close_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_close_r, res, ServerType.Area);
             SendShopNotifyClose(client);
         }
 
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_notify_close, res, client);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_notify_close, res, ServerType.Area, client);
 
         }
     }
