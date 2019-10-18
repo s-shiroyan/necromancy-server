@@ -575,7 +575,7 @@ namespace Necromancy.Server.Packet.Area
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt64(10001000100010002 + i); // ?
+                res.WriteInt64(itemIDs[x]); // ?
             }
 
             res.WriteInt32(itemIDs[x]); // Show item name                                                   
@@ -1490,14 +1490,15 @@ namespace Necromancy.Server.Packet.Area
         private void AdminConsoleRecvItemInstanceUnidentified(NecClient client)
         {
             int i = 0;
-            x = 0;
+            x = -1;
             for (i = 0; i < 19; i++)
             {
+                x++;
                 System.Threading.Thread.Sleep(100);
                 //recv_item_instance_unidentified = 0xD57A,
                 IBuffer res = BufferProvider.Provide();
 
-                res.WriteInt64(10001000100010002 + i);
+                res.WriteInt64(itemIDs[x]);
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]}"); // Item Name
 
@@ -1508,8 +1509,8 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(
                     EquipBitMask[
-                        Util.GetRandomNumber(1,
-                            8)]); /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
+                        Util.GetRandomNumber(4,
+                            4)]); /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
 
 
                 res.WriteInt32(itemIDs[x]); //Item ID for Icon
@@ -1530,101 +1531,112 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
                 res.WriteByte(0);
 
-                res.WriteByte(2); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
+                res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
                 res.WriteByte(0); // 0~2
                 res.WriteInt16((short) x); // bag index 0 to 24
 
                 res.WriteInt32(EquipBitMask[x]); //bit mask. This indicates where to put items.  
 
-                res.WriteInt64(1111111111111110);
+                res.WriteInt64(itemIDs[x]);
 
                 res.WriteInt32(1);
-                x++;
+                
 
 
                 Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
 
 
-                IBuffer res0 = BufferProvider.Provide();
-                res0.WriteInt64(10001000100010002 + i);
-                res0.WriteInt32(Util.GetRandomNumber(100, 200)); // MaxDura points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
+               IBuffer res0 = BufferProvider.Provide();
+                res0.WriteInt64(itemIDs[x]);
+                res0.WriteInt32(Util.GetRandomNumber(199,200)); // MaxDura points
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
 
 
-                IBuffer res2 = BufferProvider.Provide(); // Maybe not the good one ?
-                res2.WriteInt64(10001000100010002 + i);
+                IBuffer res2 = BufferProvider.Provide();  // Maybe not the good one ?
+                res2.WriteInt64(itemIDs[x]);
                 res2.WriteInt32(Util.GetRandomNumber(1, 200)); // Durability points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
 
 
                 IBuffer res4 = BufferProvider.Provide();
-                res4.WriteInt64(10001000100010002 + i);
+                res4.WriteInt64(itemIDs[x]);
                 res4.WriteInt32(Util.GetRandomNumber(800, 10000)); // Weight points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
 
-
+ 
                 IBuffer res5 = BufferProvider.Provide();
-                res5.WriteInt64(10001000100010002 + i);
-                res5.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Defense and attack points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
+                res5.WriteInt64(itemIDs[x]);
+                res5.WriteInt16((short)Util.GetRandomNumber(5, 500)); // Defense and attack points
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
 
 
                 IBuffer res6 = BufferProvider.Provide();
-                res6.WriteInt64(10001000100010002 + i);
-                res6.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Magic def and attack Points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
+                res6.WriteInt64(itemIDs[x]);
+                res6.WriteInt16((short)Util.GetRandomNumber(5, 500)); // Magic def and attack Points
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
 
 
                 IBuffer res7 = BufferProvider.Provide();
-                res7.WriteInt64(10001000100010002 + i);
+                res7.WriteInt64(itemIDs[x]);
                 res7.WriteInt32(Util.GetRandomNumber(1, 10)); // for the moment i don't know what it change
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
 
 
                 IBuffer res8 = BufferProvider.Provide();
-                res8.WriteInt64(10001000100010002 + i);
-                res8.WriteInt16((short) Util.GetRandomNumber(0, 100000)); // Shwo GP on certain items
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
+                res8.WriteInt64(itemIDs[x]);
+                res8.WriteInt16((short)Util.GetRandomNumber(0, 100000)); // Shwo GP on certain items
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
 
                 IBuffer res9 = BufferProvider.Provide();
-                res9.WriteInt64(10001000100010002 + i);
+                res9.WriteInt64(itemIDs[x]);
                 res9.WriteInt32(Util.GetRandomNumber(1, 50)); // for the moment i don't know what it change
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
 
 
-                IBuffer res12 = BufferProvider.Provide();
-                res12.WriteInt32(client.Character.Id);
-                res12.WriteInt32(EquipBitMask[x]);
-
-                int numEntries = 0x2;
-                for (i = 0; i < numEntries; i++)
-                {
-                    res12.WriteInt32(EquipBitMask[x]);
-                    res12.WriteByte(0);
-                    res12.WriteByte(0);
-                    res12.WriteByte(0);
-                }
-
-                res12.WriteByte(0);
-
-                res12.WriteByte(0);
-                res12.WriteByte(0);
-                res12.WriteByte(0);
-                res12.WriteByte(0);
-                res12.WriteByte(0);
-                res12.WriteByte(0);
-
-                res12.WriteByte(0);
-
-                res12.WriteInt32(EquipBitMask[x]);
-                Router.Send(client, (ushort) AreaPacketId.recv_dbg_chara_equipped, res12, ServerType.Area);
+                IBuffer res11 = BufferProvider.Provide();
+                res11.WriteInt64(itemIDs[x]);
+                res11.WriteByte((byte)Util.GetRandomNumber(0, 100)); // Hardness
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
 
 
                 IBuffer res1 = BufferProvider.Provide();
-                res1.WriteInt64(
-                    itemIDs[x]); //10001000100010002 + i   put stuff unidentified and get the status equipped  , 0 put stuff identified
+                res1.WriteInt64(itemIDs[x]); //itemIDs[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
                 res1.WriteInt32(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res1, ServerType.Area);
+
+
+                IBuffer res13 = BufferProvider.Provide();
+                //95 torso ?
+                //55 full armor too ?
+                //93 full armor ?
+                // 27 full armor ?
+                //11 under ?
+                // 38 = boots and cape
+                //byte y = unchecked((byte)110111);
+                //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
+               
+                res13.WriteInt64(itemIDs[x]);
+                res13.WriteInt32(EquipBitMask[x]); // Permit to get the armor on the chara
+
+                res13.WriteInt32(itemIDs[x]); // List of items that gonna be equip on the chara
+                res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+                res13.WriteByte(0);
+                res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
+
+                res13.WriteInt32(1);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);//bool
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0);
+                res13.WriteByte(0); // 1 = body pink texture
+                res13.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
             }
         }
 
@@ -1637,8 +1649,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
                 //recv_item_instance = 0x86EA,
                 x++;
-                res.WriteInt64(1000200030004001 +
-                               x); //  Assume Unique ID instance identifier. 1 here makes item green icon
+                res.WriteInt64(itemIDs[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
                 res.WriteInt32(EquipItemType[x] - 1);
                 res.WriteByte(1); //number of items in stack
                 res.WriteInt32(itemIDs[x]); //
@@ -1751,7 +1762,6 @@ namespace Necromancy.Server.Packet.Area
         int[] NPCSerialID = new int[]
             {10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101};
 
-        //int[] EquipBitMask = new int[] { 0b1, 0b10, 0b100, 0b1000, 0b10000, 0b100000, 0b1000000, 0b10000000, 0b100000000, 0b1000000000, 0b10000000000, 0b100000000000, 0b1000000000000, 0b10000000000000, 0b100000000000000, 0b10000000000000000, 0b10000000000000000, 0b1000000000000000000, 0b10000000000000000000 };
         int[] EquipBitMask = new int[]
         {
             1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288,
@@ -1759,7 +1769,7 @@ namespace Necromancy.Server.Packet.Area
         };
 
         int[] EquipItemType = new int[]
-            {14, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 62, 62, 62, 62, 62, 62, 62, 62};
+            {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
 
         int[] EquipStatus = new int[] {0, 1, 2, 4, 8, 16};
     }
