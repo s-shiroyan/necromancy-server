@@ -61,6 +61,7 @@ namespace Necromancy.Server.Model
         public int WeaponType { get; set; }
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
+        public int[] EquipId { get; set; }
 
 
 

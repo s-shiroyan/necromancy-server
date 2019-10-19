@@ -41,7 +41,11 @@ namespace Necromancy.Server.Packet.Area
                 byte e1 = packet.Data.ReadByte(); //Character Y Alignment with the Map Y Axis (128 for perfect, 0 for 90Degree offset)
                 byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
                                                  /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                 View Offset : Packet Value 
+                                                    View Offset : Packet Value 
+                                                         135     = 60
+                                                         136-138 = 61
+                                                         139-149 = 62
+                                                         150-179 = 63
                                                          0-29    = 63
                                                          30-40   = 62
                                                          41-42   = 61
@@ -53,11 +57,7 @@ namespace Necromancy.Server.Packet.Area
                                                          60-119  = 191
                                                          120-130 = 190
                                                          131-133 = 189
-                                                         133-144 = 188
-                                                         135     = 60
-                                                         136-138 = 61
-                                                         139-149 = 62
-                                                         150-179 = 63
+                                                         133-134 = 188
                                                  */
 
                 float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
@@ -73,25 +73,6 @@ namespace Necromancy.Server.Packet.Area
                 byte k2 = packet.Data.ReadByte();
                 byte k3 = packet.Data.ReadByte();//Character Z Alignment with the Map Z Axis (128 for perfect Alignment)
                 byte l = packet.Data.ReadByte();//Character facing Direction 
-                                                /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                View Offset : Packet Value 
-                                                        0-29    = 63
-                                                        30-40   = 62
-                                                        41-42   = 61
-                                                        43      = 59
-                                                        44      = 60
-                                                        45      = 188
-                                                        46-47   = 189 
-                                                        48-59   = 190
-                                                        60-119  = 191
-                                                        120-130 = 190
-                                                        131-133 = 189
-                                                        133-144 = 188
-                                                        135     = 60
-                                                        136-138 = 61
-                                                        139-149 = 62
-                                                        150-179 = 63
-                                                */
 
                 client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
 
