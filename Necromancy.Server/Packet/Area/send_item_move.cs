@@ -5,22 +5,26 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_item_move : Handler
+    public class send_item_move : ClientHandler
     {
         public send_item_move(NecServer server) : base(server)
         {
+       
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_item_move;
-
+        int x;
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int unknown = packet.Data.ReadInt16();
-            int fromSlot = packet.Data.ReadInt32();
+       
+            //int unknown = packet.Data.ReadInt16();
+            int fromSlot = packet.Data.ReadInt32(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
+            int toSlot = packet.Data.ReadInt32();
+            int itemCount = packet.Data.ReadByte(); //last byte is stack count?
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(00); //error check. 0 to work
+            res.WriteInt32(0); //error check. 0 to work
 
             /*
                 ITEMUSE	GENERIC	Unable to use this item right now
@@ -41,7 +45,35 @@ namespace Necromancy.Server.Packet.Area
 
             */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
+            SendItemPlaceChange(client);
         }
+        private void SendItemPlaceChange(NecClient client)
+        {
+            x = -1;
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt64(itemIDs[x]);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(1);
+            res.WriteInt64(itemIDs[x]);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(1);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place_change, res, ServerType.Area);
+        }
+
+        int[] itemIDs = new int[]
+       {
+            10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
+            360103 /*Pants*/, 401201 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+            30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
+            260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/, 1, 2, 3
+       };
+
+        int[] EquipItemType = new int[]
+            {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
+
+        int[] EquipStatus = new int[] { 0, 1, 2, 4, 8, 16 };
     }
 }
