@@ -42,6 +42,7 @@ namespace Necromancy.Server.Setting
 1001009,1001009,1001009,Kingdom of Dimento,Illfalo Ministry of Arcanum, Discovery Hall,-410,-859,68,180,9,0,1,1,6,1001009,0
 1001091,1001091,1001091,,,,0,0,0,0,0,0,0,0,1,,0
 1001901,1001901,1001901,Create Character,,,-163,4845,323,136,0,0,0,0,1,,0
+1001902,1001902,1001002, Kingdom of Dimento, Illfalo Port,New Character Deep Sea Port,29740,3186,-9,0,2,0,1,0,1,1001002,0
 1001902,1001902,1001002, Kingdom of Dimento, Illfalo Port,Deep Sea Port,23021,-224,0,260,2,0,1,0,1,1001002,0
 1001010,1001010,1001010,Union Room, Union Room,Connection Square,0,200,0,0,49,0,0,0,1,,1
 ,,,,,,,,,,,,,,,,
