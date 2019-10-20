@@ -136,11 +136,11 @@ namespace Necromancy.Server.Common
             res.WriteInt32(rr); //???Earring
             res.WriteInt32(rr); //???Necklace
             res.WriteInt32(rr); //???Belt
-            res.WriteInt32(016); //Avatar Torso
-            res.WriteInt32(128); //Avatar Feet
-            res.WriteInt32(064); //Avatar Arms
-            res.WriteInt32(032); //Avatar Legs
-            res.WriteInt32(008); //Avatar Head  
+            res.WriteInt32(-1);//016); //Avatar Torso
+            res.WriteInt32(-1);//128); //Avatar Feet
+            res.WriteInt32(-1);//064); //Avatar Arms
+            res.WriteInt32(-1);//032); //Avatar Legs
+            res.WriteInt32(-1);//008); //Avatar Head  
             res.WriteInt32(004); //???Talk Ring
             res.WriteInt32(000); //???Quiver  
 

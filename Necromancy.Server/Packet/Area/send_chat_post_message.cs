@@ -295,7 +295,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             
-            Router.Send(client, (ushort)AreaPacketId.recv_cpf_notify_error, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_cpf_notify_error, res, ServerType.Area);
 
         }
 
@@ -310,7 +310,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 res.WriteByte(0);
             }
-            Router.Send(client, (ushort)AreaPacketId.recv_cpf_authenticate, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_cpf_authenticate, res, ServerType.Area);
 
         }
 

@@ -41,7 +41,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(1);//Cool time      ./Skill_base.csv   Column J 
             res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
 
-            Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 
             SendDataNotifyEOData(client);
             //SendDataNotifyEOData2(client);
@@ -69,7 +69,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(1);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res, ServerType.Area);
         }
 
         private void SendDataNotifyEOData2(NecClient client)
@@ -102,7 +102,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(1210371);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res, ServerType.Area);
         }
 
         private void SendEOBaseNotifySphere(NecClient client)
@@ -114,7 +114,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteFloat(4);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res, ServerType.Area);
         }
 
         private void SendEOUpdateState(NecClient client)
@@ -125,7 +125,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1210371);
             res.WriteInt32(1210371);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res, ServerType.Area);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 

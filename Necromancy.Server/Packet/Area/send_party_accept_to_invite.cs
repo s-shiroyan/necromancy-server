@@ -15,6 +15,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            int characterID = packet.Data.ReadInt32(); //Could be a Party ID value hidden as character-who-made-it's value
+
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(0);
