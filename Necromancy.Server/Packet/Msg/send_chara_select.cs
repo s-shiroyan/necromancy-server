@@ -32,7 +32,7 @@ namespace Necromancy.Server.Packet.Msg
                     Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
 
                     //Settings for Map Entry until settings are databased.
-                    client.Character.MapId = 2001021;//Set your map here. See reference table in "MapSettings.CS"
+                    client.Character.MapId = 1001007;//Set your map here. See reference table in "MapSettings.CS"
                     string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
 
                     client.Character.X = float.Parse(theMapSettings[6]);
