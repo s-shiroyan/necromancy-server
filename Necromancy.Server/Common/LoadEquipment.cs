@@ -51,19 +51,18 @@ namespace Necromancy.Server.Common
             
             public static void SlotSetup( IBuffer res, Character myCharacter)
             {
-                //Static Weapon types for your character slots until weapon type is databased.
-                int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
+                
+                TemporaryCharacterSwitch(myCharacter); //needed to instantiate Weapon ID for Weapon logic below
                 int Armor = 25;         //Armor 25
                 int Accessory = 26;     //Accessory 26
                 int Shield = 21;        //Shield 19-21
                 int Quiver = 22;        //Arrows 22 Bolt 23 Bullet 24
                 int Other = 27;         //None of the Above
-                int Weapon = MyWeaponType[myCharacter.Characterslotid];         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
-                
+                int Weapon =  Convert.ToInt32(string.Concat($"{(myCharacter.EquipId[0])}"[1],$"{(myCharacter.EquipId[0])}"[2])); 
                 
                 //ItemType Select See str_table ID 100 SubID 121 for Item Type info. Increment by +1
                 int[] EquipItemType = new int[]
-                    {Weapon, Shield, Quiver, Armor, Armor, Armor, Armor, Armor, Other/*Cape-Other*/, Accessory, Accessory, Accessory, Accessory, Other/*TalkRing-Other*/, Other, Other, Other, Other, Other};
+                    {Weapon, Shield, Quiver, Armor, Armor, Armor, Armor, Armor, Other/*Cape-Other*/, Accessory, Accessory, Accessory, Accessory, Other/*TalkRing-Other*/, Armor, Armor, Armor, Armor, Armor};
                 
                 //sub_483660 
                 for (int i = 0; i < numEntries; i++)
@@ -78,73 +77,10 @@ namespace Necromancy.Server.Common
             //sub_483420
             int x = 0;
             myCharacter.EquipId = new int[numEntries];
-            byte[] headSlot = new byte[numEntries];
+            
 
-            string CharacterSet = myCharacter.Name;
-
-            switch (CharacterSet)
-            {
-                case "Talin":
-                    myCharacter.EquipId = new int[]
-                    {
-                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
-                        360103 /*Pants*/, 410505 /*Hands*/, 560103 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 110301 /*Avatar Head */,
-                        210701 /*Avatar Torso*/, 360103 /*Avatar Pants*/, 410505 /*Avatar Hands*/, 560103 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
-                    break;
-                case "Kadred":
-                    myCharacter.EquipId = new int[]
-                    {
-                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
-                        360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
-                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
-                    break;
-                case "Zakura":
-                    myCharacter.EquipId = new int[]
-                    {
-                        11400303 /*Weapon*/, 0 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
-                        360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 100403 /*Avatar Head */,
-                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 510301 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
-                    break;
-                case "Test1":
-                    myCharacter.EquipId = new int[]
-                    {
-                        11500102 /*Weapon*/, 15100801 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
-                        360103 /*Pants*/, 460103 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161101 /*Avatar Head */,
-                        261101 /*Avatar Torso*/, 361101 /*Avatar Pants*/, 461101 /*Avatar Hands*/, 561101 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
-                    break;
-                case "Zakura2":
-                    myCharacter.EquipId = new int[]
-                    {
-                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
-                        360103 /*Pants*/, 401201 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
-                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
-                    break;
-                default:
-                    myCharacter.EquipId = new int[]
-                    {
-                        10800405 /*Weapon*/, 15200702 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
-                        360103 /*Pants*/, 460103 /*Hands*/, 560103 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161401 /*Avatar Head */,
-                        261401 /*Avatar Torso*/, 561401 /*Avatar Pants*/, 461401 /*Avatar Hands*/, 361401 /*Avatar Feet*/
-                    };
-                    headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
-                    break;
-            }
+            byte[] headSlot = TemporaryCharacterSwitch(myCharacter);
+            
             //sub_4948C0
             for (int i = 0; i < numEntries; i++)
             {
@@ -214,6 +150,80 @@ namespace Necromancy.Server.Common
                 res.WriteInt32(EquipBitMask[i]); //bitmask per equipment slot
             }
             
+        }
+
+        private static byte[] TemporaryCharacterSwitch(Character myCharacter)
+        {
+            string CharacterSet = myCharacter.Name;
+            byte[] headSlot = new byte[numEntries];
+
+            switch (CharacterSet)
+            {
+                case "Talin":
+                    myCharacter.EquipId = new int[]
+                    {
+                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
+                        360103 /*Pants*/, 410505 /*Hands*/, 560103 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 110301 /*Avatar Head */,
+                        210701 /*Avatar Torso*/, 360103 /*Avatar Pants*/, 410505 /*Avatar Hands*/, 560103 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                    break;
+                case "Kadred":
+                    myCharacter.EquipId = new int[]
+                    {
+                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
+                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                    break;
+                case "Zakura":
+                    myCharacter.EquipId = new int[]
+                    {
+                        11400303 /*Weapon*/, 0 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 100403 /*Avatar Head */,
+                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 510301 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                    break;
+                case "Test1":
+                    myCharacter.EquipId = new int[]
+                    {
+                        11500102 /*Weapon*/, 15100801 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        360103 /*Pants*/, 460103 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161101 /*Avatar Head */,
+                        261101 /*Avatar Torso*/, 361101 /*Avatar Pants*/, 461101 /*Avatar Hands*/, 561101 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                    break;
+                case "Zakura2":
+                    myCharacter.EquipId = new int[]
+                    {
+                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
+                        360103 /*Pants*/, 401201 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
+                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                    break;
+                default:
+                    myCharacter.EquipId = new int[]
+                    {
+                        10800405 /*Weapon*/, 15200702 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        360103 /*Pants*/, 460103 /*Hands*/, 560103 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161401 /*Avatar Head */,
+                        261401 /*Avatar Torso*/, 361401 /*Avatar Pants*/, 461401 /*Avatar Hands*/, 561401 /*Avatar Feet*/
+                    };
+                    headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
+                    break;
+                    
+            }
+            
+            return headSlot;
+
         }
         
     }

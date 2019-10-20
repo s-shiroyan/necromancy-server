@@ -1502,7 +1502,7 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]}"); // Item Name
 
-                res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   
+                res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   // This controls Item Type.  61 ( minus 1) makes everything Type "Avatar"
                 res.WriteInt32(EquipBitMask[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
 
                 res.WriteByte(1); // Numbers of items
@@ -1650,7 +1650,7 @@ namespace Necromancy.Server.Packet.Area
                 //recv_item_instance = 0x86EA,
                 x++;
                 res.WriteInt64(client.Character.EquipId[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
-                res.WriteInt32(EquipItemType[x] - 1);
+                res.WriteInt32(EquipItemType[x] - 1); 
                 res.WriteByte(1); //number of items in stack
                 res.WriteInt32(client.Character.EquipId[x]); //
                 res.WriteFixedString("WhatIsThis", 0x10);
