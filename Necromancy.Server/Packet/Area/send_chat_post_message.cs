@@ -1522,6 +1522,7 @@ namespace Necromancy.Server.Packet.Area
             //3100102 attack monster, where to put it ?
         }
 
+        
         private void AdminConsoleRecvItemInstanceUnidentified(NecClient client)
         {
             int i = 0;
@@ -1533,12 +1534,19 @@ namespace Necromancy.Server.Packet.Area
                 //recv_item_instance_unidentified = 0xD57A,
                 IBuffer res = BufferProvider.Provide();
 
-                res.WriteInt64(client.Character.EquipId[x]);
+                res.WriteInt64(client.Character.EquipId[x]);//Unique Item ID, different for EVERY item
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]}"); // Item Name
 
                 res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   
-                res.WriteInt32(EquipBitMask[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
+
+                int[] EquipBitMaskUnk = new int[] //Correct Bit Mask
+            {
+                1, 2, 4, 0/*8*/, 0/*16*/, 0/*32*/, 0/*64*/, 0/*128*/, 256, 512, 1024, 2048, 4096, 8192, 0/*16384*/, 0/*32768*/, 0/*65536*/, 0/*131072*/, 0/*262144*/,/* 524288,
+                1048576, 2097152*/
+            };
+
+                res.WriteInt32(EquipBitMaskUnk[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
 
                 res.WriteByte(1); // Numbers of items
 
@@ -1570,7 +1578,8 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0); // 0~2
                 res.WriteInt16((short) x); // bag index 0 to 24
 
-                res.WriteInt32(EquipBitMask[x]); //bit mask. This indicates where to put items.  
+                
+                res.WriteInt32(EquipBitMaskUnk[x]);//EquipBitMask[x]); //bit mask. This indicates where to put items.  
 
                 res.WriteInt64(client.Character.EquipId[x]);
 
