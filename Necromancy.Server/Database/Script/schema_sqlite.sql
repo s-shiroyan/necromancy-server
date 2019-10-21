@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
   `account_id`        INTEGER                           NOT NULL,
   `soul_id`           INTEGER                           NOT NULL,
-  `character_slot_id` INTEGER                          NOT NULL,
+  `character_slot_id` INTEGER                           NOT NULL,
   `name`              TEXT                              NOT NULL,
   `race_id`           INTEGER                           NOT NULL,
   `sex_id`            INTEGER                           NOT NULL,
@@ -69,6 +69,14 @@ CREATE TABLE IF NOT EXISTS `nec_npc` (
   `id`     INTEGER PRIMARY KEY NOT NULL, 
   `name`   TEXT                NOT NULL,
   `title`  TEXT                NOT NULL,
-  `level`  INTEGER             NOT NULL,
-  `active` INTEGER             NOT NULL
+  `level`  INTEGER             NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
+  `id`      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+  `npc_id`  INTEGER             NOT NULL,
+  `x`       INTEGER             NOT NULL,
+  `y`       INTEGER             NOT NULL,
+  `z`       INTEGER             NOT NULL,
+  `heading` INTEGER             NOT NULL
 );
