@@ -2,16 +2,16 @@ using System.Collections.Generic;
 using System.IO;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Data;
-using Necromancy.Server.Data.Settings;
+using Necromancy.Server.Data.Setting;
 
 namespace Necromancy.Server.Model
 {
-    public class Repository
+    public class SettingRepository
     {
         private DirectoryInfo _directory;
         private readonly ILogger _logger;
 
-        public Repository(string folder)
+        public SettingRepository(string folder)
         {
             _logger = LogProvider.Logger(this);
             _directory = new DirectoryInfo(folder);
@@ -21,16 +21,20 @@ namespace Necromancy.Server.Model
                 return;
             }
 
-            Items = new Dictionary<int, Item>();
+            Items = new Dictionary<int, ItemSetting>();
+            Maps = new Dictionary<int, MapSetting>();
         }
 
-        public Dictionary<int, Item> Items { get; }
+        public Dictionary<int, ItemSetting> Items { get; }
+        public Dictionary<int, MapSetting> Maps { get; }
 
 
-        public Repository Initialize()
+        public SettingRepository Initialize()
         {
             Items.Clear();
+            Maps.Clear();
             Load(Items, "iteminfo.csv", new ItemInfoCsvReader());
+            Load(Maps, "map.csv", new MapCsvReader());
             return this;
         }
 
@@ -46,7 +50,7 @@ namespace Necromancy.Server.Model
             List<T> items = reader.Read(file.FullName);
             foreach (T item in items)
             {
-                if (item is IRepositoryItem repositoryItem)
+                if (item is ISettingRepositoryItem repositoryItem)
                 {
                     dictionary.Add(repositoryItem.Id, item);
                 }

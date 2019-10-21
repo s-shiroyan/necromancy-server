@@ -33,11 +33,12 @@ namespace Necromancy.Server.Packet.Msg
 
                     //Settings for Map Entry until settings are databased.
                     client.Character.MapId = 2001021;//Set your map here. See reference table in "MapSettings.CS"
-                    string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
-
-                    client.Character.X = float.Parse(theMapSettings[6]);
-                    client.Character.Y = float.Parse(theMapSettings[7]);
-                    client.Character.Z = float.Parse(theMapSettings[8]);
+                    
+                    // TODO verify
+                    Map map = Server.Map.Get(client.Character.MapId);
+                    client.Character.X = map.X;
+                    client.Character.Y = map.Y;
+                    client.Character.Z = map.Z;
                     //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
                     break;
                 }

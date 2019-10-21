@@ -1,6 +1,6 @@
 namespace Necromancy.Server.Model
 {
-    public interface IRepositoryItem
+    public interface ISettingRepositoryItem
     {
         int Id { get; set; }
     }

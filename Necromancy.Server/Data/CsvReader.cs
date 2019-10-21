@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Arrowgene.Services.Logging;
-using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Data
 {
