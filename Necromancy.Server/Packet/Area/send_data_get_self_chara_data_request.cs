@@ -155,7 +155,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(73);
                 res.WriteInt16(69);
 
-            if (client.Character.NewCharaProtocol == false)
+            /*if (client.Character.NewCharaProtocol == false)
             {
                 //sub_484B00 map ip and connection
                 res.WriteInt32(client.Character.MapId);//MapSerialID
@@ -164,12 +164,12 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(60002);//Port
 
                 //sub_484420 // Map Spawn coord
-                res.WriteFloat(29740);// client.Character.X);//X Pos
-                res.WriteFloat(3186);//client.Character.Y);//Y Pos
-                res.WriteFloat(-9);//client.Character.Z);//Z Pos
+                res.WriteFloat(client.Character.X);//X Pos
+                res.WriteFloat(client.Character.Y);//Y Pos
+                res.WriteFloat(client.Character.Z);//Z Pos
                 res.WriteByte(15);//view offset
-            }
-            if (client.Character.NewCharaProtocol == true)
+            }*/
+            //if (client.Character.NewCharaProtocol == true)
             {
                 //sub_484B00 map ip and connection
                 res.WriteInt32(1001002);//MapSerialID
@@ -178,9 +178,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16(60002);//Port
 
                 //sub_484420 // Map Spawn coord
-                res.WriteFloat(29740);//X Pos
-                res.WriteFloat(3186);//Y Pos
-                res.WriteFloat(-9);//Z Pos
+                res.WriteFloat(client.Character.X);//X Pos
+                res.WriteFloat(client.Character.Y);//Y Pos
+                res.WriteFloat(client.Character.Z);//Z Pos
                 res.WriteByte(0);//view offset
             }
             //sub_read_int32 skill point

@@ -78,7 +78,7 @@ namespace Necromancy.Server.Model
             Name = null;
             Created = DateTime.Now;
             logoutCanceled = 0;
-            NewCharaProtocol = true;
+            NewCharaProtocol = false;
             WeaponType = 8;
             AdventureBagGold = 80706050;
             
