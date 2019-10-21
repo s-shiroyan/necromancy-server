@@ -46,20 +46,34 @@ namespace Necromancy.Server.Packet.Area
             */
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
+            SendItemPlace(client);
             SendItemPlaceChange(client);
+        }
+        private void SendItemPlace(NecClient client)
+        {
+            x = -1;
+            x++;
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt64(itemIDs[x]); // item id
+
+            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
+            res.WriteByte(0); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
+            res.WriteInt16((short)23); // bag index 0 to 24
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
         }
         private void SendItemPlaceChange(NecClient client)
         {
             x = -1;
+            x++;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(itemIDs[x]);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt16(1);
-            res.WriteInt64(itemIDs[x]);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt16(1);
+            res.WriteInt64(itemIDs[x]); // item id
+            res.WriteByte(0);// 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+            res.WriteByte(0); // Position 2 ??
+            res.WriteInt16((short)23); // bag index 0 to 24
+            res.WriteInt64(0); // item id
+            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+            res.WriteByte(0); // Position 2 ??
+            res.WriteInt16((short)23); // bag index 0 to 24
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_place_change, res, ServerType.Area);
         }
 
@@ -70,9 +84,6 @@ namespace Necromancy.Server.Packet.Area
             30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
             260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/, 1, 2, 3
        };
-
-        int[] EquipItemType = new int[]
-            {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
 
         int[] EquipStatus = new int[] { 0, 1, 2, 4, 8, 16 };
     }
