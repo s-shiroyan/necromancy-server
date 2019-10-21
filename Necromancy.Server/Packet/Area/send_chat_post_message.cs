@@ -2,6 +2,8 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Setting;
+
 using System;
 
 namespace Necromancy.Server.Packet.Area
@@ -227,7 +229,7 @@ namespace Necromancy.Server.Packet.Area
                 case "MapChange":
                     if (SplitMessage[2] == "")
                     {
-                        SplitMessage[2] = "0";
+                        SplitMessage[2] = "1001010";
                     }
 
                     SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
@@ -299,9 +301,9 @@ namespace Necromancy.Server.Packet.Area
 
             res3.WriteByte(0); // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
 
-            res3.WriteCString($"Belong Here"); //Name
+            res3.WriteCString($"Name"); //Name
 
-            res3.WriteCString($"I Don't"); //Title
+            res3.WriteCString($"Title"); //Title
 
             res3.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150)); //X Pos
             res3.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150)); //Y Pos
@@ -677,7 +679,7 @@ namespace Necromancy.Server.Packet.Area
             // recv_event_request_int open a pin code ? 
 
 
-            IBuffer res = BufferProvider.Provide(); // It's the aura portal for event
+            /*IBuffer res = BufferProvider.Provide(); // It's the aura portal for event
             res.WriteInt32(0); // ID
 
             res.WriteFloat(client.Character.X); //x
@@ -727,8 +729,8 @@ namespace Necromancy.Server.Packet.Area
 
              res.WriteInt32(0); // Jump item animation
              Router.Send(client, (ushort)AreaPacketId.recv_data_notify_goldobject_data, res, ServerType.Area);
-
-             /*IBuffer res = BufferProvider.Provide();
+             */
+             IBuffer res = BufferProvider.Provide();
              res.WriteInt32(0);// 0 or 1, other = crash
              res.WriteInt32(1);// ??
              res.WriteByte(1);// 0 = Text, 1 = F to examine  , other = dissapear the both, text and examine, but not the effect ?
@@ -1700,13 +1702,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             Map map = Server.Map.Get(mapId);
-            if (map == null)
-            {
-                Logger.Error($"MapId: {mapId} not found in map lookup", client);
-                //client.Socket.Close();
-                return;
-            }
-
+ 
             map.Enter(client);
 
             IBuffer res = BufferProvider.Provide();
@@ -1717,10 +1713,16 @@ namespace Necromancy.Server.Packet.Area
         private void SendMapChangeForce(NecClient client, int MapID)
         {
             IBuffer res = BufferProvider.Provide();
+            client.Character.MapId = MapID;
+            string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
+
+            client.Character.X = float.Parse(theMapSettings[6]);
+            client.Character.Y = float.Parse(theMapSettings[7]);
+            client.Character.Z = float.Parse(theMapSettings[8]);
 
             //sub_4E4210_2341  // impacts map spawn ID
-            res.WriteInt32(1001007); //MapSerialID
-            res.WriteInt32(client.Character.MapId); //MapID
+            res.WriteInt32(MapID); //MapSerialID
+            res.WriteInt32(MapID); //MapID
             res.WriteFixedString("127.0.0.1", 65); //IP
             res.WriteInt16(60002); //Port
 
@@ -1733,7 +1735,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_map_change_force, res, ServerType.Area);
 
                 //SendMapChangeSyncOk(client);
-            client.Character.MapId = MapID;
+            SendMapEntry(client, MapID);
         }
 
         private void SendMapChangeSyncOk(NecClient client)
