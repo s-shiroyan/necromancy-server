@@ -74,8 +74,19 @@ namespace Necromancy.Server
         {
         }
 
-        private void AreaClientDisconnected(NecConnection client)
+        private void AreaClientDisconnected(NecConnection connection)
         {
+            NecClient client = connection.Client;
+            if (client == null)
+            {
+                return;
+            }
+
+            Map map = client.Map;
+            if (map != null)
+            {
+                map.Leave(client);
+            }
         }
 
         public void Start()
