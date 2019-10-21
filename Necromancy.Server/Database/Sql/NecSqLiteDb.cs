@@ -8,17 +8,17 @@ namespace Necromancy.Server.Database.Sql
     /// <summary>
     /// SQLite Necromancy database.
     /// </summary>
-    public class SqLiteDb : NecSqlDb<SQLiteConnection, SQLiteCommand>, IDatabase
+    public class NecSqLiteDb : NecSqlDb<SQLiteConnection, SQLiteCommand>, IDatabase
     {
         public const string MemoryDatabasePath = ":memory:";
+        public const int Version = 1;
 
         private const string SelectAutoIncrement = "SELECT last_insert_rowid()";
-
 
         private readonly string _databasePath;
         private string _connectionString;
 
-        public SqLiteDb(string databasePath)
+        public NecSqLiteDb(string databasePath)
         {
             _databasePath = databasePath;
             Logger.Info($"Database Path: {_databasePath}");
@@ -32,6 +32,7 @@ namespace Necromancy.Server.Database.Sql
                 FileStream fs = File.Create(_databasePath);
                 fs.Close();
                 fs.Dispose();
+                Logger.Info($"Created new v{Version} database");
             }
         }
 

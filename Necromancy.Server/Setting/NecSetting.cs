@@ -1,6 +1,8 @@
+using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Common;
 
 namespace Necromancy.Server.Setting
 {
@@ -67,6 +69,7 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 23)] public bool LogIncomingPackets { get; set; }
 
+        [DataMember(Order = 60)] public string RepositoryFolder { get; set; }
         [DataMember(Order = 70)] public DatabaseSettings DatabaseSettings { get; set; }
 
         [DataMember(Order = 100)] public AsyncEventSettings AuthSocketSettings { get; set; }
@@ -89,6 +92,7 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
             LogIncomingPackets = true;
+            RepositoryFolder = Path.Combine(Util.RelativeExecutingDirectory(), "Client/Data/Settings");
             DatabaseSettings = new DatabaseSettings();
             AuthSocketSettings = new AsyncEventSettings();
             AuthSocketSettings.MaxUnitOfOrder = 2;
@@ -112,6 +116,7 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;
             LogIncomingPackets = setting.LogIncomingPackets;
+            RepositoryFolder = setting.RepositoryFolder;
             DatabaseSettings = new DatabaseSettings(setting.DatabaseSettings);
             AuthSocketSettings = new AsyncEventSettings(setting.AuthSocketSettings);
             MsgSocketSettings = new AsyncEventSettings(setting.MsgSocketSettings);
