@@ -19,8 +19,6 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-            client.Character.NewCharaProtocol = false;
-
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(0xFFFFFFFF);

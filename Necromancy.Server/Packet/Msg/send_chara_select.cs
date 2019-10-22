@@ -19,58 +19,36 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             byte CharacterIdInSelectedSlot = packet.Data.ReadByte();
-            Console.WriteLine($"Character ID In Selected Slot = {CharacterIdInSelectedSlot}");
+            Logger.Debug(client, $"Character ID In Selected Slot = {CharacterIdInSelectedSlot}");
+            Logger.Debug(client, $"soul ID  = {client.Character.SoulId}");
 
-            foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
+            if (client.Character.NewCharaProtocol == false)
             {
-                Console.WriteLine($"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
-                if (myCharacter.Id == CharacterIdInSelectedSlot)
+                foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
                 {
-                    int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
-                    client.Character = myCharacter;
-                    client.Character.WeaponType = MyWeaponType[client.Character.Characterslotid];
-                    Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
-
-                    //Settings for Map Entry until settings are databased.
-                    client.Character.MapId = 2001021;//Set your map here. See reference table in "MapSettings.CS"
-                    string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
-
-                    client.Character.X = float.Parse(theMapSettings[6]);
-                    client.Character.Y = float.Parse(theMapSettings[7]);
-                    client.Character.Z = float.Parse(theMapSettings[8]);
-                    //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
-                    break;
+                    Logger.Debug(client, $"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                    if (myCharacter.Id == CharacterIdInSelectedSlot)
+                    {
+                        client.Character = myCharacter;
+                        Logger.Debug(client, $"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
+                        break;
+                    }
                 }
             }
-            if (CharacterIdInSelectedSlot < 6)
-            {
 
-                IBuffer res = BufferProvider.Provide();
+                //Settings for Map Entry until settings are databased.
+                client.Character.MapId = 1001007;//Set your map here. See reference table in "MapSettings.CS"
 
-                res.WriteInt32(0);//Error
+                if (client.Character.NewCharaProtocol == true) { client.Character.MapId = 1001902; }
 
-                //sub_4E4210_2341  // impacts map spawn ID
-                res.WriteInt32(1001002);//MapSerialID
-                res.WriteInt32(1001002);//MapID
-                res.WriteFixedString("127.0.0.1", 65);//IP
-                res.WriteInt16(60002);//Port
+                string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
 
-                //sub_484420   //  does not impact map spawn coord
-                res.WriteFloat(0);//X Pos
-                res.WriteFloat(-0);//Y Pos
-                res.WriteFloat(0);//Z Pos
-                res.WriteByte(0);//View offset
-                                 //
+                client.Character.X = float.Parse(theMapSettings[6]);
+                client.Character.Y = float.Parse(theMapSettings[7]);
+                client.Character.Z = float.Parse(theMapSettings[8]);
+                //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
 
-                Router.Send(client, (ushort)MsgPacketId.recv_channel_select_r, res, ServerType.Msg);
-
-                client.Character.NewCharaProtocol = true;
-
-            }
-
-            if (CharacterIdInSelectedSlot > 6)
-            {
-                IBuffer res2 = BufferProvider.Provide();
+            IBuffer res2 = BufferProvider.Provide();
 
                 res2.WriteInt32(0); // error check
                 res2.WriteInt32(0); // error check
@@ -100,7 +78,7 @@ namespace Necromancy.Server.Packet.Msg
                 res2.WriteByte(10); //# of channels
 
                 Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
-            }
+            
         }
     }
 }

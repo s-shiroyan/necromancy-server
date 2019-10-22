@@ -59,6 +59,9 @@ namespace Necromancy.Server.Packet.Msg
             character.luck = luck;
             character.ClassId = class_id;
             character.AccountId = client.Account.Id;
+            character.SoulId = client.Soul.Id;
+
+            character.NewCharaProtocol = true;
 
             //----------------------------------------------------------
             // Character Slot ID
