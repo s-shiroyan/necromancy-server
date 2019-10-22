@@ -39,24 +39,14 @@ namespace Necromancy.Server.Packet.Msg
                 //Settings for Map Entry until settings are databased.
                 client.Character.MapId = 1001007;//Set your map here. See reference table in "MapSettings.CS"
 
-                if (client.Character.NewCharaProtocol == true) { client.Character.MapId = 1001902; } // special over-ride for new characters 1st time login after character creation (yes it has its own dedicated map)
-                
-                
-                // TODO verify new Map Setting Method
-                Map map = Server.Map.Get(client.Character.MapId);
-                client.Character.X = map.X;
-                client.Character.Y = map.Y;
-                client.Character.Z = map.Z;
-                //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
-                break;
+                if (client.Character.NewCharaProtocol == true) { client.Character.MapId = 1001902; }
 
-                /*Outdated Method to be removed post test
                 string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
+
                 client.Character.X = float.Parse(theMapSettings[6]);
                 client.Character.Y = float.Parse(theMapSettings[7]);
                 client.Character.Z = float.Parse(theMapSettings[8]);
                 //client.Character.viewOffset = byte.Parse(theMapSettings[9]);
-                */
 
             IBuffer res2 = BufferProvider.Provide();
 

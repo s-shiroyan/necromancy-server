@@ -187,7 +187,7 @@ namespace Necromancy.Server.Data
                 }
             }
 
-            short version = buffer.ReadInt16(); // cmp to 1
+            short unknown0 = buffer.ReadInt16(); // cmp to 1
             List<WoItm> woItems = new List<WoItm>();
             while (buffer.Position < buffer.Size)
             {
@@ -198,24 +198,37 @@ namespace Necromancy.Server.Data
 
                 WoItm woItm = new WoItm();
                 woItm.Id = itemId;
-                woItm.Size = chunkSize;
-                woItm.Size2 = chunkLen;
                 woItm.Data = data;
                 woItems.Add(woItm);
             }
 
+            
+            // TODO decrypt data
+            byte[] key = new byte[]
+                {0x2A, 0xE3, 0x48, 0xB4, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            byte[] key1 = new byte[]
+                {0x2A, 0xE3, 0x48, 0xB4, 0x14, 0x26, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            byte[] key2 = new byte[]
+                {0x2A, 0xE3, 0x14, 0x26, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
+            
+            IBuffer exe = new StreamBuffer(@"C:\Games\Wizardry Online\WizardryOnline_no_encryption.exe");
+            exe.SetPositionStart();
+            
             List<string> str = new List<string>();
             foreach (WoItm woItem in woItems)
             {
-                byte[] outp = Xor(woItem.Data, new byte[] {0x00});
-                string test = Encoding.UTF8.GetString(outp);
-                if (str.Contains(","))
+                for (int j = 0; j < exe.Size - 16; j++)
                 {
-                    str.Add(test);
-                    _logger.Info(test);
+                    byte[] k = exe.GetBytes(j, 16);
+                    byte[] outp = Xor(woItem.Data, k);
+                    string test = Encoding.UTF8.GetString(outp);
+                    if (str.Contains(","))
+                    {
+                        str.Add(test);
+                        _logger.Info(test);
+                    }
                 }
             }
-
             _logger.Info("done");
         }
 
@@ -226,7 +239,6 @@ namespace Necromancy.Server.Data
             {
                 xor[i] = (byte) (text[i] ^ key[i % key.Length]);
             }
-
             return xor;
         }
 

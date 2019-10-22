@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Arrowgene.Services.Logging;
+using Necromancy.Server.Common;
 using Necromancy.Server.Database.Sql;
 using Necromancy.Server.Model;
 using Necromancy.Server.Setting;
@@ -22,7 +23,7 @@ namespace Necromancy.Server.Database
             switch (settings.Type)
             {
                 case DatabaseType.SQLite:
-                    database = PrepareSqlLiteDb(settings.SqLiteFolder);
+                    database = PrepareSqlLiteDb(settings.SqLitePath);
                     break;
             }
 
@@ -35,14 +36,19 @@ namespace Necromancy.Server.Database
             return database;
         }
 
-        private NecSqLiteDb PrepareSqlLiteDb(string sqLiteFolder)
+        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
         {
-            string sqLitePath = Path.Combine(sqLiteFolder, $"db.v{NecSqLiteDb.Version}.sqlite");
-            NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
+            if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319"))
+                {
+                Console.WriteLine($"DB Flag File not found. Creating : {Util.ExecutingDirectory()}/DBVersionFlagFile92319");
+                File.Create($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319");
+                Console.WriteLine($"Deleting outdated Database file. Db.sqlite will be re-created with updated schema : {Util.ExecutingDirectory()}/db.sqlite");
+                File.Delete($"{Util.ExecutingDirectory()}/db.sqlite");
+                }
+
+            SqLiteDb db = new SqLiteDb(sqlLitePath);
             ScriptRunner scriptRunner = new ScriptRunner(db);
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/schema_sqlite.sql"));
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_item.sql"));
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_npc.sql"));
+            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/sqlite_schema.sql"));
             return db;
         }
     }

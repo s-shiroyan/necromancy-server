@@ -15,10 +15,9 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public ClientLookup Clients { get; }
-        public MapLookup Map { get; }
-        public IDatabase Database { get; }
-        public SettingRepository SettingRepository { get; }
+        public ClientLookup Clients { get; set; }
+        public MapLookup Map { get; set; }
+        public IDatabase Database { get; set; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -36,7 +35,6 @@ namespace Necromancy.Server
             Map = new MapLookup();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
-            SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);

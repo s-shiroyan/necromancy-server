@@ -54,12 +54,12 @@ namespace Necromancy.Server.Model
         /// <summary>
         /// Returns a Client by CharacterName if it exists.
         /// </summary>
-        public NecClient GetByCharacterName(int soulId, string characterName)
+        public NecClient GetByCharacterName(string characterName)
         {
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Soul.Id == soulId && client.Character.Name == characterName)
+                if (client.Character.Name == characterName)
                 {
                     return client;
                 }
