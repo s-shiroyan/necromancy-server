@@ -1,19 +1,17 @@
-using Necromancy.Server.Model;
-
 namespace Necromancy.Server.Data.Setting
 {
-    public class ItemInfoCsvReader : CsvReader<ItemSetting>
+    public class MonsterCsvReader : CsvReader<MonsterSetting>
     {
         protected override int NumExpectedItems => 2;
 
-        protected override ItemSetting CreateInstance(string[] properties)
+        protected override MonsterSetting CreateInstance(string[] properties)
         {
             if (!int.TryParse(properties[0], out int id))
             {
                 return null;
             }
 
-            return new ItemSetting
+            return new MonsterSetting
             {
                 Id = id,
                 Name = properties[1]

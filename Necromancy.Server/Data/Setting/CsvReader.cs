@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using Arrowgene.Services.Logging;
 
-namespace Necromancy.Server.Data
+namespace Necromancy.Server.Data.Setting
 {
     public abstract class CsvReader<T>
     {
@@ -41,6 +41,12 @@ namespace Necromancy.Server.Data
 
         protected abstract T CreateInstance(string[] properties);
 
+        /// <summary>
+        /// Defines the minimum number of items to expect.
+        /// If the entry has less items it will be discarded without processing.
+        /// </summary>
+        protected abstract int NumExpectedItems { get; }
+
         private void ProcessLine(string line, ICollection<T> items)
         {
             if (string.IsNullOrEmpty(line))
@@ -60,15 +66,27 @@ namespace Necromancy.Server.Data
                 return;
             }
 
+            if (properties.Length < NumExpectedItems)
+            {
+                return;
+            }
+
+            T item = default;
             try
             {
-                T item = CreateInstance(properties);
-                items.Add(item);
+                item = CreateInstance(properties);
             }
             catch (Exception ex)
             {
                 Logger.Exception(ex);
             }
+
+            if (item == null)
+            {
+                return;
+            }
+
+            items.Add(item);
         }
     }
 }

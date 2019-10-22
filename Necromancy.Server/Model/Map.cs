@@ -1,11 +1,23 @@
 using Arrowgene.Services.Logging;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Model
 {
-    public class Map 
+    public class Map
     {
         private readonly NecLogger _logger;
+
+        public Map(MapSetting setting)
+        {
+            _logger = LogProvider.Logger<NecLogger>(this);
+            ClientLookup = new ClientLookup();
+            Id = setting.Id;
+            X = setting.X;
+            Y = setting.Y;
+            Z = setting.Z;
+            Orientation = setting.Orientation;
+        }
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -15,11 +27,6 @@ namespace Necromancy.Server.Model
         public int Orientation { get; set; }
         public ClientLookup ClientLookup { get; }
 
-        public Map()
-        {
-            _logger = LogProvider.Logger<NecLogger>(this);
-            ClientLookup = new ClientLookup();
-        }
 
         public void Enter(NecClient client)
         {

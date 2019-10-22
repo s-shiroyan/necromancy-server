@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Necromancy.Server.Data.Setting;
 
 namespace Necromancy.Server.Model
 {
@@ -38,7 +39,7 @@ namespace Necromancy.Server.Model
 
                 // TODO populate valid maps
                 // For now we always return a map because we have not populate all Ids
-                Map map = new Map() {Id = mapId};
+                Map map = new Map(new MapSetting()) {Id = mapId};
                 _maps.Add(mapId, map);
                 return map;
 

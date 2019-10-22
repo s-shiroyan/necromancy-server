@@ -1,5 +1,6 @@
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;

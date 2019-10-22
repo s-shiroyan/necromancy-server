@@ -1,4 +1,4 @@
-namespace Necromancy.Server.Model
+namespace Necromancy.Server.Data.Setting
 {
     public interface ISettingRepositoryItem
     {
