@@ -1541,13 +1541,7 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   
 
-                int[] EquipBitMaskUnk = new int[] //Correct Bit Mask
-            {
-                0/*1*/, 0/*2*/, 0/*4*/, 0/*8*/, 0/*16*/, 0/*32*/, 0/*64*/, 0/*128*/, 0/*256*/, 0/*512*/, 0/*1024*/, 0/*2048*/, 0/*4096*/, 0/*8192*/, 0/*16384*/, 0/*32768*/, 0/*65536*/, 0/*131072*/, 0/*262144*/,/* 524288,
-                1048576, 2097152*/
-            };
-
-                res.WriteInt32(EquipBitMaskUnk[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
+                res.WriteInt32(EquipBitMask[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
 
                 res.WriteByte(1); // Numbers of items
 
@@ -1580,7 +1574,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt16((short) x); // bag index 0 to 24
 
                 
-                res.WriteInt32(EquipBitMaskUnk[x]);//EquipBitMask[x]); //bit mask. This indicates where to put items.  
+                res.WriteInt32(EquipBitMask[x]);//EquipBitMask[x]); //bit mask. This indicates where to put items.  
 
                 res.WriteInt64(client.Character.EquipId[x]);
 
@@ -1661,6 +1655,7 @@ namespace Necromancy.Server.Packet.Area
                 //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
                
                 res13.WriteInt64(client.Character.EquipId[x]);
+
                 res13.WriteInt32(EquipBitMask[x]); // Permit to get the armor on the chara
 
                 res13.WriteInt32(client.Character.EquipId[x]); // List of items that gonna be equip on the chara

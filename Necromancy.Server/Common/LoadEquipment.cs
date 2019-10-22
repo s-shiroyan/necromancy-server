@@ -137,13 +137,13 @@ namespace Necromancy.Server.Common
         {
             int[] EquipBitMask = new int[] //Correct Bit Mask
             {
-                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, -1/*16384*/, -1/*32768*/, -1/*65536*/, -1/*131072*/, -1/*262144*/,/* 524288,
+                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144,/* 524288,
                 1048576, 2097152*/
             };
-            /*EquipBitMask = new int[] //Temporary Bit Mask until i re-figure out Avatar Item Display Precedence.
+            EquipBitMask = new int[] //Temporary Bit Mask until i re-figure out Avatar Item Display Precedence.
             {
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128
-            };*/
+            };
             for (int i = 0; i < numEntries; i++)
             {
                 //sub_483420   
