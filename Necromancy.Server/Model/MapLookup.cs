@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Necromancy.Server.Data.Setting;
+using Arrowgene.Services.Logging;
 
 namespace Necromancy.Server.Model
 {
@@ -8,9 +8,11 @@ namespace Necromancy.Server.Model
         private readonly Dictionary<int, Map> _maps;
 
         private readonly object _lock = new object();
+        private readonly ILogger _logger;
 
         public MapLookup()
         {
+            _logger = LogProvider.Logger(this);
             _maps = new Dictionary<int, Map>();
         }
 
@@ -32,20 +34,12 @@ namespace Necromancy.Server.Model
         {
             lock (_lock)
             {
-                if (_maps.ContainsKey(mapId))
+                if (!_maps.ContainsKey(mapId))
                 {
-                    return _maps[mapId];
+                    _logger.Error($"MapId: {mapId} not found");
                 }
-                
-                
 
-                // TODO populate valid maps
-                // For now we always return a map because we have not populate all Ids
-                Map map = new Map(new MapSetting()) {Id = mapId};
-                _maps.Add(mapId, map);
-                return map;
-
-                // return null;
+                return _maps[mapId];
             }
         }
 
