@@ -1703,7 +1703,7 @@ namespace Necromancy.Server.Packet.Area
 
             Map map = Server.Map.Get(mapId);
  
-            map.Enter(client);
+            //map.Enter(client);
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
