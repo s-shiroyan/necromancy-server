@@ -32,8 +32,8 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_logout_start, res2, ServerType.Area);
 
-            Task.Delay(TimeSpan.FromMilliseconds((int) (CastingTime * 1000)))
-                .ContinueWith(t1 => { LogOutRequest(client, packet); });
+            /*Task.Delay(TimeSpan.FromMilliseconds((int) (CastingTime * 1000)))
+                .ContinueWith(t1 => {*/ LogOutRequest(client, packet); /*});*/
         }
 
         private void LogOutRequest(NecClient client, NecPacket packet)
