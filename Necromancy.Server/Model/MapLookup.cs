@@ -36,6 +36,8 @@ namespace Necromancy.Server.Model
                 {
                     return _maps[mapId];
                 }
+                
+                
 
                 // TODO populate valid maps
                 // For now we always return a map because we have not populate all Ids

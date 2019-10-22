@@ -66,6 +66,7 @@ namespace Necromancy.Server
                 Setting.AreaSocketSettings
             );
 
+            Populate();
             LoadHandler();
         }
 
@@ -93,6 +94,15 @@ namespace Necromancy.Server
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
+        }
+
+        private void Populate()
+        {
+            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            {
+                Map map = new Map(mapSetting);
+                Map.Add(map);
+            }
         }
 
         private void LoadHandler()

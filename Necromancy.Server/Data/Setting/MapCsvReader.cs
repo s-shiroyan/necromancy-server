@@ -81,7 +81,7 @@ namespace Necromancy.Server.Data.Setting
                 return null;
             }
 
-            MapSetting map = new MapSetting
+            return new MapSetting
             {
                 Id = id,
                 Country = country,
@@ -92,7 +92,6 @@ namespace Necromancy.Server.Data.Setting
                 Z = z,
                 Orientation = orientation
             };
-            return map;
         }
     }
 }

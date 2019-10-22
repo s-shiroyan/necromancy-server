@@ -16,17 +16,21 @@ namespace Necromancy.Server.Model
             X = setting.X;
             Y = setting.Y;
             Z = setting.Z;
+            Country = setting.Country;
+            Area = setting.Area;
+            Place = setting.Place;
             Orientation = setting.Orientation;
         }
 
         public int Id { get; set; }
-        public string Name { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
+        public string Country { get; set; }
+        public string Area { get; set; }
+        public string Place { get; set; }
         public int Orientation { get; set; }
         public ClientLookup ClientLookup { get; }
-
 
         public void Enter(NecClient client)
         {
