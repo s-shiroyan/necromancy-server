@@ -1,5 +1,6 @@
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -15,9 +16,10 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public ClientLookup Clients { get; set; }
-        public MapLookup Map { get; set; }
-        public IDatabase Database { get; set; }
+        public ClientLookup Clients { get; }
+        public MapLookup Map { get; }
+        public IDatabase Database { get; }
+        public SettingRepository SettingRepository { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -35,6 +37,7 @@ namespace Necromancy.Server
             Map = new MapLookup();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
+            SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);
@@ -63,6 +66,7 @@ namespace Necromancy.Server
                 Setting.AreaSocketSettings
             );
 
+            Populate();
             LoadHandler();
         }
 
@@ -101,6 +105,15 @@ namespace Necromancy.Server
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
+        }
+
+        private void Populate()
+        {
+            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            {
+                Map map = new Map(mapSetting);
+                Map.Add(map);
+            }
         }
 
         private void LoadHandler()

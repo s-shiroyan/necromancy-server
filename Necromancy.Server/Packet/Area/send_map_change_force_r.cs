@@ -2,8 +2,6 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Setting;
-
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -23,17 +21,18 @@ namespace Necromancy.Server.Packet.Area
             {
                 map.Leave(client);
             }
+
             map = Server.Map.Get(client.Character.MapId);
-            if (map != null)
+            if (map == null)
             {
-                map.Enter(client);
-            }   
+                Logger.Error($"Map {client.Character.MapId} does not exist");
+                return;
+            }
 
-            string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
-
-            client.Character.X = float.Parse(theMapSettings[6]);
-            client.Character.Y = float.Parse(theMapSettings[7]);
-            client.Character.Z = float.Parse(theMapSettings[8]);
+            map.Enter(client);
+            client.Character.X = map.X;
+            client.Character.Y = map.Y;
+            client.Character.Z = map.Z;
 
             res.WriteInt32(client.Character.MapId);
             res.WriteInt32(client.Character.MapId);

@@ -3,7 +3,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Setting;
-
 using System;
 
 namespace Necromancy.Server.Packet.Area
@@ -730,94 +729,95 @@ namespace Necromancy.Server.Packet.Area
              res.WriteInt32(0); // Jump item animation
              Router.Send(client, (ushort)AreaPacketId.recv_data_notify_goldobject_data, res, ServerType.Area);
              */
-             IBuffer res = BufferProvider.Provide();
-             res.WriteInt32(0);// 0 or 1, other = crash
-             res.WriteInt32(1);// ??
-             res.WriteByte(1);// 0 = Text, 1 = F to examine  , other = dissapear the both, text and examine, but not the effect ?
-             res.WriteCString("a");//"0x5B" first sentence of the text
-             res.WriteCString("b");//"0x5B" second sentence
-             res.WriteFloat(client.Character.X);//X of the float text
-             res.WriteFloat(client.Character.Y +50);//Y of the float text
-             res.WriteFloat(client.Character.Z + 120);//Z of the float text
-             res.WriteByte(180);// view offset
-             res.WriteInt32(2016001);// 0 = permit to see the examine and text but no models, to see models refer to the model_common.csv
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // 0 or 1, other = crash
+            res.WriteInt32(1); // ??
+            res.WriteByte(1); // 0 = Text, 1 = F to examine  , other = dissapear the both, text and examine, but not the effect ?
+            res.WriteCString("a"); //"0x5B" first sentence of the text
+            res.WriteCString("b"); //"0x5B" second sentence
+            res.WriteFloat(client.Character.X); //X of the float text
+            res.WriteFloat(client.Character.Y + 50); //Y of the float text
+            res.WriteFloat(client.Character.Z + 120); //Z of the float text
+            res.WriteByte(180); // view offset
+            res.WriteInt32(
+                2016001); // 0 = permit to see the examine and text but no models, to see models refer to the model_common.csv
 
-             res.WriteInt16(100);//  size of the object
-
-
-             res.WriteInt32(0);// 0 = collision, 1 = no collision ?(maybe), when you appear the things lool like object 
-
-             res.WriteInt32(2);//0= no effect color appear, blue = cleared, yellow = puzzle, red = ready for fight
-             Router.Send(client, (ushort)AreaPacketId.recv_data_notify_ggate_stone_data, res, ServerType.Area);
+            res.WriteInt16(100); //  size of the object
 
 
-             /* IBuffer res = BufferProvider.Provide();
-          res.WriteInt32(client.Character.Id);
-          res.WriteInt32(2);
-          res.WriteCString("ToBeFound"); // find max size 
-          res.WriteCString("ToBeFound"); // find max size 
-          res.WriteFloat(client.Character.X);
-          res.WriteFloat(client.Character.Y);
-          res.WriteFloat(client.Character.Z);
-          res.WriteByte(180);
-          res.WriteInt32(0);
+            res.WriteInt32(0); // 0 = collision, 1 = no collision ?(maybe), when you appear the things lool like object 
 
-          int numEntries = 19;
-          res.WriteInt32(numEntries);//less than or equal to 19
-          for (int i = 0; i < numEntries; i++)
-              res.WriteInt32(0);
+            res.WriteInt32(2); //0= no effect color appear, blue = cleared, yellow = puzzle, red = ready for fight
+            Router.Send(client, (ushort) AreaPacketId.recv_data_notify_ggate_stone_data, res, ServerType.Area);
 
-          numEntries = 19;
-          res.WriteInt32(0);
-          for (int i = 0; i < numEntries; i++)
-          {
-              res.WriteInt32(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteInt32(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
 
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);//bool
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-              res.WriteByte(0);
-          }
+            /* IBuffer res = BufferProvider.Provide();
+         res.WriteInt32(client.Character.Id);
+         res.WriteInt32(2);
+         res.WriteCString("ToBeFound"); // find max size 
+         res.WriteCString("ToBeFound"); // find max size 
+         res.WriteFloat(client.Character.X);
+         res.WriteFloat(client.Character.Y);
+         res.WriteFloat(client.Character.Z);
+         res.WriteByte(180);
+         res.WriteInt32(0);
 
-          numEntries = 19;
-          res.WriteInt32(0);
-          for (int i = 0; i < numEntries; i++)
-          {
-              res.WriteInt32(0);
-          }
+         int numEntries = 19;
+         res.WriteInt32(numEntries);//less than or equal to 19
+         for (int i = 0; i < numEntries; i++)
+             res.WriteInt32(0);
 
-          res.WriteInt32(0);
-          res.WriteInt32(0);
-          res.WriteByte(0);
-          res.WriteByte(0);
-          res.WriteByte(0);
-          res.WriteInt32(0);
-          res.WriteInt32(0);
-          res.WriteInt32(0);
-          res.WriteInt32(0);
-          res.WriteByte(0);
-          res.WriteByte(0);//bool
-          res.WriteInt32(0);
-          Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res, ServerType.Area);
+         numEntries = 19;
+         res.WriteInt32(0);
+         for (int i = 0; i < numEntries; i++)
+         {
+             res.WriteInt32(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteInt32(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
 
-          /*IBuffer res0 = BufferProvider.Provide();
-           res0.WriteInt32(2); // ID ?? or race id ?
-          res0.WriteInt32(client.Character.Id); // RaceID ??
-           res0.WriteByte(2);
-          res0.WriteByte(0);
-          res0.WriteByte(0);
-           Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_form, res0); */
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);//bool
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+             res.WriteByte(0);
+         }
+
+         numEntries = 19;
+         res.WriteInt32(0);
+         for (int i = 0; i < numEntries; i++)
+         {
+             res.WriteInt32(0);
+         }
+
+         res.WriteInt32(0);
+         res.WriteInt32(0);
+         res.WriteByte(0);
+         res.WriteByte(0);
+         res.WriteByte(0);
+         res.WriteInt32(0);
+         res.WriteInt32(0);
+         res.WriteInt32(0);
+         res.WriteInt32(0);
+         res.WriteByte(0);
+         res.WriteByte(0);//bool
+         res.WriteInt32(0);
+         Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res, ServerType.Area);
+
+         /*IBuffer res0 = BufferProvider.Provide();
+          res0.WriteInt32(2); // ID ?? or race id ?
+         res0.WriteInt32(client.Character.Id); // RaceID ??
+          res0.WriteByte(2);
+         res0.WriteByte(0);
+         res0.WriteByte(0);
+          Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_form, res0); */
 
 
             /*
@@ -1504,7 +1504,8 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]}"); // Item Name
 
-                res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   // This controls Item Type.  61 ( minus 1) makes everything Type "Avatar"
+                res.WriteInt32(EquipItemType[x] -
+                               1); // Item Type. Refer To ItemType.csv   // This controls Item Type.  61 ( minus 1) makes everything Type "Avatar"
                 res.WriteInt32(EquipBitMask[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
 
                 res.WriteByte(1); // Numbers of items
@@ -1542,69 +1543,69 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(client.Character.EquipId[x]);
 
                 res.WriteInt32(1);
-                
 
 
                 Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
 
 
-               IBuffer res0 = BufferProvider.Provide();
+                IBuffer res0 = BufferProvider.Provide();
                 res0.WriteInt64(client.Character.EquipId[x]);
-                res0.WriteInt32(Util.GetRandomNumber(199,200)); // MaxDura points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
+                res0.WriteInt32(Util.GetRandomNumber(199, 200)); // MaxDura points
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
 
 
-                IBuffer res2 = BufferProvider.Provide();  // Maybe not the good one ?
+                IBuffer res2 = BufferProvider.Provide(); // Maybe not the good one ?
                 res2.WriteInt64(client.Character.EquipId[x]);
                 res2.WriteInt32(Util.GetRandomNumber(1, 200)); // Durability points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
 
 
                 IBuffer res4 = BufferProvider.Provide();
                 res4.WriteInt64(client.Character.EquipId[x]);
                 res4.WriteInt32(Util.GetRandomNumber(800, 10000)); // Weight points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
 
- 
+
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteInt64(client.Character.EquipId[x]);
-                res5.WriteInt16((short)Util.GetRandomNumber(5, 500)); // Defense and attack points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
+                res5.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Defense and attack points
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
 
 
                 IBuffer res6 = BufferProvider.Provide();
                 res6.WriteInt64(client.Character.EquipId[x]);
-                res6.WriteInt16((short)Util.GetRandomNumber(5, 500)); // Magic def and attack Points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
+                res6.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Magic def and attack Points
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
 
 
                 IBuffer res7 = BufferProvider.Provide();
                 res7.WriteInt64(client.Character.EquipId[x]);
                 res7.WriteInt32(Util.GetRandomNumber(1, 10)); // for the moment i don't know what it change
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
 
 
                 IBuffer res8 = BufferProvider.Provide();
                 res8.WriteInt64(client.Character.EquipId[x]);
-                res8.WriteInt16((short)Util.GetRandomNumber(0, 100000)); // Shwo GP on certain items
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
+                res8.WriteInt16((short) Util.GetRandomNumber(0, 100000)); // Shwo GP on certain items
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
 
                 IBuffer res9 = BufferProvider.Provide();
                 res9.WriteInt64(client.Character.EquipId[x]);
                 res9.WriteInt32(Util.GetRandomNumber(1, 50)); // for the moment i don't know what it change
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
 
 
                 IBuffer res11 = BufferProvider.Provide();
                 res11.WriteInt64(client.Character.EquipId[x]);
-                res11.WriteByte((byte)Util.GetRandomNumber(0, 100)); // Hardness
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
+                res11.WriteByte((byte) Util.GetRandomNumber(0, 100)); // Hardness
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
 
 
                 IBuffer res1 = BufferProvider.Provide();
-                res1.WriteInt64(client.Character.EquipId[x]); //client.Character.EquipId[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
+                res1.WriteInt64(client.Character
+                    .EquipId[x]); //client.Character.EquipId[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
                 res1.WriteInt32(0);
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res1, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
 
 
                 IBuffer res13 = BufferProvider.Provide();
@@ -1616,7 +1617,7 @@ namespace Necromancy.Server.Packet.Area
                 // 38 = boots and cape
                 //byte y = unchecked((byte)110111);
                 //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
-               
+
                 res13.WriteInt64(client.Character.EquipId[x]);
                 res13.WriteInt32(EquipBitMask[x]); // Permit to get the armor on the chara
 
@@ -1632,13 +1633,13 @@ namespace Necromancy.Server.Packet.Area
 
                 res13.WriteByte(0);
                 res13.WriteByte(0);
-                res13.WriteByte(0);//bool
+                res13.WriteByte(0); //bool
                 res13.WriteByte(0);
                 res13.WriteByte(0);
                 res13.WriteByte(0);
                 res13.WriteByte(0); // 1 = body pink texture
                 res13.WriteByte(0);
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
             }
         }
 
@@ -1651,8 +1652,9 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
                 //recv_item_instance = 0x86EA,
                 x++;
-                res.WriteInt64(client.Character.EquipId[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
-                res.WriteInt32(EquipItemType[x] - 1); 
+                res.WriteInt64(client.Character
+                    .EquipId[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
+                res.WriteInt32(EquipItemType[x] - 1);
                 res.WriteByte(1); //number of items in stack
                 res.WriteInt32(client.Character.EquipId[x]); //
                 res.WriteFixedString("WhatIsThis", 0x10);
@@ -1702,7 +1704,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             Map map = Server.Map.Get(mapId);
- 
+
             //map.Enter(client);
 
             IBuffer res = BufferProvider.Provide();
@@ -1714,11 +1716,11 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             client.Character.MapId = MapID;
-            string[] theMapSettings = MapSetting.MapLoadInfo(client.Character.MapId);
+            Map map = Server.Map.Get(client.Character.MapId);
 
-            client.Character.X = float.Parse(theMapSettings[6]);
-            client.Character.Y = float.Parse(theMapSettings[7]);
-            client.Character.Z = float.Parse(theMapSettings[8]);
+            client.Character.X = map.X;
+            client.Character.Y = map.Y;
+            client.Character.Z = map.Z;
 
             //sub_4E4210_2341  // impacts map spawn ID
             res.WriteInt32(MapID); //MapSerialID
@@ -1734,7 +1736,7 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_map_change_force, res, ServerType.Area);
 
-                //SendMapChangeSyncOk(client);
+            //SendMapChangeSyncOk(client);
             SendMapEntry(client, MapID);
         }
 
