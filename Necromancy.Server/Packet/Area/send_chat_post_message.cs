@@ -4,6 +4,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Setting;
 using System;
+using Necromancy.Server.Chat;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -19,10 +20,19 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int ChatType = packet.Data.ReadInt32(); // 0 - Area, 1 - Shout, other todo...
-            string To = packet.Data.ReadCString();
-            string Message = packet.Data.ReadCString();
+            int messageTypeValue = packet.Data.ReadInt32();
+            if (!Enum.IsDefined(typeof(ChatMessageType), messageTypeValue))
+            {
+                Logger.Error(client, $"ChatMessageType: {messageTypeValue} not defined");
+                return;
+            }
 
+            ChatMessageType messageType = (ChatMessageType) messageTypeValue;
+            string recipient = packet.Data.ReadCString();
+            string message = packet.Data.ReadCString();
+
+            ChatMessage chatMessage = new ChatMessage(messageType, recipient, message);
+            Server.Chat.Handle(client, chatMessage);
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // errcode : 0 for success
@@ -46,10 +56,10 @@ namespace Necromancy.Server.Packet.Area
 
 
             //Parse "!" at the begging of a chat message to access the console commands below
-            if (Message[0] == '!')
-                Message = commandParse(client, Message);
+            if (message[0] == '!')
+                message = commandParse(client, message);
 
-            SendChatNotifyMessage(client, Message, ChatType);
+            SendChatNotifyMessage(client, message, (int) messageType);
         }
 
         /// <summary>

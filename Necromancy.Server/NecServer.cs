@@ -1,5 +1,6 @@
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Chat;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
@@ -20,6 +21,7 @@ namespace Necromancy.Server
         public MapLookup Map { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
+        public ChatManager Chat { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -35,6 +37,7 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
             Clients = new ClientLookup();
             Map = new MapLookup();
+            Chat = new ChatManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
