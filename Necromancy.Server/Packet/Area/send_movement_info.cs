@@ -29,55 +29,52 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Z = packet.Data.ReadFloat();
 
 
-                //these bytes below with a varible as a name have not been confirmed this is for testing
+                //X? movement on the Map. Only triggers if you deviate from the X Axis (test on tall Ladders or by walking/running a perfect straight line on X
                 byte a = packet.Data.ReadByte();
-
                 byte b = packet.Data.ReadByte();
-                byte b1 = packet.Data.ReadByte();
+                byte b1 = packet.Data.ReadByte();//Character X Alignment with the Map X Axis (128 for perfect, 0 for 90Degree offset)
+                byte c = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
 
-                byte c = packet.Data.ReadByte(); // some sort of direction modified var
-
-                //XY movement on the Map
-                byte d = packet.Data.ReadByte(); //Camera Z related to character
+                //Y? movement on the Map. Only triggers if you deviate from the Y Axis (test on tall Ladders or by walking/running a perfect straight line on Y
+                byte d = packet.Data.ReadByte(); 
                 byte e = packet.Data.ReadByte();
-                byte e1 = packet.Data.ReadByte(); // direction char is moving based from the view of camera? if that makes sense
-                byte f = packet.Data.ReadByte(); // Character Movement Direction //Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                /*
-                                                View Offset : Packet Value 
-                                                        0-29    = 63
-                                                        30-40   = 62
-                                                        41-42   = 61
-                                                        43      = 59
-                                                        44      = 60
-                                                        45      = 188
-                                                        46-47   = 189 
-                                                        48-59   = 190
-                                                        60-119  = 191
-                                                        120-130 = 190
-                                                        131-133 = 189
-                                                        133-144 = 188
-                                                        135     = 60
-                                                        136-138 = 61
-                                                        139-149 = 62
-                                                        150-179 = 63
-                                                */
+                byte e1 = packet.Data.ReadByte(); //Character Y Alignment with the Map Y Axis (128 for perfect, 0 for 90Degree offset)
+                byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
+                                                 /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
+                                                    View Offset : Packet Value 
+                                                         135     = 60
+                                                         136-138 = 61
+                                                         139-149 = 62
+                                                         150-179 = 63
+                                                         0-29    = 63
+                                                         30-40   = 62
+                                                         41-42   = 61
+                                                         43      = 59
+                                                         44      = 60
+                                                         45      = 188
+                                                         46-47   = 189 
+                                                         48-59   = 190
+                                                         60-119  = 191
+                                                         120-130 = 190
+                                                         131-133 = 189
+                                                         133-134 = 188
+                                                 */
 
                 float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
 
-                byte h = packet.Data.ReadByte();
+                //Movement related variables
+                byte h = packet.Data.ReadByte(); //Accelerate and Decelerate animation? related. Becomes 0 when stable speed/animation reached
+                byte i = packet.Data.ReadByte(); //Accelerate and Decelerate speed?     related. Becomes 0 when stable speed/animation reached
+                byte j = packet.Data.ReadByte(); //movement type/Speed   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
+                byte k = packet.Data.ReadByte(); //Direction related
 
-                byte i = packet.Data.ReadByte();
-
-                byte j = packet.Data.ReadByte(); //movement type?
-
-                byte k = packet.Data.ReadByte();
+                //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistently impacted by Jump
                 byte k1 = packet.Data.ReadByte();
                 byte k2 = packet.Data.ReadByte();
-                byte k3 = packet.Data.ReadByte();
+                byte k3 = packet.Data.ReadByte();//Character Z Alignment with the Map Z Axis (128 for perfect Alignment)
+                byte l = packet.Data.ReadByte();//Character facing Direction 
 
-                byte l = packet.Data.ReadByte();
-
-                client.Character.movementAnim = packet.Data.ReadByte(); //Character Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
+                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
 
                 client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
                                                                         //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
@@ -86,9 +83,12 @@ namespace Necromancy.Server.Packet.Area
 
                 if (j != 0)
                 {
-                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}]");
-                    //Console.WriteLine($"[][][] [{a}][{b}][{b1}][{c}]i32[{d}][{e}][{e1}][{f}] [] [{h}][{i}]J[{j}][{k}][{k1}][{k2}][{k3}][{l}] [] []");
-                    Console.WriteLine($"i32[{d}][{e}][{e1}][{f}]");
+                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    //Console.WriteLine($"[][][] MyXvsMapX[{a}][{b}][{b1}][{c}] MyYvsMapY[{d}][{e}][{e1}][{f}] []  Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]     MyZvsMapZ[{k1}][{k2}][{k3}][{l}] [] []");
+                    Console.WriteLine($"MyXvsMapX[{a}][{b}][{b1}][{c}]");
+                    Console.WriteLine($"MyYvsMapY[{d}][{e}][{e1}][{f}]");
+                    Console.WriteLine($"Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]");
+                    Console.WriteLine($"MyZvsMapZ[{k1}][{k2}][{k3}][{l}]");
                 }
                 else
                 {
