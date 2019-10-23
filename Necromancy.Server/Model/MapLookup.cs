@@ -37,6 +37,7 @@ namespace Necromancy.Server.Model
                 if (!_maps.ContainsKey(mapId))
                 {
                     _logger.Error($"MapId: {mapId} not found");
+                    return null;
                 }
 
                 return _maps[mapId];
