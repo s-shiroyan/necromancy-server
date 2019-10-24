@@ -35,18 +35,18 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);//Party maker client id
+            res.WriteInt32(0);//Party maker client id
             res.WriteInt32(0);//Party type
             res.WriteInt32(0);//Normal item distribution
             res.WriteInt32(0);//Rare item distribution
-            res.WriteInt32(69);
             res.WriteInt32(0);
+            res.WriteInt32(client.Character.Id);
             for (int i = 0; i < 4; i++)
             {
-                res.WriteInt32(targetClient);
                 res.WriteInt32(0);
-                res.WriteFixedString("ada", 0x31); //size is 0x31
-                res.WriteFixedString("mad", 0x5B); //size is 0x5B
+                res.WriteInt32(0);
+                res.WriteFixedString("fixed1", 0x31); //size is 0x31
+                res.WriteFixedString("fixed2", 0x5B); //size is 0x5B
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -55,9 +55,10 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
             }
             res.WriteByte(0);
-            res.WriteFixedString("", 0xB5); //size is 0xB5
+            res.WriteFixedString("fixed3", 0xB5); //size is 0xB5
 
-            Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg, client);
+            //Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg, client);
+            Router.Send(Server.Clients.GetByCharacterId(targetClient), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
             
         }
     }

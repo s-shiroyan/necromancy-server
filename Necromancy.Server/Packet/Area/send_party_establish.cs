@@ -44,13 +44,13 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(normItemDist);//Normal item distribution
             res.WriteInt32(rareItemDist);//Rare item distribution
             res.WriteInt32(69);
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.Id);
             //for (int i = 0; i < 4; i++)
             {
                 res.WriteInt32(client.Character.Id);
                 res.WriteInt32(0);
-                res.WriteFixedString("asf", 0x31); //size is 0x31
-                res.WriteFixedString("asdf", 0x5B); //size is 0x5B
+                res.WriteFixedString("asdf1", 0x31); //size is 0x31
+                res.WriteFixedString("asdf2", 0x5B); //size is 0x5B
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -60,8 +60,8 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(0);
                 res.WriteInt32(0);
-                res.WriteFixedString("", 0x31); //size is 0x31
-                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteFixedString("asdf3", 0x31); //size is 0x31
+                res.WriteFixedString("asdf4", 0x5B); //size is 0x5B
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -71,8 +71,8 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(0);
                 res.WriteInt32(0);
-                res.WriteFixedString("", 0x31); //size is 0x31
-                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteFixedString("asdf5", 0x31); //size is 0x31
+                res.WriteFixedString("asdf6", 0x5B); //size is 0x5B
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -82,8 +82,8 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(0);
                 res.WriteInt32(0);
-                res.WriteFixedString("", 0x31); //size is 0x31
-                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteFixedString("asdf7", 0x31); //size is 0x31
+                res.WriteFixedString("asdf8", 0x5B); //size is 0x5B
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
