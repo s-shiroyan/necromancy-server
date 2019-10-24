@@ -21,8 +21,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);//Bool
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_enter_r, res, ServerType.Area);
-            Console.WriteLine($"{client.Character.Name} {client.Soul.Name} Entering Map: {client.Character.MapId}");
-            Console.WriteLine($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
+            Logger.Debug($"{client.Character.Name} {client.Soul.Name} Entering Map: {client.Character.MapId}");
+            Logger.Debug($"At Entry Point XYZ  X: {client.Character.X}  Y: {client.Character.Y}  Z: {client.Character.Z}  ");
 
             //This makes each joined client re-send their notify when new clients connect.
             foreach (NecClient thisNecClient in client.Map.ClientLookup.GetAll())

@@ -48,7 +48,7 @@ namespace Necromancy.Server.Packet.Msg
             int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
 
             //Database.SelectCharacterBySoulId(client.Character.SoulId);
-            Console.WriteLine($"this is my SoulID {client.Character.SoulId}");
+            Logger.Debug($"this is my SoulID {client.Character.SoulId}");
  
 
             if (Database.SelectCharacterBySoulId(client.Character.SoulId) != null)
@@ -56,8 +56,8 @@ namespace Necromancy.Server.Packet.Msg
 
                 foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
                 {
-                    Console.WriteLine($"Loading data from database for {myCharacter.Name}");
-                    Console.WriteLine($"Loading Character to Slot : {myCharacter.Characterslotid}");
+                    Logger.Debug($"Loading data from database for {myCharacter.Name}");
+                    Logger.Debug($"Loading Character to Slot : {myCharacter.Characterslotid}");
 
                     IBuffer res = BufferProvider.Provide();
 

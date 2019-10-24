@@ -63,10 +63,10 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries; i++)  
             {
                 //sub_494c50
-                res2.WriteInt32(client.Character.MapId); //Unknown.  trying for clues from 'send_chara_select'  It uses the same Subs, and structure
-                res2.WriteInt32(client.Character.MapId);
-                res2.WriteInt32(client.Character.MapId);
-                res2.WriteInt16(1);
+                res2.WriteInt32(0); //Unknown.  trying for clues from 'send_chara_select'  It uses the same Subs, and structure
+                res2.WriteInt32(0);
+                res2.WriteInt32(0);
+                res2.WriteInt16(60001);
                     //sub_4834C0
                     res2.WriteByte(1);
                     for (int j = 0; j < 0x80; j++) //j max 0x80
@@ -79,7 +79,7 @@ namespace Necromancy.Server.Packet.Area
                         res7.WriteByte(0);
                         res7.WriteByte(0);
                     }
-                    res7.WriteByte(255); //Number or Channels  - comment from other recv
+                    res7.WriteByte(5); //Number or Channels  - comment from other recv
             }
             
             Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);

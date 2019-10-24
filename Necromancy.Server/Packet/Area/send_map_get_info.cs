@@ -38,7 +38,7 @@ namespace Necromancy.Server.Packet.Area
             foreach (string[] ary1 in jaggedArray)
             {
                 npcCount++;
-                Console.WriteLine($"Loading NPC Number: {npcCount} from TempNPCData.csv with values {ary1[1]}, {ary1[2]}, {ary1[3]}, {ary1[4]}, {ary1[5]}, {ary1[6]}, {ary1[7]},");
+                Logger.Debug($"Loading NPC Number: {npcCount} from TempNPCData.csv with values {ary1[1]}, {ary1[2]}, {ary1[3]}, {ary1[4]}, {ary1[5]}, {ary1[6]}, {ary1[7]},");
                 IBuffer res2 = BufferProvider.Provide();
                 
                 //Not All SerialIDs in CSV are numeric.  catching the strings and seting a random ID.

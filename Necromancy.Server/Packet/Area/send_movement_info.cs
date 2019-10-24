@@ -63,9 +63,9 @@ namespace Necromancy.Server.Packet.Area
                 float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
 
                 //Movement related variables
-                byte h = packet.Data.ReadByte(); //Accelerate and Decelerate animation? related. Becomes 0 when stable speed/animation reached
-                byte i = packet.Data.ReadByte(); //Accelerate and Decelerate speed?     related. Becomes 0 when stable speed/animation reached
-                byte j = packet.Data.ReadByte(); //movement type/Speed   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
+                byte h = packet.Data.ReadByte(); //Head Animation?  Becomes 0 when stable speed/animation reached
+                byte i = packet.Data.ReadByte(); //Arm Animation?    related. Becomes 0 when stable speed/animation reached
+                byte j = packet.Data.ReadByte(); //Leg Animation?   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
                 byte k = packet.Data.ReadByte(); //Direction related
 
                 //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistently impacted by Jump
@@ -83,16 +83,13 @@ namespace Necromancy.Server.Packet.Area
 
                 if (j != 0)
                 {
-                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    Logger.Debug($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
                     //Console.WriteLine($"[][][] MyXvsMapX[{a}][{b}][{b1}][{c}] MyYvsMapY[{d}][{e}][{e1}][{f}] []  Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]     MyZvsMapZ[{k1}][{k2}][{k3}][{l}] [] []");
-                    Console.WriteLine($"MyXvsMapX[{a}][{b}][{b1}][{c}]");
-                    Console.WriteLine($"MyYvsMapY[{d}][{e}][{e1}][{f}]");
-                    Console.WriteLine($"Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]");
-                    Console.WriteLine($"MyZvsMapZ[{k1}][{k2}][{k3}][{l}]");
+                    Logger.Debug($"X to Map X[{a}][{b}][{b1}][{c}] | Y to Map Y[{d}][{e}][{e1}][{f}] | Z to Map Z[{ k1}][{k2}][{k3}][{l}] | Animations Head:[{h}]Arm:[{i}]Leg:[{j}]Direction:[{k}]", args: "magenta e.g. I wish i knew how to use Args to set colors");
                 }
                 else
                 {
-                    Console.WriteLine($"Movement Stop Reset");
+                    Logger.Debug($"Movement Stop Reset");
                 }
                 // the game divides the normal 359 radius by 2. giving view direction only 1-180
 
