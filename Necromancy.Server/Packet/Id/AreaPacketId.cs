@@ -779,7 +779,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_script_play_r = 0xA3B5,
         send_event_select_channel_r = 0x1C22,
         send_event_select_exec_r = 0x6439,
-        send_event_select_map_and_channel_r = 0x86, //opcode not found
+        send_event_select_map_and_channel_r = 0xB87F, //opcode not found
         send_event_soul_rankup_close = 0x4D03,
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
