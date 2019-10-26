@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_event_access_object;
-
+        private byte byteIterator = 0;
         public override void Handle(NecClient client, NecPacket packet)
         {
             int objectID = packet.Data.ReadInt32();
@@ -26,25 +26,27 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
             SentEventStart(client, objectID);
-            SendEventShowBoardStart(client, objectID);
-            SendEventMessageNoObject(client, objectID);
-            Task.Delay(TimeSpan.FromMilliseconds((int)(5 * 1000))).ContinueWith 
+            //SendEventShowBoardStart(client, objectID);
+            //SendEventMessageNoObject(client, objectID);
+            Task.Delay(TimeSpan.FromMilliseconds((int)(1 * 1000))).ContinueWith 
             (t1 =>
                 {
-                    SendEventShowBoardEnd(client, objectID);
+                   // SendEventShowBoardEnd(client, objectID);
                     SendEventEnd(client);
                 }
             );
             
-            MapAndChannel(client, objectID);
+            //MapAndChannel(client, objectID);
             
 
         }
         private void SentEventStart(NecClient client, int obkectID)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(0); // 1 = cinematic
-            res2.WriteByte(2);
+            res2.WriteInt32((int)byteIterator); // 1 = cinematic
+            res2.WriteByte(0);
+            Logger.Debug($"Testing Byte Iteration {byteIterator}");
+            byteIterator++;
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_start, res2, ServerType.Area);
             // it's the event than permit to that all the code under

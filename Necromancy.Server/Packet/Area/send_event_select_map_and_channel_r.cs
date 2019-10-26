@@ -14,7 +14,7 @@ namespace Necromancy.Server.Packet.Area
 
 
         public override ushort Id => (ushort)AreaPacketId.send_event_select_map_and_channel_r;
-
+        
         public override void Handle(NecClient client, NecPacket packet)
         {
             int selectedMap = packet.Data.ReadInt32();

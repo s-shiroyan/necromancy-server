@@ -4,6 +4,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System;
 using System.IO;
+using System.Globalization;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -28,207 +29,73 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
 
+                float percentMovementIsX = packet.Data.ReadFloat();
+                float percentMovementIsY = packet.Data.ReadFloat();
 
-                //X? movement on the Map. Only triggers if you deviate from the X Axis (test on tall Ladders or by walking/running a perfect straight line on X
-                byte a = packet.Data.ReadByte();
-                byte b = packet.Data.ReadByte();
-                byte b1 = packet.Data.ReadByte();//Character X Alignment with the Map X Axis (128 for perfect, 0 for 90Degree offset)
-                byte c = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
-
-                //Y? movement on the Map. Only triggers if you deviate from the Y Axis (test on tall Ladders or by walking/running a perfect straight line on Y
-                byte d = packet.Data.ReadByte(); 
+                /*for testing individual bytes
+                byte d = packet.Data.ReadByte();
                 byte e = packet.Data.ReadByte();
                 byte e1 = packet.Data.ReadByte(); //Character Y Alignment with the Map Y Axis (128 for perfect, 0 for 90Degree offset)
                 byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
-                                                 /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                    View Offset : Packet Value 
-                                                         135     = 60
-                                                         136-138 = 61
-                                                         139-149 = 62
-                                                         150-179 = 63
-                                                         0-29    = 63
-                                                         30-40   = 62
-                                                         41-42   = 61
-                                                         43      = 59
-                                                         44      = 60
-                                                         45      = 188
-                                                         46-47   = 189 
-                                                         48-59   = 190
-                                                         60-119  = 191
-                                                         120-130 = 190
-                                                         131-133 = 189
-                                                         133-134 = 188
-                                                 */
+                float percentMovementIsY = BitConverter.ToSingle(new[] { d, e, e1, f }, 0);
+                */
 
-                float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
+                float verticalMovementSpeedMultiplier = packet.Data.ReadFloat(); //  Confirm by climbing ladder at 1 up or -1 down. or Jumping
+                float movementSpeed = packet.Data.ReadFloat();
+                float horizontalMovementSpeedMultiplier = packet.Data.ReadFloat(); //always 1 when moving.  Confirm by Coliding with an  object and watching it Dip.
 
-                //Movement related variables
-                byte h = packet.Data.ReadByte(); //Head Animation?  Becomes 0 when stable speed/animation reached
-                byte i = packet.Data.ReadByte(); //Arm Animation?    related. Becomes 0 when stable speed/animation reached
-                byte j = packet.Data.ReadByte(); //Leg Animation?   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
-                byte k = packet.Data.ReadByte(); //Direction related
 
-                //Z Axis movement on the Map? Very Similar to Bytes d e e1 f. Consistently impacted by Jump
-                byte k1 = packet.Data.ReadByte();
-                byte k2 = packet.Data.ReadByte();
-                byte k3 = packet.Data.ReadByte();//Character Z Alignment with the Map Z Axis (128 for perfect Alignment)
-                byte l = packet.Data.ReadByte();//Character facing Direction 
+                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Type: Type 8 Falling / Jumping. Type 3 normal:  Type 9  climbing
 
-                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
-
-                client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
+                client.Character.animJumpFall = packet.Data.ReadByte(); //Action Modifier Byte
                                                                         //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
                                                                         //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
                                                                         //81  jumping up,                //84  jumping down       //85 landing
-
-                if (j != 0)
+                
+                /* Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
+                if (movementSpeed != 0)
                 {
-                    Logger.Debug($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
-                    //Console.WriteLine($"[][][] MyXvsMapX[{a}][{b}][{b1}][{c}] MyYvsMapY[{d}][{e}][{e1}][{f}] []  Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]     MyZvsMapZ[{k1}][{k2}][{k3}][{l}] [] []");
-                    Logger.Debug($"X to Map X[{a}][{b}][{b1}][{c}] | Y to Map Y[{d}][{e}][{e1}][{f}] | Z to Map Z[{ k1}][{k2}][{k3}][{l}] | Animations Head:[{h}]Arm:[{i}]Leg:[{j}]Direction:[{k}]", args: "magenta e.g. I wish i knew how to use Args to set colors");
+                    Logger.Debug($"Character {client.Character.Name} is in map {client.Character.MapId} @ : X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]");
+                    Logger.Debug($"X Axis Aligned : {percentMovementIsX.ToString("P", CultureInfo.InvariantCulture)} | Y Axis Aligned  : {percentMovementIsY.ToString("P", CultureInfo.InvariantCulture)}");
+                    Logger.Debug($"vertical Speed multi : {verticalMovementSpeedMultiplier}| Move Speed {movementSpeed} | Horizontal Speed Multi {horizontalMovementSpeedMultiplier}");
+                    Logger.Debug($"Movement Type[{client.Character.movementAnim}]  Type Anim [{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    Logger.Debug($"---------------------------------------------------------------");
+
+                    //Logger.Debug($"Var 1 {(byte)(percentMovementIsX*255)} |Var 2 {(byte)(percentMovementIsY*255)}  ");
+                    //Logger.Debug($" Y to Map Y[{d}][{e}][{e1}][{f} |  and {percentMovementIsY}");
                 }
                 else
                 {
                     Logger.Debug($"Movement Stop Reset");
+                    Logger.Debug($"---------------------------------------------------------------");
                 }
-                // the game divides the normal 359 radius by 2. giving view direction only 1-180
+                */
 
-                if (client.Character.viewOffset <= 180) // NORTH
-                {
-                    client.Character.wepEastWestAnim = 127;
-                    client.Character.wepNorthSouthAnim = 127-59;
 
-                    if (client.Character.viewOffset <= 168.75) // SOUTH-EAST
-                    {
-                        client.Character.wepEastWestAnim = 127-59;
-                        client.Character.wepNorthSouthAnim = 127-59;
-
-                        if (client.Character.viewOffset <= 146.25) // EAST
-                        {
-                            client.Character.wepEastWestAnim = 127-59;
-                            client.Character.wepNorthSouthAnim = 127;
-
-                            if (client.Character.viewOffset <= 123.75) // SOUTH-EAST
-                            {
-                                client.Character.wepEastWestAnim = 127-59;
-                                client.Character.wepNorthSouthAnim = 128+59;
-
-                                if (client.Character.viewOffset <= 101.25) // SOUTH
-                                {
-                                    client.Character.wepEastWestAnim = 128;
-                                    client.Character.wepNorthSouthAnim = 128+59;
-
-                                    if (client.Character.viewOffset <= 78.75) // SOUTH-WEST
-                                    {
-                                        client.Character.wepEastWestAnim = 128+59;
-                                        client.Character.wepNorthSouthAnim = 128+59;
-
-                                        if (client.Character.viewOffset <= 59.25) // WEST
-                                        {
-                                            client.Character.wepEastWestAnim = 128+59;
-                                            client.Character.wepNorthSouthAnim = 128;
-
-                                            if (client.Character.viewOffset <= 33.75) // NORTH-WEST
-                                            {
-                                                client.Character.wepEastWestAnim = 128+59;
-                                                client.Character.wepNorthSouthAnim = 127-59;
-
-                                                if (client.Character.viewOffset <= 11.25) // NORTH
-                                                {
-                                                    client.Character.wepEastWestAnim = 127;
-                                                    client.Character.wepNorthSouthAnim = 127-59;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                //int zz = (e1*-1)+e1;
-                //byte zzz = (byte)zz;
-                
-                
-              
-                
-                if (client.Character.weaponEquipped == true)
-                {
-                    if (client.Character.viewOffset <= 180) // NORTH
-                    {
-                        client.Character.wepEastWestAnim = 127;
-                        client.Character.wepNorthSouthAnim = 127;
-
-                        if (client.Character.viewOffset <= 168.75) // SOUTH-EAST
-                        {
-                            client.Character.wepEastWestAnim = 127;
-                            client.Character.wepNorthSouthAnim = 127;
-
-                            if (client.Character.viewOffset <= 146.25) // EAST
-                            {
-                                client.Character.wepEastWestAnim = 127;
-                                client.Character.wepNorthSouthAnim = 127;
-
-                                if (client.Character.viewOffset <= 123.75) // SOUTH-EAST
-                                {
-                                    client.Character.wepEastWestAnim = 127;
-                                    client.Character.wepNorthSouthAnim = 128;
-
-                                    if (client.Character.viewOffset <= 101.25) // SOUTH
-                                    {
-                                        client.Character.wepEastWestAnim = 128;
-                                        client.Character.wepNorthSouthAnim = 128;
-
-                                        if (client.Character.viewOffset <= 78.75) // SOUTH-WEST
-                                        {
-                                            client.Character.wepEastWestAnim = 128;
-                                            client.Character.wepNorthSouthAnim = 128;
-
-                                            if (client.Character.viewOffset <= 59.25) // WEST
-                                            {
-                                                client.Character.wepEastWestAnim = 128;
-                                                client.Character.wepNorthSouthAnim = 128;
-
-                                                if (client.Character.viewOffset <= 33.75) // NORTH-WEST
-                                                {
-                                                    client.Character.wepEastWestAnim = 128;
-                                                    client.Character.wepNorthSouthAnim = 127;
-
-                                                    if (client.Character.viewOffset <= 11.25) // NORTH
-                                                    {
-                                                        client.Character.wepEastWestAnim = 127;
-                                                        client.Character.wepNorthSouthAnim = 127;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-
-                // how to sideways walk ^ 127-127 is character left // 128-128 is character right
-                {
-                    // for (byte xd = 0; xd < 259; xd++)
-                    {
-
+                //This is all Animation related.
                         IBuffer res2 = BufferProvider.Provide();
 
                         res2.WriteInt32(client.Character.Id);//Character ID
-                        res2.WriteFloat(client.Character.X);
-                        res2.WriteFloat(client.Character.Y);
-                        res2.WriteFloat(client.Character.Z);
+                        res2.WriteFloat(verticalMovementSpeedMultiplier);
+                        res2.WriteFloat(movementSpeed);
+                        res2.WriteFloat(horizontalMovementSpeedMultiplier);
 
-                        res2.WriteByte(client.Character.wepEastWestAnim); //HANDLES EAST AND WEST ANIMS WITH WEAPONS
-                        res2.WriteByte(client.Character.wepNorthSouthAnim);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS
-                        res2.WriteByte(e1); // I DUNNO BUT IT WORKS
+                       //Body Rotation relative to movement direction (client.Character.viewOffset). must have a value in a byte for movement animation in battle pose. Body rotation off by 90* with these settings
+                       if (client.Character.weaponEquipped == true)
+                        {
+                            res2.WriteByte((byte)(percentMovementIsX * 256)); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
+                            res2.WriteByte((byte)(percentMovementIsY * 255));// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
+                            res2.WriteByte((byte)(horizontalMovementSpeedMultiplier * 255)); //
+                        }
+                        else
+                        {
+                            res2.WriteByte(0); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
+                            res2.WriteByte(0);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
+                            res2.WriteByte(0); //
+                        }
+                        res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG???
 
-                        res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG
-
-                        res2.WriteByte(0);// DONT TOUCH >.> CAUSES VISUAL TELEPORTING
+                        res2.WriteByte(0);// DONT TOUCH >.> CAUSES VISUAL TELEPORTING??? Character re-draw byte? 255 shrinks to nothing then redraws.
                         res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
                         res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
 
@@ -237,25 +104,21 @@ namespace Necromancy.Server.Packet.Area
 
                         Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);
 
-
-                        //System.Threading.Thread.Sleep(1000);
-                    }
-
+                
+                //This is all Position and Orientation Related.
                     IBuffer res = BufferProvider.Provide();
 
                     res.WriteInt32(client.Character.Id);//Character ID
                     res.WriteFloat(client.Character.X);
                     res.WriteFloat(client.Character.Y);
                     res.WriteFloat(client.Character.Z);
-                    res.WriteByte(client.Character.viewOffset);//View offset
+                    res.WriteByte(client.Character.viewOffset);//View offset / Head Rotation
                     res.WriteByte(0);//Character state?
 
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area, client);
 
                     //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
 
-
-                }
             }
         }
     }

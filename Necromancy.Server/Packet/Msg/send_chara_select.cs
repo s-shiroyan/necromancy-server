@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             //Settings for Map Entry until settings are databased.
-            client.Character.MapId = 1001007; //Set your map here. See reference table in "MapSettings.CS"
+            client.Character.MapId = 2006000; //Set your map here. See reference table in "MapSettings.CS"
 
             if (client.Character.NewCharaProtocol == true)
             {
