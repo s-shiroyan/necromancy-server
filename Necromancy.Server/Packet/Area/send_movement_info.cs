@@ -83,9 +83,9 @@ namespace Necromancy.Server.Packet.Area
                        //Body Rotation relative to movement direction (client.Character.viewOffset). must have a value in a byte for movement animation in battle pose. Body rotation off by 90* with these settings
                        if (client.Character.weaponEquipped == true)
                         {
-                            res2.WriteByte((byte)(percentMovementIsX * 256)); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
-                            res2.WriteByte((byte)(percentMovementIsY * 255));// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
-                            res2.WriteByte((byte)(horizontalMovementSpeedMultiplier * 255)); //
+                    res2.WriteByte((byte)(percentMovementIsX * -180)); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
+                    res2.WriteByte((byte)(percentMovementIsY * -180));// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
+                    res2.WriteByte((byte)(horizontalMovementSpeedMultiplier)); //
                         }
                         else
                         {
