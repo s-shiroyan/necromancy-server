@@ -7,6 +7,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
+using Necromancy.Server.Packet.Area.SendChatPostMessage;
 using Necromancy.Server.Packet.Auth;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
@@ -198,7 +199,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_chara_pose(this));
             _areaConsumer.AddHandler(new send_charabody_access_start(this));
             _areaConsumer.AddHandler(new send_character_view_offset(this));
-            _areaConsumer.AddHandler(new send_chat_post_message(this));
+            _areaConsumer.AddHandler(new SendChatPostMessageHandler(this));
             _areaConsumer.AddHandler(new send_cmd_exec(this));
             _areaConsumer.AddHandler(new send_comment_set(this));
             _areaConsumer.AddHandler(new send_comment_switch(this));

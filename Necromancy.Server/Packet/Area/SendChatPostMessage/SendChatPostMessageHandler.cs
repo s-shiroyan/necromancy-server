@@ -2,15 +2,14 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Setting;
 using System;
 using Necromancy.Server.Chat;
 
-namespace Necromancy.Server.Packet.Area
+namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 {
-    public class send_chat_post_message : ClientHandler
+    public class SendChatPostMessageHandler : ClientHandlerDeserializer<ChatMessage>
     {
-        public send_chat_post_message(NecServer server) : base(server)
+        public SendChatPostMessageHandler(NecServer server) : base(server, new SendChatPostMessageDeserializer())
         {
         }
 
@@ -18,21 +17,9 @@ namespace Necromancy.Server.Packet.Area
 
         int x = 0;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void HandleRequest(NecClient client, ChatMessage request)
         {
-            int messageTypeValue = packet.Data.ReadInt32();
-            if (!Enum.IsDefined(typeof(ChatMessageType), messageTypeValue))
-            {
-                Logger.Error(client, $"ChatMessageType: {messageTypeValue} not defined");
-                return;
-            }
-
-            ChatMessageType messageType = (ChatMessageType) messageTypeValue;
-            string recipient = packet.Data.ReadCString();
-            string message = packet.Data.ReadCString();
-
-            ChatMessage chatMessage = new ChatMessage(messageType, recipient, message);
-            Server.Chat.Handle(client, chatMessage);
+            Server.Chat.Handle(client, request);
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // errcode : 0 for success
@@ -54,13 +41,14 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_chat_post_message_r, res, ServerType.Area);
 
-
+            string message = request.Message;
             //Parse "!" at the begging of a chat message to access the console commands below
             if (message[0] == '!')
                 message = commandParse(client, message);
 
-            SendChatNotifyMessage(client, message, (int) messageType);
+            SendChatNotifyMessage(client, message, (int) request.MessageType);
         }
+
 
         /// <summary>
         /// Begin Console commands and Test funtions below.   To be or restricted to GM use at a later time.

@@ -18,9 +18,9 @@ namespace Necromancy.Server.Packet
         /// <summary>
         /// Send a packet to a client.
         /// </summary>
-        public void Send(NecClient client, NecPacket packet, ServerType serverType)
+        public void Send(NecClient client, NecPacket packet)
         {
-            client.Send(packet, serverType);
+            client.Send(packet);
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace Necromancy.Server.Packet
         /// </summary>
         public void Send(NecClient client, ushort id, IBuffer data, ServerType serverType)
         {
-            NecPacket packet = new NecPacket(id, data);
-            Send(client, packet, serverType);
+            NecPacket packet = new NecPacket(id, data, serverType);
+            Send(client, packet);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet
         /// </summary>
         public void Send(NecConnection connection, ushort id, IBuffer data)
         {
-            NecPacket packet = new NecPacket(id, data);
+            NecPacket packet = new NecPacket(id, data, connection.ServerType);
             Send(connection, packet);
         }
 
@@ -53,12 +53,12 @@ namespace Necromancy.Server.Packet
         /// Send a packet to multiple clients.
         /// </summary>
         /// <param name="excepts">clients to exclude</param>
-        public void Send(List<NecClient> clients, NecPacket packet, ServerType serverType, params NecClient[] excepts)
+        public void Send(List<NecClient> clients, NecPacket packet, params NecClient[] excepts)
         {
             clients = GetClients(clients, excepts);
             foreach (NecClient client in clients)
             {
-                Send(client, packet, serverType);
+                Send(client, packet);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Necromancy.Server.Packet
         public void Send(List<NecClient> clients, ushort id, IBuffer data, ServerType serverType,
             params NecClient[] excepts)
         {
-            Send(clients, new NecPacket(id, data), serverType, excepts);
+            Send(clients, new NecPacket(id, data, serverType), excepts);
         }
 
 
@@ -78,18 +78,18 @@ namespace Necromancy.Server.Packet
         /// </summary>
         public void Send(Map map, ushort id, IBuffer data, ServerType serverType, params NecClient[] excepts)
         {
-            Send(map, new NecPacket(id, data), serverType, excepts);
+            Send(map, new NecPacket(id, data, serverType), excepts);
         }
 
         /// <summary>
         /// Send a packet to everyone in the map.
         /// </summary>
-        public void Send(Map map, NecPacket packet, ServerType serverType, params NecClient[] excepts)
+        public void Send(Map map, NecPacket packet, params NecClient[] excepts)
         {
             List<NecClient> clients = GetClients(map.ClientLookup.GetAll(), excepts);
             foreach (NecClient client in clients)
             {
-                Send(client, packet, serverType);
+                Send(client, packet);
             }
         }
 

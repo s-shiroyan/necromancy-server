@@ -31,7 +31,7 @@ namespace Necromancy.Server.Model
             List<NecPacket> packets;
             try
             {
-                packets = PacketFactory.Read(data);
+                packets = PacketFactory.Read(data, ServerType);
             }
             catch (Exception ex)
             {
