@@ -4,5 +4,6 @@ namespace Necromancy.Server.Chat
     {
         Area = 0,
         Shout = 1,
+        ChatCommand = 0xFFFFFFF
     }
 }

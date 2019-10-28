@@ -98,9 +98,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
             switch (command)
             {
-                case "rbox":
-                    SendRandomBoxNotifyOpen(client);
-                    break;
                 case "soul":
                     SoulShop(client);
                     break;
@@ -562,31 +559,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             res.WriteInt32(client.Character.Id);
 
             Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res, ServerType.Area);
-        }
-
-        private void SendRandomBoxNotifyOpen(NecClient client)
-        {
-            //recv_random_box_notify_open = 0xC374,
-            IBuffer res = BufferProvider.Provide();
-
-            int numEntries = 10; // Slots
-            res.WriteInt32(numEntries); //less than or equal to 10
-
-            for (int i = 0; i < numEntries; i++)
-            {
-                res.WriteInt64(itemIDs[x]); // ?
-            }
-
-            res.WriteInt32(itemIDs[x]); // Show item name                                                   
-
-
-            Router.Send(client, (ushort) AreaPacketId.recv_random_box_notify_open, res,
-                ServerType.Area); // Trying to spawn item in this boxe, maybe i need the item instance ?
-
-            IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt64(0); //
-            res1.WriteInt32(itemIDs[x]);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
         }
 
         private void SoulShop(NecClient client)
