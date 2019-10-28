@@ -9,9 +9,8 @@ namespace Necromancy.Server.Logging
     public class NecLogPacket : NecPacket
     {
         public NecLogPacket(string clientIdentity, NecPacket packet, NecLogType logType, ServerType serverType)
-            : base(packet.Id, packet.Data.Clone())
+            : base(packet.Id, packet.Data.Clone(), serverType)
         {
-            ServerType = serverType;
             Header = packet.Header;
             LogType = logType;
             TimeStamp = DateTime.Now;
@@ -21,7 +20,6 @@ namespace Necromancy.Server.Logging
         public string ClientIdentity { get; }
         public NecLogType LogType { get; }
         public DateTime TimeStamp { get; }
-        public ServerType ServerType { get; }
         public string Hex => Data.ToHexString('-');
         public string Ascii => Data.ToAsciiString(true);
         public string HeaderHex => Util.ToHexString(Header, '-');

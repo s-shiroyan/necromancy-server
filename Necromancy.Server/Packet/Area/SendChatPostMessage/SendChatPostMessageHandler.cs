@@ -2,14 +2,14 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Setting;
 using System;
+using Necromancy.Server.Chat;
 
-namespace Necromancy.Server.Packet.Area
+namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 {
-    public class send_chat_post_message : ClientHandler
+    public class SendChatPostMessageHandler : ClientHandlerDeserializer<ChatMessage>
     {
-        public send_chat_post_message(NecServer server) : base(server)
+        public SendChatPostMessageHandler(NecServer server) : base(server, new SendChatPostMessageDeserializer())
         {
         }
 
@@ -17,12 +17,9 @@ namespace Necromancy.Server.Packet.Area
 
         int x = 0;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void HandleRequest(NecClient client, ChatMessage request)
         {
-            int ChatType = packet.Data.ReadInt32(); // 0 - Area, 1 - Shout, other todo...
-            string To = packet.Data.ReadCString();
-            string Message = packet.Data.ReadCString();
-
+            Server.Chat.Handle(client, request);
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // errcode : 0 for success
@@ -44,13 +41,14 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_chat_post_message_r, res, ServerType.Area);
 
-
+            string message = request.Message;
             //Parse "!" at the begging of a chat message to access the console commands below
-            if (Message[0] == '!')
-                Message = commandParse(client, Message);
+            if (message[0] == '!')
+                message = commandParse(client, message);
 
-            SendChatNotifyMessage(client, Message, ChatType);
+            SendChatNotifyMessage(client, message, (int) request.MessageType);
         }
+
 
         /// <summary>
         /// Begin Console commands and Test funtions below.   To be or restricted to GM use at a later time.
@@ -100,9 +98,6 @@ namespace Necromancy.Server.Packet.Area
 
             switch (command)
             {
-                case "rbox":
-                    SendRandomBoxNotifyOpen(client);
-                    break;
                 case "soul":
                     SoulShop(client);
                     break;
@@ -564,31 +559,6 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Character.Id);
 
             Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res, ServerType.Area);
-        }
-
-        private void SendRandomBoxNotifyOpen(NecClient client)
-        {
-            //recv_random_box_notify_open = 0xC374,
-            IBuffer res = BufferProvider.Provide();
-
-            int numEntries = 10; // Slots
-            res.WriteInt32(numEntries); //less than or equal to 10
-
-            for (int i = 0; i < numEntries; i++)
-            {
-                res.WriteInt64(itemIDs[x]); // ?
-            }
-
-            res.WriteInt32(itemIDs[x]); // Show item name                                                   
-
-
-            Router.Send(client, (ushort) AreaPacketId.recv_random_box_notify_open, res,
-                ServerType.Area); // Trying to spawn item in this boxe, maybe i need the item instance ?
-
-            IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt64(0); //
-            res1.WriteInt32(itemIDs[x]);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
         }
 
         private void SoulShop(NecClient client)
