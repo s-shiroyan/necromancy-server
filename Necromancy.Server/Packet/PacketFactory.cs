@@ -76,7 +76,7 @@ namespace Necromancy.Server.Packet
             return buffer.GetAllBytes();
         }
 
-        public List<NecPacket> Read(byte[] data)
+        public List<NecPacket> Read(byte[] data, ServerType serverType)
         {
             List<NecPacket> packets = new List<NecPacket>();
             if (_buffer == null)
@@ -102,9 +102,7 @@ namespace Necromancy.Server.Packet
                     byte lengthType = _buffer.ReadByte();
                     if (!Enum.IsDefined(typeof(PacketLengthType), lengthType))
                     {
-                        //_logger.Error($"PacketLengthType: '{lengthType}' not found");
-                        byte[] dataDump = _buffer.GetBytes(_buffer.Position - 1, _buffer.Size);
-                        //_logger.LogErrorPacket(client, dataDump, null);
+                        _logger.Error($"PacketLengthType: '{lengthType}' not found");
                         Reset();
                         return packets;
                     }
@@ -159,7 +157,7 @@ namespace Necromancy.Server.Packet
                     // TODO update arrowgene service to read uint
                     byte[] packetData = _buffer.ReadBytes((int) _dataSize);
                     IBuffer buffer = BufferProvider.Provide(packetData);
-                    NecPacket packet = new NecPacket(_id, buffer);
+                    NecPacket packet = new NecPacket(_id, buffer, serverType);
                     packet.Header = _header;
                     packets.Add(packet);
                     _readPacketLengthType = false;

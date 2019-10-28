@@ -1,11 +1,15 @@
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Chat;
+using Necromancy.Server.Chat.Command.Commands;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
+using Necromancy.Server.Packet.Area.SendChatPostMessage;
+using Necromancy.Server.Packet.Area.SendCmdExec;
 using Necromancy.Server.Packet.Auth;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
@@ -20,6 +24,7 @@ namespace Necromancy.Server
         public MapLookup Map { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
+        public ChatManager Chat { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -35,6 +40,7 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
             Clients = new ClientLookup();
             Map = new MapLookup();
+            Chat = new ChatManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
@@ -66,7 +72,8 @@ namespace Necromancy.Server
                 Setting.AreaSocketSettings
             );
 
-            Populate();
+            LoadChatCommands();
+            LoadSettingRepository();
             LoadHandler();
         }
 
@@ -107,7 +114,12 @@ namespace Necromancy.Server
             _areaServer.Stop();
         }
 
-        private void Populate()
+        private void LoadChatCommands()
+        {
+            Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
+        }
+
+        private void LoadSettingRepository()
         {
             foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
             {
@@ -195,8 +207,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_chara_pose(this));
             _areaConsumer.AddHandler(new send_charabody_access_start(this));
             _areaConsumer.AddHandler(new send_character_view_offset(this));
-            _areaConsumer.AddHandler(new send_chat_post_message(this));
-            _areaConsumer.AddHandler(new send_cmd_exec(this));
+            _areaConsumer.AddHandler(new SendChatPostMessageHandler(this));
+            _areaConsumer.AddHandler(new SendCmdExecHandler(this));
             _areaConsumer.AddHandler(new send_comment_set(this));
             _areaConsumer.AddHandler(new send_comment_switch(this));
             _areaConsumer.AddHandler(new send_create_package(this));
