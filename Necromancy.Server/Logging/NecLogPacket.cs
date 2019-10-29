@@ -26,31 +26,90 @@ namespace Necromancy.Server.Logging
 
         public string ToLogText()
         {
-            String log = $"{ClientIdentity} Packet Log";
-            log += Environment.NewLine;
-            log += "----------";
-            log += Environment.NewLine;
-            log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
-            log += $"[{ServerType}]";
-            log += Environment.NewLine;
-            log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
             string idName = GetIdName();
-            if (idName != null)
-            {
-                log += $"[{idName}]";
-            }
+            String log = $"{ClientIdentity} Packet Log";
 
-            log += Environment.NewLine;
-            log += "ASCII:";
-            log += Environment.NewLine;
-            log += Ascii;
-            log += Environment.NewLine;
-            log += "HEX:";
-            log += Environment.NewLine;
-            log += Hex;
-            log += Environment.NewLine;
-            log += "----------";
-            return log;
+
+            switch (idName)
+            {
+                case "send_character_view_offset":
+                    int viewOffset = int.Parse(Hex, System.Globalization.NumberStyles.HexNumber);
+                    log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                    log += $"[{ServerType}]";
+                    log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+                    log += $"[{idName}]";
+                    log += Environment.NewLine;
+                    log += "HEX:";
+                    log += Hex;
+                    log += "   View Offest:";
+                    log += viewOffset;
+                    log += Environment.NewLine;
+                    log += "----------";
+                    return log;
+
+                case "send_movement_info":
+                    log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                    log += $"[{ServerType}]";
+                    log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+                    log += $"[{idName}]";
+                    log += Environment.NewLine;
+                    log += "HEX:";
+                    log += Hex;
+                    log += Environment.NewLine;
+                    log += "----------";
+                    return log;
+
+                default:
+                    if (Data.Size <= 50)
+                    {
+                        log += Environment.NewLine;
+                        log += "----------";
+                        log += Environment.NewLine;
+                        log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                        log += $"[{ServerType}]";
+                        log += Environment.NewLine;
+                        log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+
+                        if (idName != null)
+                        {
+                            log += $"[{idName}]";
+                        }
+                        if (Hex != null)
+                        {
+                            log += Environment.NewLine;
+                            log += "ASCII:";
+                            log += Environment.NewLine;
+                            log += Ascii;
+                            log += Environment.NewLine;
+                            log += "HEX:";
+                            log += Environment.NewLine;
+                            log += Hex;
+                        }
+                        log += Environment.NewLine;
+                        log += "----------";
+                        return log;
+                    }
+                    else
+                    {
+                        log += Environment.NewLine;
+                        log += "----------";
+                        log += Environment.NewLine;
+                        log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                        log += $"[{ServerType}]";
+                        log += Environment.NewLine;
+                        log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+                        if (idName != null)
+                        {
+                            log += $"[{idName}]";
+                        }
+
+                        log += Environment.NewLine;
+                        log += "NecLogPacket.cs . . . . . . .Large Packet: Skipping Console Output for performance";
+                        return log;
+                    }
+
+               
+            }
         }
 
         public string GetIdName()
