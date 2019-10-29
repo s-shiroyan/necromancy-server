@@ -185,6 +185,9 @@ namespace Necromancy.Server.Packet.Area
                 case "sdnc":
                     SendDataNotifyCharaData(client);
                     break;
+                case "aura":
+                    SendDataNotifyMaplink(client, x);
+                    break;
                 default:
                     command = "unrecognized";
                     break;
@@ -271,6 +274,24 @@ namespace Necromancy.Server.Packet.Area
             }
 
             return Message;
+        }
+
+        private void SendDataNotifyMaplink(NecClient client, long x)
+        {
+            IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
+
+            res1.WriteInt32(2); // ID
+
+            res1.WriteFloat(client.Character.X); //x
+            res1.WriteFloat(client.Character.Y); //y
+            res1.WriteFloat(client.Character.Z + 2); //z
+            res1.WriteByte(client.Character.viewOffset); // offset
+
+            res1.WriteFloat(x); // Size
+            res1.WriteFloat(100); // distance
+
+            res1.WriteInt32(0); // Type of aura   0 to 5, crash above 5
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
         }
 
         private void SendDataNotifyCharaData(NecClient client)
