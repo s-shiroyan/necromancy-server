@@ -22,9 +22,6 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-
-            if (client.Character != null)
-            {
                 client.Character.X = packet.Data.ReadFloat();
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
@@ -36,7 +33,6 @@ namespace Necromancy.Server.Packet.Area
                 float movementSpeed = packet.Data.ReadFloat();
 
                 float horizontalMovementSpeedMultiplier = packet.Data.ReadFloat(); //always 1 when moving.  Confirm by Coliding with an  object and watching it Dip.
-
 
                 client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Type: Type 8 Falling / Jumping. Type 3 normal:  Type 9  climbing
 
@@ -70,15 +66,13 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteFloat(client.Character.X);
                 res2.WriteFloat(client.Character.Y);
                 res2.WriteFloat(client.Character.Z);
-
-
-                {
-                    res2.WriteFloat(percentMovementIsX);
-                    res2.WriteFloat(percentMovementIsY);
-                    res2.WriteFloat(verticalMovementSpeedMultiplier);
-                }
-
+                                               
+                res2.WriteFloat(percentMovementIsX);
+                res2.WriteFloat(percentMovementIsY);
+                res2.WriteFloat(verticalMovementSpeedMultiplier);
+               
                 res2.WriteFloat(movementSpeed);
+
                 res2.WriteFloat(horizontalMovementSpeedMultiplier);
 
                 res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
@@ -88,42 +82,6 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-
-
-                /*
-
-                //This is all Animation related.
-                        IBuffer res2 = BufferProvider.Provide();
-
-                        res2.WriteInt32(client.Character.Id);//Character ID
-                        res2.WriteFloat(verticalMovementSpeedMultiplier);
-                        res2.WriteFloat(movementSpeed);
-                        res2.WriteFloat(horizontalMovementSpeedMultiplier);
-
-                       //Body Rotation relative to movement direction (client.Character.viewOffset). Body rotation off by 90* with these settings if weapon unsheathed and no target locked
-                       if (client.Character.weaponEquipped == true)
-                        {
-                            res2.WriteByte((byte)(percentMovementIsX * -180)); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
-                            res2.WriteByte((byte)(percentMovementIsY * -180));// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
-                            res2.WriteByte((byte)(horizontalMovementSpeedMultiplier)); //
-                        }
-                        else
-                        {
-                            res2.WriteByte(0); //HANDLES EAST AND WEST ANIMS WITH WEAPON unsheathed
-                            res2.WriteByte(0);// // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS unsheathed
-                            res2.WriteByte(0); //
-                        }
-                        res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG???
-
-                        res2.WriteByte(0);// DONT TOUCH >.> CAUSES VISUAL TELEPORTING??? Character re-draw byte? 255 shrinks to nothing then redraws.
-                        res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                        res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
-
-
-
-
-                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);
-*/
                 
                     //This is all Position and Orientation Related.
                     IBuffer res = BufferProvider.Provide();
@@ -138,8 +96,8 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area, client);
 
                     //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
-                    
-            }
+                   
+            
         }
     }
 }

@@ -218,7 +218,7 @@ namespace Necromancy.Server.Logging
 
         public void Packet(NecLogPacket packet)
         {
-            //Write(LogLevel.Info, packet.LogType, packet.ToLogText());
+            Write(LogLevel.Info, packet.LogType, packet.ToLogText());
         }
     }
 }
