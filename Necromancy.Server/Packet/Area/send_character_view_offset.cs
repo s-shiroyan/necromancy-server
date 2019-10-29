@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
             if(client.Character != null)
                 client.Character.viewOffset = view;
-            Console.WriteLine($"View Offset = {view}");
+            //Console.WriteLine($"View Offset = {view}");
         }
     }
 }

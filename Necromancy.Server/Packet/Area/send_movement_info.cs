@@ -28,8 +28,21 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
 
+                float percentMovementIsX = packet.Data.ReadFloat();
+                float percentMovementIsY = packet.Data.ReadFloat();
 
-                //X? movement on the Map. Only triggers if you deviate from the X Axis (test on tall Ladders or by walking/running a perfect straight line on X
+                float verticalMovementSpeedMultiplier = packet.Data.ReadFloat(); //  Confirm by climbing ladder at 1 up or -1 down. or Jumping
+                float movementSpeed = packet.Data.ReadFloat();
+                float horizontalMovementSpeedMultiplier = packet.Data.ReadFloat(); //always 1 when moving.  Confirm by Coliding with an  object and watching it Dip.
+
+                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Type: Type 8 Falling / Jumping. Type 3 normal:  Type 9  climbing
+
+                client.Character.animJumpFall = packet.Data.ReadByte(); //Action Modifier Byte
+                                                                        //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
+                                                                        //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
+                                                                        //81  jumping up,                //84  jumping down       //85 landing
+
+                /*//X? movement on the Map. Only triggers if you deviate from the X Axis (test on tall Ladders or by walking/running a perfect straight line on X
                 byte a = packet.Data.ReadByte();
                 byte b = packet.Data.ReadByte();
                 byte b1 = packet.Data.ReadByte();//Character X Alignment with the Map X Axis (128 for perfect, 0 for 90Degree offset)
@@ -39,30 +52,30 @@ namespace Necromancy.Server.Packet.Area
                 byte d = packet.Data.ReadByte(); 
                 byte e = packet.Data.ReadByte();
                 byte e1 = packet.Data.ReadByte(); //Character Y Alignment with the Map Y Axis (128 for perfect, 0 for 90Degree offset)
-                byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.
-                                                 /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
-                                                    View Offset : Packet Value 
-                                                         135     = 60
-                                                         136-138 = 61
-                                                         139-149 = 62
-                                                         150-179 = 63
-                                                         0-29    = 63
-                                                         30-40   = 62
-                                                         41-42   = 61
-                                                         43      = 59
-                                                         44      = 60
-                                                         45      = 188
-                                                         46-47   = 189 
-                                                         48-59   = 190
-                                                         60-119  = 191
-                                                         120-130 = 190
-                                                         131-133 = 189
-                                                         133-134 = 188
-                                                 */
+                byte f = packet.Data.ReadByte(); //Character facing Direction Relive to Map Y Axis. 63 for moving forward along the axis. 191 for moving backward along the axis.*/
+                /*   Offest 135 = 60  Offset 45  = 188  (180 degree change make 128 bit difference. This is a bitmask)
+                   View Offset : Packet Value 
+                        135     = 60
+                        136-138 = 61
+                        139-149 = 62
+                        150-179 = 63
+                        0-29    = 63
+                        30-40   = 62
+                        41-42   = 61
+                        43      = 59
+                        44      = 60
+                        45      = 188
+                        46-47   = 189 
+                        48-59   = 190
+                        60-119  = 191
+                        120-130 = 190
+                        131-133 = 189
+                        133-134 = 188
+                */
 
-                float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
+                //float VerticalSpeed = packet.Data.ReadFloat(); // Actually vertical Movement Speed. Changed to Float  Confirm by climbing ladder at 1 up or -1 down
 
-                //Movement related variables
+                /*//Movement related variables
                 byte h = packet.Data.ReadByte(); //Accelerate and Decelerate animation? related. Becomes 0 when stable speed/animation reached
                 byte i = packet.Data.ReadByte(); //Accelerate and Decelerate speed?     related. Becomes 0 when stable speed/animation reached
                 byte j = packet.Data.ReadByte(); //movement type/Speed   102 - Slow Walk (c)  225 Normal Walk  36 Run (hold Shift)
@@ -72,28 +85,28 @@ namespace Necromancy.Server.Packet.Area
                 byte k1 = packet.Data.ReadByte();
                 byte k2 = packet.Data.ReadByte();
                 byte k3 = packet.Data.ReadByte();//Character Z Alignment with the Map Z Axis (128 for perfect Alignment)
-                byte l = packet.Data.ReadByte();//Character facing Direction 
+                byte l = packet.Data.ReadByte();//Character facing Direction */
 
-                client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
+                //client.Character.movementAnim = packet.Data.ReadByte(); //Character Movement Pose: Pos 8 Falling / Jumping. Pose 3 normal: 9  climbing
 
-                client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
+                //client.Character.animJumpFall = packet.Data.ReadByte(); //Pose Modifier Byte
                                                                         //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
                                                                         //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
                                                                         //81  jumping up,                //84  jumping down       //85 landing
 
-                if (j != 0)
+                /*if (j != 0)
                 {
-                    Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    /*Console.WriteLine($"X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]VMS[{VerticalSpeed}]Pose[{client.Character.movementAnim}]PoseMod[{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
                     //Console.WriteLine($"[][][] MyXvsMapX[{a}][{b}][{b1}][{c}] MyYvsMapY[{d}][{e}][{e1}][{f}] []  Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]     MyZvsMapZ[{k1}][{k2}][{k3}][{l}] [] []");
                     Console.WriteLine($"MyXvsMapX[{a}][{b}][{b1}][{c}]");
                     Console.WriteLine($"MyYvsMapY[{d}][{e}][{e1}][{f}]");
                     Console.WriteLine($"Acc/Dec[{h}][{i}]MoveTyp[{j}]?[{k}]");
-                    Console.WriteLine($"MyZvsMapZ[{k1}][{k2}][{k3}][{l}]");
-                }
+                    Console.WriteLine($"MyZvsMapZ[{k1}][{k2}][{k3}][{l}]");*/
+                /*}
                 else
                 {
-                    Console.WriteLine($"Movement Stop Reset");
-                }
+                    //Console.WriteLine($"Movement Stop Reset");
+                }*/
                 // the game divides the normal 359 radius by 2. giving view direction only 1-180
 
                 if (client.Character.viewOffset <= 180) // NORTH
@@ -211,14 +224,14 @@ namespace Necromancy.Server.Packet.Area
                         }
                     }
                 }
-                
+
 
                 // how to sideways walk ^ 127-127 is character left // 128-128 is character right
                 {
                     // for (byte xd = 0; xd < 259; xd++)
                     {
 
-                        IBuffer res2 = BufferProvider.Provide();
+                        /*IBuffer res2 = BufferProvider.Provide();
 
                         res2.WriteInt32(client.Character.Id);//Character ID
                         res2.WriteFloat(client.Character.X);
@@ -238,13 +251,13 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);*/
 
 
                         //System.Threading.Thread.Sleep(1000);
                     }
 
-                    IBuffer res = BufferProvider.Provide();
+                    /*IBuffer res = BufferProvider.Provide();
 
                     res.WriteInt32(client.Character.Id);//Character ID
                     res.WriteFloat(client.Character.X);
@@ -255,8 +268,28 @@ namespace Necromancy.Server.Packet.Area
 
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area, client);
 
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
+                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);*/
 
+
+                {
+                    //recv_0x8D92 = 0x8D92,
+                    IBuffer res = BufferProvider.Provide();
+
+                    res.WriteInt32(client.Character.Id);
+                    res.WriteFloat(client.Character.X);
+                    res.WriteFloat(client.Character.Y);
+                    res.WriteFloat(client.Character.Z);
+                    res.WriteFloat(percentMovementIsX);
+                    res.WriteFloat(percentMovementIsY);
+                    res.WriteFloat(verticalMovementSpeedMultiplier);
+                    res.WriteFloat(movementSpeed);
+                    res.WriteFloat(horizontalMovementSpeedMultiplier);
+                    res.WriteByte(client.Character.movementAnim);
+                    res.WriteByte(client.Character.animJumpFall);
+
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area, client);
+
+                }
 
                 }
             }
