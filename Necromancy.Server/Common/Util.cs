@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Necromancy.Server.Common
 {
@@ -28,11 +27,12 @@ namespace Necromancy.Server.Common
         }
 
         public static string PathDifferenceEnd(string directoryInfo1, string directoryInfo2, bool unRoot)
-        {           
+        {
             return PathDifference(new DirectoryInfo(directoryInfo1), new DirectoryInfo(directoryInfo2), unRoot);
         }
 
-        public static string PathDifferenceEnd(FileSystemInfo directoryInfo1, FileSystemInfo directoryInfo2, bool unRoot)
+        public static string PathDifferenceEnd(FileSystemInfo directoryInfo1, FileSystemInfo directoryInfo2,
+            bool unRoot)
         {
             string result;
             if (directoryInfo1.FullName == directoryInfo2.FullName)
@@ -61,7 +61,7 @@ namespace Necromancy.Server.Common
 
             return result;
         }
-        
+
 
         public static string PathDifference(string directoryInfo1, string directoryInfo2, bool unRoot)
         {
@@ -494,7 +494,7 @@ namespace Necromancy.Server.Common
 
             return result;
         }
-        
+
         public static string ToHexString(byte[] data, char? seperator = null)
         {
             StringBuilder sb = new StringBuilder();
