@@ -22,12 +22,13 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Threading;
 using Arrowgene.Services.Logging;
-using Necromancy.Server.Data;
+using Necromancy.Cli.Command;
+using Necromancy.Cli.Command.Commands;
 using Necromancy.Server.Logging;
 
 namespace Necromancy.Cli
@@ -36,6 +37,7 @@ namespace Necromancy.Cli
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine("Program started");
             Program program = new Program(args);
             program.Run();
             Console.WriteLine("Program ended");
@@ -45,45 +47,80 @@ namespace Necromancy.Cli
         private readonly BlockingCollection<string> _inputQueue;
         private readonly Thread _consoleThread;
         private readonly object _consoleLock;
+        private readonly Dictionary<string, IConsoleCommand> _commands;
         private readonly ILogger _logger;
 
         private Program(string[] args)
         {
             _logger = LogProvider.Logger(this);
-            _consoleThread = new Thread(ReadConsole);
-          //  _consoleThread.IsBackground = true;
-            _consoleThread.Name = "Console Thread";
+            _commands = new Dictionary<string, IConsoleCommand>();
             _inputQueue = new BlockingCollection<string>();
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleLock = new object();
+            _consoleThread = new Thread(ReadConsoleThread);
 
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
 
-            if (args.Length == 2)
-            {
-                FpmfArchiveIO archiveIO = new FpmfArchiveIO();
-                FpmfArchive archive = archiveIO.Open(args[0]);
-                archiveIO.Save(archive, args[1]);
-                return;
-            }
-
-            if (args.Length == 1)
-            {
-                FpmfArchiveIO archiveIO = new FpmfArchiveIO();
-                archiveIO.OpenWoItm(args[0]);
-                return;
-            }
+            _consoleThread.IsBackground = true;
+            _consoleThread.Name = "Console Thread";
+            _consoleThread.Start();
         }
 
+        private void LoadCommands()
+        {
+            _commands.Add("show", new ShowCommand());
+            _commands.Add("unpack", new UnpackCommand());
+        }
 
-        // NecSetting setting = new NecSetting();
-        /// LogProvider.Configure<NecLogger>(setting);
+        private void Run()
+        {
+            LoadCommands();
+            ShowCopyright();
+            {
+                while (!_cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    string line;
+                    try
+                    {
+                        line = _inputQueue.Take(_cancellationTokenSource.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        line = null;
+                    }
 
-        //  NecServer server = new NecServer(setting);
-        // Console.WriteLine("Press E-key to exit..");
-        // server.Start();
-        private void ReadConsole()
+                    if (line == null)
+                    {
+                        // Ctrl+Z, Ctrl+C or error
+                        break;
+                    }
+
+
+
+                    string[] arguments = line.Split(" ");
+                    string key = arguments[0];
+                    
+                    
+                    if (line.StartsWith("e", true, CultureInfo.InvariantCulture))
+                    {
+                        _logger.Info("Exiting...");
+                        break;
+                    }
+                    
+                    if (!_commands.ContainsKey(key))
+                    {
+                        continue;
+                    }
+
+                    IConsoleCommand consoleCommand = _commands[key];
+                    consoleCommand.Handle(line);
+                }
+            }
+            StopReadConsoleThread();
+        }
+
+        private void ReadConsoleThread()
         {
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
@@ -94,79 +131,36 @@ namespace Necromancy.Cli
                 }
                 catch (OperationCanceledException)
                 {
-                    Console.WriteLine("ReadConsole - OperationCanceledException");
+                    // Ignored
                 }
             }
         }
 
-        private void Run()
-        {
-            ShowCopyright();
-            _consoleThread.Start();
-            {
-                while (!_cancellationTokenSource.Token.IsCancellationRequested)
-                {
-                    Stop1();
-                    string line;
-                    try
-                    {
-                        line = _inputQueue.Take(_cancellationTokenSource.Token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        line = null;
-                        Console.WriteLine("Run - OperationCanceledException");
-                    }
-
-                    if (line == null)
-                    {
-                        // Ctrl+Z or error
-                        break;
-                    }
-
-                    if (line.StartsWith("e", true, CultureInfo.InvariantCulture))
-                    {
-                        Console.WriteLine("Exiting...");
-                        //server.Stop();
-                        break;
-                    }
-                }
-            }
-            Stop1();
-       //     Stop();
-        }
-
-        private void Stop1()
-        {
-            Stream stream = new MemoryStream();
-            stream.Write(new byte[1]);
-            stream.Position = 0;
-            StreamReader t = new StreamReader(stream);
-            
-            Console.SetIn(t);
-            Thread.Sleep(500);
-            stream.Write(new byte[1]);
-            
-            Thread.Sleep(500);
-        }
-
-        private void Stop()
+        private void StopReadConsoleThread()
         {
             if (_consoleThread != null
                 && _consoleThread.IsAlive
                 && Thread.CurrentThread != _consoleThread
             )
             {
-                //Console.OpenStandardInput().Write(new byte[1]);
-                _consoleThread.Interrupt();
+                try
+                {
+                    _consoleThread.Interrupt();
+                }
+                catch (Exception)
+                {
+                    // Ignored
+                }
+
                 if (!_consoleThread.Join(TimeSpan.FromMilliseconds(500)))
                 {
                     try
                     {
                         _consoleThread.Abort();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
+                        // Ignored
                     }
                 }
             }
@@ -175,8 +169,6 @@ namespace Necromancy.Cli
         private void ConsoleOnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             _cancellationTokenSource.Cancel();
-            //    TextReader textReader = new TextReader();
-            //     Console.SetIn();
         }
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)

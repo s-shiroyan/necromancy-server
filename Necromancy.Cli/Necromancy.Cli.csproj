@@ -11,6 +11,6 @@
         <LangVersion>8</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Necromancy.Server\Necromancy.Server.csproj"/>
+        <ProjectReference Include="..\Necromancy.Server\Necromancy.Server.csproj" />
     </ItemGroup>
 </Project>
