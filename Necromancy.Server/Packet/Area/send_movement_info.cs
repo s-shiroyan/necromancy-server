@@ -82,20 +82,6 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-                
-                    //This is all Position and Orientation Related.
-                    IBuffer res = BufferProvider.Provide();
-
-                    res.WriteInt32(client.Character.Id);//Character ID
-                    res.WriteFloat(client.Character.X); //might need to change to Target X Y Z
-                    res.WriteFloat(client.Character.Y);
-                    res.WriteFloat(client.Character.Z);
-                    res.WriteByte(client.Character.viewOffset);//View offset / Head Rotation
-                    res.WriteByte(0);//Character state? body rotation? TBD
-
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area, client);
-
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
                    
             
         }
