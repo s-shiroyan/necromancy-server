@@ -36,12 +36,9 @@ namespace Necromancy.Server.Packet.Area
         private void SendMapChangeForce(NecClient client, int MapID)
         {
             IBuffer res = BufferProvider.Provide();
-            client.Character.MapId = MapID;
-            Map map = Server.Map.Get(client.Character.MapId);
-
-            client.Character.X = map.X;
-            client.Character.Y = map.Y;
-            client.Character.Z = map.Z;
+            
+            Map map = Server.Map.Get(MapID);
+            client.Character.MapId = MapID; //might be needed until we replace FileReader for NPC loading.
 
             //sub_4E4210_2341  // impacts map spawn ID
             res.WriteInt32(MapID); //MapSerialID
@@ -50,26 +47,21 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(60002); //Port
 
             //sub_484420   //  does not impact map spawn coord
-            res.WriteFloat(client.Character.X); //X Pos
-            res.WriteFloat(client.Character.Y); //Y Pos
-            res.WriteFloat(client.Character.Z); //Z Pos
-            res.WriteByte(client.Character.viewOffset); //View offset
+            res.WriteFloat(map.X); //X Pos
+            res.WriteFloat(map.Y); //Y Pos
+            res.WriteFloat(map.Z); //Z Pos
+            res.WriteByte((byte)map.Orientation); //View offset
 
             Router.Send(client, (ushort)AreaPacketId.recv_map_change_force, res, ServerType.Area);
 
         }
         private void SendMapEntry(NecClient client, int myMapId)
         {
-            int mapId = myMapId;
-
-
-            Map map = Server.Map.Get(mapId);
-
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort)AreaPacketId.recv_map_entry_r, res, ServerType.Area);
 
-            SendEventEnd(client);  //Forgot to add this.  its slightly important.
+            SendEventEnd(client); 
         }
 
         private void SendEventEnd(NecClient client)
