@@ -286,6 +286,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_skill_request_info(this));
             _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
             _areaConsumer.AddHandler(new send_charabody_self_salvage_notify_r(this));
+            _areaConsumer.AddHandler(new send_return_home_request_exec(this));
         }
     }
 }
