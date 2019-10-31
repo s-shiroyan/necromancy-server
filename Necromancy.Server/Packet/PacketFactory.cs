@@ -39,7 +39,7 @@ namespace Necromancy.Server.Packet
 
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
-            ulong dataSize = (ushort) (data.Length + PacketIdSize);
+            ulong dataSize = (ulong) (data.Length + PacketIdSize);
 
             PacketLengthType packetLengthType;
 

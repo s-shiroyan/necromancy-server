@@ -239,6 +239,9 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
                 case "Move":
                     Move(client);
                     break;
+                case "EndEvent":
+                    SendEventEnd(client);
+                    break;
                 default:
                     SplitMessage[1] = "unrecognized";
                     //Message = $"Unrecognized command '{SplitMessage[1]}' ";
@@ -1718,6 +1721,14 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             Router.Send(client, (ushort) AreaPacketId.recv_map_change_sync_ok, res, ServerType.Area);
 
             //Add a wait statement here
+        }
+
+        private void SendEventEnd(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
+
         }
 
 
