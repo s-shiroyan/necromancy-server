@@ -17,14 +17,16 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int selectExecCode = packet.Data.ReadInt32();
-            Logger.Debug($" THe packet contents are :{selectExecCode}");
-            IBuffer res = BufferProvider.Provide();
-            res.WriteCString("Message at End of Event"); // find max size
-            res.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_exec, res, ServerType.Area);
-            if (selectExecCode == -1)
+            client.Character.selectExecCode = packet.Data.ReadInt32();
+            Logger.Debug($" THe packet contents are :{client.Character.selectExecCode}");
+            
+            
+            if (client.Character.selectExecCode == -1)
             {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteCString("Message at End of Event"); // find max size
+                res.WriteInt32(0);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_exec, res, ServerType.Area);
                 RecvEventEnd(client);
             }
         }

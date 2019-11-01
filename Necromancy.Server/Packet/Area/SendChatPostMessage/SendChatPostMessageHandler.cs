@@ -98,88 +98,85 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
             switch (command)
             {
-                case "soul":
+                case "soul": //opens soul shop
                     SoulShop(client);
                     break;
-                case "revi":
+                case "revi": //Makes you a tombstone
                     Revive(client);
                     break;
-                case "form":
+                case "form": //changes you to male or female
                     ChangeFormMenu(client);
                     break;
-                case "char":
+                case "char": // updates your HP and MP to 1
                     SendCharaUpdateEvent(client);
                     break;
-                case "test":
+                case "test": // many different things. To-Do.  break up things
                     SendTestEvent(client);
                     break;
-                case "trap":
+                case "trap": //disarm a red chest trap window
                     SendTrapEvent(client);
                     break;
-                case "mess":
+                case "mess": //Event Message at bottom of screen
                     SendMessageEvent(client);
                     break;
-                case "stor":
+                case "stor": //opens your storage
                     SendSoulStorageEvent(client);
                     break;
-                case "salv":
+                case "salv": //Picks up your own body in to soul storage
                     SendSalvageNotifyBody(client);
                     break;
-                case "ques":
+                case "ques": //accepts a quest to defeat 10 hydras
                     QuestStarted(client);
                     break;
-                case "tbox":
+                case "tbox": //opens an empty Treasure box window
                     SendEventTreasureboxBegin(client);
                     break;
-                case "gems":
+                case "gems": //Gem Combination window
                     GemNotifyOpen(client);
                     break;
-                case "mant":
+                case "mant": //union Cape design window
                     SendUnionMantleOpen(client);
                     break;
-                case "unio":
+                case "unio": //Union Naming window
                     SendUnionOpenWindow(client);
                     break;
-                case "list":
+                case "list": //Opens Bounty Board
                     SendWantedListOpen(client);
                     break;
-                case "jail":
+                case "jail": //Opens Jail Warden dialog to pay bail (toilet?)
                     SendWantedJailOpen(client);
                     break;
-                case "auct":
+                case "auct": //opens auction house
                     SendAuctionNotifyOpen(client);
                     break;
-                case "shop":
+                case "shop": //opens your shop
                     SendShopNotifyOpen(client);
                     break;
-                case "item":
+                case "item": //spawns a green soul material item
                     SendDataNotifyItemObjectData(client);
                     break;
-                case "mail":
+                case "mail": //opens the mail window
                     SendMailOpenR(client);
                     break;
-                case "chid":
+                case "chid": //puts your character ID in chat
                     SendCharacterId(client);
                     break;
-                case "accs":
+                case "accs": //recv loot access object?  doesnt do anything
                     SendLootAccessObject(client);
                     break;
-                /*case "move":
-                    SendItemMove(client);
-                    break;*/
                 case "itis":
-                    SendItemInstance(client, x);
+                    SendItemInstance(client, x); //Adds an Identified item to inventory
                     break;
                 case "itus":
-                    SendItemInstanceUnidentified(client, x);
+                    SendItemInstanceUnidentified(client, x); //adds an unidentified item to inventory
                     break;
-                case "upit":
+                case "upit": //updates and items state
                     SendItemUpdateState(client);
                     break;
-                case "stuf":
+                case "stuf": //updates a stall feature item
                     SendStallUpdateFeatureItem(client);
                     break;
-                case "sssi":
+                case "sssi": //sells an item from your stall 
                     SendStallSellItem(client);
                     break;
                 default:
@@ -190,7 +187,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
             switch (SplitMessage[1])
             {
-                case "NPC":
+                case "NPC": //spawns an NPC by your location.  Add an ID to spawn a specific model
                     if (SplitMessage[2] == "")
                     {
                         SplitMessage[2] = "0";
@@ -198,35 +195,35 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
                     AdminConsoleNPC(client, Convert.ToInt32(SplitMessage[2]));
                     break;
-                case "Monster":
+                case "Monster": //Spawns a monster near you
                     AdminConsoleRecvDataNotifyMonsterData(client);
                     break;
-                case "Item":
+                case "Item": //Spawns a green soul item on the ground
                     SendDataNotifyItemObjectData(client);
                     break;
-                case "Died":
+                case "Died": //displays message that you died
                     IBuffer res4 = BufferProvider.Provide();
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_self_lost_notify, res4, ServerType.Area);
                     break;
-                case "GetUItem":
+                case "GetUItem": //Equips your whole character with gear based on settings in LoadEquipment.cs
                     AdminConsoleRecvItemInstanceUnidentified(client);
                     break;
-                case "GetItem":
+                case "GetItem": //puts items in your inventory
                     AdminConsoleRecvItemInstance(client);
                     break;
-                case "SendMail":
+                case "SendMail": //opens mail
                     SendMailOpenR(client);
                     break;
-                case "GetMail":
+                case "GetMail": //cant remember
                     AdminConsoleSelectPackageUpdate(client);
                     break;
-                case "logout":
+                case "logout": //logs you out
                     LogOut(client);
                     break;
-                case "ReadFile":
+                case "ReadFile": //runs a command from FileReader.CS for testing output
                     FileReader.GameFileReader(client);
                     break;
-                case "MapChange":
+                case "MapChange": //Changes your Map.  Union room by default.  add a mapId to a specific map.
                     if (SplitMessage[2] == "")
                     {
                         SplitMessage[2] = "1001010";
@@ -234,18 +231,15 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
                     SendMapChangeForce(client, Convert.ToInt32(SplitMessage[2]));
                     break;
-                case "MapEntry":
+                case "MapEntry": //adds your client to the list of clients in a map
                     SendMapEntry(client, Convert.ToInt32(SplitMessage[2]));
                     break;
-                case "TestRecv":
+                case "OnHit": //  battle report attack on hit. 
                     IBuffer res = BufferProvider.Provide();
                     Router.Send(client, (ushort) AreaPacketId.recv_battle_report_action_attack_onhit, res,
                         ServerType.Area);
                     break;
-                case "Move":
-                    Move(client);
-                    break;
-                case "EndEvent":
+                case "EndEvent": //failsafe to end events when frozen
                     SendEventEnd(client);
                     break;
                 default:
@@ -264,28 +258,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             }
 
             return Message;
-        }
-
-        private void Move(NecClient client)
-        {
-            IBuffer res2 = BufferProvider.Provide();
-
-            res2.WriteInt32(client.Character.Id); //Character ID
-            res2.WriteFloat(client.Character.X + 100);
-            res2.WriteFloat(client.Character.Y + 100);
-            res2.WriteFloat(client.Character.Z + 100);
-
-            res2.WriteByte(client.Character.wepEastWestAnim); //HANDLES EAST AND WEST ANIMS WITH WEAPONS
-            res2.WriteByte(client.Character.wepNorthSouthAnim); // // HANDLES NORTH AND SOUTH ANIMS WITH WEAPONS
-            res2.WriteByte(6); // I DUNNO BUT IT WORKS
-
-            res2.WriteInt16(0xFFFF); //FIXES MOVEMENT LAG
-
-            res2.WriteByte(0); // DONT TOUCH >.> CAUSES VISUAL TELEPORTING
-            res2.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-            res2.WriteByte(client.Character.animJumpFall); //JUMP & FALLING ANIM
-
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_0xE8B9, res2, ServerType.Area, client);
         }
 
 
@@ -563,36 +535,10 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
         private void SendMailOpenR(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            //recv_mail_open_r = 0xCE7,
 
             res.WriteInt32(client.Character.Id);
 
             Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res, ServerType.Area);
-        }
-
-        private void SendRandomBoxNotifyOpen(NecClient client)
-        {
-            //recv_random_box_notify_open = 0xC374,
-            IBuffer res = BufferProvider.Provide();
-
-            int numEntries = 10; // Slots
-            res.WriteInt32(numEntries); //less than or equal to 10
-
-            for (int i = 0; i < numEntries; i++)
-            {
-                res.WriteInt64(itemIDs[x]); // ?
-            }
-
-            res.WriteInt32(itemIDs[x]); // Show item name                                                   
-
-
-            Router.Send(client, (ushort) AreaPacketId.recv_random_box_notify_open, res,
-                ServerType.Area); // Trying to spawn item in this boxe, maybe i need the item instance ?
-
-            IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt64(0); //
-            res1.WriteInt32(itemIDs[x]);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
         }
 
         private void SoulShop(NecClient client)
@@ -606,11 +552,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
         {
             if (client.Character.soulFormState == 1)
             {
-                /* IBuffer res1 = BufferProvider.Provide();
-                 res1.WriteInt32(client.Character.Id);
-                 res1.WriteInt32(0);
-                 Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res1); */
-
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteInt32(0);
@@ -643,20 +584,10 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_self_lost_notify, res5, ServerType.Area);
             }
 
-
-            /*IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(client.Character.Id);
-            res3.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res3); */
         }
 
         private void ChangeFormMenu(NecClient client)
         {
-            /*string SexString = "Male";
-            int SexInteger = int.Parse(SexString); */
-            bool isFemale = false;
-            bool isMale = false;
-
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
@@ -675,7 +606,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
                 IBuffer res70 = BufferProvider.Provide();
                     res70.WriteCString("Female"); //Length 0x601
-                    Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res70, ServerType.Area);   // It's the first choice
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res70, ServerType.Area);   // It's the second choice
 
       
   
@@ -683,48 +614,21 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             IBuffer res1 = BufferProvider.Provide();
 
             res1.WriteCString("Character appareance change \n Price : 9000 Pieces"); // It's the title dude
-            res1.WriteInt32(0); // Don't know what it affect
+            res1.WriteInt32(0xFFFD); // This is the Event Type.  0xFFFD sends a 58 byte packet
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res1, ServerType.Area);
 
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.Raceid); // race
-            res.WriteInt32(2); // gender 1 = female, 2 = male
-            res.WriteByte(client.Character.HairId); ; //hair
-            res.WriteByte(0); //color
-            res.WriteByte(client.Character.FaceId); //face
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res, ServerType.Area);
-
-            IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(client.Character.Raceid); // race
-            res6.WriteInt32(1); // gender 1 = female, 2 = male
-            res6.WriteByte(client.Character.HairId); ; //hair
-            res6.WriteByte(client.Character.HairColorId); //color
-            res6.WriteByte(client.Character.FaceId); //face
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res6, ServerType.Area);
-
-
-            /*IBuffer res = BufferProvider.Provide();
-                    res.WriteInt32(0); // race
-                    res.WriteInt32(1); // gender
-                    res.WriteByte(0); //hair
-                    res.WriteByte(0); //color
-                    res.WriteByte(0); //face
-                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res, ServerType.Area);
-
-
-
-                   /* IBuffer res1 = BufferProvider.Provide();
-                    res1.WriteInt32(1);
-                    res1.WriteInt32(2);
-                    res1.WriteByte(0);
-                    res1.WriteByte(0);
-                    res1.WriteByte(0);
-                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res1, ServerType.Area); */
-
-
-
-
+            if (client.Character.selectExecCode != -1)
+            { 
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(client.Character.Raceid); // race
+                res.WriteInt32(client.Character.selectExecCode+1); // gender 1 = female, 2 = male
+                res.WriteByte(client.Character.HairId); ; //hair
+                res.WriteByte(client.Character.HairColorId); //color
+                res.WriteByte(client.Character.FaceId); //face
+                Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res, ServerType.Area);
+                SendEventEnd(client);
+                client.Character.selectExecCode = -1;
+            }
         }
 
         private void SendCharaUpdateEvent(NecClient client)
@@ -735,7 +639,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(1);
+            res6.WriteInt32(44);
             Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res6, ServerType.Area);
 
 
@@ -745,7 +649,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
 
             IBuffer res7 = BufferProvider.Provide();
-            res7.WriteInt32(1);
+            res7.WriteInt32(55);
             Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res7, ServerType.Area);
 
 
@@ -800,11 +704,8 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             res.WriteInt32(90); // Time before the "scale" be available
             Router.Send(client, (ushort)AreaPacketId.recv_charabody_self_warpdragon_penalty, res, ServerType.Area);
 
-
-
             
             res=null;
-            IBuffer res = BufferProvider.Provide();
             res.WriteInt32(4); // Color
             Router.Send(client, (ushort) AreaPacketId.recv_data_notify_eventlink, res, ServerType.Area);
 
@@ -1911,20 +1812,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
 
             Map map = Server.Map.Get(mapId);
-            if (map == null)
-            {
-                Logger.Error($"MapId: {mapId} not found in map lookup", client);
-                //client.Socket.Close();
-                return;
-            }
-        }
-
-        private void SendMapEntry(NecClient client, int myMapId)
-        {
-            int mapId = myMapId;
-
-
-            Map map = Server.Map.Get(mapId);
 
             //map.Enter(client);
 
@@ -1961,59 +1848,11 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             SendMapEntry(client, MapID);
         }
 
-        private void SendMapChangeSyncOk(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-
-            Router.Send(client, (ushort) AreaPacketId.recv_map_change_sync_ok, res, ServerType.Area);
-
-            //Add a wait statement here
-        }
-
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
             Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
-
-            map.Enter(client);
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res, ServerType.Area);
-        }
-
-        private void SendMapChangeForce(NecClient client, int MapID)
-        {
-            IBuffer res = BufferProvider.Provide();
-
-            //sub_4E4210_2341  // impacts map spawn ID
-            res.WriteInt32(client.Character.MapId); //MapSerialID
-            res.WriteInt32(client.Character.MapId); //MapID
-            res.WriteFixedString("127.0.0.1", 65); //IP
-            res.WriteInt16(60002); //Port
-
-            //sub_484420   //  does not impact map spawn coord
-            res.WriteFloat(client.Character.X); //X Pos
-            res.WriteFloat(client.Character.Y); //Y Pos
-            res.WriteFloat(client.Character.Z); //Z Pos
-            res.WriteByte(1); //View offset
-
-            Router.Send(client, (ushort) AreaPacketId.recv_map_change_force, res, ServerType.Area);
-
-            SendMapChangeSyncOk(client);
-            client.Character.MapId = MapID;
-        }
-
-        private void SendMapChangeSyncOk(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-
-            Router.Send(client, (ushort) AreaPacketId.recv_map_change_sync_ok, res, ServerType.Area);
-
-            //Add a wait statement here
         }
 
 

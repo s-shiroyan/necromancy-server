@@ -52,7 +52,6 @@ namespace Necromancy.Server.Packet.Area
             260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/, 1, 2, 3
        };
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_dbg_chara_unequipped, res, ServerType.Area, client);
         int[] EquipBitMask = new int[]
    {
             1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288,

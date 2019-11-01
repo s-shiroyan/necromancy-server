@@ -88,7 +88,7 @@ namespace Necromancy.Server.Logging
                     return log;
 
                 default:
-                    if (Data.Size <= 50)
+                    if (Data.Size <= 60)
                     {
                         log += Environment.NewLine;
                         log += "----------";
