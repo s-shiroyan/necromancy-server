@@ -27,9 +27,9 @@ namespace Necromancy.Server.Packet.Area
 
             SentEventStart(client, objectID);
             SendEventShowBoardStart(client, objectID);
-            SendEventMessageNoObject(client, objectID);
-            SendEventMessage(client, objectID);
-            SendEventBlockMessage(client, objectID);
+            //SendEventMessageNoObject(client, objectID);
+            //SendEventMessage(client, objectID);
+            //SendEventBlockMessage(client, objectID);
             SendEventSelectMapAndChannel(client, objectID);
 
             Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith 
@@ -113,7 +113,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 //sub_494c50
                 res7.WriteInt32(nameIdx[i]); //Stage ID from Stage.CSV
-                res7.WriteInt32(mapIDs[i]); //Map ID
+                res7.WriteInt32(mapIDs[i]); //Map ID.  Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
                 res7.WriteInt32(partySize[i]); //max players
                 res7.WriteInt16(levels[i]); ; //Recommended Level
                     //sub_4834C0
