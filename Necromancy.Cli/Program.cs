@@ -28,6 +28,7 @@ using System.Threading;
 using Arrowgene.Services.Logging;
 using Necromancy.Cli.Command;
 using Necromancy.Cli.Command.Commands;
+using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 
 namespace Necromancy.Cli
@@ -93,8 +94,9 @@ namespace Necromancy.Cli
             _logger.Info("Argument Mode");
             _logger.Info("Press `e'-key to exit.");
 
-            string line = string.Join(CliSeparator, arguments);
-            ProcessLine(line);
+            ProcessArguments(arguments);
+            _logger.Info("Command Completed");
+            _logger.Info("Press `e'-key to exit.");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             while (keyInfo.Key != ConsoleKey.E)
@@ -128,7 +130,20 @@ namespace Necromancy.Cli
                     line = null;
                 }
 
-                ProcessLineResultType result = ProcessLine(line);
+                if (line == null)
+                {
+                    // Ctrl+Z, Ctrl+C or error
+                    break;
+                }
+
+                string[] arguments = Util.ParseTextArguments(line, CliSeparator, '"');
+                if (arguments.Length <= 0)
+                {
+                    _logger.Error("Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                    continue;
+                }
+
+                ProcessLineResultType result = ProcessArguments(arguments);
                 if (result == ProcessLineResultType.Exit)
                 {
                     break;
@@ -141,6 +156,7 @@ namespace Necromancy.Cli
 
                 if (result == ProcessLineResultType.Completed)
                 {
+                    _logger.Info("Command Completed");
                     continue;
                 }
             }
@@ -149,18 +165,11 @@ namespace Necromancy.Cli
             ShutdownCommands();
         }
 
-        private ProcessLineResultType ProcessLine(string line)
+        private ProcessLineResultType ProcessArguments(string[] arguments)
         {
-            if (line == null)
-            {
-                // Ctrl+Z, Ctrl+C or error
-                return ProcessLineResultType.Exit;
-            }
-
-            string[] arguments = line.Split(CliSeparator);
             if (arguments.Length <= 0)
             {
-                _logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                _logger.Error("Invalid input. Type 'help' for a list of available commands.");
                 return ProcessLineResultType.Continue;
             }
 
@@ -215,10 +224,8 @@ namespace Necromancy.Cli
                 Array.Copy(arguments, 1, newArguments, 0, cmdLength);
             }
 
-            line = string.Join(CliSeparator, newArguments);
-
             IConsoleCommand consoleCommand = _commands[key];
-            consoleCommand.Handle(line);
+            consoleCommand.Handle(newArguments);
             return ProcessLineResultType.Completed;
         }
 

@@ -35,12 +35,12 @@ namespace Necromancy.Cli.Command
         {
         }
 
-        public void Handle(string line)
+        public void Handle(string[] args)
         {
             Clear();
-            if (!string.IsNullOrWhiteSpace(line))
+            if (args.Length > 0)
             {
-                Parse(line);
+                Parse(args);
             }
             else if (RequireArgs)
             {
@@ -62,15 +62,14 @@ namespace Necromancy.Cli.Command
         /// <summary>
         /// Parses the input text into arguments and switches.
         /// </summary>
-        protected void Parse(string line)
+        protected void Parse(string[] args)
         {
-            string[] parts = line.Split(Program.CliSeparator);
-            foreach (string part in parts)
+            foreach (string arg in args)
             {
-                int count = CountChar(part, Program.CliValueSeparator);
+                int count = CountChar(arg, Program.CliValueSeparator);
                 if (count == 1)
                 {
-                    string[] keyValue = part.Split(Program.CliValueSeparator);
+                    string[] keyValue = arg.Split(Program.CliValueSeparator);
                     if (keyValue.Length == 2)
                     {
                         string key = keyValue[0];
@@ -99,9 +98,9 @@ namespace Necromancy.Cli.Command
                     }
                 }
 
-                if (part.StartsWith('-'))
+                if (arg.StartsWith('-'))
                 {
-                    string switchStr = part.Substring(1);
+                    string switchStr = arg.Substring(1);
                     if (switchStr.Length <= 0 || Switches.Contains(switchStr))
                     {
                         Logger.Error($"Invalid switch: '{switchStr}' is empty or duplicated.");
@@ -112,13 +111,13 @@ namespace Necromancy.Cli.Command
                     continue;
                 }
 
-                if (part.Length <= 0 || Switches.Contains(part))
+                if (arg.Length <= 0 || Switches.Contains(arg))
                 {
-                    Logger.Error($"Invalid argument: '{part}' is empty or duplicated.");
+                    Logger.Error($"Invalid argument: '{arg}' is empty or duplicated.");
                     continue;
                 }
 
-                Arguments.Add(part);
+                Arguments.Add(arg);
             }
         }
 

@@ -14,7 +14,10 @@ namespace Necromancy.Cli.Command.Commands
 
         public override void Shutdown()
         {
-            _server.Stop();
+            if (_server != null)
+            {
+                _server.Stop();
+            }
         }
 
         protected override void Run()

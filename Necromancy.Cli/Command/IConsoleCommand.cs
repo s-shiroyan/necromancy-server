@@ -2,7 +2,7 @@ namespace Necromancy.Cli.Command
 {
     public interface IConsoleCommand
     {
-        void Handle(string line);        
+        void Handle(string[] args);        
         void Shutdown();
         string Key { get; }
         string Description { get; }
