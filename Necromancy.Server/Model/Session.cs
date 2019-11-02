@@ -13,8 +13,11 @@ namespace Necromancy.Server.Model
         public Account Account { get; set; }
         public Soul Soul { get; set; }
         public Character Character { get; set; }
+        public Items Items { get; set; }
+        public Quest Quest { get; set; }
         public Channel Channel { get; set; }
         public Map Map { get; set; }
+        public ITcpSocket authSocket { get; set; }
         public ITcpSocket msgSocket { get; set; }
         public ITcpSocket areaSocket { get; set; }
 

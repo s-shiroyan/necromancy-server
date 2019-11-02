@@ -24,10 +24,21 @@ namespace Necromancy.Server.Database
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
-        Character SelectCharacterBySoulIdAndSlotId(int soulId, byte character_slot_id);  //Not used,  delete this
         List<Character> SelectCharacterByAccountId(int accountId);
         List<Character> SelectCharacterBySoulId(int soulId);
         bool UpdateCharacter(Character character);
         bool DeleteCharacter(int characterId);
+
+        // Items
+        bool InsertItems(Items items);
+        Items SelectitemsById(int itemsId);
+        bool UpdateItems(Items items);
+        bool DeleteItems(int itemsId);
+
+        // Quest
+        bool InsertQuest(Quest quest);
+        Quest SelectQuestById(int questId);
+        bool UpdateQuest(Quest quest);
+        bool DeleteQuest(int questId);
     }
 }

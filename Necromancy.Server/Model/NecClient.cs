@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 
@@ -13,91 +11,49 @@ namespace Necromancy.Server.Model
     {
         private readonly NecLogger _logger;
 
-        public NecClient(ITcpSocket clientSocket, PacketFactory packetFactory)
+        public NecClient()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            PacketFactory = packetFactory;
-            Socket = clientSocket;
-            UpdateIdentity();
+            Creation = DateTime.Now;
         }
 
-        #region Session
-
-        public Session Session { get; set; }
-
-        public Account Account
-        {
-            get => Session.Account;
-            set => Session.Account = value;
-        }
-
-        public Soul Soul
-        {
-            get => Session.Soul;
-            set => Session.Soul = value;
-        }
-
-        public Character Character
-        {
-            get => Session.Character;
-            set => Session.Character = value;
-        }
-
-        public Channel Channel
-        {
-            get => Session.Channel;
-            set => Session.Channel = value;
-        }
-
-
-        public Map Map
-        {
-            get => Session.Map;
-            set => Session.Map = value;
-        }
-
-        #endregion
-
+        public DateTime Creation { get; }
         public string Identity { get; private set; }
-        public ITcpSocket Socket { get; }
-        public PacketFactory PacketFactory { get; }
+        public Account Account { get; set; }
+        public Soul Soul { get; set; }
+        public Character Character { get; set; }
+        public Items Items { get; set; }
+        public Quest Quest { get; set; }
+        public Channel Channel { get; set; }
+        public Map Map { get; set; }
+        public NecConnection AuthConnection { get; set; }
+        public NecConnection MsgConnection { get; set; }
+        public NecConnection AreaConnection { get; set; }
 
-        public List<NecPacket> Receive(byte[] data)
+        public void Send(NecPacket packet, ServerType serverType)
         {
-            List<NecPacket> packets;
-            try
+            switch (serverType)
             {
-                packets = PacketFactory.Read(data, this);
+                case ServerType.Area:
+                    AreaConnection.Send(packet);
+                    break;
+                case ServerType.Msg:
+                    MsgConnection.Send(packet);
+                    break;
+                case ServerType.Auth:
+                    AuthConnection.Send(packet);
+                    break;
+                default:
+                    _logger.Error(this, "Invalid ServerType");
+                    break;
             }
-            catch (Exception ex)
-            {
-                _logger.Exception(this, ex);
-                packets = new List<NecPacket>();
-            }
-
-            return packets;
         }
 
-        public void Send(NecPacket packet)
+        public void Close()
         {
-            byte[] data;
-            try
-            {
-                data = PacketFactory.Write(packet, this);
-            }
-            catch (Exception ex)
-            {
-                _logger.Exception(this, ex);
-                return;
-            }
-
-            _logger.LogOutgoingPacket(this, packet);
-            Socket.Send(data);
-        }
-
-        public void UpdateIdentity()
-        {
-            Identity = $"[{Socket.Identity}]";
+            AuthConnection?.Socket.Close();
+            MsgConnection?.Socket.Close();
+            AreaConnection?.Socket.Close();
         }
     }
 }
