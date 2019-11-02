@@ -5,6 +5,7 @@ namespace Necromancy.Server.Packet
         Byte = 0,
         UInt16 = 1,
         UInt24 = 2,
-        UInt32 = 3
+        UInt32 = 3,
+        HeartBeat = 16
     }
 }

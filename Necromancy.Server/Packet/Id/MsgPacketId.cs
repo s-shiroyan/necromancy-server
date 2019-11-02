@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x831C = 0x831C,
         recv_0xC8D2 = 0xC8D2,
         recv_0xC991 = 0xC991,
-        recv_0xD2D6 = 0xD2D6,
+        recv_0xD2D6 = 0xD2D6, //recv_base_ping_r
         recv_base_check_version_r = 0xEFDD,
         recv_base_login_r = 0xA68E,
         recv_cash_buy_premium_r = 0x6FF,
