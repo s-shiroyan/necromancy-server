@@ -23,7 +23,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 using System.Threading;
 using Arrowgene.Services.Logging;
@@ -35,11 +34,22 @@ namespace Necromancy.Cli
 {
     internal class Program
     {
+        public const char CliSeparator = ' ';
+        public const char CliValueSeparator = '=';
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Program started");
-            Program program = new Program(args);
-            program.Run();
+            Program program = new Program();
+            if (args.Length > 0)
+            {
+                program.RunArguments(args);
+            }
+            else
+            {
+                program.RunInteractive();
+            }
+
             Console.WriteLine("Program ended");
         }
 
@@ -50,7 +60,7 @@ namespace Necromancy.Cli
         private readonly Dictionary<string, IConsoleCommand> _commands;
         private readonly ILogger _logger;
 
-        private Program(string[] args)
+        private Program()
         {
             _logger = LogProvider.Logger(this);
             _commands = new Dictionary<string, IConsoleCommand>();
@@ -61,64 +71,157 @@ namespace Necromancy.Cli
 
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
-
-            _consoleThread.IsBackground = true;
-            _consoleThread.Name = "Console Thread";
-            _consoleThread.Start();
         }
 
         private void LoadCommands()
         {
-            _commands.Add("show", new ShowCommand());
-            _commands.Add("unpack", new UnpackCommand());
+            AddCommand(new ShowCommand());
+            AddCommand(new UnpackCommand());
+            AddCommand(new ServerCommand());
         }
 
-        private void Run()
+        private void RunArguments(string[] arguments)
+        {
+            if (arguments.Length <= 0)
+            {
+                _logger.Error("Invalid input");
+                return;
+            }
+
+            LoadCommands();
+            ShowCopyright();
+            _logger.Info("Argument Mode");
+            _logger.Info("Press `e'-key to exit.");
+
+            string line = string.Join(CliSeparator, arguments);
+            ProcessLine(line);
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey();
+            while (keyInfo.Key != ConsoleKey.E)
+            {
+                keyInfo = Console.ReadKey();
+            }
+
+            ShutdownCommands();
+        }
+
+        private void RunInteractive()
         {
             LoadCommands();
             ShowCopyright();
+
+            _logger.Info("Interactive Mode");
+
+            _consoleThread.IsBackground = true;
+            _consoleThread.Name = "Console Thread";
+            _consoleThread.Start();
+
+            while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
-                while (!_cancellationTokenSource.Token.IsCancellationRequested)
+                string line;
+                try
                 {
-                    string line;
-                    try
-                    {
-                        line = _inputQueue.Take(_cancellationTokenSource.Token);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        line = null;
-                    }
+                    line = _inputQueue.Take(_cancellationTokenSource.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    line = null;
+                }
 
-                    if (line == null)
-                    {
-                        // Ctrl+Z, Ctrl+C or error
-                        break;
-                    }
+                ProcessLineResultType result = ProcessLine(line);
+                if (result == ProcessLineResultType.Exit)
+                {
+                    break;
+                }
 
+                if (result == ProcessLineResultType.Continue)
+                {
+                    continue;
+                }
 
-
-                    string[] arguments = line.Split(" ");
-                    string key = arguments[0];
-                    
-                    
-                    if (line.StartsWith("e", true, CultureInfo.InvariantCulture))
-                    {
-                        _logger.Info("Exiting...");
-                        break;
-                    }
-                    
-                    if (!_commands.ContainsKey(key))
-                    {
-                        continue;
-                    }
-
-                    IConsoleCommand consoleCommand = _commands[key];
-                    consoleCommand.Handle(line);
+                if (result == ProcessLineResultType.Completed)
+                {
+                    continue;
                 }
             }
+
             StopReadConsoleThread();
+            ShutdownCommands();
         }
+
+        private ProcessLineResultType ProcessLine(string line)
+        {
+            if (line == null)
+            {
+                // Ctrl+Z, Ctrl+C or error
+                return ProcessLineResultType.Exit;
+            }
+
+            string[] arguments = line.Split(CliSeparator);
+            if (arguments.Length <= 0)
+            {
+                _logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                return ProcessLineResultType.Continue;
+            }
+
+            string key = arguments[0];
+
+            if (key.Equals("exit", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _logger.Info("Exiting...");
+                return ProcessLineResultType.Exit;
+            }
+
+            if (key.Equals("help", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (arguments.Length >= 2)
+                {
+                    string subKey = arguments[1].ToLowerInvariant();
+                    bool found = false;
+                    foreach (string cmdKey in _commands.Keys)
+                    {
+                        if (cmdKey.ToLowerInvariant() == subKey)
+                        {
+                            IConsoleCommand consoleCommandHelp = _commands[cmdKey];
+                            _logger.Info(ShowHelp(consoleCommandHelp));
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found)
+                    {
+                        _logger.Error(
+                            $"Command: 'help {subKey}' not available. Type 'help' for a list of available commands.");
+                    }
+
+                    return ProcessLineResultType.Continue;
+                }
+
+                ShowHelp();
+                return ProcessLineResultType.Continue;
+            }
+
+            if (!_commands.ContainsKey(key))
+            {
+                _logger.Error($"Command: '{key}' not available. Type 'help' for a list of available commands.");
+                return ProcessLineResultType.Continue;
+            }
+
+            int cmdLength = arguments.Length - 1;
+            string[] newArguments = new string[cmdLength];
+            if (cmdLength > 0)
+            {
+                Array.Copy(arguments, 1, newArguments, 0, cmdLength);
+            }
+
+            line = string.Join(CliSeparator, newArguments);
+
+            IConsoleCommand consoleCommand = _commands[key];
+            consoleCommand.Handle(line);
+            return ProcessLineResultType.Completed;
+        }
+
 
         private void ReadConsoleThread()
         {
@@ -209,9 +312,64 @@ namespace Necromancy.Cli
             }
         }
 
+        private void AddCommand(IConsoleCommand command)
+        {
+            _commands.Add(command.Key, command);
+        }
+
+        private void ShutdownCommands()
+        {
+            foreach (IConsoleCommand command in _commands.Values)
+            {
+                command.Shutdown();
+            }
+        }
+
+        private void ShowHelp()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Available Commands:");
+            sb.Append(Environment.NewLine);
+
+            sb.Append("exit");
+            sb.Append(Environment.NewLine);
+            sb.Append("- Closes the program");
+
+            sb.Append(Environment.NewLine);
+            sb.Append("----------");
+            sb.Append(Environment.NewLine);
+
+            sb.Append("help");
+            sb.Append(Environment.NewLine);
+            sb.Append("- Displays this text");
+
+            foreach (string key in _commands.Keys)
+            {
+                sb.Append(Environment.NewLine);
+                sb.Append("----------");
+                sb.Append(Environment.NewLine);
+
+                IConsoleCommand command = _commands[key];
+                sb.Append(ShowHelp(command));
+            }
+
+            _logger.Info(sb.ToString());
+        }
+
+        private string ShowHelp(IConsoleCommand command)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(command.Key);
+            sb.Append(Environment.NewLine);
+            sb.Append($"- {command.Description}");
+            return sb.ToString();
+        }
+
         private void ShowCopyright()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append(Environment.NewLine);
+            sb.Append(Environment.NewLine);
             sb.Append("Necromancy.Cli Copyright (C) 2019-2020 Necromancy Team");
             sb.Append(Environment.NewLine);
             sb.Append("This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.");
@@ -220,7 +378,8 @@ namespace Necromancy.Cli
             sb.Append(Environment.NewLine);
             sb.Append("under certain conditions; type `show c' for details.");
             sb.Append(Environment.NewLine);
-            Console.WriteLine(sb);
+            sb.Append(Environment.NewLine);
+            _logger.Info(sb.ToString());
         }
     }
 }
