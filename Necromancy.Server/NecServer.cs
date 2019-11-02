@@ -1,3 +1,25 @@
+/*
+ * This file is part of Necromancy.Server
+ *
+ * Necromancy.Server is a server implementation for the game "Wizardry Online".
+ * Copyright (C) 2019-2020 Necromancy Team
+ *
+ * Github: https://github.com/necromancyonline/necromancy-server
+ *
+ * Necromancy.Server is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Necromancy.Server is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Necromancy.Server. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;

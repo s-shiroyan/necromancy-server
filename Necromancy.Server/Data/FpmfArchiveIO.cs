@@ -241,9 +241,8 @@ namespace Necromancy.Server.Data
             byte sub = 0x0A;
 
             //Uncomment for US Steam Client
-            //byte dl = 0xA6;
-            //byte sub = 0x21;
-
+            dl = 0xA6;
+            sub = 0x21;
 
             // Uncomment for JP client
             // dl = 0x67;
