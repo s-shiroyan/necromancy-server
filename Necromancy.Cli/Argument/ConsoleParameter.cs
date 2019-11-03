@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Necromancy.Cli
+namespace Necromancy.Cli.Argument
 {
     public class ConsoleParameter
     {

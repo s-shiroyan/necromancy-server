@@ -1,3 +1,5 @@
+using Necromancy.Cli.Argument;
+
 namespace Necromancy.Cli.Command.Commands
 {
     public class ExitCommand : ConsoleCommand

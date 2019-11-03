@@ -1,4 +1,4 @@
-namespace Necromancy.Cli
+namespace Necromancy.Cli.Command
 {
     public enum CommandResultType
     {

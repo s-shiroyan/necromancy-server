@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
+using Necromancy.Cli.Argument;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Cli
 {
-    public class LogWriter
+    public class LogWriter : ISwitchConsumer
     {
         private readonly object _consoleLock;
         private Dictionary<ServerType, HashSet<uint>> _ignoredPackets;
@@ -19,7 +20,9 @@ namespace Necromancy.Cli
             _logger = LogProvider.Logger(this);
             _ignoredPackets = new Dictionary<ServerType, HashSet<uint>>();
             _consoleLock = new object();
+            Switches = new List<ISwitchProperty>();
             Reset();
+            LoadSwitches();
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
         }
 
@@ -38,6 +41,8 @@ namespace Necromancy.Cli
             MaxPacketSize = -1;
             NoData = false;
         }
+
+        public List<ISwitchProperty> Switches { get; }
 
         public void AddIgnoredPacket(ServerType serverType, uint packetId)
         {
@@ -59,6 +64,28 @@ namespace Necromancy.Cli
             }
 
             ignored.Add(packetId);
+        }
+
+        private void LoadSwitches()
+        {
+            Switches.Add(
+                new SwitchProperty<bool>(
+                    "--no-data",
+                    "--no-data=true (true|false)",
+                    "Don't display packet data",
+                    bool.TryParse,
+                    (result => NoData = result)
+                )
+            );
+            Switches.Add(
+                new SwitchProperty<int>(
+                    "--max-packet-size",
+                    "--max-packet-size=64 (integer)",
+                    "Don't display packet data",
+                    int.TryParse,
+                    (result => MaxPacketSize = result)
+                )
+            );
         }
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)

@@ -1,4 +1,5 @@
 using System;
+using Necromancy.Cli.Argument;
 using Necromancy.Server.Data;
 
 namespace Necromancy.Cli.Command.Commands

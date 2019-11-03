@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Necromancy.Cli.Argument;
 
 namespace Necromancy.Cli.Command.Commands
 {

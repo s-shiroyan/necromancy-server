@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Arrowgene.Services.Logging;
+using Necromancy.Cli.Argument;
 using Necromancy.Cli.Command;
 using Necromancy.Cli.Command.Commands;
 using Necromancy.Server.Common;
@@ -57,6 +58,7 @@ namespace Necromancy.Cli
         private readonly BlockingCollection<string> _inputQueue;
         private readonly Thread _consoleThread;
         private readonly Dictionary<string, IConsoleCommand> _commands;
+        private readonly List<ISwitchConsumer> _parameterConsumers;
         private readonly ILogger _logger;
         private readonly LogWriter _logWriter;
 
@@ -65,6 +67,7 @@ namespace Necromancy.Cli
             _logger = LogProvider.Logger(this);
             _commands = new Dictionary<string, IConsoleCommand>();
             _inputQueue = new BlockingCollection<string>();
+            _parameterConsumers = new List<ISwitchConsumer>();
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleThread = new Thread(ReadConsoleThread);
             _logWriter = new LogWriter();
@@ -78,6 +81,12 @@ namespace Necromancy.Cli
             AddCommand(new ServerCommand(_logWriter));
             AddCommand(new HelpCommand(_commands));
             AddCommand(new ExitCommand());
+            AddCommand(new SwitchCommand(_parameterConsumers));
+        }
+
+        private void LoadGlobalParameterConsumer()
+        {
+            _parameterConsumers.Add(_logWriter);
         }
 
         private void RunArguments(string[] arguments)
@@ -89,6 +98,7 @@ namespace Necromancy.Cli
             }
 
             LoadCommands();
+            LoadGlobalParameterConsumer();
             ShowCopyright();
             _logger.Info("Argument Mode");
             _logger.Info("Press `e'-key to exit.");
@@ -109,6 +119,7 @@ namespace Necromancy.Cli
         private void RunInteractive()
         {
             LoadCommands();
+            LoadGlobalParameterConsumer();
             ShowCopyright();
 
             _logger.Info("Interactive Mode");
@@ -213,8 +224,7 @@ namespace Necromancy.Cli
                         string value = keyValue[1];
                         if (key.StartsWith('-'))
                         {
-                            key = key.Substring(1);
-                            if (key.Length <= 0 || parameter.SwitchMap.ContainsKey(key))
+                            if (key.Length <= 2 || parameter.SwitchMap.ContainsKey(key))
                             {
                                 _logger.Error($"Invalid switch key: '{key}' is empty or duplicated.");
                                 continue;
@@ -237,8 +247,8 @@ namespace Necromancy.Cli
 
                 if (arg.StartsWith('-'))
                 {
-                    string switchStr = arg.Substring(1);
-                    if (switchStr.Length <= 0 || parameter.Switches.Contains(switchStr))
+                    string switchStr = arg;
+                    if (switchStr.Length <= 2 || parameter.Switches.Contains(switchStr))
                     {
                         _logger.Error($"Invalid switch: '{switchStr}' is empty or duplicated.");
                         continue;
