@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
         {
             byte view = packet.Data.ReadByte();
 
-            if(client.Character != null)
+            //(client.Character != null)
                 client.Character.viewOffset = view;
             //Console.WriteLine($"View Offset = {view}");
         }

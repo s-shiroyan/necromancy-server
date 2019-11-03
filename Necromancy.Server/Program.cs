@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Data;
 using Necromancy.Server.Logging;
@@ -61,7 +61,7 @@ namespace Necromancy.Server
             switch (logWriteEventArgs.Log.LogLevel)
             {
                 case LogLevel.Debug:
-                    consoleColor = ConsoleColor.Yellow;
+                    consoleColor = ConsoleColor.DarkCyan;
                     break;
                 case LogLevel.Info:
                     consoleColor = ConsoleColor.Cyan;
@@ -83,6 +83,7 @@ namespace Necromancy.Server
                         consoleColor = ConsoleColor.Blue;
                         break;
                 }
+                
             }
 
             lock (_consoleLock)

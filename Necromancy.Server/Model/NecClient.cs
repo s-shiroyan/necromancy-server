@@ -28,9 +28,9 @@ namespace Necromancy.Server.Model
         public NecConnection MsgConnection { get; set; }
         public NecConnection AreaConnection { get; set; }
 
-        public void Send(NecPacket packet, ServerType serverType)
+        public void Send(NecPacket packet)
         {
-            switch (serverType)
+            switch (packet.ServerType)
             {
                 case ServerType.Area:
                     AreaConnection.Send(packet);

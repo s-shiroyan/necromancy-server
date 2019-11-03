@@ -1,4 +1,4 @@
-﻿using Arrowgene.Services.Buffers;
+using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int disarmingSkill = packet.Data.ReadInt32();
-            Console.WriteLine($"Packet Contents as a Int32 : {disarmingSkill}");
+            Logger.Debug($"Packet Contents as a Int32 : {disarmingSkill}");
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //Error check - 0 for success

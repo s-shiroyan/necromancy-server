@@ -1,10 +1,15 @@
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Necromancy.Server.Chat;
+using Necromancy.Server.Chat.Command.Commands;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
+using Necromancy.Server.Packet.Area.SendChatPostMessage;
+using Necromancy.Server.Packet.Area.SendCmdExec;
 using Necromancy.Server.Packet.Auth;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
@@ -15,9 +20,11 @@ namespace Necromancy.Server
     {
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
-        public ClientLookup Clients { get; set; }
-        public MapLookup Map { get; set; }
-        public IDatabase Database { get; set; }
+        public ClientLookup Clients { get; }
+        public MapLookup Map { get; }
+        public IDatabase Database { get; }
+        public SettingRepository SettingRepository { get; }
+        public ChatManager Chat { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -33,8 +40,10 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
             Clients = new ClientLookup();
             Map = new MapLookup();
+            Chat = new ChatManager();
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
+            SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);
@@ -63,6 +72,8 @@ namespace Necromancy.Server
                 Setting.AreaSocketSettings
             );
 
+            LoadChatCommands();
+            LoadSettingRepository();
             LoadHandler();
         }
 
@@ -101,6 +112,20 @@ namespace Necromancy.Server
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
+        }
+
+        private void LoadChatCommands()
+        {
+            Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
+        }
+
+        private void LoadSettingRepository()
+        {
+            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            {
+                Map map = new Map(mapSetting);
+                Map.Add(map);
+            }
         }
 
         private void LoadHandler()
@@ -182,8 +207,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_chara_pose(this));
             _areaConsumer.AddHandler(new send_charabody_access_start(this));
             _areaConsumer.AddHandler(new send_character_view_offset(this));
-            _areaConsumer.AddHandler(new send_chat_post_message(this));
-            _areaConsumer.AddHandler(new send_cmd_exec(this));
+            _areaConsumer.AddHandler(new SendChatPostMessageHandler(this));
+            _areaConsumer.AddHandler(new SendCmdExecHandler(this));
             _areaConsumer.AddHandler(new send_comment_set(this));
             _areaConsumer.AddHandler(new send_comment_switch(this));
             _areaConsumer.AddHandler(new send_create_package(this));
@@ -287,6 +312,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
             _areaConsumer.AddHandler(new send_charabody_self_salvage_notify_r(this));
             _areaConsumer.AddHandler(new send_return_home_request_exec(this));
+            _areaConsumer.AddHandler(new send_event_select_map_and_channel_r(this));
         }
     }
 }
