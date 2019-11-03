@@ -29,7 +29,6 @@ using Arrowgene.Services.Logging;
 using Necromancy.Cli.Command;
 using Necromancy.Cli.Command.Commands;
 using Necromancy.Server.Common;
-using Necromancy.Server.Logging;
 
 namespace Necromancy.Cli
 {
@@ -57,9 +56,9 @@ namespace Necromancy.Cli
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly BlockingCollection<string> _inputQueue;
         private readonly Thread _consoleThread;
-        private readonly object _consoleLock;
         private readonly Dictionary<string, IConsoleCommand> _commands;
         private readonly ILogger _logger;
+        private readonly LogWriter _logWriter;
 
         private Program()
         {
@@ -67,10 +66,8 @@ namespace Necromancy.Cli
             _commands = new Dictionary<string, IConsoleCommand>();
             _inputQueue = new BlockingCollection<string>();
             _cancellationTokenSource = new CancellationTokenSource();
-            _consoleLock = new object();
             _consoleThread = new Thread(ReadConsoleThread);
-
-            LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
+            _logWriter = new LogWriter();
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
         }
 
@@ -78,7 +75,7 @@ namespace Necromancy.Cli
         {
             AddCommand(new ShowCommand());
             AddCommand(new UnpackCommand());
-            AddCommand(new ServerCommand());
+            AddCommand(new ServerCommand(_logWriter));
         }
 
         private void RunArguments(string[] arguments)
@@ -229,7 +226,6 @@ namespace Necromancy.Cli
             return ProcessLineResultType.Completed;
         }
 
-
         private void ReadConsoleThread()
         {
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
@@ -279,44 +275,6 @@ namespace Necromancy.Cli
         private void ConsoleOnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
             _cancellationTokenSource.Cancel();
-        }
-
-        private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)
-        {
-            ConsoleColor consoleColor = ConsoleColor.Gray;
-            switch (logWriteEventArgs.Log.LogLevel)
-            {
-                case LogLevel.Debug:
-                    consoleColor = ConsoleColor.DarkCyan;
-                    break;
-                case LogLevel.Info:
-                    consoleColor = ConsoleColor.Cyan;
-                    break;
-                case LogLevel.Error:
-                    consoleColor = ConsoleColor.Red;
-                    break;
-            }
-
-            object tag = logWriteEventArgs.Log.Tag;
-            if (tag is NecLogType)
-            {
-                switch (tag)
-                {
-                    case NecLogType.In:
-                        consoleColor = ConsoleColor.Green;
-                        break;
-                    case NecLogType.Out:
-                        consoleColor = ConsoleColor.Blue;
-                        break;
-                }
-            }
-
-            lock (_consoleLock)
-            {
-                Console.ForegroundColor = consoleColor;
-                Console.WriteLine(logWriteEventArgs.Log);
-                Console.ResetColor();
-            }
         }
 
         private void AddCommand(IConsoleCommand command)

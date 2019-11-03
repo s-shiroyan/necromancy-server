@@ -7,9 +7,11 @@ namespace Necromancy.Cli.Command.Commands
     public class ServerCommand : ConsoleCommand
     {
         private NecServer _server;
+        private readonly LogWriter _logWriter;
 
-        public ServerCommand()
+        public ServerCommand(LogWriter logWriter)
         {
+            _logWriter = logWriter;
         }
 
         public override void Shutdown()
