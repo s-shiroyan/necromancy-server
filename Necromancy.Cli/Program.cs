@@ -61,6 +61,7 @@ namespace Necromancy.Cli
         private readonly List<ISwitchConsumer> _parameterConsumers;
         private readonly ILogger _logger;
         private readonly LogWriter _logWriter;
+        private readonly SwitchCommand _switchCommand;
 
         private Program()
         {
@@ -71,6 +72,7 @@ namespace Necromancy.Cli
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleThread = new Thread(ReadConsoleThread);
             _logWriter = new LogWriter();
+            _switchCommand = new SwitchCommand(_parameterConsumers);
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
         }
 
@@ -81,7 +83,7 @@ namespace Necromancy.Cli
             AddCommand(new ServerCommand(_logWriter));
             AddCommand(new HelpCommand(_commands));
             AddCommand(new ExitCommand());
-            AddCommand(new SwitchCommand(_parameterConsumers));
+            AddCommand(_switchCommand);
         }
 
         private void LoadGlobalParameterConsumer()
@@ -104,8 +106,6 @@ namespace Necromancy.Cli
             _logger.Info("Press `e'-key to exit.");
 
             ProcessArguments(arguments);
-            _logger.Info("Command Completed");
-            _logger.Info("Press `e'-key to exit.");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             while (keyInfo.Key != ConsoleKey.E)
@@ -185,6 +185,8 @@ namespace Necromancy.Cli
                     $"Command: '{parameter.Key}' not available. Type `help' for a list of available commands.");
                 return CommandResultType.Continue;
             }
+
+            _switchCommand.Handle(parameter);
 
             IConsoleCommand consoleCommand = _commands[parameter.Key];
             return consoleCommand.Handle(parameter);
@@ -348,7 +350,6 @@ namespace Necromancy.Cli
                 command.Shutdown();
             }
         }
-
 
         private void ShowCopyright()
         {

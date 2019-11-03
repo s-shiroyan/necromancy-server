@@ -30,6 +30,28 @@ namespace Necromancy.Cli.Command.Commands
                 {
                     Logger.Error($"Switch '{key}' failed, value: '{value}' is invalid");
                 }
+                else
+                {
+                    Logger.Info($"Applied {key}={value}");
+                }
+            }
+            
+            foreach (string booleanSwitch in parameter.Switches)
+            {
+                ISwitchProperty property = FindSwitch(booleanSwitch);
+                if (property == null)
+                {
+                    Logger.Error($"Switch '{booleanSwitch}' not found");
+                    continue;
+                }
+                if (!property.Assign(bool.TrueString))
+                {
+                    Logger.Error($"Switch '{booleanSwitch}' failed, value: '{bool.TrueString}' is invalid");
+                }
+                else
+                {
+                    Logger.Info($"Applied {booleanSwitch}={bool.TrueString}");
+                }
             }
 
             return CommandResultType.Completed;
