@@ -59,8 +59,36 @@ namespace Necromancy.Server.Logging
                     log += "----------";
                     return log;
 
+                case "send_system_register_error_report":
+                    log += Environment.NewLine;
+                    log += "----------";
+                    log += Environment.NewLine;
+                    log += $"[{TimeStamp:HH:mm:ss}][Typ:{LogType}]";
+                    log += $"[{ServerType}]";
+                    log += Environment.NewLine;
+                    log += $"[Id:0x{Id:X2}|{Id}][Len(Data/Total):{Data.Size}/{Data.Size + Header.Length}][Header:{HeaderHex}]";
+
+                    if (idName != null)
+                    {
+                        log += $"[{idName}]";
+                    }
+                    if (Hex != null)
+                    {
+                        log += Environment.NewLine;
+                        log += "ASCII:";
+                        log += Environment.NewLine;
+                        log += Ascii;
+                        log += Environment.NewLine;
+                        log += "HEX:";
+                        log += Environment.NewLine;
+                        log += Hex;
+                    }
+                    log += Environment.NewLine;
+                    log += "----------";
+                    return log;
+
                 default:
-                    if (Data.Size <= 50)
+                    if (Data.Size <= 60)
                     {
                         log += Environment.NewLine;
                         log += "----------";

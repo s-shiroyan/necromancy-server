@@ -7,6 +7,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Setting;
 
+
 namespace Necromancy.Server.Packet
 {
     public class PacketFactory
@@ -39,7 +40,7 @@ namespace Necromancy.Server.Packet
 
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
-            ulong dataSize = (ushort) (data.Length + PacketIdSize);
+            ulong dataSize = (ulong) (data.Length + PacketIdSize);
 
             PacketLengthType packetLengthType;
 
@@ -102,7 +103,18 @@ namespace Necromancy.Server.Packet
                     byte lengthType = _buffer.ReadByte();
                     if (!Enum.IsDefined(typeof(PacketLengthType), lengthType))
                     {
-                        _logger.Error($"PacketLengthType: '{lengthType}' not found");
+                        if (lengthType == 16)
+                        {
+                            IBuffer buf = BufferProvider.Provide(data);
+                            buf.SetPositionStart();
+                            buf.ReadByte();
+                            UInt32 time = buf.ReadUInt32();
+                            _logger.Info($"Time in seconds since Client Executable Start :{(time/1000)}  ");
+                        }
+                        else
+                        {
+                            _logger.Error($"PacketLengthType: '{lengthType}' not found");
+                        }
                         Reset();
                         return packets;
                     }
@@ -124,17 +136,34 @@ namespace Necromancy.Server.Packet
                         case PacketLengthType.Byte:
                         {
                             _dataSize = _buffer.ReadByte();
-                            break;
+                                _dataSize -= PacketIdSize;
+                                _id = _buffer.ReadUInt16();
+                                _readHeader = true;
+                                break;
                         }
                         case PacketLengthType.UInt16:
                         {
                             _dataSize = _buffer.ReadUInt16();
-                            break;
+                                _dataSize -= PacketIdSize;
+                                _id = _buffer.ReadUInt16();
+                                _readHeader = true;
+                                break;
                         }
                         case PacketLengthType.UInt32:
                         {
                             _dataSize = _buffer.ReadUInt32();
-                            break;
+                                _dataSize -= PacketIdSize;
+                                _id = _buffer.ReadUInt16();
+                                _readHeader = true;
+                                break;
+                        }
+                        case PacketLengthType.HeartBeat:
+                        {
+
+                        _dataSize = 8;
+                        _id = (ushort)PacketLengthType.HeartBeat;
+                        _readHeader = true;
+                        break;
                         }
                         default:
                         {
@@ -145,9 +174,7 @@ namespace Necromancy.Server.Packet
                         }
                     }
 
-                    _dataSize -= PacketIdSize;
-                    _id = _buffer.ReadUInt16();
-                    _readHeader = true;
+
                 }
 
                 if (_readPacketLengthType
@@ -191,7 +218,14 @@ namespace Necromancy.Server.Packet
 
         private byte CalculateHeaderSize(PacketLengthType packetLengthType)
         {
-            return (byte) (PacketLengthTypeSize + (packetLengthType + 1) + PacketIdSize);
+            if (packetLengthType == PacketLengthType.HeartBeat)
+            {
+                return 1;
+            }
+            else
+            {
+                return (byte)(PacketLengthTypeSize + (packetLengthType + 1) + PacketIdSize);
+            }
         }
 
         private int CalculatePadding(int size)

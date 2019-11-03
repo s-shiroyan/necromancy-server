@@ -58,8 +58,11 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Setting = new NecSetting(setting);
+
+            LogProvider.Configure<NecLogger>(Setting);
+            _logger = LogProvider.Logger<NecLogger>(this);
+
             Clients = new ClientLookup();
             Map = new MapLookup();
             Chat = new ChatManager();
