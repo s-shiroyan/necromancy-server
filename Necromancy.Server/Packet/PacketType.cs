@@ -1,6 +1,6 @@
 namespace Necromancy.Server.Packet
 {
-    public enum PacketLengthType : byte
+    public enum PacketType : byte
     {
         Byte = 0,
         UInt16 = 1,

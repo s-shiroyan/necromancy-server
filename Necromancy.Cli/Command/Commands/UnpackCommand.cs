@@ -1,31 +1,32 @@
 using System;
+using Necromancy.Cli.Argument;
 using Necromancy.Server.Data;
 
 namespace Necromancy.Cli.Command.Commands
 {
     public class UnpackCommand : ConsoleCommand
     {
-        protected override void Run()
+        public override CommandResultType Handle(ConsoleParameter parameter)
         {
-            if (Arguments.Count == 2)
+            if (parameter.Arguments.Count == 2)
             {
                 FpmfArchiveIO archiveIO = new FpmfArchiveIO();
-                FpmfArchive archive = archiveIO.Open(Arguments[0]);
-                archiveIO.Save(archive, Arguments[1]);
-                return;
+                FpmfArchive archive = archiveIO.Open(parameter.Arguments[0]);
+                archiveIO.Save(archive, parameter.Arguments[1]);
+                return CommandResultType.Completed;
             }
 
-            if (Arguments.Count == 1)
+            if (parameter.Arguments.Count == 1)
             {
                 FpmfArchiveIO archiveIO = new FpmfArchiveIO();
-                archiveIO.OpenWoItm(Arguments[0]);
-                return;
+                archiveIO.OpenWoItm(parameter.Arguments[0]);
+                return CommandResultType.Completed;
             }
+
+            return CommandResultType.Continue;
         }
 
-
         public override string Key => "unpack";
-        public override bool RequireArgs => true;
 
         public override string Description =>
             $"Unpacks Data. Ex.:{Environment.NewLine}unpack \"C:/Games/Wizardry Online/data/settings.hed\" \"C:/output\"";

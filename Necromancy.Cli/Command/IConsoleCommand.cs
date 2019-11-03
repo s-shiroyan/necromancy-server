@@ -1,11 +1,12 @@
+using Necromancy.Cli.Argument;
+
 namespace Necromancy.Cli.Command
 {
     public interface IConsoleCommand
     {
-        void Handle(string[] args);        
+        CommandResultType Handle(ConsoleParameter parameter);        
         void Shutdown();
         string Key { get; }
         string Description { get; }
-        bool RequireArgs { get; }
     }
 }

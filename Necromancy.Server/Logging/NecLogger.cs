@@ -1,8 +1,6 @@
 using System;
-using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp;
-using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Setting;
@@ -107,40 +105,12 @@ namespace Necromancy.Server.Logging
             Write(LogLevel.Error, null, $"[{socket.Identity}] {exception}");
         }
 
-        public void LogErrorPacket(NecClient client, byte[] data, string identity)
-        {
-            IBuffer buffer = BufferProvider.Provide(data);
-            String log = $"{client.Identity} Packet Log";
-            log += Environment.NewLine;
-            log += "----------";
-            log += Environment.NewLine;
-            if (identity != null)
-            {
-                log += $"[{identity}]";
-            }
-
-            log += $"[Len:{buffer.Size}]";
-            log += Environment.NewLine;
-            log += "ASCII:";
-            log += Environment.NewLine;
-            log += buffer.ToHexString('-');
-            log += Environment.NewLine;
-            log += "HEX:";
-            log += Environment.NewLine;
-            log += buffer.ToAsciiString(true);
-            ;
-            log += Environment.NewLine;
-            log += "----------";
-
-            Write(LogLevel.Error, NecLogType.PacketError, log);
-        }
-
         public void LogIncomingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.In, serverType);
-                Packet(logPacket);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.PacketIn, serverType);
+                WritePacket(logPacket);
             }
         }
 
@@ -158,16 +128,16 @@ namespace Necromancy.Server.Logging
                 return;
             }
 
-            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.In, serverType);
-            Packet(logPacket);
+            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.PacketIn, serverType);
+            WritePacket(logPacket);
         }
 
         public void LogUnknownIncomingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogUnknownIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.Unhandled, serverType);
-                Packet(logPacket);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.PacketUnhandled, serverType);
+                WritePacket(logPacket);
             }
         }
 
@@ -185,16 +155,16 @@ namespace Necromancy.Server.Logging
                 return;
             }
 
-            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.Unhandled, serverType);
-            Packet(logPacket);
+            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.PacketUnhandled, serverType);
+            WritePacket(logPacket);
         }
 
         public void LogOutgoingPacket(NecClient client, NecPacket packet, ServerType serverType)
         {
             if (_setting.LogOutgoingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.Out, serverType);
-                Packet(logPacket);
+                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.PacketOut, serverType);
+                WritePacket(logPacket);
             }
         }
 
@@ -212,13 +182,13 @@ namespace Necromancy.Server.Logging
                 return;
             }
 
-            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.Out, serverType);
-            Packet(logPacket);
+            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.PacketOut, serverType);
+            WritePacket(logPacket);
         }
 
-        public void Packet(NecLogPacket packet)
+        private void WritePacket(NecLogPacket packet)
         {
-            Write(LogLevel.Info, packet.LogType, packet.ToLogText());
+            Write(LogLevel.Info, packet, packet.ToLogText());
         }
     }
 }

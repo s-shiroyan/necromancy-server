@@ -33,6 +33,7 @@ using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Area.SendChatPostMessage;
 using Necromancy.Server.Packet.Area.SendCmdExec;
 using Necromancy.Server.Packet.Auth;
+using Necromancy.Server.Packet.Custom;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
 
@@ -156,12 +157,14 @@ namespace Necromancy.Server
         private void LoadHandler()
         {
             // Authentication Handler
+            _authConsumer.AddHandler(new SendHeartbeat(this));
             _authConsumer.AddHandler(new send_base_check_version_auth(this));
             _authConsumer.AddHandler(new send_base_authenticate(this));
             _authConsumer.AddHandler(new send_base_get_worldlist(this));
             _authConsumer.AddHandler(new send_base_select_world(this));
 
             // Message Handler
+            _msgConsumer.AddHandler(new SendHeartbeat(this));
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
             _msgConsumer.AddHandler(new send_base_login(this));
             _msgConsumer.AddHandler(new send_cash_buy_premium(this));
@@ -203,9 +206,9 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_union_request_secede(this));
             _msgConsumer.AddHandler(new send_union_request_set_info(this));
             _msgConsumer.AddHandler(new send_union_request_set_mantle(this));
-
-
+            
             // Area Handler
+            _areaConsumer.AddHandler(new SendHeartbeat(this));
             _areaConsumer.AddHandler(new send_auction_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
