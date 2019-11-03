@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Text;
+using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -11,12 +12,53 @@ namespace Necromancy.Cli
     {
         private readonly object _consoleLock;
         private Dictionary<ServerType, HashSet<uint>> _ignoredPackets;
+        private readonly ILogger _logger;
 
         public LogWriter()
         {
+            _logger = LogProvider.Logger(this);
             _ignoredPackets = new Dictionary<ServerType, HashSet<uint>>();
             _consoleLock = new object();
+            Reset();
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
+        }
+
+        /// <summary>
+        /// --max-packet-size=64
+        /// </summary>
+        public int MaxPacketSize { get; set; }
+
+        /// <summary>
+        /// --no-data=true
+        /// </summary>
+        public bool NoData { get; set; }
+
+        public void Reset()
+        {
+            MaxPacketSize = -1;
+            NoData = false;
+        }
+
+        public void AddIgnoredPacket(ServerType serverType, uint packetId)
+        {
+            HashSet<uint> ignored;
+            if (_ignoredPackets.ContainsKey(serverType))
+            {
+                ignored = _ignoredPackets[serverType];
+            }
+            else
+            {
+                ignored = new HashSet<uint>();
+                _ignoredPackets.Add(serverType, ignored);
+            }
+
+            if (ignored.Contains(packetId))
+            {
+                _logger.Error($"ServerType:{serverType} PacketId:{packetId} is already ignored");
+                return;
+            }
+
+            ignored.Add(packetId);
         }
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)
@@ -63,6 +105,11 @@ namespace Necromancy.Cli
                 text = logWriteEventArgs.Log.ToString();
             }
 
+            if (text == null)
+            {
+                return;
+            }
+
             lock (_consoleLock)
             {
                 Console.ForegroundColor = consoleColor;
@@ -71,127 +118,57 @@ namespace Necromancy.Cli
             }
         }
 
-        public string CreatePacketLog(NecLogPacket logPacket)
+        private string CreatePacketLog(NecLogPacket logPacket)
         {
-            string idName = logPacket.PacketIdName;
-            String log = $"{logPacket.ClientIdentity} Packet Log";
+            ServerType serverType = logPacket.ServerType;
+            ushort packetId = logPacket.Id;
 
-
-            switch (idName)
+            if (_ignoredPackets.ContainsKey(serverType)
+                && _ignoredPackets[serverType].Contains(packetId))
             {
-                case "send_character_view_offset":
-                    int viewOffset = int.Parse(logPacket.Hex, NumberStyles.HexNumber);
-                    log += $"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]";
-                    log += $"[{logPacket.ServerType}]";
-                    log +=
-                        $"[Id:0x{logPacket.Id:X2}|{logPacket.Id}][Len(Data/Total):{logPacket.Data.Size}/{logPacket.Data.Size + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]";
-                    log += $"[{idName}]";
-                    log += Environment.NewLine;
-                    log += "HEX:";
-                    log += logPacket.Hex;
-                    log += "   View Offest:";
-                    log += viewOffset;
-                    log += Environment.NewLine;
-                    log += "----------";
-                    return log;
-
-                case "send_movement_info":
-                    log += $"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]";
-                    log += $"[{logPacket.ServerType}]";
-                    log +=
-                        $"[Id:0x{logPacket.Id:X2}|{logPacket.Id}][Len(Data/Total):{logPacket.Data.Size}/{logPacket.Data.Size + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]";
-                    log += $"[{idName}]";
-                    log += Environment.NewLine;
-                    log += "HEX:";
-                    log += logPacket.Hex;
-                    log += Environment.NewLine;
-                    log += "----------";
-                    return log;
-
-                case "send_system_register_error_report":
-                    log += Environment.NewLine;
-                    log += "----------";
-                    log += Environment.NewLine;
-                    log += $"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]";
-                    log += $"[{logPacket.ServerType}]";
-                    log += Environment.NewLine;
-                    log +=
-                        $"[Id:0x{logPacket.Id:X2}|{logPacket.Id}][Len(Data/Total):{logPacket.Data.Size}/{logPacket.Data.Size + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]";
-
-                    if (idName != null)
-                    {
-                        log += $"[{idName}]";
-                    }
-
-                    if (logPacket.Hex != null)
-                    {
-                        log += Environment.NewLine;
-                        log += "ASCII:";
-                        log += Environment.NewLine;
-                        log += logPacket.Ascii;
-                        log += Environment.NewLine;
-                        log += "HEX:";
-                        log += Environment.NewLine;
-                        log += logPacket.Hex;
-                    }
-
-                    log += Environment.NewLine;
-                    log += "----------";
-                    return log;
-
-                default:
-                    if (logPacket.Data.Size <= 60)
-                    {
-                        log += Environment.NewLine;
-                        log += "----------";
-                        log += Environment.NewLine;
-                        log += $"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]";
-                        log += $"[{logPacket.ServerType}]";
-                        log += Environment.NewLine;
-                        log +=
-                            $"[Id:0x{logPacket.Id:X2}|{logPacket.Id}][Len(Data/Total):{logPacket.Data.Size}/{logPacket.Data.Size + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]";
-
-                        if (idName != null)
-                        {
-                            log += $"[{idName}]";
-                        }
-
-                        if (logPacket.Hex != null)
-                        {
-                            log += Environment.NewLine;
-                            log += "ASCII:";
-                            log += Environment.NewLine;
-                            log += logPacket.Ascii;
-                            log += Environment.NewLine;
-                            log += "HEX:";
-                            log += Environment.NewLine;
-                            log += logPacket.Hex;
-                        }
-
-                        log += Environment.NewLine;
-                        log += "----------";
-                        return log;
-                    }
-                    else
-                    {
-                        log += Environment.NewLine;
-                        log += "----------";
-                        log += Environment.NewLine;
-                        log += $"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]";
-                        log += $"[{logPacket.ServerType}]";
-                        log += Environment.NewLine;
-                        log +=
-                            $"[Id:0x{logPacket.Id:X2}|{logPacket.Id}][Len(Data/Total):{logPacket.Data.Size}/{logPacket.Data.Size + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]";
-                        if (idName != null)
-                        {
-                            log += $"[{idName}]";
-                        }
-
-                        log += Environment.NewLine;
-                        log += "NecLogPacket.cs . . . . . . .Large Packet: Skipping Console Output for performance";
-                        return log;
-                    }
+                return null;
             }
+
+            int dataSize = logPacket.Data.Size;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append($"{logPacket.ClientIdentity} Packet Log");
+            sb.Append(Environment.NewLine);
+            sb.Append("----------");
+            sb.Append(Environment.NewLine);
+            sb.Append($"[{logPacket.TimeStamp:HH:mm:ss}][Typ:{logPacket.LogType}]");
+            sb.Append($"[{serverType}]");
+            sb.Append(Environment.NewLine);
+            sb.Append(
+                $"[Id:0x{packetId:X2}|{packetId}][Len(Data/Total):{dataSize}/{dataSize + logPacket.Header.Length}][Header:{logPacket.HeaderHex}]");
+            sb.Append($"[{logPacket.PacketIdName}]");
+            sb.Append(Environment.NewLine);
+
+            if (!NoData)
+            {
+                IBuffer data = logPacket.Data;
+                int maxPacketSize = MaxPacketSize;
+                if (maxPacketSize > 0 && dataSize > maxPacketSize)
+                {
+                    data = data.Clone(0, maxPacketSize);
+
+                    sb.Append($"- Truncated Data showing {maxPacketSize} of {dataSize} bytes");
+                    sb.Append(Environment.NewLine);
+                }
+
+                sb.Append("ASCII:");
+                sb.Append(Environment.NewLine);
+                sb.Append(data.ToAsciiString(true));
+                sb.Append(Environment.NewLine);
+                sb.Append("HEX:");
+                sb.Append(Environment.NewLine);
+                sb.Append(data.ToHexString('-'));
+                sb.Append(Environment.NewLine);
+            }
+
+            sb.Append("----------");
+
+            return sb.ToString();
         }
     }
 }

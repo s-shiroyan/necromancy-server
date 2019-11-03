@@ -76,6 +76,8 @@ namespace Necromancy.Cli
             AddCommand(new ShowCommand());
             AddCommand(new UnpackCommand());
             AddCommand(new ServerCommand(_logWriter));
+            AddCommand(new HelpCommand(_commands));
+            AddCommand(new ExitCommand());
         }
 
         private void RunArguments(string[] arguments)
@@ -140,18 +142,18 @@ namespace Necromancy.Cli
                     continue;
                 }
 
-                ProcessLineResultType result = ProcessArguments(arguments);
-                if (result == ProcessLineResultType.Exit)
+                CommandResultType result = ProcessArguments(arguments);
+                if (result == CommandResultType.Exit)
                 {
                     break;
                 }
 
-                if (result == ProcessLineResultType.Continue)
+                if (result == CommandResultType.Continue)
                 {
                     continue;
                 }
 
-                if (result == ProcessLineResultType.Completed)
+                if (result == CommandResultType.Completed)
                 {
                     _logger.Info("Command Completed");
                     continue;
@@ -162,69 +164,116 @@ namespace Necromancy.Cli
             ShutdownCommands();
         }
 
-        private ProcessLineResultType ProcessArguments(string[] arguments)
+        private CommandResultType ProcessArguments(string[] arguments)
         {
-            if (arguments.Length <= 0)
+            ConsoleParameter parameter = ParseParameter(arguments);
+
+            if (!_commands.ContainsKey(parameter.Key))
+            {
+                _logger.Error(
+                    $"Command: '{parameter.Key}' not available. Type `help' for a list of available commands.");
+                return CommandResultType.Continue;
+            }
+
+            IConsoleCommand consoleCommand = _commands[parameter.Key];
+            return consoleCommand.Handle(parameter);
+        }
+
+        /// <summary>
+        /// Parses the input text into arguments and switches.
+        /// </summary>
+        private ConsoleParameter ParseParameter(string[] args)
+        {
+            if (args.Length <= 0)
             {
                 _logger.Error("Invalid input. Type 'help' for a list of available commands.");
-                return ProcessLineResultType.Continue;
+                return null;
             }
 
-            string key = arguments[0];
-
-            if (key.Equals("exit", StringComparison.InvariantCultureIgnoreCase))
-            {
-                _logger.Info("Exiting...");
-                return ProcessLineResultType.Exit;
-            }
-
-            if (key.Equals("help", StringComparison.InvariantCultureIgnoreCase))
-            {
-                if (arguments.Length >= 2)
-                {
-                    string subKey = arguments[1].ToLowerInvariant();
-                    bool found = false;
-                    foreach (string cmdKey in _commands.Keys)
-                    {
-                        if (cmdKey.ToLowerInvariant() == subKey)
-                        {
-                            IConsoleCommand consoleCommandHelp = _commands[cmdKey];
-                            _logger.Info(ShowHelp(consoleCommandHelp));
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        _logger.Error(
-                            $"Command: 'help {subKey}' not available. Type 'help' for a list of available commands.");
-                    }
-
-                    return ProcessLineResultType.Continue;
-                }
-
-                ShowHelp();
-                return ProcessLineResultType.Continue;
-            }
-
-            if (!_commands.ContainsKey(key))
-            {
-                _logger.Error($"Command: '{key}' not available. Type 'help' for a list of available commands.");
-                return ProcessLineResultType.Continue;
-            }
-
-            int cmdLength = arguments.Length - 1;
+            string paramKey = args[0];
+            int cmdLength = args.Length - 1;
             string[] newArguments = new string[cmdLength];
             if (cmdLength > 0)
             {
-                Array.Copy(arguments, 1, newArguments, 0, cmdLength);
+                Array.Copy(args, 1, newArguments, 0, cmdLength);
             }
 
-            IConsoleCommand consoleCommand = _commands[key];
-            consoleCommand.Handle(newArguments);
-            return ProcessLineResultType.Completed;
+            args = newArguments;
+
+            ConsoleParameter parameter = new ConsoleParameter(paramKey);
+            foreach (string arg in args)
+            {
+                int count = CountChar(arg, CliValueSeparator);
+                if (count == 1)
+                {
+                    string[] keyValue = arg.Split(CliValueSeparator);
+                    if (keyValue.Length == 2)
+                    {
+                        string key = keyValue[0];
+                        string value = keyValue[1];
+                        if (key.StartsWith('-'))
+                        {
+                            key = key.Substring(1);
+                            if (key.Length <= 0 || parameter.SwitchMap.ContainsKey(key))
+                            {
+                                _logger.Error($"Invalid switch key: '{key}' is empty or duplicated.");
+                                continue;
+                            }
+
+                            parameter.SwitchMap.Add(key, value);
+                            continue;
+                        }
+
+                        if (key.Length <= 0 || parameter.ArgumentMap.ContainsKey(key))
+                        {
+                            _logger.Error($"Invalid argument key: '{key}' is empty or duplicated.");
+                            continue;
+                        }
+
+                        parameter.ArgumentMap.Add(key, value);
+                        continue;
+                    }
+                }
+
+                if (arg.StartsWith('-'))
+                {
+                    string switchStr = arg.Substring(1);
+                    if (switchStr.Length <= 0 || parameter.Switches.Contains(switchStr))
+                    {
+                        _logger.Error($"Invalid switch: '{switchStr}' is empty or duplicated.");
+                        continue;
+                    }
+
+                    parameter.Switches.Add(switchStr);
+                    continue;
+                }
+
+                if (arg.Length <= 0 || parameter.Switches.Contains(arg))
+                {
+                    _logger.Error($"Invalid argument: '{arg}' is empty or duplicated.");
+                    continue;
+                }
+
+                parameter.Arguments.Add(arg);
+            }
+
+            return parameter;
         }
+
+        private int CountChar(string str, char chr)
+        {
+            int count = 0;
+            foreach (char c in str)
+            {
+                if (c == chr)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
 
         private void ReadConsoleThread()
         {
@@ -290,45 +339,6 @@ namespace Necromancy.Cli
             }
         }
 
-        private void ShowHelp()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Available Commands:");
-            sb.Append(Environment.NewLine);
-
-            sb.Append("exit");
-            sb.Append(Environment.NewLine);
-            sb.Append("- Closes the program");
-
-            sb.Append(Environment.NewLine);
-            sb.Append("----------");
-            sb.Append(Environment.NewLine);
-
-            sb.Append("help");
-            sb.Append(Environment.NewLine);
-            sb.Append("- Displays this text");
-
-            foreach (string key in _commands.Keys)
-            {
-                sb.Append(Environment.NewLine);
-                sb.Append("----------");
-                sb.Append(Environment.NewLine);
-
-                IConsoleCommand command = _commands[key];
-                sb.Append(ShowHelp(command));
-            }
-
-            _logger.Info(sb.ToString());
-        }
-
-        private string ShowHelp(IConsoleCommand command)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(command.Key);
-            sb.Append(Environment.NewLine);
-            sb.Append($"- {command.Description}");
-            return sb.ToString();
-        }
 
         private void ShowCopyright()
         {

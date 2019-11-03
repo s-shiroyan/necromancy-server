@@ -1,6 +1,6 @@
 namespace Necromancy.Cli
 {
-    public enum ProcessLineResultType
+    public enum CommandResultType
     {
         Exit,
         Continue,

@@ -5,9 +5,9 @@ namespace Necromancy.Cli.Command.Commands
 {
     public class ShowCommand : ConsoleCommand
     {
-        protected override void Run()
+        public override CommandResultType Handle(ConsoleParameter parameter)
         {
-            if (Arguments.Contains("w"))
+            if (parameter.Arguments.Contains("w"))
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(Environment.NewLine);
@@ -30,9 +30,10 @@ namespace Necromancy.Cli.Command.Commands
                 sb.Append("ALL NECESSARY SERVICING, REPAIR OR CORRECTION.");
                 sb.Append(Environment.NewLine);
                 Logger.Info(sb.ToString());
+                return CommandResultType.Completed;
             }
 
-            if (Arguments.Contains("c"))
+            if (parameter.Arguments.Contains("c"))
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(Environment.NewLine);
@@ -82,11 +83,13 @@ namespace Necromancy.Cli.Command.Commands
                 sb.Append("makes it unnecessary.");
                 sb.Append(Environment.NewLine);
                 Logger.Info(sb.ToString());
+                return CommandResultType.Completed;
             }
+
+            return CommandResultType.Continue;
         }
 
         public override string Key => "show";
-        public override bool RequireArgs => true;
 
         public override string Description =>
             $"Shows Copyright. Ex.:{Environment.NewLine}show w{Environment.NewLine}show c";

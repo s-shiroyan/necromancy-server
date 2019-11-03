@@ -22,7 +22,7 @@ namespace Necromancy.Cli.Command.Commands
             }
         }
 
-        protected override void Run()
+        public override CommandResultType Handle(ConsoleParameter parameter)
         {
             if (_server == null)
             {
@@ -30,19 +30,23 @@ namespace Necromancy.Cli.Command.Commands
                 _server = new NecServer(setting);
             }
 
-            if (Arguments.Contains("start"))
+            if (parameter.Arguments.Contains("start"))
             {
                 _server.Start();
+                return CommandResultType.Completed;
             }
 
-            if (Arguments.Contains("stop"))
+            if (parameter.Arguments.Contains("stop"))
             {
                 _server.Stop();
+                return CommandResultType.Completed;
             }
+
+            return CommandResultType.Continue;
         }
 
         public override string Key => "server";
-        public override bool RequireArgs => true;
+
 
         public override string Description =>
             $"Wizardry Online Server. Ex.:{Environment.NewLine}server start{Environment.NewLine}server stop";
