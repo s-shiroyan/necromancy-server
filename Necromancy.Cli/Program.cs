@@ -186,9 +186,12 @@ namespace Necromancy.Cli
                 return CommandResultType.Continue;
             }
 
-            _switchCommand.Handle(parameter);
-
             IConsoleCommand consoleCommand = _commands[parameter.Key];
+            if (consoleCommand != _switchCommand)
+            {
+                _switchCommand.Handle(parameter);
+            }
+
             return consoleCommand.Handle(parameter);
         }
 
