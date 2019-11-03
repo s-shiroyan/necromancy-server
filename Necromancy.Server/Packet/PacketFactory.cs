@@ -5,8 +5,8 @@ using Arrowgene.Services.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Setting;
-
 
 namespace Necromancy.Server.Packet
 {
@@ -14,6 +14,7 @@ namespace Necromancy.Server.Packet
     {
         public const int PacketIdSize = 2;
         public const int PacketLengthTypeSize = 1;
+        public const int HeartbeatPacketBodySize = 8;
 
         private bool _readHeader;
         private bool _readPacketLengthType;
@@ -24,7 +25,7 @@ namespace Necromancy.Server.Packet
         private readonly NecLogger _logger;
         private readonly NecSetting _setting;
         private byte[] _header;
-        private PacketLengthType _packetLengthType;
+        private PacketType _packetType;
         private byte _headerSize;
 
         public PacketFactory(NecSetting setting)
@@ -42,24 +43,24 @@ namespace Necromancy.Server.Packet
             IBuffer buffer = BufferProvider.Provide();
             ulong dataSize = (ulong) (data.Length + PacketIdSize);
 
-            PacketLengthType packetLengthType;
+            PacketType packetType;
 
             if (dataSize < byte.MaxValue)
             {
-                packetLengthType = PacketLengthType.Byte;
-                buffer.WriteByte((byte) packetLengthType);
+                packetType = PacketType.Byte;
+                buffer.WriteByte((byte) packetType);
                 buffer.WriteByte((byte) dataSize);
             }
             else if (dataSize < ushort.MaxValue)
             {
-                packetLengthType = PacketLengthType.UInt16;
-                buffer.WriteByte((byte) packetLengthType);
+                packetType = PacketType.UInt16;
+                buffer.WriteByte((byte) packetType);
                 buffer.WriteInt16((ushort) dataSize);
             }
             else if (dataSize < uint.MaxValue)
             {
-                packetLengthType = PacketLengthType.UInt32;
-                buffer.WriteByte((byte) packetLengthType);
+                packetType = PacketType.UInt32;
+                buffer.WriteByte((byte) packetType);
                 buffer.WriteInt32((uint) dataSize);
             }
             else
@@ -71,7 +72,7 @@ namespace Necromancy.Server.Packet
             buffer.WriteInt16(packet.Id);
             buffer.WriteBytes(data);
 
-            byte headerSize = CalculateHeaderSize(packetLengthType);
+            byte headerSize = CalculateHeaderSize(packetType);
             packet.Header = buffer.GetBytes(0, headerSize);
 
             return buffer.GetAllBytes();
@@ -101,80 +102,66 @@ namespace Necromancy.Server.Packet
                     && _buffer.Size - _buffer.Position > PacketLengthTypeSize)
                 {
                     byte lengthType = _buffer.ReadByte();
-                    if (!Enum.IsDefined(typeof(PacketLengthType), lengthType))
+                    if (!Enum.IsDefined(typeof(PacketType), lengthType))
                     {
-                        if (lengthType == 16)
-                        {
-                            IBuffer buf = BufferProvider.Provide(data);
-                            buf.SetPositionStart();
-                            buf.ReadByte();
-                            UInt32 time = buf.ReadUInt32();
-                            _logger.Info($"Time in seconds since Client Executable Start :{(time/1000)}  ");
-                        }
-                        else
-                        {
-                            _logger.Error($"PacketLengthType: '{lengthType}' not found");
-                        }
+                        _logger.Error($"PacketType: '{lengthType}' not found");
                         Reset();
                         return packets;
                     }
 
                     _readPacketLengthType = true;
-                    _packetLengthType = (PacketLengthType) lengthType;
-                    _headerSize = CalculateHeaderSize(_packetLengthType);
+                    _packetType = (PacketType) lengthType;
+                    _headerSize = CalculateHeaderSize(_packetType);
                 }
 
                 if (_readPacketLengthType
                     && !_readHeader
                     && _buffer.Size - _buffer.Position >= _headerSize - PacketLengthTypeSize)
                 {
-                    // TODO aquire 1st byte differently incase -1 doesnt work
+                    // TODO acquire 1st byte differently in case -1 doesnt work
                     _header = _buffer.GetBytes(_buffer.Position - PacketLengthTypeSize, _headerSize);
 
-                    switch (_packetLengthType)
+                    switch (_packetType)
                     {
-                        case PacketLengthType.Byte:
+                        case PacketType.Byte:
                         {
                             _dataSize = _buffer.ReadByte();
-                                _dataSize -= PacketIdSize;
-                                _id = _buffer.ReadUInt16();
-                                _readHeader = true;
-                                break;
+                            _dataSize -= PacketIdSize;
+                            _id = _buffer.ReadUInt16();
+                            _readHeader = true;
+                            break;
                         }
-                        case PacketLengthType.UInt16:
+                        case PacketType.UInt16:
                         {
                             _dataSize = _buffer.ReadUInt16();
-                                _dataSize -= PacketIdSize;
-                                _id = _buffer.ReadUInt16();
-                                _readHeader = true;
-                                break;
+                            _dataSize -= PacketIdSize;
+                            _id = _buffer.ReadUInt16();
+                            _readHeader = true;
+                            break;
                         }
-                        case PacketLengthType.UInt32:
+                        case PacketType.UInt32:
                         {
                             _dataSize = _buffer.ReadUInt32();
-                                _dataSize -= PacketIdSize;
-                                _id = _buffer.ReadUInt16();
-                                _readHeader = true;
-                                break;
+                            _dataSize -= PacketIdSize;
+                            _id = _buffer.ReadUInt16();
+                            _readHeader = true;
+                            break;
                         }
-                        case PacketLengthType.HeartBeat:
+                        case PacketType.HeartBeat:
                         {
-
-                        _dataSize = 8;
-                        _id = (ushort)PacketLengthType.HeartBeat;
-                        _readHeader = true;
-                        break;
+                            _dataSize = HeartbeatPacketBodySize;
+                            _id = (ushort) CustomPacketId.SendHeartbeat;
+                            _readHeader = true;
+                            break;
                         }
                         default:
                         {
                             // TODO update arrowgene service to read uint24 && int24
-                            _logger.Error($"PacketLengthType: '{_packetLengthType}' not supported");
+                            _logger.Error($"PacketType: '{_packetType}' not supported");
                             Reset();
                             return packets;
                         }
                     }
-
-
                 }
 
                 if (_readPacketLengthType
@@ -216,15 +203,18 @@ namespace Necromancy.Server.Packet
             _header = null;
         }
 
-        private byte CalculateHeaderSize(PacketLengthType packetLengthType)
+        private byte CalculateHeaderSize(PacketType packetType)
         {
-            if (packetLengthType == PacketLengthType.HeartBeat)
+            switch (packetType)
             {
-                return 1;
-            }
-            else
-            {
-                return (byte)(PacketLengthTypeSize + (packetLengthType + 1) + PacketIdSize);
+                case PacketType.HeartBeat:
+                {
+                    return PacketLengthTypeSize;
+                }
+                default:
+                {
+                    return (byte) (PacketLengthTypeSize + (packetType + 1) + PacketIdSize);
+                }
             }
         }
 
