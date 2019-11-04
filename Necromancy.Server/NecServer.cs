@@ -66,7 +66,7 @@ namespace Necromancy.Server
 
             Clients = new ClientLookup();
             Map = new MapLookup();
-            Chat = new ChatManager();
+            Chat = new ChatManager(this);
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();

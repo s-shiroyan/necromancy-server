@@ -23,21 +23,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // errcode : 0 for success
-            /*
-            CHAT_MSG	GENERIC	Unknown statement error
-            CHAT_MSG	2	You are unable to whisper to yourself
-            CHAT_MSG	-802	You are not able to speak since you are not in a party
-            CHAT_MSG	-1400	Unable to find Soul.  Reason: <errmsg>
-            CHAT_MSG	-1401	You do not have an all-chat item
-            CHAT_MSG	-1402	Action failed since it is on cool down.
-            CHAT_MSG	-1403	You may not repeat phrases over and over in chat
-            CHAT_MSG	-1404	You may not shout at Soul Rank 1
-            CHAT_MSG	-1405	Action failed since it is on cool down.
-            CHAT_MSG	-2201	Target refused to accept your whisper
-            CHAT_MSG	-2202	Unable to whisper as you are on the recipient's Block List.
-            CHAT_MSG	-3000	You may not chat in all-chat during trades.
-            CHAT_MSG	-3001	You may not chat in all-chat while you have a shop open.
-             */
+     
 
             Router.Send(client, (ushort) AreaPacketId.recv_chat_post_message_r, res, ServerType.Area);
 
