@@ -64,6 +64,7 @@ namespace Necromancy.Server.Model
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
+        public int selectExecCode { get; set; }
 
 
 
@@ -81,7 +82,7 @@ namespace Necromancy.Server.Model
             NewCharaProtocol = false;
             WeaponType = 8;
             AdventureBagGold = 80706050;
-            
+            selectExecCode = -1;
         }
     }
 

@@ -32,7 +32,7 @@ Please check the wiki for additional information.
 1) Clone the repository  
 `git clone https://github.com/necromancyonline/necromancy-server.git`
 
-2) Install .Net Core 2.2 or later  
+2) Install .Net Core 3.0 or later  
 https://dotnet.microsoft.com/download
 
 ## Visual Studio

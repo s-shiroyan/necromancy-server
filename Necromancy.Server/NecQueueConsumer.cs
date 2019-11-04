@@ -290,6 +290,12 @@ namespace Necromancy.Server
 
         void IConsumer.OnStart()
         {
+            if (_isRunning)
+            {
+                _logger.Error($" [{_serverType}] Consumer already running.");
+                return;
+            }
+
             _cancellationTokenSource = new CancellationTokenSource();
             _isRunning = true;
             for (int i = 0; i < _maxUnitOfOrder; i++)
@@ -329,6 +335,12 @@ namespace Necromancy.Server
 
         void IConsumer.OnStop()
         {
+            if (!_isRunning)
+            {
+                _logger.Error($" [{_serverType}] Consumer already stopped.");
+                return;
+            }
+
             _isRunning = false;
             _cancellationTokenSource.Cancel();
             for (int i = 0; i < _maxUnitOfOrder; i++)

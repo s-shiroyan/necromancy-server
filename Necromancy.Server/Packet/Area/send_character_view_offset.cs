@@ -20,7 +20,20 @@ namespace Necromancy.Server.Packet.Area
 
             //(client.Character != null)
                 client.Character.viewOffset = view;
-            //Console.WriteLine($"View Offset = {view}");
+
+            //This is all Position and Orientation Related.
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(client.Character.Id);//Character ID
+            res.WriteFloat(client.Character.X); //might need to change to Target X Y Z
+            res.WriteFloat(client.Character.Y);
+            res.WriteFloat(client.Character.Z);
+            res.WriteByte(client.Character.viewOffset);//View offset / Head Rotation
+            res.WriteByte(client.Character.movementAnim);//Character state? body rotation? TBD. should be character state, but not sure where to read that from
+
+            //Router.Send(client.Map, (ushort)AreaPacketId.recv_self_dragon_pos_notify, res, ServerType.Area, client);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area, client);
         }
     }
 }

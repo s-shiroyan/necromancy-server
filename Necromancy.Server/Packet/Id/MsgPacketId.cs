@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x831C = 0x831C,
         recv_0xC8D2 = 0xC8D2,
         recv_0xC991 = 0xC991,
-        recv_0xD2D6 = 0xD2D6,
+        recv_0xD2D6 = 0xD2D6, //recv_base_ping_r
         recv_base_check_version_r = 0xEFDD,
         recv_base_login_r = 0xA68E,
         recv_cash_buy_premium_r = 0x6FF,
@@ -160,7 +160,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_select = 0xA869, // 0xC44F, // :0xA869
         send_soul_select_C44F = 0xC44F,
         send_soul_set_passwd = 0x8C9D,
-        send_system_register_error_report = 0x012, // placeholder until found
+        send_system_register_error_report = 0xC789, 
         send_union_reply_to_invite2 = 0x013, // placeholder until found
         send_union_request_change_role = 0x014, // placeholder until found
         send_union_request_detail = 0x7950,

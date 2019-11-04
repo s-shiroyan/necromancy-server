@@ -235,14 +235,16 @@ namespace Necromancy.Server.Data
         /// </summary>
         private IBuffer DecryptHed(IBuffer buffer)
         {
-            byte dl = 0xEA;
             byte bl = 0;
             byte al = 0;
-            byte sub = 0x0A;
 
             //Uncomment for US Steam Client
-            //byte dl = 0xA6;
-            //byte sub = 0x21;
+            byte dl = 0xA6;
+            byte sub = 0x21;
+
+            //Uncomment for US Sunset Client.
+            //byte dl = 0xEA;
+            //byte sub = 0x0A;
 
 
             // Uncomment for JP client

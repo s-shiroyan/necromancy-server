@@ -26,26 +26,30 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
             SentEventStart(client, objectID);
-            //SendEventShowBoardStart(client, objectID);
+            SendEventShowBoardStart(client, objectID);
             //SendEventMessageNoObject(client, objectID);
-            Task.Delay(TimeSpan.FromMilliseconds((int)(1 * 1000))).ContinueWith 
+            //SendEventMessage(client, objectID);
+            //SendEventBlockMessage(client, objectID);
+            SendEventSelectMapAndChannel(client, objectID);
+
+            Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith 
             (t1 =>
                 {
-                   // SendEventShowBoardEnd(client, objectID);
-                    SendEventEnd(client);
+                    SendEventShowBoardEnd(client, objectID);
+                    //SendEventEnd(client);
                 }
             );
             
-            //MapAndChannel(client, objectID);
+            
             
 
         }
         private void SentEventStart(NecClient client, int obkectID)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32((int)byteIterator); // 1 = cinematic
+            res2.WriteInt32(0); // 0 = normal 1 = cinematic
             res2.WriteByte(0);
-            Logger.Debug($"Testing Byte Iteration {byteIterator}");
+            //Logger.Debug($"Testing Byte Iteration {byteIterator}");
             byteIterator++;
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_start, res2, ServerType.Area);
@@ -98,39 +102,38 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_event_block_message, res, ServerType.Area);
         }
 
-        private void MapAndChannel(NecClient client, int objectID)
+        private void SendEventSelectMapAndChannel(NecClient client, int objectID)
         {
             
-            ///////Giant Annoying Map Loading Recv that disconnects immediatly after
             IBuffer res7 = BufferProvider.Provide();
 
-            int numEntries = 0x4; //Max of 0x20 : cmp ebx,20 
+            int numEntries = mapIDs.Length; ; //Max of 0x20 : cmp ebx,20 
             res7.WriteInt32(numEntries);
             for (int i = 0; i < numEntries; i++)  
             {
                 //sub_494c50
-                res7.WriteInt32(99999999); //Unknown.  trying for clues from 'send_chara_select'  It uses the same Subs, and structure
-                res7.WriteInt32(99999999);
-                res7.WriteInt32(99999999);
-                res7.WriteInt16(60001);
+                res7.WriteInt32(nameIdx[i]); //Stage ID from Stage.CSV
+                res7.WriteInt32(mapIDs[i]); //Map ID.  Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+                res7.WriteInt32(partySize[i]); //max players
+                res7.WriteInt16(levels[i]); ; //Recommended Level
                     //sub_4834C0
-                    res7.WriteByte(9);
+                    res7.WriteByte(19);
                     for (int j = 0; j < 0x80; j++) //j max 0x80
                     {
-                        res7.WriteInt32(1001007);
-                        res7.WriteFixedString($"Loop{i}:{j}", 0x61);  //Channel Names.  Variables let you know what Loop Iteration you're on
+                        res7.WriteInt32(mapIDs[i]);
+                        res7.WriteFixedString($"Channel-{i}:{j}", 0x61);  //Channel Names.  Variables let you know what Loop Iteration you're on
                         res7.WriteByte(1); //bool 1 | 0
                         res7.WriteInt16(0xFFFF); //Max players  -  Comment from other recv
-                        res7.WriteInt16(0xFF); //Current players  - Comment from other recv
-                        res7.WriteByte(5);
-                        res7.WriteByte(5);
-                    }
-                    res7.WriteByte(5); //Number or Channels  - comment from other recv
+                        res7.WriteInt16(7); //Current players  - Comment from other recv
+                        res7.WriteByte(3); 
+                        res7.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                }
+                    res7.WriteByte(6); //Number or Channels  - comment from other recv
             }
             
             Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
 
-            ///////////////////////end  of problem
+      
 
 
             /*
@@ -161,6 +164,34 @@ namespace Necromancy.Server.Packet.Area
             */
         }
 
+        int[] StageSelect = new int[]
+        {
+                     1  /* Ilfalo Port  */
+            ,   100001	/*	Caligrase Sewers	*/
+            ,   100002	/*	Kaoka Parrej Ruins	*/
+            ,   100003	/*	Deltis Keep	*/
+            ,   100004	/*	Golden Dragon Ruins	*/
+            ,   100005	/*	Chikor Castle Site	*/
+            ,   100006	/*	Aria Reservoir	*/
+            ,   100007	/*	Temple of Oblivion	*/
+            ,   100008	/*	Underground Sewers	*/
+            ,   100009	/*	Descension Ruins	*/
+            ,   100010	/*	Roswald Deep Fort	*/
+            ,   100011	/*	Azarm Trial Grounds	*/
+            ,   100012	/*	Ruined Chamber	*/
+            ,   100013	/*	Facility 13	*/
+            ,   100014	/*	Dark Roundtable	*/
+            ,   100015	/*	Sangent Ruins	*/
+            ,   100019	/*	Papylium Hanging Gardens	*/
+            ,   100020	/*	Azarm Trial Grounds	*/
+            ,   100022	/*	The Labyrinth of Apocrypha	*/
+            ,   110001	/*	Dum Spiro Spero	*/
+            ,   110002	/*	Trial of Fantasy	*/
+        };
+        int[] mapIDs = new int[] { 2001001, 2002001, 2001101, 2003101, 2001103, 2002101, 2002102, 2001105, 2003102, 2002104, 2003104, 2004106, 2004103, 2001014, 2004001 };
+        short[] levels = new short[] { 1, 3, 5, 7, 9, 11, 12, 12, 14, 16, 16, 17, 18, 19, 20, 22 };
+        int[] partySize = new int[] { 2, 3, 4, 5, 5, 5, 5, 4, 5, 4, 5, 3, 4, 5, 2, 4 };
+        int[] nameIdx = new int[] { 100008, 100015, 100001, 100005, 100003, 100002, 100004, 100006, 100007, 100010, 100012, 100013, 100014, 110002, 100022 };
 
     }
 }
