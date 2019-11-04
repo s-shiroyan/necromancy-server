@@ -43,10 +43,10 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 
-            SendDataNotifyEOData(client);
+            //SendDataNotifyEOData(client);
             //SendDataNotifyEOData2(client);
             //SendEOBaseNotifySphere(client);
-            //SendEOUpdateState(client);
+            SendEOUpdateState(client);
         }
 
         private void SendDataNotifyEOData(NecClient client)
@@ -54,7 +54,7 @@ namespace Necromancy.Server.Packet.Area
             //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
             IBuffer res = BufferProvider.Provide();
             
-            res.WriteInt32(1);
+            res.WriteInt32(99);//Effect ID(has a unique ID like characters and so on.)
             res.WriteFloat(client.Character.X);//x
             res.WriteFloat(client.Character.Y+50);//y
             res.WriteFloat(client.Character.Z+120);//z
@@ -64,8 +64,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(client.Character.Z+120);//z
 
             res.WriteInt32(1210371);
-            res.WriteInt32(4);
-            res.WriteInt32(6);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
 
             res.WriteInt32(1);
 
@@ -77,16 +77,16 @@ namespace Necromancy.Server.Packet.Area
             //recv_data_notify_eo_data2 = 0xEDB3,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
-            res.WriteInt32(1);
+            res.WriteInt32(98);//Effect ID(has a unique ID like characters and so on.)
+            res.WriteInt32(1210371);
 
             res.WriteFloat(client.Character.X);
-            res.WriteFloat(client.Character.Y);
-            res.WriteFloat(client.Character.Z);
+            res.WriteFloat(client.Character.Y + 50);
+            res.WriteFloat(client.Character.Z + 120);
 
             res.WriteFloat(client.Character.X);
-            res.WriteFloat(client.Character.Y);
-            res.WriteFloat(client.Character.Z);
+            res.WriteFloat(client.Character.Y + 50);
+            res.WriteFloat(client.Character.Z + 120);
 
             res.WriteInt32(1210371);
 
@@ -122,14 +122,14 @@ namespace Necromancy.Server.Packet.Area
             //recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(1210371);
+            res.WriteInt32(99);
             res.WriteInt32(1210371);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res, ServerType.Area);
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
+            //Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 
-            skillEffect(client);
+            //skillEffect(client);
         }
 
         private void skillEffect(NecClient client)
