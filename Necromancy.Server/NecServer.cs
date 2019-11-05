@@ -142,20 +142,34 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new AdminConsoleNPC(this));
+            Chat.CommandHandler.AddCommand(new AdminConsoleRecvDataNotifyMonsterData(this));
+            Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstance(this));
+            Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstanceUnidentified(this));
+            Chat.CommandHandler.AddCommand(new AdminConsoleSelectPackageUpdate(this));
             Chat.CommandHandler.AddCommand(new ChangeFormMenu(this));
+            Chat.CommandHandler.AddCommand(new Died(this));
             Chat.CommandHandler.AddCommand(new GemNotifyOpen(this));
+            Chat.CommandHandler.AddCommand(new LogOut(this));
+            Chat.CommandHandler.AddCommand(new OnHit(this));
             Chat.CommandHandler.AddCommand(new QuestStarted(this));
+            Chat.CommandHandler.AddCommand(new ReadFile(this));
             Chat.CommandHandler.AddCommand(new Revive(this));
             Chat.CommandHandler.AddCommand(new SendAuctionNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new SendCharacterId(this));
             Chat.CommandHandler.AddCommand(new SendCharaUpdateEvent(this));
+            Chat.CommandHandler.AddCommand(new SendDataNotifiyGGateStoneData(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
+            Chat.CommandHandler.AddCommand(new SendEventEnd(this));
             Chat.CommandHandler.AddCommand(new SendEventTreasureboxBegin(this));
             Chat.CommandHandler.AddCommand(new SendItemInstance(this));
             Chat.CommandHandler.AddCommand(new SendItemInstanceUnidentified(this));
             Chat.CommandHandler.AddCommand(new SendItemUpdateState(this));
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
+            Chat.CommandHandler.AddCommand(new SendMapChangeForce(this));
+            Chat.CommandHandler.AddCommand(new SendMapEntry(this));
+            Chat.CommandHandler.AddCommand(new SendMapLink(this));
             Chat.CommandHandler.AddCommand(new SendMessageEvent(this));
             Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new SendSalvageNotifyBody(this));
