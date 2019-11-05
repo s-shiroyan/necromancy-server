@@ -50,9 +50,6 @@
       <ClsidMap Remove="obj\Debug\netstandard2.1\Necromancy.Server.clsidmap" />
     </ItemGroup>
     <ItemGroup>
-      <ContentWithTargetPath Remove="Client\Data\Settings\TempNPCData.csv" />
-    </ItemGroup>
-    <ItemGroup>
       <RegFreeComManifest Remove="obj\Debug\netstandard2.1\Necromancy.Server.X.manifest" />
     </ItemGroup>
 </Project>
