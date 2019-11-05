@@ -1,3 +1,5 @@
+using Arrowgene.Services.Buffers;
+using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -15,6 +17,18 @@ namespace Necromancy.Server.Packet.Custom
         {
             uint time = packet.Data.ReadUInt32();
             Logger.Info(client, $"Time in seconds since Client Executable Start :{(time / 1000)}  ");
+
+            IBuffer buffer = BufferProvider.Provide();
+            buffer.WriteInt32(time);
+
+            NecPacket response = new NecPacket(
+                (ushort) CustomPacketId.RecvHeartbeat,
+                buffer,
+                packet.ServerType,
+                PacketType.HeartBeat
+            );
+
+            Router.Send(client, response);
         }
     }
 }

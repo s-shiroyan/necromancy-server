@@ -185,6 +185,7 @@ namespace Necromancy.Server
         {
             // Authentication Handler
             _authConsumer.AddHandler(new SendHeartbeat(this));
+            _authConsumer.AddHandler(new SendUnknown1(this));
             _authConsumer.AddHandler(new send_base_check_version_auth(this));
             _authConsumer.AddHandler(new send_base_authenticate(this));
             _authConsumer.AddHandler(new send_base_get_worldlist(this));
@@ -192,6 +193,7 @@ namespace Necromancy.Server
 
             // Message Handler
             _msgConsumer.AddHandler(new SendHeartbeat(this));
+            _msgConsumer.AddHandler(new SendUnknown1(this));
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
             _msgConsumer.AddHandler(new send_base_login(this));
             _msgConsumer.AddHandler(new send_cash_buy_premium(this));
@@ -236,6 +238,7 @@ namespace Necromancy.Server
 
             // Area Handler
             _areaConsumer.AddHandler(new SendHeartbeat(this));
+            _areaConsumer.AddHandler(new SendUnknown1(this));
             _areaConsumer.AddHandler(new send_auction_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));

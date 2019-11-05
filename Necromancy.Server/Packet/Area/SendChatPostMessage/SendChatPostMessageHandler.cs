@@ -22,20 +22,6 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             Server.Chat.Handle(client, request);
         }
         
-        /// <summary>
-        /// Begin Console commands and Test funtions below.   To be or restricted to GM use at a later time.
-        /// </summary>
-        private void SendChatNotifyMessage(NecClient client, string Message, int ChatType)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(ChatType);
-            res.WriteInt32(client.Character.Id);
-            res.WriteFixedString($"{client.Soul.Name}", 49);
-            res.WriteFixedString($"{client.Character.Name}", 37);
-            res.WriteFixedString($"{Message}", 769);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_chat_notify_message, res, ServerType.Area);
-        }
-
         private string commandParse(NecClient client, string Message)
         {
             string command = null;
