@@ -8,6 +8,9 @@ namespace Necromancy.Server.Chat
         public ChatResponse()
         {
             Recipients = new List<NecClient>();
+            Deliver = true;
+            ErrorType = ChatErrorType.Success;
+            MessageType = ChatMessageType.Area;
         }
 
         public List<NecClient> Recipients { get; }

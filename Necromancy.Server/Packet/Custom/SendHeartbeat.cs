@@ -19,7 +19,8 @@ namespace Necromancy.Server.Packet.Custom
             Logger.Info(client, $"Time in seconds since Client Executable Start :{(time / 1000)}  ");
 
             IBuffer buffer = BufferProvider.Provide();
-            buffer.WriteInt32(time);
+            buffer.WriteInt32(0);
+            buffer.WriteInt32(0);
 
             NecPacket response = new NecPacket(
                 (ushort) CustomPacketId.RecvHeartbeat,

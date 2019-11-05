@@ -17,12 +17,12 @@ namespace Necromancy.Server.Packet.Custom
         {
             uint a = packet.Data.ReadUInt32();
             uint b = packet.Data.ReadUInt32();
-            Logger.Info(client, $"Unknown1 A:{a}");
-            Logger.Info(client, $"Unknown1 B:{b}");
+            // Logger.Info(client, $"Unknown1 A:{a / 1000}");
+            // Logger.Info(client, $"Unknown1 B:{b / 1000}");
 
             IBuffer buffer = BufferProvider.Provide();
-            buffer.WriteInt32(a);
-            buffer.WriteInt32(b);
+            buffer.WriteInt32(0);
+            buffer.WriteInt32(0);
 
             NecPacket response = new NecPacket(
                 (ushort) CustomPacketId.RecvUnknown1,

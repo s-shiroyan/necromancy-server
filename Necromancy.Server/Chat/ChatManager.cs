@@ -44,6 +44,14 @@ namespace Necromancy.Server.Chat
             }
 
             ChatResponse response = new ChatResponse();
+            response.Message = message.Message;
+            response.CharacterId = client.Character.Id;
+            response.CharacterName = client.Character.Name;
+            response.SoulName = client.Soul.Name;
+            response.Deliver = true;
+            response.ErrorType = ChatErrorType.Success;
+            response.MessageType = message.MessageType;
+            response.Recipients.Add(client);
             foreach (IChatHandler handler in _handler)
             {
                 handler.Handle(client, message, response);
@@ -54,7 +62,7 @@ namespace Necromancy.Server.Chat
                 RespondPostMessage(client, ChatErrorType.GenericUnknownStatement);
                 return;
             }
-
+            RespondPostMessage(client, ChatErrorType.Success);
             RecvChatNotifyMessage notifyMessage = new RecvChatNotifyMessage(response);
             notifyMessage.AddClients(response.Recipients);
             _server.Router.Send(notifyMessage);
