@@ -20,7 +20,7 @@ namespace Necromancy.Server.Chat.Command
 
         public void AddCommand(ChatCommand command)
         {
-            _commands.Add(command.Key, command);
+            _commands.Add(command.KeyToLowerInvariant, command);
         }
 
         public void HandleCommand(NecClient client, string command)
@@ -65,12 +65,13 @@ namespace Necromancy.Server.Chat.Command
                 return;
             }
 
-            if (!_commands.ContainsKey(command[0]))
+            string commandKey = command[0].ToLowerInvariant();
+            if (!_commands.ContainsKey(commandKey))
             {
                 return;
             }
 
-            ChatCommand chatCommand = _commands[command[0]];
+            ChatCommand chatCommand = _commands[commandKey];
             if (client.Account.State < chatCommand.AccountState)
             {
                 Logger.Debug(client,
