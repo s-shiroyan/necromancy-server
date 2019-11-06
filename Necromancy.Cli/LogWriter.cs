@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading;
 using Arrowgene.Services.Buffers;
@@ -163,7 +164,7 @@ namespace Necromancy.Cli
             Switches.Add(
                 new SwitchProperty<List<Tuple<ServerType?, ushort>>>(
                     "--b-list",
-                    "--b-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId) [Auth=1, Msg=2, Area=3]",
+                    "--b-list=1:1000,2000,3:0xAA (ServerType:PacketId[0xA|10] | PacketId[0xA|10]) [Auth=1, Msg=2, Area=3]",
                     "A blacklist that does not logs packets specified",
                     TryParsePacketIdList,
                     results => { AssingPacketIdList(results, BlacklistPacket, BlacklistPacket); }
@@ -172,7 +173,7 @@ namespace Necromancy.Cli
             Switches.Add(
                 new SwitchProperty<List<Tuple<ServerType?, ushort>>>(
                     "--w-list",
-                    "--w-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId) [Auth=1, Msg=2, Area=3]",
+                    "--w-list=1:1000,2000,3:0xAA (ServerType:PacketId[0xA|10] | PacketId[0xA|10]) [Auth=1, Msg=2, Area=3]",
                     "A whitelist that only logs packets specified",
                     TryParsePacketIdList,
                     results => { AssingPacketIdList(results, WhitelistPacket, WhitelistPacket); }
@@ -215,7 +216,19 @@ namespace Necromancy.Cli
                     }
 
                     ServerType serverType = (ServerType) serverTypeValue;
-                    if (!ushort.TryParse(keyValue[1], out ushort val))
+
+                    NumberStyles numberStyles;
+                    if (keyValue[1].StartsWith("0x"))
+                    {
+                        keyValue[1] = keyValue[1].Substring(2);
+                        numberStyles = NumberStyles.HexNumber;
+                    }
+                    else
+                    {
+                        numberStyles = NumberStyles.Integer;
+                    }
+
+                    if (!ushort.TryParse(keyValue[1], numberStyles, null, out ushort val))
                     {
                         return false;
                     }
@@ -224,7 +237,21 @@ namespace Necromancy.Cli
                 }
                 else
                 {
-                    if (!ushort.TryParse(entry, out ushort val))
+                    NumberStyles numberStyles;
+                    String entryStr;
+                    if (entry.StartsWith("0x"))
+                    {
+                        entryStr = entry.Substring(2);
+                        numberStyles = NumberStyles.HexNumber;
+                    }
+                    else
+                    {
+                        entryStr = entry;
+                        numberStyles = NumberStyles.Integer;
+                    }
+
+
+                    if (!ushort.TryParse(entryStr, numberStyles, null, out ushort val))
                     {
                         return false;
                     }
@@ -281,7 +308,7 @@ namespace Necromancy.Cli
             {
                 Thread.Sleep(10000);
             }
-            
+
             if (_paused)
             {
                 _logQueue.Enqueue(logWriteEventArgs.Log);
