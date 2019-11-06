@@ -37,6 +37,12 @@ namespace Necromancy.Server.Packet
                     break;
             }
 
+            if (Enum.IsDefined(typeof(CustomPacketId), id))
+            {
+                CustomPacketId customPacketId = (CustomPacketId) id;
+                return customPacketId.ToString();
+            }
+            
             return null;
         }
 
@@ -47,12 +53,23 @@ namespace Necromancy.Server.Packet
             Data = buffer;
             Id = id;
             ServerType = serverType;
+            PacketType = null;
+        }
+
+        public NecPacket(ushort id, IBuffer buffer, ServerType serverType, PacketType packetType)
+        {
+            Data = buffer;
+            Id = id;
+            ServerType = serverType;
+            PacketType = null;
+            PacketType = packetType;
         }
 
         public IBuffer Data { get; }
         public ushort Id { get; }
         public byte[] Header { get; set; }
         public ServerType ServerType { get; }
+        public PacketType? PacketType { get; }
 
         public string PacketIdName
         {

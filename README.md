@@ -29,22 +29,22 @@ The project is intended for educational purpose only.
 Please check the wiki for additional information.
 
 # Setup
-1) Clone the repository  
+## 1) Clone the repository  
 `git clone https://github.com/necromancyonline/necromancy-server.git`
 
-2) Install .Net Core 3.0 or later  
+## 2) Install .Net Core 3.0 or later  
 https://dotnet.microsoft.com/download
 
-## Visual Studio
+## 3) Use your IDE of choice:
+
+## 3.1) Visual Studio
 ### Notice:
-Minimum version of Visual Studio is 2017 and requires a special download:  
-`Download .NET Core SDK (Compatible with Visual Studio 2017)` (On the .NET Download Website)  
-Any other version should be fine with the normal download.
+Minimum version of "Visual Studio 2019 v16.3" or later.
 
 ### Open Project:
 Open the `necromancy.sln`-file
 
-## VS Code
+## 3.2) VS Code
 Download IDE: https://code.visualstudio.com/download  
 C# Plugin: https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp  
 
@@ -52,11 +52,14 @@ C# Plugin: https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp
 Open the Project Folder:  
 `\necromancy-server`
 
-## IntelliJ Rider
+## 3.3) IntelliJ Rider
 https://www.jetbrains.com/rider/
 
 ### Open Project:  
 Open the `necromancy.sln`-file
+
+## 4) Debug the Project
+Run the `Necromancy.Cli`-Project
 
 # Project
 ## Common
@@ -65,6 +68,19 @@ Open the `necromancy.sln`-file
 ## Packet
 
 # Guidelines
+## Git 
+### Workflow
+The work on this project should happen via `feature-branches`
+   
+Feature branches (or sometimes called topic branches) are used to develop new features for the upcoming or a distant future release. 
+When starting development of a feature, the target release in which this feature will be incorporated may well be unknown at that point. 
+The essence of a feature branch is that it exists as long as the feature is in development, 
+but will eventually be merged back into develop (to definitely add the new feature to the upcoming release) or discarded (in case of a disappointing experiment).
+   
+1) Create a new `feature/feature-name` or `fix/bug-fix-name` branch from master
+2) Push all your changes to that branch
+3) Create a Pull Request to merge that branch into `master`
+
 ## Best Practise
 - Do not use Console.WriteLine etc, use the specially designed logger.
 - Own the Code: extract solutions, discard libraries.

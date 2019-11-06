@@ -23,22 +23,35 @@ namespace Necromancy.Server.Data.Setting
             Maps = new Dictionary<int, MapSetting>();
             Strings = new StrTableSettingLookup();
             Monster = new Dictionary<int, MonsterSetting>();
+            Npc = new Dictionary<int, NpcSetting>();
+            ModelAtr = new Dictionary<int, ModelAtrSetting>();
+            ModelCommon = new Dictionary<int, ModelCommonSetting>();
         }
 
         public Dictionary<int, ItemSetting> Items { get; }
         public Dictionary<int, MapSetting> Maps { get; }
         public Dictionary<int, MonsterSetting> Monster { get; }
         public StrTableSettingLookup Strings { get; }
+        public Dictionary<int, NpcSetting> Npc { get; }
+        public Dictionary<int, ModelAtrSetting> ModelAtr { get; }
+        public Dictionary<int, ModelCommonSetting> ModelCommon { get; }
 
         public SettingRepository Initialize()
         {
             Items.Clear();
             Maps.Clear();
             Strings.Clear();
+            Monster.Clear();
+            Npc.Clear();
+            ModelAtr.Clear();
+            ModelCommon.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
             Load(Items, "iteminfo.csv", new ItemInfoCsvReader());
-            Load(Maps, "map.csv", new MapCsvReader(Strings));
             Load(Monster, "monster.csv", new MonsterCsvReader());
+            Load(Npc, "npc.csv", new NpcCsvReader());
+            Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());
+            Load(Maps, "map.csv", new MapCsvReader(Strings));
+            Load(ModelCommon, "model_common.csv", new ModelCommonCsvReader(Monster, ModelAtr));
             return this;
         }
 

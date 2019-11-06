@@ -45,6 +45,25 @@ namespace Necromancy.Server.Model
         }
 
         /// <summary>
+        /// Returns a map by its id.
+        /// </summary>
+        public bool TryGet(int mapId, out Map map)
+        {
+            lock (_lock)
+            {
+                if (!_maps.ContainsKey(mapId))
+                {
+                    _logger.Error($"MapId: {mapId} not found");
+                    map = null;
+                    return false;
+                }
+
+                map = _maps[mapId];
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Adds a new map to the lookup.
         /// If the mapId already exists no insert will happen.
         /// </summary>
