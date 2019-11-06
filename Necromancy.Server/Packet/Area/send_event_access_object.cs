@@ -2,9 +2,10 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Threading;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -15,33 +16,36 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_event_access_object;
-        private byte byteIterator = 0;
         public override void Handle(NecClient client, NecPacket packet)
         {
             int objectID = packet.Data.ReadInt32();
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(objectID);
             Logger.Debug($"Packet int32 Contents in Decimal: {objectID} ");
-
             Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
-            SentEventStart(client, objectID);
-            SendEventShowBoardStart(client, objectID);
-            //SendEventMessageNoObject(client, objectID);
-            //SendEventMessage(client, objectID);
-            //SendEventBlockMessage(client, objectID);
-            SendEventSelectMapAndChannel(client, objectID);
 
-            Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith 
-            (t1 =>
-                {
-                    SendEventShowBoardEnd(client, objectID);
-                    //SendEventEnd(client);
-                }
-            );
-            
-            
-            
+            //Begin Event for all cases
+            SentEventStart(client, objectID);
+            client.Character.eventSelectReadyCode = objectID;
+
+            var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+            {
+             { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },  
+             { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+             { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+             { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+             { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+             { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+             { x => x < 90000010 ,  () => defaultEvent(client, objectID) },
+             { x => x < 90009000 ,  () => RecoverySpring(client, objectID)        },
+             
+            };
+
+            eventSwitchPerObjectID.First(sw => sw.Key(objectID)).Value();
+
+
+
 
         }
         private void SentEventStart(NecClient client, int obkectID)
@@ -49,8 +53,6 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0); // 0 = normal 1 = cinematic
             res2.WriteByte(0);
-            //Logger.Debug($"Testing Byte Iteration {byteIterator}");
-            byteIterator++;
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_start, res2, ServerType.Area);
             // it's the event than permit to that all the code under
@@ -132,37 +134,99 @@ namespace Necromancy.Server.Packet.Area
             }
             
             Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+        }
+        private void defaultEvent(NecClient client, int objectID)
+        {
+            SendEventShowBoardStart(client, objectID);
+            //SendEventMessageNoObject(client, objectID);
+            //SendEventMessage(client, objectID);
+            //SendEventBlockMessage(client, objectID);
+            SendEventSelectMapAndChannel(client, objectID);
 
-      
-
+            Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith
+            (t1 =>
+            {
+                SendEventShowBoardEnd(client, objectID);
+                        //SendEventEnd(client);
+                    }
+            );
+        }
+        private void RecoverySpring(NecClient client, int objectID)
+            {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteCString("Fountain Of Healing"); // Title at top of Window
+            res.WriteInt32(objectID); //should pull name of NPC,  doesnt currently
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+            /*
+            IBuffer res10 = BufferProvider.Provide();
+            res10.WriteCString("The fountain is brimmed with water. Has enough for 3 more drinks.");
+            res10.WriteCString("The fountain is brimmed with water. Has enough for 4 more drinks.");
+            res10.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
+            Router.Send(client, (ushort)AreaPacketId.recv_event_block_message_no_object, res10, ServerType.Area);
+            */
+            /*
+            IBuffer res7 = BufferProvider.Provide();
+            res7.WriteInt32(objectID);
+            res7.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
+            Router.Send(client, (ushort)AreaPacketId.recv_event_block_message, res7, ServerType.Area);
+            */
+ 
+            /*
+            IBuffer res9 = BufferProvider.Provide();
+            res9.WriteCString($"NPC#:{objectID}"); // Npc name manually entered
+            res9.WriteCString("QuestChat");//Chat Window lable
+            res9.WriteCString("You've got 5 seconds before this window closes. Think Quick!'");// it's the npc text, switch automatically to an other window when text finish
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res9, ServerType.Area);
+            */
 
             /*
-            IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(1);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res6, ServerType.Area); // It's the first choice
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteInt32(objectID); // used to pull Name/Title information from the NPC/object being interacted with
+            res8.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message, res8, ServerType.Area);
+            */
 
+            IBuffer res12 = BufferProvider.Provide();
+            res12.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks."); // Length 0xC01
+            Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+
+            /*
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
+            res4.WriteInt32(0);
+            res4.WriteInt32(0);
+            res4.WriteInt32(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec_winpos, res4, ServerType.Area); // It's the windows that contain the multiple choice
+            */
+            /*
+            IBuffer res6 = BufferProvider.Provide();
+            res6.WriteInt32(objectID);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res6, ServerType.Area);//????
+            */
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteCString("Hmmm.. Okay ?"); //Length 0x601  // name of the choice 
+            res3.WriteCString("Drink"); //Length 0x601  // name of the choice 
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
 
-
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteCString("No, talk to me better"); //Length 0x601 // name of the choice
+            res5.WriteCString("Don't drink"); //Length 0x601 // name of the choice
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the second choice
 
-    
-            IBuffer res4 = BufferProvider.Provide();
+            IBuffer res11 = BufferProvider.Provide();
+            res11.WriteCString("Effect: Recover 50% of maximum HP and MP"); // Window Heading / Name
+            res11.WriteInt32(objectID);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11, ServerType.Area); // It's the windows that contain the multiple choice
 
-            res4.WriteCString("Hey you i need your help, help me now !"); // Window Heading / Name
-            res4.WriteInt32(0);
-
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res4, ServerType.Area); // It's the windows that contain the multiple choice
-
-
-            
+            /*
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(objectID);
+            res2.WriteByte(1); // bool
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_ready, res2, ServerType.Area); //prevents the call to send_event_select_exec_r until you make a selection.
             */
+
+
         }
+
 
         int[] StageSelect = new int[]
         {

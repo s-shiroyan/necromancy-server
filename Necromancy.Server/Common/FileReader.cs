@@ -12,8 +12,8 @@ namespace Necromancy.Server.Common
         public static string[][] GameFileReader(NecClient client)
         {
             //var shiftJis = Encoding.GetEncoding(932); // CSV files are in this encording.  To-Do. Figure out encoding loading. 
-            string newPath = Path.GetFullPath(Path.Combine(Util.ExecutingDirectory(), @"..\..\..\")) + "Database/TempNPCData.csv";
-            System.Console.WriteLine($"Contents of CSV file {newPath} = ");
+            string newPath = Path.Combine(Util.RelativeExecutingDirectory(), "Client/Data/Settings/TempNPCData.csv");
+            //System.Console.WriteLine($"Contents of CSV file {newPath} = ");
             string[] lines = System.IO.File.ReadAllLines(newPath/*,shiftJis*/);
             int matchCount = 0;
             int lastMatchRow = 0;
@@ -25,11 +25,11 @@ namespace Necromancy.Server.Common
                     lastMatchRow = i+1; 
                 }
             }
-            Console.WriteLine($"MatchCount : {matchCount}");
-            Console.WriteLine($"lastMatchRow : {lastMatchRow}");
+            //Console.WriteLine($"MatchCount : {matchCount}");
+            //Console.WriteLine($"lastMatchRow : {lastMatchRow}");
             string[][] jaggedArray = new string[matchCount][];
             int rowStop = lastMatchRow - matchCount; 
-            Console.WriteLine($"lastMatchRow : {rowStop}");
+            //Console.WriteLine($"lastMatchRow : {rowStop}");
             for (int i = rowStop; i < lastMatchRow; i++)
             {
                 if (lines[i - rowStop].StartsWith("#"))
