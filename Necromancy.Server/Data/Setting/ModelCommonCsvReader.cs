@@ -63,17 +63,15 @@ namespace Necromancy.Server.Data.Setting
                 return null;
             }
 
-            if (!int.TryParse(properties[11], out int monsterId))
-            {
-                return null;
-            }
-
             MonsterSetting monster = null;
-            if (_monsterSetting.ContainsKey(monsterId))
+            if (properties.Length > 11 && int.TryParse(properties[11], out int monsterId))
             {
-                monster = _monsterSetting[monsterId];
+                if (_monsterSetting.ContainsKey(monsterId))
+                {
+                    monster = _monsterSetting[monsterId];
+                }
             }
-
+            
             ModelAtrSetting atr = null;
             if (_modelAtrSettings.ContainsKey(modelAtrId))
             {

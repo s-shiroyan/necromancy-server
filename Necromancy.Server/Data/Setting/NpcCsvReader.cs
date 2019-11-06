@@ -11,7 +11,7 @@ namespace Necromancy.Server.Data.Setting
                 return null;
             }
 
-            if (!int.TryParse(properties[11], out int level))
+            if (!int.TryParse(properties[12], out int level))
             {
                 return null;
             }

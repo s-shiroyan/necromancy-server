@@ -10,9 +10,11 @@ namespace Necromancy.Server.Chat.Command
         public const char ChatCommandSeparator = ' ';
 
         private readonly Dictionary<string, ChatCommand> _commands;
+        private readonly NecServer _server;
 
-        public ChatCommandHandler()
+        public ChatCommandHandler(NecServer server)
         {
+            _server = server;
             _commands = new Dictionary<string, ChatCommand>();
         }
 
@@ -29,10 +31,16 @@ namespace Necromancy.Server.Chat.Command
             }
 
             ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, command);
-            Handle(client, message, new ChatResponse());
+            List<ChatResponse> responses = new List<ChatResponse>();
+            Handle(client, message, new ChatResponse(), responses);
+            foreach (ChatResponse response in responses)
+            {
+                _server.Router.Send(response);
+            }
         }
 
-        public override void Handle(NecClient client, ChatMessage message, ChatResponse response)
+        public override void Handle(NecClient client, ChatMessage message, ChatResponse response,
+            List<ChatResponse> responses)
         {
             if (client == null)
             {
@@ -82,7 +90,7 @@ namespace Necromancy.Server.Chat.Command
                 subCommand = new string[0];
             }
 
-            chatCommand.Execute(subCommand, client, message, response);
+            chatCommand.Execute(subCommand, client, message, responses);
         }
     }
 }

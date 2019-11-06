@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
@@ -32,7 +33,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         int[] EquipItemType = new int[]
             {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             int i = 0;
             x = -1;

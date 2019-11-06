@@ -18,7 +18,7 @@ namespace Necromancy.Server.Chat
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
             _handler = new List<IChatHandler>();
-            CommandHandler = new ChatCommandHandler();
+            CommandHandler = new ChatCommandHandler(server);
             AddHandler(CommandHandler);
         }
 
@@ -52,9 +52,11 @@ namespace Necromancy.Server.Chat
             response.ErrorType = ChatErrorType.Success;
             response.MessageType = message.MessageType;
             response.Recipients.Add(client);
+
+            List<ChatResponse> responses = new List<ChatResponse>();
             foreach (IChatHandler handler in _handler)
             {
-                handler.Handle(client, message, response);
+                handler.Handle(client, message, response, responses);
             }
 
             if (!response.Deliver)
@@ -62,10 +64,14 @@ namespace Necromancy.Server.Chat
                 RespondPostMessage(client, ChatErrorType.GenericUnknownStatement);
                 return;
             }
+
             RespondPostMessage(client, ChatErrorType.Success);
-            RecvChatNotifyMessage notifyMessage = new RecvChatNotifyMessage(response);
-            notifyMessage.AddClients(response.Recipients);
-            _server.Router.Send(notifyMessage);
+
+            _server.Router.Send(response);
+            foreach (ChatResponse chatResponse in responses)
+            {
+                _server.Router.Send(chatResponse);
+            }
         }
 
         private void RespondPostMessage(NecClient client, ChatErrorType chatErrorType)

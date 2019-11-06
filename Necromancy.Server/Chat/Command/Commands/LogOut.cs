@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
@@ -12,7 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             byte[] byteArr = new byte[8] {0x00, 0x06, 0xEE, 0x91, 0, 0, 0, 0};
 

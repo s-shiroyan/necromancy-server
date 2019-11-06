@@ -1,6 +1,7 @@
-using System;
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -12,32 +13,44 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        int[] NPCModelID = new int[]
-            {1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101};
-
-        int[] NPCSerialID = new int[]
-            {10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101};
-
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
-            int ModelID = Convert.ToInt32(command[0]);
-
-            if (ModelID <= 1)
+            if (!int.TryParse(command[0], out int npcId))
             {
-                ModelID = NPCModelID[Util.GetRandomNumber(1, 10)];
-            } // pick random model if you don't specify an ID.
+                responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));
+                return;
+            }
+
+            if (!Server.SettingRepository.Npc.TryGetValue(npcId, out NpcSetting npcSetting))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid NpcId: {npcId}"));
+                return;
+            }
+
+            if (!int.TryParse(command[1], out int modelId))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[1]}"));
+                return;
+            }
+
+            if (!Server.SettingRepository.ModelCommon.TryGetValue(modelId, out ModelCommonSetting modelSetting))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid ModelId: {modelId}"));
+                return;
+            }
 
             int numEntries = 0; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(NPCModelID[Util.GetRandomNumber(1, 10)]); // NPC ID (object id)
+            res3.WriteInt32(Server.IdGenerator.GetId()); // NPC ID (object id)
 
-            res3.WriteInt32((NPCSerialID[Util.GetRandomNumber(1, 10)])); // NPC Serial ID from "npc.csv"
+            res3.WriteInt32(npcSetting.Id); // NPC Serial ID from "npc.csv"
 
             res3.WriteByte(0); // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
 
-            res3.WriteCString($"Name"); //Name
+            res3.WriteCString(npcSetting.Name); //Name
 
-            res3.WriteCString($"Title"); //Title
+            res3.WriteCString(npcSetting.Title); //Title
 
             res3.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150)); //X Pos
             res3.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150)); //Y Pos
@@ -86,7 +99,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res3.WriteInt32(1);
             }
 
-            res3.WriteInt32(ModelID); //NPC Model from file "model_common.csv"
+            res3.WriteInt32(modelSetting.Id); //NPC Model from file "model_common.csv"
 
             res3.WriteInt16(100); //NPC Model Size
 

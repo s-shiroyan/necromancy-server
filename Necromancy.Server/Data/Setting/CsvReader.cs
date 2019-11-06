@@ -68,6 +68,8 @@ namespace Necromancy.Server.Data.Setting
 
             if (properties.Length < NumExpectedItems)
             {
+                Logger.Error(
+                    $"Skipping Line: '{line}' expected {NumExpectedItems} values but got {properties.Length}");
                 return;
             }
 
@@ -83,6 +85,8 @@ namespace Necromancy.Server.Data.Setting
 
             if (item == null)
             {
+                Logger.Error(
+                    $"Skipping Line: '{line}' could not be converted");
                 return;
             }
 

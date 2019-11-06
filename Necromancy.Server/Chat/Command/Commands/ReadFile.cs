@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 
@@ -10,7 +11,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             FileReader.GameFileReader(client);
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
@@ -12,7 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             // Check the list to know what recv do
             // recv_data_notify_eventlink           spawn the aura for changing area for event

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
@@ -12,7 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             //recv_stall_sell_item = 0x919C,
             IBuffer res = BufferProvider.Provide();
@@ -25,7 +27,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt16(16);
             res.WriteInt32(client.Character.Id); //Item id
 
-            Router.Send(client, (ushort) AreaPacketId.recv_stall_sell_item, res, ServerType.Area);  }
+            Router.Send(client, (ushort) AreaPacketId.recv_stall_sell_item, res, ServerType.Area);
+        }
 
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "sssi";

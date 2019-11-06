@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
@@ -12,7 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             int mapId = Convert.ToInt32(command[0]);
 
