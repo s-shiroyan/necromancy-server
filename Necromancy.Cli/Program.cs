@@ -149,7 +149,7 @@ namespace Necromancy.Cli
                 string[] arguments = Util.ParseTextArguments(line, CliSeparator, '"');
                 if (arguments.Length <= 0)
                 {
-                    _logger.Error("Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                    _logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
                     continue;
                 }
 
