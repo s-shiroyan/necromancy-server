@@ -6,9 +6,9 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
-    public class AdminConsoleNPC : ServerChatCommand
+    public class NpcCommand : ServerChatCommand
     {
-        public AdminConsoleNPC(NecServer server) : base(server)
+        public NpcCommand(NecServer server) : base(server)
         {
         }
 
@@ -123,6 +123,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
-        public override string Key => "NPC";
+        public override string Key => "npc";
     }
 }
