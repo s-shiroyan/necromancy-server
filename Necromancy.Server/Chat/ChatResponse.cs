@@ -5,6 +5,21 @@ namespace Necromancy.Server.Chat
 {
     public class ChatResponse
     {
+        public static ChatResponse CommandError(NecClient client, string message)
+        {
+            return new ChatResponse()
+            {
+                Deliver = true,
+                SoulName = "System",
+                CharacterName = "",
+                ErrorType = ChatErrorType.GenericUnknownStatement,
+                Message = message,
+                MessageType = ChatMessageType.TextCommandLog,
+                Recipients = {client}
+            };
+        }
+
+
         public ChatResponse()
         {
             Recipients = new List<NecClient>();
@@ -14,7 +29,6 @@ namespace Necromancy.Server.Chat
         }
 
         public List<NecClient> Recipients { get; }
-
         public bool Deliver { get; set; }
         public ChatErrorType ErrorType { get; set; }
         public ChatMessageType MessageType { get; set; }

@@ -24,6 +24,7 @@ using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;
 using Necromancy.Server.Chat.Command.Commands;
+using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
@@ -48,6 +49,7 @@ namespace Necromancy.Server
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
+        public InstanceIdGenerator IdGenerator { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -64,6 +66,7 @@ namespace Necromancy.Server
             LogProvider.Configure<NecLogger>(Setting);
             _logger = LogProvider.Logger<NecLogger>(this);
 
+            IdGenerator = new InstanceIdGenerator();
             Clients = new ClientLookup();
             Map = new MapLookup();
             Chat = new ChatManager(this);
@@ -142,7 +145,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
-            Chat.CommandHandler.AddCommand(new AdminConsoleNPC(this));
+            Chat.CommandHandler.AddCommand(new NpcCommand(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvDataNotifyMonsterData(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstance(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstanceUnidentified(this));

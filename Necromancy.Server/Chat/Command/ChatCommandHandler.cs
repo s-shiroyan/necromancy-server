@@ -10,15 +10,17 @@ namespace Necromancy.Server.Chat.Command
         public const char ChatCommandSeparator = ' ';
 
         private readonly Dictionary<string, ChatCommand> _commands;
+        private readonly NecServer _server;
 
-        public ChatCommandHandler()
+        public ChatCommandHandler(NecServer server)
         {
+            _server = server;
             _commands = new Dictionary<string, ChatCommand>();
         }
 
         public void AddCommand(ChatCommand command)
         {
-            _commands.Add(command.Key, command);
+            _commands.Add(command.KeyToLowerInvariant, command);
         }
 
         public void HandleCommand(NecClient client, string command)
@@ -29,10 +31,16 @@ namespace Necromancy.Server.Chat.Command
             }
 
             ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, command);
-            Handle(client, message, new ChatResponse());
+            List<ChatResponse> responses = new List<ChatResponse>();
+            Handle(client, message, new ChatResponse(), responses);
+            foreach (ChatResponse response in responses)
+            {
+                _server.Router.Send(response);
+            }
         }
 
-        public override void Handle(NecClient client, ChatMessage message, ChatResponse response)
+        public override void Handle(NecClient client, ChatMessage message, ChatResponse response,
+            List<ChatResponse> responses)
         {
             if (client == null)
             {
@@ -57,12 +65,13 @@ namespace Necromancy.Server.Chat.Command
                 return;
             }
 
-            if (!_commands.ContainsKey(command[0]))
+            string commandKey = command[0].ToLowerInvariant();
+            if (!_commands.ContainsKey(commandKey))
             {
                 return;
             }
 
-            ChatCommand chatCommand = _commands[command[0]];
+            ChatCommand chatCommand = _commands[commandKey];
             if (client.Account.State < chatCommand.AccountState)
             {
                 Logger.Debug(client,
@@ -82,7 +91,7 @@ namespace Necromancy.Server.Chat.Command
                 subCommand = new string[0];
             }
 
-            chatCommand.Execute(subCommand, client, message, response);
+            chatCommand.Execute(subCommand, client, message, responses);
         }
     }
 }

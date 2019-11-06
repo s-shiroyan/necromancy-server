@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
@@ -12,7 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // 1 = cinematic
@@ -24,7 +26,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0);
             res2.WriteCString("Wake up Samurai we have a city to burn"); // find max size   show the text of the message
-            Router.Send(client, (ushort) AreaPacketId.recv_event_message, res2, ServerType.Area);    }
+            Router.Send(client, (ushort) AreaPacketId.recv_event_message, res2, ServerType.Area);
+        }
 
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "mess";

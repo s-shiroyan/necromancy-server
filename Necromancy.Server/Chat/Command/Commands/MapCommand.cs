@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
@@ -12,21 +12,31 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
         }
 
-        public override void Execute(string[] command, NecClient client, ChatMessage message, ChatResponse response)
+        public override void Execute(string[] command, NecClient client, ChatMessage message,
+            List<ChatResponse> responses)
         {
-            int MapID = Convert.ToInt32(command[0]);
+            if (!int.TryParse(command[0], out int mapId))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));
+                return;
+            }
+
+            if (!Server.Map.TryGet(mapId, out Map map))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid MapId: {mapId}"));
+                return;
+            }
 
             IBuffer res = BufferProvider.Provide();
-            client.Character.MapId = MapID;
-            Map map = Server.Map.Get(client.Character.MapId);
+            client.Character.MapId = map.Id;
 
             client.Character.X = map.X;
             client.Character.Y = map.Y;
             client.Character.Z = map.Z;
 
             //sub_4E4210_2341  // impacts map spawn ID
-            res.WriteInt32(MapID); //MapSerialID
-            res.WriteInt32(MapID); //MapID
+            res.WriteInt32(map.Id); //MapSerialID
+            res.WriteInt32(map.Id); //MapID
             res.WriteFixedString("127.0.0.1", 65); //IP
             res.WriteInt16(60002); //Port
 
@@ -39,16 +49,11 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort) AreaPacketId.recv_map_change_force, res, ServerType.Area);
 
             //SendMapChangeSyncOk(client);
-            SendMapEntry(client, MapID);
+            SendMapEntry(client, map);
         }
 
-        private void SendMapEntry(NecClient client, int myMapId)
+        private void SendMapEntry(NecClient client, Map map)
         {
-            int mapId = myMapId;
-
-
-            Map map = Server.Map.Get(mapId);
-
             //map.Enter(client);
 
             IBuffer res = BufferProvider.Provide();
@@ -57,6 +62,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
-        public override string Key => "MapChange";
+        public override string Key => "map";
     }
 }

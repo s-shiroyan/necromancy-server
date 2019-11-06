@@ -334,6 +334,9 @@ namespace Necromancy.Cli
                     case NecLogType.PacketOut:
                         consoleColor = ConsoleColor.Blue;
                         break;
+                    case NecLogType.PacketUnhandled:
+                        consoleColor = ConsoleColor.Red;
+                        break;
                     default:
                         consoleColor = ConsoleColor.Gray;
                         break;
@@ -414,7 +417,7 @@ namespace Necromancy.Cli
         {
             ServerType serverType = logPacket.ServerType;
             ushort packetId = logPacket.Id;
-            
+
             if (ExcludeLog(serverType, packetId))
             {
                 return null;

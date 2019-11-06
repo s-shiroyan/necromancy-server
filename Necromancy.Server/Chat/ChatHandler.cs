@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -13,6 +14,7 @@ namespace Necromancy.Server.Chat
 
         protected NecLogger Logger { get; }
 
-        public abstract void Handle(NecClient client, ChatMessage message, ChatResponse response);
+        public abstract void Handle(NecClient client, ChatMessage message, ChatResponse response,
+            List<ChatResponse> responses);
     }
 }
