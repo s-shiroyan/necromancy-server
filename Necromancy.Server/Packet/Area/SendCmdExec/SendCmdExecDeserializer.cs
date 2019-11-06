@@ -17,13 +17,18 @@ namespace Necromancy.Server.Packet.Area.SendCmdExec
 
             SendCmdExecRequest sendCmdExecRequest = new SendCmdExecRequest(command);
 
-            packet.Data.Position = 49;
+
             int parameterCount = 11;
-            for (int i = 0; i < parameterCount; i++)
+            int startPosition = 49;
+            int blockSize = 769;
+            while (startPosition + blockSize < packet.Data.Size)
             {
+                packet.Data.Position = startPosition;
                 string parameter = packet.Data.ReadCString();
                 sendCmdExecRequest.Parameter.Add(parameter);
-                packet.Data.Position += 769; // Skip 769 Unknown bytes
+                packet.Data.Position = startPosition;
+                startPosition += blockSize;
+                // Skip 769 Unknown bytes
             }
 
             packet.Data.Position = 7739;
