@@ -179,6 +179,15 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
                 case "sssi": //sells an item from your stall 
                     SendStallSellItem(client);
                     break;
+                case "6sen": //sends 6th sense to server
+                    SendSixthsenseTrapNotify(client);
+                    break;
+                case "sbfi":
+                    SendSkillRequestBaseFromItem(client, x);
+                    break;
+                case "ping":
+                    SendBasePing(client);
+                    break;
                 default:
                     command = "unrecognized";
                     break;
@@ -273,8 +282,33 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
             return Message;
         }
+        private void SendBasePing(NecClient client)
+        {
+            //recv_base_ping_r = 0xD2D6,
+            IBuffer res = BufferProvider.Provide();
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_base_ping_r, res, ServerType.Area);
+        }
+        private void SendSkillRequestBaseFromItem(NecClient client, long x)
+        {
+            //recv_skill_request_base_from_item_r = 0xA520
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32((int)x);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_request_base_from_item_r, res, ServerType.Area);
+        }
 
+        private void SendSixthsenseTrapNotify(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
 
+            //recv_sixthsense_trap_notify = 0xBA11,
+
+        	res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_sixthsense_trap_notify, res, ServerType.Area);
+        }
         private void SendDataNotifiyGGateStoneData(NecClient client, int GGateChoice)
         {
             if (GGateChoice == 100)
