@@ -167,7 +167,7 @@ namespace Necromancy.Cli
                     "--b-list=1:1000,2000,3:0xAA (ServerType:PacketId[0xA|10] | PacketId[0xA|10]) [Auth=1, Msg=2, Area=3]",
                     "A blacklist that does not logs packets specified",
                     TryParsePacketIdList,
-                    results => { AssingPacketIdList(results, BlacklistPacket, BlacklistPacket); }
+                    results => { AssinPacketIdList(results, BlacklistPacket, BlacklistPacket); }
                 )
             );
             Switches.Add(
@@ -176,7 +176,7 @@ namespace Necromancy.Cli
                     "--w-list=1:1000,2000,3:0xAA (ServerType:PacketId[0xA|10] | PacketId[0xA|10]) [Auth=1, Msg=2, Area=3]",
                     "A whitelist that only logs packets specified",
                     TryParsePacketIdList,
-                    results => { AssingPacketIdList(results, WhitelistPacket, WhitelistPacket); }
+                    results => { AssinPacketIdList(results, WhitelistPacket, WhitelistPacket); }
                 )
             );
         }
@@ -263,7 +263,7 @@ namespace Necromancy.Cli
             return true;
         }
 
-        private void AssingPacketIdList(List<Tuple<ServerType?, ushort>> results,
+        private void AssinPacketIdList(List<Tuple<ServerType?, ushort>> results,
             Action<ServerType, ushort> addToServerTypeList,
             Action<ushort> addToPacketList)
         {
@@ -381,22 +381,41 @@ namespace Necromancy.Cli
             }
         }
 
-        private string CreatePacketLog(NecLogPacket logPacket)
+        private bool ExcludeLog(ServerType serverType, ushort packetId)
         {
-            ServerType serverType = logPacket.ServerType;
-            ushort packetId = logPacket.Id;
+            bool useWhitelist = _serverTypeWhitelist.Count > 0 || _packetIdWhitelist.Count > 0;
 
             bool whitelisted = (_serverTypeWhitelist.ContainsKey(serverType)
                                 && _serverTypeWhitelist[serverType].Contains(packetId))
                                || _packetIdWhitelist.Contains(packetId);
-            if (!whitelisted
-                && _serverTypeBlacklist.ContainsKey(serverType)
-                && _serverTypeBlacklist[serverType].Contains(packetId))
+            bool blacklisted = (_serverTypeBlacklist.ContainsKey(serverType)
+                                && _serverTypeBlacklist[serverType].Contains(packetId))
+                               || _packetIdBlacklist.Contains(packetId);
+
+            if (useWhitelist && whitelisted)
             {
-                return null;
+                return false;
             }
 
-            if (!whitelisted && _packetIdBlacklist.Contains(packetId))
+            if (useWhitelist)
+            {
+                return true;
+            }
+
+            if (blacklisted)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private string CreatePacketLog(NecLogPacket logPacket)
+        {
+            ServerType serverType = logPacket.ServerType;
+            ushort packetId = logPacket.Id;
+            
+            if (ExcludeLog(serverType, packetId))
             {
                 return null;
             }
