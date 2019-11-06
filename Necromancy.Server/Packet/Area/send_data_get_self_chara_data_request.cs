@@ -41,14 +41,14 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(777777712); // soul exp
                 res.WriteInt64(33); // exp needed to level
                 res.WriteInt64(44); // soul exp needed to level
-                res.WriteInt32(1020); // current hp
-                res.WriteInt32(400); // current mp
-                res.WriteInt32(400); // current od
-                res.WriteInt32(1040); // max hp
-                res.WriteInt32(400); // maxmp
-                res.WriteInt32(400); // max od
-                res.WriteInt32(200); // current gp
-                res.WriteInt32(200); // map gp
+                res.WriteInt32(client.Character.currentHp); // current hp
+                res.WriteInt32(client.Character.currentMp); // current mp
+                res.WriteInt32(client.Character.currentOd); // current od
+                res.WriteInt32(client.Character.maxHp); // max hp
+                res.WriteInt32(client.Character.maxMp); // maxmp
+                res.WriteInt32(client.Character.maxOd); // max od
+                res.WriteInt32(client.Character.AdventureBagGold); // current gp
+                res.WriteInt32(2000000); // map gp
                 res.WriteInt32(1238); // value/100 = current weight
                 res.WriteInt32(1895); // value/100 = max weight
                 res.WriteByte(200); // condition

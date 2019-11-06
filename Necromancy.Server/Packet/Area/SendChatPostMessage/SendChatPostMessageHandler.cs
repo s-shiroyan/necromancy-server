@@ -631,7 +631,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 
         private void ChangeFormMenu(NecClient client)
         {
-            if (client.Character.selectExecCode == -1)
+            if (client.Character.eventSelectExecCode == -1)
             {
                 IBuffer res2 = BufferProvider.Provide();
                 res2.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
@@ -657,17 +657,17 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res1, ServerType.Area);
             }
 
-            if (client.Character.selectExecCode != -1)
+            if (client.Character.eventSelectExecCode != -1)
             { 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(client.Character.Raceid); // race
-                res.WriteInt32(client.Character.selectExecCode); // gender 0 = female, 1 = male
+                res.WriteInt32(client.Character.eventSelectExecCode); // gender 0 = female, 1 = male
                 res.WriteByte(client.Character.HairId); ; //hair
                 res.WriteByte(client.Character.HairColorId); //color
                 res.WriteByte(client.Character.FaceId); //face
                 Router.Send(client, (ushort)AreaPacketId.recv_chara_update_form, res, ServerType.Area);
                 SendEventEnd(client);
-                client.Character.selectExecCode = -1;
+                client.Character.eventSelectExecCode = -1;
             }
         }
 

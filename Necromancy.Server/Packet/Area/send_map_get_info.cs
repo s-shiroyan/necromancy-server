@@ -50,9 +50,18 @@ namespace Necromancy.Server.Packet.Area
                 }
                 else
                 {
-                    int randomSerialID = Util.GetRandomNumber(90000010, 90000099);
-                    res2.WriteInt32(randomSerialID);             // NPC ID (object id)
-                    res2.WriteInt32(randomSerialID);      // NPC Serial ID from "npc.csv"
+                    if (ary1[1] == "Recovery Spring")
+                    {
+                        int SequentialSerialID = 90000100 + npcCount;
+                        res2.WriteInt32(SequentialSerialID);             // NPC ID (object id)
+                        res2.WriteInt32(SequentialSerialID);      // NPC Serial ID from "npc.csv"
+                    }
+                    else
+                    {
+                        int randomSerialID = Util.GetRandomNumber(90000010, 90000099);
+                        res2.WriteInt32(randomSerialID);             // NPC ID (object id)
+                        res2.WriteInt32(randomSerialID);      // NPC Serial ID from "npc.csv"
+                    }
                 }
                              
 
@@ -127,10 +136,10 @@ namespace Necromancy.Server.Packet.Area
 
                 res2.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
 
-                res2.WriteInt32(Int32.Parse(ary1[2]));
-                res2.WriteFloat(0); //x for icons
-                res2.WriteFloat(0); //y for icons
-                res2.WriteFloat(50); //z for icons
+                res2.WriteInt32(Int32.Parse(ary1[2]));//icon type e.g. Door above Dungeon guide head
+                res2.WriteFloat(Int32.Parse(ary1[3]));//X Pos for icons
+                res2.WriteFloat(Int32.Parse(ary1[4]));//Y Pos for icons
+                res2.WriteFloat(Int32.Parse(ary1[5]));//Z Pos for icons
 
                 res2.WriteInt32(numEntries2); // number of status effects.  128 Max.   setting to 0 for noise reduction in console
                                 
