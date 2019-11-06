@@ -1,25 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using Necromancy.Cli.Argument;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Cli
 {
     public class LogWriter : ISwitchConsumer
     {
         private readonly object _consoleLock;
-
-        private Dictionary<ServerType, HashSet<ushort>> _serverTypeBlacklist;
-        private Dictionary<ServerType, HashSet<ushort>> _serverTypeWhitelist;
-        private HashSet<ushort> _packetIdWhitelist;
-        private HashSet<ushort> _packetIdBlacklist;
-
+        private readonly Dictionary<ServerType, HashSet<ushort>> _serverTypeBlacklist;
+        private readonly Dictionary<ServerType, HashSet<ushort>> _serverTypeWhitelist;
+        private readonly HashSet<ushort> _packetIdWhitelist;
+        private readonly HashSet<ushort> _packetIdBlacklist;
         private readonly ILogger _logger;
+        private readonly Queue<Log> _logQueue;
+        private bool _paused;
+        private bool _continueing;
 
         public LogWriter()
         {
@@ -28,12 +29,17 @@ namespace Necromancy.Cli
             _serverTypeWhitelist = new Dictionary<ServerType, HashSet<ushort>>();
             _packetIdWhitelist = new HashSet<ushort>();
             _packetIdBlacklist = new HashSet<ushort>();
+            _logQueue = new Queue<Log>();
             _consoleLock = new object();
             Switches = new List<ISwitchProperty>();
+            _paused = false;
+            _continueing = false;
             Reset();
             LoadSwitches();
             LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
         }
+
+        public List<ISwitchProperty> Switches { get; }
 
         /// <summary>
         /// --max-packet-size=64
@@ -45,14 +51,21 @@ namespace Necromancy.Cli
         /// </summary>
         public bool NoData { get; set; }
 
+        /// <summary>
+        /// --log-level=2
+        /// </summary>
+        public int MinLogLevel { get; set; }
+
         public void Reset()
         {
             MaxPacketSize = -1;
             NoData = false;
+            MinLogLevel = (int) LogLevel.Debug;
+            _serverTypeBlacklist.Clear();
+            _serverTypeWhitelist.Clear();
+            _packetIdWhitelist.Clear();
+            _packetIdBlacklist.Clear();
         }
-
-        public List<ISwitchProperty> Switches { get; }
-
 
         public void WhitelistPacket(ushort packetId)
         {
@@ -76,74 +89,37 @@ namespace Necromancy.Cli
             _packetIdBlacklist.Add(packetId);
         }
 
-        public void WhitelistAuthPacket(AuthPacketId authPacketId)
+        public void WhitelistPacket(ServerType serverType, ushort packetId)
         {
-            if (!AddToServerTypeList(_serverTypeWhitelist, ServerType.Auth, (ushort) authPacketId))
+            if (!AddToServerTypeList(_serverTypeWhitelist, serverType, packetId))
             {
-                _logger.Error($"WhitelistAuthPacket: PacketId:{authPacketId} is already added");
+                _logger.Error($"WhitelistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
             }
         }
 
-        public void WhitelistMsgPacket(MsgPacketId msgPacketId)
+        public void BlacklistPacket(ServerType serverType, ushort packetId)
         {
-            if (!AddToServerTypeList(_serverTypeWhitelist, ServerType.Msg, (ushort) msgPacketId))
+            if (!AddToServerTypeList(_serverTypeBlacklist, serverType, packetId))
             {
-                _logger.Error($"WhitelistMsgPacket: PacketId:{msgPacketId} is already added");
+                _logger.Error($"BlacklistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
             }
         }
 
-        public void WhitelistAreaPacket(AreaPacketId areaPacketId)
+        public void Pause()
         {
-            if (!AddToServerTypeList(_serverTypeWhitelist, ServerType.Area, (ushort) areaPacketId))
-            {
-                _logger.Error($"WhitelistAreaPacket: PacketId:{areaPacketId} is already added");
-            }
+            _paused = true;
         }
 
-        public void BlacklistAuthPacket(AuthPacketId authPacketId)
+        public void Continue()
         {
-            if (!AddToServerTypeList(_serverTypeBlacklist, ServerType.Auth, (ushort) authPacketId))
+            _continueing = true;
+            while (_logQueue.TryDequeue(out Log log))
             {
-                _logger.Error($"BlacklistAuthPacket: PacketId:{authPacketId} is already added");
-            }
-        }
-
-        public void BlacklistMsgPacket(MsgPacketId msgPacketId)
-        {
-            if (!AddToServerTypeList(_serverTypeBlacklist, ServerType.Msg, (ushort) msgPacketId))
-            {
-                _logger.Error($"BlacklistMsgPacket: PacketId:{msgPacketId} is already added");
-            }
-        }
-
-        public void BlacklistAreaPacket(AreaPacketId areaPacketId)
-        {
-            if (!AddToServerTypeList(_serverTypeBlacklist, ServerType.Area, (ushort) areaPacketId))
-            {
-                _logger.Error($"BlacklistAreaPacket: PacketId:{areaPacketId} is already added");
-            }
-        }
-
-        private bool AddToServerTypeList(Dictionary<ServerType, HashSet<ushort>> dictionary, ServerType serverType,
-            ushort packetId)
-        {
-            HashSet<ushort> hashSet;
-            if (dictionary.ContainsKey(serverType))
-            {
-                hashSet = dictionary[serverType];
-            }
-            else
-            {
-                hashSet = new HashSet<ushort>();
-                dictionary.Add(serverType, hashSet);
+                WriteLog(log);
             }
 
-            if (hashSet.Contains(packetId))
-            {
-                return false;
-            }
-
-            return hashSet.Add(packetId);
+            _paused = false;
+            _continueing = false;
         }
 
         private void LoadSwitches()
@@ -167,27 +143,39 @@ namespace Necromancy.Cli
                 )
             );
             Switches.Add(
+                new SwitchProperty<int>(
+                    "--log-level",
+                    "--log-level=20 (integer) [Debug=10, Info=20, Error=30]",
+                    "Only display logs of the same level or above",
+                    int.TryParse,
+                    (result => MinLogLevel = result)
+                )
+            );
+            Switches.Add(
+                new SwitchProperty<object>(
+                    "--clear",
+                    "--clear",
+                    "Resets all switches to default",
+                    SwitchProperty<object>.NoOp,
+                    result => Reset()
+                )
+            );
+            Switches.Add(
                 new SwitchProperty<List<Tuple<ServerType?, ushort>>>(
                     "--b-list",
-                    "--b-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId)",
-                    "A blacklist that drops all packet logs specified",
+                    "--b-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId) [Auth=1, Msg=2, Area=3]",
+                    "A blacklist that does not logs packets specified",
                     TryParsePacketIdList,
-                    results =>
-                    {
-                        PacketIdListAssigner(results, _serverTypeBlacklist, AddToServerTypeList, BlacklistPacket);
-                    }
+                    results => { AssingPacketIdList(results, BlacklistPacket, BlacklistPacket); }
                 )
             );
             Switches.Add(
                 new SwitchProperty<List<Tuple<ServerType?, ushort>>>(
                     "--w-list",
-                    "--w-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId)",
+                    "--w-list=1:1000,2000,3:4000 (ServerType:PacketId | PacketId) [Auth=1, Msg=2, Area=3]",
                     "A whitelist that only logs packets specified",
                     TryParsePacketIdList,
-                    results =>
-                    {
-                        PacketIdListAssigner(results, _serverTypeWhitelist, AddToServerTypeList, WhitelistPacket);
-                    }
+                    results => { AssingPacketIdList(results, WhitelistPacket, WhitelistPacket); }
                 )
             );
         }
@@ -248,16 +236,15 @@ namespace Necromancy.Cli
             return true;
         }
 
-        private void PacketIdListAssigner(List<Tuple<ServerType?, ushort>> results,
-            Dictionary<ServerType, HashSet<ushort>> dictionary,
-            Func<Dictionary<ServerType, HashSet<ushort>>, ServerType, ushort, bool> addToServerTypeList,
+        private void AssingPacketIdList(List<Tuple<ServerType?, ushort>> results,
+            Action<ServerType, ushort> addToServerTypeList,
             Action<ushort> addToPacketList)
         {
             foreach (Tuple<ServerType?, ushort> entry in results)
             {
                 if (entry.Item1.HasValue)
                 {
-                    addToServerTypeList(dictionary, entry.Item1.Value, entry.Item2);
+                    addToServerTypeList(entry.Item1.Value, entry.Item2);
                 }
                 else
                 {
@@ -266,12 +253,50 @@ namespace Necromancy.Cli
             }
         }
 
+        private bool AddToServerTypeList(Dictionary<ServerType, HashSet<ushort>> dictionary, ServerType serverType,
+            ushort packetId)
+        {
+            HashSet<ushort> hashSet;
+            if (dictionary.ContainsKey(serverType))
+            {
+                hashSet = dictionary[serverType];
+            }
+            else
+            {
+                hashSet = new HashSet<ushort>();
+                dictionary.Add(serverType, hashSet);
+            }
+
+            if (hashSet.Contains(packetId))
+            {
+                return false;
+            }
+
+            return hashSet.Add(packetId);
+        }
+
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)
+        {
+            while (_continueing)
+            {
+                Thread.Sleep(10000);
+            }
+            
+            if (_paused)
+            {
+                _logQueue.Enqueue(logWriteEventArgs.Log);
+                return;
+            }
+
+            WriteLog(logWriteEventArgs.Log);
+        }
+
+        private void WriteLog(Log log)
         {
             ConsoleColor consoleColor;
             string text;
 
-            object tag = logWriteEventArgs.Log.Tag;
+            object tag = log.Tag;
             if (tag is NecLogPacket logPacket)
             {
                 switch (logPacket.LogType)
@@ -291,7 +316,13 @@ namespace Necromancy.Cli
             }
             else
             {
-                switch (logWriteEventArgs.Log.LogLevel)
+                LogLevel logLevel = log.LogLevel;
+                if ((int) logLevel < MinLogLevel)
+                {
+                    return;
+                }
+
+                switch (logLevel)
                 {
                     case LogLevel.Debug:
                         consoleColor = ConsoleColor.DarkCyan;
@@ -307,7 +338,7 @@ namespace Necromancy.Cli
                         break;
                 }
 
-                text = logWriteEventArgs.Log.ToString();
+                text = log.ToString();
             }
 
             if (text == null)
@@ -328,8 +359,17 @@ namespace Necromancy.Cli
             ServerType serverType = logPacket.ServerType;
             ushort packetId = logPacket.Id;
 
-            if (_serverTypeBlacklist.ContainsKey(serverType)
+            bool whitelisted = (_serverTypeWhitelist.ContainsKey(serverType)
+                                && _serverTypeWhitelist[serverType].Contains(packetId))
+                               || _packetIdWhitelist.Contains(packetId);
+            if (!whitelisted
+                && _serverTypeBlacklist.ContainsKey(serverType)
                 && _serverTypeBlacklist[serverType].Contains(packetId))
+            {
+                return null;
+            }
+
+            if (!whitelisted && _packetIdBlacklist.Contains(packetId))
             {
                 return null;
             }

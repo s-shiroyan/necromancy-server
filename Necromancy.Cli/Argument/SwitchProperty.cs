@@ -2,6 +2,12 @@ namespace Necromancy.Cli.Argument
 {
     public class SwitchProperty<T> : ISwitchProperty
     {
+        public static TryParseHandler NoOp = (string value, out T result) =>
+        {
+            result = default;
+            return true;
+        };
+
         private TryParseHandler _parser;
         private AssignHandler _assigner;
 
