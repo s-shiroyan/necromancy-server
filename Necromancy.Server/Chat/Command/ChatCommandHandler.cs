@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
-using Necromancy.Server.Chat.Middleware;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Chat.Command
 {
-    public class ChatCommandHandler : ChatMiddleware
+    public class ChatCommandHandler : ChatHandler
     {
+        public const char ChatCommandStart = '/';
+        public const char ChatCommandSeparator = ' ';
+
         private readonly Dictionary<string, ChatCommand> _commands;
 
         public ChatCommandHandler()
@@ -26,32 +28,37 @@ namespace Necromancy.Server.Chat.Command
                 return;
             }
 
-            ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, $"/{command}");
-            Handle(client, message, new ChatResponse(), (necClient, chatMessage, response) => { });
+            ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, command);
+            Handle(client, message, new ChatResponse());
         }
 
-        public override void Handle(NecClient client, ChatMessage message, ChatResponse response,
-            MiddlewareDelegate next)
+        public override void Handle(NecClient client, ChatMessage message, ChatResponse response)
         {
-            if (message.Message == null
-                || message.Message.Length <= 1
-                || message.Message[0] != '/')
+            if (client == null)
             {
-                next(client, message, response);
+                return;
+            }
+
+            if (message.Message == null || message.Message.Length <= 1)
+            {
+                return;
+            }
+
+            if (!message.Message.StartsWith(ChatCommandStart))
+            {
+                Logger.Error($"Command '{message.Message}' does not start with '{ChatCommandStart}'");
                 return;
             }
 
             string commandMessage = message.Message.Substring(1);
-            string[] command = commandMessage.Split(' ');
+            string[] command = commandMessage.Split(ChatCommandSeparator);
             if (command.Length <= 0)
             {
-                next(client, message, response);
                 return;
             }
 
             if (!_commands.ContainsKey(command[0]))
             {
-                next(client, message, response);
                 return;
             }
 
@@ -60,7 +67,6 @@ namespace Necromancy.Server.Chat.Command
             {
                 Logger.Debug(client,
                     $"Not entitled to execute command '{chatCommand.Key}' (State < Required: {client.Account.State} < {chatCommand.AccountState})");
-                next(client, message, response);
                 return;
             }
 
@@ -77,7 +83,6 @@ namespace Necromancy.Server.Chat.Command
             }
 
             chatCommand.Execute(subCommand, client, message, response);
-            next(client, message, response);
         }
     }
 }

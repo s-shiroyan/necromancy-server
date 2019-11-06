@@ -93,6 +93,17 @@ namespace Necromancy.Server.Packet
             }
         }
 
+        /// <summary>
+        /// Send a specific packet response.
+        /// </summary>
+        public void Send(PacketResponse response)
+        {
+            foreach (NecClient client in response.Clients)
+            {
+                Send(client, response.ToPacket());
+            }
+        }
+
         private List<NecClient> GetClients(List<NecClient> clients, params NecClient[] excepts)
         {
             if (excepts.Length == 0)

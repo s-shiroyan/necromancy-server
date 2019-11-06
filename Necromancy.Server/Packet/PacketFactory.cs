@@ -15,6 +15,7 @@ namespace Necromancy.Server.Packet
         public const int PacketIdSize = 2;
         public const int PacketLengthTypeSize = 1;
         public const int HeartbeatPacketBodySize = 8;
+        public const int Unknown1PacketBodySize = 8;
 
         private bool _readHeader;
         private bool _readPacketLengthType;
@@ -41,36 +42,50 @@ namespace Necromancy.Server.Packet
 
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
-            ulong dataSize = (ulong) (data.Length + PacketIdSize);
 
             PacketType packetType;
+            switch (packet.PacketType)
+            {
+                case PacketType.HeartBeat:
+                    packetType = PacketType.HeartBeat;
+                    buffer.WriteByte((byte) packetType);
+                    buffer.WriteBytes(data);
+                    break;
+                case PacketType.Unknown1:
+                    packetType = PacketType.Unknown1;
+                    buffer.WriteByte((byte) packetType);
+                    buffer.WriteBytes(data);
+                    break;
+                default:
+                    ulong dataSize = (ulong) (data.Length + PacketIdSize);
+                    if (dataSize < byte.MaxValue)
+                    {
+                        packetType = PacketType.Byte;
+                        buffer.WriteByte((byte) packetType);
+                        buffer.WriteByte((byte) dataSize);
+                    }
+                    else if (dataSize < ushort.MaxValue)
+                    {
+                        packetType = PacketType.UInt16;
+                        buffer.WriteByte((byte) packetType);
+                        buffer.WriteInt16((ushort) dataSize);
+                    }
+                    else if (dataSize < uint.MaxValue)
+                    {
+                        packetType = PacketType.UInt32;
+                        buffer.WriteByte((byte) packetType);
+                        buffer.WriteInt32((uint) dataSize);
+                    }
+                    else
+                    {
+                        _logger.Error($"{dataSize} to big");
+                        return null;
+                    }
 
-            if (dataSize < byte.MaxValue)
-            {
-                packetType = PacketType.Byte;
-                buffer.WriteByte((byte) packetType);
-                buffer.WriteByte((byte) dataSize);
+                    buffer.WriteInt16(packet.Id);
+                    buffer.WriteBytes(data);
+                    break;
             }
-            else if (dataSize < ushort.MaxValue)
-            {
-                packetType = PacketType.UInt16;
-                buffer.WriteByte((byte) packetType);
-                buffer.WriteInt16((ushort) dataSize);
-            }
-            else if (dataSize < uint.MaxValue)
-            {
-                packetType = PacketType.UInt32;
-                buffer.WriteByte((byte) packetType);
-                buffer.WriteInt32((uint) dataSize);
-            }
-            else
-            {
-                _logger.Error($"{dataSize} to big");
-                return null;
-            }
-
-            buffer.WriteInt16(packet.Id);
-            buffer.WriteBytes(data);
 
             byte headerSize = CalculateHeaderSize(packetType);
             packet.Header = buffer.GetBytes(0, headerSize);
@@ -154,6 +169,13 @@ namespace Necromancy.Server.Packet
                             _readHeader = true;
                             break;
                         }
+                        case PacketType.Unknown1:
+                        {
+                            _dataSize = Unknown1PacketBodySize;
+                            _id = (ushort) CustomPacketId.SendUnknown1;
+                            _readHeader = true;
+                            break;
+                        }
                         default:
                         {
                             // TODO update arrowgene service to read uint24 && int24
@@ -208,6 +230,10 @@ namespace Necromancy.Server.Packet
             switch (packetType)
             {
                 case PacketType.HeartBeat:
+                {
+                    return PacketLengthTypeSize;
+                }
+                case PacketType.Unknown1:
                 {
                     return PacketLengthTypeSize;
                 }

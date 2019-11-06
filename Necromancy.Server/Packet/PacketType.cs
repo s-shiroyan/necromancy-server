@@ -6,6 +6,7 @@ namespace Necromancy.Server.Packet
         UInt16 = 1,
         UInt24 = 2,
         UInt32 = 3,
-        HeartBeat = 16
+        HeartBeat = 16,
+        Unknown1 = 32
     }
 }
