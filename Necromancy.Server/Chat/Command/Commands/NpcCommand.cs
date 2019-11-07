@@ -7,6 +7,9 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
+    /// <summary>
+    /// Spawns a npc
+    /// </summary>
     public class NpcCommand : ServerChatCommand
     {
         public NpcCommand(NecServer server) : base(server)

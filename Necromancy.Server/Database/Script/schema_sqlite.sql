@@ -33,11 +33,6 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item` (
-  `id`   INTEGER PRIMARY KEY NOT NULL, 
-  `name` TEXT                NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
   `account_id`        INTEGER                           NOT NULL,
@@ -65,18 +60,37 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`)
 );
 
-CREATE TABLE IF NOT EXISTS `nec_npc` (
-  `id`     INTEGER PRIMARY KEY NOT NULL, 
-  `name`   TEXT                NOT NULL,
-  `title`  TEXT                NOT NULL,
-  `level`  INTEGER             NOT NULL
+CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `npc_id`     INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `level`      INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `visibility` INTEGER             NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
-  `id`      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-  `npc_id`  INTEGER             NOT NULL,
-  `x`       INTEGER             NOT NULL,
-  `y`       INTEGER             NOT NULL,
-  `z`       INTEGER             NOT NULL,
-  `heading` INTEGER             NOT NULL
+CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `monster_id` INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `level`      INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_item` (
+  `id`   INTEGER PRIMARY KEY NOT NULL, 
+  `name` TEXT                NOT NULL
 );

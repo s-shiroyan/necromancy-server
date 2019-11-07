@@ -6,6 +6,9 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
+    /// <summary>
+    /// Changes the map
+    /// </summary>
     public class SendMapChangeForce : ServerChatCommand
     {
         public SendMapChangeForce(NecServer server) : base(server)

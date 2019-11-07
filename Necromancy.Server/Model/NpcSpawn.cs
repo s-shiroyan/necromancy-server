@@ -1,11 +1,16 @@
+using System;
+
 namespace Necromancy.Server.Model
 {
-    public class Npc
+    public class NpcSpawn
     {
         public int Id { get; set; }
-        public int Name { get; set; }
-        public int Title { get; set; }
+        public int NpcId { get; set; }
+        public int ModelId { get; set; }
         public byte Level { get; set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
+        public int MapId { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
@@ -13,6 +18,7 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public int Visibility { get; set; }
-
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
     }
 }

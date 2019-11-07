@@ -8,17 +8,17 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCon : DbConnection
         where TCom : DbCommand
     {
-        private const string SqlCreateCharacter =
+        private const string SqlInsertCharacter =
             "INSERT INTO `nec_character` (`account_id`, `soul_id`, `character_slot_id`,  `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created`) VALUES (@account_id, @soul_id, @character_slot_id, @name, @race_id, @sex_id, @hair_id, @hair_color_id, @face_id, @alignment_id, @strength, @vitality, @dexterity, @agility, @intelligence, @piety, @luck, @class_id, @level, @created);";
 
         private const string SqlSelectCharacterById =
-            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `id`=@id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `id`=@id;";
 
         private const string SqlSelectCharactersByAccountId =
-            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `account_id`=@account_id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `account_id`=@account_id;";
 
         private const string SqlSelectCharactersBySoulId =
-            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id; ";
+            "SELECT `id`, `account_id`, `soul_id`, `character_slot_id`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id;";
  
         private const string SqlUpdateCharacter =
             "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `character_slot_id`=@character_slot_id,  `name`=@name, `race_id`=@race_id, `sex_id`=@sex_id, `hair_id`=@hair_id, `hair_color_id`=@hair_color_id, `face_id`=@face_id, `alignment_id`=@alignment_id, `strength`=@strength, `vitality`=@vitality, `dexterity`=@dexterity, `agility`=@agility, `intelligence`=@intelligence, `piety`=@piety, `luck`=@luck, `class_id`=@class_id, `level`=@level, `created`=@created WHERE `id`=@id;";
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Database.Sql.Core
 
         public bool InsertCharacter(Character character)
         {
-            int rowsAffected = ExecuteNonQuery(SqlCreateCharacter, command =>
+            int rowsAffected = ExecuteNonQuery(SqlInsertCharacter, command =>
             {
                 AddParameter(command, "@account_id", character.AccountId);
                 AddParameter(command, "@soul_id", character.AccountId);

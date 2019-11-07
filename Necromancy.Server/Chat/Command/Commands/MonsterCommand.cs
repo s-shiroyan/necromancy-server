@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
-    //Spawns a monster near you
-    public class AdminConsoleRecvDataNotifyMonsterData : ServerChatCommand
+    /// <summary>
+    /// Spawns a monster
+    /// </summary>
+    public class MonsterCommand : ServerChatCommand
     {
-        public AdminConsoleRecvDataNotifyMonsterData(NecServer server) : base(server)
+        public MonsterCommand(NecServer server) : base(server)
         {
         }
 
@@ -26,25 +29,47 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            if (!int.TryParse(command[0], out int monsterId))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));
+                return;
+            }
+
+            if (!Server.SettingRepository.Monster.TryGetValue(monsterId, out MonsterSetting monsterSetting))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid MonsterId: {monsterId}"));
+                return;
+            }
+
+            if (!int.TryParse(command[1], out int modelId))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[1]}"));
+                return;
+            }
+
+            if (!Server.SettingRepository.ModelCommon.TryGetValue(modelId, out ModelCommonSetting modelSetting))
+            {
+                responses.Add(ChatResponse.CommandError(client, $"Invalid ModelId: {modelId}"));
+                return;
+            }
+
+            int objectId = Server.IdGenerator.GetId();
+            
             IBuffer res = BufferProvider.Provide();
-            int MonsterUniqueId = Util.GetRandomNumber(55566, 55888);
-            res.WriteInt32(MonsterUniqueId);
-
-            res.WriteCString($"Demon Bardock{MonsterUniqueId}"); //Name while spawning
-
-            res.WriteCString($"Titan"); //Title
+            res.WriteInt32(objectId);
+            res.WriteCString(monsterSetting.Name);
+            res.WriteCString(monsterSetting.Title);
 
             res.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150)); //X Pos
             res.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150)); //Y Pos
             res.WriteFloat(client.Character.Z); //Z Pos
             res.WriteByte(client.Character.viewOffset); //view offset
 
-            res.WriteInt32(
-                900102); // Monster serial ID.  70101 for Lesser Demon.  If this is invalid, you can't "loot" the monster or see it's first CString
+            res.WriteInt32(monsterSetting.Id); // Monster serial ID.  70101 for Lesser Demon.  If this is invalid, you can't "loot" the monster or see it's first CString
 
-            res.WriteInt32(2016001); // Model from model_common.csv  2070001 for Lesser Demon
+            res.WriteInt32(modelSetting.Id); // Model from model_common.csv  2070001 for Lesser Demon
 
-            res.WriteInt16(100); //model size
+            res.WriteInt16((short)modelSetting.Height); //model size
 
             res.WriteInt32(0x10); // cmp to 0x10 = 16
 
@@ -124,19 +149,19 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteInt32(11);
-            res5.WriteInt32(MonsterUniqueId);
+            res5.WriteInt32(objectId);
             Router.Send(client, (ushort) AreaPacketId.recv_monster_hate_on, res5, ServerType.Area);
 
             IBuffer res6 = BufferProvider.Provide();
             res6.WriteInt32(11);
-            res6.WriteInt32(MonsterUniqueId);
+            res6.WriteInt32(objectId);
             Router.Send(client, (ushort) AreaPacketId.recv_battle_report_notify_damage_hp, res6, ServerType.Area);
 
 
             IBuffer res12 = BufferProvider.Provide();
             res12.WriteInt32(0);
 
-            res12.WriteInt32(MonsterUniqueId);
+            res12.WriteInt32(objectId);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_monster_state_update_notify, res12, ServerType.Area);
 
             /*IBuffer res81 = BufferProvider.Provide();
@@ -189,6 +214,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
-        public override string Key => "Monster";
+        public override string Key => "mon";
     }
 }
