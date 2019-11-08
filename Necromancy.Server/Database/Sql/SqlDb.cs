@@ -185,7 +185,7 @@ namespace Necromancy.Server.Database.Sql
         {
             AddParameter(command, name, value, DbType.Double);
         }
-        
+
         protected void AddParameter(TCom command, string name, byte value)
         {
             AddParameter(command, name, value, DbType.Byte);
@@ -249,6 +249,11 @@ namespace Necromancy.Server.Database.Sql
         protected short GetInt16(DbDataReader reader, string column)
         {
             return reader.GetInt16(reader.GetOrdinal(column));
+        }
+
+        protected float GetFloat(DbDataReader reader, string column)
+        {
+            return reader.GetFloat(reader.GetOrdinal(column));
         }
 
         protected string GetString(DbDataReader reader, string column)

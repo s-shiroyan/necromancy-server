@@ -15,33 +15,33 @@ namespace Necromancy.Server.Data.Setting
             {
                 return null;
             }
-
-            if (!int.TryParse(properties[4], out int effectId))
-            {
-                return null;
-            }
-
-            if (!int.TryParse(properties[5], out int activeEffectId))
-            {
-                return null;
-            }
-
-            if (!int.TryParse(properties[6], out int inactiveEffectId))
-            {
-                return null;
-            }
-
-            if (!int.TryParse(properties[8], out int modelSwitching))
+            
+            if (!TryParseNullableInt(properties[4], out int? effectId))
             {
                 return null;
             }
             
+            if (!TryParseNullableInt(properties[5], out int? activeEffectId))
+            {
+                return null;
+            }
+
+            if (!TryParseNullableInt(properties[6], out int? inactiveEffectId))
+            {
+                return null;
+            }
+
+            if (!TryParseNullableInt(properties[8], out int? modelSwitching))
+            {
+                return null;
+            }
+
             if (!int.TryParse(properties[9], out int attackSkillId))
             {
                 return null;
             }
 
-            
+
             if (!int.TryParse(properties[10], out int level))
             {
                 return null;

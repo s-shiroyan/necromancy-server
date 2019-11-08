@@ -19,7 +19,7 @@ namespace Necromancy.Server.Common
             int lastMatchRow = 0;
             for (int i = 0; i < lines.Length; i++) 
             {
-                if (lines[i].StartsWith($"{client.Character.MapId}") || (lines[i].StartsWith($"#{client.Character.MapId}")))
+                if (lines[i].StartsWith($"{client.Map.Id}") || (lines[i].StartsWith($"#{client.Map.Id}")))
                 {
                     matchCount++;
                     lastMatchRow = i+1; 

@@ -37,7 +37,11 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
   `account_id`        INTEGER                           NOT NULL,
   `soul_id`           INTEGER                           NOT NULL,
-  `character_slot_id` INTEGER                           NOT NULL,
+  `slot`              INTEGER                           NOT NULL,
+  `map_id`            INTEGER                           NOT NULL,
+  `x`                 REAL                              NOT NULL,
+  `y`                 REAL                              NOT NULL,
+  `z`                 REAL                              NOT NULL,
   `name`              TEXT                              NOT NULL,
   `race_id`           INTEGER                           NOT NULL,
   `sex_id`            INTEGER                           NOT NULL,
@@ -57,7 +61,8 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `created`           DATETIME                          NOT NULL,
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
-  CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`)
+  CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`),
+  CONSTRAINT `uq_nec_character_soul_id_slot` UNIQUE (`soul_id`, `slot`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (

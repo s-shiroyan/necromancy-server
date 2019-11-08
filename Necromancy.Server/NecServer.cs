@@ -45,7 +45,7 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
-        public MapLookup Map { get; }
+        public MapLookup Maps { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
@@ -68,7 +68,7 @@ namespace Necromancy.Server
 
             IdGenerator = new InstanceIdGenerator();
             Clients = new ClientLookup();
-            Map = new MapLookup();
+            Maps = new MapLookup();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
             Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
@@ -193,8 +193,8 @@ namespace Necromancy.Server
         {
             foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
             {
-                Map map = new Map(mapSetting);
-                Map.Add(map);
+                Map map = new Map(mapSetting, this);
+                Maps.Add(map);
             }
         }
 

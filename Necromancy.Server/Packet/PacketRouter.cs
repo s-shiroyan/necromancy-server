@@ -107,6 +107,18 @@ namespace Necromancy.Server.Packet
         }
 
         /// <summary>
+        /// Send a specific packet response.
+        /// </summary>
+        public void Send(PacketResponse response, params NecClient[] clients)
+        {
+            response.AddClients(clients);
+            foreach (NecClient client in response.Clients)
+            {
+                Send(client, response.ToPacket());
+            }
+        }
+
+        /// <summary>
         /// Send a chat message
         /// </summary>
         public void Send(ChatResponse response)

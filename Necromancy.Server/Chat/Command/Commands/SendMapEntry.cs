@@ -19,7 +19,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             int mapId = Convert.ToInt32(command[0]);
 
 
-            Map map = Server.Map.Get(mapId);
+            Map map = Server.Maps.Get(mapId);
 
             //map.Enter(client);
 

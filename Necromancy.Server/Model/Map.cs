@@ -1,17 +1,24 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Model
 {
     public class Map
     {
-        private readonly NecLogger _logger;
+        public const int NewCharacterMapId = 1001902;
 
-        public Map(MapSetting setting)
+        private readonly NecLogger _logger;
+        private readonly NecServer _server;
+
+        public Map(MapSetting setting, NecServer server)
         {
+            _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
             ClientLookup = new ClientLookup();
+            NpcSpawns = new Dictionary<int, NpcSpawn>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -30,18 +37,29 @@ namespace Necromancy.Server.Model
         public string Area { get; set; }
         public string Place { get; set; }
         public int Orientation { get; set; }
+        public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
+        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
 
         public void Enter(NecClient client)
         {
-            _logger.Info($"Entering Map: {Id}", client);
+            if (client.Map != null)
+            {
+                client.Map.Leave(client);
+            }
+
+            _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
             ClientLookup.Add(client);
             client.Map = this;
+            client.Character.X = X;
+            client.Character.Y = Y;
+            client.Character.Z = Z;
+            _server.Router.Send(new RecvMapChangeForce(this), client);
         }
 
         public void Leave(NecClient client)
         {
-            _logger.Info($"Leaving Map: {Id}", client);
+            _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
             ClientLookup.Remove(client);
             client.Map = null;
         }

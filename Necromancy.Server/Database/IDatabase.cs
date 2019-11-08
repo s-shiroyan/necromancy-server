@@ -24,8 +24,9 @@ namespace Necromancy.Server.Database
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
-        List<Character> SelectCharacterByAccountId(int accountId);
-        List<Character> SelectCharacterBySoulId(int soulId);
+        Character SelectCharacterBySlot(int soulId, int slot);
+        List<Character> SelectCharactersByAccountId(int accountId);
+        List<Character> SelectCharactersBySoulId(int soulId);
         bool UpdateCharacter(Character character);
         bool DeleteCharacter(int characterId);
     }

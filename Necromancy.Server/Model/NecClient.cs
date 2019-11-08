@@ -15,6 +15,7 @@ namespace Necromancy.Server.Model
         {
             _logger = LogProvider.Logger<NecLogger>(this);
             Creation = DateTime.Now;
+            Identity = "";
         }
 
         public DateTime Creation { get; }
@@ -44,6 +45,28 @@ namespace Necromancy.Server.Model
                 default:
                     _logger.Error(this, "Invalid ServerType");
                     break;
+            }
+        }
+
+        public void UpdateIdentity()
+        {
+            Identity = "";
+
+            if (Character != null)
+            {
+                Identity += $"[Char:{Character.Id}:{Character.Name}]";
+                return;
+            }
+
+            if (Account != null)
+            {
+                Identity += $"[Acc:{Account.Id}:{Account.Name}]";
+                return;
+            }
+
+            if (AuthConnection != null)
+            {
+                Identity += $"[Con:{AuthConnection.Identity}]";
             }
         }
 

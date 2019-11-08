@@ -11,7 +11,7 @@ namespace Necromancy.Server.Packet.Msg
         {
         }
 
-        public override ushort Id => (ushort)MsgPacketId.send_chara_create;
+        public override ushort Id => (ushort) MsgPacketId.send_chara_create;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -41,9 +41,24 @@ namespace Necromancy.Server.Packet.Msg
             //-------------------------------------
             // Send Character Creation packets to Database for laster use.
 
+            if (!Maps.TryGet(Map.NewCharacterMapId, out Map map))
+            {
+                Logger.Error($"New character map not found MapId: {Map.NewCharacterMapId}");
+                client.Close();
+            }
+
             Character character = new Character();
-            character.Characterslotid = character_slot_id;
+            character.MapId = map.Id;
+            character.X = map.X;
+            character.Y = map.Y;
+            character.Z = map.Z;
+            character.viewOffset = (byte) map.Orientation;
+
+            character.AccountId = client.Account.Id;
+            character.SoulId = client.Soul.Id;
+            character.Slot = character_slot_id;
             character.Name = character_name;
+            
             character.Raceid = race_id;
             character.Sexid = sex_id;
             character.HairId = hair_id;
@@ -58,10 +73,7 @@ namespace Necromancy.Server.Packet.Msg
             character.piety = piety;
             character.luck = luck;
             character.ClassId = class_id;
-            character.AccountId = client.Account.Id;
-            character.SoulId = client.Soul.Id;
 
-            character.NewCharaProtocol = true;
 
             //----------------------------------------------------------
             // Character Slot ID
@@ -96,15 +108,11 @@ namespace Necromancy.Server.Packet.Msg
             //-------------------------------------------------------------------------------
 
 
-
-
-
-
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(1);
+            res.WriteInt32(character.Id); //CharacterId
 
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_create_r, res, ServerType.Msg);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_create_r, res, ServerType.Msg);
         }
     }
 }

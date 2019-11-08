@@ -24,15 +24,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            if (!Server.Map.TryGet(mapId, out Map map))
+            if (!Server.Maps.TryGet(mapId, out Map map))
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid MapId: {mapId}"));
                 return;
             }
 
             IBuffer res = BufferProvider.Provide();
-            client.Character.MapId = map.Id;
-
             client.Character.X = map.X;
             client.Character.Y = map.Y;
             client.Character.Z = map.Z;
