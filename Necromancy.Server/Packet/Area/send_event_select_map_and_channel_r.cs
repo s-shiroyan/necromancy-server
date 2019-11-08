@@ -60,8 +60,6 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort)AreaPacketId.recv_map_entry_r, res, ServerType.Area);
-
-            SendEventEnd(client); 
         }
 
         private void SendEventEnd(NecClient client)

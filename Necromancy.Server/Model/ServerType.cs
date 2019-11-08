@@ -1,10 +1,9 @@
 namespace Necromancy.Server.Model
 {
-    public enum ServerType
+    public enum ServerType : byte
     {
-        None,
-        Auth,
-        Msg,
-        Area
+        Auth = 1,
+        Msg = 2,
+        Area = 3
     }
 }

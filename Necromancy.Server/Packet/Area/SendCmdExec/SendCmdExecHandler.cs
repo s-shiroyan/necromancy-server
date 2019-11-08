@@ -13,7 +13,7 @@ namespace Necromancy.Server.Packet.Area.SendCmdExec
 
         public override void HandleRequest(NecClient client, SendCmdExecRequest request)
         {
-            Server.Chat.CommandHandler.HandleCommand(client, request.Command);
+            Server.Chat.CommandHandler.HandleCommand(client, request.CommandString());
             // IBuffer res = BufferProvider.Provide();
             // res.WriteInt32(0);
             // Router.Send(client, (ushort) AreaPacketId.recv_cmd_exec_r, res, ServerType.Area);

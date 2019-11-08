@@ -149,7 +149,7 @@ namespace Necromancy.Cli
                 string[] arguments = Util.ParseTextArguments(line, CliSeparator, '"');
                 if (arguments.Length <= 0)
                 {
-                    _logger.Error("Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                    _logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
                     continue;
                 }
 
@@ -294,6 +294,13 @@ namespace Necromancy.Cli
         {
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
+                if (Console.ReadKey().Key != ConsoleKey.Enter)
+                {
+                    continue;
+                }
+
+                _logWriter.Pause();
+                Console.WriteLine("Enter Command:");
                 string line = Console.ReadLine();
                 try
                 {
@@ -303,6 +310,8 @@ namespace Necromancy.Cli
                 {
                     // Ignored
                 }
+
+                _logWriter.Continue();
             }
         }
 

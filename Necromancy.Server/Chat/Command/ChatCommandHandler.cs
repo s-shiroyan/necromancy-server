@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
-using Necromancy.Server.Chat.Middleware;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Chat.Command
 {
-    public class ChatCommandHandler : ChatMiddleware
+    public class ChatCommandHandler : ChatHandler
     {
-        private readonly Dictionary<string, ChatCommand> _commands;
+        public const char ChatCommandStart = '/';
+        public const char ChatCommandSeparator = ' ';
 
-        public ChatCommandHandler()
+        private readonly Dictionary<string, ChatCommand> _commands;
+        private readonly NecServer _server;
+
+        public ChatCommandHandler(NecServer server)
         {
+            _server = server;
             _commands = new Dictionary<string, ChatCommand>();
         }
 
         public void AddCommand(ChatCommand command)
         {
-            _commands.Add(command.Key, command);
+            _commands.Add(command.KeyToLowerInvariant, command);
         }
 
         public void HandleCommand(NecClient client, string command)
@@ -26,41 +30,52 @@ namespace Necromancy.Server.Chat.Command
                 return;
             }
 
-            ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, $"/{command}");
-            Handle(client, message, new ChatResponse(), (necClient, chatMessage, response) => { });
+            ChatMessage message = new ChatMessage(ChatMessageType.ChatCommand, client.Character.Name, command);
+            List<ChatResponse> responses = new List<ChatResponse>();
+            Handle(client, message, new ChatResponse(), responses);
+            foreach (ChatResponse response in responses)
+            {
+                _server.Router.Send(response);
+            }
         }
 
         public override void Handle(NecClient client, ChatMessage message, ChatResponse response,
-            MiddlewareDelegate next)
+            List<ChatResponse> responses)
         {
-            if (message.Message == null
-                || message.Message.Length <= 1
-                || message.Message[0] != '/')
+            if (client == null)
             {
-                next(client, message, response);
+                return;
+            }
+
+            if (message.Message == null || message.Message.Length <= 1)
+            {
+                return;
+            }
+
+            if (!message.Message.StartsWith(ChatCommandStart))
+            {
+                Logger.Error($"Command '{message.Message}' does not start with '{ChatCommandStart}'");
                 return;
             }
 
             string commandMessage = message.Message.Substring(1);
-            string[] command = commandMessage.Split(' ');
+            string[] command = commandMessage.Split(ChatCommandSeparator);
             if (command.Length <= 0)
             {
-                next(client, message, response);
                 return;
             }
 
-            if (!_commands.ContainsKey(command[0]))
+            string commandKey = command[0].ToLowerInvariant();
+            if (!_commands.ContainsKey(commandKey))
             {
-                next(client, message, response);
                 return;
             }
 
-            ChatCommand chatCommand = _commands[command[0]];
+            ChatCommand chatCommand = _commands[commandKey];
             if (client.Account.State < chatCommand.AccountState)
             {
                 Logger.Debug(client,
                     $"Not entitled to execute command '{chatCommand.Key}' (State < Required: {client.Account.State} < {chatCommand.AccountState})");
-                next(client, message, response);
                 return;
             }
 
@@ -76,8 +91,7 @@ namespace Necromancy.Server.Chat.Command
                 subCommand = new string[0];
             }
 
-            chatCommand.Execute(subCommand, client, message, response);
-            next(client, message, response);
+            chatCommand.Execute(subCommand, client, message, responses);
         }
     }
 }

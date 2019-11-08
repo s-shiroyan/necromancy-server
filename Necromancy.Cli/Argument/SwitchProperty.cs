@@ -1,11 +1,18 @@
 namespace Necromancy.Cli.Argument
 {
-    public class SwitchProperty<T> : ISwitchProperty where T : struct
+    public class SwitchProperty<T> : ISwitchProperty
     {
+        public static TryParseHandler NoOp = (string value, out T result) =>
+        {
+            result = default;
+            return true;
+        };
+
         private TryParseHandler _parser;
         private AssignHandler _assigner;
 
-        public SwitchProperty(string key, string valueDescription, string description, TryParseHandler parser, AssignHandler assigner)
+        public SwitchProperty(string key, string valueDescription, string description, TryParseHandler parser,
+            AssignHandler assigner)
         {
             Key = key;
             ValueDescription = valueDescription;

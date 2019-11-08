@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
+using Necromancy.Server.Chat;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Packet
 {
@@ -91,6 +93,27 @@ namespace Necromancy.Server.Packet
             {
                 Send(client, packet);
             }
+        }
+
+        /// <summary>
+        /// Send a specific packet response.
+        /// </summary>
+        public void Send(PacketResponse response)
+        {
+            foreach (NecClient client in response.Clients)
+            {
+                Send(client, response.ToPacket());
+            }
+        }
+
+        /// <summary>
+        /// Send a chat message
+        /// </summary>
+        public void Send(ChatResponse response)
+        {
+            RecvChatNotifyMessage notifyMessage = new RecvChatNotifyMessage(response);
+            notifyMessage.AddClients(response.Recipients);
+            Send(notifyMessage);
         }
 
         private List<NecClient> GetClients(List<NecClient> clients, params NecClient[] excepts)

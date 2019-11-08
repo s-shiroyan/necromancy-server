@@ -1,12 +1,13 @@
+using System.Collections.Generic;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
-namespace Necromancy.Server.Chat.Middleware
+namespace Necromancy.Server.Chat
 {
-    public abstract class ChatMiddleware : IChatMiddleware
+    public abstract class ChatHandler : IChatHandler
     {
-        protected ChatMiddleware()
+        protected ChatHandler()
         {
             Logger = LogProvider.Logger<NecLogger>(this);
         }
@@ -14,6 +15,6 @@ namespace Necromancy.Server.Chat.Middleware
         protected NecLogger Logger { get; }
 
         public abstract void Handle(NecClient client, ChatMessage message, ChatResponse response,
-            MiddlewareDelegate next);
+            List<ChatResponse> responses);
     }
 }
