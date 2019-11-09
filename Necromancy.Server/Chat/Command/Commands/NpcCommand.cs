@@ -43,9 +43,9 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             NpcSpawn npcSpawn = Server.Instances.CreateInstance<NpcSpawn>();
             npcSpawn.NpcId = npcSetting.Id;
-            npcSpawn.Level = (byte) npcSetting.Level;
             npcSpawn.Name = npcSetting.Name;
             npcSpawn.Title = npcSetting.Title;
+            npcSpawn.Level = (byte) npcSetting.Level;
 
             npcSpawn.ModelId = modelSetting.Id;
             npcSpawn.Size = (short) modelSetting.Height;
@@ -54,7 +54,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             npcSpawn.X = client.Character.X;
             npcSpawn.Y = client.Character.Y;
             npcSpawn.Z = client.Character.Z;
-            npcSpawn.Heading = client.Character.viewOffset;
+            npcSpawn.Heading = client.Character.Heading;
 
             if (!Server.Database.InsertNpcSpawn(npcSpawn))
             {
@@ -68,5 +68,6 @@ namespace Necromancy.Server.Chat.Command.Commands
 
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "npc";
+        public override string HelpText => "usage: `/npc [npcId] [modelId]` - Spawns an NPC";
     }
 }

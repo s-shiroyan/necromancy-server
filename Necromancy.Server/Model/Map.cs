@@ -40,13 +40,13 @@ namespace Necromancy.Server.Model
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
-        
+
         public void EnterForce(NecClient client)
         {
             Enter(client);
             _server.Router.Send(new RecvMapChangeForce(this), client);
         }
-        
+
         public void Enter(NecClient client)
         {
             if (client.Map != null)
@@ -57,6 +57,7 @@ namespace Necromancy.Server.Model
             _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
             ClientLookup.Add(client);
             client.Map = this;
+            client.Character.MapId = Id;
             client.Character.X = X;
             client.Character.Y = Y;
             client.Character.Z = Z;

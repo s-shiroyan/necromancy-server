@@ -52,7 +52,7 @@ namespace Necromancy.Server.Packet.Msg
             character.X = map.X;
             character.Y = map.Y;
             character.Z = map.Z;
-            character.viewOffset = (byte) map.Orientation;
+            character.Heading = (byte) map.Orientation;
 
             character.AccountId = client.Account.Id;
             character.SoulId = client.Soul.Id;

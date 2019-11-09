@@ -23,6 +23,11 @@ namespace Necromancy.Server.Chat.Command
             _commands.Add(command.KeyToLowerInvariant, command);
         }
 
+        public Dictionary<string, ChatCommand> GetCommands()
+        {
+            return new Dictionary<string, ChatCommand>(_commands);
+        }
+
         public void HandleCommand(NecClient client, string command)
         {
             if (client == null)
@@ -54,7 +59,7 @@ namespace Necromancy.Server.Chat.Command
 
             if (!message.Message.StartsWith(ChatCommandStart))
             {
-                Logger.Error($"Command '{message.Message}' does not start with '{ChatCommandStart}'");
+                Logger.Error(client, $"Command '{message.Message}' does not start with '{ChatCommandStart}'");
                 return;
             }
 
@@ -68,13 +73,15 @@ namespace Necromancy.Server.Chat.Command
             string commandKey = command[0].ToLowerInvariant();
             if (!_commands.ContainsKey(commandKey))
             {
+                Logger.Error(client, $"Command '{commandKey}' does not exist");
+                responses.Add(ChatResponse.CommandError(client, $"Command does not exist: {commandKey}"));
                 return;
             }
 
             ChatCommand chatCommand = _commands[commandKey];
             if (client.Account.State < chatCommand.AccountState)
             {
-                Logger.Debug(client,
+                Logger.Error(client,
                     $"Not entitled to execute command '{chatCommand.Key}' (State < Required: {client.Account.State} < {chatCommand.AccountState})");
                 return;
             }

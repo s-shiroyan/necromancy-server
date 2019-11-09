@@ -23,32 +23,32 @@ namespace Necromancy.Server.Database.Sql.Core
         private const string SqlDeleteNpcSpawn =
             "DELETE FROM `nec_npc_spawn` WHERE `id`=@id;";
 
-        public bool InsertNpcSpawn(NpcSpawn npcSpawnSpawn)
+        public bool InsertNpcSpawn(NpcSpawn npcSpawn)
         {
             int rowsAffected = ExecuteNonQuery(SqlInsertNpcSpawn, command =>
             {
-                AddParameter(command, "@npc_id", npcSpawnSpawn.NpcId);
-                AddParameter(command, "@model_id", npcSpawnSpawn.ModelId);
-                AddParameter(command, "@level", npcSpawnSpawn.Level);
-                AddParameter(command, "@name", npcSpawnSpawn.Name);
-                AddParameter(command, "@title", npcSpawnSpawn.Title);
-                AddParameter(command, "@map_id", npcSpawnSpawn.MapId);
-                AddParameter(command, "@x", npcSpawnSpawn.X);
-                AddParameter(command, "@y", npcSpawnSpawn.Y);
-                AddParameter(command, "@z", npcSpawnSpawn.Z);
-                AddParameter(command, "@active", npcSpawnSpawn.Active);
-                AddParameter(command, "@heading", npcSpawnSpawn.Heading);
-                AddParameter(command, "@size", npcSpawnSpawn.Size);
-                AddParameter(command, "@visibility", npcSpawnSpawn.Visibility);
-                AddParameter(command, "@created", npcSpawnSpawn.Created);
-                AddParameter(command, "@updated", npcSpawnSpawn.Updated);
+                AddParameter(command, "@npc_id", npcSpawn.NpcId);
+                AddParameter(command, "@model_id", npcSpawn.ModelId);
+                AddParameter(command, "@level", npcSpawn.Level);
+                AddParameter(command, "@name", npcSpawn.Name);
+                AddParameter(command, "@title", npcSpawn.Title);
+                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@x", npcSpawn.X);
+                AddParameter(command, "@y", npcSpawn.Y);
+                AddParameter(command, "@z", npcSpawn.Z);
+                AddParameter(command, "@active", npcSpawn.Active);
+                AddParameter(command, "@heading", npcSpawn.Heading);
+                AddParameter(command, "@size", npcSpawn.Size);
+                AddParameter(command, "@visibility", npcSpawn.Visibility);
+                AddParameter(command, "@created", npcSpawn.Created);
+                AddParameter(command, "@updated", npcSpawn.Updated);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
                 return false;
             }
 
-            npcSpawnSpawn.Id = (int) autoIncrement;
+            npcSpawn.Id = (int) autoIncrement;
             return true;
         }
 
@@ -59,8 +59,8 @@ namespace Necromancy.Server.Database.Sql.Core
             {
                 while (reader.Read())
                 {
-                    NpcSpawn npcSpawnSpawn = ReadNpcSpawn(reader);
-                    npcSpawns.Add(npcSpawnSpawn);
+                    NpcSpawn npcSpawn = ReadNpcSpawn(reader);
+                    npcSpawns.Add(npcSpawn);
                 }
             });
             return npcSpawns;
@@ -75,33 +75,33 @@ namespace Necromancy.Server.Database.Sql.Core
                 {
                     while (reader.Read())
                     {
-                        NpcSpawn npcSpawnSpawn = ReadNpcSpawn(reader);
-                        npcSpawns.Add(npcSpawnSpawn);
+                        NpcSpawn npcSpawn = ReadNpcSpawn(reader);
+                        npcSpawns.Add(npcSpawn);
                     }
                 });
             return npcSpawns;
         }
 
-        public bool UpdateNpcSpawn(NpcSpawn npcSpawnSpawn)
+        public bool UpdateNpcSpawn(NpcSpawn npcSpawn)
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateNpcSpawn, command =>
             {
-                AddParameter(command, "@npc_id", npcSpawnSpawn.NpcId);
-                AddParameter(command, "@model_id", npcSpawnSpawn.ModelId);
-                AddParameter(command, "@level", npcSpawnSpawn.Level);
-                AddParameter(command, "@name", npcSpawnSpawn.Name);
-                AddParameter(command, "@title", npcSpawnSpawn.Title);
-                AddParameter(command, "@map_id", npcSpawnSpawn.MapId);
-                AddParameter(command, "@x", npcSpawnSpawn.X);
-                AddParameter(command, "@y", npcSpawnSpawn.Y);
-                AddParameter(command, "@z", npcSpawnSpawn.Z);
-                AddParameter(command, "@active", npcSpawnSpawn.Active);
-                AddParameter(command, "@heading", npcSpawnSpawn.Heading);
-                AddParameter(command, "@size", npcSpawnSpawn.Size);
-                AddParameter(command, "@visibility", npcSpawnSpawn.Visibility);
-                AddParameter(command, "@created", npcSpawnSpawn.Created);
-                AddParameter(command, "@updated", npcSpawnSpawn.Updated);
-                AddParameter(command, "@id", npcSpawnSpawn.Id);
+                AddParameter(command, "@npc_id", npcSpawn.NpcId);
+                AddParameter(command, "@model_id", npcSpawn.ModelId);
+                AddParameter(command, "@level", npcSpawn.Level);
+                AddParameter(command, "@name", npcSpawn.Name);
+                AddParameter(command, "@title", npcSpawn.Title);
+                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@x", npcSpawn.X);
+                AddParameter(command, "@y", npcSpawn.Y);
+                AddParameter(command, "@z", npcSpawn.Z);
+                AddParameter(command, "@active", npcSpawn.Active);
+                AddParameter(command, "@heading", npcSpawn.Heading);
+                AddParameter(command, "@size", npcSpawn.Size);
+                AddParameter(command, "@visibility", npcSpawn.Visibility);
+                AddParameter(command, "@created", npcSpawn.Created);
+                AddParameter(command, "@updated", npcSpawn.Updated);
+                AddParameter(command, "@id", npcSpawn.Id);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -115,24 +115,24 @@ namespace Necromancy.Server.Database.Sql.Core
 
         private NpcSpawn ReadNpcSpawn(DbDataReader reader)
         {
-            NpcSpawn npcSpawnSpawn = new NpcSpawn();
-            npcSpawnSpawn.Id = GetInt32(reader, "id");
-            npcSpawnSpawn.ModelId = GetInt32(reader, "model_id");
-            npcSpawnSpawn.NpcId = GetInt32(reader, "npc_id");
-            npcSpawnSpawn.Level = GetByte(reader, "level");
-            npcSpawnSpawn.Name = GetString(reader, "name");
-            npcSpawnSpawn.Title = GetString(reader, "title");
-            npcSpawnSpawn.MapId = GetInt32(reader, "map_id");
-            npcSpawnSpawn.X = GetFloat(reader, "x");
-            npcSpawnSpawn.Y = GetFloat(reader, "y");
-            npcSpawnSpawn.Z = GetFloat(reader, "z");
-            npcSpawnSpawn.Active = GetBoolean(reader, "active");
-            npcSpawnSpawn.Heading = GetByte(reader, "heading");
-            npcSpawnSpawn.Size = GetInt16(reader, "size");
-            npcSpawnSpawn.Visibility = GetInt32(reader, "visibility");
-            npcSpawnSpawn.Created = GetDateTime(reader, "created");
-            npcSpawnSpawn.Updated = GetDateTime(reader, "updated");
-            return npcSpawnSpawn;
+            NpcSpawn npcSpawn = new NpcSpawn();
+            npcSpawn.Id = GetInt32(reader, "id");
+            npcSpawn.ModelId = GetInt32(reader, "model_id");
+            npcSpawn.NpcId = GetInt32(reader, "npc_id");
+            npcSpawn.Level = GetByte(reader, "level");
+            npcSpawn.Name = GetString(reader, "name");
+            npcSpawn.Title = GetString(reader, "title");
+            npcSpawn.MapId = GetInt32(reader, "map_id");
+            npcSpawn.X = GetFloat(reader, "x");
+            npcSpawn.Y = GetFloat(reader, "y");
+            npcSpawn.Z = GetFloat(reader, "z");
+            npcSpawn.Active = GetBoolean(reader, "active");
+            npcSpawn.Heading = GetByte(reader, "heading");
+            npcSpawn.Size = GetInt16(reader, "size");
+            npcSpawn.Visibility = GetInt32(reader, "visibility");
+            npcSpawn.Created = GetDateTime(reader, "created");
+            npcSpawn.Updated = GetDateTime(reader, "updated");
+            return npcSpawn;
         }
     }
 }

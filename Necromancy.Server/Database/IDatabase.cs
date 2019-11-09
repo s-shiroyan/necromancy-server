@@ -36,5 +36,12 @@ namespace Necromancy.Server.Database
         List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
         bool UpdateNpcSpawn(NpcSpawn npcSpawnSpawn);
         bool DeleteNpcSpawn(int npcSpawnId);
+
+        // Monster Spawn
+        bool InsertMonsterSpawn(MonsterSpawn monsterSpawn);
+        List<MonsterSpawn> SelectMonsterSpawns();
+        List<MonsterSpawn> SelectMonsterSpawnsByMapId(int mapId);
+        bool UpdateMonsterSpawn(MonsterSpawn monsterSpawn);
+        bool DeleteMonsterSpawn(int monsterSpawnId);
     }
 }

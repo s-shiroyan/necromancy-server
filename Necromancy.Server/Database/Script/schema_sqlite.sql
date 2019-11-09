@@ -94,7 +94,13 @@ CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
   `map_id`     INTEGER             NOT NULL,
   `x`          REAL                NOT NULL,
   `y`          REAL                NOT NULL,
-  `z`          REAL                NOT NULL
+  `z`          REAL                NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `visibility` INTEGER             NOT NULL,
+  `created`    DATETIME            NOT NULL,
+  `updated`    DATETIME            NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_item` (

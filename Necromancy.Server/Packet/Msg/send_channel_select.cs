@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteFloat(client.Character.X); //X Pos
             res.WriteFloat(client.Character.Y); //Y Pos
             res.WriteFloat(client.Character.Z); //Z Pos
-            res.WriteByte(client.Character.viewOffset); //View offset
+            res.WriteByte(client.Character.Heading); //View offset
             //
 
             Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res, ServerType.Msg);

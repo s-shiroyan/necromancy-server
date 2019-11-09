@@ -20,5 +20,10 @@ namespace Necromancy.Server.Chat.Command
         public abstract AccountStateType AccountState { get; }
         public abstract string Key { get; }
         public string KeyToLowerInvariant => Key.ToLowerInvariant();
+
+        public virtual string HelpText
+        {
+            get { return null; }
+        }
     }
 }

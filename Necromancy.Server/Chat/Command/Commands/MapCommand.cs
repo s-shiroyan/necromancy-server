@@ -32,5 +32,6 @@ namespace Necromancy.Server.Chat.Command.Commands
 
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "map";
+        public override string HelpText => "usage: `/map [mapId]` - Changes the map";
     }
 }

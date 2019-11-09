@@ -145,6 +145,8 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new HelpCommand(this));
+            Chat.CommandHandler.AddCommand(new StatusCommand(this));
             Chat.CommandHandler.AddCommand(new NpcCommand(this));
             Chat.CommandHandler.AddCommand(new MonsterCommand(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstance(this));

@@ -39,7 +39,7 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteFloat(thisNecClient.Character.X); //X Pos
             res3.WriteFloat(thisNecClient.Character.Y); //Y Pos
             res3.WriteFloat(thisNecClient.Character.Z); //Z Pos
-            res3.WriteByte(thisNecClient.Character.viewOffset); //view offset
+            res3.WriteByte(thisNecClient.Character.Heading); //view offset
 
             //sub_read_int32
             res3.WriteInt32(6);
