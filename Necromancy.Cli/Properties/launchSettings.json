@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Necromancy.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "server start"
+    },
+    "Start /w--MaxPacket64": {
+      "commandName": "Project",
+      "commandLineArgs": "server start --max-packet-size=64"
+    },
+    "Start No Arguments": {
+      "commandName": "Project"
+    }
+  }
+}

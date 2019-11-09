@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
-            map.Enter(client);
+            map.EnterForce(client);
             SendEventEnd(client);
         }
 

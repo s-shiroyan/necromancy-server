@@ -22,14 +22,10 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
             List<NpcSpawn> npcSpawns = Database.SelectNpcSpawnsByMapId(client.Map.Id);
-            if (npcSpawns.Count > 0)
+            foreach (NpcSpawn npcSpawn in npcSpawns)
             {
-                foreach (NpcSpawn npcSpawn in npcSpawns)
-                {
-                    Server.Instances.AssignInstance(npcSpawn);
-                }
-
-                RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawns);
+                Server.Instances.AssignInstance(npcSpawn);
+                RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
                 Router.Send(npcData, client);
             }
         }

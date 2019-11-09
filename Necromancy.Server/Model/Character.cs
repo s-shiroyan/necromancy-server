@@ -7,21 +7,14 @@ namespace Necromancy.Server.Model
     {
         public uint InstanceId { get; set; }
 
-        //
+        //core attributes
         public int Id { get; set; }
         public int AccountId { get; set; }
         public int SoulId { get; set; }
         public DateTime Created { get; set; }
-        public int MapId { get; set; }
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
         public byte Slot { get; set; }
         public string Name { get; set; }
-
         public byte Level { get; set; }
-
-        ////
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }
         public byte HairId { get; set; }
@@ -36,22 +29,37 @@ namespace Necromancy.Server.Model
         public ushort piety { get; set; }
         public ushort luck { get; set; }
         public uint ClassId { get; set; }
+        public uint maxHp { get; set; }
+        public uint maxMp { get; set; }
+        public uint maxOd { get; set; }
 
+        //Movement Related
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
         public byte viewOffset { get; set; }
         public int battlePose { get; set; }
         public int charaPose { get; set; }
         public byte movementAnim { get; set; }
         public byte animJumpFall { get; set; }
-        public byte xAnim { get; set; }
         public bool weaponEquipped { get; set; }
-        public byte wepEastWestAnim { get; set; }
-        public byte wepNorthSouthAnim { get; set; }
+
+        //Logout Cancel Detection
         public byte logoutCanceled { get; set; }
+
+        //Map Related
+        public int MapId { get; set; }
+
+        //Temporary Value Holders
         public int WeaponType { get; set; }
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
-        public int selectExecCode { get; set; }
+        public int eventSelectExecCode { get; set; }
+        public int eventSelectReadyCode { get; set; }
+        public uint currentHp { get; set; }
+        public uint currentMp { get; set; }
+        public uint currentOd { get; set; }
 
         public Character()
         {
@@ -70,7 +78,13 @@ namespace Necromancy.Server.Model
             logoutCanceled = 0;
             WeaponType = 8;
             AdventureBagGold = 80706050;
-            selectExecCode = -1;
+            eventSelectExecCode = -1;
+            maxHp = 1000;
+            maxMp = 500;
+            maxOd = 200;
+            currentHp = 999;
+            currentMp = 1000;
+            currentOd = 1000;
         }
     }
 }
