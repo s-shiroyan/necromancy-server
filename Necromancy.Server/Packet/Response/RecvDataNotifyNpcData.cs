@@ -64,9 +64,9 @@ namespace Necromancy.Server.Packet.Response
 
             res.WriteInt32(_npcSpawn.ModelId); //NPC Model from file "model_common.csv"
             res.WriteInt16(_npcSpawn.Size); //NPC Model Size
-            res.WriteByte(2);
-            res.WriteByte(5);
-            res.WriteByte(6);
+            res.WriteByte(255);
+            res.WriteByte(255);
+            res.WriteByte(255);
             res.WriteInt32(0); //Hp Related Bitmask?  This setting makes the NPC "alive"    11111110 = npc flickering, 0 = npc alive
             res.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
             res.WriteInt32(

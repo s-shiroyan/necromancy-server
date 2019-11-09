@@ -28,6 +28,14 @@ namespace Necromancy.Server.Packet.Area
                 RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
                 Router.Send(npcData, client);
             }
+
+            List<MonsterSpawn> monsterSpawns = Database.SelectMonsterSpawnsByMapId(client.Map.Id);
+            foreach (MonsterSpawn monsterSpawn in monsterSpawns)
+            {
+                Server.Instances.AssignInstance(monsterSpawn);
+                RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                Router.Send(client.Map, monsterData);
+            }
         }
     }
 }

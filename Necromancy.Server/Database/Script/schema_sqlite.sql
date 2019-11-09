@@ -98,7 +98,6 @@ CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
   `active`     INTEGER             NOT NULL,
   `heading`    INTEGER             NOT NULL,
   `size`       INTEGER             NOT NULL,
-  `visibility` INTEGER             NOT NULL,
   `created`    DATETIME            NOT NULL,
   `updated`    DATETIME            NOT NULL
 );

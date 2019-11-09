@@ -46,7 +46,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             MonsterSpawn monsterSpawn = Server.Instances.CreateInstance<MonsterSpawn>();
             monsterSpawn.MonsterId = monsterSetting.Id;
-            monsterSetting.Name = monsterSetting.Name;
+            monsterSpawn.Name = monsterSetting.Name;
             monsterSpawn.Title = monsterSetting.Title;
             monsterSpawn.Level = (byte) monsterSetting.Level;
 

@@ -39,10 +39,16 @@ namespace Necromancy.Server.Database
         {
             string sqLitePath = Path.Combine(sqLiteFolder, $"db.v{NecSqLiteDb.Version}.sqlite");
             NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
-            ScriptRunner scriptRunner = new ScriptRunner(db);
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/schema_sqlite.sql"));
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_item.sql"));
-            scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_npc.sql"));
+            if (db.CreateDatabase())
+            {
+                ScriptRunner scriptRunner = new ScriptRunner(db);
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/schema_sqlite.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_item.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_npc.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_monster.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_account.sql"));
+            }
+
             return db;
         }
     }

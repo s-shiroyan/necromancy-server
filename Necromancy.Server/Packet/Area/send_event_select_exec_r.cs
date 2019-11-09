@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //logic to execute different actions based on the event that triggered this select execution.
-            int objectID = client.Character.eventSelectReadyCode;
+            uint objectID = client.Character.eventSelectReadyCode;
             var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
              { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
@@ -43,12 +43,12 @@ namespace Necromancy.Server.Packet.Area
              { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
              { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
              { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 90000010 ,  () => defaultEvent(client, objectID) },
-             { x => x < 90009000 ,  () => RecoverySpring(client, objectID)        },
+             { x => x < 90000010 ,  () => defaultEvent(client, (int)objectID) },
+             { x => x < 90009000 ,  () => RecoverySpring(client, (int)objectID)        },
 
             };
 
-            eventSwitchPerObjectID.First(sw => sw.Key(objectID)).Value();
+            eventSwitchPerObjectID.First(sw => sw.Key((int)objectID)).Value();
 
 
         }

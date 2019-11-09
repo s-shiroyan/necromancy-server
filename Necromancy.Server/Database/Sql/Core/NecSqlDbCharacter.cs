@@ -34,7 +34,7 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlInsertCharacter, command =>
             {
                 AddParameter(command, "@account_id", character.AccountId);
-                AddParameter(command, "@soul_id", character.AccountId);
+                AddParameter(command, "@soul_id", character.SoulId);
                 AddParameter(command, "@slot", character.Slot);
                 AddParameter(command, "@map_id", character.MapId);
                 AddParameter(command, "@x", character.X);
