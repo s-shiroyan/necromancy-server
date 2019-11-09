@@ -41,5 +41,10 @@ namespace Necromancy.Server.Packet
         {
             _clients.AddRange(clients);
         }
+
+        public void CleatClients()
+        {
+            _clients.Clear();
+        }
     }
 }

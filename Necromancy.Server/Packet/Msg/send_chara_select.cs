@@ -24,6 +24,7 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
 
+            Server.Instances.AssignInstance(character);
             client.Character = character;
             client.UpdateIdentity();
 

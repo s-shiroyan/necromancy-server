@@ -14,6 +14,9 @@ namespace Necromancy.Server.Database.Sql.Core
         private const string SqlSelectNpcSpawns =
             "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` FROM `nec_npc_spawn`;";
 
+        private const string SqlSelectNpcSpawnsByMapId =
+            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
+
         private const string SqlUpdateNpcSpawn =
             "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id, `model_id`=@model_id, `level`=@level,  `name`=@name, `title`=@title, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `active`=@active, `heading`=@heading, `size`=@size, `visibility`=@visibility, `created`=@created, `updated`=@updated WHERE `id`=@id;";
 
@@ -48,11 +51,27 @@ namespace Necromancy.Server.Database.Sql.Core
             npcSpawnSpawn.Id = (int) autoIncrement;
             return true;
         }
-        
+
         public List<NpcSpawn> SelectNpcSpawns()
         {
             List<NpcSpawn> npcSpawns = new List<NpcSpawn>();
             ExecuteReader(SqlSelectNpcSpawns, reader =>
+            {
+                while (reader.Read())
+                {
+                    NpcSpawn npcSpawnSpawn = ReadNpcSpawn(reader);
+                    npcSpawns.Add(npcSpawnSpawn);
+                }
+            });
+            return npcSpawns;
+        }
+
+        public List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId)
+        {
+            List<NpcSpawn> npcSpawns = new List<NpcSpawn>();
+            ExecuteReader(SqlSelectNpcSpawnsByMapId,
+                command => { AddParameter(command, "@map_id", mapId); },
+                reader =>
                 {
                     while (reader.Read())
                     {
@@ -104,9 +123,9 @@ namespace Necromancy.Server.Database.Sql.Core
             npcSpawnSpawn.Name = GetString(reader, "name");
             npcSpawnSpawn.Title = GetString(reader, "title");
             npcSpawnSpawn.MapId = GetInt32(reader, "map_id");
-            npcSpawnSpawn.X = GetInt32(reader, "x");
-            npcSpawnSpawn.Y = GetInt32(reader, "y");
-            npcSpawnSpawn.Z = GetInt32(reader, "z");
+            npcSpawnSpawn.X = GetFloat(reader, "x");
+            npcSpawnSpawn.Y = GetFloat(reader, "y");
+            npcSpawnSpawn.Z = GetFloat(reader, "z");
             npcSpawnSpawn.Active = GetBoolean(reader, "active");
             npcSpawnSpawn.Heading = GetByte(reader, "heading");
             npcSpawnSpawn.Size = GetInt16(reader, "size");

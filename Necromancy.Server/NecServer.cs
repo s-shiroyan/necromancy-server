@@ -24,7 +24,7 @@ using Arrowgene.Services.Logging;
 using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;
 using Necromancy.Server.Chat.Command.Commands;
-using Necromancy.Server.Common;
+using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
@@ -49,7 +49,7 @@ namespace Necromancy.Server
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
-        public InstanceIdGenerator IdGenerator { get; }
+        public InstanceGenerator Instances { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -66,7 +66,7 @@ namespace Necromancy.Server
             LogProvider.Configure<NecLogger>(Setting);
             _logger = LogProvider.Logger<NecLogger>(this);
 
-            IdGenerator = new InstanceIdGenerator();
+            Instances = new InstanceGenerator();
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Chat = new ChatManager(this);
@@ -156,7 +156,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new LogOut(this));
             Chat.CommandHandler.AddCommand(new OnHit(this));
             Chat.CommandHandler.AddCommand(new QuestStarted(this));
-            Chat.CommandHandler.AddCommand(new ReadFile(this));
             Chat.CommandHandler.AddCommand(new Revive(this));
             Chat.CommandHandler.AddCommand(new SendAuctionNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new SendCharacterId(this));

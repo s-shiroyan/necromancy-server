@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -43,99 +41,29 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            int numEntries = 0; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
-            IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(Server.IdGenerator.GetId()); // NPC ID (object id)
+            NpcSpawn npcSpawn = Server.Instances.CreateInstance<NpcSpawn>();
+            npcSpawn.NpcId = npcSetting.Id;
+            npcSpawn.Level = (byte) npcSetting.Level;
+            npcSpawn.Name = npcSetting.Name;
+            npcSpawn.Title = npcSetting.Title;
 
-            res3.WriteInt32(npcSetting.Id); // NPC Serial ID from "npc.csv"
+            npcSpawn.ModelId = modelSetting.Id;
+            npcSpawn.Size = (short) modelSetting.Height;
 
-            res3.WriteByte(0); // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
+            npcSpawn.MapId = client.Character.MapId;
+            npcSpawn.X = client.Character.X;
+            npcSpawn.Y = client.Character.Y;
+            npcSpawn.Z = client.Character.Z;
+            npcSpawn.Heading = client.Character.viewOffset;
 
-            res3.WriteCString(npcSetting.Name); //Name
-
-            res3.WriteCString(npcSetting.Title); //Title
-
-            res3.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150)); //X Pos
-            res3.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150)); //Y Pos
-            res3.WriteFloat(client.Character.Z); //Z Pos
-            res3.WriteByte(client.Character.viewOffset); //view offset
-
-            res3.WriteInt32(numEntries); // # Items to Equip
-
-            for (int i = 0; i < numEntries; i++)
-
+            if (!Server.Database.InsertNpcSpawn(npcSpawn))
             {
-                res3.WriteInt32(24);
+                responses.Add(ChatResponse.CommandError(client, $"NpcSpawn could not be saved to database"));
+                return;
             }
 
-            res3.WriteInt32(numEntries); // # Items to Equip
-
-            for (int i = 0; i < numEntries; i++)
-
-            {
-                // loop start
-                res3.WriteInt32(210901); // this is a loop within a loop i went ahead and broke it up
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(3);
-
-                res3.WriteInt32(10310503);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(3);
-
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(1); // bool
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-                res3.WriteByte(0);
-            }
-
-            res3.WriteInt32(numEntries); // # Items to Equip
-
-            for (int i = 0; i < numEntries; i++) // Item type bitmask per slot
-
-            {
-                res3.WriteInt32(1);
-            }
-
-            res3.WriteInt32(modelSetting.Id); //NPC Model from file "model_common.csv"
-
-            res3.WriteInt16(100); //NPC Model Size
-
-            res3.WriteByte(2);
-
-            res3.WriteByte(5);
-
-            res3.WriteByte(6);
-
-            res3.WriteInt32(
-                0); //Hp Related Bitmask?  This setting makes the NPC "alive"    11111110 = npc flickering, 0 = npc alive
-
-            res3.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
-
-            res3.WriteInt32(8); // add strange light on certain npc
-            res3.WriteFloat(0); //x for icons
-            res3.WriteFloat(0); //y for icons
-            res3.WriteFloat(50); //z for icons
-
-            res3.WriteInt32(128);
-
-            int numEntries2 = 128;
-
-
-            for (int i = 0; i < numEntries2; i++)
-
-            {
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-            }
-
-            Router.Send(client, (ushort) AreaPacketId.recv_data_notify_npc_data, res3, ServerType.Area);
+            RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
+            Router.Send(client.Map, npcData);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

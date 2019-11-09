@@ -29,5 +29,12 @@ namespace Necromancy.Server.Database
         List<Character> SelectCharactersBySoulId(int soulId);
         bool UpdateCharacter(Character character);
         bool DeleteCharacter(int characterId);
+
+        // NpcSpawn
+        bool InsertNpcSpawn(NpcSpawn npcSpawnSpawn);
+        List<NpcSpawn> SelectNpcSpawns();
+        List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
+        bool UpdateNpcSpawn(NpcSpawn npcSpawnSpawn);
+        bool DeleteNpcSpawn(int npcSpawnId);
     }
 }

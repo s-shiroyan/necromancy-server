@@ -53,10 +53,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            int objectId = Server.IdGenerator.GetId();
+            MonsterSpawn monsterSpawn = Server.Instances.CreateInstance<MonsterSpawn>();
             
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(objectId);
+            res.WriteInt32(monsterSpawn.InstanceId);
             res.WriteCString(monsterSetting.Name);
             res.WriteCString(monsterSetting.Title);
 
@@ -149,19 +149,19 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteInt32(11);
-            res5.WriteInt32(objectId);
+            res5.WriteInt32(monsterSpawn.InstanceId);
             Router.Send(client, (ushort) AreaPacketId.recv_monster_hate_on, res5, ServerType.Area);
 
             IBuffer res6 = BufferProvider.Provide();
             res6.WriteInt32(11);
-            res6.WriteInt32(objectId);
+            res6.WriteInt32(monsterSpawn.InstanceId);
             Router.Send(client, (ushort) AreaPacketId.recv_battle_report_notify_damage_hp, res6, ServerType.Area);
 
 
             IBuffer res12 = BufferProvider.Provide();
             res12.WriteInt32(0);
 
-            res12.WriteInt32(objectId);
+            res12.WriteInt32(monsterSpawn.InstanceId);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_monster_state_update_notify, res12, ServerType.Area);
 
             /*IBuffer res81 = BufferProvider.Provide();

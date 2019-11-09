@@ -107,15 +107,25 @@ namespace Necromancy.Server.Packet
         }
 
         /// <summary>
+        /// Send a specific packet response to a map.
+        /// </summary>
+        public void Send(Map map, PacketResponse response, params NecClient[] excepts)
+        {
+            List<NecClient> mapClients = map.ClientLookup.GetAll();
+            mapClients.AddRange(response.Clients);
+            response.CleatClients();
+            List<NecClient> clients = GetClients(mapClients, excepts);
+            response.AddClients(clients);
+            Send(response);
+        }
+
+        /// <summary>
         /// Send a specific packet response.
         /// </summary>
         public void Send(PacketResponse response, params NecClient[] clients)
         {
             response.AddClients(clients);
-            foreach (NecClient client in response.Clients)
-            {
-                Send(client, response.ToPacket());
-            }
+            Send(response);
         }
 
         /// <summary>
