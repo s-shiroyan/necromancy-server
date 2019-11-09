@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Area
             if (mapId == -2147483648)
             {
                 // TODO remove this when done testing
-                Logger.Error("MapId == -2147483648 => SendEventEnd");
+                Logger.Debug("Escape button was selected to close dungeun select. MapID code  == -2147483648 => SendEventEnd");
                 SendEventEnd(client);
                 return;
             }

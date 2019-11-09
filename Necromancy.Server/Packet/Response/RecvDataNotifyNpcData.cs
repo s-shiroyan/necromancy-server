@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Response
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_npcSpawn.InstanceId); // InstanceId
+            res.WriteInt32(_npcSpawn.Id); // InstanceId : Should be Modified to NPC Serial ID as each NPC has it's own unique serial ID.
             res.WriteInt32(_npcSpawn.NpcId); // NPC Serial ID from "npc.csv"
             res.WriteByte(0); // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
             res.WriteCString(_npcSpawn.Name); //Name
