@@ -68,7 +68,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteFloat(client.Character.X + Util.GetRandomNumber(25, 150)); //X Pos
             res.WriteFloat(client.Character.Y + Util.GetRandomNumber(25, 150)); //Y Pos
             res.WriteFloat(client.Character.Z); //Z Pos
-            res.WriteByte(client.Character.viewOffset); //view offset
+            res.WriteByte(client.Character.Heading); //view offset
             res.WriteInt32(
                 GGateModelIds[
                     GGateChoice]); // Optional Model ID. Warp Statues. Gaurds, Pedistals, Etc., to see models refer to the model_common.csv

@@ -16,9 +16,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int mapId = packet.Data.ReadInt32();
-
-
-            Map map = Server.Map.Get(mapId);
+            Map map = Server.Maps.Get(mapId);
             if (map == null)
             {
                 Logger.Error($"MapId: {mapId} not found in map lookup", client);

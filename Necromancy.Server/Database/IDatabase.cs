@@ -7,6 +7,11 @@ namespace Necromancy.Server.Database
     {
         void Execute(string sql);
 
+        /// <summary>
+        /// Return true if database was created, or false if not.
+        /// </summary>
+        bool CreateDatabase();
+
         // Account
         Account CreateAccount(string name, string mail, string hash);
         Account SelectAccountById(int accountId);
@@ -24,9 +29,24 @@ namespace Necromancy.Server.Database
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
-        List<Character> SelectCharacterByAccountId(int accountId);
-        List<Character> SelectCharacterBySoulId(int soulId);
+        Character SelectCharacterBySlot(int soulId, int slot);
+        List<Character> SelectCharactersByAccountId(int accountId);
+        List<Character> SelectCharactersBySoulId(int soulId);
         bool UpdateCharacter(Character character);
         bool DeleteCharacter(int characterId);
+
+        // NpcSpawn
+        bool InsertNpcSpawn(NpcSpawn npcSpawnSpawn);
+        List<NpcSpawn> SelectNpcSpawns();
+        List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
+        bool UpdateNpcSpawn(NpcSpawn npcSpawnSpawn);
+        bool DeleteNpcSpawn(int npcSpawnId);
+
+        // Monster Spawn
+        bool InsertMonsterSpawn(MonsterSpawn monsterSpawn);
+        List<MonsterSpawn> SelectMonsterSpawns();
+        List<MonsterSpawn> SelectMonsterSpawnsByMapId(int mapId);
+        bool UpdateMonsterSpawn(MonsterSpawn monsterSpawn);
+        bool DeleteMonsterSpawn(int monsterSpawnId);
     }
 }

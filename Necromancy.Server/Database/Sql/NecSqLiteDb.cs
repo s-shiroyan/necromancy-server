@@ -22,10 +22,9 @@ namespace Necromancy.Server.Database.Sql
         {
             _databasePath = databasePath;
             Logger.Info($"Database Path: {_databasePath}");
-            CreateDatabase();
         }
 
-        private void CreateDatabase()
+        public bool CreateDatabase()
         {
             if (_databasePath != MemoryDatabasePath && !File.Exists(_databasePath))
             {
@@ -33,7 +32,10 @@ namespace Necromancy.Server.Database.Sql
                 fs.Close();
                 fs.Dispose();
                 Logger.Info($"Created new v{Version} database");
+                return true;
             }
+
+            return false;
         }
 
         private string BuildConnectionString(string source)

@@ -33,16 +33,15 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item` (
-  `id`   INTEGER PRIMARY KEY NOT NULL, 
-  `name` TEXT                NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
   `account_id`        INTEGER                           NOT NULL,
   `soul_id`           INTEGER                           NOT NULL,
-  `character_slot_id` INTEGER                           NOT NULL,
+  `slot`              INTEGER                           NOT NULL,
+  `map_id`            INTEGER                           NOT NULL,
+  `x`                 REAL                              NOT NULL,
+  `y`                 REAL                              NOT NULL,
+  `z`                 REAL                              NOT NULL,
   `name`              TEXT                              NOT NULL,
   `race_id`           INTEGER                           NOT NULL,
   `sex_id`            INTEGER                           NOT NULL,
@@ -62,21 +61,48 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `created`           DATETIME                          NOT NULL,
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
-  CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`)
-);
-
-CREATE TABLE IF NOT EXISTS `nec_npc` (
-  `id`     INTEGER PRIMARY KEY NOT NULL, 
-  `name`   TEXT                NOT NULL,
-  `title`  TEXT                NOT NULL,
-  `level`  INTEGER             NOT NULL
+  CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`),
+  CONSTRAINT `uq_nec_character_soul_id_slot` UNIQUE (`soul_id`, `slot`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
-  `id`      INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-  `npc_id`  INTEGER             NOT NULL,
-  `x`       INTEGER             NOT NULL,
-  `y`       INTEGER             NOT NULL,
-  `z`       INTEGER             NOT NULL,
-  `heading` INTEGER             NOT NULL
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `npc_id`     INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `level`      INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `visibility` INTEGER             NOT NULL,
+  `created`    DATETIME            NOT NULL,
+  `updated`    DATETIME            NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `monster_id` INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `level`      INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `created`    DATETIME            NOT NULL,
+  `updated`    DATETIME            NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_item` (
+  `id`   INTEGER PRIMARY KEY NOT NULL, 
+  `name` TEXT                NOT NULL
 );

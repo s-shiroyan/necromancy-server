@@ -16,6 +16,11 @@ namespace Necromancy.Server.Database.Sql
 
         private string _connectionString;
 
+        public bool CreateDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
         public NecMariaDb(string host, short port, string user, string password, string database)
         {
             _connectionString = $"host={host};port={port};user id={user};password={password};database={database};";

@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet
             Router = server.Router;
             Database = server.Database;
             Settings = server.Setting;
-            Map = server.Map;
+            Maps = server.Maps;
             Clients = server.Clients;
         }
 
@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet
         protected NecSetting Settings { get; }
         protected NecLogger Logger { get; }
         protected PacketRouter Router { get; }
-        protected MapLookup Map { get; }
+        protected MapLookup Maps { get; }
         protected ClientLookup Clients { get; }
         protected IDatabase Database { get; }
     }
