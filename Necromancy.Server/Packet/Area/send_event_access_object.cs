@@ -5,6 +5,8 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -19,23 +21,44 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             uint instanceId = packet.Data.ReadUInt32();
+
+            //Begin Event for all cases
+            SentEventStart(client, instanceId);
+
+
             IInstance instance = Server.Instances.GetInstance(instanceId);
             switch (instance)
             {
                 case NpcSpawn npcSpawn:
-                    Logger.Debug($"NpcId: {npcSpawn.Id}");
-                    if (npcSpawn.NpcId == 74000022)
-                    {
-                        RecoverySpring(client, npcSpawn);
-                    }
+                    Logger.Debug($"npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
 
-                    defaultEvent(client, (int) instanceId);
+                    //logic to execute different actions based on the event that triggered this select execution.
+                    client.Character.eventSelectReadyCode = (uint)npcSpawn.NpcId; //Sends the NpcID to 'send_event_select_exec_r  logic gate.
+                    var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                        {
+                         { x => x < 2 ,    () => defaultEvent(client, (int)instanceId) },
+                         { x => x < 3 ,    () => RecoverySpring(client, npcSpawn)},
+                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn) },
+                         { x => x < 90000010 ,  () => defaultEvent(client, (int)instanceId) }
+
+                        };
+
+                    eventSwitchPerObjectID.First(sw => sw.Key((int)instanceId)).Value();
+
+
                     break;
                 case MonsterSpawn monsterSpawn:
                     Logger.Debug($"MonsterId: {monsterSpawn.Id}");
                     break;
                 default:
                     Logger.Error($"Instance with InstanceId: {instanceId} does not exist");
+                    SendEventEnd(client);
                     break;
             }
 
@@ -43,9 +66,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(instanceId);
             Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
-            //Begin Event for all cases
-            SentEventStart(client, instanceId);
-            client.Character.eventSelectReadyCode = instanceId;
+
         }
 
         private void SentEventStart(NecClient client, uint obkectID)
@@ -59,7 +80,7 @@ namespace Necromancy.Server.Packet.Area
             // dont forget tu put a recv_event_end, at the end, if you don't want to get stuck, and do nothing.
         }
 
-        private void SendEventShowBoardStart(NecClient client, int objectID)
+        private void SendEventShowBoardStart(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteCString("I Hate Events"); // find max size
@@ -67,7 +88,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
         }
 
-        private void SendEventShowBoardEnd(NecClient client, int objectID)
+        private void SendEventShowBoardEnd(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
@@ -80,17 +101,17 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_end, res, ServerType.Area);
         }
 
-        private void SendEventMessageNoObject(NecClient client, int objectID)
+        private void SendEventMessageNoObject(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteCString($"NPC#:{objectID}"); // Npc name
+            res.WriteCString($"NPC#:{instanceId}"); // Npc name
             res.WriteCString("QuestChat"); //Chat Window lable
             res.WriteCString(
                 "You've got 5 seconds before this window closes. Think Quick!'"); // it's the npc text, switch automatically to an other window when text finish
             Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res, ServerType.Area);
         }
 
-        private void SendEventMessage(NecClient client, int objectID)
+        private void SendEventMessage(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(1);
@@ -98,15 +119,15 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_message, res, ServerType.Area);
         }
 
-        private void SendEventBlockMessage(NecClient client, int objectID)
+        private void SendEventBlockMessage(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(objectID);
+            res.WriteInt32(instanceId);
             res.WriteCString("Hello world.");
             Router.Send(client, (ushort) AreaPacketId.recv_event_block_message, res, ServerType.Area);
         }
 
-        private void SendEventSelectMapAndChannel(NecClient client, int objectID)
+        private void SendEventSelectMapAndChannel(NecClient client, int instanceId)
         {
             IBuffer res7 = BufferProvider.Provide();
 
@@ -142,18 +163,18 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
         }
 
-        private void defaultEvent(NecClient client, int objectID)
+        private void defaultEvent(NecClient client, int instanceId)
         {
-            SendEventShowBoardStart(client, objectID);
-            //SendEventMessageNoObject(client, objectID);
-            //SendEventMessage(client, objectID);
-            //SendEventBlockMessage(client, objectID);
-            SendEventSelectMapAndChannel(client, objectID);
+            SendEventShowBoardStart(client, instanceId);
+            //SendEventMessageNoObject(client, instanceId);
+            //SendEventMessage(client, instanceId);
+            //SendEventBlockMessage(client, instanceId);
+            SendEventSelectMapAndChannel(client, instanceId);
 
             Task.Delay(TimeSpan.FromMilliseconds((int) (15 * 1000))).ContinueWith
             (t1 =>
                 {
-                    SendEventShowBoardEnd(client, objectID);
+                    SendEventShowBoardEnd(client, instanceId);
                     //SendEventEnd(client);
                 }
             );
@@ -174,14 +195,14 @@ namespace Necromancy.Server.Packet.Area
             */
             /*
             IBuffer res7 = BufferProvider.Provide();
-            res7.WriteInt32(objectID);
+            res7.WriteInt32(instanceId);
             res7.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
             Router.Send(client, (ushort)AreaPacketId.recv_event_block_message, res7, ServerType.Area);
             */
 
             /*
             IBuffer res9 = BufferProvider.Provide();
-            res9.WriteCString($"NPC#:{objectID}"); // Npc name manually entered
+            res9.WriteCString($"NPC#:{instanceId}"); // Npc name manually entered
             res9.WriteCString("QuestChat");//Chat Window lable
             res9.WriteCString("You've got 5 seconds before this window closes. Think Quick!'");// it's the npc text, switch automatically to an other window when text finish
             Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res9, ServerType.Area);
@@ -189,7 +210,7 @@ namespace Necromancy.Server.Packet.Area
 
             /*
             IBuffer res8 = BufferProvider.Provide();
-            res8.WriteInt32(objectID); // used to pull Name/Title information from the NPC/object being interacted with
+            res8.WriteInt32(instanceId); // used to pull Name/Title information from the NPC/object being interacted with
             res8.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks.");
             Router.Send(client, (ushort)AreaPacketId.recv_event_message, res8, ServerType.Area);
             */
@@ -209,7 +230,7 @@ namespace Necromancy.Server.Packet.Area
             */
             /*
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(objectID);
+            res6.WriteInt32(instanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res6, ServerType.Area);//????
             */
 
@@ -231,7 +252,7 @@ namespace Necromancy.Server.Packet.Area
 
             /*
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(objectID);
+            res2.WriteInt32(instanceId);
             res2.WriteByte(1); // bool
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_ready, res2, ServerType.Area); //prevents the call to send_event_select_exec_r until you make a selection.
             */
