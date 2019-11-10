@@ -43,45 +43,44 @@ namespace Necromancy.Server.Data.Setting
             if (!int.TryParse(properties[5], out int settingIdOrText))
             {
                 //Catch the strings, and convert them to a unique int for assigment of behavoir later.
-                switch (properties[4])
+                switch (properties[5])
                 {
                     case "Recovery Spring":
-                        return null;
-                    //return 99009901;
+                    settingIdOrText = 99009901;
+                        break;
                     case "Quopaty Temple":
-                        return null;
-                    //return 99009902;
+                    settingIdOrText = 99009902;
+                        break;
                     case "Adventurer's Inn":
-                        return null;
-                    //return 99009903;
+                    settingIdOrText = 99009903;
+                        break;
                     case "Gilgamesh's Tavern":
-                        return null;
-                    //return 99009904;
+                    settingIdOrText = 99009904;
+                        break;
                     case "Adventurer's Guild":
-                        return null;
-                    //return 99009905;
+                    settingIdOrText = 99009905;
+                        break;
                     case "Change Channels":
-                        return null;
-                    //return 99009906;
+                    settingIdOrText = 99009906;
+                        break;
                     case "Departure Gate":
-                        return null;
-                    //return 99009907;
+                    settingIdOrText = 99009907;
+                        break;
                     case "Modamus Arms":
-                        return null;
-                    //return 99009908;
+                    settingIdOrText = 99009908;
+                        break;
                     case "Vortak's Items":
-                        return null;
-                    //return 99009909;
+                    settingIdOrText = 99009909;
+                        break;
                     case "Sagil Armor":
-                        return null;
-                    //return 99009910;
+                    settingIdOrText = 99009910;
+                        break;
                     case "Magic by Junon":
-                        return null;
-                    //return 99009911;
+                    settingIdOrText = 99009911;
+                        break;
                     case "Gidol's Forge & Alchemy":
-                        return null;
-                    //return 99009912;
-
+                    settingIdOrText = 99009912;
+                        break;
 
                     default:
                         return null;
