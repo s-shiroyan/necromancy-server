@@ -67,9 +67,9 @@ Run the `Necromancy.Cli`-Project
 |:-----------|:-----------|:-----------|:---------|:--------------------------------------------------------------------------------------------------------|
 | InstanceId | ObjectId   | Globally   | No       | Identifies a object uniquely globally (No duplicate Ids are possible, can distinguish between anything) |
 | Id         | DatabaseId | per Domain | Yes      | Identifies a object uniquely among its domain. (Can distinguish between two npcs with the same NpcId)   |
-| NpcId      | SerialId   | None       | Yes      | Identifies a npc (Multiple npc can exist with same NpcId)                                               |
-| MonsterId  | SerialId   | None       | Yes      | Identifies a monster (Multiple monster can exist with same MonsterId)                                   |
-| ModelId    | SerialId   | None       | Yes      | Identifies a model (Multiple model can exist with same ModelId)                                         |
+| NpcId      | SerialId   | None       | Yes      | Identifies a type of npc (Multiple npc can exist with same NpcId)                                               |
+| MonsterId  | SerialId   | None       | Yes      | Identifies a type of monster (Multiple monster can exist with same MonsterId)                                   |
+| ModelId    | SerialId   | None       | Yes      | Identifies a type of model (Multiple model can exist with same ModelId)                                         |
 
 
 ## Common
