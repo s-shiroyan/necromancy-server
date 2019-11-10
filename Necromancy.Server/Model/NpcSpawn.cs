@@ -22,6 +22,7 @@ namespace Necromancy.Server.Model
         public int Visibility { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
+        public int Icon { get; set; }
 
         public NpcSpawn()
         {

@@ -54,7 +54,7 @@ namespace Necromancy.Server.Data.Setting
             Load(Npc, "npc.csv", new NpcCsvReader());
             Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());
             Load(Maps, "map.csv", new MapCsvReader(Strings));
-            Load(MapSymbols, "map_symbol.csv", new MapSymbolCsvReader());
+            //Load(MapSymbols, "map_symbol.csv", new MapSymbolCsvReader());
             Load(ModelCommon, "model_common.csv", new ModelCommonCsvReader(Monster, ModelAtr));
             return this;
         }
