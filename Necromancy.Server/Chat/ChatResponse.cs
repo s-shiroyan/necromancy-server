@@ -27,8 +27,9 @@ namespace Necromancy.Server.Chat
             ErrorType = ChatErrorType.Success;
             MessageType = ChatMessageType.Area;
         }
-        
-        public ChatResponse(NecClient sender, string message, ChatMessageType messageType) : this()
+
+        public ChatResponse(NecClient sender, string message, ChatMessageType messageType,
+            string recipientSoulName = null) : this()
         {
             Message = message;
             CharacterId = sender.Character.Id;
@@ -38,7 +39,7 @@ namespace Necromancy.Server.Chat
             Deliver = true;
             ErrorType = ChatErrorType.Success;
             MessageType = messageType;
-            Recipients.Add(sender);
+            RecipientSoulName = recipientSoulName;
         }
 
         public List<NecClient> Recipients { get; }
@@ -50,5 +51,6 @@ namespace Necromancy.Server.Chat
         public string Message { get; set; }
         public int CharacterId { get; set; }
         public uint CharacterInstanceId { get; set; }
+        public string RecipientSoulName { get; set; }
     }
 }

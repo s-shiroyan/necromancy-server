@@ -43,7 +43,8 @@ namespace Necromancy.Server.Chat
                 return;
             }
 
-            ChatResponse response = new ChatResponse(client, message.Message, message.MessageType);
+            ChatResponse response =
+                new ChatResponse(client, message.Message, message.MessageType, message.RecipientSoulName);
             List<ChatResponse> responses = new List<ChatResponse>();
             foreach (IChatHandler handler in _handler)
             {
@@ -56,13 +57,49 @@ namespace Necromancy.Server.Chat
                 return;
             }
 
+            Deliver(client, response);
             RespondPostMessage(client, ChatErrorType.Success);
 
-            _server.Router.Send(response);
+
             foreach (ChatResponse chatResponse in responses)
             {
-                _server.Router.Send(chatResponse);
+                Deliver(client, chatResponse);
             }
+        }
+
+        private void Deliver(NecClient sender, ChatResponse chatResponse)
+        {
+            switch (chatResponse.MessageType)
+            {
+                case ChatMessageType.ChatCommand:
+                    chatResponse.Recipients.Add(sender);
+                    break;
+                case ChatMessageType.All:
+                    chatResponse.Recipients.AddRange(sender.Map.ClientLookup.GetAll());
+                    break;
+                case ChatMessageType.Area:
+                    chatResponse.Recipients.AddRange(sender.Map.ClientLookup.GetAll());
+                    break;
+                case ChatMessageType.Shout:
+                    chatResponse.Recipients.AddRange(sender.Map.ClientLookup.GetAll());
+                    break;
+                case ChatMessageType.Whisper:
+                    NecClient recipient = _server.Clients.GetBySoulName(chatResponse.RecipientSoulName);
+                    if (recipient == null)
+                    {
+                        _logger.Error($"SoulName: {chatResponse.RecipientSoulName} not found");
+                        return;
+                    }
+
+                    chatResponse.Recipients.Add(sender);
+                    chatResponse.Recipients.Add(recipient);
+                    break;
+                default:
+                    chatResponse.Recipients.Add(sender);
+                    break;
+            }
+
+            _server.Router.Send(chatResponse);
         }
 
         private void RespondPostMessage(NecClient client, ChatErrorType chatErrorType)
