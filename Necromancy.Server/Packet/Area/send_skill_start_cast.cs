@@ -19,7 +19,6 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int mySkillID = packet.Data.ReadInt32();
-            client.Character.lastCast = mySkillID;
 
             int mySkillTarget = packet.Data.ReadInt32();
 #pragma warning disable CS0219 // Variable is assigned but its value is never used

@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int CastingTime = 10;
+            //int CastingTime = 10;
             client.Character.logoutCanceled = 0;
 
             IBuffer res = BufferProvider.Provide();
