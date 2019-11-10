@@ -44,12 +44,18 @@ namespace Necromancy.Server.Packet.Area
                          { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 10000013 ,  () => defaultEvent(client, (int)instanceId) },                         
                          { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn) },
                          { x => x < 90000010 ,  () => defaultEvent(client, (int)instanceId) }
 
                         };
 
-                    eventSwitchPerObjectID.First(sw => sw.Key((int)instanceId)).Value();
+                    eventSwitchPerObjectID.First(sw => sw.Key((int)npcSpawn.NpcId)).Value();
+
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(npcSpawn.NpcId);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
+
 
 
                     break;
@@ -62,9 +68,6 @@ namespace Necromancy.Server.Packet.Area
                     break;
             }
 
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(instanceId);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
 
         }

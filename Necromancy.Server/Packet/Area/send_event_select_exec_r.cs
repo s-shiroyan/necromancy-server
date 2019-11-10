@@ -44,6 +44,7 @@ namespace Necromancy.Server.Packet.Area
                  { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
                  { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
                  { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 10000013 ,  () => defaultEvent(client, (int)objectID) },
                  { x => x < 74000023 ,  () => RecoverySpring(client, (int)objectID) },
                  { x => x < 90000011 ,  () => defaultEvent(client, (int)objectID) }
 
