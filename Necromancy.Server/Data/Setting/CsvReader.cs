@@ -92,5 +92,28 @@ namespace Necromancy.Server.Data.Setting
 
             items.Add(item);
         }
+
+        /// <summary>
+        /// Only produce null value if the string is null or empty.
+        /// Otherwise try to parse the content and return the number on success.
+        /// Return false if the string contains an invalid number.
+        /// </summary>
+        protected bool TryParseNullableInt(string str, out int? value)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                value = null;
+                return true;
+            }
+
+            if (int.TryParse(str, out int val))
+            {
+                value = val;
+                return true;
+            }
+
+            value = null;
+            return false;
+        }
     }
 }

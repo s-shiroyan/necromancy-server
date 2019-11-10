@@ -3,7 +3,6 @@ namespace Necromancy.Server.Data.Setting
     public class ModelCommonSetting : ISettingRepositoryItem
     {
         public int Id { get; set; }
-        public int ModelId => Id;
         public int Radius { get; set; }
         public int Height { get; set; }
         public int CrouchHeight { get; set; }

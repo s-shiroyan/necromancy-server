@@ -49,6 +49,7 @@ namespace Necromancy.Server.Packet.Auth
             client.Account = account;
             client.AuthConnection = connection;
             connection.Client = client;
+            client.UpdateIdentity();
             Server.Clients.Add(client);
 
             SendResponse(connection, account);

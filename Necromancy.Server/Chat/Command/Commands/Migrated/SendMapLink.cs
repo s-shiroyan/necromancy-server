@@ -37,7 +37,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res1.WriteFloat(client.Character.X); //x
             res1.WriteFloat(client.Character.Y); //y
             res1.WriteFloat(client.Character.Z + 2); //z
-            res1.WriteByte(client.Character.viewOffset); // offset
+            res1.WriteByte(client.Character.Heading); // offset
 
             res1.WriteFloat(1000); // Height
             res1.WriteFloat(100); // Width

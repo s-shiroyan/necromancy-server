@@ -27,7 +27,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteFloat(client.Character.X); //Final X
             res.WriteFloat(client.Character.Y); //Final Y
             res.WriteFloat(client.Character.Z); //Final Z
-            res.WriteByte(client.Character.viewOffset); //View offset
+            res.WriteByte(client.Character.Heading); //View offset
 
             res.WriteInt32(0); // 0 here gives an indication (blue pillar thing) and makes it pickup-able
             res.WriteInt32(0);

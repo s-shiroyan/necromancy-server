@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             byte view = packet.Data.ReadByte();
 
             //(client.Character != null)
-                client.Character.viewOffset = view;
+                client.Character.Heading = view;
 
             //This is all Position and Orientation Related.
             IBuffer res = BufferProvider.Provide();
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(client.Character.X); //might need to change to Target X Y Z
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);
-            res.WriteByte(client.Character.viewOffset);//View offset / Head Rotation
+            res.WriteByte(client.Character.Heading);//View offset / Head Rotation
             res.WriteByte(client.Character.movementAnim);//Character state? body rotation? TBD. should be character state, but not sure where to read that from
 
             //Router.Send(client.Map, (ushort)AreaPacketId.recv_self_dragon_pos_notify, res, ServerType.Area, client);

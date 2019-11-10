@@ -28,7 +28,7 @@ namespace Necromancy.Server.Common
             int Shield = 21;        //Shield 19-21
                                     //int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
                                     //sub_483660 
-            res.WriteInt32(MyWeaponType[myCharacter.Characterslotid]); //18	    				
+            res.WriteInt32(MyWeaponType[myCharacter.Slot]); //18	    				
             res.WriteInt32(Shield); //17 	    		
             res.WriteInt32(Armor); //16	        			
             res.WriteInt32(Armor); //15	        				

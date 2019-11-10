@@ -26,31 +26,32 @@ namespace Necromancy.Server.Packet.Area
 
             if (client.Character.eventSelectExecCode == -1)
             {
-                IBuffer res = BufferProvider.Provide();
-                res.WriteCString("Message at End of Event"); // find max size
-                res.WriteInt32(0);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_event_select_exec, res, ServerType.Area);
-                RecvEventEnd(client);
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteByte(0);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res2, ServerType.Area);
             }
-
-            //logic to execute different actions based on the event that triggered this select execution.
-            int objectID = client.Character.eventSelectReadyCode;
-            var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+            else
             {
-             { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-             { x => x < 90000010 ,  () => defaultEvent(client, objectID) },
-             { x => x < 90009000 ,  () => RecoverySpring(client, objectID)        },
+                    //logic to execute different actions based on the event that triggered this select execution.
+                    uint objectID = client.Character.eventSelectReadyCode;
+                    var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                {
+                 { x => x < 2 ,    () => defaultEvent(client, (int)objectID) },
+                 { x => x < 3 ,    () => RecoverySpring(client, (int)objectID)},
+                 { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
+                 { x => x < 10000013 ,  () => defaultEvent(client, (int)objectID) },
+                 { x => x < 74000023 ,  () => RecoverySpring(client, (int)objectID) },
+                 { x => x < 90000011 ,  () => defaultEvent(client, (int)objectID) }
 
-            };
+                };
 
-            eventSwitchPerObjectID.First(sw => sw.Key(objectID)).Value();
-
-
+                    eventSwitchPerObjectID.First(sw => sw.Key((int)objectID)).Value();
+            }
         }
         private void RecvEventEnd(NecClient client)
         {

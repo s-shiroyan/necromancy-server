@@ -31,46 +31,32 @@ namespace Necromancy.Server.Packet.Msg
                 connection.Socket.Close();
                 return;
             }
-
-            // TODO initialize character from database
-            client.Character = new Character();
-            client.Character.Id = Util.GetRandomNumber(1, 999);
-            // TODO Query Soul ID by Account ID. Account ID == Soul ID for now....
-            client.Character.SoulId = client.Account.Id;
-            client.Character.AccountId = client.Account.Id;
             client.MsgConnection = connection;
             connection.Client = client;
             SendResponse(connection, client);
         }
-
-
+        
         private void SendResponse(NecConnection connection, NecClient client)
         {
             List<Soul> souls = Database.SelectSoulsByAccountId(client.Account.Id);
             if (souls.Count <= 0)
             {
                 IBuffer resq = BufferProvider.Provide();
-
                 resq.WriteInt32(0); //  Error
-
                 resq.WriteByte(0);
                 resq.WriteFixedString(String.Empty, 49); // Soul Name
                 resq.WriteByte(0); // Soul Level
                 resq.WriteByte(0); // bool - if use value 1, can't join in msg server character list
-
                 resq.WriteByte(0);
                 resq.WriteFixedString(String.Empty, 49); // Soul Name
                 resq.WriteByte(0); // Soul Level
                 resq.WriteByte(0); // bool - if use value 1, can't join in msg server character list
-
-
                 resq.WriteByte(0); // bool
                 resq.WriteByte(0);
                 Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, resq, ServerType.Msg);
                 return;
             }
-
-
+            
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
             for (int i = 0; i < SoulCount; i++)

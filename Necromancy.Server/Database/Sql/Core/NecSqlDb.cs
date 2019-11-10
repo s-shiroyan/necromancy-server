@@ -24,5 +24,6 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             Logger.Exception(ex);
         }
+
     }
 }
