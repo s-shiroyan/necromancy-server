@@ -43,16 +43,7 @@ namespace Necromancy.Server.Chat
                 return;
             }
 
-            ChatResponse response = new ChatResponse();
-            response.Message = message.Message;
-            response.CharacterId = client.Character.Id;
-            response.CharacterName = client.Character.Name;
-            response.SoulName = client.Soul.Name;
-            response.Deliver = true;
-            response.ErrorType = ChatErrorType.Success;
-            response.MessageType = message.MessageType;
-            response.Recipients.Add(client);
-
+            ChatResponse response = new ChatResponse(client, message.Message, message.MessageType);
             List<ChatResponse> responses = new List<ChatResponse>();
             foreach (IChatHandler handler in _handler)
             {
