@@ -87,6 +87,10 @@ namespace Necromancy.Server.Model
             _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
             ClientLookup.Remove(client);
             client.Map = null;
+
+            // Send everyone except me my disappearence
+            RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
+            _server.Router.Send(this, objectDisappearData, client);
         }
     }
 }
