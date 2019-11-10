@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
             //This is all Position and Orientation Related.
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);//Character ID
+            res.WriteInt32(client.Character.InstanceId);//Character ID
             res.WriteFloat(client.Character.X); //might need to change to Target X Y Z
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);
