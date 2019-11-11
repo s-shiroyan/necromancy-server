@@ -102,7 +102,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@visibility", npcSpawn.Visibility);
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);
-                AddParameter(command, "@icon", npcSpawn.Updated);
+                AddParameter(command, "@icon", npcSpawn.Icon);
                 AddParameter(command, "@id", npcSpawn.Id);
             });
             return rowsAffected > NoRowsAffected;
