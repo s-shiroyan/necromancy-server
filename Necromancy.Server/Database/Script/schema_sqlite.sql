@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
   `size`       INTEGER             NOT NULL,
   `visibility` INTEGER             NOT NULL,
   `created`    DATETIME            NOT NULL,
-  `updated`    DATETIME            NOT NULL
+  `updated`    DATETIME            NOT NULL,
+  `icon`       INTEGER             NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
