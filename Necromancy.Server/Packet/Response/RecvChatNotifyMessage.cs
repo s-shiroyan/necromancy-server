@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Response
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32((int) _response.MessageType);
-            res.WriteInt32(_response.CharacterId);
+            res.WriteInt32(_response.CharacterInstanceId);
             res.WriteFixedString(_response.SoulName, 49);
             res.WriteFixedString(_response.CharacterName, 37);
             res.WriteFixedString(_response.Message, 769);

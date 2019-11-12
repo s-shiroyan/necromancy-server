@@ -28,6 +28,20 @@ namespace Necromancy.Server.Chat
             MessageType = ChatMessageType.Area;
         }
 
+        public ChatResponse(NecClient sender, string message, ChatMessageType messageType,
+            string recipientSoulName = null) : this()
+        {
+            Message = message;
+            CharacterId = sender.Character.Id;
+            CharacterInstanceId = sender.Character.InstanceId;
+            CharacterName = sender.Character.Name;
+            SoulName = sender.Soul.Name;
+            Deliver = true;
+            ErrorType = ChatErrorType.Success;
+            MessageType = messageType;
+            RecipientSoulName = recipientSoulName;
+        }
+
         public List<NecClient> Recipients { get; }
         public bool Deliver { get; set; }
         public ChatErrorType ErrorType { get; set; }
@@ -36,5 +50,7 @@ namespace Necromancy.Server.Chat
         public string CharacterName { get; set; }
         public string Message { get; set; }
         public int CharacterId { get; set; }
+        public uint CharacterInstanceId { get; set; }
+        public string RecipientSoulName { get; set; }
     }
 }

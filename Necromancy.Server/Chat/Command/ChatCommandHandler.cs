@@ -59,7 +59,6 @@ namespace Necromancy.Server.Chat.Command
 
             if (!message.Message.StartsWith(ChatCommandStart))
             {
-                Logger.Error(client, $"Command '{message.Message}' does not start with '{ChatCommandStart}'");
                 return;
             }
 
@@ -67,6 +66,7 @@ namespace Necromancy.Server.Chat.Command
             string[] command = commandMessage.Split(ChatCommandSeparator);
             if (command.Length <= 0)
             {
+                Logger.Error(client, $"Command '{message.Message}' is invalid");
                 return;
             }
 

@@ -61,6 +61,25 @@ namespace Necromancy.Server.Model
             client.Character.X = X;
             client.Character.Y = Y;
             client.Character.Z = Z;
+
+            // Send everyone except me my character data
+            RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
+            _server.Router.Send(this, myCharacterData, client);
+
+
+            // Send me every ones character data to me
+            foreach (NecClient otherClient in ClientLookup.GetAll())
+            {
+                if (otherClient == client)
+                {
+                    // skip myself
+                    continue;
+                }
+
+                RecvDataNotifyCharaData otherCharacterData =
+                    new RecvDataNotifyCharaData(otherClient.Character, otherClient.Soul.Name);
+                _server.Router.Send(otherCharacterData, client);
+            }
         }
 
         public void Leave(NecClient client)
@@ -68,6 +87,10 @@ namespace Necromancy.Server.Model
             _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
             ClientLookup.Remove(client);
             client.Map = null;
+
+            // Send everyone except me my disappearence
+            RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
+            _server.Router.Send(this, objectDisappearData, client);
         }
     }
 }

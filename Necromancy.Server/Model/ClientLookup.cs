@@ -50,16 +50,16 @@ namespace Necromancy.Server.Model
                 _clients.Remove(client);
             }
         }
-
+        
         /// <summary>
-        /// Returns a Client by CharacterName if it exists.
+        /// Returns a Client by Soul name if it exists.
         /// </summary>
-        public NecClient GetByCharacterName(int soulId, string characterName)
+        public NecClient GetBySoulName(string soulName)
         {
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Soul.Id == soulId && client.Character.Name == characterName)
+                if (client.Soul.Name == soulName)
                 {
                     return client;
                 }

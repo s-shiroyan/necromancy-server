@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             
                 IBuffer res = BufferProvider.Provide();
 
-                res.WriteInt32(client.Character.Id);//Character ID
+                res.WriteInt32(client.Character.InstanceId);//Character ID
                 res.WriteInt32(client.Character.charaPose); //Character pose
 
                 

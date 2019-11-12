@@ -2,15 +2,15 @@ namespace Necromancy.Server.Chat
 {
     public class ChatMessage
     {
-        public ChatMessage(ChatMessageType messageType, string recipient, string message)
+        public ChatMessage(ChatMessageType messageType, string recipientSoulName, string message)
         {
             MessageType = messageType;
-            Recipient = recipient;
+            RecipientSoulName = recipientSoulName;
             Message = message;
         }
 
         public ChatMessageType MessageType { get; }
-        public string Recipient { get; }
+        public string RecipientSoulName { get; }
         public string Message { get; }
     }
 }
