@@ -34,7 +34,20 @@ namespace Necromancy.Server.Packet.Area
             {
                 Server.Instances.AssignInstance(monsterSpawn);
                 RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                Router.Send(client.Map, monsterData);
+                Router.Send(monsterData, client);
+            }
+
+            foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
+            {
+                if (otherClient == client)
+                {
+                    // skip myself
+                    continue;
+                }
+
+                RecvDataNotifyCharaData otherCharacterData =
+                    new RecvDataNotifyCharaData(otherClient.Character, otherClient.Soul.Name);
+                Router.Send(otherCharacterData, client);
             }
         }
     }
