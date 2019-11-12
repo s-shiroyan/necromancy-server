@@ -1,7 +1,9 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -18,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             /*int32, unknown
               int32, target client(character) id[i think this is the sends structure]*/
             int unknown = packet.Data.ReadInt32();
-            int targetClient = packet.Data.ReadInt32();
+            uint targetInstanceId = packet.Data.ReadUInt32();
 
             IBuffer res = BufferProvider.Provide();
 
@@ -26,16 +28,16 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_party_invite_r, res, ServerType.Area);
 
-            SendPartyNotifyInvite(client, targetClient);
+            SendPartyNotifyInvite(client, targetInstanceId);
         }
 
-        private void SendPartyNotifyInvite(NecClient client, int targetClient)
+        private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
             //recv_party_notify_invite
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);//Party maker client id
+            res.WriteInt32(client.Character.InstanceId);//Party maker client id
             res.WriteInt32(0);//Party type
             res.WriteInt32(0);//Normal item distribution
             res.WriteInt32(0);//Rare item distribution
@@ -57,9 +59,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);
             res.WriteFixedString("fixed3", 0xB5); //size is 0xB5
 
-            //Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg, client);
-            Router.Send(Server.Clients.GetByCharacterId(targetClient), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
-            
+            Router.Send(Server.Clients.GetByCharacterInstanceId(targetInstanceId), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
         }
     }
 }
