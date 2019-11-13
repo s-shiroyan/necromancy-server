@@ -31,25 +31,25 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(1); //Most likely insanceId
             res.WriteInt32(1);
-            res.WriteInt32(2);
-            res.WriteFixedString("soul?", 0x31); //soul name?
-            res.WriteFixedString("chara?", 0x5B); //character name?
-            res.WriteInt32(3);
-            res.WriteByte(1);
-            res.WriteByte(2);
-            res.WriteInt32(4);
-            res.WriteInt32(5);
-            res.WriteInt32(6);
-            res.WriteInt32(7);
-            res.WriteInt32(8);
-            res.WriteInt32(9);
-            res.WriteInt32(10);
-            res.WriteInt32(11);
-            res.WriteInt32(12);
-            res.WriteInt32(13);
-            res.WriteFixedString("fixstr3", 0x61); // size is 0x61
+            res.WriteInt32(1);
+            res.WriteFixedString("soulname", 0x31); //Soul name
+            res.WriteFixedString("charaname", 0x5B); //Character name
+            res.WriteInt32(3); //Class
+            res.WriteByte(2); //Soul rank
+            res.WriteByte(4); //Character level
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1001902); //Might make the character selectable?
+            res.WriteInt32(1001902); //One half of location? 1001902 = Illfalo Port but is actually Deep Sea Port
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteFixedString("", 0x61); //Location of player if not in same zone
             res.WriteFloat(1);
             res.WriteFloat(1);
             res.WriteFloat(1);
