@@ -64,16 +64,15 @@ namespace Necromancy.Server.Packet.Response
 
             res.WriteInt32(_npcSpawn.ModelId); //NPC Model from file "model_common.csv"
             res.WriteInt16(_npcSpawn.Size); //NPC Model Size
-            res.WriteByte(255);
-            res.WriteByte(255);
-            res.WriteByte(255);
-            res.WriteInt32(0); //Hp Related Bitmask?  This setting makes the NPC "alive"    11111110 = npc flickering, 0 = npc alive
+            res.WriteByte(255); //ToDo:  pull in map_symbol.csv column B
+            res.WriteByte(255); //ToDo:  pull in map_symbol.csv column C
+            res.WriteByte(255); //ToDo:  pull in map_symbol.csv column D
+            res.WriteInt32(0);  //ToDo:  pull in map_symbol.csv column E or //ToDo:  pull in NPC.CSV column A //Hp Related Bitmask?  This setting makes the NPC "alive"    11111110 = npc flickering, 0 = npc alive
             res.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
-            res.WriteInt32(
-                8); //NPC minimap icon (map_symbol.csv idx 5) / /  res3.WriteInt32(8); // add strange light on certain npc
-            res.WriteFloat(0); //x for icons
-            res.WriteFloat(0); //y for icons
-            res.WriteFloat(50); //z for icons
+            res.WriteInt32(8); //ToDo:  pull in NPC.CSV column C
+            res.WriteFloat(0); //x for icons //ToDo:  pull in NPC.CSV column D
+            res.WriteFloat(0); //y for icons //ToDo:  pull in NPC.CSV column E
+            res.WriteFloat(50); //z for icons //ToDo:  pull in NPC.CSV column F
             int numStatusEffects = 128;
             res.WriteInt32(numStatusEffects); //number of status effects. 128 Max.
             for (int i = 0; i < numStatusEffects; i++)
