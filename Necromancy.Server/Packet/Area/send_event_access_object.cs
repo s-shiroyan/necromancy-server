@@ -44,9 +44,9 @@ namespace Necromancy.Server.Packet.Area
                          { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 10000013 ,  () => defaultEvent(client, (int)instanceId) },                         
+                         { x => x < 74000019 ,  () => defaultEvent(client, (int)instanceId) },                         
                          { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn) },
-                         { x => x < 90000010 ,  () => defaultEvent(client, (int)instanceId) }
+                         { x => x < 900000100 ,  () => defaultEvent(client, (int)instanceId) }
 
                         };
 
@@ -86,7 +86,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendEventShowBoardStart(NecClient client, int instanceId)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteCString("I Hate Events"); // find max size
+            res.WriteCString("Select a Map!. just not the town. town is brokenh"); // find max size
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
         }
