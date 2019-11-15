@@ -19,6 +19,7 @@ jobs:
           NEC_VERSION_FILE=${{ github.workspace }}/necromancy.version
           NEC_VERSION=$(<"$NEC_VERSION_FILE")
           echo ::set-env name=NEC_VERSION::$NEC_VERSION
+          echo ::set-env name=NEC_VERSION_E::$(echo ${GITHUB_SHA} | cut -c1-8)
           mkdir ./release
           for NEC_RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
               # Server
@@ -35,8 +36,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: release-${{ env.NEC_VERSION }}-${{ github.sha::8 }}
-          release_name: Release ${{ env.NEC_VERSION }}-${{ github.sha::8 }}
+          tag_name: release-${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}
+          release_name: Release ${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}
           draft: false
           prerelease: false
 
@@ -48,7 +49,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release/win-x86-${{ env.NEC_VERSION }}.tar.gz
-          asset_name: win-x86-${{ env.NEC_VERSION }}-${{ github.sha::8 }}.tar.gz
+          asset_name: win-x86-${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}.tar.gz
           asset_content_type: application/gzip
           
       - name: Upload win-x64 Release Asset
@@ -59,7 +60,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release/win-x64-${{ env.NEC_VERSION }}.tar.gz
-          asset_name: win-x64-${{ env.NEC_VERSION }}-${{ github.sha::8 }}.tar.gz
+          asset_name: win-x64-${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}.tar.gz
           asset_content_type: application/gzip
           
       - name: Upload linux-x64 Release Asset
@@ -70,7 +71,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release/linux-x64-${{ env.NEC_VERSION }}.tar.gz
-          asset_name: linux-x64-${{ env.NEC_VERSION }}-${{ github.sha::8 }}.tar.gz
+          asset_name: linux-x64-${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}.tar.gz
           asset_content_type: application/gzip
           
       - name: Upload osx-x64 Release Asset
@@ -81,5 +82,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release/osx-x64-${{ env.NEC_VERSION }}.tar.gz
-          asset_name: osx-x64-${{ env.NEC_VERSION }}-${{ github.sha::8 }}.tar.gz
+          asset_name: osx-x64-${{ env.NEC_VERSION }}-${{ env.NEC_VERSION_E }}.tar.gz
           asset_content_type: application/gzip
