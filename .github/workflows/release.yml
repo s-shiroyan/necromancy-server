@@ -11,7 +11,7 @@ jobs:
       - name: Create Release
         run: |
           read -r VERSION<${{ github.workspace }}/necromancy.version
-          mkdir ./release
+          mkdir ${{ github.workspace }}/release
           for RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
           # Server
           dotnet publish Necromancy.Cli/Necromancy.Cli.csproj /p:Version=$VERSION /p:FromMSBuild=true --runtime $RUNTIME --configuration Release --output ${{ github.workspace }}/publish/$RUNTIME-$VERSION/Server
