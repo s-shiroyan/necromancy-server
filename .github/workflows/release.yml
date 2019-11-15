@@ -15,6 +15,7 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          NEC_VERSION_FILE={{ github.workspace }}/necromancy.version
+          NEC_VERSION_FILE=${{ github.workspace }}/necromancy.version
           NEC_VERSION=$(<"$NEC_VERSION_FILE")
           echo $NEC_VERSION
+          echo ::set-env name=NEC_VERSION::$$NEC_VERSION
