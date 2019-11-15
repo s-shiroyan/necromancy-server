@@ -15,4 +15,6 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
-          help read
+          NEC_VERSION_FILE={{ github.workspace }}/necromancy.version
+          NEC_VERSION=$(<"$NEC_VERSION_FILE")
+          echo $NEC_VERSION
