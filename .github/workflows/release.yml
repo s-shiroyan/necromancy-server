@@ -8,12 +8,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Define variables
-        run: sh ${{ github.workspace }}/release.sh
-
-      - name: Run a multi-line script
+      - name: Create Release
         run: |
           read -r VERSION<${{ github.workspace }}/necromancy.version
-          echo "$VERSION"
-          echo TEST
+          mkdir ./release
+          for RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
+          # Server
+          dotnet publish Necromancy.Cli/Necromancy.Cli.csproj /p:Version=$VERSION /p:FromMSBuild=true --runtime $RUNTIME --configuration Release --output ${{ github.workspace }}/publish/$RUNTIME-$VERSION/Server
+          # ReleaseFiles
+          cp -r ${{ github.workspace }}/ReleaseFiles/. ${{ github.workspace }}/publish/$RUNTIME-$VERSION/
+          # Pack
+          tar cjf ${{ github.workspace }}/release/$RUNTIME-$VERSION.tar.gz ${{ github.workspace }}/publish/$RUNTIME-$VERSION
+          done 
         
