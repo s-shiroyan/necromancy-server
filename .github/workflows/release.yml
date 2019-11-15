@@ -12,10 +12,17 @@ jobs:
           dotnet-version: 3.0.100
       - name: Build Release
         id: build_release
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
           NEC_VERSION_FILE=${{ github.workspace }}/necromancy.version
           NEC_VERSION=$(<"$NEC_VERSION_FILE")
-          echo $NEC_VERSION
-          echo ::set-env name=NEC_VERSION::$$NEC_VERSION
+          echo ::set-env name=NEC_VERSION::$NEC_VERSION
+          mkdir ./release
+          for NEC_RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
+              # Server
+              dotnet publish Necromancy.Cli/Necromancy.Cli.csproj /p:Version=$NEC_VERSION /p:FromMSBuild=true --runtime $NEC_RUNTIME --configuration Release --output ./publish/$NEC_RUNTIME-$NEC_VERSION/Server
+              # ReleaseFiles
+              cp -r ./ReleaseFiles/. ./publish/$NEC_RUNTIME-$NEC_VERSION/
+              # Pack
+              tar cjf ./release/$NEC_RUNTIME-$NEC_VERSION.tar.gz ./publish/$NEC_RUNTIME-$NEC_VERSION
+          done
+          la
