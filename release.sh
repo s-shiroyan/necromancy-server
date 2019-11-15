@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore2x
+printenv
+RootFolder="${RELEASE_ROOT_FOLDER:-./}"
 read -r VERSION<necromancy.version
 mkdir ./release
 for RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
