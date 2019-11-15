@@ -4,15 +4,13 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
+    - name: Checkout
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
     - name: Run a multi-line script
       run: |
+        echo TEST
         read -r VERSION<${{ github.workspace }}/necromancy.version
         echo Version: $VERSION
         
