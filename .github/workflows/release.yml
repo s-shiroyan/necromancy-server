@@ -11,6 +11,11 @@ jobs:
         with:
           dotnet-version: 3.0.100
       - name: Build Release
+        id: build_release
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
         run: |
+          #!/bin/bash
+          echo "$GITHUB_CONTEXT"
           read -r NEC_VERSION<${{ github.workspace }}/necromancy.version
           echo $NEC_VERSION
