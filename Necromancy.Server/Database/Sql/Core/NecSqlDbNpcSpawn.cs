@@ -9,16 +9,16 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertNpcSpawn =
-            "INSERT INTO `nec_npc_spawn` (`npc_id`, `model_id`, `level`,  `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated`, `icon`) VALUES (@npc_id, @model_id, @level, @name, @title, @map_id, @x, @y, @z, @active, @heading, @size, @visibility, @created, @updated, @icon);";
+            "INSERT INTO `nec_npc_spawn` (`id`, `npc_id`, `name`, `status_effect_id`, `status_effect_x`, `status_effect_y`, `status_effect_z`, `to_do`, `special_attribute`, `event_first_encounter`, `event_always`, `play_cutscene_first_encounter`, `play_cutscene_always`, `level`, `title`, `dragon_statue_type`, `icon_type`, `x`, `y`, `z`, `map_id`, `display_condition_flag`, `split_map_number`, `setting_type_flag`, `model_id`, `radius`, `height`, `crouch_height`, `name_plate`, `height_model_attribute`, `z_offset`, `effect_scaling`, `heading`, `created`, `updated`) VALUES(@Id,@npc_id,@name,@status_effect_id,@status_effect_x,@status_effect_y,@status_effect_z,@to_do,@special_attribute,@event_first_encounter,@event_always,@play_cutscene_first_encounter,@play_cutscene_always,@level,@title,@dragon_statue_type,@icon_type,@x,@y,@z,@map_id,@display_condition_flag,@split_map_number,@setting_type_flag,@model_id,@radius,@height,@crouch_height,@name_plate,@height_model_attribute,@z_offset,@effect_scaling,@heading,@created,@updated);";
 
-        private const string SqlSelectNpcSpawns =
-            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon` FROM `nec_npc_spawn`;";
-
+        private const string SqlSelectNpcSpawns = 
+            "SELECT `id`, `npc_id`, `name`, `status_effect_id`, `status_effect_x`, `status_effect_y`, `status_effect_z`, `to_do`, `special_attribute`, `event_first_encounter`, `event_always`, `play_cutscene_first_encounter`, `play_cutscene_always`, `level`, `title`, `dragon_statue_type`, `icon_type`, `x`, `y`, `z`, `map_id`, `display_condition_flag`, `split_map_number`, `setting_type_flag`, `model_id`, `radius`, `height`, `crouch_height`, `name_plate`, `height_model_attribute`, `z_offset`, `effect_scaling`, `heading`, `created`, `updated` FROM `nec_npc_spawn`;";
+        
         private const string SqlSelectNpcSpawnsByMapId =
-            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
+            "SELECT `id`, `npc_id`, `name`, `status_effect_id`, `status_effect_x`, `status_effect_y`, `status_effect_z`, `to_do`, `special_attribute`, `event_first_encounter`, `event_always`, `play_cutscene_first_encounter`, `play_cutscene_always`, `level`, `title`, `dragon_statue_type`, `icon_type`, `x`, `y`, `z`, `map_id`, `display_condition_flag`, `split_map_number`, `setting_type_flag`, `model_id`, `radius`, `height`, `crouch_height`, `name_plate`, `height_model_attribute`, `z_offset`, `effect_scaling`, `heading`, `created`, `updated` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
 
         private const string SqlUpdateNpcSpawn =
-            "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id, `model_id`=@model_id, `level`=@level,  `name`=@name, `title`=@title, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `active`=@active, `heading`=@heading, `size`=@size, `visibility`=@visibility, `created`=@created, `updated`=@updated , `icon`=@icon WHERE `id`=@id;";
+            "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id,`name`=@name,`status_effect_id`=@status_effect_id,`status_effect_x`=@status_effect_x,`status_effect_y`=@status_effect_y,`status_effect_z`=@status_effect_z,`to_do`=@to_do,`special_attribute`=@special_attribute,`event_first_encounter`=@event_first_encounter,`event_always`=@event_always,`play_cutscene_first_encounter`=play_cutscene_first_encounter,`play_cutscene_always`=@play_cutscene_always,`level`=@level,`title`=@title,`dragon_statue_type`=@dragon_statue_type,`icon_type`=@icon_type,`x`=@a,`y`=@y,`z`=@z,`map_id`=@map_id,`display_condition_flag`=@display_condition_flag,`split_map_number`=@split_map_number,`setting_type_flag`=@setting_type_flag,`model_id`=@model_id,`radius`=@radius,`height`=@height,`crouch_height`=@crouch_height,`name_plate`=@name_plate,`height_model_attribute`=@height_model_attribute,`z_offset`=@z_offset,`effect_scaling`=@effect_scaling,`heading`=@heading,`created`=@created,`updated`=@updated FROM `nec_npc_spawn`;";
 
         private const string SqlDeleteNpcSpawn =
             "DELETE FROM `nec_npc_spawn` WHERE `id`=@id;";
@@ -28,21 +28,38 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlInsertNpcSpawn, command =>
             {
                 AddParameter(command, "@npc_id", npcSpawn.NpcId);
-                AddParameter(command, "@model_id", npcSpawn.ModelId);
-                AddParameter(command, "@level", npcSpawn.Level);
                 AddParameter(command, "@name", npcSpawn.Name);
+                AddParameter(command, "@status_effect_id", npcSpawn.StatusEffectId);
+                AddParameter(command, "@status_effect_x", npcSpawn.StatusEffectX);
+                AddParameter(command, "@status_effect_y", npcSpawn.StatusEffectY);
+                AddParameter(command, "@status_effect_z", npcSpawn.StatusEffectZ);
+                AddParameter(command, "@to_do", npcSpawn.ToDo);
+                AddParameter(command, "@special_attribute", npcSpawn.SpecialAttribute);
+                AddParameter(command, "@event_first_encounter", npcSpawn.EventFirstEncounter);
+                AddParameter(command, "@event_always", npcSpawn.EventAlways);
+                AddParameter(command, "@play_cutscene_first_encounter", npcSpawn.PlayCutsceneFirstEncounter);
+                AddParameter(command, "@play_cutscene_always", npcSpawn.PlayCutsceneAlways);
+                AddParameter(command, "@level", npcSpawn.Level);
                 AddParameter(command, "@title", npcSpawn.Title);
-                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@dragon_statue_type", npcSpawn.DragonStatueType);
+                AddParameter(command, "@icon_type", npcSpawn.IconType);
                 AddParameter(command, "@x", npcSpawn.X);
                 AddParameter(command, "@y", npcSpawn.Y);
                 AddParameter(command, "@z", npcSpawn.Z);
-                AddParameter(command, "@active", npcSpawn.Active);
+                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@display_condition_flag", npcSpawn.DisplayConditionFlag);
+                AddParameter(command, "@split_map_number", npcSpawn.SplitMapNumber);
+                AddParameter(command, "@setting_type_flag", npcSpawn.SettingTypeFlag);
+                AddParameter(command, "@model_id", npcSpawn.ModelId);
+                AddParameter(command, "@radius", npcSpawn.Radius);
+                AddParameter(command, "@height", npcSpawn.Height);
+                AddParameter(command, "@crouch_height", npcSpawn.CrouchHeight);
+                AddParameter(command, "@name_plate", npcSpawn.NamePlate);
+                AddParameter(command, "@height_model_attribute", npcSpawn.HeightModelAttribute);
+                AddParameter(command, "@z_offset", npcSpawn.ZOffset);
                 AddParameter(command, "@heading", npcSpawn.Heading);
-                AddParameter(command, "@size", npcSpawn.Size);
-                AddParameter(command, "@visibility", npcSpawn.Visibility);
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);
-                AddParameter(command, "@icon", npcSpawn.Icon);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
@@ -88,22 +105,38 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlUpdateNpcSpawn, command =>
             {
                 AddParameter(command, "@npc_id", npcSpawn.NpcId);
-                AddParameter(command, "@model_id", npcSpawn.ModelId);
-                AddParameter(command, "@level", npcSpawn.Level);
                 AddParameter(command, "@name", npcSpawn.Name);
+                AddParameter(command, "@status_effect_id", npcSpawn.StatusEffectId);
+                AddParameter(command, "@status_effect_x", npcSpawn.StatusEffectX);
+                AddParameter(command, "@status_effect_y", npcSpawn.StatusEffectY);
+                AddParameter(command, "@status_effect_z", npcSpawn.StatusEffectZ);
+                AddParameter(command, "@to_do", npcSpawn.ToDo);
+                AddParameter(command, "@special_attribute", npcSpawn.SpecialAttribute);
+                AddParameter(command, "@event_first_encounter", npcSpawn.EventFirstEncounter);
+                AddParameter(command, "@event_always", npcSpawn.EventAlways);
+                AddParameter(command, "@play_cutscene_first_encounter", npcSpawn.PlayCutsceneFirstEncounter);
+                AddParameter(command, "@play_cutscene_always", npcSpawn.PlayCutsceneAlways);
+                AddParameter(command, "@level", npcSpawn.Level);
                 AddParameter(command, "@title", npcSpawn.Title);
-                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@dragon_statue_type", npcSpawn.DragonStatueType);
+                AddParameter(command, "@icon_type", npcSpawn.IconType);
                 AddParameter(command, "@x", npcSpawn.X);
                 AddParameter(command, "@y", npcSpawn.Y);
                 AddParameter(command, "@z", npcSpawn.Z);
-                AddParameter(command, "@active", npcSpawn.Active);
+                AddParameter(command, "@map_id", npcSpawn.MapId);
+                AddParameter(command, "@display_condition_flag", npcSpawn.DisplayConditionFlag);
+                AddParameter(command, "@split_map_number", npcSpawn.SplitMapNumber);
+                AddParameter(command, "@setting_type_flag", npcSpawn.SettingTypeFlag);
+                AddParameter(command, "@model_id", npcSpawn.ModelId);
+                AddParameter(command, "@radius", npcSpawn.Radius);
+                AddParameter(command, "@height", npcSpawn.Height);
+                AddParameter(command, "@crouch_height", npcSpawn.CrouchHeight);
+                AddParameter(command, "@name_plate", npcSpawn.NamePlate);
+                AddParameter(command, "@height_model_attribute", npcSpawn.HeightModelAttribute);
+                AddParameter(command, "@z_offset", npcSpawn.ZOffset);
                 AddParameter(command, "@heading", npcSpawn.Heading);
-                AddParameter(command, "@size", npcSpawn.Size);
-                AddParameter(command, "@visibility", npcSpawn.Visibility);
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);
-                AddParameter(command, "@icon", npcSpawn.Icon);
-                AddParameter(command, "@id", npcSpawn.Id);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -119,22 +152,42 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             NpcSpawn npcSpawn = new NpcSpawn();
             npcSpawn.Id = GetInt32(reader, "id");
-            npcSpawn.ModelId = GetInt32(reader, "model_id");
             npcSpawn.NpcId = GetInt32(reader, "npc_id");
-            npcSpawn.Level = GetByte(reader, "level");
             npcSpawn.Name = GetString(reader, "name");
+            npcSpawn.StatusEffectId = GetInt32(reader, "status_effect_id");
+            npcSpawn.StatusEffectX = GetFloat(reader, "status_effect_x");
+            npcSpawn.StatusEffectY = GetFloat(reader, "status_effect_y");
+            npcSpawn.StatusEffectZ = GetFloat(reader, "status_effect_z");
+            npcSpawn.ToDo = GetString(reader, "to_do");
+            npcSpawn.SpecialAttribute = GetInt32(reader, "special_attribute");
+            npcSpawn.EventFirstEncounter = GetInt32(reader, "event_first_encounter");
+            npcSpawn.EventAlways = GetInt32(reader, "event_always");
+            npcSpawn.PlayCutsceneFirstEncounter = GetInt32(reader, "play_cutscene_first_encounter");
+            npcSpawn.PlayCutsceneAlways = GetInt32(reader, "play_cutscene_always");
+            npcSpawn.Level = GetByte(reader, "level");
             npcSpawn.Title = GetString(reader, "title");
-            npcSpawn.MapId = GetInt32(reader, "map_id");
+            npcSpawn.DragonStatueType = GetInt32(reader, "dragon_statue_type");
+            npcSpawn.IconType = GetInt32(reader, "icon_type");
             npcSpawn.X = GetFloat(reader, "x");
             npcSpawn.Y = GetFloat(reader, "y");
             npcSpawn.Z = GetFloat(reader, "z");
-            npcSpawn.Active = GetBoolean(reader, "active");
+            npcSpawn.MapId = GetInt32(reader, "map_id");
+            npcSpawn.DisplayConditionFlag = GetInt32(reader, "display_condition_flag");
+            npcSpawn.SplitMapNumber = GetInt32(reader, "split_map_number");
+            npcSpawn.SettingTypeFlag = GetInt32(reader, "setting_type_flag");
+
+            npcSpawn.ModelId = GetInt32(reader, "model_id");
+
+            npcSpawn.Radius = GetInt16(reader, "radius");
+            npcSpawn.CrouchHeight = GetByte(reader, "crouch_height");
+            npcSpawn.NamePlate = GetByte(reader, "name_plate");
+            npcSpawn.HeightModelAttribute = GetInt32(reader, "height_model_attribute");
+            npcSpawn.ZOffset = GetInt32(reader, "z_offset");
+            npcSpawn.EffectScaling = GetInt32(reader, "effect_scaling");
             npcSpawn.Heading = GetByte(reader, "heading");
-            npcSpawn.Size = GetInt16(reader, "size");
-            npcSpawn.Visibility = GetInt32(reader, "visibility");
             npcSpawn.Created = GetDateTime(reader, "created");
             npcSpawn.Updated = GetDateTime(reader, "updated");
-            npcSpawn.Icon = GetInt32(reader, "icon");
+
             return npcSpawn;
         }
     }

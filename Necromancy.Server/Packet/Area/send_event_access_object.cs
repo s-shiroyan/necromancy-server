@@ -22,6 +22,8 @@ namespace Necromancy.Server.Packet.Area
         {
             uint instanceId = packet.Data.ReadUInt32();
 
+            //To-Do:  Create two events for NPCs.  1.)"press Yes to update heading in database to current heading" 2.) press 'update' to update the model ID of the NPC in the database, using the gold deposit menu"
+
             //Begin Event for all cases
             SentEventStart(client, instanceId);
 
