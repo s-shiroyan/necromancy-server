@@ -13,6 +13,6 @@ jobs:
       run: echo Hello, world!
     - name: Run a multi-line script
       run: |
-        read -r /VERSION<${{ github.workspace }}/necromancy.version
+        read -r VERSION<${{ github.workspace }}/necromancy.version
         echo Version: {{VERSION}}
         
