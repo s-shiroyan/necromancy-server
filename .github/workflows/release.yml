@@ -9,11 +9,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Define variables
-        run: sh ./{{ github.workspace }}/release.sh
+        run: sh ${{ github.workspace }}/release.sh
 
       - name: Run a multi-line script
         run: |
           read -r VERSION<${{ github.workspace }}/necromancy.version
-          echo $VERSION
+          echo "$VERSION"
           echo TEST
         
