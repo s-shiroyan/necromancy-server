@@ -4,6 +4,7 @@ printenv
 RootFolder="${RELEASE_ROOT_FOLDER:-./}"
 read -r VERSION<$RootFolder/necromancy.version
 mkdir ./release
+echo Version: $VERSION
 ls
 for RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
     # Server
