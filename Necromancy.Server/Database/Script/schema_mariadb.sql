@@ -42,6 +42,23 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
   
+  CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
+  `id`    INT(11)             NOT NULL,
+  `slot0` INT(11)             NOT NULL,
+  `slot1` INT(11)             NOT NULL,
+  `slot2` INT(11)             NOT NULL,
+  `slot3` INT(11)             NOT NULL,
+  `slot4` INT(11)             NOT NULL,
+  `slot5` INT(11)             NOT NULL,
+  `slot6` INT(11)             NOT NULL,
+  `slot7` INT(11)             NOT NULL,
+  `slot8` INT(11)             NOT NULL,
+  `slot9` INT(11)             NOT NULL,
+   PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`         INT(11)             NOT NULL AUTO_INCREMENT,
   `account_id` INT(11)             NOT NULL,
@@ -63,6 +80,8 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `luck`      INT(11)       UNSIGNED      NOT NULL,
   `class_id`      INT(11)    UNSIGNED         NOT NULL,
   `level`      INT(11) UNSIGNED NOT NULL,
+  `shortcut_bar0_id`      INT(11) UNSIGNED NOT NULL,
+  `shortcut_bar1_id`      INT(11) UNSIGNED NOT NULL,
   `created`    DATETIME            NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_nec_character_account_id` (`account_id`),

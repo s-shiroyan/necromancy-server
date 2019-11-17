@@ -60,6 +60,8 @@ namespace Necromancy.Server.Model
         public uint currentHp { get; set; }
         public uint currentMp { get; set; }
         public uint currentOd { get; set; }
+        public int shortcutBar0Id { get; set; }
+        public int shortcutBar1Id { get; set; }
 
         public Character()
         {
@@ -85,6 +87,8 @@ namespace Necromancy.Server.Model
             currentHp = 999;
             currentMp = 1000;
             currentOd = 1000;
+            shortcutBar0Id = -1;
+            shortcutBar1Id = -1;
         }
     }
 }
