@@ -18,7 +18,7 @@ namespace Necromancy.Server.Database.Sql.Core
             "SELECT `id`, `npc_id`, `name`, `status_effect_id`, `status_effect_x`, `status_effect_y`, `status_effect_z`, `to_do`, `special_attribute`, `event_first_encounter`, `event_always`, `play_cutscene_first_encounter`, `play_cutscene_always`, `level`, `title`, `dragon_statue_type`, `icon_type`, `x`, `y`, `z`, `map_id`, `display_condition_flag`, `split_map_number`, `setting_type_flag`, `model_id`, `radius`, `height`, `crouch_height`, `name_plate`, `height_model_attribute`, `z_offset`, `effect_scaling`, `heading`, `created`, `updated` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
 
         private const string SqlUpdateNpcSpawn =
-            "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id,`name`=@name,`status_effect_id`=@status_effect_id,`status_effect_x`=@status_effect_x,`status_effect_y`=@status_effect_y,`status_effect_z`=@status_effect_z,`to_do`=@to_do,`special_attribute`=@special_attribute,`event_first_encounter`=@event_first_encounter,`event_always`=@event_always,`play_cutscene_first_encounter`=play_cutscene_first_encounter,`play_cutscene_always`=@play_cutscene_always,`level`=@level,`title`=@title,`dragon_statue_type`=@dragon_statue_type,`icon_type`=@icon_type,`x`=@a,`y`=@y,`z`=@z,`map_id`=@map_id,`display_condition_flag`=@display_condition_flag,`split_map_number`=@split_map_number,`setting_type_flag`=@setting_type_flag,`model_id`=@model_id,`radius`=@radius,`height`=@height,`crouch_height`=@crouch_height,`name_plate`=@name_plate,`height_model_attribute`=@height_model_attribute,`z_offset`=@z_offset,`effect_scaling`=@effect_scaling,`heading`=@heading,`created`=@created,`updated`=@updated FROM `nec_npc_spawn`;";
+            "UPDATE `nec_npc_spawn` SET `id`=@id, `npc_id`=@npc_id, `name`=@name, `status_effect_id`=@status_effect_id, `status_effect_x`=@status_effect_x, `status_effect_y`=@status_effect_y, `status_effect_z`=@status_effect_z, `to_do`=@to_do, `special_attribute`=@special_attribute, `event_first_encounter`=@event_first_encounter, `event_always`=@event_always, `play_cutscene_first_encounter`=play_cutscene_first_encounter, `play_cutscene_always`=@play_cutscene_always, `level`=@level, `title`=@title, `dragon_statue_type`=@dragon_statue_type, `icon_type`=@icon_type, `x`=@x, `y`=@y, `z`=@z, `map_id`=@map_id, `display_condition_flag`=@display_condition_flag, `split_map_number`=@split_map_number, `setting_type_flag`=@setting_type_flag, `model_id`=@model_id, `radius`=@radius, `height`=@height, `crouch_height`=@crouch_height, `name_plate`=@name_plate, `height_model_attribute`=@height_model_attribute, `z_offset`=@z_offset, `effect_scaling`=@effect_scaling, `heading`=@heading, `created`=@created, `updated`=@updated WHERE `id`=@id;";
 
         private const string SqlDeleteNpcSpawn =
             "DELETE FROM `nec_npc_spawn` WHERE `id`=@id;";
@@ -104,6 +104,7 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateNpcSpawn, command =>
             {
+                AddParameter(command, "@id", npcSpawn.Id);
                 AddParameter(command, "@npc_id", npcSpawn.NpcId);
                 AddParameter(command, "@name", npcSpawn.Name);
                 AddParameter(command, "@status_effect_id", npcSpawn.StatusEffectId);
@@ -134,6 +135,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@name_plate", npcSpawn.NamePlate);
                 AddParameter(command, "@height_model_attribute", npcSpawn.HeightModelAttribute);
                 AddParameter(command, "@z_offset", npcSpawn.ZOffset);
+                AddParameter(command, "@effect_scaling", npcSpawn.EffectScaling);
                 AddParameter(command, "@heading", npcSpawn.Heading);
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);

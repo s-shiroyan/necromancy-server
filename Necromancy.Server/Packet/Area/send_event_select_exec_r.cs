@@ -1,5 +1,6 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System;
@@ -32,25 +33,46 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                    //logic to execute different actions based on the event that triggered this select execution.
-                    uint objectID = client.Character.eventSelectReadyCode;
-                    var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                //logic to execute different actions based on the event that triggered this select execution.
+                 IInstance instance = Server.Instances.GetInstance(client.Character.eventSelectReadyCode);
+
+
+                switch (instance)
                 {
-                 { x => x < 2 ,    () => defaultEvent(client, (int)objectID) },
-                 { x => x < 3 ,    () => RecoverySpring(client, (int)objectID)},
-                 { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {objectID} reached") },
-                 { x => x < 10000013 ,  () => defaultEvent(client, (int)objectID) },
-                 { x => x < 74000023 ,  () => RecoverySpring(client, (int)objectID) },
-                 { x => x < 90000011 ,  () => defaultEvent(client, (int)objectID) }
+                    case NpcSpawn npcSpawn:
+                        Logger.Debug($"instanceId : {client.Character.eventSelectReadyCode} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
 
-                };
+                        var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                        {
+                         { x => x == 10000704, () => UpdateNPC(client, npcSpawn) },
+                         { x => x < 2 ,    () => defaultEvent(client, npcSpawn.NpcId) },
+                         { x => x < 3 ,    () => RecoverySpring(client, npcSpawn.NpcId)},
+                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 10000013 ,  () => defaultEvent(client, npcSpawn.NpcId) },
+                         { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
+                         { x => x < 90000011 ,  () => defaultEvent(client, npcSpawn.NpcId) }
 
-                    eventSwitchPerObjectID.First(sw => sw.Key((int)objectID)).Value();
+                        };
+
+                        eventSwitchPerObjectID.First(sw => sw.Key(npcSpawn.NpcId)).Value();
+
+
+
+                        break;
+                    case MonsterSpawn monsterSpawn:
+                        Logger.Debug($"MonsterId: {monsterSpawn.Id}");
+                        break;
+                    default:
+                        Logger.Error($"Instance with InstanceId: {client.Character.eventSelectReadyCode} does not exist");
+                        RecvEventEnd(client);
+                        break;
+                }
+
             }
         }
         private void RecvEventEnd(NecClient client)
@@ -118,5 +140,42 @@ namespace Necromancy.Server.Packet.Area
         {
             RecvEventEnd(client);
         }
+
+        private void UpdateNPC(NecClient client, NpcSpawn npcSpawn)
+        {
+            if (client.Character.eventSelectExecCode == 0)
+            {
+
+                npcSpawn.Heading = (byte)(client.Character.Heading - 90);
+                npcSpawn.Updated = DateTime.Now;
+
+
+                if (!Server.Database.UpdateNpcSpawn(npcSpawn))
+                {
+                    IBuffer res12 = BufferProvider.Provide();
+                    res12.WriteCString("Could not update the database"); // Length 0xC01
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+                    return;
+                }
+
+
+            }
+            else if (client.Character.eventSelectExecCode == 1)
+            {
+
+                IBuffer res12 = BufferProvider.Provide();
+                res12.WriteCString("Please enter the Model Number of the NPC"); // Length 0xC01
+                Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+            }
+
+            IBuffer res13 = BufferProvider.Provide();
+            res13.WriteCString("NPC Updated"); // Length 0xC01
+            Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res13, ServerType.Area);// show system message on middle of the screen.
+
+            RecvEventEnd(client); //End The Event 
+        }
+
+
+
     }
 }
