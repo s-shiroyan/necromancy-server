@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `level`             INTEGER                           NOT NULL,
   `shortcut_bar0_id`  INTEGER                           NOT NULL,
   `shortcut_bar1_id`  INTEGER                           NOT NULL,
+  `shortcut_bar2_id`  INTEGER                           NOT NULL,
+  `shortcut_bar3_id`  INTEGER                           NOT NULL,
   `created`           DATETIME                          NOT NULL,
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),

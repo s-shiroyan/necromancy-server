@@ -46,5 +46,18 @@ namespace Necromancy.Server.Model
             shortcutBar[9] = Slot9;
             return shortcutBar;
         }
+        public void setArray(int [] shortcutBar)
+        {
+            Slot0 = shortcutBar[0];
+            Slot1 = shortcutBar[1];
+            Slot2 = shortcutBar[2];
+            Slot3 = shortcutBar[3];
+            Slot4 = shortcutBar[4];
+            Slot5 = shortcutBar[5];
+            Slot6 = shortcutBar[6];
+            Slot7 = shortcutBar[7];
+            Slot8 = shortcutBar[8];
+            Slot9 = shortcutBar[9];
+        }
     }
 }
