@@ -32,7 +32,14 @@ namespace Necromancy.Server.Packet.Area
                 Logger.Error($"MapId: {mapId} does not exist");
                 return;
             }
-
+            // Default orietation from map.csv is not correct for some maps??
+            if (map.Id == 2002104)
+            {
+                map.Orientation = 90;
+            } else if (map.Id == 2002105)
+            {
+                map.Orientation = 133;
+            }
             map.EnterForce(client);
             SendEventEnd(client);
         }

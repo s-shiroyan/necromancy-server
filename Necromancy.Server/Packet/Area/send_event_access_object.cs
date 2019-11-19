@@ -23,6 +23,10 @@ namespace Necromancy.Server.Packet.Area
             uint instanceId = packet.Data.ReadUInt32();
 
             //Begin Event for all cases
+            // If this is after SendEventSelectMapAndChannel the map selection is corrupted and does not work
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(instanceId);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
             SentEventStart(client, instanceId);
 
 
@@ -44,19 +48,15 @@ namespace Necromancy.Server.Packet.Area
                          { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
                          { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x == 10000005 ,  () =>  SendEventSelectMapAndChannel(client, (int)instanceId)},
                          { x => x < 10000013 ,  () => defaultEvent(client, (int)instanceId) },                         
                          { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn) },
+                         { x => x < 74013272,  () => SendGetWarpTarget(client, npcSpawn) },
                          { x => x < 90000010 ,  () => defaultEvent(client, (int)instanceId) }
 
                         };
 
                     eventSwitchPerObjectID.First(sw => sw.Key((int)npcSpawn.NpcId)).Value();
-
-                    IBuffer res = BufferProvider.Provide();
-                    res.WriteInt32(npcSpawn.NpcId);
-                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
-
-
 
                     break;
                 case MonsterSpawn monsterSpawn:
@@ -141,8 +141,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 //sub_494c50
                 res7.WriteInt32(nameIdx[i]); //Stage ID from Stage.CSV
-                res7.WriteInt32(
-                    mapIDs[i]); //Map ID.  Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+                res7.WriteInt32(mapIDs[i]); //Map ID.  Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
                 res7.WriteInt32(partySize[i]); //max players
                 res7.WriteInt16(levels[i]);
                 ; //Recommended Level
@@ -151,7 +150,7 @@ namespace Necromancy.Server.Packet.Area
                 for (int j = 0; j < 0x80; j++) //j max 0x80
                 {
                     res7.WriteInt32(mapIDs[i]);
-                    res7.WriteFixedString($"Channel-{i}:{j}",
+                    res7.WriteFixedString($"Channel-{j}",
                         0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
                     res7.WriteByte(1); //bool 1 | 0
                     res7.WriteInt16(0xFFFF); //Max players  -  Comment from other recv
@@ -164,6 +163,42 @@ namespace Necromancy.Server.Packet.Area
             }
 
             Router.Send(client.Map, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+        }
+
+        // I added these to Npc database for now, should it be handled differently?????
+        private void SendGetWarpTarget(NecClient client, NpcSpawn npcSpawn)
+        {
+            client.Character.eventSelectExecCode = -1;
+            Logger.Debug($"npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId} client.Character.eventSelectExecCode: {client.Character.eventSelectExecCode}");
+            if (client.Character.eventSelectExecCode == -1)
+            {
+                IBuffer res3 = BufferProvider.Provide();
+                if (client.Character.MapId == 2002104)     // Roswald Fort #1 to #2
+                {
+                    res3.WriteCString("Isolated Hall"); //Length 0x601
+                }
+                else if (client.Character.MapId == 2002105 || client.Character.MapId == 2002106) // Roswald Fort #2/#3 to #1
+                {
+                    res3.WriteCString("Rusted Gate"); //Length 0x601
+                }
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area);   // It's the first choice
+
+                IBuffer res70 = BufferProvider.Provide();
+                if (client.Character.MapId == 2002104 || client.Character.MapId == 2002105) // Roswald Fort #1/#2 to #3
+                {
+                    res70.WriteCString("Severed Corridor"); //Length 0x601
+                }
+                else if (client.Character.MapId == 2002106) // Roswald Fort #3 to #2
+                {
+                    res70.WriteCString("Isolated Hall"); //Length 0x601
+                }
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res70, ServerType.Area);   // It's the second choice
+
+                IBuffer res1 = BufferProvider.Provide();
+                res1.WriteCString("Select area to travel to"); // It's the title dude
+                res1.WriteInt32(npcSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res1, ServerType.Area);   // Actual map change is handled by send_event_select_exec_r, need to figure out how to handle this better
+            }
         }
 
         private void defaultEvent(NecClient client, int instanceId)
