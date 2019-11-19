@@ -44,7 +44,17 @@ CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
   `slot6` INTEGER                           NOT NULL,
   `slot7` INTEGER                           NOT NULL,
   `slot8` INTEGER                           NOT NULL,
-  `slot9` INTEGER                           NOT NULL
+  `slot9` INTEGER                           NOT NULL,
+  `action0` INTEGER                           NOT NULL,
+  `action1` INTEGER                           NOT NULL,
+  `action2` INTEGER                           NOT NULL,
+  `action3` INTEGER                           NOT NULL,
+  `action4` INTEGER                           NOT NULL,
+  `action5` INTEGER                           NOT NULL,
+  `action6` INTEGER                           NOT NULL,
+  `action7` INTEGER                           NOT NULL,
+  `action8` INTEGER                           NOT NULL,
+  `action9` INTEGER                           NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_character` (

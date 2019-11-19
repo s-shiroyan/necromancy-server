@@ -54,6 +54,16 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   `slot7` INT(11)             NOT NULL,
   `slot8` INT(11)             NOT NULL,
   `slot9` INT(11)             NOT NULL,
+  `action0` INT(11)             NOT NULL,
+  `action1` INT(11)             NOT NULL,
+  `action2` INT(11)             NOT NULL,
+  `action3` INT(11)             NOT NULL,
+  `action4` INT(11)             NOT NULL,
+  `action5` INT(11)             NOT NULL,
+  `action6` INT(11)             NOT NULL,
+  `action7` INT(11)             NOT NULL,
+  `action8` INT(11)             NOT NULL,
+  `action9` INT(11)             NOT NULL,
    PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB

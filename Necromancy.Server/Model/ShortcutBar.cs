@@ -16,6 +16,16 @@ namespace Necromancy.Server.Model
         public int Slot8 { get; set; }
         public int Slot9 { get; set; }
 
+        public int Action0 { get; set; }
+        public int Action1 { get; set; }
+        public int Action2 { get; set; }
+        public int Action3 { get; set; }
+        public int Action4 { get; set; }
+        public int Action5 { get; set; }
+        public int Action6 { get; set; }
+        public int Action7 { get; set; }
+        public int Action8 { get; set; }
+        public int Action9 { get; set; }
         public ShortcutBar()
         {
             Id = -1;
@@ -29,9 +39,19 @@ namespace Necromancy.Server.Model
             Slot7 = -1;
             Slot8 = -1;
             Slot9 = -1;
+            Action0 = -1;
+            Action1 = -1;
+            Action2 = -1;
+            Action3 = -1;
+            Action4 = -1;
+            Action5 = -1;
+            Action6 = -1;
+            Action7 = -1;
+            Action8 = -1;
+            Action9 = -1;
         }
 
-        public int[] getArray()
+        public int[] getSlotArray()
         {
             int[] shortcutBar = new int[10];
             shortcutBar[0] = Slot0;
@@ -46,7 +66,7 @@ namespace Necromancy.Server.Model
             shortcutBar[9] = Slot9;
             return shortcutBar;
         }
-        public void setArray(int [] shortcutBar)
+        public void setSlotArray(int [] shortcutBar)
         {
             Slot0 = shortcutBar[0];
             Slot1 = shortcutBar[1];
@@ -58,6 +78,34 @@ namespace Necromancy.Server.Model
             Slot7 = shortcutBar[7];
             Slot8 = shortcutBar[8];
             Slot9 = shortcutBar[9];
+        }
+        public int[] getActionArray()
+        {
+            int[] action = new int[10];
+            action[0] = Action0;
+            action[1] = Action1;
+            action[2] = Action2;
+            action[3] = Action3;
+            action[4] = Action4;
+            action[5] = Action5;
+            action[6] = Action6;
+            action[7] = Action7;
+            action[8] = Action8;
+            action[9] = Action9;
+            return action;
+        }
+        public void setActionArray(int[] action)
+        {
+            Action0 = action[0];
+            Action1 = action[1];
+            Action2 = action[2];
+            Action3 = action[3];
+            Action4 = action[4];
+            Action5 = action[5];
+            Action6 = action[6];
+            Action7 = action[7];
+            Action8 = action[8];
+            Action9 = action[9];
         }
     }
 }
