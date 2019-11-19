@@ -44,7 +44,9 @@ namespace Necromancy.Server.Packet.Area
 
                         var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
                         {
-                         { x => x == 10000704, () => UpdateNPC(client, npcSpawn) },
+                         { x => x == 10000704, () => defaultEvent(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
+                         { x => x == 10000012 ,  () => defaultEvent(client, npcSpawn.NpcId) },
+                         { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
                          { x => x < 2 ,    () => defaultEvent(client, npcSpawn.NpcId) },
                          { x => x < 3 ,    () => RecoverySpring(client, npcSpawn.NpcId)},
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -53,9 +55,7 @@ namespace Necromancy.Server.Packet.Area
                          { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 10000013 ,  () => defaultEvent(client, npcSpawn.NpcId) },
-                         { x => x < 74000023 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
-                         { x => x < 90000011 ,  () => defaultEvent(client, npcSpawn.NpcId) }
+                         { x => x < 900000100 ,  () => UpdateNPC(client, npcSpawn) }
 
                         };
 
@@ -164,7 +164,7 @@ namespace Necromancy.Server.Packet.Area
             {
 
                 IBuffer res12 = BufferProvider.Provide();
-                res12.WriteCString("Please enter the Model Number of the NPC"); // Length 0xC01
+                res12.WriteCString("This Feature is under development"); // Length 0xC01
                 Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
             }
 

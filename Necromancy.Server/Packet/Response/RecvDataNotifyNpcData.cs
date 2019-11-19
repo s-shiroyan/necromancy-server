@@ -64,17 +64,16 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt32(1);
             }
             res.WriteInt32(_npcSpawn.ModelId); //NPC Model from file "model_common.csv"
-            res.WriteInt16((short)(_npcSpawn.HeightModelAttribute * 100)); //NPC Model Size
-            res.WriteByte(_npcSpawn.Height); //From map_symbol.csv column B
-            res.WriteByte(_npcSpawn.CrouchHeight); //From map_symbol.csv column C
-            res.WriteByte(_npcSpawn.NamePlate); //From map_symbol.csv column D
+            res.WriteInt16(_npcSpawn.Size); //NPC Model Size
+            res.WriteByte(0); //Possibly From map_symbol.csv column B
+            res.WriteByte(0); //Possibly From map_symbol.csv column C
+            res.WriteByte(0); //Possibly From map_symbol.csv column D
             res.WriteInt32(0);  //Hp Related Bitmask?  This setting makes the NPC "alive"    11111110 = npc flickering, 0 = npc alive
-            res.WriteInt32(_npcSpawn.SpecialAttribute); //npc Emoticon above head 1 for skull
-            res.WriteInt32(_npcSpawn.StatusEffectId); //From  NPC.CSV column C  | 
-            //horse: 4 TP machine:5 Ghost: 6 Illusion 7. Dungeun: 8 Stone 9. Ggate 1.  torch 13,14,15. power spot :22  event:23 ??:16,17,18
-            res.WriteFloat(_npcSpawn.StatusEffectX); //x for particle effects from Int32 above From NPC.CSV column D
-            res.WriteFloat(_npcSpawn.StatusEffectY); //y for particle effects from Int32 above From NPC.CSV column E
-            res.WriteFloat(_npcSpawn.StatusEffectZ); //z for particle effects from Int32 above From NPC.CSV column F
+            res.WriteInt32(Util.GetRandomNumber(1,9)); //npc Emoticon above head 1 for skull
+            res.WriteInt32(_npcSpawn.Status); //From  NPC.CSV column C  |   //horse: 4 TP machine:5 Ghost: 6 Illusion 7. Dungeun: 8 Stone 9. Ggate 1.  torch 13,14,15. power spot :22  event:23 ??:16,17,18
+            res.WriteFloat(_npcSpawn.Status_X); //x for particle effects from Int32 above From NPC.CSV column D
+            res.WriteFloat(_npcSpawn.Status_Y); //y for particle effects from Int32 above From NPC.CSV column E
+            res.WriteFloat(_npcSpawn.Status_Z); //z for particle effects from Int32 above From NPC.CSV column F
             int numStatusEffects = 128;
             res.WriteInt32(numStatusEffects); //number of status effects. 128 Max.
             for (int i = 0; i < numStatusEffects; i++)

@@ -48,7 +48,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             npcSpawn.Level = (byte) npcSetting.Level;
 
             npcSpawn.ModelId = modelSetting.Id;
-            npcSpawn.Height = (byte) modelSetting.Height;
+            npcSpawn.Size = (byte) modelSetting.Height;
 
             npcSpawn.MapId = client.Character.MapId;
             npcSpawn.X = client.Character.X;
