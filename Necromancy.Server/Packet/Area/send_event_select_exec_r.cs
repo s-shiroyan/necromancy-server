@@ -47,6 +47,7 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 10000704, () => defaultEvent(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
                          { x => x == 10000012 ,  () => defaultEvent(client, npcSpawn.NpcId) },
                          { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
+                         { x => x == 74013272 ,  () => ChangeMap(client, (int)objectID) },
                          { x => x < 2 ,    () => defaultEvent(client, npcSpawn.NpcId) },
                          { x => x < 3 ,    () => RecoverySpring(client, npcSpawn.NpcId)},
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -88,6 +89,12 @@ namespace Necromancy.Server.Packet.Area
                }
            );
 
+        }
+        private void SendEventEnd(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
         }
 
         private void RecoverySpring(NecClient client, int objectID)
@@ -134,6 +141,54 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res13, ServerType.Area);// show system message on middle of the screen.
 
             RecvEventEnd(client); //End The Event 
+        }
+        private void ChangeMap(NecClient client, int objectID)
+        {
+            Map map = null;
+            switch (objectID)
+            {
+                case 74013071:
+                    Logger.Debug($"objectId[{objectID}] selected {client.Character.eventSelectExecCode}");
+                    if (client.Character.eventSelectExecCode == 0)
+                    {
+                        map = Server.Maps.Get(2002105);
+                        map.Orientation = 133;
+                    }
+                    else if (client.Character.eventSelectExecCode == 1)
+                    {
+                        map = Server.Maps.Get(2002106);
+                    }
+                    break;
+                case 74013161:
+                    Logger.Debug($"objectId[{objectID}] selected {client.Character.eventSelectExecCode}");
+                    if (client.Character.eventSelectExecCode == 0)
+                    {
+                        map = Server.Maps.Get(2002104);
+                        map.Orientation = 90;
+                    }
+                    else if (client.Character.eventSelectExecCode == 1)
+                    {
+                        map = Server.Maps.Get(2002106);
+                    }
+                    break;
+                case 74013271:
+                    Logger.Debug($"objectId[{objectID}] selected {client.Character.eventSelectExecCode}");
+                    if (client.Character.eventSelectExecCode == 0)
+                    {
+                        map = Server.Maps.Get(2002104);
+                        map.Orientation = 90;
+                    }
+                    else if (client.Character.eventSelectExecCode == 1)
+                    {
+                        map = Server.Maps.Get(2002105);
+                        map.Orientation = 133;
+                    }
+                    break;
+                default:
+                    return;
+            }
+            map.EnterForce(client);
+            SendEventEnd(client);
         }
 
         private void defaultEvent(NecClient client, int objectID)

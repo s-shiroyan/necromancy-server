@@ -26,6 +26,12 @@ namespace Necromancy.Server.Database
         bool UpdateSoul(Soul soul);
         bool DeleteSoul(int soulId);
 
+        // ShortcutBar
+        bool InsertShortcutBar(ShortcutBar shortcutBar);
+        ShortcutBar SelectShortcutBarById(int shortcutBarId);
+        bool UpdateShortcutBar(ShortcutBar shortcutBar);
+        bool DeleteShortcutBar(int shortcutBarId);
+
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
