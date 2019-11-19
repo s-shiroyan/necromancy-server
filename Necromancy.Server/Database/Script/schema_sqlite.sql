@@ -33,6 +33,30 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
 
+CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
+  `id`    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  `slot0` INTEGER                           NOT NULL,
+  `slot1` INTEGER                           NOT NULL,
+  `slot2` INTEGER                           NOT NULL,
+  `slot3` INTEGER                           NOT NULL,
+  `slot4` INTEGER                           NOT NULL,
+  `slot5` INTEGER                           NOT NULL,
+  `slot6` INTEGER                           NOT NULL,
+  `slot7` INTEGER                           NOT NULL,
+  `slot8` INTEGER                           NOT NULL,
+  `slot9` INTEGER                           NOT NULL,
+  `action0` INTEGER                           NOT NULL,
+  `action1` INTEGER                           NOT NULL,
+  `action2` INTEGER                           NOT NULL,
+  `action3` INTEGER                           NOT NULL,
+  `action4` INTEGER                           NOT NULL,
+  `action5` INTEGER                           NOT NULL,
+  `action6` INTEGER                           NOT NULL,
+  `action7` INTEGER                           NOT NULL,
+  `action8` INTEGER                           NOT NULL,
+  `action9` INTEGER                           NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `nec_character` (
   `id`                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
   `account_id`        INTEGER                           NOT NULL,
@@ -58,6 +82,10 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `luck`              INTEGER                           NOT NULL,
   `class_id`          INTEGER                           NOT NULL,
   `level`             INTEGER                           NOT NULL,
+  `shortcut_bar0_id`  INTEGER                           NOT NULL,
+  `shortcut_bar1_id`  INTEGER                           NOT NULL,
+  `shortcut_bar2_id`  INTEGER                           NOT NULL,
+  `shortcut_bar3_id`  INTEGER                           NOT NULL,
   `created`           DATETIME                          NOT NULL,
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
