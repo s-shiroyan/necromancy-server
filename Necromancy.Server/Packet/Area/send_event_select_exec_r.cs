@@ -82,7 +82,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
-            Task.Delay(TimeSpan.FromMilliseconds((int)(4 * 1000))).ContinueWith
+            Task.Delay(TimeSpan.FromMilliseconds((int)(2 * 1000))).ContinueWith
            (t1 =>
                {
                 IBuffer res = BufferProvider.Provide();
@@ -203,8 +203,14 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.eventSelectExecCode == 0)
             {
 
-                npcSpawn.Heading = (byte)(client.Character.Heading - 90);
-                npcSpawn.Updated = DateTime.Now;
+                npcSpawn.Heading = (byte)(client.Character.Heading + 90);
+                npcSpawn.Heading = (byte)(npcSpawn.Heading % 180);
+                if(npcSpawn.Heading < 0)
+                {
+                    npcSpawn.Heading += 180;
+
+                }
+                    npcSpawn.Updated = DateTime.Now;
 
 
                 if (!Server.Database.UpdateNpcSpawn(npcSpawn))
