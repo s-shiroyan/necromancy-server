@@ -110,8 +110,13 @@ CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
   `visibility` INTEGER             NOT NULL,
   `created`    DATETIME            NOT NULL,
   `updated`    DATETIME            NOT NULL,
-  `icon`       INTEGER             NOT NULL
+  `icon`       INTEGER             NOT NULL,
+  `status`     INTEGER             NOT NULL,
+  `status_x`   INTEGER             NOT NULL,
+  `status_y`   INTEGER             NOT NULL,
+  `status_z`   INTEGER             NOT NULL
 );
+
 
 CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
   `id`         INTEGER PRIMARY KEY NOT NULL, 
