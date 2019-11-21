@@ -23,14 +23,7 @@ namespace Necromancy.Server.Packet.Area
             uint instanceId = packet.Data.ReadUInt32();
             client.Character.eventSelectReadyCode = instanceId; //Sends the NpcID to 'send_event_select_exec_r  logic gate.
 
-
-            //To-Do:  Create two events for NPCs.  1.)"press Yes to update heading in database to current heading" 2.) press 'update' to update the model ID of the NPC in the database, using the gold deposit menu"
-
             //Begin Event for all cases
-            // If this is after SendEventSelectMapAndChannel the map selection is corrupted and does not work
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(instanceId);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
             SentEventStart(client, instanceId);
 
 
@@ -39,6 +32,10 @@ namespace Necromancy.Server.Packet.Area
             {
                 case NpcSpawn npcSpawn:
                     Logger.Debug($"instanceId : {instanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
+
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(npcSpawn.Id);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
                     //logic to execute different actions based on the event that triggered this select execution.
                     var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
@@ -67,6 +64,11 @@ namespace Necromancy.Server.Packet.Area
                     break;
                 case MonsterSpawn monsterSpawn:
                     Logger.Debug($"MonsterId: {monsterSpawn.Id}");
+
+                    IBuffer res2 = BufferProvider.Provide();
+                    res2.WriteInt32(monsterSpawn.Id);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res2, ServerType.Area);
+
                     break;
                 default:
                     Logger.Error($"Instance with InstanceId: {instanceId} does not exist");
