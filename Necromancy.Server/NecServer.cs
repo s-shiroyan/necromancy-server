@@ -175,6 +175,7 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendMapEntry(this));
             Chat.CommandHandler.AddCommand(new SendMapLink(this));
             Chat.CommandHandler.AddCommand(new SendMessageEvent(this));
+            Chat.CommandHandler.AddCommand(new SendMonsterStateUpdateNotify(this));
             Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new SendSalvageNotifyBody(this));
             Chat.CommandHandler.AddCommand(new SendShopNotifyOpen(this));

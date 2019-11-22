@@ -21,20 +21,19 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             
             if(client.Character.takeover == true)
-            { client.Character.takeover = false; }
+            { 
+                client.Character.takeover = false; 
+            }
             else if (client.Character.takeover == false)
-            { client.Character.takeover = true; }
-
-
-
+            { 
+                client.Character.takeover = true; 
+            }
+                       
             if (command[0] =="cancel" || command[0] == "c" )
-            { client.Character.takeover = false; }
-
-
-
-
-
-
+            { 
+                client.Character.takeover = false; 
+            }
+                                                  
             IInstance instance = Server.Instances.GetInstance(client.Character.eventSelectReadyCode);
 
             if (command[0] == "save" || command[0] == "s")
@@ -48,10 +47,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         npcSpawn.Heading = (byte)(client.Character.Heading);
                         npcSpawn.X = (client.Character.X);
                         npcSpawn.Y = (client.Character.Y);
-                        npcSpawn.Z = (client.Character.Z);
-
-
-
+                        npcSpawn.Z = (client.Character.Z);                                               
                         npcSpawn.Updated = DateTime.Now;
                         if (!Server.Database.UpdateNpcSpawn(npcSpawn))
                         {
@@ -61,7 +57,16 @@ namespace Necromancy.Server.Chat.Command.Commands
                         break;
                     case MonsterSpawn monsterSpawn:
                         Logger.Debug($"MonsterId: {monsterSpawn.Id} is being updated in the database");
-
+                        monsterSpawn.Heading = (byte)(client.Character.Heading);
+                        monsterSpawn.X = (client.Character.X);
+                        monsterSpawn.Y = (client.Character.Y);
+                        monsterSpawn.Z = (client.Character.Z);
+                        monsterSpawn.Updated = DateTime.Now;
+                        if (!Server.Database.UpdateMonsterSpawn(monsterSpawn))
+                        {
+                            Logger.Error("Could not update the database");
+                            return;
+                        }
                         break;
                     case Character character:
                         Logger.Debug($"CharacterId: {character.Id} is being updated in the database");
@@ -71,8 +76,6 @@ namespace Necromancy.Server.Chat.Command.Commands
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");
                         break;
                 }
-
-
             }
             else
             {

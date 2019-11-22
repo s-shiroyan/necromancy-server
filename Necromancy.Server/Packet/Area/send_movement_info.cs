@@ -90,11 +90,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFloat(client.Character.X);
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);
-                res.WriteByte(client.Character.movementAnim); //MOVEMENT ANIM
-                res.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
+                res.WriteByte(client.Character.Heading); //Heading
+                res.WriteByte(client.Character.animJumpFall);//?????
                 
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area, client);
+                Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
 
 
             }

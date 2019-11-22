@@ -20,6 +20,7 @@ namespace Necromancy.Server.Packet.Area
         {
             int mySkillID = packet.Data.ReadInt32();
             int mySkillTarget = packet.Data.ReadInt32();
+            client.Character.eventSelectReadyCode = (uint)mySkillTarget;
 #pragma warning disable CS0219 // Variable is assigned but its value is never used
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             int CastingTime = 3;
