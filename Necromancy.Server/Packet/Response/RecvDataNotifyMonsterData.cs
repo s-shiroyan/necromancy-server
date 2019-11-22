@@ -25,8 +25,8 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_monsterSpawn.Y);
             res.WriteFloat(_monsterSpawn.Z);
             res.WriteByte(_monsterSpawn.Heading);
-            res.WriteInt32(_monsterSpawn.MonsterId);
-            res.WriteInt32(_monsterSpawn.ModelId);
+            res.WriteInt32(_monsterSpawn.MonsterId); //Monster Serial ID
+            res.WriteInt32(_monsterSpawn.ModelId); //Monster Model ID
             res.WriteInt16(_monsterSpawn.Size);
             res.WriteInt32(0x10); // cmp to 0x10 = 16
             int numEntries = 0x10;
@@ -68,12 +68,12 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt64(100);
             }
 
-            res.WriteInt32(900102); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
-            res.WriteInt64(0); // item Id ?
-            res.WriteInt64(0); // item Id ?
-            res.WriteInt64(0); // item Id ?
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res.WriteInt32(22220000); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
+            res.WriteInt64(_monsterSpawn.MonsterId); // item Id ?
+            res.WriteInt64(111112); // item Id ?
+            res.WriteInt64(111113); // item Id ?
+            res.WriteByte(255);
+            res.WriteByte(255);
             res.WriteInt32(900); //Current HP
             res.WriteInt32(1000); //Max HP
             res.WriteInt32(0x80); // cmp to 0x80 = 128

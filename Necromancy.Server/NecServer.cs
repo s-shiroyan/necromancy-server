@@ -188,6 +188,8 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendWantedJailOpen(this));
             Chat.CommandHandler.AddCommand(new SendWantedListOpen(this));
             Chat.CommandHandler.AddCommand(new SoulShop(this));
+            Chat.CommandHandler.AddCommand(new Takeover(this));
+
         }
 
         private void LoadSettingRepository()
