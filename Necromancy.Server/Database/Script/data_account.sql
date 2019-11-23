@@ -1,7 +1,7 @@
 INSERT INTO "account" ("id","name","normal_name","hash","mail","mail_verified","mail_verified_at","mail_token","password_token","state","last_login","created") VALUES 
- (1,'Admin','admin','$2a$10$WT0s8dLPde7CWOSrEGIM2u4Nk.n/SBaAZe0VQ.FK.V/f/D1sIGqRu','Admin',0,NULL,NULL,NULL,1,NULL,'2019-11-19 15:58:21.1738355'),
+ (1,'Admin','Admin','$2a$10$WT0s8dLPde7CWOSrEGIM2u4Nk.n/SBaAZe0VQ.FK.V/f/D1sIGqRu','Admin',0,NULL,NULL,NULL,1,NULL,'2019-11-19 15:58:21.1738355'),
  (2,'1234','1234','$2a$10$gHAWndIPBBGuTcsyOL2KFufzvPDI/evj18DygBv/QelpLENzALcBi','1234',0,NULL,NULL,NULL,1,NULL,'2019-11-19 16:03:55.2889936'),
- (3,'ff','ff','$2a$10$GcOlhPqLN0mK8LCHg9RonO8I9ha2rm/QEMEG5U8n2q3PhPEDw5K7S','ff',0,NULL,NULL,NULL,1,NULL,'2019-11-19 16:13:35.4028315');
+ (3,'ff','ff','$2a$10$GhZE/d8hTdh92URBeP5k6eH9HbCWhoDknupYegGpgdcIOfRUoGodq','ff',0,NULL,NULL,NULL,1,NULL,'2019-11-19 16:13:35.4028315');
 
 INSERT INTO "nec_soul" ("id","account_id","name","level","created","password") VALUES 
  (1,1,'Server',0,'2019-11-19 16:00:24.0076961','0000'),
