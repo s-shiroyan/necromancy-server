@@ -21,11 +21,15 @@ namespace Necromancy.Server.Packet.Area
             int mySkillID = packet.Data.ReadInt32();
             int mySkillTarget = packet.Data.ReadInt32();
             client.Character.eventSelectReadyCode = (uint)mySkillTarget;
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            int CastingTime = 3;
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
+            if(int.TryParse(($"{mySkillID}".Substring(1, 6))+($"{mySkillID}".Substring(8,1)), out int result))
+            {
+                client.Character.skillStartCast = result;
+            }
+            Logger.Debug($"skill effect parsed from skillID is {result}");
+            
+            int CastingTime = 1;
+
+
 
             if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
             {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
@@ -51,7 +55,7 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Skill Int : {mySkillID}");
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
-            float CastingTime = 2;
+            float CastingTime = 1;
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  
@@ -92,7 +96,7 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Skill Int : {mySkillID}");
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
-            float CastingTime = 2;
+            float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillID); //previously Skill ID
             res.WriteFloat(CastingTime);
@@ -104,7 +108,7 @@ namespace Necromancy.Server.Packet.Area
             Console.WriteLine($"Skill Int : {mySkillID}");
             Console.WriteLine($"Target Int : {mySkillTarget}");
             Console.WriteLine($"my Character ID : {client.Character.Id}");
-            float CastingTime = 2;
+            float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
             res.WriteFloat(CastingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
@@ -119,9 +123,9 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1000);//Distance?              ./Skill_base.csv   Column AN 
             res.WriteInt32(200);//Height?                 ./Skill_base.csv   Column AO 
             res.WriteInt32(0);//??                          ./Skill_base.csv   Column AP 
-            res.WriteInt32(0);//??                       ./Skill_base.csv   Column AQ 
+            res.WriteInt32(mySkillTarget);//??                       ./Skill_base.csv   Column AQ 
 
-            res.WriteInt32(15);// Effect time?
+            res.WriteInt32(5);// Effect time?
 
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_ex_r, res, ServerType.Area);  
         }

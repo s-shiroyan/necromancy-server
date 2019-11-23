@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_movement_info;
 
-
+        int i = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -91,7 +91,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);
                 res.WriteByte(client.Character.Heading); //Heading
-                res.WriteByte(client.Character.animJumpFall);//?????
+                res.WriteByte((byte)i);//state
+                i++;
+                i = 255 % i;
                 
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);

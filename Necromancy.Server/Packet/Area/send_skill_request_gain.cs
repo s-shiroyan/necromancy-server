@@ -30,9 +30,9 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(skillID);
-            res.WriteInt32(skillLevel);//Level?
-            res.WriteByte(0); //Bool
-            res.WriteByte(0); //Bool
+            res.WriteInt32(skillLevel);//Level of skill (1-7)
+            res.WriteByte(1); //Bool
+            res.WriteByte(2); //Bool
 
             Router.Send(client, (ushort) AreaPacketId.recv_skill_tree_gain, res, ServerType.Area);
         }
