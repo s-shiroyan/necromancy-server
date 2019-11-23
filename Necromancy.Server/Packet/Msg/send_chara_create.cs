@@ -74,10 +74,6 @@ namespace Necromancy.Server.Packet.Msg
             character.luck = luck;
             character.ClassId = class_id;
             CreateShortcutBars(client, character, class_id);
-            Logger.Info($"character shortcutBar0Id: {character.shortcutBar0Id} ");
-            Logger.Info($"character shortcutBar1Id: {character.shortcutBar1Id} ");
-            Logger.Info($"character shortcutBar2Id: {character.shortcutBar2Id} ");
-            Logger.Info($"character shortcutBar3Id: {character.shortcutBar3Id} ");
             //----------------------------------------------------------
             // Character Slot ID
 
@@ -218,6 +214,15 @@ namespace Necromancy.Server.Packet.Msg
             }
             character.shortcutBar3Id = shortcutBar3.Id;
 
+            ShortcutBar shortcutBar4 = new ShortcutBar();
+            if (!Database.InsertShortcutBar(shortcutBar4))
+            {
+                Logger.Error(client, $"Failed to create ShortcutBar4");
+                client.Close();
+                character.shortcutBar4Id = -1;
+                return;
+            }
+            character.shortcutBar4Id = shortcutBar4.Id;
         }
     }
 }
