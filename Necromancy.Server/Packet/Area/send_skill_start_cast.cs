@@ -114,8 +114,8 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(mySkillID);//
 
-            res.WriteInt32(1000);//Distance?              ./Skill_base.csv   Column AN 
-            res.WriteInt32(1000);//Height?                 ./Skill_base.csv   Column AO 
+            res.WriteInt32(10000);//Distance?              ./Skill_base.csv   Column AN 
+            res.WriteInt32(10000);//Height?                 ./Skill_base.csv   Column AO 
             res.WriteInt32(500);//??                          ./Skill_base.csv   Column AP 
             res.WriteInt32(client.Character.Heading);//??                       ./Skill_base.csv   Column AQ 
 

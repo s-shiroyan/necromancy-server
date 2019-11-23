@@ -39,15 +39,11 @@ namespace Necromancy.Server.Packet.Area
                 1       Not enough distance
                 GENERIC Unable to use skill: < errcode >
             */
-            res.WriteFloat(4);//Cool time      ./Skill_base.csv   Column J 
+            res.WriteFloat(2);//Cool time      ./Skill_base.csv   Column J 
             res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
             Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 
             IInstance instance = Server.Instances.GetInstance((uint)myTargetID);
-
-            //if (myTargetID != 0)
-            {
-                
 
                 switch (instance)
                 {
@@ -73,27 +69,26 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist.  the ground is gettin blasted");
                         break;
                 }
-            }
 
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(Server.Instances.CreateInstance<Skill>().InstanceId); // 0 = nothing, 1 = activate effect. //Somehow this is effect Instance ID....
+            res2.WriteInt32(Server.Instances.CreateInstance<Skill>().InstanceId); // Unique Instance ID of Skill Cast
             res2.WriteFloat(X);//Effect Object X
             res2.WriteFloat(Y);//Effect Object y
             res2.WriteFloat(Z+100);//Effect Object z
 
-            //orientation, and animation speed related?
-            res2.WriteFloat(500);//Not X
-            res2.WriteFloat(500);//Not Y
-            res2.WriteFloat(500);//Not Z
+            //orientation related
+            res2.WriteFloat(1);//Rotation Along X Axis if above 0
+            res2.WriteFloat(1);//Rotation Along Y Axis if above 0
+            res2.WriteFloat(0);//Rotation Along Z Axis if above 0
 
             res2.WriteInt32(client.Character.skillStartCast);// effect id
-            res2.WriteInt32(client.Character.InstanceId); //unknown
-            res2.WriteInt32(myTargetID);//unknown
+            res2.WriteInt32(10000001); //unknown
+            res2.WriteInt32(11111111);//unknown
 
-            res2.WriteInt32(1);
-            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
+            res2.WriteInt32(client.Character.skillStartCast);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
 
             ////////////////////Battle testing below this line.
 
