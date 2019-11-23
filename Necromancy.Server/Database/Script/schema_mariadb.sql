@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `shortcut_bar1_id`      INT(11) NOT NULL,
   `shortcut_bar2_id`      INT(11) NOT NULL,
   `shortcut_bar3_id`      INT(11) NOT NULL,
+  `shortcut_bar4_id`      INT(11) NOT NULL,
   `created`    DATETIME            NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_nec_character_account_id` (`account_id`),
