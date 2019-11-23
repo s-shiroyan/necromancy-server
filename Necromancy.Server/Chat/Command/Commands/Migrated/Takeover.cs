@@ -77,20 +77,52 @@ namespace Necromancy.Server.Chat.Command.Commands
                         break;
                 }
             }
+            else if (uint.TryParse(command[0], out uint specifiedInstanceId))
+            {
+                IInstance specifiedInstance = Server.Instances.GetInstance(specifiedInstanceId);
+
+                switch (specifiedInstance)
+                {
+                    case NpcSpawn npcSpawn:
+                        Logger.Debug($"NPCId: {npcSpawn.Id} is now under your movement control. /takeover to Cancel");
+                        client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
+
+                        break;
+                    case MonsterSpawn monsterSpawn:
+                        Logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is now under your movement control. /takeover to Cancel");
+                        client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
+                        break;
+                    case Character character:
+                        Logger.Debug($"CharacterId: {character.InstanceId} is now under your movement control. /takeover to Cancel");
+                        client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
+                        break;
+                    case Skill skill:
+                        Logger.Debug($"CharacterId: {skill.InstanceId} is now under your movement control. /takeover to Cancel");
+                        client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
+                        break;
+                    default:
+                        Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");
+                        break;
+                }
+            }
             else
             {
                 switch (instance)
                 {
                     case NpcSpawn npcSpawn:
-                        Logger.Debug($"NPCId: {npcSpawn.Id} is now under your movement control. Click NPC to Cancel");
+                        Logger.Debug($"NPCId: {npcSpawn.InstanceId} is now under your movement control. /takeover to Cancel");
 
                         break;
                     case MonsterSpawn monsterSpawn:
-                        Logger.Debug($"MonsterId: {monsterSpawn.Id} is now under your movement control. Click NPC to Cancel");
+                        Logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is now under your movement control. /takeover to Cancel");
 
                         break;
                     case Character character:
-                        Logger.Debug($"CharacterId: {character.Id} is now under your movement control. Click NPC to Cancel");
+                        Logger.Debug($"CharacterId: {character.InstanceId} is now under your movement control. /takeover to Cancel");
+
+                        break;
+                    case Skill skill:
+                        Logger.Debug($"CharacterId: {skill.InstanceId} is now under your movement control. /takeover to Cancel");
 
                         break;
                     default:

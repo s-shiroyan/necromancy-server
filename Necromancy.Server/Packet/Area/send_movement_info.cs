@@ -81,7 +81,7 @@ namespace Necromancy.Server.Packet.Area
             
             if (client.Character.takeover == true)
             {
-                Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}");
+                Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}.  i is {i}");
                 IBuffer res = BufferProvider.Provide();
                 IBuffer res3 = BufferProvider.Provide();
 
@@ -89,11 +89,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(client.Character.eventSelectReadyCode);
                 res.WriteFloat(client.Character.X);
                 res.WriteFloat(client.Character.Y);
-                res.WriteFloat(client.Character.Z);
+                res.WriteFloat(client.Character.Z+125);
                 res.WriteByte(client.Character.Heading); //Heading
                 res.WriteByte((byte)i);//state
                 i++;
-                i = 255 % i;
+                if (i == 255) i = 0;
                 
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);

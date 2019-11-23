@@ -73,7 +73,9 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(Server.Instances.CreateInstance<Skill>().InstanceId); // Unique Instance ID of Skill Cast
+            int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
+            Logger.Debug($"Skill instace {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
+            res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
             res2.WriteFloat(X);//Effect Object X
             res2.WriteFloat(Y);//Effect Object y
             res2.WriteFloat(Z+100);//Effect Object z
