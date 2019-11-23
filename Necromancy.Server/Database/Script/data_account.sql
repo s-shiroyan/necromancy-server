@@ -6,8 +6,7 @@ INSERT INTO "account" ("id","name","normal_name","hash","mail","mail_verified","
 INSERT INTO "nec_soul" ("id","account_id","name","level","created","password") VALUES 
  (1,1,'Server',0,'2019-11-19 16:00:24.0076961','0000'),
  (2,2,'Xeno.',100,'2019-11-19 16:04:30.5066857','1234'),
- (3,3,'Unknown',100,'2019-11-19 16:14:12.2002506','0000'),
- (4,4,'Unknown1',0,'2019-11-23 10:52:36.6968553','0000');
+ (3,3,'Unknown',100,'2019-11-19 16:14:12.2002506','0000');
 
  INSERT INTO "nec_character" ("id","account_id","soul_id","slot","map_id","x","y","z","name","race_id","sex_id","hair_id","hair_color_id","face_id","alignment_id","strength","vitality","dexterity","agility","intelligence","piety","luck","class_id","level","shortcut_bar0_id","shortcut_bar1_id","shortcut_bar2_id","shortcut_bar3_id","shortcut_bar4_id","created") VALUES 
  (1,1,1,1,1001902,23021.0,-224.0,0.0,'Server',1,1,0,0,0,1,0,0,0,0,0,0,4,3,0,1,2,3,4,5,'2019-11-19 16:01:29.30889'),
