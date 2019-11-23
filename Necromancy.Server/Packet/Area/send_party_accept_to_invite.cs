@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int characterID = packet.Data.ReadInt32(); //Could be a Party ID value hidden as character-who-made-it's value
+            int instanceId = packet.Data.ReadInt32(); //Could be a Party ID value hidden as character-who-made-it's value
 
             IBuffer res = BufferProvider.Provide();
 
@@ -23,17 +23,17 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_party_accept_to_invite_r, res, ServerType.Area);
 
-            SendPartyNotifyAddMember(client);
+            SendPartyNotifyAddMember(client, instanceId);
         }
 
-        private void SendPartyNotifyAddMember(NecClient client)
+        private void SendPartyNotifyAddMember(NecClient client, int instanceId)
         {
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(1); //Most likely insanceId
-            res.WriteInt32(1);
-            res.WriteInt32(1);
+            res.WriteInt32(instanceId); //Most likely insanceId
+            res.WriteInt32(instanceId);
+            res.WriteInt32(instanceId);
             res.WriteFixedString("soulname", 0x31); //Soul name
             res.WriteFixedString("charaname", 0x5B); //Character name
             res.WriteInt32(3); //Class

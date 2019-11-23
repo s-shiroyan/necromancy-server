@@ -12,7 +12,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         public SendTestEvent(NecServer server) : base(server)
         {
         }
-
+        int i = 0;
+        int j = 0;
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
@@ -31,7 +32,15 @@ namespace Necromancy.Server.Chat.Command.Commands
             // recv_event_select_exec               put it before the recv_event_select_push!! The recv_event_select_push, put the choice, the recv_event_select_exec take the choice in the window, and put a title
             // recv_event_request_int               open a pin code ? 
 
-            IBuffer res = BufferProvider.Provide(); // Show a panel "The scale will be available in"
+            //recv_monster_hate_on = 0x5C47
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0x67);//Monster Instance ID
+            res.WriteInt32(j++);
+            Router.Send(client, (ushort)AreaPacketId.recv_monster_hate_on, res, ServerType.Area);
+
+            //--------------------------------------------------------------
+
+            /*IBuffer res = BufferProvider.Provide(); // Show a panel "The scale will be available in"
             res.WriteInt32(90); // Time before the "scale" be available
             Router.Send(client, (ushort) AreaPacketId.recv_charabody_self_warpdragon_penalty, res, ServerType.Area);
 

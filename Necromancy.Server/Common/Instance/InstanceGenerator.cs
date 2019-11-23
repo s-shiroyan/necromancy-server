@@ -15,7 +15,7 @@ namespace Necromancy.Server.Common.Instance
         public InstanceGenerator()
         {
             _lock = new object();
-            _currentId = 0;
+            _currentId = 1;
             _instances = new Dictionary<uint, IInstance>();
         }
 
