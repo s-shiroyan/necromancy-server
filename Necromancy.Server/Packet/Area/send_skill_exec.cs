@@ -27,9 +27,9 @@ namespace Necromancy.Server.Packet.Area
          
             int errcode = packet.Data.ReadInt32();
 
-            Console.WriteLine($"myTargetID : {myTargetID}");
-            Console.WriteLine($"Target location : X-{X}Y-{Y}Z-{Z}");
-            Console.WriteLine($"ErrorCode : {errcode}");
+            Logger.Debug($"myTargetID : {myTargetID}");
+            Logger.Debug($"Target location : X-{X}Y-{Y}Z-{Z}");
+            Logger.Debug($"ErrorCode : {errcode}");
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(errcode);//see sys_msg.csv
             /*
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
 
             IInstance instance = Server.Instances.GetInstance((uint)myTargetID);
 
-            if (myTargetID != 0)
+            //if (myTargetID != 0)
             {
                 
 
@@ -78,15 +78,15 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(1); // 0 = nothing, 1 = activate effect. //Somehow this is effect Instance ID....
+            res2.WriteInt32(Server.Instances.CreateInstance<Skill>().InstanceId); // 0 = nothing, 1 = activate effect. //Somehow this is effect Instance ID....
             res2.WriteFloat(X);//Effect Object X
             res2.WriteFloat(Y);//Effect Object y
-            res2.WriteFloat(Z+130);//Effect Object z
+            res2.WriteFloat(Z+100);//Effect Object z
 
             //orientation, and animation speed related?
-            res2.WriteFloat(9999);//Not X
-            res2.WriteFloat(9999);//Not Y
-            res2.WriteFloat(99);//Not Z
+            res2.WriteFloat(500);//Not X
+            res2.WriteFloat(500);//Not Y
+            res2.WriteFloat(500);//Not Z
 
             res2.WriteInt32(client.Character.skillStartCast);// effect id
             res2.WriteInt32(client.Character.InstanceId); //unknown

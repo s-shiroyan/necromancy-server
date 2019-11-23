@@ -27,9 +27,6 @@ namespace Necromancy.Server.Packet.Area
             }
             Logger.Debug($"skill effect parsed from skillID is {result}");
             
-            int CastingTime = 1;
-
-
 
             if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
             {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
@@ -45,16 +42,13 @@ namespace Necromancy.Server.Packet.Area
 
             //recv_skill_start_item_cast_r // To-Do .  after Items exist,  start casting based on item i.e. camp.
 
-            //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000))).ContinueWith (t1 => { SendSkillStartCastExR(client, mySkillID, mySkillTarget); });
-            //Task.Delay(TimeSpan.FromMilliseconds((int)(CastingTime * 1000 * 2))).ContinueWith(t1 => { SendSkillExecR(client, mySkillID, mySkillTarget); });
-
         }
 
         private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget)
         {
-            Console.WriteLine($"Skill Int : {mySkillID}");
-            Console.WriteLine($"Target Int : {mySkillTarget}");
-            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            Logger.Debug($"Skill Int : {mySkillID}");
+            Logger.Debug($"Target Int : {mySkillTarget}");
+            Logger.Debug($"my Character ID : {client.Character.Id}");
             float CastingTime = 1;
 
             IBuffer res = BufferProvider.Provide();
@@ -93,9 +87,9 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget)
         {
-            Console.WriteLine($"Skill Int : {mySkillID}");
-            Console.WriteLine($"Target Int : {mySkillTarget}");
-            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            Logger.Debug($"Skill Int : {mySkillID}");
+            Logger.Debug($"Target Int : {mySkillTarget}");
+            Logger.Debug($"my Character ID : {client.Character.Id}");
             float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillID); //previously Skill ID
@@ -105,25 +99,25 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendSkillStartCastExR(NecClient client,int mySkillID,int mySkillTarget)
         {
-            Console.WriteLine($"Skill Int : {mySkillID}");
-            Console.WriteLine($"Target Int : {mySkillTarget}");
-            Console.WriteLine($"my Character ID : {client.Character.Id}");
+            Logger.Debug($"Skill Int : {mySkillID}");
+            Logger.Debug($"Target Int : {mySkillTarget}");
+            Logger.Debug($"my Character ID : {client.Character.Id}");
             float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
             res.WriteFloat(CastingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
 
-            res.WriteInt32(4);//Cast Script?     ./Skill_base.csv   Column T
-            res.WriteInt32(7);//Effect Script    ./Skill_base.csv   Column V
+            res.WriteInt32(1);//Cast Script?     ./Skill_base.csv   Column T
+            res.WriteInt32(1);//Effect Script    ./Skill_base.csv   Column V
             res.WriteInt32(1);//Effect ID?   ./Skill_base.csv   Column X 
-            res.WriteInt32(0);//Effect ID 2     ./Skill_base.csv   Column Z 
+            res.WriteInt32(1);//Effect ID 2     ./Skill_base.csv   Column Z 
 
             res.WriteInt32(mySkillID);//
 
             res.WriteInt32(1000);//Distance?              ./Skill_base.csv   Column AN 
-            res.WriteInt32(200);//Height?                 ./Skill_base.csv   Column AO 
-            res.WriteInt32(0);//??                          ./Skill_base.csv   Column AP 
-            res.WriteInt32(mySkillTarget);//??                       ./Skill_base.csv   Column AQ 
+            res.WriteInt32(1000);//Height?                 ./Skill_base.csv   Column AO 
+            res.WriteInt32(500);//??                          ./Skill_base.csv   Column AP 
+            res.WriteInt32(client.Character.Heading);//??                       ./Skill_base.csv   Column AQ 
 
             res.WriteInt32(5);// Effect time?
 
