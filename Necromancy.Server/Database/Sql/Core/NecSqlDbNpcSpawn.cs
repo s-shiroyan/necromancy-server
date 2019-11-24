@@ -9,16 +9,16 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertNpcSpawn =
-            "INSERT INTO `nec_npc_spawn` (`npc_id`, `model_id`, `level`,  `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated`, `icon`) VALUES (@npc_id, @model_id, @level, @name, @title, @map_id, @x, @y, @z, @active, @heading, @size, @visibility, @created, @updated, @icon);";
+            "INSERT INTO `nec_npc_spawn` (`npc_id`, `model_id`, `level`,  `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated`, `icon`, `status`, `status_x`, `status_y`, `status_z`) VALUES (@npc_id, @model_id, @level, @name, @title, @map_id, @x, @y, @z, @active, @heading, @size, @visibility, @created, @updated, @icon, @status, @status_x, @status_y, @status_z );";
 
         private const string SqlSelectNpcSpawns =
-            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon` FROM `nec_npc_spawn`;";
+            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon`, `status`, `status_x`, `status_y`, `status_z` FROM `nec_npc_spawn`;";
 
         private const string SqlSelectNpcSpawnsByMapId =
-            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
+            "SELECT `id`, `npc_id`, `model_id`, `level`, `name`, `title`, `map_id`, `x`, `y`, `z`, `active`, `heading`, `size`, `visibility`, `created`, `updated` , `icon`, `status`, `status_x`, `status_y`, `status_z` FROM `nec_npc_spawn` WHERE `map_id`=@map_id;";
 
         private const string SqlUpdateNpcSpawn =
-            "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id, `model_id`=@model_id, `level`=@level,  `name`=@name, `title`=@title, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `active`=@active, `heading`=@heading, `size`=@size, `visibility`=@visibility, `created`=@created, `updated`=@updated , `icon`=@icon WHERE `id`=@id;";
+            "UPDATE `nec_npc_spawn` SET `npc_id`=@npc_id, `model_id`=@model_id, `level`=@level,  `name`=@name, `title`=@title, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `active`=@active, `heading`=@heading, `size`=@size, `visibility`=@visibility, `created`=@created, `updated`=@updated, `icon`=@icon, `status`=@status, `status_x`=@status_x, `status_y`=@status_y, `status_z`=@status_z WHERE `id`=@id;";
 
         private const string SqlDeleteNpcSpawn =
             "DELETE FROM `nec_npc_spawn` WHERE `id`=@id;";
@@ -43,13 +43,18 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);
                 AddParameter(command, "@icon", npcSpawn.Icon);
+                AddParameter(command, "@status", npcSpawn.Status);
+                AddParameter(command, "@status_x", npcSpawn.Status_X);
+                AddParameter(command, "@status_y", npcSpawn.Status_Y);
+                AddParameter(command, "@status_z", npcSpawn.Status_Z);
+
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
                 return false;
             }
 
-            npcSpawn.Id = (int) autoIncrement;
+            npcSpawn.Id = (int)autoIncrement;
             return true;
         }
 
@@ -87,6 +92,7 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateNpcSpawn, command =>
             {
+                AddParameter(command, "@id", npcSpawn.Id);
                 AddParameter(command, "@npc_id", npcSpawn.NpcId);
                 AddParameter(command, "@model_id", npcSpawn.ModelId);
                 AddParameter(command, "@level", npcSpawn.Level);
@@ -103,7 +109,10 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@created", npcSpawn.Created);
                 AddParameter(command, "@updated", npcSpawn.Updated);
                 AddParameter(command, "@icon", npcSpawn.Icon);
-                AddParameter(command, "@id", npcSpawn.Id);
+                AddParameter(command, "@status", npcSpawn.Status);
+                AddParameter(command, "@status_x", npcSpawn.Status_X);
+                AddParameter(command, "@status_y", npcSpawn.Status_Y);
+                AddParameter(command, "@status_z", npcSpawn.Status_Z);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -135,6 +144,10 @@ namespace Necromancy.Server.Database.Sql.Core
             npcSpawn.Created = GetDateTime(reader, "created");
             npcSpawn.Updated = GetDateTime(reader, "updated");
             npcSpawn.Icon = GetInt32(reader, "icon");
+            npcSpawn.Status = GetInt32(reader, "status");
+            npcSpawn.Status_X = GetInt32(reader, "status_x");
+            npcSpawn.Status_Y = GetInt32(reader, "status_y");
+            npcSpawn.Status_Z = GetInt32(reader, "status_z");
             return npcSpawn;
         }
     }

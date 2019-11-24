@@ -26,6 +26,12 @@ namespace Necromancy.Server.Database
         bool UpdateSoul(Soul soul);
         bool DeleteSoul(int soulId);
 
+        // ShortcutBar
+        bool InsertShortcutBar(ShortcutBar shortcutBar);
+        ShortcutBar SelectShortcutBarById(int shortcutBarId);
+        bool UpdateShortcutBar(ShortcutBar shortcutBar);
+        bool DeleteShortcutBar(int shortcutBarId);
+
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
@@ -36,10 +42,10 @@ namespace Necromancy.Server.Database
         bool DeleteCharacter(int characterId);
 
         // NpcSpawn
-        bool InsertNpcSpawn(NpcSpawn npcSpawnSpawn);
+        bool InsertNpcSpawn(NpcSpawn npcSpawn);
         List<NpcSpawn> SelectNpcSpawns();
         List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
-        bool UpdateNpcSpawn(NpcSpawn npcSpawnSpawn);
+        bool UpdateNpcSpawn(NpcSpawn npcSpawn);
         bool DeleteNpcSpawn(int npcSpawnId);
 
         // Monster Spawn

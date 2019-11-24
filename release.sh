@@ -10,4 +10,3 @@ for RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
     # Pack
     tar cjf ./release/$RUNTIME-$VERSION.tar.gz ./publish/$RUNTIME-$VERSION
 done 
- 

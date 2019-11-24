@@ -1,6 +1,37 @@
-INSERT INTO `account` (id,name,normal_name,hash,mail,mail_verified,mail_verified_at,mail_token,password_token,state,last_login,created) VALUES 
-(1,'admin','admin','$2a$10$q38QrceMiKLxI3rj6zGpHOQTqG61pEbu5wExo6bhV3s5srxbg11Oi','admin',0,NULL,NULL,NULL,1,NULL,'2019-11-09 20:23:33.2347542');
-INSERT INTO `nec_soul` (id,account_id,name,level,created,password) VALUES 
-(1,1,'Server',0,'2019-11-09 20:24:07.052087','0000');
-INSERT INTO `nec_character` (id,account_id,soul_id,slot,map_id,x,y,z,name,race_id,sex_id,hair_id,hair_color_id,face_id,alignment_id,strength,vitality,dexterity,agility,intelligence,piety,luck,class_id,level,created) VALUES 
-(1,1,1,1,1001902,23021.0,-224.0,0.0,'Admin',1,1,0,0,0,1,0,0,0,0,9,0,0,3,0,'2019-11-09 20:33:27.921302');
+INSERT INTO "account" ("id","name","normal_name","hash","mail","mail_verified","mail_verified_at","mail_token","password_token","state","last_login","created") VALUES 
+ (1,'Admin','admin','$2a$10$WT0s8dLPde7CWOSrEGIM2u4Nk.n/SBaAZe0VQ.FK.V/f/D1sIGqRu','Admin',0,NULL,NULL,NULL,1,NULL,'2019-11-19 15:58:21.1738355'),
+ (2,'1234','1234','$2a$10$gHAWndIPBBGuTcsyOL2KFufzvPDI/evj18DygBv/QelpLENzALcBi','1234',0,NULL,NULL,NULL,1,NULL,'2019-11-19 16:03:55.2889936'),
+ (3,'ff','ff','$2a$10$GcOlhPqLN0mK8LCHg9RonO8I9ha2rm/QEMEG5U8n2q3PhPEDw5K7S','ff',0,NULL,NULL,NULL,1,NULL,'2019-11-19 16:13:35.4028315');
+
+INSERT INTO "nec_soul" ("id","account_id","name","level","created","password") VALUES 
+ (1,1,'Server',0,'2019-11-19 16:00:24.0076961','0000'),
+ (2,2,'Xeno.',0,'2019-11-19 16:04:30.5066857','1234'),
+ (3,3,'Unknown',0,'2019-11-19 16:14:12.2002506','0000');
+
+ INSERT INTO "nec_character" ("id","account_id","soul_id","slot","map_id","x","y","z","name","race_id","sex_id","hair_id","hair_color_id","face_id","alignment_id","strength","vitality","dexterity","agility","intelligence","piety","luck","class_id","level","shortcut_bar0_id","shortcut_bar1_id","shortcut_bar2_id","shortcut_bar3_id","created") VALUES 
+ (1,1,1,1,1001902,23021.0,-224.0,0.0,'Admin',1,1,0,0,0,1,0,0,0,0,0,0,4,3,0,1,2,3,4,'2019-11-19 16:01:29.30889'),
+ (2,2,2,1,1001902,23021.0,-224.0,0.0,'Talin',3,0,0,5,0,3,0,0,0,0,0,0,6,1,0,5,6,7,8,'2019-11-19 16:05:17.8122517'),
+ (3,2,2,2,1001902,23021.0,-224.0,0.0,'Zakura',0,1,0,0,4,1,0,0,0,0,0,0,8,0,0,9,10,11,12,'2019-11-19 16:11:13.2318326'),
+ (4,2,2,0,1001902,23021.0,-224.0,0.0,'Kadred',0,0,0,0,0,3,0,0,0,0,0,0,3,2,0,13,14,15,16,'2019-11-19 16:12:46.8206967'),
+ (5,3,3,1,1001902,23021.0,-224.0,0.0,'One',4,1,1,1,0,3,0,0,0,0,0,0,9,3,0,17,18,19,20,'2019-11-19 16:15:30.9221983');
+
+INSERT INTO "nec_shortcut_bar" ("id","slot0","slot1","slot2","slot3","slot4","slot5","slot6","slot7","slot8","slot9","action0","action1","action2","action3","action4","action5","action6","action7","action8","action9") VALUES (1,12501,12601,-1,-1,11,-1,18,22,-1,2,3,3,-1,-1,4,-1,4,4,-1,4),
+ (2,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
+ (3,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (4,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (5,14101,14302,14803,-1,11,-1,18,22,-1,2,3,3,3,-1,4,-1,4,4,-1,4),
+ (6,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
+ (7,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (8,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (9,11101,11201,-1,-1,11,-1,18,22,-1,2,3,3,-1,-1,4,-1,4,4,-1,4),
+ (10,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
+ (11,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (12,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (13,13101,13404,-1,-1,11,-1,18,22,-1,2,3,3,-1,-1,4,-1,4,4,-1,4),
+ (14,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
+ (15,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (16,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (17,12501,12601,-1,-1,11,-1,18,22,-1,2,3,3,-1,-1,4,-1,4,4,-1,4),
+ (18,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
+ (19,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
+ (20,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1);

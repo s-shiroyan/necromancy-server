@@ -23,6 +23,11 @@ namespace Necromancy.Server.Model
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public int Icon { get; set; }
+        public int Status { get; set; }
+        public int Status_X { get; set; }
+        public int Status_Y { get; set; }
+        public int Status_Z { get; set; }
+
 
         public NpcSpawn()
         {
