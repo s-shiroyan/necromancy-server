@@ -22,6 +22,7 @@ namespace Necromancy.Server.Packet.Area
         {
             uint instanceId = packet.Data.ReadUInt32();
             client.Character.eventSelectReadyCode = instanceId; //Sends the NpcID to 'send_event_select_exec_r  logic gate.
+            client.Character.takeover = false;
 
             //Begin Event for all cases
             SentEventStart(client, instanceId);

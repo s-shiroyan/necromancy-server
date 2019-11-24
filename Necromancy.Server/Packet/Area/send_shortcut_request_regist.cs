@@ -36,6 +36,9 @@ namespace Necromancy.Server.Packet.Area
                 case 3:
                     shortcutBarId = client.Character.shortcutBar3Id;
                     break;
+                case 4:
+                    shortcutBarId = client.Character.shortcutBar4Id;
+                    break;
                 default:
                     return;
             }

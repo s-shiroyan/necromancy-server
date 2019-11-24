@@ -32,6 +32,14 @@ namespace Necromancy.Server.Database
         bool UpdateShortcutBar(ShortcutBar shortcutBar);
         bool DeleteShortcutBar(int shortcutBarId);
 
+        // SkillTreeItem
+        bool InsertSkillTreeItem(SkillTreeItem skillTreeItem);
+        SkillTreeItem SelectSkillTreeItemById(int id);
+        List<SkillTreeItem> SelectSkillTreeItemsByCharId(int charId);
+        SkillTreeItem SelectSkillTreeItemByCharSkillId(int charId, int skillId);
+        bool UpdateSkillTreeItem(SkillTreeItem skillTreeItem);
+        bool DeleteSkillTreeItem(int id);
+
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);

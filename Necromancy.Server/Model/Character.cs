@@ -64,6 +64,9 @@ namespace Necromancy.Server.Model
         public int shortcutBar1Id { get; set; }
         public int shortcutBar2Id { get; set; }
         public int shortcutBar3Id { get; set; }
+        public int shortcutBar4Id { get; set; }
+        public bool takeover { get; set; }
+        public int skillStartCast { get; set; }
 
         public Character()
         {
@@ -93,6 +96,9 @@ namespace Necromancy.Server.Model
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
             shortcutBar3Id = -1;
+            shortcutBar4Id = -1;
+            takeover = false;
+            skillStartCast = 0;
         }
     }
 }

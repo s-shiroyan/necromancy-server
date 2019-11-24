@@ -4,6 +4,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System.Threading;
 using System;
+using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -15,8 +16,6 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_skill_exec;
 
-        int i = 0;
-
         public override void Handle(NecClient client, NecPacket packet)
         {
 
@@ -25,13 +24,12 @@ namespace Necromancy.Server.Packet.Area
             float X = packet.Data.ReadFloat();
             float Y = packet.Data.ReadFloat();
             float Z = packet.Data.ReadFloat();
-         
+
             int errcode = packet.Data.ReadInt32();
 
-
-            Console.WriteLine($"myTargetID : {myTargetID}");
-            Console.WriteLine($"Target location : X-{X}Y-{Y}Z-{Z}");
-            Console.WriteLine($"ErrorCode : {errcode}");
+            Logger.Debug($"myTargetID : {myTargetID}");
+            Logger.Debug($"Target location : X-{X}Y-{Y}Z-{Z}");
+            Logger.Debug($"ErrorCode : {errcode}");
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(errcode);//see sys_msg.csv
             /*
@@ -41,112 +39,80 @@ namespace Necromancy.Server.Packet.Area
                 1       Not enough distance
                 GENERIC Unable to use skill: < errcode >
             */
-            res.WriteFloat(1);//Cool time      ./Skill_base.csv   Column J 
+            res.WriteFloat(2);//Cool time      ./Skill_base.csv   Column J 
             res.WriteFloat(1);//Rigidity time  ./Skill_base.csv   Column L  
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_skill_exec_r, res, ServerType.Area);
+            IInstance instance = Server.Instances.GetInstance((uint)myTargetID);
 
-            SendDataNotifyEOData(client, X, Y, Z, i);
-            //SendDataNotifyEOData2(client);
-            //SendEOBaseNotifySphere(client);
-            //SendEOUpdateState(client);
-            i++;
-        }
+            switch (instance)
+            {
+                case NpcSpawn npcSpawn:
+                    Logger.Debug($"NPCId: {npcSpawn.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                    X = npcSpawn.X;
+                    Y = npcSpawn.Y;
+                    Z = npcSpawn.Z;
+                    break;
+                case MonsterSpawn monsterSpawn:
+                    Logger.Debug($"MonsterId: {monsterSpawn.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                    X = monsterSpawn.X;
+                    Y = monsterSpawn.Y;
+                    Z = monsterSpawn.Z;
+                    break;
+                case Character character:
+                    Logger.Debug($"CharacterId: {character.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                    X = character.X;
+                    Y = character.Y;
+                    Z = character.Z;
+                    break;
+                default:
+                    Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist.  the ground is gettin blasted");
+                    break;
+            }
 
-        private void SendDataNotifyEOData(NecClient client, float X, float Y, float Z, int i)
-        {
-            //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
-            IBuffer res = BufferProvider.Provide();
-            
-            res.WriteInt32(1+i);//Effect ID(has a unique ID like characters and so on.)
-            res.WriteFloat(client.Character.X);//x      Point of origin.X
-            res.WriteFloat(client.Character.Y);//y      Point of origin.Y
-            res.WriteFloat(client.Character.Z);//z      Point of origin.Z
 
-            res.WriteFloat(5);//x
-            res.WriteFloat(5);//y
-            res.WriteFloat(5);//z
 
-            res.WriteInt32(6);//ID for skills effect from eo_base.csv
-            res.WriteInt32(200);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res, ServerType.Area);
-
-            //recv_eo_update_end_trapid = 0xE8BF,
             IBuffer res2 = BufferProvider.Provide();
-			res2.WriteInt32(1+i);
-            res2.WriteInt32(4);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_end_trapid, res2, ServerType.Area);
+            int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
+            Logger.Debug($"Skill instace {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
+            res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
+            res2.WriteFloat(X);//Effect Object X
+            res2.WriteFloat(Y);//Effect Object y
+            res2.WriteFloat(Z + 100);//Effect Object z
 
-            //recv_eo_update_second_trapid = 0x96EA, = 0xE8BF,
+            //orientation related
+            res2.WriteFloat(1);//Rotation Along X Axis if above 0
+            res2.WriteFloat(1);//Rotation Along Y Axis if above 0
+            res2.WriteFloat(0);//Rotation Along Z Axis if above 0
+
+            res2.WriteInt32(client.Character.skillStartCast);// effect id
+            res2.WriteInt32(10000001); //unknown
+            res2.WriteInt32(11111111);//unknown
+
+            res2.WriteInt32(client.Character.skillStartCast);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
+
+            ////////////////////Battle testing below this line.
+
+            //Delete all this. it was just for fun. and an example for how we impact targets with other more proper recvs.
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(1+i);
-            res3.WriteInt32(4);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_second_trapid, res3, ServerType.Area);
+            res3.WriteInt32(instance.InstanceId);
+            //Router.Send(client, (ushort)AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
-            SendEOBaseNotifySphere(client);
+
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(instance.InstanceId);
+            res4.WriteByte((byte)(Util.GetRandomNumber(0, 70))); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
+            Router.Send(client, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
+
+
+
+
+
         }
 
-        private void SendDataNotifyEOData2(NecClient client)
-        {
-            //recv_data_notify_eo_data2 = 0xEDB3,
-            IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(1+i);//Effect ID(has a unique ID like characters and so on.)
-            res.WriteInt32(client.Character.Id);
 
-            res.WriteFloat(client.Character.X);
-            res.WriteFloat(client.Character.Y + 50);
-            res.WriteFloat(client.Character.Z + 120);
 
-            res.WriteFloat(client.Character.X);
-            res.WriteFloat(client.Character.Y + 50);
-            res.WriteFloat(client.Character.Z + 120);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            res.WriteInt32(1430211);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res, ServerType.Area);
-
-            //SendEOUpdateState(client);
-        }
-
-        private void SendEOBaseNotifySphere(NecClient client)
-        {
-            //recv_eo_base_notify_sphere = 0xAF6D,
-            IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(i+1);
-
-            res.WriteFloat(300);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res, ServerType.Area);
-
-            //SendDataNotifyEOData2(client);
-        }
-
-        private void SendEOUpdateState(NecClient client)
-        {
-            //recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
-            IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res, ServerType.Area);
-        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Necromancy.Server.Model;
 
@@ -15,6 +16,12 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            if (command[0].Length == 0)
+            { 
+                Logger.Debug("Re-entering current map");
+                command[0] = $"{client.Character.MapId}";
+            }
+
             if (!int.TryParse(command[0], out int mapId))
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));

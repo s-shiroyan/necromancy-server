@@ -33,6 +33,13 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
 
+CREATE TABLE IF NOT EXISTS `nec_skilltree_item` (
+  `id`         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  `skill_id`   INTEGER                           NOT NULL,
+  `char_id`    INTEGER                           NOT NULL,
+  `level`      INTEGER                           NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
   `id`    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   `slot0` INTEGER                           NOT NULL,
@@ -86,6 +93,7 @@ CREATE TABLE IF NOT EXISTS `nec_character` (
   `shortcut_bar1_id`  INTEGER                           NOT NULL,
   `shortcut_bar2_id`  INTEGER                           NOT NULL,
   `shortcut_bar3_id`  INTEGER                           NOT NULL,
+  `shortcut_bar4_id`  INTEGER                           NOT NULL,
   `created`           DATETIME                          NOT NULL,
   CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
