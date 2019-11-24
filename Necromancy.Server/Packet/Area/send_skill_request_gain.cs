@@ -17,7 +17,30 @@ namespace Necromancy.Server.Packet.Area
         {
             int skillID = packet.Data.ReadInt32(),
                  skillLevel = packet.Data.ReadInt32();
-
+            //ToDo Add prerequisite checking for new skills
+            //ToDo Add passive class specialty skills
+            SkillTreeItem skillTreeItem = null;
+            if (skillLevel > 1)
+            {
+                // Should already an entry for this skill
+                skillTreeItem = Database.SelectSkillTreeItemByCharSkillId(client.Character.Id, skillID);
+                skillTreeItem.Level = skillLevel;
+                if (Database.UpdateSkillTreeItem(skillTreeItem) == false)
+                {
+                    Logger.Error($"Updating SkillTreeItem for Character ID [{client.Character.Id}]");
+                }
+            }
+            else
+            {
+                skillTreeItem = new SkillTreeItem();
+                skillTreeItem.SkillId = skillID;
+                skillTreeItem.Level = skillLevel;
+                skillTreeItem.CharId = client.Character.Id;
+                if (Database.InsertSkillTreeItem(skillTreeItem) == false)
+                {
+                    Logger.Error($"Adding SkillTreeItem for Character ID [{client.Character.Id}]");
+                }
+            }
             SendSkillTreeGain(client, skillID, skillLevel);
             //uint skillID = packet.Data.ReadUInt32();
             IBuffer res = BufferProvider.Provide();

@@ -42,7 +42,17 @@ CREATE TABLE IF NOT EXISTS `nec_soul` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
   
-  CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
+CREATE TABLE IF NOT EXISTS `nec_skilltree_item` (
+  `id` INT(11)                  NOT NULL,
+  `skill_id` INT(11)            NOT NULL,
+  `char_id` INT(11)             NOT NULL,
+  `level` INT(11) UNSIGNED      NOT NULL,
+  PRIMARY KEY (`id`),
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+ 
+ CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
   `id`    INT(11)             NOT NULL,
   `slot0` INT(11)             NOT NULL,
   `slot1` INT(11)             NOT NULL,
