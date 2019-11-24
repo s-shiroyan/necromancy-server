@@ -74,6 +74,7 @@ namespace Necromancy.Server.Packet.Msg
             character.luck = luck;
             character.ClassId = class_id;
             CreateShortcutBars(client, character, class_id);
+
             //----------------------------------------------------------
             // Character Slot ID
 
@@ -83,6 +84,7 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
+            CreateSkillTreeItems(client, character, class_id);
 
             client.Character = character;
             Logger.Info($"Created CharacterSlot: {character_slot_id}");
@@ -113,6 +115,80 @@ namespace Necromancy.Server.Packet.Msg
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_create_r, res, ServerType.Msg);
         }
+
+        private void CreateSkillTreeItems(NecClient client, Character character, uint class_id)
+        {
+            if (class_id == 0)      // Fighter
+            {
+                for (int i = 0; i < fighterSkills.Length; i++)
+                {
+                    SkillTreeItem skillTreeItem = new SkillTreeItem();
+                    skillTreeItem.Level = 1;
+                    skillTreeItem.SkillId = fighterSkills[i];
+                    skillTreeItem.CharId = character.Id;
+                    if (!Database.InsertSkillTreeItem(skillTreeItem))
+                    {
+                        Logger.Error(client, $"Failed to create SkillTreeItem");
+                        client.Close();
+                        return;
+                    }
+                }
+            }
+            else if (class_id == 1)     // Thief
+            {
+                for (int i = 0; i < thiefSkills.Length; i++)
+                {
+                    SkillTreeItem skillTreeItem = new SkillTreeItem();
+                    skillTreeItem.Level = 1;
+                    skillTreeItem.SkillId = thiefSkills[i];
+                    skillTreeItem.CharId = character.Id;
+                    if (!Database.InsertSkillTreeItem(skillTreeItem))
+                    {
+                        Logger.Error(client, $"Failed to create SkillTreeItem");
+                        client.Close();
+                        return;
+                    }
+                }
+            }
+            else if (class_id == 2)       // Mage
+            {
+                for (int i = 0; i < mageSkills.Length; i++)
+                {
+                    SkillTreeItem skillTreeItem = new SkillTreeItem();
+                    skillTreeItem.Level = 1;
+                    skillTreeItem.SkillId = mageSkills[i];
+                    skillTreeItem.CharId = character.Id;
+                    if (!Database.InsertSkillTreeItem(skillTreeItem))
+                    {
+                        Logger.Error(client, $"Failed to create SkillTreeItem");
+                        client.Close();
+                        return;
+                    }
+                }
+            }
+            else if (class_id == 3)         // Priest
+            {
+                for (int i = 0; i < priestSkills.Length; i++)
+                {
+                    SkillTreeItem skillTreeItem = new SkillTreeItem();
+                    skillTreeItem.Level = 1;
+                    skillTreeItem.SkillId = priestSkills[i];
+                    skillTreeItem.CharId = character.Id;
+                    if (!Database.InsertSkillTreeItem(skillTreeItem))
+                    {
+                        Logger.Error(client, $"Failed to create SkillTreeItem");
+                        client.Close();
+                        return;
+                    }
+                }
+            }
+
+        }
+        // ToDo should we have separate claases for each class?  Fighter, Mage, Priest and Thief
+        int[] thiefSkills = new int[] { 14101, 14302, 14803 };
+        int[] fighterSkills = new int[] { 11101, 11201 };
+        int[] mageSkills = new int[] { 13101, 13404 };
+        int[] priestSkills = new int[] { 12501, 12601 };
 
         private void CreateShortcutBars(NecClient client, Character character, uint class_id)
         {
