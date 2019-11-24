@@ -2,9 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
-using System.IO;
-using System.Globalization;
+
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -17,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_movement_info;
 
-
+        int i = 0;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -60,6 +58,7 @@ namespace Necromancy.Server.Packet.Area
                 }
                 */
 
+
                 IBuffer res2 = BufferProvider.Provide();
 
                 res2.WriteInt32(client.Character.InstanceId);//Character ID
@@ -79,11 +78,32 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteByte(client.Character.animJumpFall);//JUMP & FALLING ANIM
 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area, client);
-
-
-
-                   
             
+            if (client.Character.takeover == true)
+            {
+                Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}.  i is {i}");
+                IBuffer res = BufferProvider.Provide();
+                IBuffer res3 = BufferProvider.Provide();
+
+
+                res.WriteInt32(client.Character.eventSelectReadyCode);
+                res.WriteFloat(client.Character.X);
+                res.WriteFloat(client.Character.Y);
+                res.WriteFloat(client.Character.Z+125);
+                res.WriteByte(client.Character.Heading); //Heading
+                res.WriteByte((byte)i);//state
+                i++;
+                if (i == 255) i = 0;
+                
+                Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
+
+
+            }
+
+
+
+
         }
     }
 }
