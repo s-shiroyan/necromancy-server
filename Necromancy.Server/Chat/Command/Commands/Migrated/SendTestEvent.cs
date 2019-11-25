@@ -12,8 +12,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public SendTestEvent(NecServer server) : base(server)
         {
         }
-        int i = 0;
-        int j = 0;
+
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
@@ -34,8 +33,8 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             //recv_monster_hate_on = 0x5C47
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0x67);//Monster Instance ID
-            res.WriteInt32(j++);
+            res.WriteInt32(0x38);
+            res.WriteInt32(client.Character.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_monster_hate_on, res, ServerType.Area);
 
             //--------------------------------------------------------------
