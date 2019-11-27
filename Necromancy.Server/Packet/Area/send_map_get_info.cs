@@ -35,10 +35,8 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
-            List<MonsterSpawn> monsterSpawns = Database.SelectMonsterSpawnsByMapId(client.Map.Id);
-            foreach (MonsterSpawn monsterSpawn in monsterSpawns)
+            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                Server.Instances.AssignInstance(monsterSpawn);
                 RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                 Router.Send(monsterData, client);
             }

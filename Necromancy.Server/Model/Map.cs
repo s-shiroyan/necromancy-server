@@ -20,6 +20,7 @@ namespace Necromancy.Server.Model
             _logger = LogProvider.Logger<NecLogger>(this);
             ClientLookup = new ClientLookup();
             NpcSpawns = new Dictionary<int, NpcSpawn>();
+            MonsterSpawns = new Dictionary<int, MonsterSpawn>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -29,6 +30,7 @@ namespace Necromancy.Server.Model
             Place = setting.Place;
             Orientation = setting.Orientation;
 
+            //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
@@ -36,6 +38,15 @@ namespace Necromancy.Server.Model
                 //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
                 npcSpawn.InstanceId = instanceID;
                 NpcSpawns.Add((int)instanceID, npcSpawn);
+            }
+
+            List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
+            foreach (MonsterSpawn monsterSpawn in monsterSpawns)
+            {
+                uint instanceID = server.Instances.CreateInstance<MonsterSpawn>().InstanceId;
+                //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
+                monsterSpawn.InstanceId = instanceID;
+                MonsterSpawns.Add((int)instanceID, monsterSpawn);
             }
 
 
@@ -52,6 +63,8 @@ namespace Necromancy.Server.Model
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
+        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
+
 
         public void EnterForce(NecClient client)
         {

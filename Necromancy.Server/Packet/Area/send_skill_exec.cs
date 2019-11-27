@@ -51,13 +51,13 @@ namespace Necromancy.Server.Packet.Area
                         Z = npcSpawn.Z;
                         break;
                     case MonsterSpawn monsterSpawn:
-                        Logger.Debug($"MonsterId: {monsterSpawn.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        Logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
                         X = monsterSpawn.X;
                         Y = monsterSpawn.Y;
                         Z = monsterSpawn.Z;
                         break;
                     case Character character:
-                        Logger.Debug($"CharacterId: {character.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        Logger.Debug($"CharacterId: {character.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
                         X = character.X;
                         Y = character.Y;
                         Z = character.Z;
@@ -71,7 +71,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res2 = BufferProvider.Provide();
             int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
-            Logger.Debug($"Skill instace {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
+            Logger.Debug($"Skill instance {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
             res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
             res2.WriteFloat(X);//Effect Object X
             res2.WriteFloat(Y);//Effect Object y
