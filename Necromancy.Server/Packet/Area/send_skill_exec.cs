@@ -2,8 +2,6 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Threading;
-using System;
 using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Packet.Area
@@ -18,7 +16,6 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-
             int myTargetID = packet.Data.ReadInt32();
 
             float X = packet.Data.ReadFloat();
@@ -48,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
                 switch (instance)
                 {
                     case NpcSpawn npcSpawn:
-                        Logger.Debug($"NPCId: {npcSpawn.Id} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        Logger.Debug($"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
                         X = npcSpawn.X;
                         Y = npcSpawn.Y;
                         Z = npcSpawn.Z;
@@ -81,16 +78,65 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteFloat(Z+100);//Effect Object z
 
             //orientation related
-            res2.WriteFloat(1);//Rotation Along X Axis if above 0
-            res2.WriteFloat(1);//Rotation Along Y Axis if above 0
-            res2.WriteFloat(0);//Rotation Along Z Axis if above 0
+            res2.WriteFloat(client.Character.X);//Rotation Along X Axis if above 0
+            res2.WriteFloat(client.Character.Y);//Rotation Along Y Axis if above 0
+            res2.WriteFloat(client.Character.Heading);//Rotation Along Z Axis if above 0
 
             res2.WriteInt32(client.Character.skillStartCast);// effect id
-            res2.WriteInt32(10000001); //unknown
-            res2.WriteInt32(11111111);//unknown
+            res2.WriteInt32(myTargetID); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
+            res2.WriteInt32(0);//unknown
 
-            res2.WriteInt32(client.Character.skillStartCast);
+            res2.WriteInt32(client.Character.Heading);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
+
+            //makes Effect disappear after float seconds
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteInt32(skillInstanceID);
+            res5.WriteFloat(10);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res5, ServerType.Area);
+
+            //makes effect have a sphere of collision???
+            IBuffer res6 = BufferProvider.Provide();
+            res6.WriteInt32(skillInstanceID);
+            res6.WriteFloat(10000);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res6, ServerType.Area);
+
+            //testing
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteInt32(0);
+            res8.WriteInt32(0);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res8, ServerType.Area);
+
+            //EO Destination??  2nd Effect?  makes the 1st effect disappear almost instantly....
+            IBuffer res7 = BufferProvider.Provide();
+
+            res7.WriteInt32(skillInstanceID+1);
+            res7.WriteInt32(client.Character.InstanceId);
+
+            res7.WriteFloat(X+10);
+            res7.WriteFloat(Y+10);
+            res7.WriteFloat(Z+10);
+
+            res7.WriteFloat(X+20);
+            res7.WriteFloat(Y+20);
+            res7.WriteFloat(Z+20);
+
+            res7.WriteInt32(client.Character.skillStartCast);
+
+            res7.WriteInt32(myTargetID);
+
+            res7.WriteInt32(10);
+
+            res7.WriteInt32(10);
+
+            res7.WriteInt32(10);
+
+            res7.WriteInt32(10);
+
+            res7.WriteInt32(10);
+            //Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res7, ServerType.Area);
+
+
 
             ////////////////////Battle testing below this line.
 

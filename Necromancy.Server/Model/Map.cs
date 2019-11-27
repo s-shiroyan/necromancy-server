@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Data.Setting;
@@ -27,6 +28,17 @@ namespace Necromancy.Server.Model
             Area = setting.Area;
             Place = setting.Place;
             Orientation = setting.Orientation;
+
+            List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
+            foreach (NpcSpawn npcSpawn in npcSpawns)
+            {
+                uint instanceID = server.Instances.CreateInstance<NpcSpawn>().InstanceId;
+                //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
+                npcSpawn.InstanceId = instanceID;
+                NpcSpawns.Add((int)instanceID, npcSpawn);
+            }
+
+
         }
 
         public int Id { get; set; }

@@ -70,7 +70,17 @@ namespace Necromancy.Server.Chat.Command.Commands
                         break;
                     case Character character:
                         Logger.Debug($"CharacterId: {character.Id} is being updated in the database");
-
+                        character.Heading = (byte)(client.Character.Heading);
+                        character.X = (client.Character.X);
+                        character.Y = (client.Character.Y);
+                        character.Z = (client.Character.Z);
+                        character.MapId = client.Character.MapId;
+                        //character.Updated = DateTime.Now;
+                        if (!Server.Database.UpdateCharacter(character))
+                        {
+                            Logger.Error("Could not update the database");
+                            return;
+                        }
                         break;
                     default:
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");
