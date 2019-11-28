@@ -89,7 +89,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(client.Character.eventSelectReadyCode);
                 res.WriteFloat(client.Character.X);
                 res.WriteFloat(client.Character.Y);
-                res.WriteFloat(client.Character.Z+125);
+                res.WriteFloat(client.Character.Z);
                 res.WriteByte(client.Character.Heading); //Heading
                 res.WriteByte((byte)i);//state
                 i++;

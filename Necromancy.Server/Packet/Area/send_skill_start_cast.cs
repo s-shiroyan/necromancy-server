@@ -107,10 +107,10 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
             res.WriteFloat(CastingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
 
-            res.WriteInt32(1);//Cast Script?     ./Skill_base.csv   Column T
-            res.WriteInt32(1);//Effect Script    ./Skill_base.csv   Column V
-            res.WriteInt32(1);//Effect ID?   ./Skill_base.csv   Column X 
-            res.WriteInt32(1);//Effect ID 2     ./Skill_base.csv   Column Z 
+            res.WriteInt32(100);//Cast Script?     ./Skill_base.csv   Column T
+            res.WriteInt32(100);//Effect Script    ./Skill_base.csv   Column V
+            res.WriteInt32(100);//Effect ID?   ./Skill_base.csv   Column X 
+            res.WriteInt32(0100);//Effect ID 2     ./Skill_base.csv   Column Z 
 
             res.WriteInt32(mySkillID);//
 

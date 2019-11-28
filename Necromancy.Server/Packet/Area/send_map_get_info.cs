@@ -21,11 +21,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Map.Id);
             Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
-            List<NpcSpawn> npcSpawns = Database.SelectNpcSpawnsByMapId(client.Map.Id);
-            foreach (NpcSpawn npcSpawn in npcSpawns)
+            foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
             {
-                Server.Instances.AssignInstance(npcSpawn);
-                Server.Instances.AssignInstance(npcSpawn);
                 // This requires database changes to add the GGates to the Npc database!!!!!
                 if (npcSpawn.Name == "GGate")
                 {
@@ -38,10 +35,8 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
-            List<MonsterSpawn> monsterSpawns = Database.SelectMonsterSpawnsByMapId(client.Map.Id);
-            foreach (MonsterSpawn monsterSpawn in monsterSpawns)
+            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                Server.Instances.AssignInstance(monsterSpawn);
                 RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                 Router.Send(monsterData, client);
             }
