@@ -31,7 +31,68 @@ namespace Necromancy.Server.Chat.Command.Commands
             // recv_event_select_exec               put it before the recv_event_select_push!! The recv_event_select_push, put the choice, the recv_event_select_exec take the choice in the window, and put a title
             // recv_event_request_int               open a pin code ? 
 
-            IBuffer res = BufferProvider.Provide(); // Show a panel "The scale will be available in"
+            //recv_0xE8B9 = 0xE8B9,
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0x38); //Monster instance ID
+            res.WriteFloat(client.Character.X); //X
+            res.WriteFloat(client.Character.Y); //Y
+            res.WriteFloat(client.Character.Z); //Z
+            //Location for monster to go to
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            Router.Send(client, 0xE8B9, res, ServerType.Area);
+
+            //--------------------------------------------------------------
+            //recv_self_dragon_pos_notify = 0x6FB2;
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(client.Character.InstanceId); //Works with character instance ID, might be able to use its own ID.
+
+            res.WriteFloat(client.Character.X); // X
+            res.WriteFloat(client.Character.Y); // Y
+            res.WriteFloat(client.Character.Z); // Z
+            //Location on minimap where the icon for a guardian statue is.
+
+            res.WriteByte(1);//Bool? Shows a minimap icon if 1, doesn't if any other value.
+            Router.Send(client, 0x6FB2, res, ServerType.Area);
+
+            //--------------------------------------------------------------
+            //recv_quest_hint = 0x505E,
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(client.Character.InstanceId); // Quester's instance id
+
+            res.WriteInt32(0); //
+            //I think the above int32 is for quest text as our pop-up is missing text.
+            res.WriteFloat(client.Character.X); // X
+            res.WriteFloat(client.Character.Y); // Y
+            res.WriteFloat(client.Character.Z); // Z
+            //Location on minimap where the icon should show for a hint.
+
+            res.WriteInt32(j++); //Hint "instance" ID, increasing this as it goes on will make it more show up instead of updating one.
+            Router.Send(client, (ushort)AreaPacketId.recv_quest_hint, res, ServerType.Area);
+            //--------------------------------------------------------------
+
+            //recv_charabody_self_notify_abyss_stead_pos = 0x679B,
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteFloat(client.Character.X);
+            res.WriteFloat(client.Character.Y);
+            res.WriteFloat(client.Character.Z);
+            Router.Send(client, (ushort)AreaPacketId.recv_charabody_self_notify_abyss_stead_pos, res, ServerType.Area);*
+            //--------------------------------------------------------------
+
+            //recv_monster_hate_on = 0x5C47
+            /*IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0x38);//Monster instance ID, has to be a monster or causes a crash(the game knows it isn't if it isn't)
+            res.WriteInt32(client.Character.InstanceId);//Player/Character instance ID
+            Router.Send(client, (ushort)AreaPacketId.recv_monster_hate_on, res, ServerType.Area);
+            //Causes the monster fight music to go off
+            //--------------------------------------------------------------
+
+            /*IBuffer res = BufferProvider.Provide(); // Show a panel "The scale will be available in"
             res.WriteInt32(90); // Time before the "scale" be available
             Router.Send(client, (ushort) AreaPacketId.recv_charabody_self_warpdragon_penalty, res, ServerType.Area);
 

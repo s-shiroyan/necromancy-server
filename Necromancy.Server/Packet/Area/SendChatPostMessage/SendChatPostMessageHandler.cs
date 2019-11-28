@@ -10,7 +10,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_chat_post_message;
+        public override ushort Id => (ushort)AreaPacketId.send_chat_post_message;
 
         public override void HandleRequest(NecClient client, ChatMessage request)
         {

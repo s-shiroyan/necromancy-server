@@ -21,8 +21,6 @@ namespace Necromancy.Server.Packet.Area
             //(client.Character != null)
                 client.Character.Heading = view;
 
-
-
             //This is all Position and Orientation Related.
             IBuffer res = BufferProvider.Provide();
 

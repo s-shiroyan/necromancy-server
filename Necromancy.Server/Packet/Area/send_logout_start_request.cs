@@ -29,6 +29,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             res2.WriteInt32(10);
+
             Router.Send(client, (ushort) AreaPacketId.recv_logout_start, res2, ServerType.Area);
 
             Task.Delay(TimeSpan.FromMilliseconds((int) (CastingTime * 1000)))

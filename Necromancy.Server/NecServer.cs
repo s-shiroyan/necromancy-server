@@ -189,8 +189,9 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendWantedJailOpen(this));
             Chat.CommandHandler.AddCommand(new SendWantedListOpen(this));
             Chat.CommandHandler.AddCommand(new SoulShop(this));
+            Chat.CommandHandler.AddCommand(new JumpCommand(this));
+            Chat.CommandHandler.AddCommand(new NoStringTestCommand(this));
             Chat.CommandHandler.AddCommand(new Takeover(this));
-
         }
 
         private void LoadSettingRepository()
@@ -390,6 +391,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_skill_request_info(this));
             _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
             _areaConsumer.AddHandler(new send_charabody_self_salvage_notify_r(this));
+            _areaConsumer.AddHandler(new send_return_home_request_exec(this));
             _areaConsumer.AddHandler(new send_event_select_map_and_channel_r(this));
         }
     }
