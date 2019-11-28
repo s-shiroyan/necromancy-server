@@ -19,7 +19,6 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int mySkillID = packet.Data.ReadInt32();
-
             int mySkillTarget = packet.Data.ReadInt32();
             client.Character.eventSelectReadyCode = (uint)mySkillTarget;
             if(int.TryParse(($"{mySkillID}".Substring(1, 6))+($"{mySkillID}".Substring(8,1)), out int result))

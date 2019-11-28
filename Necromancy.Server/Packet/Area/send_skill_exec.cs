@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             float X = packet.Data.ReadFloat();
             float Y = packet.Data.ReadFloat();
             float Z = packet.Data.ReadFloat();
-
+         
             int errcode = packet.Data.ReadInt32();
 
             Logger.Debug($"myTargetID : {myTargetID}");
@@ -42,30 +42,30 @@ namespace Necromancy.Server.Packet.Area
 
             IInstance instance = Server.Instances.GetInstance((uint)myTargetID);
 
-            switch (instance)
-            {
-                case NpcSpawn npcSpawn:
-                    Logger.Debug($"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
-                    X = npcSpawn.X;
-                    Y = npcSpawn.Y;
-                    Z = npcSpawn.Z;
-                    break;
-                case MonsterSpawn monsterSpawn:
-                    Logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
-                    X = monsterSpawn.X;
-                    Y = monsterSpawn.Y;
-                    Z = monsterSpawn.Z;
-                    break;
-                case Character character:
-                    Logger.Debug($"CharacterId: {character.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
-                    X = character.X;
-                    Y = character.Y;
-                    Z = character.Z;
-                    break;
-                default:
-                    Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist.  the ground is gettin blasted");
-                    break;
-            }
+                switch (instance)
+                {
+                    case NpcSpawn npcSpawn:
+                        Logger.Debug($"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        X = npcSpawn.X;
+                        Y = npcSpawn.Y;
+                        Z = npcSpawn.Z;
+                        break;
+                    case MonsterSpawn monsterSpawn:
+                        Logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        X = monsterSpawn.X;
+                        Y = monsterSpawn.Y;
+                        Z = monsterSpawn.Z;
+                        break;
+                    case Character character:
+                        Logger.Debug($"CharacterId: {character.InstanceId} is gettin blasted by Skill Effect {client.Character.skillStartCast}");
+                        X = character.X;
+                        Y = character.Y;
+                        Z = character.Z;
+                        break;
+                    default:
+                        Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist.  the ground is gettin blasted");
+                        break;
+                }
 
 
 
@@ -75,7 +75,7 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
             res2.WriteFloat(X);//Effect Object X
             res2.WriteFloat(Y);//Effect Object y
-            res2.WriteFloat(Z + 100);//Effect Object z
+            res2.WriteFloat(Z+100);//Effect Object z
 
             //orientation related
             res2.WriteFloat(client.Character.X);//Rotation Along X Axis if above 0
@@ -110,16 +110,16 @@ namespace Necromancy.Server.Packet.Area
             //EO Destination??  2nd Effect?  makes the 1st effect disappear almost instantly....
             IBuffer res7 = BufferProvider.Provide();
 
-            res7.WriteInt32(skillInstanceID + 1);
+            res7.WriteInt32(skillInstanceID+1);
             res7.WriteInt32(client.Character.InstanceId);
 
-            res7.WriteFloat(X + 10);
-            res7.WriteFloat(Y + 10);
-            res7.WriteFloat(Z + 10);
+            res7.WriteFloat(X+10);
+            res7.WriteFloat(Y+10);
+            res7.WriteFloat(Z+10);
 
-            res7.WriteFloat(X + 20);
-            res7.WriteFloat(Y + 20);
-            res7.WriteFloat(Z + 20);
+            res7.WriteFloat(X+20);
+            res7.WriteFloat(Y+20);
+            res7.WriteFloat(Z+20);
 
             res7.WriteInt32(client.Character.skillStartCast);
 
@@ -148,7 +148,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteInt32(instance.InstanceId);
-            res4.WriteByte((byte)(Util.GetRandomNumber(0, 70))); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
+            res4.WriteByte((byte)(Util.GetRandomNumber(0,70))); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
             Router.Send(client, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
 
 
