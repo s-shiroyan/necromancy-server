@@ -32,33 +32,33 @@ namespace Necromancy.Server.Packet.Response
             int numEntries = 0x10;
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(16);
+                res.WriteInt32(1);
             }
 
             res.WriteInt32(0x10); // cmp to 0x10 = 16
             int numEntries2 = 0x10;
             for (int i = 0; i < numEntries2; i++)
             {
-                res.WriteInt32(16); // this was an x2 loop (i broke it down)
+                res.WriteInt32(1); // this was an x2 loop (i broke it down)
             }
 
             for (int i = 0; i < numEntries2; i++)
             {
                 res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
+                res.WriteByte(2);
+                res.WriteByte(3);
                 res.WriteInt32(0);
+                res.WriteByte(4);
+                res.WriteByte(5);
+                res.WriteByte(6);
                 res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
+                res.WriteByte(2);
                 res.WriteByte(1); // bool
-                res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
-                res.WriteByte(1);
+                res.WriteByte(3);
+                res.WriteByte(4);
+                res.WriteByte(5);
+                res.WriteByte(6);
+                res.WriteByte(7);
             }
 
             res.WriteInt32(0x10); // cmp to 0x10 = 16
@@ -68,14 +68,14 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt64(100);
             }
 
-            res.WriteInt32(22220000); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
+            res.WriteInt32(11110000); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
             res.WriteInt64(_monsterSpawn.MonsterId); // item Id ?
             res.WriteInt64(111112); // item Id ?
             res.WriteInt64(111113); // item Id ?
             res.WriteByte(255);
             res.WriteByte(255);
-            res.WriteInt32(900); //Current HP
-            res.WriteInt32(1000); //Max HP
+            res.WriteInt32(_monsterSpawn.CurrentHp); //Current HP
+            res.WriteInt32(_monsterSpawn.MaxHp); //Max HP
             res.WriteInt32(0x80); // cmp to 0x80 = 128
             int numEntries4 = 0x80; //Statuses?
             for (int i = 0; i < numEntries4; i++)

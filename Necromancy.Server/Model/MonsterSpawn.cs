@@ -21,9 +21,13 @@ namespace Necromancy.Server.Model
         public short Size { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
+        public int CurrentHp { get; set; }
+        public int MaxHp { get; set; }
 
         public MonsterSpawn()
         {
+            CurrentHp = 80087355;
+            MaxHp = 88888888;
             Created = DateTime.Now;
             Updated = DateTime.Now;
         }

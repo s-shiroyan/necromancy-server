@@ -20,6 +20,11 @@ namespace Necromancy.Server.Packet.Area
             int instanceId = packet.Data.ReadInt32();
             int Unknown2 = packet.Data.ReadInt32();
 
+            client.Character.eventSelectReadyCode = (uint)instanceId;
+            Logger.Debug($"Just attacked Target {client.Character.eventSelectReadyCode}");
+
+
+
             SendBattleAttackExecR(client);
             if (instanceId == 0)
             {
@@ -66,15 +71,18 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendReportDamageHP(NecClient client, IInstance instance)
         {
-            int damage = Util.GetRandomNumber(1, 20);
+            int damage = Util.GetRandomNumber(1000000, 2000000);
             IBuffer res = BufferProvider.Provide();
+            client.Map.MonsterSpawns.TryGetValue((int)instance.InstanceId, out MonsterSpawn _monsterSpawn);
+            _monsterSpawn.CurrentHp -= damage;
             res.WriteInt32(instance.InstanceId);
             res.WriteInt32(damage);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_phy_damage_hp, res, ServerType.Area);
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteInt32(instance.InstanceId);
-            res4.WriteByte((byte)damage); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
+            Logger.Debug($"hp: {_monsterSpawn.CurrentHp} max hp : {_monsterSpawn.MaxHp}  hp calc {((double)_monsterSpawn.CurrentHp/ (double)_monsterSpawn.MaxHp)*100}");
+            res4.WriteByte((byte)(((double)_monsterSpawn.CurrentHp / (double)_monsterSpawn.MaxHp) * 100)); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
 
         }
