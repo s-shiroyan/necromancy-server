@@ -40,6 +40,7 @@ namespace Necromancy.Server.Packet.Area
                 switch (instance)
                 {
                     case NpcSpawn npcSpawn:
+                        client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
                         Logger.Debug($"instanceId : {client.Character.eventSelectReadyCode} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
 
                         var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
@@ -50,8 +51,6 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 74013071 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013161 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013271 ,  () => ChangeMap(client, npcSpawn.NpcId) },
-                         { x => x < 2 ,    () => defaultEvent(client, npcSpawn.NpcId) },
-                         { x => x < 3 ,    () => RecoverySpring(client, npcSpawn.NpcId)},
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
