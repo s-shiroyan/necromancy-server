@@ -67,13 +67,20 @@ namespace Necromancy.Server.Packet.Response
             {
                 res.WriteInt64(100);
             }
-
-            res.WriteInt32(11110000); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
-            res.WriteInt64(_monsterSpawn.MonsterId); // item Id ?
+            
+            if (_monsterSpawn.CurrentHp <=0)
+            {
+                res.WriteInt32(1); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
+            }
+            else
+            {
+                res.WriteInt32(11110000); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
+            }
+            res.WriteInt64(111111); // item Id ?
             res.WriteInt64(111112); // item Id ?
             res.WriteInt64(111113); // item Id ?
-            res.WriteByte(255);
-            res.WriteByte(255);
+            res.WriteByte(90);
+            res.WriteByte(100);
             res.WriteInt32(_monsterSpawn.CurrentHp); //Current HP
             res.WriteInt32(_monsterSpawn.MaxHp); //Max HP
             res.WriteInt32(0x80); // cmp to 0x80 = 128
