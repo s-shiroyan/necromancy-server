@@ -84,7 +84,7 @@ namespace Necromancy.Server.Packet.Area
 
             res2.WriteInt32(client.Character.skillStartCast);// effect id
             res2.WriteInt32(myTargetID); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
-            res2.WriteInt32(0);//unknown
+            res2.WriteInt32(500);//unknown
 
             res2.WriteInt32(client.Character.Heading);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);

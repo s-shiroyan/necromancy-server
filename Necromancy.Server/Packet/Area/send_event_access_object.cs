@@ -32,30 +32,28 @@ namespace Necromancy.Server.Packet.Area
             switch (instance)
             {
                 case NpcSpawn npcSpawn:
-                    Logger.Debug($"instanceId : {instanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
-
+                    client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
+                    Logger.Debug($"instanceId : {npcSpawn.InstanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
                     IBuffer res = BufferProvider.Provide();
-                    res.WriteInt32(npcSpawn.Id);
+                    res.WriteInt32(npcSpawn.InstanceId);
                     Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
                     //logic to execute different actions based on the event that triggered this select execution.
                     var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
                         {
-                         { x => x == 10000704, () => SendEventSelectMapAndChannel(client, (int)instanceId) }, //set to Manaphes in slums for testing.
-                         { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, (int)instanceId) },
-                         { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, (int)instanceId) },
+                         { x => x == 10000704, () => SendEventSelectMapAndChannel(client, instanceId) }, //set to Manaphes in slums for testing.
+                         { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
+                         { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
                          { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn) },
                          { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
                          { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
                          { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
-                         { x => x < 2 ,    () => defaultEvent(client, (int)instanceId) },
-                         { x => x < 3 ,    () => RecoverySpring(client, npcSpawn)},
-                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
-                         { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {instanceId} reached") },
+                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                         { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 900000100 ,  () =>  UpdateNPC(client, npcSpawn) }
 
                         };
@@ -92,7 +90,7 @@ namespace Necromancy.Server.Packet.Area
             // dont forget tu put a recv_event_end, at the end, if you don't want to get stuck, and do nothing.
         }
 
-        private void SendEventShowBoardStart(NecClient client, int instanceId)
+        private void SendEventShowBoardStart(NecClient client, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteCString("Select a Map!. just not the town"); // find max size
@@ -100,7 +98,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
         }
 
-        private void SendEventShowBoardEnd(NecClient client, int instanceId)
+        private void SendEventShowBoardEnd(NecClient client, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
@@ -139,7 +137,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_event_block_message, res, ServerType.Area);
         }
 
-        private void SendEventSelectMapAndChannel(NecClient client, int instanceId)
+        private void SendEventSelectMapAndChannel(NecClient client, uint instanceId)
         {
             IBuffer res7 = BufferProvider.Provide();
 
@@ -210,7 +208,7 @@ namespace Necromancy.Server.Packet.Area
             }
         }
 
-        private void defaultEvent(NecClient client, int instanceId)
+        private void defaultEvent(NecClient client, uint instanceId)
         {
             SendEventShowBoardStart(client, instanceId);
             //SendEventMessageNoObject(client, instanceId);
