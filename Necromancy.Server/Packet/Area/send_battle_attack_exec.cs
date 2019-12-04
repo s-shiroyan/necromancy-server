@@ -3,6 +3,10 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Common.Instance;
+using System.Threading.Tasks;
+using System;
+using Necromancy.Server.Packet.Response;
+
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -71,7 +75,7 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendReportDamageHP(NecClient client, IInstance instance)
         {
-            int damage = Util.GetRandomNumber(1000000, 2000000);
+            int damage = Util.GetRandomNumber(4000000, 6000000);
             IBuffer res = BufferProvider.Provide();
             client.Map.MonsterSpawns.TryGetValue((int)instance.InstanceId, out MonsterSpawn _monsterSpawn);
             _monsterSpawn.CurrentHp -= damage;
@@ -86,16 +90,55 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"hp: {_monsterSpawn.CurrentHp} max hp : {_monsterSpawn.MaxHp}  hp calc {((double)_monsterSpawn.CurrentHp/ (double)_monsterSpawn.MaxHp)*100}");
             res4.WriteByte((byte)(((double)_monsterSpawn.CurrentHp / (double)_monsterSpawn.MaxHp) * 100)); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
+
+            //Check if the monster has 0 hp.  if so,  animate it's death,  then decompose the body,  then remove it from the map, then re-spawn it with full HP.
             if (_monsterSpawn.CurrentHp <= 0) { 
 
+                //Death Animation
                 IBuffer res5 = BufferProvider.Provide();
-
 	            res5.WriteInt32(instance.InstanceId);
-                res5.WriteInt32(1);
-                res5.WriteInt32(1);
-                res5.WriteInt32(1);
-
+                res5.WriteInt32(1); //Death int
+                res5.WriteInt32(0);
+                res5.WriteInt32(0);
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
+
+                //Make the monster a lootable state
+                IBuffer res10 = BufferProvider.Provide();
+                res10.WriteInt32(_monsterSpawn.InstanceId);
+                res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
+                Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
+
+                //Give the player time to loot the corpse, then decompose the body
+                Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
+                (t1 =>
+                    {
+                        _monsterSpawn.CurrentHp = _monsterSpawn.MaxHp; //re-set HP to max
+
+                        //decompose the body
+                        IBuffer res7 = BufferProvider.Provide();
+                        res7.WriteInt32(instance.InstanceId);
+                        res7.WriteInt32(5);//4 here causes a cloud and the model to disappear, 5 causes a mist to happen and disappear
+                        res7.WriteInt32(1);
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_deadstate, res7, ServerType.Area);
+
+                        //leave the monster gone for a while,  then re-spawn it.
+                        Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
+                        (t1 =>
+                            {
+
+                                //Remove the dead monster object from the map (reset the instance for re-use)
+                                RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monsterSpawn.InstanceId);
+                                Router.Send(client.Map, objectDisappearData);
+
+                                //Re-spawn the monster
+                                RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monsterSpawn);
+                                Router.Send(client.Map, monsterData);
+
+                            }
+                        );
+
+                    }
+                );
 
             }
 

@@ -26,8 +26,8 @@ namespace Necromancy.Server.Model
 
         public MonsterSpawn()
         {
-            CurrentHp = 80087355;
-            MaxHp = 88888888;
+            CurrentHp = 80085;
+            MaxHp = 88887355;
             Created = DateTime.Now;
             Updated = DateTime.Now;
         }
