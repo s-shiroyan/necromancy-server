@@ -1,4 +1,4 @@
-﻿using Arrowgene.Services.Buffers;
+using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_search : Handler
+    public class send_auction_search : ClientHandler
     {
         public send_auction_search(NecServer server) : base(server)
         {
@@ -27,15 +27,15 @@ namespace Necromancy.Server.Packet.Area
             {
                 res.WriteInt32(0);
                 res.WriteInt64(2);
-                res.WriteInt32(3); // Lowest
-                res.WriteInt32(4); // Buy Now
+                res.WriteInt32(1); // Lowest
+                res.WriteInt32(800); // Buy Now
                 res.WriteFixedString($"{client.Soul.Name}", 49); // Soul Name Of Sellers
-                res.WriteByte(0);
-                res.WriteFixedString("Viagra for your sword", 385); // Comment section
-                res.WriteInt16(5); // Bid
-                res.WriteInt32(999999); // Item remaining time
+                res.WriteByte(6); // 0 = nothing.    Other = Logo appear, effect or rank, or somethiung else ?
+                res.WriteFixedString("what's this item ?", 385); // Comment section
+                res.WriteInt16(500); // Bid
+                res.WriteInt32(9999); // Item remaining time
             }
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_search_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_search_r, res, ServerType.Area);
         }
 
     }
