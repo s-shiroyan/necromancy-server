@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Model
@@ -21,6 +22,7 @@ namespace Necromancy.Server.Model
         public short Size { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
+        public short Radius { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
 
@@ -31,5 +33,10 @@ namespace Necromancy.Server.Model
             Created = DateTime.Now;
             Updated = DateTime.Now;
         }
+    }
+    public class MonsterCoord
+    {
+        public byte Heading { get; set; }
+        public Vector3 destination { get; set; }
     }
 }
