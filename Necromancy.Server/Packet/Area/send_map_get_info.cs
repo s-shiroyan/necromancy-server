@@ -1,8 +1,10 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -37,8 +39,25 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                Router.Send(monsterData, client);
+                if (!Server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
+                {
+                    return;
+                }
+                monsterSpawn.ModelId = modelSetting.Id;
+                monsterSpawn.Size = (short)modelSetting.Height;
+                monsterSpawn.Radius = (short)modelSetting.Radius;
+                monsterSpawn.MaxHp = 1000;
+                monsterSpawn.CurrentHp = 100;
+                if (monsterSpawn.MapId != 2002104)
+                {
+                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                    Router.Send(monsterData, client);
+                } else
+                {
+                    MonsterTask monsterTask = new MonsterTask(Server, client, monsterSpawn);
+                    monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                    monsterTask.Start();
+                }
             }
 
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
