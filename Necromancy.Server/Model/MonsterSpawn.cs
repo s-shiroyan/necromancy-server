@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 using Necromancy.Server.Common.Instance;
 
@@ -20,23 +21,48 @@ namespace Necromancy.Server.Model
         public float Z { get; set; }
         public byte Heading { get; set; }
         public short Size { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
         public short Radius { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
+        public int RespawnTime { get; set; }
+        public bool SpawnActive { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
+
+        public List<MonsterCoord> monsterCoords;
 
         public MonsterSpawn()
         {
             CurrentHp = 80085;
             MaxHp = 88887355;
+            RespawnTime = 60000;
+            SpawnActive = false;
             Created = DateTime.Now;
             Updated = DateTime.Now;
+            monsterCoords = new List<MonsterCoord>();
+
+            //To-Do   add at least 1 default monster coord for /mon spawns
+            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
+            MonsterCoord defaultCoord = new MonsterCoord();
+            defaultCoord.Id = Id;
+            defaultCoord.MonsterId = (uint)MonsterId;
+            defaultCoord.MapId = (uint)MapId;
+            defaultCoord.destination = defaultVector3;
+
+            monsterCoords.Add(defaultCoord);
+
+            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
+
         }
     }
-    public class MonsterCoord
+
+    public class MonsterCoord 
     {
-        public byte Heading { get; set; }
+        public int Id;
+        public uint MonsterId { get; set; }
+        public uint MapId { get; set; }
+        public int CoordIdx { get; set; }
         public Vector3 destination { get; set; }
+
     }
 }

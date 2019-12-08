@@ -160,7 +160,9 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new QuestStarted(this));
             Chat.CommandHandler.AddCommand(new Revive(this));
             Chat.CommandHandler.AddCommand(new SendAuctionNotifyOpen(this));
+            Chat.CommandHandler.AddCommand(new SendCharacterHome(this));
             Chat.CommandHandler.AddCommand(new SendCharacterId(this));
+            Chat.CommandHandler.AddCommand(new SendCharacterSave(this));
             Chat.CommandHandler.AddCommand(new SendCharaUpdateEvent(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifiyGGateStoneData(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
@@ -172,8 +174,10 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
             Chat.CommandHandler.AddCommand(new SendMapChangeForce(this));
+            Chat.CommandHandler.AddCommand(new SendMapCoord(this));
             Chat.CommandHandler.AddCommand(new SendMapEntry(this));
             Chat.CommandHandler.AddCommand(new SendMapLink(this));
+            Chat.CommandHandler.AddCommand(new SendMapMove(this));
             Chat.CommandHandler.AddCommand(new SendMessageEvent(this));
             Chat.CommandHandler.AddCommand(new SendMonsterStateUpdateNotify(this));
             Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));

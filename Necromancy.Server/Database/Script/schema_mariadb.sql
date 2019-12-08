@@ -52,6 +52,20 @@ CREATE TABLE IF NOT EXISTS `nec_skilltree_item` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
  
+ CREATE TABLE IF NOT EXISTS `nec_monster_coords` (
+  `id`         INT(11)             NOT NULL,
+  `monster_id` INT(11)             NOT NULL,
+  `map_id` INT(11)                 NOT NULL,
+  `coord_dx` INT(11)               NOT NULL,
+  `x` FLOAT                        NOT NULL,
+  `y` FLOAT                        NOT NULL,
+  `z` FLOAT                        NOT NULL,
+
+  PRIMARY KEY (`id`),
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
  CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
   `id`    INT(11)             NOT NULL,
   `slot0` INT(11)             NOT NULL,

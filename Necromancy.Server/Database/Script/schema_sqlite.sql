@@ -125,6 +125,15 @@ CREATE TABLE IF NOT EXISTS `nec_npc_spawn` (
   `status_z`   INTEGER             NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `nec_monster_coords` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `monster_id` INTEGER             NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `coord_idx`  INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
   `id`         INTEGER PRIMARY KEY NOT NULL, 

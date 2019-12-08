@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Arrowgene.Services.Logging;
+using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Response;
@@ -29,6 +30,7 @@ namespace Necromancy.Server.Model
             Area = setting.Area;
             Place = setting.Place;
             Orientation = setting.Orientation;
+            MonsterTasks = new TaskManager();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
@@ -43,13 +45,18 @@ namespace Necromancy.Server.Model
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
+                //MonsterSpawn monster = (MonsterSpawn)server.Instances.CreateInstance<MonsterSpawn>((IInstance)monsterSpawn);
                 uint instanceID = server.Instances.CreateInstance<MonsterSpawn>().InstanceId;
-                //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
                 monsterSpawn.InstanceId = instanceID;
-                MonsterSpawns.Add((int)instanceID, monsterSpawn);
+                MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
+
+                monsterSpawn.monsterCoords.Clear();
+                List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.MonsterId);
+                foreach (MonsterCoord monsterCoord in coords)
+                {
+                    monsterSpawn.monsterCoords.Add(monsterCoord);
+                }
             }
-
-
         }
 
         public int Id { get; set; }
@@ -65,6 +72,7 @@ namespace Necromancy.Server.Model
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
         public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
 
+        public TaskManager MonsterTasks;
 
         public void EnterForce(NecClient client)
         {
@@ -87,6 +95,10 @@ namespace Necromancy.Server.Model
             client.Character.Y = Y;
             client.Character.Z = Z;
 
+            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            {
+                monsterSpawn.SpawnActive = true; ;
+            }
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
         }
@@ -99,6 +111,12 @@ namespace Necromancy.Server.Model
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
             _server.Router.Send(this, objectDisappearData, client);
+
+            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            {
+                monsterSpawn.SpawnActive = false;
+            }
+
         }
     }
 }

@@ -5,7 +5,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Threading;
+using Necromancy.Server.Tasks;
 using System;
 using System.Numerics;
 using System.Threading;
@@ -83,6 +83,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             monsterSpawn.ModelId = modelSetting.Id;
             monsterSpawn.Size = (short)modelSetting.Height;
+            monsterSpawn.Radius = (short)modelSetting.Radius;
 
             monsterSpawn.MapId = client.Character.MapId;
             //double heading1 = GetHeading(client.Character.X, client.Character.Y, monsterSpawn.X, monsterSpawn.Y);
@@ -96,10 +97,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 monsterSpawn.Y = monsterYCoords[0];
             }
 
-            monsterSpawn.Heading = monsterHeading[1];
             monsterSpawn.MaxHp = 1000;
             monsterSpawn.CurrentHp = 100;
-            monsterSpawn.Radius = (short)modelSetting.Radius;
             /*if (!Server.Database.InsertMonsterSpawn(monsterSpawn))
             {
                 responses.Add(ChatResponse.CommandError(client, "MonsterSpawn could not be saved to database"));
@@ -108,21 +107,13 @@ namespace Necromancy.Server.Chat.Command.Commands
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
             Router.Send(client.Map, monsterData);
             SendMonsterPose(client, monsterSpawn);
-            MonsterThread monsterThread = new MonsterThread(Server, client, monsterSpawn);
-            for (int i=0;i< monsterXCoords.Length; i++)
-            {
-                MonsterCoord monsterCoords = new MonsterCoord();
-                monsterCoords.destination = new Vector3(monsterXCoords[i], monsterYCoords[i], monsterZCoords[i]);
-                monsterCoords.Heading = monsterHeading[i];
-                monsterThread.monsterCoords.Add(monsterCoords);
-            }
-            Thread workerThread = new Thread(monsterThread.InstanceMethod);
-            monsterThread.gotoDistance = 10;
+            MonsterTask monsterTask = new MonsterTask(Server, client, monsterSpawn);
+            //Thread workerThread = new Thread(monsterThread.InstanceMethod);
+            monsterTask.gotoDistance = 10;
             MonsterCoord monsterHome = new MonsterCoord();
             monsterHome.destination = new Vector3(-923, 3599, -371);
-            monsterHome.Heading = 0;
-            monsterThread.monsterHome = monsterHome;
-            workerThread.Start();
+            monsterTask.monsterHome = monsterHome;
+            monsterTask.Start();
 
         }
         private void SendBattleReportStartNotify(NecClient client, MonsterSpawn monsterSpawn)

@@ -31,16 +31,28 @@ namespace Necromancy.Server.Packet.Area
 
             SendBattleAttackExecR(client);
             if (instanceId == 0)
+                return;
+
+            MonsterSpawn monsterSpawn = null;
+            client.Map.MonsterSpawns.TryGetValue((int)instanceId, out monsterSpawn);
+//            MonsterSpawn monsterSpawn = (MonsterSpawn)instance;
+            SendBattleAttackExecR(client);
+
+
+            double distanceToMonster = distance(monsterSpawn.X, monsterSpawn.Y, client.Character.X, client.Character.Y);
+            Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
+            //Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_exec_direct_r, res, ServerType.Area);
+            if ( distanceToMonster > monsterSpawn.Radius+125)
             {
                 return;
             }
-            IInstance instance = Server.Instances.GetInstance((uint)instanceId);
-            //Router.Send(client, (ushort) AreaPacketId.recv_battle_attack_exec_direct_r, res, ServerType.Area);
-            SendBattleReportStartNotify(client, instance);
-            SendReportNotifyHitEffect(client, instance);
-            SendReportDamageHP(client, instance);
+            SendBattleReportStartNotify(client, monsterSpawn);
+            SendReportNotifyHitEffect(client, monsterSpawn);
+            SendReportDamageHP(client, monsterSpawn);
+            //SendBattleReportKnockBack(client, instance);
             //SendDataNotifyEoData(client, instance);
-            SendBattleReportEndNotify(client, instance);
+            CheckMonsterStats(client, monsterSpawn);
+            SendBattleReportEndNotify(client, monsterSpawn);
         }
 
         private void SendBattleReportStartNotify(NecClient client, IInstance instance)
@@ -55,6 +67,58 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res4, ServerType.Area);
         }
 
+        private void SendBattleReportKnockBack(NecClient client, IInstance instance)
+        {
+            MonsterSpawn monster = (MonsterSpawn)instance;
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(monster.InstanceId);
+            res.WriteFloat(0);
+            res.WriteFloat(2);   // delay in seconds
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_knockback, res, ServerType.Area);
+        }
+
+        private void SendDataNotifyEoData(NecClient client, IInstance instance)
+        {
+            MonsterSpawn monster = (MonsterSpawn)instance;
+            IBuffer res2 = BufferProvider.Provide();
+            int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
+            Logger.Debug($"Skill instance {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
+            res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
+            res2.WriteFloat(monster.X);//Effect Object X
+            res2.WriteFloat(monster.Y);//Effect Object y
+            res2.WriteFloat(monster.Z + 100);//Effect Object z
+
+            //orientation related
+            res2.WriteFloat(client.Character.X);//Rotation Along X Axis if above 0
+            res2.WriteFloat(client.Character.Y);//Rotation Along Y Axis if above 0
+            res2.WriteFloat(client.Character.Heading);//Rotation Along Z Axis if above 0
+
+            res2.WriteInt32(600021);// effect id
+            res2.WriteInt32(monster.InstanceId); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
+            res2.WriteInt32(0);//unknown
+
+            res2.WriteInt32(client.Character.Heading);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
+
+            //makes Effect disappear after float seconds
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteInt32(skillInstanceID);
+            res5.WriteFloat(10);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res5, ServerType.Area);
+
+            //makes effect have a sphere of collision???
+            IBuffer res6 = BufferProvider.Provide();
+            res6.WriteInt32(skillInstanceID);
+            res6.WriteFloat(10000);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res6, ServerType.Area);
+
+            //testing
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteInt32(0);
+            res8.WriteInt32(0);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res8, ServerType.Area);
+        }
 
         private void SendReportAcctionAtackExec(NecClient client, IInstance instance)
         {
@@ -64,10 +128,31 @@ namespace Necromancy.Server.Packet.Area
 
 
         }
+        private void CheckMonsterStats(NecClient client, IInstance instance)
+        {
+            MonsterSpawn monster = (MonsterSpawn)instance;
+            if (monster.CurrentHp <= 0)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteInt32(monster.InstanceId);
+                res2.WriteInt32(1); //4 = chara dissapear, is dead ???
+                res2.WriteInt32(1);
+                res2.WriteInt32(1);
+                Router.Send(client, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res2, ServerType.Area);
+
+                IBuffer res1 = BufferProvider.Provide();
+                res1.WriteInt32(monster.InstanceId);
+                //Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
+                res1.WriteInt32(39);
+                Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res1, ServerType.Area);
+
+            }
+
+        }
         private void SendReportNotifyHitEffect(NecClient client, IInstance instance)
         {
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(100020);
+            res4.WriteInt32(instance.InstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_hit_effect, res4, ServerType.Area);
 
 
@@ -75,74 +160,32 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendReportDamageHP(NecClient client, IInstance instance)
         {
-            int damage = Util.GetRandomNumber(4000000, 6000000);
+
+            MonsterSpawn monsterSpawn = (MonsterSpawn)instance;
+            int seed = Util.GetRandomNumber(0, 20);
+            int damage = 0;
+            if (seed < 2)
+                damage = Util.GetRandomNumber(1, 4);    // Light hit
+            else if (seed < 20)
+                damage = Util.GetRandomNumber(16, 24);  // Normal hit
+            else
+                damage = Util.GetRandomNumber(32, 48);  // Critical hit
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(instance.InstanceId);
             res.WriteInt32(damage);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_phy_damage_hp, res, ServerType.Area);
 
-            if (client.Map.MonsterSpawns.TryGetValue((int)instance.InstanceId, out MonsterSpawn _monsterSpawn))
-            {
-                _monsterSpawn.CurrentHp -= damage;
+            monsterSpawn.CurrentHp -= damage;
+            float currentHp = monsterSpawn.CurrentHp;
+            float maxHp = monsterSpawn.MaxHp;
+            float perHp = (int)((currentHp / maxHp) * 100);
+            Logger.Debug($"CurrentHp [{currentHp}] MaxHp[{maxHp}] perHp[{perHp}]");
 
-                IBuffer res4 = BufferProvider.Provide();
-                res4.WriteInt32(instance.InstanceId);
-                if (_monsterSpawn.CurrentHp <= 0) { _monsterSpawn.CurrentHp = 0; }
-                Logger.Debug($"hp: {_monsterSpawn.CurrentHp} max hp : {_monsterSpawn.MaxHp}  hp calc {((double)_monsterSpawn.CurrentHp / (double)_monsterSpawn.MaxHp) * 100}");
-                res4.WriteByte((byte)(((double)_monsterSpawn.CurrentHp / (double)_monsterSpawn.MaxHp) * 100)); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
-
-                //Check if the monster has 0 hp.  if so,  animate it's death,  then decompose the body,  then remove it from the map, then re-spawn it with full HP.
-                if (_monsterSpawn.CurrentHp <= 0) {
-
-                    //Death Animation
-                    IBuffer res5 = BufferProvider.Provide();
-                    res5.WriteInt32(instance.InstanceId);
-                    res5.WriteInt32(1); //Death int
-                    res5.WriteInt32(0);
-                    res5.WriteInt32(0);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
-
-                    //Make the monster a lootable state
-                    IBuffer res10 = BufferProvider.Provide();
-                    res10.WriteInt32(_monsterSpawn.InstanceId);
-                    res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
-                    Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
-
-                    //Give the player time to loot the corpse, then decompose the body
-                    Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
-                    (t1 =>
-                        {
-                            _monsterSpawn.CurrentHp = _monsterSpawn.MaxHp; //re-set HP to max
-
-                        //decompose the body
-                        IBuffer res7 = BufferProvider.Provide();
-                            res7.WriteInt32(instance.InstanceId);
-                            res7.WriteInt32(5);//4 here causes a cloud and the model to disappear, 5 causes a mist to happen and disappear
-                        res7.WriteInt32(1);
-                            Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_deadstate, res7, ServerType.Area);
-
-                        //leave the monster gone for a while,  then re-spawn it.
-                        Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
-                            (t1 =>
-                                {
-
-                                //Remove the dead monster object from the map (reset the instance for re-use)
-                                RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monsterSpawn.InstanceId);
-                                    Router.Send(client.Map, objectDisappearData);
-
-                                //Re-spawn the monster
-                                RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monsterSpawn);
-                                    Router.Send(client.Map, monsterData);
-
-                                }
-                            );
-
-                        }
-                    );
-
-                }
-            }
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(instance.InstanceId);
+            res4.WriteByte((byte)perHp); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
+            Router.Send(client, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
         }
 
         private void SendBattleAteckExecDirect(NecClient client, IInstance instance)
@@ -161,6 +204,12 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_exec_r, res, ServerType.Area);
         }
 
+        static double distance(double targetX, double targetY, double objectX, double objectY)
+        {
+            // Calculating distance 
+            return Math.Sqrt(Math.Pow(objectX - targetX, 2) +
+                          Math.Pow(objectY - targetY, 2) * 1.0);
+        }
 
     }
 }
