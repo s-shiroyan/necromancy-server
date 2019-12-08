@@ -266,7 +266,7 @@ namespace Necromancy.Server.Tasks
                 IBuffer res10 = BufferProvider.Provide();
                 res10.WriteInt32(_monster.InstanceId);
                 res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
-                Router.Send(_client, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
+                Router.Send(_client.Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
 
                 //  Let a separate loot manager handle the monster body click?
                 Thread.Sleep(_monster.RespawnTime);
@@ -291,12 +291,12 @@ namespace Necromancy.Server.Tasks
             res.WriteInt32(_monster.InstanceId);
             if (poseOn)
             {
-                Router.Send(_client, (ushort)AreaPacketId.recv_battle_attack_pose_start_notify, res, ServerType.Area);
+                Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_attack_pose_start_notify, res, ServerType.Area);
                 battlePose = true;
             }
             else
             {
-                Router.Send(_client, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area);
+                Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area);
                 battlePose = false;
             }
         }
@@ -328,7 +328,7 @@ namespace Necromancy.Server.Tasks
 
                 res.WriteByte(2); //MOVEMENT ANIM
                 res.WriteByte(0);//JUMP & FALLING ANIM
-                Router.Send(_client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+                Router.Send(_client.Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
                 monsterMoving = true;
             }
             //            Logger.Debug($"distance [{distance}]");
@@ -388,7 +388,7 @@ namespace Necromancy.Server.Tasks
 
             res2.WriteByte(3); //MOVEMENT ANIM
             res2.WriteByte(0);//JUMP & FALLING ANIM
-            Router.Send(_client, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area);
+            Router.Send(_client.Map, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area);
             _monster.X = _monster.X + xTick;
             _monster.Y = _monster.Y + yTick;
         }
@@ -409,7 +409,7 @@ namespace Necromancy.Server.Tasks
 
             res.WriteByte(0); //MOVEMENT ANIM
             res.WriteByte(0);//JUMP & FALLING ANIM
-            Router.Send(_client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+            Router.Send(_client.Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
             monsterMoving = false;
             Thread.Sleep(100);
         }
@@ -452,7 +452,7 @@ namespace Necromancy.Server.Tasks
             res.WriteFloat(_monster.Z);
             res.WriteByte(_monster.Heading);
             res.WriteByte(1);
-            Router.Send(_client, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
+            Router.Send(_client.Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
         }
         private float GetDistance(Vector3 target, Vector3 source)
         {
@@ -517,12 +517,12 @@ namespace Necromancy.Server.Tasks
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_monster.InstanceId);
-            Router.Send(_client, (ushort)AreaPacketId.recv_battle_report_start_notify, res, ServerType.Area);
+            Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res, ServerType.Area);
         }
         private void SendBattleReportEndNotify()
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(_client, (ushort)AreaPacketId.recv_battle_report_end_notify, res, ServerType.Area);
+            Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res, ServerType.Area);
         }
     }
 }
