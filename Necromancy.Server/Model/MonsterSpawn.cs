@@ -33,13 +33,14 @@ namespace Necromancy.Server.Model
 
         public MonsterSpawn()
         {
-            CurrentHp = 80085;
-            MaxHp = 88887355;
+            CurrentHp = 1000;
+            MaxHp = 50000;
             RespawnTime = 60000;
             SpawnActive = false;
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
+            Heading = 0;
 
             //To-Do   add at least 1 default monster coord for /mon spawns
             Vector3 defaultVector3 = new Vector3(X,Y,Z); 
