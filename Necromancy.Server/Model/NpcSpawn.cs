@@ -27,12 +27,15 @@ namespace Necromancy.Server.Model
         public int Status_X { get; set; }
         public int Status_Y { get; set; }
         public int Status_Z { get; set; }
+        public int Radius { get; set; }
+
 
 
         public NpcSpawn()
         {
             Created = DateTime.Now;
             Updated = DateTime.Now;
+            Radius = 100;
         }
     }
 }

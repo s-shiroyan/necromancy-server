@@ -23,8 +23,6 @@ namespace Necromancy.Server.Chat.Command.Commands
             //this.server = server;
         }
 
-        int i = 0;
-
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
