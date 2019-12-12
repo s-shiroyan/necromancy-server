@@ -26,10 +26,14 @@ namespace Necromancy.Server.Model
         public int MaxHp { get; set; }
         public int RespawnTime { get; set; }
         public bool SpawnActive { get; set; }
+        public bool TaskActive { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
         public List<MonsterCoord> monsterCoords;
+        public bool defaultCoords { get; set; }
+        public Dictionary<int, int> MonsterAgro { get; set; }
+
 
         public MonsterSpawn()
         {
@@ -37,9 +41,12 @@ namespace Necromancy.Server.Model
             MaxHp = 50000;
             RespawnTime = 6000;//60000
             SpawnActive = false;
+            TaskActive = false;
+            defaultCoords = true;
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
+            MonsterAgro = new Dictionary<int, int>();
 
         }
     }

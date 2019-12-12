@@ -6,6 +6,7 @@ using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
@@ -37,21 +38,29 @@ namespace Necromancy.Server.Model
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
-                uint instanceID = server.Instances.CreateInstance<NpcSpawn>().InstanceId;
-                npcSpawn.InstanceId = instanceID;
-                NpcSpawns.Add((int)instanceID, npcSpawn);
+                server.Instances.AssignInstance(npcSpawn);
+                NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
             }
 
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
-                uint instanceID = server.Instances.CreateInstance<MonsterSpawn>().InstanceId;
-                monsterSpawn.InstanceId = instanceID;
+                server.Instances.AssignInstance(monsterSpawn);
+                if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
+                {
+                    return;
+                }
+                monsterSpawn.ModelId = modelSetting.Id;
+                monsterSpawn.Size = (short)(modelSetting.Height / 2);
+                monsterSpawn.Radius = (short)modelSetting.Radius;
+                monsterSpawn.MaxHp = 100;
+                monsterSpawn.CurrentHp = 100;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.MonsterId);
                 if (coords.Count > 0)
                 {
+                    monsterSpawn.defaultCoords = false;
                     monsterSpawn.monsterCoords.Clear();
                     foreach (MonsterCoord monsterCoord in coords)
                     {
@@ -135,12 +144,30 @@ namespace Necromancy.Server.Model
             client.Character.Y = Y;
             client.Character.Z = Z;
 
-            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            if (ClientLookup.GetAll().Count == 1)
             {
-                monsterSpawn.SpawnActive = true; ;
+                foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+                {
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
+                    {
+                        MonsterTask monsterTask = new MonsterTask(_server, client, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+                    else
+                    {
+                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                        _server.Router.Send(monsterData, client);
+                    }
+                }
             }
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+
         }
 
         public void Leave(NecClient client)
@@ -151,12 +178,13 @@ namespace Necromancy.Server.Model
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
             _server.Router.Send(this, objectDisappearData, client);
-
-            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            if (ClientLookup.GetAll().Count == 0)
             {
-                monsterSpawn.SpawnActive = false;
+                foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+                {
+                    monsterSpawn.SpawnActive = false;
+                }
             }
-
         }
     }
 }
