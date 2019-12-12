@@ -35,24 +35,11 @@ namespace Necromancy.Server.Model
         {
             CurrentHp = 1000;
             MaxHp = 50000;
-            RespawnTime = 60000;
+            RespawnTime = 6000;//60000
             SpawnActive = false;
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            Heading = 0;
-
-            //To-Do   add at least 1 default monster coord for /mon spawns
-            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
-            MonsterCoord defaultCoord = new MonsterCoord();
-            defaultCoord.Id = Id;
-            defaultCoord.MonsterId = (uint)MonsterId;
-            defaultCoord.MapId = (uint)MapId;
-            defaultCoord.destination = defaultVector3;
-
-            monsterCoords.Add(defaultCoord);
-
-            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
 
         }
     }

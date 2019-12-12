@@ -44,18 +44,18 @@ namespace Necromancy.Server.Packet.Area
                     return;
                 }
                 monsterSpawn.ModelId = modelSetting.Id;
-                monsterSpawn.Size = (short)modelSetting.Height;
+                monsterSpawn.Size = (short)(modelSetting.Height/2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
                 monsterSpawn.MaxHp = 1000;
                 monsterSpawn.CurrentHp = 100;
-                if (monsterSpawn.MapId != 2002104)
+               // if (monsterSpawn.MapId != 2002104)
                 {
-                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                    Router.Send(monsterData, client);
-                } else
+              //      RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                //    Router.Send(monsterData, client);
+                } //else
                 {
                     MonsterTask monsterTask = new MonsterTask(Server, client, monsterSpawn);
-                    monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                    monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 0); //was 64
                     monsterTask.Start();
                 }
             }

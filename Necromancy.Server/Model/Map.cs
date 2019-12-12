@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
@@ -37,7 +38,6 @@ namespace Necromancy.Server.Model
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
                 uint instanceID = server.Instances.CreateInstance<NpcSpawn>().InstanceId;
-                //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
                 npcSpawn.InstanceId = instanceID;
                 NpcSpawns.Add((int)instanceID, npcSpawn);
             }
@@ -45,17 +45,57 @@ namespace Necromancy.Server.Model
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
-                //MonsterSpawn monster = (MonsterSpawn)server.Instances.CreateInstance<MonsterSpawn>((IInstance)monsterSpawn);
                 uint instanceID = server.Instances.CreateInstance<MonsterSpawn>().InstanceId;
                 monsterSpawn.InstanceId = instanceID;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
-                monsterSpawn.monsterCoords.Clear();
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.MonsterId);
-                foreach (MonsterCoord monsterCoord in coords)
+                if (coords.Count > 0)
                 {
-                    monsterSpawn.monsterCoords.Add(monsterCoord);
+                    monsterSpawn.monsterCoords.Clear();
+                    foreach (MonsterCoord monsterCoord in coords)
+                    {
+                        //Console.WriteLine($"added coord {monsterCoord} to monster {monsterSpawn.InstanceId}");
+                        monsterSpawn.monsterCoords.Add(monsterCoord);
+                    }
                 }
+                else
+                {
+
+                    //home coordinate set to monster X,Y,Z from database
+                    Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
+                    MonsterCoord homeCoord = new MonsterCoord();
+                    homeCoord.Id = monsterSpawn.Id;
+                    homeCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    homeCoord.MapId = (uint)monsterSpawn.MapId;
+                    homeCoord.CoordIdx = 0;
+                    homeCoord.destination = homeVector3;
+                    monsterSpawn.monsterCoords.Add(homeCoord);
+
+                    //default path part 2
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    MonsterCoord defaultCoord = new MonsterCoord();
+                    defaultCoord.Id = monsterSpawn.Id;
+                    defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord.CoordIdx = 1; 
+                    defaultCoord.destination = defaultVector3;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord);
+
+                    //default path part 3
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    MonsterCoord defaultCoord2 = new MonsterCoord();
+                    defaultCoord2.Id = monsterSpawn.Id;
+                    defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord2.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
+                    defaultCoord2.destination = defaultVector32;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord2);
+
+                }
+                
             }
         }
 

@@ -70,7 +70,7 @@ namespace Necromancy.Server.Packet.Area
                         monsterSpawn.CurrentHp -= damage;
                         perHp = (int)((monsterSpawn.CurrentHp / monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.CurrentHp}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
-                        if (monsterSpawn.CurrentHp <= 0)
+                        /*if (monsterSpawn.CurrentHp <= 0)
                         {
                             Logger.Debug($"Killed monster Instance ID {instanceId}");
                             //Death Animation
@@ -87,7 +87,7 @@ namespace Necromancy.Server.Packet.Area
                             res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
                             Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
                           
-                        }
+                        }*/
                     }
                     break;
                 case Character character:

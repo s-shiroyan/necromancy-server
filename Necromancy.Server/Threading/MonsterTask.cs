@@ -70,10 +70,10 @@ namespace Necromancy.Server.Tasks
             monsterAgro = false;
             monsterWaiting = true;
             agroRange = 1000;
-            monsterVelocity = 250;
+            monsterVelocity = 200;
             RunAtStart = false;
             Name = monster.Name;
-            respawnTime = 10000;
+            respawnTime = 3800; //10000
         }
 
         public override string Name { get; }
@@ -81,7 +81,7 @@ namespace Necromancy.Server.Tasks
         protected override bool RunAtStart { get; }
         protected override void Execute()
         {
-            int currentDest = 1;
+            int currentDest = 0;
             float fovAngle = (float)Math.Cos(Math.PI / 2);
             int currentWait = 0;
             while (monsterActive && _monster.SpawnActive)
@@ -109,7 +109,7 @@ namespace Necromancy.Server.Tasks
                         continue;
                     }
                     float homeDistance = GetDistance(monsterHome.destination, monster);
-                    if (homeDistance >= (agroRange * 2))
+                    if (homeDistance >= (agroRange * 5))
                     {
                         RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monster.InstanceId);
                         Router.Send(_client.Map, objectDisappearData);
@@ -131,10 +131,11 @@ namespace Necromancy.Server.Tasks
                             monsterWaiting = true;
                             currentWait = 0;
                             //                        Thread.Sleep(2000);
-                            if (currentDest < _monster.monsterCoords.Count - 2)
+                            if (currentDest < _monster.monsterCoords.Count - 1)
                                 currentDest++;
                             else
                                 currentDest = 0;
+
                             _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == currentDest).destination);
                         }
                     }
@@ -161,7 +162,7 @@ namespace Necromancy.Server.Tasks
                         MonsterStop();
                         MonsterHate(true);
                         moveTime = agroTick;
-                        gotoDistance = 800;
+                        gotoDistance = 200;
                         monsterVelocity = 500;
                         //SendBattleReportStartNotify();
                         //MonsterTarget();
@@ -237,12 +238,12 @@ namespace Necromancy.Server.Tasks
             casting = false;
             monsterWaiting = false;
             gotoDistance = 10;
-            monsterVelocity = 250;
+            monsterVelocity = 200;
             MonsterCoord spawnCoords = _monster.monsterCoords.Find(x => x.CoordIdx == 0);
-            _monster.X = spawnCoords.destination.X;
-            _monster.Y = spawnCoords.destination.Y;
-            _monster.Z = spawnCoords.destination.Z;
-            _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination);
+            _monster.X = spawnCoords.destination.X; 
+            _monster.Y = spawnCoords.destination.Y; 
+            _monster.Z = spawnCoords.destination.Z; 
+            _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination); 
             _monster.CurrentHp = 100;
             respawnTime = _monster.RespawnTime;
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monster);
@@ -253,6 +254,7 @@ namespace Necromancy.Server.Tasks
         {
             if (_monster.CurrentHp <= 0)
             {
+                SendBattleReportStartNotify();
                 MonsterHate(false);
                 //Death Animation
                 IBuffer res5 = BufferProvider.Provide();
@@ -261,6 +263,8 @@ namespace Necromancy.Server.Tasks
                 res5.WriteInt32(0);
                 res5.WriteInt32(0);
                 Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
+
+                SendBattleReportEndNotify();
 
                 //Make the monster a lootable state
                 IBuffer res10 = BufferProvider.Provide();
@@ -425,7 +429,7 @@ namespace Necromancy.Server.Tasks
             float dotProduct = Vector2.Dot(sourceVector, targetVector);
             //Logger.Debug($"sourceVector.X[{sourceVector.X}] sourceVector.Y[{sourceVector.Y}]");
             if (dotProduct > fovAngle)
-                Logger.Debug($"Monster sees you!!");
+                Logger.Debug($"Monster {_monster.Name} sees you!!");
             //else
             //Logger.Debug($"Monster is oblivious dotProduct [{dotProduct}] fovAngle [{fovAngle}]");
             return dotProduct > fovAngle;
