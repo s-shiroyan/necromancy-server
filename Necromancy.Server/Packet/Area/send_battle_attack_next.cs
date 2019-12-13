@@ -23,20 +23,12 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.battleAnim = 232; // 232 is the '2nd' attack animation for all weapons.  
                 client.Character.battleNext = 1;
             }
-            else if (client.Character.battleNext == 1)
+            else 
             {                
-                client.Character.battleAnim = 233; // 233 is the '2nd' attack animation for all weapons. 
-                client.Character.battleNext += 1;
+                client.Character.battleAnim =(byte)(232 + client.Character.battleNext); // 233,234,235,236...
+                client.Character.battleNext +=1;
             }
-            else if (client.Character.battleNext == 2)
-            {
-                client.Character.battleAnim = 234; // 234 is the '2nd' attack animation for some weapons. 
-                client.Character.battleNext += 1;
-            }
-
-
-
-            //client.Character.battleAnim += 1; // increment the battleAnim to the 'next' one.  231 and 232 are common.  1h weapons also have 233 and 234
+            
 
 
             IBuffer res = BufferProvider.Provide();

@@ -45,10 +45,6 @@ namespace Necromancy.Server.Packet.Area
                 {
                 client.Character.movementPose = 8 /*client.Character.battlePose*/;  //Setting the pose byte to the 2nd and 3rd digits of our equipped weapon ID. For battle!!
                 client.Character.movementAnim = client.Character.battleAnim; //Setting the animation byte to an animation from C:\WO\Chara\chara\00\041\anim. 231, 232, 233, and 244 are attack animations
-                    if(movementSpeed == 0)
-                    {
-                        client.Character.movementAnim = 0;  //movement stop resets battle anim.
-                    }
                 }
 
 
@@ -74,6 +70,8 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteByte(client.Character.movementAnim);//JUMP & FALLING ANIM
 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area, client);
+
+                client.Character.battleAnim = 0; //re-setting the byte to 0 at the end of every iteration to allow for normal movements.
 
 
 
