@@ -27,7 +27,6 @@ namespace Necromancy.Server.Packet.Area
             client.Character.eventSelectReadyCode = (uint)instanceId;
             Logger.Debug($"Just attacked Target {client.Character.eventSelectReadyCode}");
 
-            SendBattleAttackExecR(client);
 
             if (instanceId == 0)
                 return;
@@ -44,6 +43,7 @@ namespace Necromancy.Server.Packet.Area
 
             IInstance instance = Server.Instances.GetInstance(instanceId);
             SendBattleReportStartNotify(client, instance);
+            SendBattleAttackExecR(client);
 
             switch (instance)
             {
@@ -54,6 +54,7 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"NPC name [{npcSpawn.Name}] distanceToNPC [{distanceToNPC}] Radius [{npcSpawn.Radius}] {npcSpawn.Name}");
                         if (distanceToNPC > npcSpawn.Radius + 125)
                         {
+                            SendBattleReportEndNotify(client, instance);
                             return;
                         }
                     }
@@ -65,6 +66,7 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
                         if (distanceToMonster > monsterSpawn.Radius + 125)
                         {
+                            SendBattleReportEndNotify(client, instance);
                             return;
                         }
                         monsterSpawn.CurrentHp -= damage;
@@ -78,6 +80,7 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"target Character name [{targetClient.Character.Name}] distanceToCharacter [{distanceToCharacter}] Radius {/*[{monsterSpawn.Radius}]*/"125"} {targetClient.Character.Name}");
                     if (distanceToCharacter > /*targetClient.Character.Radius +*/ 125)
                     {
+                        SendBattleReportEndNotify(client, instance);
                         return;
                     }
                     targetClient.Character.currentHp -= (uint)damage;

@@ -2,7 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-
+using System.Globalization;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -39,13 +39,13 @@ namespace Necromancy.Server.Packet.Area
                                                                         //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
                                                                         //81  jumping up,                //84  jumping down       //85 landing
 
-                /* Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
+                 //Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
                 if (movementSpeed != 0)
                 {
                     Logger.Debug($"Character {client.Character.Name} is in map {client.Character.MapId} @ : X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]");
                     Logger.Debug($"X Axis Aligned : {percentMovementIsX.ToString("P", CultureInfo.InvariantCulture)} | Y Axis Aligned  : {percentMovementIsY.ToString("P", CultureInfo.InvariantCulture)}");
                     Logger.Debug($"vertical Speed multi : {verticalMovementSpeedMultiplier}| Move Speed {movementSpeed} | Horizontal Speed Multi {horizontalMovementSpeedMultiplier}");
-                    Logger.Debug($"Movement Type[{client.Character.movementAnim}]  Type Anim [{client.Character.animJumpFall}] View Offset:{client.Character.viewOffset}");
+                    Logger.Debug($"Movement Type[{client.Character.movementAnim}]  Type Anim [{client.Character.animJumpFall}] View Offset:{client.Character.Heading}");
                     Logger.Debug($"---------------------------------------------------------------");
 
                     //Logger.Debug($"Var 1 {(byte)(percentMovementIsX*255)} |Var 2 {(byte)(percentMovementIsY*255)}  ");
@@ -56,7 +56,7 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"Movement Stop Reset");
                     Logger.Debug($"---------------------------------------------------------------");
                 }
-                */
+                
 
 
                 IBuffer res2 = BufferProvider.Provide();
