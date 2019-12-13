@@ -19,6 +19,9 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
 
+            client.Character.battleAnim = 231; //at the start of every attack, set the battle anim to 231.  231 is the 1st anim for all weapon types 
+            client.Character.battleNext = 0;
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //0 means success
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area, client);

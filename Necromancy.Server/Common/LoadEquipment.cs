@@ -18,36 +18,6 @@ namespace Necromancy.Server.Common
             res.WriteByte(myCharacter.FaceId); //face
         }
 
-            public static void SlotSetupOld( IBuffer res, Character myCharacter)
-        {
-            //Static Weapon types for your character slots until weapon type is databased.
-            int[] MyWeaponType = new int[] { 14, 8, 15, 8, 10, 10 };
-            //ItemType Select See str_table SubID 121 for Item Type info. Increment by +1
-            int Armor = 25;         //Armor 25
-            int Accessory = 27;     //Accessory 26
-            int Shield = 21;        //Shield 19-21
-                                    //int Weapon = 14;         //0 Knuckle, 1 Dagger, 3 1hSword, 7 1h axe (broken), 8 2hAxe, 9 spear, 10 blunt, 13 staff, 15 crossbow
-                                    //sub_483660 
-            res.WriteInt32(MyWeaponType[myCharacter.Slot]); //18	    				
-            res.WriteInt32(Shield); //17 	    		
-            res.WriteInt32(Armor); //16	        			
-            res.WriteInt32(Armor); //15	        				
-            res.WriteInt32(Armor); //14	        			
-            res.WriteInt32(Armor); //13	        			
-            res.WriteInt32(Armor); //12	        				
-            res.WriteInt32(Accessory); //11	  	
-            res.WriteInt32(Accessory); //10	    			
-            res.WriteInt32(Accessory); //9	    		
-            res.WriteInt32(Accessory); //8	    			
-            res.WriteInt32(Accessory); //7	    			
-            res.WriteInt32(Armor); //6          				
-            res.WriteInt32(Armor); //5          		
-            res.WriteInt32(Armor); //4	        					
-            res.WriteInt32(Armor); //3	        				
-            res.WriteInt32(Armor); //2          				
-            res.WriteInt32(Shield + 1); //1       					
-            res.WriteInt32(22);  //0 
-        }
             
             public static void SlotSetup( IBuffer res, Character myCharacter)
             {
@@ -58,7 +28,9 @@ namespace Necromancy.Server.Common
                 int Shield = 21;        //Shield 19-21
                 int Quiver = 22;        //Arrows 22 Bolt 23 Bullet 24
                 int Other = 27;         //None of the Above
-                int Weapon =  Convert.ToInt32(string.Concat($"{(myCharacter.EquipId[0])}"[1],$"{(myCharacter.EquipId[0])}"[2])); 
+                int Weapon =  Convert.ToInt32(string.Concat($"{(myCharacter.EquipId[0])}"[1],$"{(myCharacter.EquipId[0])}"[2]));
+                myCharacter.battlePose = (byte)Weapon;
+                //Console.WriteLine($"Weapon : {Weapon}");
                 
                 //ItemType Select See str_table ID 100 SubID 121 for Item Type info. Increment by +1
                 int[] EquipItemType = new int[]
