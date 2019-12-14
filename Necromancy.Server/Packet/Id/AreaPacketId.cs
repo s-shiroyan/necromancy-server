@@ -760,7 +760,8 @@ namespace Necromancy.Server.Packet.Id
         send_create_package = 0xF6D,
         send_data_get_self_chara_data_request = 0x74DD, 
         send_dbg_select_raise = 0x68, //opcode not found
-        send_door_open = 0x69, //opcode not found
+        send_door_close = 0xC218,
+        send_door_open = 0x1D8A,
         send_emotion_update_type = 0x7672, 
         send_equip_honor = 0x70, //opcode not found  TODO
         send_event_abort = 0x71, //opcode not found  TODO
