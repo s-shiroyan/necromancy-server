@@ -27,7 +27,6 @@ namespace Necromancy.Server.Packet.Area
             client.Character.eventSelectReadyCode = (uint)instanceId;
             Logger.Debug($"Just attacked Target {client.Character.eventSelectReadyCode}");
 
-            SendBattleAttackExecR(client);
 
             if (instanceId == 0)
                 return;
@@ -44,6 +43,7 @@ namespace Necromancy.Server.Packet.Area
 
             IInstance instance = Server.Instances.GetInstance(instanceId);
             SendBattleReportStartNotify(client, instance);
+            SendBattleAttackExecR(client);
 
             switch (instance)
             {
@@ -54,6 +54,7 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"NPC name [{npcSpawn.Name}] distanceToNPC [{distanceToNPC}] Radius [{npcSpawn.Radius}] {npcSpawn.Name}");
                         if (distanceToNPC > npcSpawn.Radius + 125)
                         {
+                            SendBattleReportEndNotify(client, instance);
                             return;
                         }
                     }
@@ -65,29 +66,12 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
                         if (distanceToMonster > monsterSpawn.Radius + 125)
                         {
+                            SendBattleReportEndNotify(client, instance);
                             return;
                         }
                         monsterSpawn.CurrentHp -= damage;
-                        perHp = (int)((monsterSpawn.CurrentHp / monsterSpawn.MaxHp) * 100);
+                        perHp = (((float)monsterSpawn.CurrentHp / (float)monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.CurrentHp}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
-                        if (monsterSpawn.CurrentHp <= 0)
-                        {
-                            Logger.Debug($"Killed monster Instance ID {instanceId}");
-                            //Death Animation
-                            IBuffer res5 = BufferProvider.Provide();
-                            res5.WriteInt32((int)instanceId);
-                            res5.WriteInt32(1); //Death int
-                            res5.WriteInt32(0);
-                            res5.WriteInt32(0);
-                            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
-
-                            //Make the monster a lootable state. may need a 1 second delay here.
-                            IBuffer res10 = BufferProvider.Provide();
-                            res10.WriteInt32(instance.InstanceId);
-                            res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
-                            Router.Send(client, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
-                          
-                        }
                     }
                     break;
                 case Character character:
@@ -96,6 +80,7 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"target Character name [{targetClient.Character.Name}] distanceToCharacter [{distanceToCharacter}] Radius {/*[{monsterSpawn.Radius}]*/"125"} {targetClient.Character.Name}");
                     if (distanceToCharacter > /*targetClient.Character.Radius +*/ 125)
                     {
+                        SendBattleReportEndNotify(client, instance);
                         return;
                     }
                     targetClient.Character.currentHp -= (uint)damage;
@@ -141,6 +126,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(instance.InstanceId);
             res.WriteInt32(damage);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_phy_damage_hp, res, ServerType.Area);            
+
+            if (perHp < 0) { perHp = 0; }
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteInt32(instance.InstanceId);

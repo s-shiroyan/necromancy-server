@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
@@ -36,26 +38,73 @@ namespace Necromancy.Server.Model
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
-                uint instanceID = server.Instances.CreateInstance<NpcSpawn>().InstanceId;
-                //Console.WriteLine($"Just Assigned instance number {instanceID} for setting id {setting.Id}");
-                npcSpawn.InstanceId = instanceID;
-                NpcSpawns.Add((int)instanceID, npcSpawn);
+                server.Instances.AssignInstance(npcSpawn);
+                NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
             }
 
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
-                //MonsterSpawn monster = (MonsterSpawn)server.Instances.CreateInstance<MonsterSpawn>((IInstance)monsterSpawn);
-                uint instanceID = server.Instances.CreateInstance<MonsterSpawn>().InstanceId;
-                monsterSpawn.InstanceId = instanceID;
+                server.Instances.AssignInstance(monsterSpawn);
+                if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
+                {
+                    return;
+                }
+                monsterSpawn.ModelId = modelSetting.Id;
+                monsterSpawn.Size = (short)(modelSetting.Height / 2);
+                monsterSpawn.Radius = (short)modelSetting.Radius;
+                monsterSpawn.MaxHp = 100;
+                monsterSpawn.CurrentHp = 100;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
-                monsterSpawn.monsterCoords.Clear();
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.MonsterId);
-                foreach (MonsterCoord monsterCoord in coords)
+                if (coords.Count > 0)
                 {
-                    monsterSpawn.monsterCoords.Add(monsterCoord);
+                    monsterSpawn.defaultCoords = false;
+                    monsterSpawn.monsterCoords.Clear();
+                    foreach (MonsterCoord monsterCoord in coords)
+                    {
+                        //Console.WriteLine($"added coord {monsterCoord} to monster {monsterSpawn.InstanceId}");
+                        monsterSpawn.monsterCoords.Add(monsterCoord);
+                    }
                 }
+                else
+                {
+
+                    //home coordinate set to monster X,Y,Z from database
+                    Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
+                    MonsterCoord homeCoord = new MonsterCoord();
+                    homeCoord.Id = monsterSpawn.Id;
+                    homeCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    homeCoord.MapId = (uint)monsterSpawn.MapId;
+                    homeCoord.CoordIdx = 0;
+                    homeCoord.destination = homeVector3;
+                    monsterSpawn.monsterCoords.Add(homeCoord);
+
+                    //default path part 2
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    MonsterCoord defaultCoord = new MonsterCoord();
+                    defaultCoord.Id = monsterSpawn.Id;
+                    defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord.CoordIdx = 1; 
+                    defaultCoord.destination = defaultVector3;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord);
+
+                    //default path part 3
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    MonsterCoord defaultCoord2 = new MonsterCoord();
+                    defaultCoord2.Id = monsterSpawn.Id;
+                    defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord2.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
+                    defaultCoord2.destination = defaultVector32;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord2);
+
+                }
+                
             }
         }
 
@@ -95,12 +144,30 @@ namespace Necromancy.Server.Model
             client.Character.Y = Y;
             client.Character.Z = Z;
 
-            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            if (ClientLookup.GetAll().Count == 1)
             {
-                monsterSpawn.SpawnActive = true; ;
+                foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+                {
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
+                    {
+                        MonsterTask monsterTask = new MonsterTask(_server, client, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+                    else
+                    {
+                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                        _server.Router.Send(monsterData, client);
+                    }
+                }
             }
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+
         }
 
         public void Leave(NecClient client)
@@ -111,12 +178,13 @@ namespace Necromancy.Server.Model
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
             _server.Router.Send(this, objectDisappearData, client);
-
-            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            if (ClientLookup.GetAll().Count == 0)
             {
-                monsterSpawn.SpawnActive = false;
+                foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+                {
+                    monsterSpawn.SpawnActive = false;
+                }
             }
-
         }
     }
 }

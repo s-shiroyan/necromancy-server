@@ -15,12 +15,16 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            SendBattleAttackPoseStartNotify(client);
+
+            IBuffer res2 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_pose_self, res2, ServerType.Area);
+
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_battle_attack_pose_r, res, ServerType.Area, client);
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_battle_attack_pose_r, res, ServerType.Area);
-
-            SendBattleAttackPoseStartNotify(client);    
         }
 
         private void SendBattleAttackPoseStartNotify(NecClient client)
@@ -34,5 +38,6 @@ namespace Necromancy.Server.Packet.Area
             client.Character.weaponEquipped = true;
 
         }
+
     }
 }

@@ -36,27 +36,13 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(npcData, client);
                 }
             }
-
-            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
+            //Allows player 2 to see Monsters on the map before player 2 was
+            if (client.Map.ClientLookup.GetAll().Count > 1)
             {
-                if (!Server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
-                {
-                    return;
-                }
-                monsterSpawn.ModelId = modelSetting.Id;
-                monsterSpawn.Size = (short)modelSetting.Height;
-                monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 1000;
-                monsterSpawn.CurrentHp = 100;
-                if (monsterSpawn.MapId != 2002104)
+                foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
                 {
                     RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                     Router.Send(monsterData, client);
-                } else
-                {
-                    MonsterTask monsterTask = new MonsterTask(Server, client, monsterSpawn);
-                    monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
-                    monsterTask.Start();
                 }
             }
 
