@@ -316,7 +316,7 @@ namespace Necromancy.Server.Tasks
                 res5.WriteInt32(1); //Death int
                 res5.WriteInt32(0);
                 res5.WriteInt32(0);
-                Router.Send(_client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
+                Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
 
                 SendBattleReportEndNotify();
 
@@ -324,7 +324,7 @@ namespace Necromancy.Server.Tasks
                 IBuffer res10 = BufferProvider.Provide();
                 res10.WriteInt32(_monster.InstanceId);
                 res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
-                Router.Send(_client.Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
+                Router.Send(Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
 
                 //  Let a separate loot manager handle the monster body click?
                 Thread.Sleep(_monster.RespawnTime);
@@ -333,10 +333,10 @@ namespace Necromancy.Server.Tasks
                 res7.WriteInt32(_monster.InstanceId);
                 res7.WriteInt32(5);//4 here causes a cloud and the model to disappear, 5 causes a mist to happen and disappear
                 res7.WriteInt32(1);
-                Router.Send(_client.Map, (ushort)AreaPacketId.recv_charabody_notify_deadstate, res7, ServerType.Area);
+                Router.Send(Map, (ushort)AreaPacketId.recv_charabody_notify_deadstate, res7, ServerType.Area);
                 Thread.Sleep(2000);
                 RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monster.InstanceId);
-                Router.Send(objectDisappearData, _client);
+                Router.Send(Map, objectDisappearData);
 
                 spawnMonster = true;
                 return true;
@@ -638,12 +638,12 @@ namespace Necromancy.Server.Tasks
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_monster.InstanceId);
-            Router.Send(_client, (ushort)AreaPacketId.recv_battle_report_start_notify, res, ServerType.Area);
+            Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res, ServerType.Area);
         }
         private void SendBattleReportEndNotify()
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(_client, (ushort)AreaPacketId.recv_battle_report_end_notify, res, ServerType.Area);
+            Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res, ServerType.Area);
         }
     }
 }
