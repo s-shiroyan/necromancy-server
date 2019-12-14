@@ -6,7 +6,6 @@ using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
@@ -53,11 +52,12 @@ namespace Necromancy.Server.Model
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 100;
+                monsterSpawn.MaxHp = 1000;
                 monsterSpawn.CurrentHp = 100;
+                monsterSpawn.Map = this;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
-                List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.MonsterId);
+                List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
                 if (coords.Count > 0)
                 {
                     monsterSpawn.defaultCoords = false;
@@ -144,27 +144,6 @@ namespace Necromancy.Server.Model
             client.Character.Y = Y;
             client.Character.Z = Z;
 
-            if (ClientLookup.GetAll().Count == 1)
-            {
-                foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
-                {
-                    monsterSpawn.SpawnActive = true;
-                    if (!monsterSpawn.TaskActive)
-                    {
-                        MonsterTask monsterTask = new MonsterTask(_server, client, monsterSpawn);
-                        if (monsterSpawn.defaultCoords)
-                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
-                        else
-                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
-                        monsterTask.Start();
-                    }
-                    else
-                    {
-                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                        _server.Router.Send(monsterData, client);
-                    }
-                }
-            }
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
 

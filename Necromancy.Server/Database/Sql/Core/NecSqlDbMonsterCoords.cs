@@ -18,6 +18,9 @@ namespace Necromancy.Server.Database.Sql.Core
         private const string SqlSelectMonsterCoordByMapId =
             "SELECT `id`, `monster_id`, `map_id`, `coord_idx`, `x`, `y`, `z` FROM `nec_monster_coords` WHERE `map_id`=@map_id;";
 
+        private const string SqlSelectMonsterCoordById =
+            "SELECT `id`, `monster_id`, `map_id`, `coord_idx`, `x`, `y`, `z` FROM `nec_monster_coords` WHERE `id`=@id;";
+
         private const string SqlSelectMonsterCoordByMonsterId =
             "SELECT `id`, `monster_id`, `map_id`, `coord_idx`, `x`, `y`, `z` FROM `nec_monster_coords` WHERE `monster_id`=@monster_id;";
 
@@ -61,6 +64,21 @@ namespace Necromancy.Server.Database.Sql.Core
             return monsterCoords;
         }
 
+        public List<MonsterCoord> SelectMonsterCoordsById(int Id)
+        {
+            List<MonsterCoord> monsterCoords = new List<MonsterCoord>();
+            ExecuteReader(SqlSelectMonsterCoordById,
+                command => { AddParameter(command, "@id", Id); },
+                reader =>
+                {
+                    while (reader.Read())
+                    {
+                        MonsterCoord monsterCoord = ReadMonsterCoord(reader);
+                        monsterCoords.Add(monsterCoord);
+                    }
+                });
+            return monsterCoords;
+        }
         public List<MonsterCoord> SelectMonsterCoordsByMonsterId(int mapId)
         {
             List<MonsterCoord> monsterCoords = new List<MonsterCoord>();

@@ -10,8 +10,10 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_map_get_info : ClientHandler
     {
+        private readonly NecServer _server;
         public send_map_get_info(NecServer server) : base(server)
         {
+        _server = server;
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_map_get_info;
@@ -36,13 +38,28 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(npcData, client);
                 }
             }
-            //Allows player 2 to see Monsters on the map before player 2 was
-            if (client.Map.ClientLookup.GetAll().Count > 1)
+
+            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
+                monsterSpawn.SpawnActive = true;
+                if (!monsterSpawn.TaskActive)
                 {
-                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                    Router.Send(monsterData, client);
+                    MonsterTask monsterTask = new MonsterTask(Server, monsterSpawn);
+                    if (monsterSpawn.defaultCoords)
+                        monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                    else
+                        monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                    monsterTask.Start();
+                }
+                else
+                {
+                    if (monsterSpawn.MonsterVisible)
+                    {
+                        Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                        Server.Router.Send(monsterData, client);
+                        monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity);
+                    }
                 }
             }
 
