@@ -28,11 +28,11 @@ namespace Necromancy.Server.Packet.Area
 
             if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
             {
-                SendMagUpdateCastTime(client, CastingTime);
+                SendMagUpdateCastTime(client, CastingTime);                             // This actually did not appear to do anything, should be removed?
                 SendSkillStartCast(client,mySkillID,mySkillTarget, CastingTime);
-                SendBattleReportStartNotify(client);
-                SendBattleReportSkillStartCast(client, mySkillID);
-                SendEoNotifyDisappearSchedule(client, mySkillID, CastingTime);
+                SendBattleReportStartNotify(client);                                    // Seemd the Character.InstanceId tells client this is only for this character here
+                SendBattleReportSkillStartCast(client, mySkillID);                      // this does not send character instanceId, but it does use effect on character
+                SendEoNotifyDisappearSchedule(client, mySkillID, CastingTime);          // Failed attempt to remove the cast effect
                 SendBattleReportEndNotify(client);
             }
 
