@@ -52,7 +52,7 @@ namespace Necromancy.Server.Model
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 1000;
+                monsterSpawn.MaxHp = 100;
                 monsterSpawn.CurrentHp = 100;
                 monsterSpawn.Map = this;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);

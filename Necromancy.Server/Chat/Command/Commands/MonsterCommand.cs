@@ -95,7 +95,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 monsterSpawn.Y = monsterYCoords[0];
             }
 
-            monsterSpawn.MaxHp = 1000;
+            monsterSpawn.MaxHp = 100;
             monsterSpawn.CurrentHp = 100;
             /*if (!Server.Database.InsertMonsterSpawn(monsterSpawn))
             {

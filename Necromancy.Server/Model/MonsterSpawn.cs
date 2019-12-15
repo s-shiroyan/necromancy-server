@@ -6,9 +6,7 @@ using System.Numerics;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
-using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Model
 {
@@ -51,9 +49,9 @@ namespace Necromancy.Server.Model
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            CurrentHp = 80085;
-            MaxHp = 88887355;
-            RespawnTime = 60000;
+            CurrentHp = 100;
+            MaxHp = 100;
+            RespawnTime = 6000;
             SpawnActive = false;
             TaskActive = false;
             defaultCoords = true;
@@ -65,19 +63,7 @@ namespace Necromancy.Server.Model
             MonsterRunVelocity = 500;
             MonsterVisible = false;
             MonsterAgro = false;
-#if false
-            //To-Do   add at least 1 default monster coord for /mon spawns
-            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
-            MonsterCoord defaultCoord = new MonsterCoord();
-            defaultCoord.Id = Id;
-            defaultCoord.MonsterId = (uint)MonsterId;
-            defaultCoord.MapId = (uint)MapId;
-            defaultCoord.destination = defaultVector3;
 
-            monsterCoords.Add(defaultCoord);
-
-            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
-#endif
         }
 
         public void MonsterStop(NecServer server, NecClient client)
