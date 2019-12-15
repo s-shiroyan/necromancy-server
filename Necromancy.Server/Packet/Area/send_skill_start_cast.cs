@@ -2,7 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-
+using System.Threading;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -24,16 +24,23 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.skillStartCast = result;
             }
             Logger.Debug($"skill effect parsed from skillID is {result}");
-            
+            float CastingTime = 2;
 
             if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
-            {   SendSkillStartCast(client,mySkillID,mySkillTarget);    }
+            {
+                SendMagUpdateCastTime(client, CastingTime);                             // This actually did not appear to do anything, should be removed?
+                SendSkillStartCast(client,mySkillID,mySkillTarget, CastingTime);
+                SendBattleReportStartNotify(client);                                    // Seemd the Character.InstanceId tells client this is only for this character here
+                SendBattleReportSkillStartCast(client, mySkillID);                      // this does not send character instanceId, but it does use effect on character
+                SendEoNotifyDisappearSchedule(client, mySkillID, CastingTime);          // Failed attempt to remove the cast effect
+                SendBattleReportEndNotify(client);
+            }
 
             if (mySkillTarget == 0) // self cast skills 0 out your our target ID, even if you have something targeted.
-            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget);    }
+            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget, CastingTime);    }
 
             if (mySkillTarget > 9910024) // All NPCs have Serial ID's of 10,000,000 or greater.  all Monsters are 9910024 or less. most are only 6 digits. 9 digit monster ID's are for testing.
-            { SendSkillStartCastExR(client, mySkillID, mySkillTarget); }
+            { SendSkillStartCastExR(client, mySkillID, mySkillTarget, CastingTime); }
 
             //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to above.
 
@@ -42,12 +49,45 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-        private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget)
+        private void SendBattleReportSkillStartCast(NecClient client, int mySkillID)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(mySkillID);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_action_skill_start_cast, res4, ServerType.Area);
+        }
+
+        private void SendEoNotifyDisappearSchedule(NecClient client, int mySkillID, float castingTime)
+        {
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteInt32(mySkillID);
+            res5.WriteFloat(castingTime);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res5, ServerType.Area);
+
+        }
+        private void SendBattleReportStartNotify(NecClient client)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteInt32(client.Character.InstanceId);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
+        }
+        private void SendBattleReportEndNotify(NecClient client)
+        {
+            IBuffer res4 = BufferProvider.Provide();
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res4, ServerType.Area);
+        }
+        private void SendMagUpdateCastTime(NecClient client, float castingTime)
+        {
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteFloat(castingTime);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_mag_cast_time_per, res5, ServerType.Area);
+        }
+
+        private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
-            float CastingTime = 1;
+            
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  
@@ -78,32 +118,30 @@ namespace Necromancy.Server.Packet.Area
 
             */
 
-            res.WriteFloat(CastingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I             
+            res.WriteFloat(castingTime);//Casting time (countdown before auto-cast)    ./Skill_base.csv   Column I             
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_r, res, ServerType.Area); 
 
         }
 
-        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget)
+        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
-            float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillID); //previously Skill ID
-            res.WriteFloat(CastingTime);
+            res.WriteFloat(castingTime);
             Router.Send(client, (ushort) AreaPacketId.recv_skill_start_cast_self, res, ServerType.Area);
         }
 
-        private void SendSkillStartCastExR(NecClient client,int mySkillID,int mySkillTarget)
+        private void SendSkillStartCastExR(NecClient client,int mySkillID,int mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
-            float CastingTime = 1;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
-            res.WriteFloat(CastingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
+            res.WriteFloat(castingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L
 
             res.WriteInt32(100);//Cast Script?     ./Skill_base.csv   Column T
             res.WriteInt32(100);//Effect Script    ./Skill_base.csv   Column V

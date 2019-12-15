@@ -66,6 +66,7 @@ namespace Necromancy.Server.Database
         // Monster Coord
         bool InsertMonsterCoords(MonsterCoord monsterCoord);
         List<MonsterCoord> SelectMonsterCoords();
+        List<MonsterCoord> SelectMonsterCoordsById(int Id);
         List<MonsterCoord> SelectMonsterCoordsByMonsterId(int monsterId);
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);

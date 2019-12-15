@@ -105,7 +105,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
             Router.Send(client.Map, monsterData);
             SendMonsterPose(client, monsterSpawn);
-            MonsterTask monsterTask = new MonsterTask(Server, client, monsterSpawn);
+            MonsterTask monsterTask = new MonsterTask(Server, monsterSpawn);
             //Thread workerThread = new Thread(monsterThread.InstanceMethod);
             monsterTask.gotoDistance = 10;
             MonsterCoord monsterHome = new MonsterCoord();
