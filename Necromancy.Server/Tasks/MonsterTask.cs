@@ -419,21 +419,7 @@ namespace Necromancy.Server.Tasks
             tick.xTick = (moveTo.X * travelTime);
             tick.yTick = (moveTo.Y * travelTime);
             tick.zTick = (moveTo.Z * travelTime);
-            Logger.Debug($"distance [{distance}] monsterVelocity [{_monster.MonsterRunVelocity}]  travelTime[{travelTime}] xTick [{tick.xTick}] yTick [{tick.yTick}] moveTo.X [{moveTo.X}] moveTo.Y [{moveTo.Y}] moveTo.Z [{moveTo.Z}]");
-#if false
-            IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(_monster.InstanceId);//Monster ID
-            res2.WriteFloat(_monster.X);
-            res2.WriteFloat(_monster.Y);
-            res2.WriteFloat(_monster.Z);
-            res2.WriteFloat(xTick);       //X per tick
-            res2.WriteFloat(yTick);       //Y Per tick
-            res2.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
-
-            res2.WriteFloat((float)1);              //movementMultiplier
-            res2.WriteFloat(travelTime);              //Seconds to move
-#endif
-            //Logger.Debug($"distance [{distance}] monsterVelocity [{_monster.MonsterRunVelocity}]  travelTime[{travelTime}] xTick [{xTick}] yTick [{yTick}] moveTo.X [{moveTo.X}] moveTo.Y [{moveTo.Y}] moveTo.Z [{moveTo.Z}]");
+            //Logger.Debug($"distance [{distance}] monsterVelocity [{_monster.MonsterRunVelocity}]  travelTime[{travelTime}] xTick [{tick.xTick}] yTick [{tick.yTick}] moveTo.X [{moveTo.X}] moveTo.Y [{moveTo.Y}] moveTo.Z [{moveTo.Z}]");
             _monster.MonsterMove(Server, _monster.MonsterRunVelocity, tick, travelTime);
 
             _monster.X = _monster.X + tick.xTick;
