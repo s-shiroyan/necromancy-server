@@ -211,7 +211,7 @@ namespace Necromancy.Server.Tasks
                 {
                     SendBattleReportStartNotify();
                     MonsterBattlePose(true);
-                    MonsterAttack();
+                    //MonsterAttack();
                     //MonsterCast();
                     SendBattleReportEndNotify();
                     monsterWaiting = true;
