@@ -211,7 +211,8 @@ namespace Necromancy.Server.Tasks
                 {
                     SendBattleReportStartNotify();
                     MonsterBattlePose(true);
-                    //MonsterAttack();
+                    if (_monster.Id == 5)
+                        MonsterAttack();
                     //MonsterCast();
                     SendBattleReportEndNotify();
                     monsterWaiting = true;
