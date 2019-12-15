@@ -38,6 +38,7 @@ namespace Necromancy.Server.Model
 
         public int MonsterWalkVelocity { get; }
         public int MonsterRunVelocity { get; }
+        public bool MonsterAgro { get; set; }
         public bool SpawnActive { get; set; }
         public bool TaskActive { get; set; }
         public bool MonsterVisible { get; set; }
@@ -46,7 +47,7 @@ namespace Necromancy.Server.Model
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        public Dictionary<int, int> MonsterAgro { get; set; }
+        public Dictionary<int, int> MonsterPlayerAgro { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -59,10 +60,11 @@ namespace Necromancy.Server.Model
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            MonsterAgro = new Dictionary<int, int>();
+            MonsterPlayerAgro = new Dictionary<int, int>();
             MonsterWalkVelocity = 250;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
+            MonsterAgro = false;
 #if false
             //To-Do   add at least 1 default monster coord for /mon spawns
             Vector3 defaultVector3 = new Vector3(X,Y,Z); 
@@ -78,6 +80,24 @@ namespace Necromancy.Server.Model
 #endif
         }
 
+        public void MonsterStop(NecServer server, NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(this.InstanceId);//Monster ID
+            res.WriteFloat(this.X);
+            res.WriteFloat(this.Y);
+            res.WriteFloat(this.Z);
+            res.WriteFloat(0);       //X per tick
+            res.WriteFloat(0);       //Y Per tick
+            res.WriteFloat(0);              //verticalMovementSpeedMultiplier
+
+            res.WriteFloat((float)1);              //movementMultiplier
+            res.WriteFloat((float)1);              //Seconds to move
+
+            res.WriteByte(0); //MOVEMENT ANIM
+            res.WriteByte(0);//JUMP & FALLING ANIM
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+        }
         public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)

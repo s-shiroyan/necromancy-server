@@ -31,7 +31,6 @@ namespace Necromancy.Server.Tasks
         public bool hateOn { get; set; }
         private bool casting;
         private bool battlePose;
-        private bool monsterAgro;
         private bool monsterWaiting;
         private bool spawnMonster;
         public int gotoDistance { get; set; }
@@ -73,7 +72,6 @@ namespace Necromancy.Server.Tasks
             waitTime = 2000;
             currentWait = 0;
             moveTime = updateTime;
-            monsterAgro = false;
             monsterWaiting = true;
             agroRange = 1000;
             agroCheckTime = -1;
@@ -108,7 +106,7 @@ namespace Necromancy.Server.Tasks
                 MonsterCoord nextCoord = _monster.monsterCoords.Find(x => x.CoordIdx == _monster.CurrentCoordIndex);
                 Vector3 monster = new Vector3(_monster.X, _monster.Y, _monster.Z);
                 float distance = GetDistance(nextCoord.destination, monster);
-                if (monsterAgro)
+                if (_monster.MonsterAgro)
                 {
                     if (MonsterAgro())
                         continue;
@@ -137,7 +135,7 @@ namespace Necromancy.Server.Tasks
             MonsterCoord nextCoord = _monster.monsterCoords.Find(x => x.CoordIdx == _monster.CurrentCoordIndex);
             Vector3 monster = new Vector3(_monster.X, _monster.Y, _monster.Z);
             float distance = GetDistance(nextCoord.destination, monster);
-            if (distance > gotoDistance && !monsterFreeze && !monsterWaiting && !monsterAgro)
+            if (distance > gotoDistance && !monsterFreeze && !monsterWaiting && !_monster.MonsterAgro)
             {
                 MonsterMove(nextCoord);
             }
@@ -145,7 +143,7 @@ namespace Necromancy.Server.Tasks
             {
                 //Thread.Sleep(updateTime/2); //Allow for cases where the remaining distance is less than the gotoDistance
                 MonsterStop();
-                if (!monsterAgro)
+                if (!_monster.MonsterAgro)
                 {
                     monsterWaiting = true;
                     currentWait = 0;
@@ -158,8 +156,8 @@ namespace Necromancy.Server.Tasks
                     _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == _monster.CurrentCoordIndex).destination);
                 }
             }
-            monsterAgro = MonsterAgroCheck();
-            if (monsterAgro)
+            _monster.MonsterAgro = MonsterAgroCheck();
+            if (_monster.MonsterAgro)
             {
                 MonsterStop();
                 MonsterHate(true, (int)currentTarget.InstanceId);
@@ -276,7 +274,7 @@ namespace Necromancy.Server.Tasks
         }
         public void MonsterSpawn()
         {
-            monsterAgro = false;
+            _monster.MonsterAgro = false;
             monsterMoving = false;
             casting = false;
             monsterWaiting = false;
@@ -293,7 +291,7 @@ namespace Necromancy.Server.Tasks
             Router.Send(Map, monsterData);
             spawnMonster = false;
             _monster.MonsterVisible = true;
-            _monster.MonsterAgro.Clear();
+            _monster.MonsterPlayerAgro.Clear();
             //MonsterBattlePose(false);
         }
         public bool MonsterCheck()
@@ -457,13 +455,13 @@ namespace Necromancy.Server.Tasks
                     if (checkFOV(client))
                     {
                         currentTarget = client.Character;
-                        monsterAgro = true;
-                        _monster.MonsterAgro.Add((int)client.Character.InstanceId, 0);
+                        _monster.MonsterAgro = true;
+                        _monster.MonsterPlayerAgro.Add((int)client.Character.InstanceId, 0);
                     }
                 }
             }
 
-            return monsterAgro;
+            return _monster.MonsterAgro;
         }
 
         private void MonsterAgroAdjust()
@@ -473,7 +471,7 @@ namespace Necromancy.Server.Tasks
                 agroCheckTime += updateTime;
                 return;
             }
-            int currentInstance = _monster.MonsterAgro.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+            int currentInstance = _monster.MonsterPlayerAgro.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
             if (currentTarget.InstanceId != currentInstance)
             {
                 currentTarget = Map.ClientLookup.GetByCharacterInstanceId((uint)currentInstance).Character;
@@ -527,7 +525,7 @@ namespace Necromancy.Server.Tasks
 
         private void orientMonster()
         {
-            if (monsterAgro)
+            if (_monster.MonsterAgro)
                 AdjustHeading();
 
             _monster.MonsterOrient(Server);

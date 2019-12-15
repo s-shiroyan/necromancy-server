@@ -55,10 +55,18 @@ namespace Necromancy.Server.Packet.Area
                 {
                     if (monsterSpawn.MonsterVisible)
                     {
-                        Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
-                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                        Server.Router.Send(monsterData, client);
-                        monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity);
+                        if (monsterSpawn.MonsterAgro)
+                        {
+                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                            Server.Router.Send(monsterData, client);
+                            monsterSpawn.MonsterStop(_server, client);      // Without some kind of movement the monster doesn't show  why?????
+                        }
+                        else
+                        {
+                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                            Server.Router.Send(monsterData, client);
+                            monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity);
+                        }
                     }
                 }
             }
