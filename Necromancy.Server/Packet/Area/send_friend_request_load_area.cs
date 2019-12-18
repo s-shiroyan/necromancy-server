@@ -5,13 +5,13 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_friend_request_load : ClientHandler
+    public class send_friend_request_load_area : ClientHandler
     {
-        public send_friend_request_load(NecServer server) : base(server)
+        public send_friend_request_load_area(NecServer server) : base(server)
         {
         }
 
-        public override ushort Id => (ushort) MsgPacketId.send_friend_request_load;
+        public override ushort Id => (ushort) AreaPacketId.send_friend_request_load_area;
 
         public override void Handle(NecClient client, NecPacket packet)
         {

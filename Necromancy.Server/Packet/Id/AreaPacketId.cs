@@ -693,9 +693,11 @@ namespace Necromancy.Server.Packet.Id
         recv_wanted_update_state = 0xDD52,
         recv_wanted_update_state_actor_notify = 0xAFD1,
         recv_wanted_update_state_notify = 0x66EC,
-        
+
 
         // Send OP Codes - ordered by op code
+        send_union_request_detail = 0x7950, // MSG server opcode requested inside AREA server
+        send_friend_request_load_area = 0xE1DF,  // MSG server opcode requested inside AREA server
 
         send_auction_bid = 0x63BC, 
         send_auction_cancel_bid = 0xBC65,
@@ -860,7 +862,7 @@ namespace Necromancy.Server.Packet.Id
         send_party_search_recruited_party = 0x90BD, 
         send_quest_abort = 0xD247,
         send_quest_check_target = 0x1E86,
-        send_quest_check_time_limit = 0x152, //opcode not found
+        send_quest_check_time_limit = 0xC0BE, 
         send_quest_display = 0x3017, 
         send_quest_get_mission_quest_history = 0xA3E6, 
         send_quest_get_mission_quest_works = 0x7C9A, 
