@@ -2,7 +2,7 @@
   "profiles": {
     "Necromancy.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "server start --b-list=3:0x2E64,0xFFFC,0xFFFD,0xFFFE,0xFFFF,3:0x6A72,3:0xE4AE,3:0x8D92,3:0xEEF0"
+      "commandLineArgs": "server start --b-list=3:0x2E64,0xFFFC,0xFFFD,0xFFFE,0xFFFF,3:0x6A72,3:0xE4AE,3:0x8D92,3:0xEEF0,3:0x6B6A"
     },
     "Start /w--MaxPacket64": {
       "commandName": "Project",
