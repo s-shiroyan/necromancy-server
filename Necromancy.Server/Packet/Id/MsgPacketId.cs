@@ -151,7 +151,7 @@ namespace Necromancy.Server.Packet.Id
         send_friend_request_delete_friend = 0x009, // placeholder until found
         send_friend_request_link_target = 0x470C,
         send_friend_accept_request_link = 0x46FB,
-        send_friend_request_load = 0xE1DF,
+        send_friend_request_load_msg = 0x615E, //0xE1DF                                 //Commented out for now becasue it has been moved to the AREA server
         send_soul_authenticate_passwd = 0xB4BB,
         send_skill_request_info = 0x4EB5,
         send_soul_create = 0xCE74,
@@ -163,7 +163,7 @@ namespace Necromancy.Server.Packet.Id
         send_system_register_error_report = 0xC789, 
         send_union_reply_to_invite2 = 0x013, // placeholder until found
         send_union_request_change_role = 0x014, // placeholder until found
-        send_union_request_detail = 0x7950,
+        //send_union_request_detail = 0x7950,                                       //Commented out for now becasue it has been moved to the AREA server
         send_union_request_disband = 0x015, // placeholder until found
         send_union_request_expel_member = 0x016, // placeholder until found
         send_union_request_invite_target = 0x017, // placeholder until found
