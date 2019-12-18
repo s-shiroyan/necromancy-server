@@ -16,36 +16,11 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(1);
 
-            int numEntries = 2;
-            res.WriteInt32(numEntries);//less than 0x1E
+            res.WriteInt32(0);
+            res.WriteInt32(0);
 
-            for (int j = 0; j < numEntries; j++)
-            {
-                res.WriteFixedString("idk", 385);
-                res.WriteInt64(1);
-                res.WriteByte(1);
-                res.WriteFixedString("idk_also", 385);
-
-                for (int i = 0; i < 5; i++)
-                {
-                    res.WriteByte(1);
-                    res.WriteInt32(1);
-                    res.WriteInt32(1);
-                    res.WriteInt32(1);
-
-                    res.WriteInt32(1);
-
-                    res.WriteInt32(1);
-
-                }
-            }
-            res.WriteByte(1);
-            res.WriteInt32(1);
-            res.WriteFloat(1);
-
-            Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res, ServerType.Area);            
+            Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res, ServerType.Area);
         }
     }
 }
