@@ -6,6 +6,7 @@ using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Common;
 
 namespace Necromancy.Server.Model
 {
@@ -82,7 +83,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(homeCoord);
 
                     //default path part 2
-                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50,150), monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
                     defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -93,7 +94,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
-                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150), monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
                     defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;

@@ -6,7 +6,9 @@ using System.Numerics;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Model
 {
@@ -33,10 +35,8 @@ namespace Necromancy.Server.Model
         public int MaxHp { get; set; }
         public int RespawnTime { get; set; }
         public int CurrentCoordIndex { get; set; }
-
         public int MonsterWalkVelocity { get; }
         public int MonsterRunVelocity { get; }
-        public bool MonsterAgro { get; set; }
         public bool SpawnActive { get; set; }
         public bool TaskActive { get; set; }
         public bool MonsterVisible { get; set; }
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Model
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        public Dictionary<int, int> MonsterPlayerAgro { get; set; }
+        public Dictionary<int, int> MonsterAgro { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -58,33 +58,14 @@ namespace Necromancy.Server.Model
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            MonsterPlayerAgro = new Dictionary<int, int>();
+            MonsterAgro = new Dictionary<int, int>();
             MonsterWalkVelocity = 250;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
-            MonsterAgro = false;
 
         }
 
-        public void MonsterStop(NecServer server, NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(this.InstanceId);//Monster ID
-            res.WriteFloat(this.X);
-            res.WriteFloat(this.Y);
-            res.WriteFloat(this.Z);
-            res.WriteFloat(0);       //X per tick
-            res.WriteFloat(0);       //Y Per tick
-            res.WriteFloat(0);              //verticalMovementSpeedMultiplier
-
-            res.WriteFloat((float)1);              //movementMultiplier
-            res.WriteFloat((float)1);              //Seconds to move
-
-            res.WriteByte(0); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
-            server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
-        }
-        public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, MonsterCoord monsterCoord = null)
+        public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)
                 monsterCoord = monsterCoords[CurrentCoordIndex];
@@ -106,13 +87,13 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(2); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
-            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);    //recv_0xE8B9  recv_0x1FC1 
 
         }
 
-        public void MonsterMove(NecServer server, int monsterVelocity, MonsterCoord monsterCoord = null)
+        public void MonsterMove(NecServer server, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)
                 monsterCoord = monsterCoords[CurrentCoordIndex];
@@ -137,11 +118,11 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(2); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
         }
-        public void MonsterMove(NecServer server, int monsterVelocity, MonsterTick moveTo, float travelTime)
+        public void MonsterMove(NecServer server, byte pose, byte animation, MonsterTick moveTo, float travelTime)
         {
 
             IBuffer res = BufferProvider.Provide();
@@ -156,8 +137,48 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(3); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+        }
+
+        public void MonsterStop(NecServer server, NecClient client, byte pose, byte animation, float travelTime)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(this.InstanceId);//Monster ID
+            res.WriteFloat(this.X);
+            res.WriteFloat(this.Y);
+            res.WriteFloat(this.Z);
+            res.WriteFloat(0.0F);       //X per tick
+            res.WriteFloat(0.0F);       //Y Per tick
+            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+
+            res.WriteFloat((float)1 / travelTime);              //movementMultiplier
+            res.WriteFloat((float)travelTime);              //Seconds to move
+
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+        }
+
+        public void MonsterStop(NecServer server, byte pose, byte animation, float travelTime)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(this.InstanceId);//Monster ID
+            res.WriteFloat(this.X);
+            res.WriteFloat(this.Y);
+            res.WriteFloat(this.Z);
+            res.WriteFloat(0.0F);       //X per tick
+            res.WriteFloat(0.0F);       //Y Per tick
+            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+
+            res.WriteFloat((float)1 / travelTime);              //movementMultiplier
+            res.WriteFloat((float)travelTime);              //Seconds to move
+
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
         }
 

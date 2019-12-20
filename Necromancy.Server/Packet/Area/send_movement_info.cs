@@ -80,6 +80,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             //Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
+            /*
             if (movementSpeed != 0)
             {
                 Logger.Debug($"Character {client.Character.Name} is in map {client.Character.MapId} @ : X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]");
@@ -96,7 +97,7 @@ namespace Necromancy.Server.Packet.Area
                 Logger.Debug($"Movement Stop Reset");
                 Logger.Debug($"---------------------------------------------------------------");
             }
-
+            */
 
 
 ///////////
