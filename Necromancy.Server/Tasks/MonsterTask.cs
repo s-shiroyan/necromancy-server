@@ -1,7 +1,6 @@
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Common;
-using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
@@ -74,7 +73,7 @@ namespace Necromancy.Server.Tasks
             agroTick = 500;
             updateTime = pathingTick;
             waitTime = 2000;
-            currentWait = 0;
+            currentWait = Util.GetRandomNumber(0,500);
             moveTime = updateTime;
             monsterAgro = false;
             monsterWaiting = true;
@@ -176,7 +175,7 @@ namespace Necromancy.Server.Tasks
                 if (_monster.Id == 4)
                     gotoDistance = 1000;
                 else
-                    gotoDistance = 600; // set to 600 so i can see some distance for a spell cast
+                    gotoDistance = 300; 
                 //monsterVelocity = 500;
                 moveTime = agroTick;
                 agroCheckTime = 0;
@@ -229,18 +228,21 @@ namespace Necromancy.Server.Tasks
                             orientMonster();
                             skillInstanceId = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
                             SendBattleReportStartNotify();
-                            if (_monster.Id == 5)
+                            if (_monster.Id != 4)
+                            {
                                 MonsterAttack();
+                                waitTime = Util.GetRandomNumber(3500,5000);
+                            }
                             else if (_monster.Id == 4)
                             {
-                                //_monster.MonsterStop(Server,8, 231, 2.0F);
                                 StartMonsterCast(200301411, skillInstanceId);
+                                CastState = 1;
+                                waitTime = 2000;
                             }
+                            Thread.Sleep(Util.GetRandomNumber(0,150)); // End Notifies can't fire at the same time.
                             SendBattleReportEndNotify();
                             monsterWaiting = true;
                             currentWait = 0;
-                            waitTime = 2000;
-                            CastState = 1;
                             break;
                         case 1:
                             //int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
@@ -432,10 +434,11 @@ namespace Necromancy.Server.Tasks
         }
         private void MonsterAttack()
         {
+            int thisAttackId = _monster.SkillAttackId * 100 + Util.GetRandomNumber(1, 3); // most monsters have 1 to 3 melee attacks. ToDo Monster_attack.csv reader
+            Logger.Debug($"Monster {_monster.InstanceId} is attacking with melee skill {thisAttackId}");
             IBuffer res = BufferProvider.Provide();
             res = BufferProvider.Provide();
-            res.WriteInt32(10010401); //From monster attack      bare knuckles 10100202
-            //res.WriteInt32(1410201); //From monster attack
+            res.WriteInt32(thisAttackId); //From monster_attack.csv     
             Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_action_attack_exec, res, ServerType.Area);
         }
 

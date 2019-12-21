@@ -31,6 +31,7 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public short Radius { get; set; }
+        public int SkillAttackId { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
         public int RespawnTime { get; set; }

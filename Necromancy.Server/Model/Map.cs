@@ -50,12 +50,18 @@ namespace Necromancy.Server.Model
                 {
                     return;
                 }
+                if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId, out MonsterSetting monsterSetting))
+                {
+                    return;
+                }
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
                 monsterSpawn.MaxHp = 100;
                 monsterSpawn.CurrentHp = 100;
                 monsterSpawn.Map = this;
+                monsterSpawn.SkillAttackId = monsterSetting.AtackSkillId;
+                monsterSpawn.Level = (byte)monsterSetting.Level;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
