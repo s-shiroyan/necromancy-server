@@ -11,7 +11,7 @@ namespace Necromancy.Server.Packet.Msg
         {
         }
 
-        public override ushort Id => (ushort) MsgPacketId.send_union_request_detail;
+        public override ushort Id => (ushort) AreaPacketId.send_union_request_detail;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
