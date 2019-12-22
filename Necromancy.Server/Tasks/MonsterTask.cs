@@ -538,16 +538,24 @@ namespace Necromancy.Server.Tasks
             //Logger.Debug($"Monster HP [{_monster.CurrentHp}]");
             if (_monster.CurrentHp <= 0)
             {
-                SendBattleReportStartNotify();
+                //SendBattleReportStartNotify();
                 //Death Animation
-                IBuffer res5 = BufferProvider.Provide();
-                res5.WriteInt32(_monster.InstanceId);
-                res5.WriteInt32(1); //Death int
-                res5.WriteInt32(0);
-                res5.WriteInt32(0);
-                Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
+                List<PacketResponse> brList = new List<PacketResponse>();
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead((int)_monster.InstanceId);
+                brList.Add(brStart);
+                brList.Add(brDead);
+                brList.Add(brEnd);
+                Router.Send(Map, brList);
+                //IBuffer res5 = BufferProvider.Provide();
+                //res5.WriteInt32(_monster.InstanceId);
+                //res5.WriteInt32(1); //Death int
+                //res5.WriteInt32(0);
+                //res5.WriteInt32(0);
+                //Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res5, ServerType.Area);
 
-                SendBattleReportEndNotify();
+                //SendBattleReportEndNotify();
 
                 //Make the monster a lootable state
                 IBuffer res10 = BufferProvider.Provide();
