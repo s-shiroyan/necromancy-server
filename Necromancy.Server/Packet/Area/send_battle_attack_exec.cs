@@ -100,10 +100,13 @@ namespace Necromancy.Server.Packet.Area
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)instance.InstanceId);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)instance.InstanceId, damage);
+            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)instance.InstanceId, perHp);
+
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
             brList.Add(brHp);
+            brList.Add(oHpUpdate);
             brList.Add(brEnd);
             Router.Send(client.Map, brList);
 
