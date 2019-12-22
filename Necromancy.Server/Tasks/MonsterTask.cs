@@ -349,6 +349,8 @@ namespace Necromancy.Server.Tasks
         }
         private void MonsterAttackQueue(int skillId)
         {
+            uint damage = (uint)Util.GetRandomNumber(8, 43);
+            currentTarget.currentHp -= damage;
             float perHp = (int)((currentTarget.currentHp / currentTarget.maxHp) * 100);
 
             int thisAttackId = _monster.SkillAttackId * 100 + Util.GetRandomNumber(1, 3); // most monsters have 1 to 3 melee attacks. ToDo Monster_attack.csv reader
@@ -358,13 +360,15 @@ namespace Necromancy.Server.Tasks
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(thisAttackId);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, Util.GetRandomNumber(8,43));
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)currentTarget.InstanceId, perHp);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.currentHp);
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
             brList.Add(brHp);
             brList.Add(oHpUpdate);
+            brList.Add(cHpUpdate);
             brList.Add(brEnd);
             Router.Send(Map, brList);
 
