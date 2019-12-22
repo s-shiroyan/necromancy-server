@@ -74,6 +74,7 @@ namespace Necromancy.Server.Tasks
             updateTime = pathingTick;
             waitTime = 2000;
             currentWait = Util.GetRandomNumber(0,500);
+            currentWait = 0;
             moveTime = updateTime;
             monsterAgro = false;
             monsterWaiting = true;
@@ -227,11 +228,13 @@ namespace Necromancy.Server.Tasks
                         case 0:
                             orientMonster();
                             skillInstanceId = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
-                            SendBattleReportStartNotify();
+                            //SendBattleReportStartNotify();
                             if (_monster.Id != 4)
                             {
-                                MonsterAttack();
-                                waitTime = Util.GetRandomNumber(3500,5000);
+                                MonsterAttackQueue(1);
+                                //waitTime = Util.GetRandomNumber(3500,5000);
+                                waitTime = 5000;
+                                CastState = 0;
                             }
                             else if (_monster.Id == 4)
                             {
@@ -239,8 +242,8 @@ namespace Necromancy.Server.Tasks
                                 CastState = 1;
                                 waitTime = 2000;
                             }
-                            Thread.Sleep(Util.GetRandomNumber(0,150)); // End Notifies can't fire at the same time.
-                            SendBattleReportEndNotify();
+                            //Thread.Sleep(Util.GetRandomNumber(0,150)); // End Notifies can't fire at the same time.
+                            //SendBattleReportEndNotify();
                             monsterWaiting = true;
                             currentWait = 0;
                             break;
@@ -306,6 +309,19 @@ namespace Necromancy.Server.Tasks
 
 
         }
+        private void StartMonsterCastQueue(int skillId, int instanceId)
+        {
+            casting = true;
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast((int)currentTarget.InstanceId, skillId);
+            brList.Add(brStart);
+            brList.Add(brStartCast);
+            brList.Add(brEnd);
+            Router.Send(Map, brList);
+
+        }
         private void MonsterCast(int skillId)
         {
             casting = true;
@@ -318,6 +334,33 @@ namespace Necromancy.Server.Tasks
 
         }
 
+        private void MonsterCastQueue(int skillId)
+        {
+            casting = true;
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportActionMonsterSkillExec brExec = new RecvBattleReportActionMonsterSkillExec(skillId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            brList.Add(brStart);
+            brList.Add(brExec);
+            brList.Add(brEnd);
+            Router.Send(Map, brList);
+
+        }
+        private void MonsterAttackQueue(int skillId)
+        {
+            int thisAttackId = _monster.SkillAttackId * 100 + Util.GetRandomNumber(1, 3); // most monsters have 1 to 3 melee attacks. ToDo Monster_attack.csv reader
+            Logger.Debug($"Monster {_monster.InstanceId} is attacking with melee skill {thisAttackId}");
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(thisAttackId);
+            brList.Add(brStart);
+            brList.Add(brAttack);
+            brList.Add(brEnd);
+            Router.Send(Map, brList);
+
+        }
         private void SendDataNotifyEoData(int instanceId, int effectId)
         {
             IBuffer res6 = BufferProvider.Provide();

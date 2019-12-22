@@ -5,6 +5,7 @@ using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Common.Instance;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using Necromancy.Server.Packet.Response;
 
 
@@ -42,8 +43,8 @@ namespace Necromancy.Server.Packet.Area
                 damage = Util.GetRandomNumber(32, 48);  // Critical hit
 
             IInstance instance = Server.Instances.GetInstance(instanceId);
-            SendBattleReportStartNotify(client, instance);
             SendBattleAttackExecR(client);
+//            SendBattleReportStartNotify(client, instance);
 
             switch (instance)
             {
@@ -54,7 +55,7 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"NPC name [{npcSpawn.Name}] distanceToNPC [{distanceToNPC}] Radius [{npcSpawn.Radius}] {npcSpawn.Name}");
                         if (distanceToNPC > npcSpawn.Radius + 125)
                         {
-                            SendBattleReportEndNotify(client, instance);
+                            //SendBattleReportEndNotify(client, instance);
                             return;
                         }
                     }
@@ -66,7 +67,7 @@ namespace Necromancy.Server.Packet.Area
                         Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
                         if (distanceToMonster > monsterSpawn.Radius + 125)
                         {
-                            SendBattleReportEndNotify(client, instance);
+                            //SendBattleReportEndNotify(client, instance);
                             return;
                         }
                         monsterSpawn.CurrentHp -= damage;
@@ -80,7 +81,7 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"target Character name [{targetClient.Character.Name}] distanceToCharacter [{distanceToCharacter}] Radius {/*[{monsterSpawn.Radius}]*/"125"} {targetClient.Character.Name}");
                     if (distanceToCharacter > /*targetClient.Character.Radius +*/ 125)
                     {
-                        SendBattleReportEndNotify(client, instance);
+                        //SendBattleReportEndNotify(client, instance);
                         return;
                     }
                     targetClient.Character.currentHp -= (uint)damage;
@@ -93,17 +94,30 @@ namespace Necromancy.Server.Packet.Area
                     break;
             }
 
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)client.Character.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)instance.InstanceId);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)instance.InstanceId, damage);
+            brList.Add(brStart);
+            brList.Add(brAttack);
+            brList.Add(brHit);
+            brList.Add(brHp);
+            brList.Add(brEnd);
+            Router.Send(client.Map, brList);
 
-            SendReportAcctionAtackExec(client, instance);
-            SendReportNotifyHitEffect(client, instance);
-            SendReportDamageHP(client, instance, damage, perHp);
-            SendBattleReportEndNotify(client, instance);
+
+            //SendReportAcctionAtackExec(client, instance);
+            //SendReportNotifyHitEffect(client, instance);
+            //SendReportDamageHP(client, instance, damage, perHp);
+            //SendBattleReportEndNotify(client, instance);
         }
 
         private void SendBattleReportStartNotify(NecClient client, IInstance instance)
         {
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(instance.InstanceId);
+            res4.WriteInt32(client.Character.InstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
         }   
 
