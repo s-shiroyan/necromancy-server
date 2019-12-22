@@ -50,10 +50,11 @@ namespace Necromancy.Server.Chat.Command.Commands
             
             switch (command[0])
             {
-                case "state":
+                case "hp":
                     IBuffer res = BufferProvider.Provide();
-                    Console.Write("state");
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res, ServerType.Area);
+                    //recv_chara_update_hp = 0xD133,
+                    res.WriteInt32(y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                     break;
 
                 case "dead":
@@ -120,6 +121,41 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res9.WriteInt32(y); //Gimmick number (from gimmick.csv)
                     res9.WriteInt32(0);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, res9, ServerType.Area);
+                    break;
+
+                case "eo":
+                    //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+                    IBuffer res10 = BufferProvider.Provide();
+                    res10.WriteInt32(123456);// Unique Instance ID of Skill Cast
+                    res10.WriteFloat(character2.X + 100);//Effect Object X
+                    res10.WriteFloat(character2.Y);//Effect Object Y
+                    res10.WriteFloat(character2.Z + 100);//Effect Object Z
+                    res10.WriteFloat(100);//Rotation Along X Axis if above 0
+                    res10.WriteFloat(100);//Rotation Along Y Axis if above 0
+                    res10.WriteFloat(100);//Rotation Along Z Axis if above 0
+                    res10.WriteInt32(500008);//Effect id
+                    res10.WriteInt32(1);//must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
+                    res10.WriteInt32(0);//unknown
+                    res10.WriteInt32(0);//unknown
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res10, ServerType.Area);
+
+                    IBuffer res11 = BufferProvider.Provide();
+                    res11.WriteInt32(123456);
+                    res11.WriteFloat(500);
+                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res11, ServerType.Area);
+                    break;
+
+                case "eos":
+                    //recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
+                    IBuffer res12 = BufferProvider.Provide();
+                    res12.WriteInt32(123456);
+                    res12.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res12, ServerType.Area);
+                    break;
+
+                case "sync":
+                    IBuffer res13 = BufferProvider.Provide();
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_map_change_sync_ok, res13, ServerType.Area);
                     break;
 
                 default:
