@@ -350,7 +350,7 @@ namespace Necromancy.Server.Tasks
         }
         private void MonsterAttackQueue(int skillId)
         {
-            uint damage = (uint)Util.GetRandomNumber(8, 43);
+            int damage = (int)Util.GetRandomNumber(8, 43);
             currentTarget.currentHp -= damage;
             float perHp = (int)((currentTarget.currentHp / currentTarget.maxHp) * 100);
 
@@ -363,7 +363,8 @@ namespace Necromancy.Server.Tasks
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)currentTarget.InstanceId, perHp);
-            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.currentHp);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)currentTarget.currentHp);
+            RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
@@ -373,6 +374,13 @@ namespace Necromancy.Server.Tasks
             brList.Add(brEnd);
             Router.Send(Map, brList);
             Router.Send(Server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
+            if(currentTarget.currentHp <= 0 && !currentTarget.hadDied)
+            {
+                currentTarget.hadDied = true;
+                Router.Send(Map, brStart.ToPacket());
+                Router.Send(Map, cDead.ToPacket());
+                Router.Send(Map, brEnd.ToPacket());
+            }
         }
         private void SendDataNotifyEoData(int instanceId, int effectId)
         {

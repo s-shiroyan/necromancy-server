@@ -57,13 +57,15 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "dead":
+                    SendBattleReportStartNotify(client, character2);
                     //recv_battle_report_noact_notify_dead = 0xCDC9,
                     IBuffer res2 = BufferProvider.Provide();
                     res2.WriteInt32(character2.InstanceId);
-                    res2.WriteInt32(y);
-                    res2.WriteInt32(y);
-                    res2.WriteInt32(y);
+                    res2.WriteInt32(y); // death type? 1 = death, 2 = death and message, 3 = unconscious, beyond that = nothing
+                    res2.WriteInt32(0);
+                    res2.WriteInt32(0);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res2, ServerType.Area);
+                    SendBattleReportEndNotify(client, character2);
                     break;
 
                 case "pose":

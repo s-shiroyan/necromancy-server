@@ -8,8 +8,8 @@ namespace Necromancy.Server.Packet.Response
 {
     public class RecvCharaUpdateHp : PacketResponse
     {
-        private uint _currentHp;
-        public RecvCharaUpdateHp(uint currentHp)
+        private int _currentHp;
+        public RecvCharaUpdateHp(int currentHp)
             : base((ushort) AreaPacketId.recv_chara_update_hp, ServerType.Area)
         {
             _currentHp = currentHp;
