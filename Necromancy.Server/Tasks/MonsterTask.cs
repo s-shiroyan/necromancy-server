@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
+using Necromancy.Server.Common.Instance;
 
 
 namespace Necromancy.Server.Tasks
@@ -368,10 +369,10 @@ namespace Necromancy.Server.Tasks
             brList.Add(brHit);
             brList.Add(brHp);
             brList.Add(oHpUpdate);
-            brList.Add(cHpUpdate);
+            //brList.Add(cHpUpdate);
             brList.Add(brEnd);
             Router.Send(Map, brList);
-
+            Router.Send(Server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
         }
         private void SendDataNotifyEoData(int instanceId, int effectId)
         {
