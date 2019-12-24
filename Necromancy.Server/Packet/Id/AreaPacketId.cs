@@ -742,7 +742,7 @@ namespace Necromancy.Server.Packet.Id
         send_chara_pose = 0x7DE7, 
         send_chara_pose_ladder = 0xE75C, 
         send_chara_view_landing = 0x54, //opcode not found   //TODO
-        send_charabody_access_abort = 0x55, //opcode not found
+        send_charabody_access_abort = 0x8C84,
         send_charabody_access_start = 0x6D2F, 
         send_charabody_loot_complete2 = 0x56, //opcode not found
         send_charabody_loot_complete3 = 0x57, //opcode not found 
@@ -750,8 +750,8 @@ namespace Necromancy.Server.Packet.Id
         send_charabody_loot_start2_cancel = 0x59, //opcode not found
         send_charabody_loot_start3 = 0x61, //opcode not found
         send_charabody_salvage_abort = 0x6FFC,
-        send_charabody_salvage_request = 0x62, //opcode not found // TODO
-        send_charabody_salvage_request_cancel = 0x63, //opcode not found
+        send_charabody_salvage_request = 0x4616,
+        send_charabody_salvage_request_cancel = 0xFB48,
         send_charabody_self_salvage_abort = 0x64, //opcode not found
         send_charabody_self_salvage_notify_r = 0xAAF9,
         send_chat_post_message = 0x1132, 

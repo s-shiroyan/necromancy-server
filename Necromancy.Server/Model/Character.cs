@@ -33,6 +33,7 @@ namespace Necromancy.Server.Model
         public uint maxMp { get; set; }
         public uint maxOd { get; set; }
         public bool hadDied { get; set; }
+        public int DeadBodyInstanceId { get; set; } 
 
         //Movement Related
         public float X { get; set; }
@@ -104,6 +105,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
+            DeadBodyInstanceId = 0;
         }
     }
 }

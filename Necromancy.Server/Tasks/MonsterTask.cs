@@ -11,7 +11,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using Necromancy.Server.Common.Instance;
-
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Tasks
 {
@@ -350,6 +350,7 @@ namespace Necromancy.Server.Tasks
         }
         private void MonsterAttackQueue(int skillId)
         {
+
             int damage = (int)Util.GetRandomNumber(8, 43);
             currentTarget.currentHp -= damage;
             float perHp = (int)((currentTarget.currentHp / currentTarget.maxHp) * 100);
@@ -365,6 +366,7 @@ namespace Necromancy.Server.Tasks
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)currentTarget.InstanceId, perHp);
             RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)currentTarget.currentHp);
             RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
+            //RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(currentTarget);
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
@@ -380,6 +382,19 @@ namespace Necromancy.Server.Tasks
                 Router.Send(Map, brStart.ToPacket());
                 Router.Send(Map, cDead.ToPacket());
                 Router.Send(Map, brEnd.ToPacket());
+                Task.Delay(TimeSpan.FromMilliseconds((int)(9 * 1000))).ContinueWith
+                (t1 =>
+                    {
+                        Character character2 = null;
+                        IInstance instance = Server.Instances.GetInstance(currentTarget.InstanceId);
+                        if (instance is Character character)
+                        {
+                            character2 = character;
+                        }
+                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(character2);
+                        Router.Send(Map, cBodyData);
+                });
+
             }
         }
         private void SendDataNotifyEoData(int instanceId, int effectId)

@@ -403,6 +403,10 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_door_close(this));
             _areaConsumer.AddHandler(new send_quest_check_time_limit(this));
             _areaConsumer.AddHandler(new send_quest_display(this));
+            _areaConsumer.AddHandler(new send_charabody_access_abort(this));
+            _areaConsumer.AddHandler(new send_charabody_salvage_request(this));
+            _areaConsumer.AddHandler(new send_charabody_salvage_request_cancel(this));
+            _areaConsumer.AddHandler(new send_charabody_salvage_abort(this));
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND

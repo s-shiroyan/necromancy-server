@@ -88,6 +88,22 @@ namespace Necromancy.Server.Database.Sql.Core
             return npcSpawns;
         }
 
+        /*public List<DeadBody> SelectDeadBodiesByMapId(int mapId)
+        {
+            List<DeadBody> deadBodies = new List<DeadBody>();
+            ExecuteReader(SqlSelectDeadBodyByMapId,
+                command => { AddParameter(command, "@map_id", mapId); },
+                reader =>
+                {
+                    while (reader.Read())
+                    {
+                        DeadBody deadBodies = ReadDeadBody(reader);
+                        deadBodies.Add(deadBodies);
+                    }
+                });
+            return deadBodies;
+        }*/
+
         public bool UpdateNpcSpawn(NpcSpawn npcSpawn)
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateNpcSpawn, command =>
