@@ -24,6 +24,7 @@ namespace Necromancy.Server.Model
             ClientLookup = new ClientLookup();
             NpcSpawns = new Dictionary<int, NpcSpawn>();
             MonsterSpawns = new Dictionary<int, MonsterSpawn>();
+            DeadBodies = new Dictionary<int, DeadBody>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -33,13 +34,6 @@ namespace Necromancy.Server.Model
             Place = setting.Place;
             Orientation = setting.Orientation;
             MonsterTasks = new TaskManager();
-
-            /*List<DeadBody> deadBodies = server.Database.SelectDeadBodyByMapId(setting.Id);
-            foreach (DeadBody deadBody in deadBodies)
-            {
-                server.Instances.AssignInstance(deadBodies);
-                DeadBodies.Add((int)deadBody.InstanceId, deadBody);
-            }*/
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);

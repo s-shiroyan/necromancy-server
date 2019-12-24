@@ -5,8 +5,8 @@ namespace Necromancy.Server.Model
 {
     public class DeadBody : IInstance
     {
-        public int CharacterId { get; set; }
         public uint InstanceId { get; set; }
+        public int CharacterInstanceId { get; set; }
         public int Id { get; set; }
         public string CharaName { get; set; }
         public string SoulName { get; set; }
@@ -42,6 +42,7 @@ namespace Necromancy.Server.Model
             HairStyle = CharacterId.HairId;
             HairColor = CharacterId.HairColorId;
             FaceId = CharacterId.FaceId;
+            */
             ConnectionState = 1;//0 if disconnected, 1 if dead.
             ModelType = 1; //4 if they are an ash pile
             CriminalStatus = 0; //We need a criminal status value from original character

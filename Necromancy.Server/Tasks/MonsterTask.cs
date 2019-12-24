@@ -389,10 +389,24 @@ namespace Necromancy.Server.Tasks
                         IInstance instance = Server.Instances.GetInstance(currentTarget.InstanceId);
                         if (instance is Character character)
                         {
-                            character2 = character;
+                            DeadBody deadBody = new DeadBody();
+                            Server.Instances.AssignInstance(deadBody);
+                            deadBody.InstanceId = character.InstanceId;
+                            deadBody.CharaName = character.Name;
+                            deadBody.MapId = character.MapId;
+                            deadBody.X = character.X;
+                            deadBody.Y = character.Y;
+                            deadBody.Z = character.Z;
+                            deadBody.Heading = character.Heading;
+                            deadBody.RaceId = character.Raceid;
+                            deadBody.SexId = character.Sexid;
+                            deadBody.HairStyle = character.HairId;
+                            deadBody.HairColor = character.HairColorId;
+                            deadBody.FaceId = character.FaceId;
+
+                            RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
+                            Router.Send(Map, cBodyData);
                         }
-                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(character2);
-                        Router.Send(Map, cBodyData);
                 });
 
             }
