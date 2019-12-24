@@ -30,8 +30,11 @@ namespace Necromancy.Server.Tasks
         private DateTime expireTime;
         private Map _map;
         private int triggerRadius;
+        private int detectRadius;
+        private int detectHeight;
+        private int tickTime;
 
-       public TrapTask(NecServer server, Map map, Vector3 trapPos, int activeTimeMs)
+        public TrapTask(NecServer server, Map map, Vector3 trapPos, int activeTimeMs)
         {
             Server = server;
             TrapList = new Dictionary<int,IInstance>();
@@ -39,7 +42,10 @@ namespace Necromancy.Server.Tasks
             TimeSpan activeTime = new TimeSpan(0, 0, 0, 0, activeTimeMs);
             expireTime = DateTime.Now + activeTime;
             _map = map;
-            triggerRadius = 100;
+            triggerRadius = 120;
+            detectHeight = 25;
+            detectRadius = 1000;
+            tickTime = 400;
         }
 
         public override string Name { get; }
@@ -49,14 +55,24 @@ namespace Necromancy.Server.Tasks
         {
             while (expireTime > DateTime.Now)
             {
-                List<MonsterSpawn> monsters = _map.GetMonstersRange(TrapPos, triggerRadius);
+                List<MonsterSpawn> monsters = _map.GetMonstersRange(TrapPos, detectRadius);
                 if (monsters.Count > 0)
                 {
-                    RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)monsters[0].InstanceId, 1430212, TrapPos);
-                    Server.Router.Send(_map, eoTriggerData);
-
+                    bool triggered = false;
+                    foreach (MonsterSpawn monster in monsters)
+                    {
+                        Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                        if (Vector3.Distance(monsterPos, TrapPos) <= triggerRadius && (monsterPos.Z - TrapPos.Z <= detectHeight))
+                        {
+                            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)monsters[0].InstanceId, 1430212, TrapPos);
+                            Server.Router.Send(_map, eoTriggerData);
+                            triggered = true;
+                        }
+                    }
+                    if (!triggered)
+                        tickTime = 50;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(tickTime);
             }
 
             this.Stop();
@@ -70,6 +86,14 @@ namespace Necromancy.Server.Tasks
         {
             TimeSpan activeTime = new TimeSpan(0, 0, 0, 0, activeTimeMs);
             expireTime = DateTime.Now + activeTime;
+        }
+        private double ConvertToRadians(double angle, bool adjust)
+        {
+            angle = angle * 2;
+            if (adjust)
+                angle = (angle <= 90 ? angle + 270 : angle - 90);
+            //direction < 270 ? (direction + 90) / 2 : (direction - 270) / 2;
+            return (Math.PI / 180) * angle;
         }
     }
 }
