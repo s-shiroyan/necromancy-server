@@ -57,8 +57,8 @@ namespace Necromancy.Server.Model
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 1000;
-                monsterSpawn.CurrentHp = 200;
+                monsterSpawn.MaxHp = 300;
+                monsterSpawn.SetHP(300);
                 monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
                 monsterSpawn.Level = (byte)monsterSetting.Level;
                 monsterSpawn.CombatMode = monsterSetting.CombatMode;

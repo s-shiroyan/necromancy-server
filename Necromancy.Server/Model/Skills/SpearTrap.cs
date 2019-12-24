@@ -62,7 +62,7 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
             _logger.Debug($"SpearTrap effectId [{effectId}]");
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, (int)_client.Character.InstanceId, effectId, trgCoord);
+            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, (int)_client.Character.InstanceId, effectId, trgCoord, 2, 2);
             _server.Router.Send(_client.Map, eoData);
 
             //Thread.Sleep(3000);

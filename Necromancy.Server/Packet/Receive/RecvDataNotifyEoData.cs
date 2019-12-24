@@ -7,19 +7,23 @@ using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
-    public class RecvDataNotifyEoData2 : PacketResponse
+    public class RecvDataNotifyEoData : PacketResponse
     {
         private readonly int _instanceId;
         private readonly int _effectId;
+        private readonly int _unknown1;
+        private readonly int _unknown2;
         private readonly int _targetInstanceId;
         private readonly Vector3 _target;
-        public RecvDataNotifyEoData2(int instanceId, int targetInstanceId, int effectId, Vector3 target)
-            : base((ushort) AreaPacketId.recv_data_notify_eo_data2, ServerType.Area)
+        public RecvDataNotifyEoData(int instanceId, int targetInstanceId, int effectId, Vector3 target,int unknown1, int unknown2)
+            : base((ushort) AreaPacketId.recv_data_notify_eo_data, ServerType.Area)
         {
             _instanceId = instanceId;
             _targetInstanceId = targetInstanceId;
             _target = target;
             _effectId = effectId;
+            _unknown1 = unknown1;
+            _unknown2 = unknown2;
         }
 
         protected override IBuffer ToBuffer()
@@ -37,8 +41,8 @@ namespace Necromancy.Server.Packet.Receive
 
             res.WriteInt32(_effectId);// effect id
             res.WriteInt32(_targetInstanceId); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
-            res.WriteInt32(_targetInstanceId);//unknown
-            res.WriteInt32(_targetInstanceId);
+            res.WriteInt32(_unknown1);//unknown
+            res.WriteInt32(_unknown2);
             return res;
         }
     }

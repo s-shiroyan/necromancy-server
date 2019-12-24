@@ -70,9 +70,9 @@ namespace Necromancy.Server.Packet.Area
                             //SendBattleReportEndNotify(client, instance);
                             return;
                         }
-                        monsterSpawn.CurrentHp -= damage;
-                        perHp = (((float)monsterSpawn.CurrentHp / (float)monsterSpawn.MaxHp) * 100);
-                        Logger.Debug($"CurrentHp [{monsterSpawn.CurrentHp}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
+                        monsterSpawn.UpdateHP(-damage);
+                        perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
+                        Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
                     }
                     break;
                 case Character character:

@@ -7,14 +7,14 @@ using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
-    public class RecvDataNotifyEoData : PacketResponse
+    public class RecvDataNotifyEoData2 : PacketResponse
     {
         private readonly int _instanceId;
         private readonly int _effectId;
         private readonly int _targetInstanceId;
         private readonly Vector3 _target;
-        public RecvDataNotifyEoData(int instanceId, int targetInstanceId, int effectId, Vector3 target)
-            : base((ushort) AreaPacketId.recv_data_notify_eo_data, ServerType.Area)
+        public RecvDataNotifyEoData2(int instanceId, int targetInstanceId, int effectId, Vector3 target)
+            : base((ushort) AreaPacketId.recv_data_notify_eo_data2, ServerType.Area)
         {
             _instanceId = instanceId;
             _targetInstanceId = targetInstanceId;

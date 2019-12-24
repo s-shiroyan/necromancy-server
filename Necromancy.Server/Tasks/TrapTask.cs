@@ -33,7 +33,7 @@ namespace Necromancy.Server.Tasks
         private int detectRadius;
         private int detectHeight;
         private int tickTime;
-
+        private bool triggered;
         public TrapTask(NecServer server, Map map, Vector3 trapPos, int activeTimeMs)
         {
             Server = server;
@@ -46,6 +46,8 @@ namespace Necromancy.Server.Tasks
             detectHeight = 25;
             detectRadius = 1000;
             tickTime = 400;
+            triggered = false;
+
         }
 
         public override string Name { get; }
@@ -53,27 +55,59 @@ namespace Necromancy.Server.Tasks
         protected override bool RunAtStart { get; }
         protected override void Execute()
         {
-            while (expireTime > DateTime.Now)
+            while (expireTime > DateTime.Now && !triggered)
             {
                 List<MonsterSpawn> monsters = _map.GetMonstersRange(TrapPos, detectRadius);
                 if (monsters.Count > 0)
                 {
-                    bool triggered = false;
                     foreach (MonsterSpawn monster in monsters)
                     {
                         Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
-                        if (Vector3.Distance(monsterPos, TrapPos) <= triggerRadius && (monsterPos.Z - TrapPos.Z <= detectHeight))
+                        if ((Vector3.Distance(monsterPos, TrapPos) <= triggerRadius) && (monsterPos.Z - TrapPos.Z <= detectHeight))
                         {
-                            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)monsters[0].InstanceId, 1430212, TrapPos);
-                            Server.Router.Send(_map, eoTriggerData);
                             triggered = true;
+                            break;
                         }
                     }
                     if (!triggered)
                         tickTime = 50;
+                    else
+                    {
+                        foreach (MonsterSpawn monster in monsters)
+                        {
+                            Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                            if (Vector3.Distance(monsterPos, TrapPos) <= triggerRadius + 150)
+                            {
+                                int damage = Util.GetRandomNumber(70, 90);
+                                RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)monsters[0].InstanceId, 1430212, TrapPos, 2, 2);
+                                Server.Router.Send(_map, eoTriggerData);
+                                float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
+                                List<PacketResponse> brList = new List<PacketResponse>();
+                                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)TrapList[0].InstanceId);
+                                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                                RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)monster.InstanceId);
+                                RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)monster.InstanceId);
+                                RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)monster.InstanceId, damage);
+                                RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)monster.InstanceId, perHp);
+
+                                brList.Add(brStart);
+                                brList.Add(brAttack);
+                                brList.Add(brHit);
+                                brList.Add(brHp);
+                                brList.Add(oHpUpdate);
+                                brList.Add(brEnd);
+                                Server.Router.Send(_map, brList);
+                                monster.UpdateHP(-damage);
+                            }
+                        }
+                    }
                 }
                 Thread.Sleep(tickTime);
             }
+            RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)TrapList[0].InstanceId, 0, TrapPos, 0, 0);
+            Server.Router.Send(_map, eoDestroyData);
+            RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)TrapList[0].InstanceId, 0.0F);
+            Server.Router.Send(_map, eoDisappear);
 
             this.Stop();
         }

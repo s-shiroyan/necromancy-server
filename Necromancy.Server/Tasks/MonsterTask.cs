@@ -101,7 +101,7 @@ namespace Necromancy.Server.Tasks
             {
                 if (spawnMonster)
                 {
-                    Thread.Sleep(respawnTime/5);
+                    Thread.Sleep(respawnTime/2);
                     updateTime = pathingTick;
                     _monster.CurrentCoordIndex = 1;
                     moveTime = updateTime;
@@ -192,6 +192,7 @@ namespace Necromancy.Server.Tasks
             }
             if (MonsterCheck())
             {
+                MonsterHate(false, (int)currentTarget.InstanceId);
                 Logger.Debug($"MonsterCheck returned true");
                 return true;
             }
@@ -558,8 +559,8 @@ namespace Necromancy.Server.Tasks
             _monster.X = spawnCoords.destination.X; 
             _monster.Y = spawnCoords.destination.Y; 
             _monster.Z = spawnCoords.destination.Z; 
-            _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination); 
-            _monster.CurrentHp = 100;
+            _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination);
+            _monster.SetHP(100);
             respawnTime = _monster.RespawnTime;
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monster);
             Router.Send(Map, monsterData);
@@ -571,7 +572,7 @@ namespace Necromancy.Server.Tasks
         public bool MonsterCheck()
         {
             //Logger.Debug($"Monster HP [{_monster.CurrentHp}]");
-            if (_monster.CurrentHp <= 0)
+            if (_monster.GetHP() <= 0)
             {
                 //SendBattleReportStartNotify();
                 //Death Animation

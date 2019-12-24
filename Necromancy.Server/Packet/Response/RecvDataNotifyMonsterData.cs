@@ -68,7 +68,7 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt64(100);
             }
             
-            if (_monsterSpawn.CurrentHp <=0)
+            if (_monsterSpawn.GetHP() <=0)
             {
                 res.WriteInt32(1); //1000 0000 here makes it stand up and not be dead.   or 0 = alive, 1 = dead
             }
@@ -81,7 +81,7 @@ namespace Necromancy.Server.Packet.Response
             res.WriteInt64(111113); // item Id ?
             res.WriteByte(90);
             res.WriteByte(100);
-            res.WriteInt32(_monsterSpawn.CurrentHp); //Current HP
+            res.WriteInt32(_monsterSpawn.GetHP()); //Current HP
             res.WriteInt32(_monsterSpawn.MaxHp); //Max HP
             res.WriteInt32(0x80); // cmp to 0x80 = 128
             int numEntries4 = 0x80; //Statuses?

@@ -108,7 +108,7 @@ namespace Necromancy.Server.Model.Skills
                 _logger.Error($"Creating effectId from skillid [{_skillId}]");
             }
             trgCoord.Z += 50;
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, _targetInstanceId, 301411, trgCoord);
+            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, _targetInstanceId, 301411, trgCoord, 2, 2);
             _server.Router.Send(_client.Map, eoData);
             RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)InstanceId, 2.0F);
             _server.Router.Send(_client.Map, eoDisappear);

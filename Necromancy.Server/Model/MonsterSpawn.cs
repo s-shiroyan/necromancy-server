@@ -14,6 +14,8 @@ namespace Necromancy.Server.Model
 {
     public class MonsterSpawn : IInstance
     {
+        private readonly object HpLock = new object();
+
         private readonly NecLogger _logger;
         public uint InstanceId { get; set; }
         public int Id { get; set; }
@@ -33,7 +35,7 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public short Radius { get; set; }
-        public int CurrentHp { get; set; }
+        private int CurrentHp { get; set; }
         public int MaxHp { get; set; }
         public bool CombatMode { get; set; }
         public int AttackSkillId { get; set; }
@@ -53,8 +55,8 @@ namespace Necromancy.Server.Model
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            CurrentHp = 80085;
-            MaxHp = 88887355;
+            CurrentHp = 300;
+            MaxHp = 300;
             RespawnTime = 10000;
             SpawnActive = false;
             TaskActive = false;
@@ -223,6 +225,30 @@ namespace Necromancy.Server.Model
             res.WriteByte(this.Heading);
             res.WriteByte(1);
             server.Router.Send(client, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
+        }
+
+        public void SetHP(int modifier)
+        {
+            lock (HpLock)
+            {
+                CurrentHp = modifier;
+            }
+        }
+        public int GetHP()
+        {
+            int hp;
+            lock (HpLock)
+            {
+                hp = CurrentHp;
+            }
+            return hp;
+        }
+        public void UpdateHP(int modifier)
+        {
+            lock (HpLock)
+            {
+                CurrentHp += modifier;
+            }
         }
     }
     public class MonsterTick

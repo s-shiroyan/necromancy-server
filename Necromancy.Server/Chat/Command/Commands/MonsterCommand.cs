@@ -71,7 +71,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             monsterSpawn.Heading = client.Character.Heading;
 
             monsterSpawn.MaxHp = 100;
-            monsterSpawn.CurrentHp = 100;
+            monsterSpawn.SetHP(100);
 
             if (!Server.Database.InsertMonsterSpawn(monsterSpawn))
             {
