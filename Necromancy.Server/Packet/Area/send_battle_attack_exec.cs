@@ -6,7 +6,7 @@ using Necromancy.Server.Common.Instance;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive;
 
 
 namespace Necromancy.Server.Packet.Area

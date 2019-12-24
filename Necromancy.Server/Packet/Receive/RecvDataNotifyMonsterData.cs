@@ -3,7 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Response
+namespace Necromancy.Server.Packet.Receive
 {
     public class RecvDataNotifyMonsterData : PacketResponse
     {
@@ -94,5 +94,14 @@ namespace Necromancy.Server.Packet.Response
 
             return res;
         }
-    }
+
+        int [] EquipId = new int[]
+                    {
+                        11300302 /*Weapon*/, 0 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 100403 /*Avatar Head */,
+                        260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 510301 /*Avatar Feet*/
+                    };
+
+}
 }

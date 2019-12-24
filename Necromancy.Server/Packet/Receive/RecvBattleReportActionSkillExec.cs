@@ -4,13 +4,13 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Response
+namespace Necromancy.Server.Packet.Receive
 {
-    public class RecvBattleReportActionAttackExec : PacketResponse
+    public class RecvBattleReportActionSkillExec : PacketResponse
     {
         private readonly int _skillId;
-        public RecvBattleReportActionAttackExec(int skillId)
-            : base((ushort) AreaPacketId.recv_battle_report_action_attack_exec, ServerType.Area)
+        public RecvBattleReportActionSkillExec(int skillId)
+            : base((ushort) AreaPacketId.recv_battle_report_action_skill_exec, ServerType.Area)
         {
             _skillId = skillId;
         }

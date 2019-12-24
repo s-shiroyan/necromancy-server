@@ -5,14 +5,14 @@ using Arrowgene.Services.Logging;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Common;
 
 namespace Necromancy.Server.Model
 {
     public class Map
     {
-        public const int NewCharacterMapId = 1001902;
+        public const int NewCharacterMapId = 1001902;   //2006000
 
         private readonly NecLogger _logger;
         private readonly NecServer _server;
@@ -24,7 +24,6 @@ namespace Necromancy.Server.Model
             ClientLookup = new ClientLookup();
             NpcSpawns = new Dictionary<int, NpcSpawn>();
             MonsterSpawns = new Dictionary<int, MonsterSpawn>();
-            DeadBodies = new Dictionary<int, DeadBody>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -58,11 +57,14 @@ namespace Necromancy.Server.Model
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 100;
-                monsterSpawn.CurrentHp = 100;
-                monsterSpawn.Map = this;
-                monsterSpawn.SkillAttackId = monsterSetting.AtackSkillId;
+                monsterSpawn.MaxHp = 1000;
+                monsterSpawn.CurrentHp = 200;
+                monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
                 monsterSpawn.Level = (byte)monsterSetting.Level;
+                monsterSpawn.CombatMode = monsterSetting.CombatMode;
+                monsterSpawn.CatalogId = monsterSetting.CatalogId;
+                monsterSpawn.TextureType = monsterSetting.TextureType;
+                monsterSpawn.Map = this;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
@@ -90,7 +92,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(homeCoord);
 
                     //default path part 2
-                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50,150), monsterSpawn.Z);
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
                     defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -101,7 +103,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
-                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150), monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
                     defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -128,7 +130,6 @@ namespace Necromancy.Server.Model
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
         public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
-        public Dictionary<int, DeadBody> DeadBodies { get; }
 
         public TaskManager MonsterTasks;
 
@@ -136,6 +137,11 @@ namespace Necromancy.Server.Model
         {
             Enter(client);
             _server.Router.Send(new RecvMapChangeForce(this), client);
+        }
+
+        public void EnterSyncOk(NecClient client)
+        {
+            _server.Router.Send(new RecvMapChangeSyncOk(), client);
         }
 
         public void Enter(NecClient client)

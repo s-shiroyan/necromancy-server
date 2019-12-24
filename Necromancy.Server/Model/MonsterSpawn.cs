@@ -18,7 +18,9 @@ namespace Necromancy.Server.Model
         public uint InstanceId { get; set; }
         public int Id { get; set; }
         public int MonsterId { get; set; }
+        public int CatalogId { get; set; }
         public int ModelId { get; set; }
+        public int TextureType { get; set; }
         public byte Level { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
@@ -31,9 +33,10 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public short Radius { get; set; }
-        public int SkillAttackId { get; set; }
         public int CurrentHp { get; set; }
         public int MaxHp { get; set; }
+        public bool CombatMode { get; set; }
+        public int AttackSkillId { get; set; }
         public int RespawnTime { get; set; }
         public int CurrentCoordIndex { get; set; }
         public int MonsterWalkVelocity { get; }
@@ -50,9 +53,9 @@ namespace Necromancy.Server.Model
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            CurrentHp = 100;
-            MaxHp = 100;
-            RespawnTime = 6000;
+            CurrentHp = 80085;
+            MaxHp = 88887355;
+            RespawnTime = 10000;
             SpawnActive = false;
             TaskActive = false;
             defaultCoords = true;
@@ -60,10 +63,22 @@ namespace Necromancy.Server.Model
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
             MonsterAgro = new Dictionary<int, int>();
-            MonsterWalkVelocity = 250;
+            MonsterWalkVelocity = 175;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
+#if false
+            //To-Do   add at least 1 default monster coord for /mon spawns
+            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
+            MonsterCoord defaultCoord = new MonsterCoord();
+            defaultCoord.Id = Id;
+            defaultCoord.MonsterId = (uint)MonsterId;
+            defaultCoord.MapId = (uint)MapId;
+            defaultCoord.destination = defaultVector3;
 
+            monsterCoords.Add(defaultCoord);
+
+            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
+#endif
         }
 
         public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)

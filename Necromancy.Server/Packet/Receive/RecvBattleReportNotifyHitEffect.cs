@@ -4,7 +4,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Response
+namespace Necromancy.Server.Packet.Receive
 {
     public class RecvBattleReportNotifyHitEffect : PacketResponse
     {
