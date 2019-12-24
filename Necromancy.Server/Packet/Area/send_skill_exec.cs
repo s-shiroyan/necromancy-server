@@ -3,7 +3,9 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Tasks;
 using System;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -86,6 +88,10 @@ namespace Necromancy.Server.Packet.Area
             SpearTrap spearTrap = (SpearTrap)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
             Logger.Debug($"spearTrap.InstanceId [{spearTrap.InstanceId}]  skillId [{skillId}]");
             spearTrap.SkillExec();
+            Vector3 trapPos = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+            TrapTask trapTask = new TrapTask(Server, client.Map, trapPos,30000);
+            trapTask.AddTrap(0,spearTrap);
+            trapTask.Start();
         }
 
         private void Stealth(NecClient client, int skillId)

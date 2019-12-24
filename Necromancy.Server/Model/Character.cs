@@ -60,6 +60,7 @@ namespace Necromancy.Server.Model
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public int eventSelectExecCode { get; set; }
+        public int activeSkillInstance { get; set; }
         public uint eventSelectReadyCode { get; set; }
         public int currentHp { get; set; }
         public uint currentMp { get; set; }

@@ -3,6 +3,7 @@ using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Receive;
+using System;
 using System.Numerics;
 using System.Collections.Generic;
 using System.Threading;
@@ -63,12 +64,12 @@ namespace Necromancy.Server.Model.Skills
             _logger.Debug($"SpearTrap effectId [{effectId}]");
             RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, (int)_client.Character.InstanceId, effectId, trgCoord);
             _server.Router.Send(_client.Map, eoData);
-            RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)InstanceId, 30.0F);
-            _server.Router.Send(_client.Map, eoDisappear);
 
-            Thread.Sleep(1000);
-            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)InstanceId, (int)_client.Character.InstanceId, 1430212, trgCoord);
-            _server.Router.Send(_client.Map, eoTriggerData);
+            //Thread.Sleep(3000);
+            //RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)InstanceId, (int)_client.Character.InstanceId, 1430212, trgCoord);
+            //_server.Router.Send(_client.Map, eoTriggerData);
+//            RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)InstanceId, 30.0F);
+//            _server.Router.Send(_client.Map, eoDisappear);
         }
 
     }

@@ -5,6 +5,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,6 +198,7 @@ namespace Necromancy.Server.Tasks
             float homeDistance = GetDistance(monsterHome.destination, monster);
             if (homeDistance >= (agroRange * 2))
             {
+                MonsterHate(false, (int)currentTarget.InstanceId);
                 RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monster.InstanceId);
                 Router.Send(Map, objectDisappearData);
                 spawnMonster = true;
@@ -740,24 +742,25 @@ namespace Necromancy.Server.Tasks
         }
         private bool checkFOV(NecClient client)
         {
-            Vector2 target = new Vector2(client.Character.X, client.Character.Y);
-            Vector2 source = new Vector2(_monster.X, _monster.Y);
-            Vector2 targetVector = Vector2.Normalize(source - target);
-            double sourceRadian = ConvertToRadians(_monster.Heading);
-            Vector2 sourceVector = new Vector2((float)Math.Cos(sourceRadian), (float)Math.Sin(sourceRadian));
-            sourceVector = Vector2.Normalize(sourceVector);
-            float dotProduct = Vector2.Dot(sourceVector, targetVector);
+            Vector3 target = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+            Vector3 source = new Vector3(_monster.X, _monster.Y, _monster.Z);
+            Vector3 targetVector = Vector3.Normalize(source - target);
+            double sourceRadian = ConvertToRadians(_monster.Heading,Map.Id != 2006000);
+            Vector3 sourceVector = new Vector3((float)Math.Cos(sourceRadian), (float)Math.Sin(sourceRadian), 0);
+            sourceVector = Vector3.Normalize(sourceVector);
+            float dotProduct = Vector3.Dot(sourceVector, targetVector);
             //Logger.Debug($"sourceVector.X[{sourceVector.X}] sourceVector.Y[{sourceVector.Y}]");
             if (dotProduct > fovAngle)
                 Logger.Debug($"Monster {_monster.Name} sees you!!");
             //else
-            //Logger.Debug($"Monster is oblivious dotProduct [{dotProduct}] fovAngle [{fovAngle}]");
+            Logger.Debug($"Monster {_monster.Name} is oblivious dotProduct [{dotProduct}] fovAngle [{fovAngle}]");
             return dotProduct > fovAngle;
         }
-        private double ConvertToRadians(double angle)
+        private double ConvertToRadians(double angle, bool adjust)
         {
             angle = angle * 2;
-            angle = (angle <= 90 ? angle + 270 : angle - 90);
+            if (adjust)
+                angle = (angle <= 90 ? angle + 270 : angle - 90);
             //direction < 270 ? (direction + 90) / 2 : (direction - 270) / 2;
             return (Math.PI / 180) * angle;
         }

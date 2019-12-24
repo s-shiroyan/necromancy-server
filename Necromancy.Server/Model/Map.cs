@@ -180,5 +180,22 @@ namespace Necromancy.Server.Model
                 }
             }
         }
+
+        public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
+        {
+            List<MonsterSpawn> monsters = new List<MonsterSpawn>();
+
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                if (Vector3.Distance(position, monsterPos) <= range)
+                {
+                    monsters.Add(monster);
+                }
+            }
+            return monsters;
+
+        }
+
     }
 }
