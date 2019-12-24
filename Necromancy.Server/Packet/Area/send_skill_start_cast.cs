@@ -46,6 +46,7 @@ namespace Necromancy.Server.Packet.Area
             Server.Instances.AssignInstance(spearTrap);
             Logger.Debug($"spearTrap.InstanceId [{spearTrap.InstanceId}] SpearTrap skillID [{skillId}]");
             client.Character.activeSkillInstance = (int)spearTrap.InstanceId;
+            client.Character.castingSkill = true;
             spearTrap.StartCast();
         }
         private void PoisonTrap(NecClient client, int skillId)

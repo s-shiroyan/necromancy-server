@@ -55,6 +55,7 @@ namespace Necromancy.Server.Packet.Area
                         };
 
             eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
+            client.Character.castingSkill = false;
 
 
 
