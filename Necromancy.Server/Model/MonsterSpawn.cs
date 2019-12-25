@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Common;
@@ -15,6 +16,10 @@ namespace Necromancy.Server.Model
     public class MonsterSpawn : IInstance
     {
         private readonly object HpLock = new object();
+        private readonly object AgroLock = new object();
+        private readonly object TargetLock = new object();
+        private readonly object AgroListLock = new object();
+        private readonly object GotoLock = new object();
 
         private readonly NecLogger _logger;
         public uint InstanceId { get; set; }
@@ -36,6 +41,7 @@ namespace Necromancy.Server.Model
         public short Size { get; set; }
         public short Radius { get; set; }
         private int CurrentHp { get; set; }
+        private int GotoDistance;
         public int MaxHp { get; set; }
         public bool CombatMode { get; set; }
         public int AttackSkillId { get; set; }
@@ -45,26 +51,30 @@ namespace Necromancy.Server.Model
         public int MonsterRunVelocity { get; }
         public bool SpawnActive { get; set; }
         public bool TaskActive { get; set; }
+        private bool MonsterAgro;
         public bool MonsterVisible { get; set; }
+        private Character CurrentTarget;
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        public Dictionary<int, int> MonsterAgro { get; set; }
+        private Dictionary<int, int> MonsterAgroList { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
             CurrentHp = 300;
             MaxHp = 300;
             RespawnTime = 10000;
+            GotoDistance = 10;
             SpawnActive = false;
             TaskActive = false;
+            MonsterAgro = false;
             defaultCoords = true;
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            MonsterAgro = new Dictionary<int, int>();
+            MonsterAgroList = new Dictionary<int, int>();
             MonsterWalkVelocity = 175;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
@@ -227,6 +237,31 @@ namespace Necromancy.Server.Model
             server.Router.Send(client, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
         }
 
+        public void SendBattlePoseStartNotify(NecServer server)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(InstanceId);
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_pose_start_notify, res, ServerType.Area);
+        }
+        public void SendBattlePoseEndNotify(NecServer server)
+        {
+            IBuffer res = BufferProvider.Provide();
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area);
+        }
+        public void MonsterHate(NecServer server, bool hateOn, int instanceId)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(InstanceId);
+            res.WriteInt32(instanceId);
+            if (hateOn)
+            {
+                server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_hate_on, res, ServerType.Area);
+            }
+            else
+            {
+                server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_hate_off, res, ServerType.Area);
+            }
+        }
         public void SetHP(int modifier)
         {
             lock (HpLock)
@@ -243,12 +278,130 @@ namespace Necromancy.Server.Model
             }
             return hp;
         }
-        public void UpdateHP(int modifier)
+        public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, int instanceId = 0)
         {
+            if (verifyAgro)
+            {
+                if (server == null)
+                {
+                    _logger.Error($"NecServer is null!");
+                    return;
+                }
+                if (!GetAgroCharacter(instanceId))
+                {
+                    MonsterAgroList.Add(instanceId, modifier);
+                    Character character = (Character)server.Instances.GetInstance((uint)instanceId);
+                    SetCurrentTarget(character);
+                    SetAgro(true);
+                    MonsterHate(server,true, instanceId);
+                    SendBattlePoseStartNotify(server);
+                    if (Id == 4)
+                        SetGotoDistance(1000);
+                    else
+                        SetGotoDistance(200);
+
+                }
+            }
             lock (HpLock)
             {
                 CurrentHp += modifier;
             }
+        }
+        public void SetAgro(bool agroOn)
+        {
+
+            lock (AgroLock)
+            {
+                MonsterAgro = agroOn;
+            }
+        }
+
+        public bool GetAgro()
+        {
+            bool agro = false;
+            lock (AgroLock)
+            {
+                agro = MonsterAgro;
+            }
+            return agro;
+        }
+        public void SetCurrentTarget(Character character)
+        {
+            lock (TargetLock)
+            {
+                CurrentTarget = character;
+            }
+        }
+
+        public Character GetCurrentTarget()
+        {
+            Character character = null;
+            lock (TargetLock)
+            {
+                character = CurrentTarget;
+            }
+            return character;
+        }
+        public void AddAgroList(int instanceId, int damage)
+        {
+            lock (AgroListLock)
+            {
+                MonsterAgroList.Add((int)instanceId, damage);
+            }
+        }
+
+        public List<int> GetAgroInstanceList()
+        {
+            List<int> agroInstanceList = new List<int>();
+            lock (AgroListLock)
+            {
+                foreach (int instanceId in MonsterAgroList.Keys)
+                {
+                    agroInstanceList.Add(instanceId);
+                }
+            }
+            return agroInstanceList;
+        }
+        public int GetAgroHigh()
+        {
+            int instancedId;
+            lock (AgroListLock)
+            {
+                instancedId = MonsterAgroList.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+            }
+            return instancedId;
+        }
+        public bool GetAgroCharacter(int instanceId)
+        {
+            bool agro;
+            lock (AgroListLock)
+            {
+                agro = MonsterAgroList.ContainsKey(instanceId);
+            }
+            return agro;
+        }
+        public void ClearAgroList()
+        {
+             lock (AgroListLock)
+            {
+                MonsterAgroList.Clear();
+            }
+        }
+        public void SetGotoDistance(int modifier)
+        {
+            lock (GotoLock)
+            {
+                GotoDistance = modifier;
+            }
+        }
+        public int GetGotoDistance()
+        {
+            int gotoDistance;
+            lock (GotoLock)
+            {
+                gotoDistance = GotoDistance;
+            }
+            return gotoDistance;
         }
     }
     public class MonsterTick

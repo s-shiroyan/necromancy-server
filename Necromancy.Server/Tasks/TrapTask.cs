@@ -24,19 +24,20 @@ namespace Necromancy.Server.Tasks
 
     class TrapTask : PeriodicTask
     {
-        protected NecServer Server { get; }
+        protected NecServer _server { get; }
         private Dictionary<int,IInstance> TrapList;
         private Vector3 TrapPos;
         private DateTime expireTime;
         private Map _map;
+        private int ownerInstanceId;
         private int triggerRadius;
         private int detectRadius;
         private int detectHeight;
         private int tickTime;
         private bool triggered;
-        public TrapTask(NecServer server, Map map, Vector3 trapPos, int activeTimeMs)
+        public TrapTask(NecServer server, Map map, Vector3 trapPos, int instanceId, int activeTimeMs)
         {
-            Server = server;
+            _server = server;
             TrapList = new Dictionary<int,IInstance>();
             TrapPos = trapPos;
             TimeSpan activeTime = new TimeSpan(0, 0, 0, 0, activeTimeMs);
@@ -47,7 +48,7 @@ namespace Necromancy.Server.Tasks
             detectRadius = 1000;
             tickTime = 400;
             triggered = false;
-
+            ownerInstanceId = instanceId;
         }
 
         public override string Name { get; }
@@ -80,24 +81,33 @@ namespace Necromancy.Server.Tasks
                             {
                                 int damage = Util.GetRandomNumber(70, 90);
                                 RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)monsters[0].InstanceId, 1430212, TrapPos, 2, 2);
-                                Server.Router.Send(_map, eoTriggerData);
+                                _server.Router.Send(_map, eoTriggerData);
                                 float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
                                 List<PacketResponse> brList = new List<PacketResponse>();
                                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)TrapList[0].InstanceId);
                                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
                                 RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)monster.InstanceId);
                                 RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)monster.InstanceId);
-                                RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)monster.InstanceId, damage);
+                                RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp((int)monster.InstanceId, damage);
                                 RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)monster.InstanceId, perHp);
+                                RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)monster.InstanceId, damage);
 
                                 brList.Add(brStart);
                                 brList.Add(brAttack);
                                 brList.Add(brHit);
+                                brList.Add(brPhyHp);
                                 brList.Add(brHp);
                                 brList.Add(oHpUpdate);
                                 brList.Add(brEnd);
-                                Server.Router.Send(_map, brList);
-                                monster.UpdateHP(-damage);
+                                _server.Router.Send(_map, brList);
+                                if (monster.GetAgroCharacter(ownerInstanceId))
+                                {
+                                    monster.UpdateHP(-damage);
+                                }
+                                else
+                                {
+                                    monster.UpdateHP(-damage, _server, true, ownerInstanceId);
+                                }
                             }
                         }
                     }
@@ -105,9 +115,9 @@ namespace Necromancy.Server.Tasks
                 Thread.Sleep(tickTime);
             }
             RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)TrapList[0].InstanceId, 0, TrapPos, 0, 0);
-            Server.Router.Send(_map, eoDestroyData);
+            _server.Router.Send(_map, eoDestroyData);
             RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)TrapList[0].InstanceId, 0.0F);
-            Server.Router.Send(_map, eoDisappear);
+            _server.Router.Send(_map, eoDisappear);
 
             this.Stop();
         }

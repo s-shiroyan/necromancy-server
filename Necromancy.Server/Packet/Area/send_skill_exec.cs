@@ -90,7 +90,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"spearTrap.InstanceId [{spearTrap.InstanceId}]  skillId [{skillId}]");
             spearTrap.SkillExec();
             Vector3 trapPos = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
-            TrapTask trapTask = new TrapTask(Server, client.Map, trapPos,30000);
+            TrapTask trapTask = new TrapTask(Server, client.Map, trapPos, (int)client.Character.InstanceId, 30000);
             trapTask.AddTrap(0,spearTrap);
             trapTask.Start();
         }

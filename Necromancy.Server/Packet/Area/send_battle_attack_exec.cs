@@ -13,8 +13,10 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_battle_attack_exec : ClientHandler
     {
+        private readonly NecServer _server;
         public send_battle_attack_exec(NecServer server) : base(server)
         {
+            _server = server;
         }
 
         public override ushort Id => (ushort)AreaPacketId.send_battle_attack_exec;
@@ -70,7 +72,14 @@ namespace Necromancy.Server.Packet.Area
                             //SendBattleReportEndNotify(client, instance);
                             return;
                         }
-                        monsterSpawn.UpdateHP(-damage);
+                        if (monsterSpawn.GetAgroCharacter((int)client.Character.InstanceId))
+                        {
+                            monsterSpawn.UpdateHP(-damage);
+                        }
+                        else
+                        {
+                            monsterSpawn.UpdateHP(-damage, _server, true, (int)client.Character.InstanceId);
+                        }
                         perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
                     }
@@ -99,12 +108,14 @@ namespace Necromancy.Server.Packet.Area
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)instance.InstanceId);
+            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp((int)instance.InstanceId, damage);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)instance.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)instance.InstanceId, perHp);
 
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
+            brList.Add(brPhyHp);
             brList.Add(brHp);
             brList.Add(oHpUpdate);
             brList.Add(brEnd);

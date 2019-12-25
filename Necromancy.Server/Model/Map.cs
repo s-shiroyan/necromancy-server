@@ -155,13 +155,27 @@ namespace Necromancy.Server.Model
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
+            // ToDo   Stop using the Map object X,Y,Z for character transitions, this will cause issues with multi threaded transistion task
             client.Character.X = X;
             client.Character.Y = Y;
             client.Character.Z = Z;
-
+ 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+            if (Id == 2002104)
+            {
+                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
+                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
+                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002105, leftVec, rightVec, false, new Vector3(0,0,0), 0);
+            } else if (Id == 2002105)
+            {
+                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
+                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
+                Vector3 returnPos = new Vector3((float)-889.7094, (float)-11053.159, (float)462.58234);
+                byte returnHeading = 0;
+                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002104, leftVec, rightVec, true, returnPos, returnHeading);
 
+            }
         }
 
         public void Leave(NecClient client)
@@ -194,8 +208,22 @@ namespace Necromancy.Server.Model
                 }
             }
             return monsters;
-
         }
 
+        public List<Character> GetCharactersRange(Vector3 position, int range)
+        {
+            List<Character> characters = new List<Character>();
+
+           foreach (NecClient client in ClientLookup.GetAll())
+            {
+                Character character = client.Character;
+                Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);
+                if (Vector3.Distance(position, characterPos) <= range)
+                {
+                    characters.Add(character);
+                }
+            }
+            return characters;
+        }
     }
 }
