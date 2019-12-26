@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Tasks;
+using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Receive;
@@ -16,6 +17,20 @@ namespace Necromancy.Server.Model
 
         private readonly NecLogger _logger;
         private readonly NecServer _server;
+        public int Id { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+        public string Country { get; set; }
+        public string Area { get; set; }
+        public string Place { get; set; }
+        public int Orientation { get; set; }
+        public string FullName => $"{Country}/{Area}/{Place}";
+        public ClientLookup ClientLookup { get; }
+        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
+        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<int, DeadBody> DeadBodies { get; }
+        public TaskManager MonsterTasks;
 
         public Map(MapSetting setting, NecServer server)
         {
@@ -41,6 +56,8 @@ namespace Necromancy.Server.Model
                 server.Instances.AssignInstance(npcSpawn);
                 NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
             }
+
+            //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
 
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
@@ -92,7 +109,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(homeCoord);
 
                     //default path part 2
-                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
                     defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -103,7 +120,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
-                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150), monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
                     defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -118,20 +135,9 @@ namespace Necromancy.Server.Model
             }
         }
 
-        public int Id { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-        public string Country { get; set; }
-        public string Area { get; set; }
-        public string Place { get; set; }
-        public int Orientation { get; set; }
-        public string FullName => $"{Country}/{Area}/{Place}";
-        public ClientLookup ClientLookup { get; }
-        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
-        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
 
-        public TaskManager MonsterTasks;
+
+
 
         public void EnterForce(NecClient client)
         {

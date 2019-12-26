@@ -351,7 +351,7 @@ namespace Necromancy.Server.Tasks
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
@@ -371,7 +371,7 @@ namespace Necromancy.Server.Tasks
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
                 List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
                 RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
 
