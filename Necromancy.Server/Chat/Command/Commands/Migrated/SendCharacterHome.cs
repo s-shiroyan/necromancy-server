@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {

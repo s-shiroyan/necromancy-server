@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteByte(0);//
                 res.WriteInt32(_gGateSpawn.ModelId);// Optional Model ID. Warp Statues. Gaurds, Pedistals, Etc., to see models refer to the model_common.csv
                 res.WriteInt16(_gGateSpawn.Size);//  size of the object
-                res.WriteInt32(_gGateSpawn.Active ? 1 : 0);// 0 = collision, 1 = no collision  (active/Inactive?)
+                res.WriteInt32(_gGateSpawn.Active ? 0 : 1);// 0 = collision, 1 = no collision  (active/Inactive?)
                 res.WriteInt32(01);//0= no effect color appear, //Red = 0bxx1x   | Gold = obxxx1   |blue = 0bx1xx
 
                 return res;

@@ -3,18 +3,34 @@ using System.Collections.Generic;
 using System.Numerics;
 using Arrowgene.Services.Logging;
 using Arrowgene.Services.Tasks;
+using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Model
 {
     public class Map
     {
-        public const int NewCharacterMapId = 1001902;
+        public const int NewCharacterMapId = 1001902;   //2006000
 
         private readonly NecLogger _logger;
         private readonly NecServer _server;
+        public int Id { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+        public string Country { get; set; }
+        public string Area { get; set; }
+        public string Place { get; set; }
+        public int Orientation { get; set; }
+        public string FullName => $"{Country}/{Area}/{Place}";
+        public ClientLookup ClientLookup { get; }
+        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
+        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<int, DeadBody> DeadBodies { get; }
+        public TaskManager MonsterTasks;
 
         public Map(MapSetting setting, NecServer server)
         {
@@ -41,6 +57,8 @@ namespace Necromancy.Server.Model
                 NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
             }
 
+            //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
+
             List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
@@ -49,11 +67,20 @@ namespace Necromancy.Server.Model
                 {
                     return;
                 }
+                if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId, out MonsterSetting monsterSetting))
+                {
+                    return;
+                }
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 1000;
-                monsterSpawn.CurrentHp = 100;
+                monsterSpawn.MaxHp = 300;
+                monsterSpawn.SetHP(300);
+                monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
+                monsterSpawn.Level = (byte)monsterSetting.Level;
+                monsterSpawn.CombatMode = monsterSetting.CombatMode;
+                monsterSpawn.CatalogId = monsterSetting.CatalogId;
+                monsterSpawn.TextureType = monsterSetting.TextureType;
                 monsterSpawn.Map = this;
                 MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
 
@@ -82,7 +109,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(homeCoord);
 
                     //default path part 2
-                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
                     defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -93,7 +120,7 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
-                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + 100, monsterSpawn.Y + 100, monsterSpawn.Z);
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150), monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
                     defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
@@ -108,25 +135,19 @@ namespace Necromancy.Server.Model
             }
         }
 
-        public int Id { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-        public string Country { get; set; }
-        public string Area { get; set; }
-        public string Place { get; set; }
-        public int Orientation { get; set; }
-        public string FullName => $"{Country}/{Area}/{Place}";
-        public ClientLookup ClientLookup { get; }
-        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
-        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
 
-        public TaskManager MonsterTasks;
+
+
 
         public void EnterForce(NecClient client)
         {
             Enter(client);
             _server.Router.Send(new RecvMapChangeForce(this), client);
+        }
+
+        public void EnterSyncOk(NecClient client)
+        {
+            _server.Router.Send(new RecvMapChangeSyncOk(), client);
         }
 
         public void Enter(NecClient client)
@@ -140,13 +161,27 @@ namespace Necromancy.Server.Model
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
+            // ToDo   Stop using the Map object X,Y,Z for character transitions, this will cause issues with multi threaded transistion task
             client.Character.X = X;
             client.Character.Y = Y;
             client.Character.Z = Z;
-
+ 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+            if (Id == 2002104)
+            {
+                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
+                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
+                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002105, leftVec, rightVec, false, new Vector3(0,0,0), 0);
+            } else if (Id == 2002105)
+            {
+                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
+                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
+                Vector3 returnPos = new Vector3((float)-889.7094, (float)-11053.159, (float)462.58234);
+                byte returnHeading = 0;
+                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002104, leftVec, rightVec, true, returnPos, returnHeading);
 
+            }
         }
 
         public void Leave(NecClient client)
@@ -164,6 +199,37 @@ namespace Necromancy.Server.Model
                     monsterSpawn.SpawnActive = false;
                 }
             }
+        }
+
+        public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
+        {
+            List<MonsterSpawn> monsters = new List<MonsterSpawn>();
+
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                if (Vector3.Distance(position, monsterPos) <= range)
+                {
+                    monsters.Add(monster);
+                }
+            }
+            return monsters;
+        }
+
+        public List<Character> GetCharactersRange(Vector3 position, int range)
+        {
+            List<Character> characters = new List<Character>();
+
+           foreach (NecClient client in ClientLookup.GetAll())
+            {
+                Character character = client.Character;
+                Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);
+                if (Vector3.Distance(position, characterPos) <= range)
+                {
+                    characters.Add(character);
+                }
+            }
+            return characters;
         }
     }
 }

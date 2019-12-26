@@ -16,6 +16,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            Logger.Debug($"send_skill_cast_cancel_request");
             IBuffer res = BufferProvider.Provide();
             Router.Send(client, (ushort)AreaPacketId.recv_skill_cast_cancel, res, ServerType.Area);
         }

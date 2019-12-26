@@ -43,3 +43,4 @@ _ReSharper*/
 Necromancy.Server/Properties/launchSettings.json
 Necromancy.Server/.vscode/launch.json
 Necromancy.Server/.vscode/tasks.json
+Necromancy.Cli/Properties/launchSettings.json

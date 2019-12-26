@@ -3,8 +3,10 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Tasks;
+using System.Numerics;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -55,18 +57,10 @@ namespace Necromancy.Server.Packet.Area
                 {
                     if (monsterSpawn.MonsterVisible)
                     {
-                        if (monsterSpawn.MonsterAgro)
-                        {
-                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                            Server.Router.Send(monsterData, client);
-                            monsterSpawn.MonsterStop(_server, client);      // Without some kind of movement the monster doesn't show  why?????
-                        }
-                        else
-                        {
-                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                            Server.Router.Send(monsterData, client);
-                            monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity);
-                        }
+                        Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                        Server.Router.Send(monsterData, client);
+                        monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
                     }
                 }
             }
@@ -83,8 +77,36 @@ namespace Necromancy.Server.Packet.Area
                     new RecvDataNotifyCharaData(otherClient.Character, otherClient.Soul.Name);
                 Router.Send(otherCharacterData, client);
             }
+            if (client.Map.Id == 2002104)
+            {
+                Vector3 mapLinkSrc = new Vector3((float)-871.1273, (float)-11966.361, (float)462.58215);
+                byte orientation = 90;
+                SendDataNotifyMaplink(client, 2002105, mapLinkSrc, orientation);
+            }
+            else if (client.Map.Id == 2002105)
+            {
+                Vector3 mapLinkDest = new Vector3((float)-5778.367, (float)-6010.0425, (float)-1.6068916);
+                byte orientation = 45;
+                SendDataNotifyMaplink(client, 2002104, mapLinkDest, orientation);
+            }           
         }
+        public void SendDataNotifyMaplink(NecClient client, int mapId, Vector3 destCoords, byte orientation)
+        {
+            IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
+            res1.WriteInt32(mapId); // Unique ID
 
-      
+            res1.WriteFloat(destCoords.X); //x
+            res1.WriteFloat(destCoords.Y); //y
+            res1.WriteFloat(destCoords.Z + 2); //z
+            res1.WriteByte(orientation); // offset
+
+            res1.WriteFloat(1000); // Height
+            res1.WriteFloat(100); // Width
+
+            res1.WriteInt32(1); // Aura color 0=blue 1=gold 2=white 3=red 4=purple 5=black  0 to 5, crash above 5
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
+        }
     }
+
+
 }

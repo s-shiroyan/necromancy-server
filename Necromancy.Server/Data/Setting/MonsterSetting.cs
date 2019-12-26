@@ -11,9 +11,9 @@ namespace Necromancy.Server.Data.Setting
         public int? InactiveEffectId { get; set; }
         public string NamePlateType { get; set; }
         public int? ModelSwitching { get; set; }
-        public int AtackSkillId { get; set; }
+        public int AttackSkillId { get; set; }
         public int Level { get; set; }
         public bool CombatMode { get; set; }
-        public bool LoadingModel { get; set; }
+        public int TextureType { get; set; }
     }
 }
