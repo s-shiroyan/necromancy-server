@@ -380,7 +380,7 @@ namespace Necromancy.Server.Tasks
                 brList.Add(cDead);
                 brList.Add(brEnd);
                 _server.Router.Send(Map, brList);
-                Task.Delay(TimeSpan.FromSeconds(4)).ContinueWith
+                Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
                 (t1 =>
                 {
                     IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);

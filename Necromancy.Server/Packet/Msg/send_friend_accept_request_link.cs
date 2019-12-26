@@ -1,4 +1,4 @@
-﻿using Arrowgene.Services.Buffers;
+using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Msg
         private void NotifyFriendInvite(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.Id); // ?
+            res.WriteInt32(client.Character.InstanceId); // ?
             res.WriteInt32(0);
             res.WriteFixedString($"{client.Soul.Name}", 0x31); //soul name?
             res.WriteFixedString($"{client.Character.Name}", 0x5B); //character name?

@@ -36,7 +36,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             /*else if (client.Character.soulFormState == 0)
             {
                 IBuffer res1 = BufferProvider.Provide();
-                res1.WriteInt32(client.Character.Id); // ID
+                res1.WriteInt32(client.Character.InstanceId); // ID
                 res1.WriteInt32(100101); //100101, its the id to get the tombstone
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_notify_stateflag, res1, ServerType.Area);
 

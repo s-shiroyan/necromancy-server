@@ -19,7 +19,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //recv_stall_update_feature_item = 0xB195,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
 
             res.WriteInt32(10200101);
             res.WriteByte(2);

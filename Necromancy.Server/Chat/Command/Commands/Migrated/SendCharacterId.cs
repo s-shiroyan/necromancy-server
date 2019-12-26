@@ -16,7 +16,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            string chid = client.Character.Id.ToString();
+            string chid = client.Character.InstanceId.ToString();
             SendChatNotifyMessage(client, chid, 0);
         }
 
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(ChatType);
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
             res.WriteFixedString($"{client.Soul.Name}", 49);
             res.WriteFixedString($"{client.Character.Name}", 37);
             res.WriteFixedString($"{Message}", 769);

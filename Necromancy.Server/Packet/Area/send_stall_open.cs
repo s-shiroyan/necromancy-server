@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             //recv_stall_notify_opend = 0x7FC5,
             IBuffer res = BufferProvider.Provide();
 
-	        res.WriteInt32(client.Character.Id);
+	        res.WriteInt32(client.Character.InstanceId);
 	        res.WriteCString("Unky's Shop"); // find max size, shop name 
 	        int numEntries = 5;
             res.WriteInt32(numEntries); //less than or equal to 5

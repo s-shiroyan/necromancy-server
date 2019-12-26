@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);//Normal item distribution
             res.WriteInt32(0);//Rare item distribution
             res.WriteInt32(0);
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
             for (int i = 0; i < 4; i++)
             {
                 res.WriteInt32(0);
