@@ -6,6 +6,7 @@ using Necromancy.Server.Packet.Id;
 using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -47,30 +48,31 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            
+
             switch (command[0])
             {
                 case "hp":
                     IBuffer res = BufferProvider.Provide();
-                    //recv_chara_update_hp = 0xD133,
                     res.WriteInt32(y);
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                     break;
 
                 case "dead":
+                    SendBattleReportStartNotify(client, character2);
                     //recv_battle_report_noact_notify_dead = 0xCDC9,
                     IBuffer res2 = BufferProvider.Provide();
                     res2.WriteInt32(character2.InstanceId);
-                    res2.WriteInt32(y);
-                    res2.WriteInt32(y);
-                    res2.WriteInt32(y);
+                    res2.WriteInt32(y); // death type? 1 = death, 2 = death and message, 3 = unconscious, beyond that = nothing
+                    res2.WriteInt32(0);
+                    res2.WriteInt32(0);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_dead, res2, ServerType.Area);
+                    SendBattleReportEndNotify(client, character2);
                     break;
 
                 case "pose":
                     IBuffer res3 = BufferProvider.Provide();
                     //recv_battle_attack_pose_start_notify = 0x7CB2,
-	                res3.WriteInt32(y);
+                    res3.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_pose_start_notify, res3, ServerType.Area);
                     break;
 
@@ -89,7 +91,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res5.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_emotion_notify_type, res5, ServerType.Area);
                     break;
-                    
+
                 case "deadstate":
                     //recv_charabody_notify_deadstate = 0xCC36, // Parent = 0xCB94 // Range ID = 03
                     IBuffer res6 = BufferProvider.Provide();
@@ -123,39 +125,111 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, res9, ServerType.Area);
                     break;
 
-                case "eo":
-                    //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+                case "bodystate":
+                    //recv_charabody_state_update_notify = 0x1A0F, 
                     IBuffer res10 = BufferProvider.Provide();
-                    res10.WriteInt32(123456);// Unique Instance ID of Skill Cast
-                    res10.WriteFloat(character2.X + 100);//Effect Object X
-                    res10.WriteFloat(character2.Y);//Effect Object Y
-                    res10.WriteFloat(character2.Z + 100);//Effect Object Z
-                    res10.WriteFloat(100);//Rotation Along X Axis if above 0
-                    res10.WriteFloat(100);//Rotation Along Y Axis if above 0
-                    res10.WriteFloat(100);//Rotation Along Z Axis if above 0
-                    res10.WriteInt32(500008);//Effect id
-                    res10.WriteInt32(1);//must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
-                    res10.WriteInt32(0);//unknown
-                    res10.WriteInt32(0);//unknown
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res10, ServerType.Area);
+                    res10.WriteInt32(character2.InstanceId);
+                    res10.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_state_update_notify, res10, ServerType.Area);
+                    break;
 
+                case "charastate":
+                    //recv_chara_notify_stateflag = 0x23D3, 
                     IBuffer res11 = BufferProvider.Provide();
-                    res11.WriteInt32(123456);
-                    res11.WriteFloat(500);
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res11, ServerType.Area);
+                    res11.WriteInt32(character2.InstanceId);
+                    res11.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
                     break;
 
-                case "eos":
-                    //recv_eo_update_state = 0x28FD, // Parent = 0x28E7 // Range ID = 01
+                case "spirit":
+                    //recv_charabody_notify_spirit = 0x36A6, 
                     IBuffer res12 = BufferProvider.Provide();
-                    res12.WriteInt32(123456);
-                    res12.WriteInt32(y);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res12, ServerType.Area);
+                    res12.WriteInt32(character2.InstanceId);
+                    res12.WriteByte((byte)y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
                     break;
 
-                case "sync":
+                case "data":
+                    SendDataGetSelfCharaData(Server.Clients.GetByCharacterInstanceId(character2.InstanceId));
+                    break;
+
+                case "abyss":
+                    //recv_charabody_self_notify_abyss_stead_pos = 0x679B,
                     IBuffer res13 = BufferProvider.Provide();
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_map_change_sync_ok, res13, ServerType.Area);
+                    res13.WriteFloat(character2.X);
+                    res13.WriteFloat(character2.Y);
+                    res13.WriteFloat(character2.Z);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_self_notify_abyss_stead_pos, res13, ServerType.Area);
+                    break;
+
+                case "charadata":
+                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(character2, character2.Name);
+                    Router.Send(Server.Clients.GetAll(), cData.ToPacket());
+                    break;
+
+                case "charabodydata":
+                    //recv_data_notify_charabody_data = 0x906A,
+                    IBuffer res14 = BufferProvider.Provide();
+                    res14.WriteInt32(character2.InstanceId + 10000); //Instance ID of dead body
+                    res14.WriteInt32(character2.InstanceId); //Reference to actual player's instance ID
+                    res14.WriteCString("soulname"); // Soul name 
+                    res14.WriteCString($"{character2.Name}"); // Character name
+                    res14.WriteFloat(character2.X + 200); // X
+                    res14.WriteFloat(character2.Y); // Y
+                    res14.WriteFloat(character2.Z); // Z
+                    res14.WriteByte(character2.Heading); // Heading
+                    res14.WriteInt32(0);
+
+                    int numEntries = 19;
+                    res14.WriteInt32(numEntries);//less than or equal to 19
+                    for (int i = 0; i < numEntries; i++)
+                    {
+                        res14.WriteInt32(0);
+                    }
+
+                    numEntries = 19;
+                    res14.WriteInt32(numEntries);
+                    for (int i = 0; i < numEntries; i++)
+                    {
+                        res14.WriteInt32(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteInt32(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);//bool
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                        res14.WriteByte(0);
+                    }
+
+                    numEntries = 19;
+                    res14.WriteInt32(numEntries);
+                    for (int i = 0; i < numEntries; i++)
+                    {
+                        res14.WriteInt32(0);
+                    }
+
+                    res14.WriteInt32(0); //Race ID
+                    res14.WriteInt32(0); //Gender ID
+                    res14.WriteByte(0); //Hair style
+                    res14.WriteByte(0); //Hair color
+                    res14.WriteByte(0); //Face id
+                    res14.WriteInt32(1);// 0 = bag, 1 for dead? (Can't enter soul form if this isn't 0 or 1 i think).
+                    res14.WriteInt32(0);//4 = ash pile, not sure what this is.
+                    res14.WriteInt32(0);
+                    res14.WriteInt32(y); //death pose 0 = faced down, 1 = head chopped off, 2 = no arm, 3 = faced down, 4 = chopped in half, 5 = faced down, 6 = faced down, 7 and up "T-pose" the body (ONLY SEND 1 IF YOU ARE CALLING THIS FOR THE FIRST TIME)
+                    res14.WriteByte(0);//crim status (changes icon on the end also), 0 = white, 1 = yellow, 2 = red, 3 = red with crim icon, 
+                    res14.WriteByte(0);// (bool) Beginner protection
+                    res14.WriteInt32(1);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res14, ServerType.Area);
                     break;
 
                 default:

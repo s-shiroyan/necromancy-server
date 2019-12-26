@@ -29,9 +29,11 @@ namespace Necromancy.Server.Model
         public ushort piety { get; set; }
         public ushort luck { get; set; }
         public uint ClassId { get; set; }
-        public uint maxHp { get; set; }
+        public int maxHp { get; set; }
         public uint maxMp { get; set; }
         public uint maxOd { get; set; }
+        public bool hadDied { get; set; }
+        public int DeadBodyInstanceId { get; set; } 
 
         //Movement Related
         public float X { get; set; }
@@ -58,8 +60,10 @@ namespace Necromancy.Server.Model
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public int eventSelectExecCode { get; set; }
+        public int activeSkillInstance { get; set; }
+        public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
-        public uint currentHp { get; set; }
+        public int currentHp { get; set; }
         public uint currentMp { get; set; }
         public uint currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
@@ -102,6 +106,8 @@ namespace Necromancy.Server.Model
             takeover = false;
             skillStartCast = 0;
             battleAnim = 0;
+            hadDied = false;
+            DeadBodyInstanceId = 0;
         }
     }
 }

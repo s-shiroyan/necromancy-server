@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using System.Globalization;
 
 namespace Necromancy.Server.Packet.Area
@@ -72,7 +73,13 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area, client);
 
                 client.Character.battleAnim = 0; //re-setting the byte to 0 at the end of every iteration to allow for normal movements.
-
+                if (client.Character.castingSkill)
+                {
+                    RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
+                    //Router.Send(cancelCast);
+                    client.Character.activeSkillInstance = 0;
+                    client.Character.castingSkill = false;
+                }
 
 
 
@@ -80,6 +87,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             //Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
+            /*
             if (movementSpeed != 0)
             {
                 Logger.Debug($"Character {client.Character.Name} is in map {client.Character.MapId} @ : X[{client.Character.X}]Y[{client.Character.Y}]Z[{client.Character.Z}]");
@@ -96,12 +104,12 @@ namespace Necromancy.Server.Packet.Area
                 Logger.Debug($"Movement Stop Reset");
                 Logger.Debug($"---------------------------------------------------------------");
             }
+            */
 
 
-
-///////////
-/////////-----ToDO:  Find a home for the commands below this line as solutions develop.  Do not Delete!
-///////////
+            ///////////
+            /////////-----ToDO:  Find a home for the commands below this line as solutions develop.  Do not Delete!
+            ///////////
 
 
 

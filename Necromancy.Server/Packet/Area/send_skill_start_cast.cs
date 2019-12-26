@@ -1,52 +1,77 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
-using System.Threading;
+using Necromancy.Server.Packet.Response;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 
 namespace Necromancy.Server.Packet.Area
 {
     public class send_skill_start_cast : ClientHandler
     {
+        private NecServer _server;
         public send_skill_start_cast(NecServer server) : base(server)
         {
+            _server = server;
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_skill_start_cast;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int mySkillID = packet.Data.ReadInt32();
-            int mySkillTarget = packet.Data.ReadInt32();
-            client.Character.eventSelectReadyCode = (uint)mySkillTarget;
-            if(int.TryParse(($"{mySkillID}".Substring(1, 6))+($"{mySkillID}".Substring(8,1)), out int result))
+            int skillID = packet.Data.ReadInt32();
+            int skillTarget = packet.Data.ReadInt32();
+            client.Character.eventSelectReadyCode = (uint)skillTarget;
+            client.Character.skillStartCast = skillID;
+            int skillLookup = skillID / 1000;
+            Logger.Debug($"skillTarget [{skillTarget}]  skillID [{skillID}] skillLookup [{skillLookup}]");
+            var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
-                client.Character.skillStartCast = result;
-            }
-            Logger.Debug($"skill effect parsed from skillID is {result}");
-            float CastingTime = 2;
+                         { x => x == 114301, () => PoisonTrap(client, skillID) },
+                         { x => x == 114302, () => SpearTrap(client, skillID) },
+                         { x => x == 114607, () => Stealth(client, skillID) },
+                         { x => x == 113101, () => FlameArrow(client, skillID, skillTarget) }
+            };
 
-            if (mySkillTarget > 0 && mySkillTarget < 991024) // the range is for all monsters. but there's no reason to have a cast specific to monsters.   Logic TBD maybe something with Skill_sort.CSV
-            {
-                SendMagUpdateCastTime(client, CastingTime);                             // This actually did not appear to do anything, should be removed?
-                SendSkillStartCast(client,mySkillID,mySkillTarget, CastingTime);
-                SendBattleReportStartNotify(client);                                    // Seemd the Character.InstanceId tells client this is only for this character here
-                SendBattleReportSkillStartCast(client, mySkillID);                      // this does not send character instanceId, but it does use effect on character
-                SendEoNotifyDisappearSchedule(client, mySkillID, CastingTime);          // Failed attempt to remove the cast effect
-                SendBattleReportEndNotify(client);
-            }
+            eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
 
-            if (mySkillTarget == 0) // self cast skills 0 out your our target ID, even if you have something targeted.
-            {   SendSkillStartCastSelf(client,mySkillID,mySkillTarget, CastingTime);    }
+        }
+        private void SpearTrap(NecClient client, int skillId)
+        {
+            SpearTrap spearTrap = new SpearTrap(_server, client, skillId);
+            Server.Instances.AssignInstance(spearTrap);
+            Logger.Debug($"spearTrap.InstanceId [{spearTrap.InstanceId}] SpearTrap skillID [{skillId}]");
+            client.Character.activeSkillInstance = (int)spearTrap.InstanceId;
+            client.Character.castingSkill = true;
+            spearTrap.StartCast();
+        }
+        private void PoisonTrap(NecClient client, int skillId)
+        {
+            PoisonTrap poisonTrap = new PoisonTrap(_server, client, skillId);
+            Server.Instances.AssignInstance(poisonTrap);
+            Logger.Debug($"poisonTrap.InstanceId [{poisonTrap.InstanceId}] PoisonTrap skillID [{skillId}]");
+            client.Character.activeSkillInstance = (int)poisonTrap.InstanceId;
+            poisonTrap.StartCast();
+        }
+        private void Stealth(NecClient client, int skillId)
+        {
+            Stealth stealth = new Stealth(_server, client, skillId);
+            Server.Instances.AssignInstance(stealth);
+            client.Character.activeSkillInstance = (int)stealth.InstanceId;
+            stealth.StartCast();
+        }
 
-            if (mySkillTarget > 9910024) // All NPCs have Serial ID's of 10,000,000 or greater.  all Monsters are 9910024 or less. most are only 6 digits. 9 digit monster ID's are for testing.
-            { SendSkillStartCastExR(client, mySkillID, mySkillTarget, CastingTime); }
-
-            //To Do.  Identify SkillID or Target ID numbering convention that specifies 1.)NPC 2.)Monster 3.)self 4.)party 5.)item.   this logic will determine which recv to direct send_skill_start_cast to above.
-
-
-            //recv_skill_start_item_cast_r // To-Do .  after Items exist,  start casting based on item i.e. camp.
-
+        private void FlameArrow(NecClient client, int skillId, int skillTarget)
+        {
+            Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+            FlameArrow flameArrow = new FlameArrow(_server, client, skillId, skillTarget, charCoord);
+            Server.Instances.AssignInstance(flameArrow);
+            client.Character.activeSkillInstance = (int)flameArrow.InstanceId;
+            flameArrow.StartCast();
         }
 
         private void SendBattleReportSkillStartCast(NecClient client, int mySkillID)
@@ -75,19 +100,14 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res4 = BufferProvider.Provide();
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res4, ServerType.Area);
         }
-        private void SendMagUpdateCastTime(NecClient client, float castingTime)
-        {
-            IBuffer res5 = BufferProvider.Provide();
-            res5.WriteFloat(castingTime);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_mag_cast_time_per, res5, ServerType.Area);
-        }
 
         private void SendSkillStartCast(NecClient client,int mySkillID,int mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
-            
+            Logger.Debug($"my Character instanceId : {client.Character.InstanceId}");
+
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  
@@ -128,6 +148,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
+            Logger.Debug($"my Character instanceId : {client.Character.InstanceId}");
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(mySkillID); //previously Skill ID
             res.WriteFloat(castingTime);
@@ -139,6 +160,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");
             Logger.Debug($"my Character ID : {client.Character.Id}");
+            Logger.Debug($"my Character instanceId : {client.Character.InstanceId}");
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);//Error check     | 0 - success  See other codes above in SendSkillStartCast
             res.WriteFloat(castingTime);//casting time (countdown before auto-cast)    ./Skill_base.csv   Column L

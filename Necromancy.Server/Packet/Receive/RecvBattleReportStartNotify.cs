@@ -1,16 +1,16 @@
 using Arrowgene.Services.Buffers;
+using Necromancy.Server.Chat;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Response
+namespace Necromancy.Server.Packet.Receive
 {
-    public class RecvObjectDisappearNotify : PacketResponse
+    public class RecvBattleReportStartNotify : PacketResponse
     {
-        private readonly uint _instanceId;
-
-        public RecvObjectDisappearNotify(uint instanceId)
-            : base((ushort) AreaPacketId.recv_object_disappear_notify, ServerType.Area)
+        private readonly int _instanceId;
+        public RecvBattleReportStartNotify(int instanceId)
+            : base((ushort) AreaPacketId.recv_battle_report_start_notify, ServerType.Area)
         {
             _instanceId = instanceId;
         }

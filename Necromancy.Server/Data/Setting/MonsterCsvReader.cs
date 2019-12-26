@@ -53,7 +53,7 @@ namespace Necromancy.Server.Data.Setting
             }
 
 
-            if (!int.TryParse(properties[11], out int loadingModel))
+            if (!int.TryParse(properties[11], out int textureType))
             {
                 return null;
             }
@@ -69,10 +69,10 @@ namespace Necromancy.Server.Data.Setting
                 InactiveEffectId = inactiveEffectId,
                 NamePlateType = properties[7],
                 ModelSwitching = modelSwitching,
-                AtackSkillId = attackSkillId,
+                AttackSkillId = attackSkillId,
                 Level = level,
                 CombatMode = combatMode == 1,
-                LoadingModel = loadingModel == 1
+                TextureType = textureType
             };
         }
     }

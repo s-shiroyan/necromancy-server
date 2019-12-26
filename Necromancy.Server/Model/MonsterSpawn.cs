@@ -2,6 +2,7 @@ using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Common;
@@ -14,11 +15,19 @@ namespace Necromancy.Server.Model
 {
     public class MonsterSpawn : IInstance
     {
+        private readonly object HpLock = new object();
+        private readonly object AgroLock = new object();
+        private readonly object TargetLock = new object();
+        private readonly object AgroListLock = new object();
+        private readonly object GotoLock = new object();
+
         private readonly NecLogger _logger;
         public uint InstanceId { get; set; }
         public int Id { get; set; }
         public int MonsterId { get; set; }
+        public int CatalogId { get; set; }
         public int ModelId { get; set; }
+        public int TextureType { get; set; }
         public byte Level { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
@@ -31,74 +40,46 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public short Radius { get; set; }
-        public int CurrentHp { get; set; }
+        private int CurrentHp { get; set; }
+        private int GotoDistance;
         public int MaxHp { get; set; }
+        public bool CombatMode { get; set; }
+        public int AttackSkillId { get; set; }
         public int RespawnTime { get; set; }
         public int CurrentCoordIndex { get; set; }
-
         public int MonsterWalkVelocity { get; }
         public int MonsterRunVelocity { get; }
-        public bool MonsterAgro { get; set; }
         public bool SpawnActive { get; set; }
         public bool TaskActive { get; set; }
+        private bool MonsterAgro;
         public bool MonsterVisible { get; set; }
+        private Character CurrentTarget;
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        public Dictionary<int, int> MonsterPlayerAgro { get; set; }
+        private Dictionary<int, int> MonsterAgroList { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            CurrentHp = 80085;
-            MaxHp = 88887355;
-            RespawnTime = 60000;
+            CurrentHp = 300;
+            MaxHp = 300;
+            RespawnTime = 10000;
+            GotoDistance = 10;
             SpawnActive = false;
             TaskActive = false;
+            MonsterAgro = false;
             defaultCoords = true;
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            MonsterPlayerAgro = new Dictionary<int, int>();
-            MonsterWalkVelocity = 250;
+            MonsterAgroList = new Dictionary<int, int>();
+            MonsterWalkVelocity = 175;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
-            MonsterAgro = false;
-#if false
-            //To-Do   add at least 1 default monster coord for /mon spawns
-            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
-            MonsterCoord defaultCoord = new MonsterCoord();
-            defaultCoord.Id = Id;
-            defaultCoord.MonsterId = (uint)MonsterId;
-            defaultCoord.MapId = (uint)MapId;
-            defaultCoord.destination = defaultVector3;
-
-            monsterCoords.Add(defaultCoord);
-
-            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
-#endif
         }
-
-        public void MonsterStop(NecServer server, NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(this.InstanceId);//Monster ID
-            res.WriteFloat(this.X);
-            res.WriteFloat(this.Y);
-            res.WriteFloat(this.Z);
-            res.WriteFloat(0);       //X per tick
-            res.WriteFloat(0);       //Y Per tick
-            res.WriteFloat(0);              //verticalMovementSpeedMultiplier
-
-            res.WriteFloat((float)1);              //movementMultiplier
-            res.WriteFloat((float)1);              //Seconds to move
-
-            res.WriteByte(0); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
-            server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
-        }
-        public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, MonsterCoord monsterCoord = null)
+        public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)
                 monsterCoord = monsterCoords[CurrentCoordIndex];
@@ -120,13 +101,13 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(2); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
-            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);    //recv_0xE8B9  recv_0x1FC1 
 
         }
 
-        public void MonsterMove(NecServer server, int monsterVelocity, MonsterCoord monsterCoord = null)
+        public void MonsterMove(NecServer server, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)
                 monsterCoord = monsterCoords[CurrentCoordIndex];
@@ -151,11 +132,11 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(2); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
         }
-        public void MonsterMove(NecServer server, int monsterVelocity, MonsterTick moveTo, float travelTime)
+        public void MonsterMove(NecServer server, byte pose, byte animation, MonsterTick moveTo, float travelTime)
         {
 
             IBuffer res = BufferProvider.Provide();
@@ -170,8 +151,48 @@ namespace Necromancy.Server.Model
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
 
-            res.WriteByte(3); //MOVEMENT ANIM
-            res.WriteByte(0);//JUMP & FALLING ANIM
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+        }
+
+        public void MonsterStop(NecServer server, NecClient client, byte pose, byte animation, float travelTime)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(this.InstanceId);//Monster ID
+            res.WriteFloat(this.X);
+            res.WriteFloat(this.Y);
+            res.WriteFloat(this.Z);
+            res.WriteFloat(0.0F);       //X per tick
+            res.WriteFloat(0.0F);       //Y Per tick
+            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+
+            res.WriteFloat((float)1 / travelTime);              //movementMultiplier
+            res.WriteFloat((float)travelTime);              //Seconds to move
+
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
+            server.Router.Send(client, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
+        }
+
+        public void MonsterStop(NecServer server, byte pose, byte animation, float travelTime)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(this.InstanceId);//Monster ID
+            res.WriteFloat(this.X);
+            res.WriteFloat(this.Y);
+            res.WriteFloat(this.Z);
+            res.WriteFloat(0.0F);       //X per tick
+            res.WriteFloat(0.0F);       //Y Per tick
+            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+
+            res.WriteFloat((float)1 / travelTime);              //movementMultiplier
+            res.WriteFloat((float)travelTime);              //Seconds to move
+
+            res.WriteByte(pose); //MOVEMENT ANIM
+            res.WriteByte(animation);//JUMP & FALLING ANIM
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
         }
 
@@ -200,6 +221,173 @@ namespace Necromancy.Server.Model
             res.WriteByte(this.Heading);
             res.WriteByte(1);
             server.Router.Send(client, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
+        }
+
+        public void SendBattlePoseStartNotify(NecServer server)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(InstanceId);
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_pose_start_notify, res, ServerType.Area);
+        }
+        public void SendBattlePoseEndNotify(NecServer server)
+        {
+            IBuffer res = BufferProvider.Provide();
+            server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area);
+        }
+        public void MonsterHate(NecServer server, bool hateOn, int instanceId)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(InstanceId);
+            res.WriteInt32(instanceId);
+            if (hateOn)
+            {
+                server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_hate_on, res, ServerType.Area);
+            }
+            else
+            {
+                server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_hate_off, res, ServerType.Area);
+            }
+        }
+        public void SetHP(int modifier)
+        {
+            lock (HpLock)
+            {
+                CurrentHp = modifier;
+            }
+        }
+        public int GetHP()
+        {
+            int hp;
+            lock (HpLock)
+            {
+                hp = CurrentHp;
+            }
+            return hp;
+        }
+        public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, int instanceId = 0)
+        {
+            if (verifyAgro)
+            {
+                if (server == null)
+                {
+                    _logger.Error($"NecServer is null!");
+                    return;
+                }
+                if (!GetAgroCharacter(instanceId))
+                {
+                    MonsterAgroList.Add(instanceId, modifier);
+                    Character character = (Character)server.Instances.GetInstance((uint)instanceId);
+                    SetCurrentTarget(character);
+                    SetAgro(true);
+                    MonsterHate(server,true, instanceId);
+                    SendBattlePoseStartNotify(server);
+                    if (Id == 4)
+                        SetGotoDistance(1000);
+                    else
+                        SetGotoDistance(200);
+
+                }
+            }
+            lock (HpLock)
+            {
+                CurrentHp += modifier;
+            }
+        }
+        public void SetAgro(bool agroOn)
+        {
+
+            lock (AgroLock)
+            {
+                MonsterAgro = agroOn;
+            }
+        }
+
+        public bool GetAgro()
+        {
+            bool agro = false;
+            lock (AgroLock)
+            {
+                agro = MonsterAgro;
+            }
+            return agro;
+        }
+        public void SetCurrentTarget(Character character)
+        {
+            lock (TargetLock)
+            {
+                CurrentTarget = character;
+            }
+        }
+
+        public Character GetCurrentTarget()
+        {
+            Character character = null;
+            lock (TargetLock)
+            {
+                character = CurrentTarget;
+            }
+            return character;
+        }
+        public void AddAgroList(int instanceId, int damage)
+        {
+            lock (AgroListLock)
+            {
+                MonsterAgroList.Add((int)instanceId, damage);
+            }
+        }
+
+        public List<int> GetAgroInstanceList()
+        {
+            List<int> agroInstanceList = new List<int>();
+            lock (AgroListLock)
+            {
+                foreach (int instanceId in MonsterAgroList.Keys)
+                {
+                    agroInstanceList.Add(instanceId);
+                }
+            }
+            return agroInstanceList;
+        }
+        public int GetAgroHigh()
+        {
+            int instancedId;
+            lock (AgroListLock)
+            {
+                instancedId = MonsterAgroList.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
+            }
+            return instancedId;
+        }
+        public bool GetAgroCharacter(int instanceId)
+        {
+            bool agro;
+            lock (AgroListLock)
+            {
+                agro = MonsterAgroList.ContainsKey(instanceId);
+            }
+            return agro;
+        }
+        public void ClearAgroList()
+        {
+             lock (AgroListLock)
+            {
+                MonsterAgroList.Clear();
+            }
+        }
+        public void SetGotoDistance(int modifier)
+        {
+            lock (GotoLock)
+            {
+                GotoDistance = modifier;
+            }
+        }
+        public int GetGotoDistance()
+        {
+            int gotoDistance;
+            lock (GotoLock)
+            {
+                gotoDistance = GotoDistance;
+            }
+            return gotoDistance;
         }
     }
     public class MonsterTick
