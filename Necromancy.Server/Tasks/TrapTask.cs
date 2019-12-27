@@ -112,6 +112,9 @@ namespace Necromancy.Server.Tasks
                         }
                     }
                 }
+                else
+                    tickTime = 400;
+
                 Thread.Sleep(tickTime);
             }
             RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData((int)TrapList[0].InstanceId, (int)TrapList[0].InstanceId, 0, TrapPos, 0, 0);

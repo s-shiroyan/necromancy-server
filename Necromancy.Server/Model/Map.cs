@@ -18,9 +18,9 @@ namespace Necromancy.Server.Model
         private readonly NecLogger _logger;
         private readonly NecServer _server;
         public int Id { get; set; }
-        public int X { get; }
-        public int Y { get; }
-        public int Z { get; }
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
         public string Country { get; set; }
         public string Area { get; set; }
         public string Place { get; set; }
