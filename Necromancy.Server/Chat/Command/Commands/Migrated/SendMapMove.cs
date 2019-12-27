@@ -29,11 +29,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 int Y = Convert.ToInt32(keyValue[1]);
                 int Z = Convert.ToInt32(keyValue[2]);
                 int Orietation = Convert.ToInt32(keyValue[3]);
-                map.X = X;
-                map.Y = Y;
-                map.Z = Z;
-                map.Orientation = Orietation;
-                map.EnterForce(client);
+                MapPosition mapPos = new MapPosition(X,Y,Z,(byte)Orietation);
+                map.EnterForce(client, mapPos);
             }
         }
         

@@ -3,7 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
-using System.Globalization;
+using System.Collections.Generic;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -76,7 +76,15 @@ namespace Necromancy.Server.Packet.Area
                 if (client.Character.castingSkill)
                 {
                     RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
-                    //Router.Send(cancelCast);
+                    Router.Send(cancelCast);
+                    List<PacketResponse> brList = new List<PacketResponse>();
+                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)client.Character.InstanceId);
+                    RecvBattleReportActionSkillCancel brCancel = new RecvBattleReportActionSkillCancel();
+                    RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                    brList.Add(brStart);
+                    brList.Add(brCancel);
+                    brList.Add(brEnd);
+                    Router.Send(client.Map, brList);
                     client.Character.activeSkillInstance = 0;
                     client.Character.castingSkill = false;
                 }
@@ -141,35 +149,36 @@ namespace Necromancy.Server.Packet.Area
 
         private void CheckMapChange(NecClient client)
         {
+            MapPosition mapPos = new MapPosition();
             switch (client.Character.MapId)
             {
                 case 1001001:
                     if ((client.Character.X < 4842.5 && client.Character.X > 4282) && client.Character.Y > 4448)
                     {
                         Map map = Server.Maps.Get(1001004);
-                        map.X = 1;
-                        map.Y = 1;
-                        map.Z = 1;
-                        map.Orientation = 0;
-                        map.EnterForce(client);
+                        mapPos.X = 1;
+                        mapPos.Y = 1;
+                        mapPos.Z = 1;
+                        mapPos.Heading = 0;
+                        map.EnterForce(client, mapPos);
                     }
                     else if ((client.Character.X < 225 && client.Character.X > 50) && client.Character.Y > 10200)
                     {
                         Map map = Server.Maps.Get(1001007);
-                        map.X = -5622;
-                        map.Y = -5874;
-                        map.Z = 1;
-                        map.Orientation = 93;
-                        map.EnterForce(client);
+                        mapPos.X = -5622;
+                        mapPos.Y = -5874;
+                        mapPos.Z = 1;
+                        mapPos.Heading = 93;
+                        map.EnterForce(client, mapPos);
                     }
                     else if (client.Character.X > 6800 && (client.Character.Y > 945 && client.Character.Y < 1723))
                     {
                         Map map = Server.Maps.Get(1001902);
-                        map.X = 22697;
-                        map.Y = -180;
-                        map.Z = 5;
-                        map.Orientation = 132;
-                        map.EnterForce(client);
+                        mapPos.X = 22697;
+                        mapPos.Y = -180;
+                        mapPos.Z = 5;
+                        mapPos.Heading = 132;
+                        map.EnterForce(client, mapPos);
                     }
                     break;
                 case 1001002:
@@ -177,51 +186,51 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.X < 21797 && (client.Character.Y > -755 && client.Character.Y < 485))
                     {
                         Map map = Server.Maps.Get(1001001);
-                        map.X = 6700;
-                        map.Y = 1452;
-                        map.Z = -3;
-                        map.Orientation = 51;
-                        map.EnterForce(client);
+                        mapPos.X = 6700;
+                        mapPos.Y = 1452;
+                        mapPos.Z = -3;
+                        mapPos.Heading = 51;
+                        map.EnterForce(client, mapPos);
                     }
                     else if ((client.Character.X > 36246 && client.Character.X < 37254) && client.Character.Y > 5313)
                     {
                         Map map = Server.Maps.Get(1001003);
-                        map.X = 3701;
-                        map.Y = -7057;
-                        map.Z = 5;
-                        map.Orientation = 0;
-                        map.EnterForce(client);
+                        mapPos.X = 3701;
+                        mapPos.Y = -7057;
+                        mapPos.Z = 5;
+                        mapPos.Heading = 0;
+                        map.EnterForce(client, mapPos);
                     }
                     break;
                 case 1001003:
                     if ((client.Character.X < 3926 && client.Character.X > 3518) && client.Character.Y < -7511)
                     {
                         Map map = Server.Maps.Get(1001902);
-                        map.X = 36638;
-                        map.Y = 5216;
-                        map.Z = -10;
-                        map.Orientation = 87;
-                        map.EnterForce(client);
+                        mapPos.X = 36638;
+                        mapPos.Y = 5216;
+                        mapPos.Z = -10;
+                        mapPos.Heading = 87;
+                        map.EnterForce(client, mapPos);
                     }
                     break;
                 case 1001004:
                     if ((client.Character.X < 1046 && client.Character.X > -1062) && client.Character.Y > 5300)
                     {
                         Map map = Server.Maps.Get(1001009);
-                        map.X = -410;
-                        map.Y = -859;
-                        map.Z = 68;
-                        map.Orientation = 0;
-                        map.EnterForce(client);
+                        mapPos.X = -410;
+                        mapPos.Y = -859;
+                        mapPos.Z = 68;
+                        mapPos.Heading = 0;
+                        map.EnterForce(client, mapPos);
                     }
                     else if (client.Character.X < -413 && (client.Character.Y > -712 && client.Character.Y < -345))
                     {
                         Map map = Server.Maps.Get(1001001);
-                        map.X = 4243;
-                        map.Y = 4492;
-                        map.Z = 405;
-                        map.Orientation = 67;
-                        map.EnterForce(client);
+                        mapPos.X = 4243;
+                        mapPos.Y = 4492;
+                        mapPos.Z = 405;
+                        mapPos.Heading = 67;
+                        map.EnterForce(client, mapPos);
                     }
                     break;
                 case 1001005:
@@ -232,11 +241,11 @@ namespace Necromancy.Server.Packet.Area
                     if ((client.Character.X < -5400 && client.Character.X > -5845) && client.Character.Y < -6288)
                     {
                         Map map = Server.Maps.Get(1001001);
-                        map.X = 159;
-                        map.Y = 9952;
-                        map.Z = 601;
-                        map.Orientation = 46;
-                        map.EnterForce(client);
+                        mapPos.X = 159;
+                        mapPos.Y = 9952;
+                        mapPos.Z = 601;
+                        mapPos.Heading = 46;
+                        map.EnterForce(client, mapPos);
                     }
                     break;
                 case 1001008:

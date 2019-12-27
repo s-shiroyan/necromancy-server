@@ -14,24 +14,22 @@ namespace Necromancy.Server.Model
         private readonly NecServer _server;
         private readonly Vector3 _leftPos;
         private readonly Vector3 _rightPos;
-        private readonly Vector3 _changePos;
         private readonly MapTransitionTask _transitionTask;
         private readonly Map _map;
-        private readonly byte _changeHeading;
+        private readonly MapPosition _mapPosition;
         private readonly int _transitionMapId;
         private readonly bool _invertedTransition;
-        public MapTransition(NecServer server, Map map, int transitionMapId, Vector3 leftPos, Vector3 rightPos, bool invertedTransition, Vector3 changePos, byte changeHeading)
+        public MapTransition(NecServer server, Map map, int transitionMapId, Vector3 leftPos, Vector3 rightPos, bool invertedTransition, MapPosition mapPosition = null)
         {
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
             _leftPos = leftPos;
             _rightPos = rightPos;
-            _changePos = changePos;
             _map = map;
+            _mapPosition = mapPosition;
             _transitionMapId = transitionMapId;
             _invertedTransition = invertedTransition;
-            _changeHeading = changeHeading;
-            _transitionTask = new MapTransitionTask(_server, _map, _transitionMapId, _leftPos, _rightPos, (int)InstanceId, _invertedTransition, changePos, changeHeading);
+            _transitionTask = new MapTransitionTask(_server, _map, _transitionMapId, _leftPos, _rightPos, (int)InstanceId, _invertedTransition, _mapPosition);
             _transitionTask.Start();
 
         }

@@ -19,23 +19,21 @@ namespace Necromancy.Server.Tasks
         private NecServer _server { get; }
         private Vector3 _transitionPos1;
         private Vector3 _transitionPos2;
-        private Vector3 _changePos;
+        private MapPosition _changePos;
 
         private Map _map;
         private int _instanceId;
-        private byte _changeHeading;
         private bool _taskActive;
         private bool _invertedTransition;
         private int _tickTime;
         private int _transitionMapId;
         private readonly ILogger _logger;
-        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 transitionPos1, Vector3 transitionPos2, int instanceId, bool invertedTransition, Vector3 changePos, byte changeHeading)
+        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 transitionPos1, Vector3 transitionPos2, int instanceId, bool invertedTransition, MapPosition changePos)
         {
             _server = server;
             _transitionPos1 = transitionPos1;
             _transitionPos2 = transitionPos2;
             _changePos = changePos;
-            _changeHeading = changeHeading;
             _instanceId = instanceId;
             _transitionMapId = transitionMapId;
             _taskActive = false;
@@ -67,16 +65,9 @@ namespace Necromancy.Server.Tasks
                             return;
                         }
                         NecClient client = _server.Clients.GetByCharacterInstanceId(character.InstanceId);
-                        if (_changePos.X != 0 && _changePos.Y != 0 && _changePos.Z != 0 && _changeHeading != 0)
-                        {
-                            transitionMap.X = (int)_changePos.X;
-                            transitionMap.Y = (int)_changePos.Y;
-                            transitionMap.Z = (int)_changePos.Z;
-                            character.Heading = _changeHeading;
-                        }
-                        transitionMap.EnterForce(client);
+                        transitionMap.EnterForce(client, _changePos);
                     }
-                    _logger.Debug($"{character.Name} in range [transition] [{transition}].");
+                    //_logger.Debug($"{character.Name} in range [transition] [{transition}].");
 
                 }
                 Thread.Sleep(_tickTime);

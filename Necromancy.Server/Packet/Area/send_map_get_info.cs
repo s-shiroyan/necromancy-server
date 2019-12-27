@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Area
         private readonly NecServer _server;
         public send_map_get_info(NecServer server) : base(server)
         {
-        _server = server;
+            _server = server;
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_map_get_info;
@@ -43,24 +43,27 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                monsterSpawn.SpawnActive = true;
-                if (!monsterSpawn.TaskActive)
+                if (!monsterSpawn.Active)
                 {
-                    MonsterTask monsterTask = new MonsterTask(Server, monsterSpawn);
-                    if (monsterSpawn.defaultCoords)
-                        monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
-                    else
-                        monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
-                    monsterTask.Start();
-                }
-                else
-                {
-                    if (monsterSpawn.MonsterVisible)
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
                     {
-                        Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
-                        RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                        Server.Router.Send(monsterData, client);
-                        monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                        MonsterTask monsterTask = new MonsterTask(Server, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+                    else
+                    {
+                        if (monsterSpawn.MonsterVisible)
+                        {
+                            Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                            Server.Router.Send(monsterData, client);
+                            monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                        }
                     }
                 }
             }
@@ -88,7 +91,11 @@ namespace Necromancy.Server.Packet.Area
                 Vector3 mapLinkDest = new Vector3((float)-5778.367, (float)-6010.0425, (float)-1.6068916);
                 byte orientation = 45;
                 SendDataNotifyMaplink(client, 2002104, mapLinkDest, orientation);
-            }           
+            }
+            // ToDo this should be a database lookup
+            //RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
+            //_server.Router.Send(mapFragments, client);
+
         }
         public void SendDataNotifyMaplink(NecClient client, int mapId, Vector3 destCoords, byte orientation)
         {

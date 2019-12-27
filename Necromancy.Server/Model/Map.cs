@@ -31,7 +31,7 @@ namespace Necromancy.Server.Model
             Country = setting.Country;
             Area = setting.Area;
             Place = setting.Place;
-            Orientation = setting.Orientation;
+            Orientation = (byte)(setting.Orientation/2);   // Client uses 180 degree orientation
             MonsterTasks = new TaskManager();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
@@ -116,16 +116,31 @@ namespace Necromancy.Server.Model
                 }
                 
             }
+            // ToDo this should be a database lookup
+            if (Id == 2002104)
+            {
+                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
+                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
+                MapTransition mapTransition = new MapTransition(_server, this, 2002105, leftVec, rightVec, false);
+            }
+            else if (Id == 2002105)
+            {
+                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
+                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
+                MapPosition returnPos = new MapPosition((float)-889.7094, (float)-11444.197, (float)462.58234);
+                MapTransition mapTransition = new MapTransition(_server, this, 2002104, leftVec, rightVec, true, returnPos);
+
+            }
         }
 
         public int Id { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
         public string Country { get; set; }
         public string Area { get; set; }
         public string Place { get; set; }
-        public int Orientation { get; set; }
+        public byte Orientation { get; }
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
@@ -133,10 +148,10 @@ namespace Necromancy.Server.Model
 
         public TaskManager MonsterTasks;
 
-        public void EnterForce(NecClient client)
+        public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
-            Enter(client);
-            _server.Router.Send(new RecvMapChangeForce(this), client);
+            Enter(client, mapPosition);
+            _server.Router.Send(new RecvMapChangeForce(this, mapPosition), client);
         }
 
         public void EnterSyncOk(NecClient client)
@@ -144,7 +159,7 @@ namespace Necromancy.Server.Model
             _server.Router.Send(new RecvMapChangeSyncOk(), client);
         }
 
-        public void Enter(NecClient client)
+        public void Enter(NecClient client, MapPosition mapPosition = null)
         {
             if (client.Map != null)
             {
@@ -155,27 +170,8 @@ namespace Necromancy.Server.Model
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
-            // ToDo   Stop using the Map object X,Y,Z for character transitions, this will cause issues with multi threaded transistion task
-            client.Character.X = X;
-            client.Character.Y = Y;
-            client.Character.Z = Z;
- 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
-            if (Id == 2002104)
-            {
-                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
-                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
-                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002105, leftVec, rightVec, false, new Vector3(0,0,0), 0);
-            } else if (Id == 2002105)
-            {
-                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
-                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
-                Vector3 returnPos = new Vector3((float)-889.7094, (float)-11053.159, (float)462.58234);
-                byte returnHeading = 0;
-                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002104, leftVec, rightVec, true, returnPos, returnHeading);
-
-            }
         }
 
         public void Leave(NecClient client)
@@ -224,6 +220,22 @@ namespace Necromancy.Server.Model
                 }
             }
             return characters;
+        }
+    }
+
+    public class MapPosition
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public byte Heading { get; set; }
+
+        public MapPosition(float Xpos = 0, float Ypos = 0, float Zpos = 0, byte heading = 0)
+        {
+            X = Xpos;
+            Y = Ypos;
+            Z = Zpos;
+            Heading = heading;
         }
     }
 }

@@ -153,7 +153,6 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002105);
-                        map.Orientation = 133;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
@@ -165,7 +164,6 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002104);
-                        map.Orientation = 90;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
@@ -177,12 +175,10 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002104);
-                        map.Orientation = 90;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
                         map = Server.Maps.Get(2002105);
-                        map.Orientation = 133;
                     }
                     break;
                 default:

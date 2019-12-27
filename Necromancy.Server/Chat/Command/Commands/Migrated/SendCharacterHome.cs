@@ -18,11 +18,9 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             Character character = Server.Database.SelectCharacterById(client.Character.Id);
             Server.Maps.TryGet(character.MapId, out Map map);
-            map.X = (int)character.X;
-            map.Y = (int)character.Y;
-            map.Z = (int)character.Z;
-            map.Enter(client);
-            Server.Router.Send(new RecvMapChangeForce(map), client);
+            MapPosition mapPos = new MapPosition(character.X, character.Y, character.Z, character.Heading);
+            map.Enter(client, mapPos);
+            Server.Router.Send(new RecvMapChangeForce(map, mapPos), client);
         }
         
         public override AccountStateType AccountState => AccountStateType.User;
