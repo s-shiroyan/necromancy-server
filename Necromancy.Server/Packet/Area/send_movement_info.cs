@@ -76,10 +76,11 @@ namespace Necromancy.Server.Packet.Area
                 if (client.Character.castingSkill)
                 {
                     RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
-                    //Router.Send(cancelCast);
+                    Router.Send(client.Map, cancelCast.ToPacket());
                     client.Character.activeSkillInstance = 0;
                     client.Character.castingSkill = false;
-                }
+
+            }
 
 
 
