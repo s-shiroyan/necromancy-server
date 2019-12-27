@@ -78,21 +78,7 @@ namespace Necromancy.Server.Model
             MonsterWalkVelocity = 175;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
-#if false
-            //To-Do   add at least 1 default monster coord for /mon spawns
-            Vector3 defaultVector3 = new Vector3(X,Y,Z); 
-            MonsterCoord defaultCoord = new MonsterCoord();
-            defaultCoord.Id = Id;
-            defaultCoord.MonsterId = (uint)MonsterId;
-            defaultCoord.MapId = (uint)MapId;
-            defaultCoord.destination = defaultVector3;
-
-            monsterCoords.Add(defaultCoord);
-
-            //To-Do Next.  make a default heading for _monster.Heading = (byte)GetHeading(_monster.monsterCoords[1].destination);
-#endif
         }
-
         public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
         {
             if (monsterCoord == null)

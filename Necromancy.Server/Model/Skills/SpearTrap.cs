@@ -31,7 +31,7 @@ namespace Necromancy.Server.Model.Skills
         {
             _logger.Debug($"SpearTrap StartCast");
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(_skillId, 2.0F);
-            _server.Router.Send(_client.Map, startCast);
+            _server.Router.Send(_client, startCast.ToPacket()); 
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();

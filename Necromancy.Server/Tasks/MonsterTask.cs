@@ -1,6 +1,7 @@
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Common;
+using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Tasks
 {
@@ -160,10 +161,10 @@ namespace Necromancy.Server.Tasks
                 _monster.MonsterHate(_server, true, (int)_monster.GetCurrentTarget().InstanceId);
                 _monster.SendBattlePoseStartNotify(_server);
                 updateTime = agroTick;
-                if (_monster.Id == 4)
-                    _monster.SetGotoDistance(1000);
+                if (_monster.MonsterId == 100201) 
+                    _monster.SetGotoDistance(1000); //Caster Distance
                 else
-                    _monster.SetGotoDistance(200);
+                    _monster.SetGotoDistance(200); //Melee Distance
                 //monsterVelocity = 500;
                 moveTime = agroTick;
                 agroCheckTime = 0;
@@ -222,40 +223,32 @@ namespace Necromancy.Server.Tasks
                     {
                         case 0:
                             orientMonster();
-                            //Logger.Debug($"MonsterId [{_monster.MonsterId}]");
-                            skillInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
-                            //SendBattleReportStartNotify();
-                            if (_monster.MonsterId == 100104)
+                            //Casters
+                            if (_monster.MonsterId == 100201) 
                             {
-                                int attackId = (_monster.AttackSkillId * 100) + Util.GetRandomNumber(1, 3);
-                                //Logger.Debug($"attackId [{attackId}]");
-                                MonsterAttackQueue(attackId);
-                                waitTime = 5000;
-                                CastState = 0;
-                            }
-                            else if (_monster.MonsterId == 40101 || _monster.MonsterId == 40110)
-                            {
-                                int attackId = (_monster.AttackSkillId * 100) + (Util.GetRandomNumber(0, 100) < 51 ? 1 : 2);
-                                //Logger.Debug($"_monster.AttackSkillId [{_monster.AttackSkillId}]  attackId[{attackId}]");
-                                MonsterAttackQueue(attackId);
-                                waitTime = 5000;
-                                CastState = 0;
-                            }
-                            else //if (_monster.Id == 4)
-                            {
+                                skillInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
                                 Logger.Debug($"attackId [200301411]");
                                 //_monster.MonsterStop(Server,8, 231, 2.0F);
                                 StartMonsterCastQueue(200301411, skillInstanceId);
+                                PlayerDamage();
                                 waitTime = 2000;
                                 CastState = 1;
                             }
-                            //SendBattleReportEndNotify();
+                            //Melee Attackers
+                            else 
+                            {
+                                int attackId = (_monster.AttackSkillId * 100) + Util.GetRandomNumber(1, 4);
+                                //Logger.Debug($"_monster.AttackSkillId [{_monster.AttackSkillId}]  attackId[{attackId}]");
+                                MonsterAttackQueue(attackId);
+                                PlayerDamage();
+                                waitTime = 5000;
+                                CastState = 0;
+                            }
                             monsterWaiting = true;
                             currentWait = 0;
                            break;
                         case 1:
                             //int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
-
                             MonsterCastQueue(200301411);
                             monsterWaiting = true;
                             waitTime = 1000;
@@ -281,12 +274,8 @@ namespace Necromancy.Server.Tasks
                                 currentSkill++;
                             else
                                 currentSkill = 0;
-
                             break;
                         case 4:
-                            //     Spell Onject Movement has to be after the Effect object is created
-                            //        public void MonsterCastMove(int instanceId, int castVelocity, byte pose, byte animation)
-                            //MonsterCastMove(skillInstanceId, 2000, 13, 0);
                             monsterWaiting = true;
                             waitTime = 5000;
                             currentWait = 0;
@@ -341,18 +330,85 @@ namespace Necromancy.Server.Tasks
             //res.WriteInt32(1410201); //From monster attack
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_report_action_attack_exec, res, ServerType.Area);
         }
+
         private void MonsterAttackQueue(int skillId)
         {
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(skillId);
+
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brEnd);
             _server.Router.Send(Map, brList);
-
         }
+        private void PlayerDamage()
+        {
+            int damage = (int)Util.GetRandomNumber(8, 43);
+            Character currentTarget = _monster.GetCurrentTarget();
+            currentTarget.currentHp -= damage;
+
+            Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)currentTarget.currentHp);
+
+            brList.Add(brStart);
+            brList.Add(brHit);
+            brList.Add(brHp);
+            brList.Add(brEnd);
+            _server.Router.Send(Map, brList);
+            _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
+
+            PlayerDeadCheck(currentTarget);
+        }
+        private void PlayerDeadCheck(Character currentTarget)
+        {
+            if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
+            {
+                List<PacketResponse> brList = new List<PacketResponse>();
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
+                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
+
+                currentTarget.hadDied = true;
+                brList.Add(brStart);
+                brList.Add(cDead);
+                brList.Add(brEnd);
+                _server.Router.Send(Map, brList);
+                Task.Delay(TimeSpan.FromSeconds(4)).ContinueWith
+                (t1 =>
+                {
+                    IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
+                    if (instance is Character character)
+                    {
+                        DeadBody deadBody = new DeadBody();
+                        _server.Instances.AssignInstance(deadBody);
+                        deadBody.InstanceId = character.InstanceId;
+                        deadBody.CharaName = character.Name;
+                        deadBody.MapId = character.MapId;
+                        deadBody.X = character.X;
+                        deadBody.Y = character.Y;
+                        deadBody.Z = character.Z;
+                        deadBody.Heading = character.Heading;
+                        deadBody.RaceId = character.Raceid;
+                        deadBody.SexId = character.Sexid;
+                        deadBody.HairStyle = character.HairId;
+                        deadBody.HairColor = character.HairColorId;
+                        deadBody.FaceId = character.FaceId;
+
+                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
+                        _server.Router.Send(Map, cBodyData);
+                    }
+                });
+
+            }
+        }
+            
         private void MonsterCast(int skillId)
         {
             casting = true;
