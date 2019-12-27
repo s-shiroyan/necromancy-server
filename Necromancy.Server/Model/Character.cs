@@ -34,6 +34,7 @@ namespace Necromancy.Server.Model
         public uint maxOd { get; set; }
         public bool hadDied { get; set; }
         public int DeadBodyInstanceId { get; set; } 
+        public int Channel { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -73,6 +74,10 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
+
+        //Msg Value Holders
+        public uint friendRequest { get; set; }
+        public uint partyRequest { get; set; }
 
         public Character()
         {
