@@ -18,13 +18,13 @@ namespace Necromancy.Server.Model
         private readonly NecLogger _logger;
         private readonly NecServer _server;
         public int Id { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public int X { get; }
+        public int Y { get; }
+        public int Z { get; }
         public string Country { get; set; }
         public string Area { get; set; }
         public string Place { get; set; }
-        public int Orientation { get; set; }
+        public byte Orientation { get; }
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
