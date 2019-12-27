@@ -16,7 +16,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            Character character = Server.Database.SelectCharacterById(client.Character.Id);
+            Character character = Server.Database.SelectCharacterById((int)client.Character.InstanceId);
             Server.Maps.TryGet(character.MapId, out Map map);
             MapPosition mapPos = new MapPosition(character.X, character.Y, character.Z, character.Heading);
             map.Enter(client, mapPos);

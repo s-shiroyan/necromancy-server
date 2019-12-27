@@ -370,6 +370,11 @@ namespace Necromancy.Server.Tasks
         {
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
+                foreach (int instanceId in _monster.GetAgroInstanceList())
+                {
+                    _monster.MonsterHate(_server, false, instanceId);
+                }
+
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -380,31 +385,73 @@ namespace Necromancy.Server.Tasks
                 brList.Add(cDead);
                 brList.Add(brEnd);
                 _server.Router.Send(Map, brList);
-                Task.Delay(TimeSpan.FromSeconds(4)).ContinueWith
-                (t1 =>
+
+                //_monster.ClearAgroList();
+
+
+                
+                IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
+                if (instance is Character character)
                 {
-                    IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
-                    if (instance is Character character)
+                    IInstance instanceDead = _server.Instances.GetInstance((uint)character.DeadBodyInstanceId);
+                    if (instanceDead is DeadBody deadBody)
                     {
-                        DeadBody deadBody = new DeadBody();
-                        _server.Instances.AssignInstance(deadBody);
-                        deadBody.InstanceId = character.InstanceId;
-                        deadBody.CharaName = character.Name;
-                        deadBody.MapId = character.MapId;
                         deadBody.X = character.X;
                         deadBody.Y = character.Y;
                         deadBody.Z = character.Z;
                         deadBody.Heading = character.Heading;
-                        deadBody.RaceId = character.Raceid;
-                        deadBody.SexId = character.Sexid;
-                        deadBody.HairStyle = character.HairId;
-                        deadBody.HairColor = character.HairColorId;
-                        deadBody.FaceId = character.FaceId;
+                        Logger.Debug($"Dead Body Id = {character.DeadBodyInstanceId}");
+                        character.movementId = character.DeadBodyInstanceId;
 
-                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
-                        _server.Router.Send(Map, cBodyData);
+
+                        Thread.Sleep(15000);
+                            {
+                                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody ,character);
+                                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
+                            }
+
+                        //things that didnt work to unequip items in soul form
+                        /*
+                        //this is for when someone collects your body...
+                        IBuffer res12 = BufferProvider.Provide();
+                        res12.WriteInt32(character.InstanceId);
+                        res12.WriteByte(0); //Decomposition byte.  setting to 1+ will make you invisible
+                                            //_server.Router.Send(Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
+
+                        IBuffer res13 = BufferProvider.Provide();
+
+                        res13.WriteInt64(1);
+                        res13.WriteInt32(11111111); // all slot bitmask
+
+                        res13.WriteInt32(0); // List of items that gonna be equip on the chara
+                        res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
+
+                        res13.WriteInt32(1);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); //bool
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); // 1 = body pink texture
+                        res13.WriteByte(0);
+                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
+
+                        IBuffer res17 = BufferProvider.Provide();
+                        res17.WriteInt64(0);
+                        res17.WriteInt32(11111111);
+                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_spirit_eqmask, res17, ServerType.Area);
+                        */
+
                     }
-                });
+                }
+                
 
             }
         }
@@ -557,7 +604,7 @@ namespace Necromancy.Server.Tasks
             res = BufferProvider.Provide();
                     
             res.WriteInt32(instanceId);
-            res.WriteFloat(6.0F);
+            res.WriteFloat(4.0F);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res, ServerType.Area);
 
         }
@@ -609,7 +656,7 @@ namespace Necromancy.Server.Tasks
         }
         public bool MonsterCheck()
         {
-            Logger.Debug($"Monster HP [{_monster.GetHP()}]");
+            //Logger.Debug($"Monster HP [{_monster.GetHP()}]");
             if (_monster.GetHP() <= 0)
             {
                 foreach (int instanceId in _monster.GetAgroInstanceList())

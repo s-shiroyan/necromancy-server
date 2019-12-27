@@ -115,7 +115,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_loot_start2, res2, ServerType.Area);
 
             /*IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.Id);
+            res2.WriteInt32(client.Character.InstanceId);
             res2.WriteInt32(4); //4 = chara dissapear, is dead ???
             res2.WriteInt32(10);
             Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_deadstate, res2, ServerType.Area);
@@ -201,7 +201,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
 
               /* IBuffer res = BufferProvider.Provide();
-           res.WriteInt32(client.Character.Id);
+           res.WriteInt32(client.Character.InstanceId);
            res.WriteInt32(2);
            res.WriteCString("ToBeFound"); // find max size 
            res.WriteCString("ToBeFound"); // find max size 
@@ -304,7 +304,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res, ServerType.Area);  show system message on middle of the screen.
 
                 IBuffer res0 = BufferProvider.Provide();
-                res0.WriteInt32(client.Character.Id);
+                res0.WriteInt32(client.Character.InstanceId);
                 Router.Send(client, (ushort)AreaPacketId.recv_gimmick_access_object_r, res0);
 
                 IBuffer res1 = BufferProvider.Provide();

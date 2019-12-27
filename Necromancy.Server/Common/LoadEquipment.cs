@@ -80,31 +80,6 @@ namespace Necromancy.Server.Common
 
         }
 
-        public static void EquipSlotBitMaskOld(IBuffer res, Character myCharacter)
-        {
-            int rr = 000;
-            //sub_483420   // 2 shield 4accessory? 8Helmet 12belt? 16torso 32 pants 48torsopants 64 hands 96handpants 128 feet 192handfeet 
-            res.WriteInt32(001); //Right Hand    //1 for weapon
-            res.WriteInt32(002); //Left Hand     //2 for Shield
-            res.WriteInt32(016); //Torso         //16 for torso
-            res.WriteInt32(008); //Head          //08 for head
-            res.WriteInt32(032); //Legs          //32 for legs
-            res.WriteInt32(064); //Arms          //64 for Arms
-            res.WriteInt32(128); //Feet          //128 for feet
-            res.WriteInt32(004); //???Cape
-            res.WriteInt32(rr); //???Ring
-            res.WriteInt32(rr); //???Earring
-            res.WriteInt32(rr); //???Necklace
-            res.WriteInt32(rr); //???Belt
-            res.WriteInt32(016); //Avatar Torso
-            res.WriteInt32(128); //Avatar Feet
-            res.WriteInt32(064); //Avatar Arms
-            res.WriteInt32(032); //Avatar Legs
-            res.WriteInt32(008); //Avatar Head  
-            res.WriteInt32(004); //???Talk Ring
-            res.WriteInt32(000); //???Quiver  
-        }
-        
         public static void EquipSlotBitMask(IBuffer res, Character myCharacter)
         {
             int[] EquipBitMask = new int[] //Correct Bit Mask

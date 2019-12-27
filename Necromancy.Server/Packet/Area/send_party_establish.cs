@@ -39,15 +39,15 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);//Party maker client id
+            res.WriteInt32(client.Character.InstanceId);//Party maker client id
             res.WriteInt32(partyType);//Party type
             res.WriteInt32(normItemDist);//Normal item distribution
             res.WriteInt32(rareItemDist);//Rare item distribution
             res.WriteInt32(69);
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
             //for (int i = 0; i < 4; i++)
             {
-                res.WriteInt32(client.Character.Id);
+                res.WriteInt32(client.Character.InstanceId);
                 res.WriteInt32(0);
                 res.WriteFixedString("asdf1", 0x31); //size is 0x31
                 res.WriteFixedString("asdf2", 0x5B); //size is 0x5B
@@ -155,7 +155,7 @@ namespace Necromancy.Server.Packet.Area
             //recv_party_change_leader_r = 0x7BB3,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_party_change_leader_r, res, ServerType.Area);
         }

@@ -25,6 +25,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             Server.Instances.AssignInstance(character);
+
             client.Character = character;
             client.UpdateIdentity();
 
@@ -34,8 +35,8 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteInt32(0); // error check
             res2.WriteInt32(0); // error check
             //sub_494c50
-            res2.WriteInt32(1001007);
-            res2.WriteInt32(1001007);
+            res2.WriteInt32(character.MapId);
+            res2.WriteInt32(character.MapId);
             res2.WriteInt32(20);
             res2.WriteInt16(4);
             //sub_4834C0
@@ -43,7 +44,7 @@ namespace Necromancy.Server.Packet.Msg
             //sub_494B90 - for loop
             for (int i = 0; i < 0x80; i++)
             {
-                res2.WriteInt32(1001007);
+                res2.WriteInt32(character.MapId);
                 res2.WriteFixedString($"Channel {i}", 97);
                 res2.WriteByte(1); //bool 1 | 0
                 res2.WriteInt16(0xFFFF); //Max players
@@ -55,6 +56,25 @@ namespace Necromancy.Server.Packet.Msg
 
             res2.WriteByte(10); //# of channels
             Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+
+            //Logic to support your dead body
+            DeadBody deadBody = new DeadBody();
+            Server.Instances.AssignInstance(deadBody);
+            character.DeadBodyInstanceId = (int)deadBody.InstanceId;
+            deadBody.CharacterInstanceId = (int)character.InstanceId;
+            character.movementId = (int)character.InstanceId;
+            Logger.Debug($"Dead Body Instance ID {deadBody.InstanceId}   |  Character Instance ID {character.InstanceId}");
+            deadBody.CharaName = character.Name;
+            deadBody.MapId = character.MapId;
+            deadBody.X = character.X;
+            deadBody.Y = character.Y;
+            deadBody.Z = character.Z;
+            deadBody.Heading = character.Heading;
+            deadBody.RaceId = character.Raceid;
+            deadBody.SexId = character.Sexid;
+            deadBody.HairStyle = character.HairId;
+            deadBody.HairColor = character.HairColorId;
+            deadBody.FaceId = character.FaceId;
         }
     }
 }

@@ -26,6 +26,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0); // 0 = sucess to revive, 1 = failed to revive
                 client.Character.soulFormState -= 1;
+                client.Character.currentHp = client.Character.maxHp;
+                client.Character.movementId = (int)client.Character.InstanceId;
                 Router.Send(client, (ushort) AreaPacketId.recv_raisescale_request_revive_r, res, ServerType.Area);
 
                 IBuffer res2 = BufferProvider.Provide();
@@ -36,7 +38,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             /*else if (client.Character.soulFormState == 0)
             {
                 IBuffer res1 = BufferProvider.Provide();
-                res1.WriteInt32(client.Character.Id); // ID
+                res1.WriteInt32(client.Character.InstanceId); // ID
                 res1.WriteInt32(100101); //100101, its the id to get the tombstone
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_notify_stateflag, res1, ServerType.Area);
 

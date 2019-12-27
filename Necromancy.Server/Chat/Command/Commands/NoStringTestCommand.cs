@@ -28,7 +28,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
 
-	        res.WriteInt32(client.Character.Id);
+	        res.WriteInt32(client.Character.InstanceId);
             res.WriteInt32(x);
 
             Router.Send(client.Map, 0x1489, res, ServerType.Area);

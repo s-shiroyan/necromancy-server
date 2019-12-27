@@ -54,7 +54,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res2 = BufferProvider.Provide();
 
-                res2.WriteInt32(client.Character.InstanceId);//Character ID
+                res2.WriteInt32(client.Character.movementId);//Character ID
                 res2.WriteFloat(client.Character.X);
                 res2.WriteFloat(client.Character.Y);
                 res2.WriteFloat(client.Character.Z);
@@ -76,18 +76,11 @@ namespace Necromancy.Server.Packet.Area
                 if (client.Character.castingSkill)
                 {
                     RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
-                    Router.Send(cancelCast);
-                    List<PacketResponse> brList = new List<PacketResponse>();
-                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)client.Character.InstanceId);
-                    RecvBattleReportActionSkillCancel brCancel = new RecvBattleReportActionSkillCancel();
-                    RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                    brList.Add(brStart);
-                    brList.Add(brCancel);
-                    brList.Add(brEnd);
-                    Router.Send(client.Map, brList);
+                    Router.Send(client.Map, cancelCast.ToPacket());
                     client.Character.activeSkillInstance = 0;
                     client.Character.castingSkill = false;
-                }
+
+            }
 
 
 
