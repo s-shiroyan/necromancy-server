@@ -35,8 +35,8 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteInt32(0); // error check
             res2.WriteInt32(0); // error check
             //sub_494c50
-            res2.WriteInt32(1001007);
-            res2.WriteInt32(1001007);
+            res2.WriteInt32(character.MapId);
+            res2.WriteInt32(character.MapId);
             res2.WriteInt32(20);
             res2.WriteInt16(4);
             //sub_4834C0
@@ -44,7 +44,7 @@ namespace Necromancy.Server.Packet.Msg
             //sub_494B90 - for loop
             for (int i = 0; i < 0x80; i++)
             {
-                res2.WriteInt32(1001007);
+                res2.WriteInt32(character.MapId);
                 res2.WriteFixedString($"Channel {i}", 97);
                 res2.WriteByte(1); //bool 1 | 0
                 res2.WriteInt16(0xFFFF); //Max players

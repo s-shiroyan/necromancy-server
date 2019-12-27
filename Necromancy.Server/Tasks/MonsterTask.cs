@@ -386,31 +386,72 @@ namespace Necromancy.Server.Tasks
                 brList.Add(brEnd);
                 _server.Router.Send(Map, brList);
 
-                //remove the monster that killed you
-                RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monster.InstanceId);
-                _server.Router.Send(Map, objectDisappearData);
+                //_monster.ClearAgroList();
 
-                Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
-                (t1 =>
+
+                
+                IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
+                if (instance is Character character)
                 {
-                    IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
-                    if (instance is Character character)
+                    IInstance instanceDead = _server.Instances.GetInstance((uint)character.DeadBodyInstanceId);
+                    if (instanceDead is DeadBody deadBody)
                     {
-                        IInstance instanceDead = _server.Instances.GetInstance((uint)character.DeadBodyInstanceId);
-                        if (instanceDead is DeadBody deadBody)
-                        {
+                        deadBody.X = character.X;
+                        deadBody.Y = character.Y;
+                        deadBody.Z = character.Z;
+                        deadBody.Heading = character.Heading;
+                        Logger.Debug($"Dead Body Id = {character.DeadBodyInstanceId}");
+                        character.movementId = character.DeadBodyInstanceId;
 
-                            deadBody.X = character.X;
-                            deadBody.Y = character.Y;
-                            deadBody.Z = character.Z;
-                            deadBody.Heading = character.Heading;
-                            character.movementId = character.DeadBodyInstanceId;
-                            RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
-                            _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
-                          
-                        }
+
+                        Thread.Sleep(15000);
+                            {
+                                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody ,character);
+                                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
+                            }
+
+                        //things that didnt work to unequip items in soul form
+                        /*
+                        //this is for when someone collects your body...
+                        IBuffer res12 = BufferProvider.Provide();
+                        res12.WriteInt32(character.InstanceId);
+                        res12.WriteByte(0); //Decomposition byte.  setting to 1+ will make you invisible
+                                            //_server.Router.Send(Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
+
+                        IBuffer res13 = BufferProvider.Provide();
+
+                        res13.WriteInt64(1);
+                        res13.WriteInt32(11111111); // all slot bitmask
+
+                        res13.WriteInt32(0); // List of items that gonna be equip on the chara
+                        res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
+
+                        res13.WriteInt32(1);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); //bool
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0);
+                        res13.WriteByte(0); // 1 = body pink texture
+                        res13.WriteByte(0);
+                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
+
+                        IBuffer res17 = BufferProvider.Provide();
+                        res17.WriteInt64(0);
+                        res17.WriteInt32(11111111);
+                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_spirit_eqmask, res17, ServerType.Area);
+                        */
+
                     }
-                });
+                }
+                
 
             }
         }
