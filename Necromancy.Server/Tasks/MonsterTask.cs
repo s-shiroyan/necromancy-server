@@ -370,6 +370,11 @@ namespace Necromancy.Server.Tasks
         {
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
+                foreach (int instanceId in _monster.GetAgroInstanceList())
+                {
+                    _monster.MonsterHate(_server, false, instanceId);
+                }
+
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -380,29 +385,30 @@ namespace Necromancy.Server.Tasks
                 brList.Add(cDead);
                 brList.Add(brEnd);
                 _server.Router.Send(Map, brList);
+
+                //remove the monster that killed you
+                RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(_monster.InstanceId);
+                _server.Router.Send(Map, objectDisappearData);
+
                 Task.Delay(TimeSpan.FromSeconds(15)).ContinueWith
                 (t1 =>
                 {
                     IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
                     if (instance is Character character)
                     {
-                        DeadBody deadBody = new DeadBody();
-                        _server.Instances.AssignInstance(deadBody);
-                        deadBody.InstanceId = character.InstanceId;
-                        deadBody.CharaName = character.Name;
-                        deadBody.MapId = character.MapId;
-                        deadBody.X = character.X;
-                        deadBody.Y = character.Y;
-                        deadBody.Z = character.Z;
-                        deadBody.Heading = character.Heading;
-                        deadBody.RaceId = character.Raceid;
-                        deadBody.SexId = character.Sexid;
-                        deadBody.HairStyle = character.HairId;
-                        deadBody.HairColor = character.HairColorId;
-                        deadBody.FaceId = character.FaceId;
+                        IInstance instanceDead = _server.Instances.GetInstance((uint)character.DeadBodyInstanceId);
+                        if (instanceDead is DeadBody deadBody)
+                        {
 
-                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
-                        _server.Router.Send(Map, cBodyData);
+                            deadBody.X = character.X;
+                            deadBody.Y = character.Y;
+                            deadBody.Z = character.Z;
+                            deadBody.Heading = character.Heading;
+                            character.movementId = character.DeadBodyInstanceId;
+                            RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
+                            _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
+                          
+                        }
                     }
                 });
 
@@ -557,7 +563,7 @@ namespace Necromancy.Server.Tasks
             res = BufferProvider.Provide();
                     
             res.WriteInt32(instanceId);
-            res.WriteFloat(6.0F);
+            res.WriteFloat(4.0F);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res, ServerType.Area);
 
         }
@@ -609,7 +615,7 @@ namespace Necromancy.Server.Tasks
         }
         public bool MonsterCheck()
         {
-            Logger.Debug($"Monster HP [{_monster.GetHP()}]");
+            //Logger.Debug($"Monster HP [{_monster.GetHP()}]");
             if (_monster.GetHP() <= 0)
             {
                 foreach (int instanceId in _monster.GetAgroInstanceList())

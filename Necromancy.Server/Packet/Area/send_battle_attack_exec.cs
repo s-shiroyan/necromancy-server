@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Necromancy.Server.Packet.Receive;
-
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -96,6 +96,9 @@ namespace Necromancy.Server.Packet.Area
                     targetClient.Character.currentHp -= (int)damage;
                     perHp = (int)((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
                     Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
+                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)targetClient.Character.currentHp);
+                    _server.Router.Send(targetClient, cHpUpdate.ToPacket());
+
                     break;
 
                 default:
@@ -111,6 +114,7 @@ namespace Necromancy.Server.Packet.Area
             RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp((int)instance.InstanceId, damage);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)instance.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)instance.InstanceId, perHp);
+
 
             brList.Add(brStart);
             brList.Add(brAttack);

@@ -74,6 +74,8 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
+        public int movementId { get; set; }
+
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -112,7 +114,6 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            DeadBodyInstanceId = 0;
         }
     }
 }

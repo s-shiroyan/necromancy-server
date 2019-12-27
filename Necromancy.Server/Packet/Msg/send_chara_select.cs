@@ -25,6 +25,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             Server.Instances.AssignInstance(character);
+
             client.Character = character;
             client.UpdateIdentity();
 
@@ -55,6 +56,25 @@ namespace Necromancy.Server.Packet.Msg
 
             res2.WriteByte(10); //# of channels
             Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+
+            //Logic to support your dead body
+            DeadBody deadBody = new DeadBody();
+            Server.Instances.AssignInstance(deadBody);
+            character.DeadBodyInstanceId = (int)deadBody.InstanceId;
+            deadBody.CharacterInstanceId = (int)character.InstanceId;
+            character.movementId = (int)character.InstanceId;
+            Logger.Debug($"Dead Body Instance ID {deadBody.InstanceId}   |  Character Instance ID {character.InstanceId}");
+            deadBody.CharaName = character.Name;
+            deadBody.MapId = character.MapId;
+            deadBody.X = character.X;
+            deadBody.Y = character.Y;
+            deadBody.Z = character.Z;
+            deadBody.Heading = character.Heading;
+            deadBody.RaceId = character.Raceid;
+            deadBody.SexId = character.Sexid;
+            deadBody.HairStyle = character.HairId;
+            deadBody.HairColor = character.HairColorId;
+            deadBody.FaceId = character.FaceId;
         }
     }
 }

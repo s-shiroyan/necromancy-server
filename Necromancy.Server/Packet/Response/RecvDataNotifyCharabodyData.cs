@@ -20,8 +20,8 @@ namespace Necromancy.Server.Packet.Response
         protected override IBuffer ToBuffer()
         {
             IBuffer res14 = BufferProvider.Provide();
-            res14.WriteInt32(_deadBody.InstanceId + 10000); //Instance ID of dead body
-            res14.WriteInt32(_deadBody.InstanceId); //Reference to actual player's instance ID
+            res14.WriteInt32(_deadBody.InstanceId); //Instance ID of dead body
+            res14.WriteInt32(_deadBody.CharacterInstanceId); //Reference to actual player's instance ID
             res14.WriteCString($"{_deadBody.SoulName}"); // Soul name 
             res14.WriteCString($"{_deadBody.CharaName}"); // Character name
             res14.WriteFloat(_deadBody.X); // X
