@@ -2,7 +2,6 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Threading;
 
 namespace Necromancy.Server.Packet.Area
 {

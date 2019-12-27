@@ -34,7 +34,9 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 114301, () => PoisonTrap(client, skillID) },
                          { x => x == 114302, () => SpearTrap(client, skillID) },
                          { x => x == 114607, () => Stealth(client, skillID) },
-                         { x => x == 113101, () => FlameArrow(client, skillID, skillTarget) }
+                         { x => x == 113101, () => FlameArrow(client, skillID, skillTarget) },
+                         { x => x <= 999999, () => FlameArrow(client, 113101, skillTarget) } //this is a default catch statement. it changes un-mapped skills to a fireball
+
             };
 
             eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
