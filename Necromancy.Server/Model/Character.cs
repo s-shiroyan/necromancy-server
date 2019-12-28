@@ -33,7 +33,7 @@ namespace Necromancy.Server.Model
         public uint maxMp { get; set; }
         public uint maxOd { get; set; }
         public bool hadDied { get; set; }
-        public int DeadBodyInstanceId { get; set; } 
+        public uint DeadBodyInstanceId { get; set; } 
         public int Channel { get; set; }
 
         //Movement Related
@@ -61,7 +61,7 @@ namespace Necromancy.Server.Model
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public int eventSelectExecCode { get; set; }
-        public int activeSkillInstance { get; set; }
+        public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
         public int currentHp { get; set; }

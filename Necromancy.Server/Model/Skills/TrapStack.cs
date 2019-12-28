@@ -17,7 +17,7 @@ namespace Necromancy.Server.Model.Skills
         private NecClient _client;
         private readonly NecLogger _logger;
         private readonly NecServer _server;
-        private int _ownerInstanceId;
+        private uint _ownerInstanceId;
         public int _trapRadius { get; }
         public TrapTask _trapTask;
         private Map _map;
@@ -27,7 +27,7 @@ namespace Necromancy.Server.Model.Skills
             _server = server;
             _client = client;
             _map = _client.Map;
-            _ownerInstanceId = (int)client.Character.InstanceId;
+            _ownerInstanceId = client.Character.InstanceId;
             _trapPos = trapPos;
             _logger = LogProvider.Logger<NecLogger>(this);
             _trapRadius = trapRadius;
@@ -68,14 +68,14 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
             _logger.Debug($"SpearTrap effectId [{effectId}]");
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)trap.InstanceId, (int)_client.Character.InstanceId, effectId, trgCoord, 2, 2);
+            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(trap.InstanceId, _client.Character.InstanceId, effectId, trgCoord, 2, 2);
             _server.Router.Send(_map, eoData);
 
             if (isBaseTrap)
             {
-                _trapTask = new TrapTask(_server, _map, _trapPos, _ownerInstanceId, trap, (int)this.InstanceId);
+                _trapTask = new TrapTask(_server, _map, _trapPos, _ownerInstanceId, trap, this.InstanceId);
                 _trapTask.AddTrap(trap);
-                _map.AddTrap((int)this.InstanceId, this);
+                _map.AddTrap(this.InstanceId, this);
                 _trapTask.Start();
             }
             else

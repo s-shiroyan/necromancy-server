@@ -59,7 +59,7 @@ namespace Necromancy.Server.Model
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        private Dictionary<int, int> MonsterAgroList { get; set; }
+        private Dictionary<uint, int> MonsterAgroList { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -74,7 +74,7 @@ namespace Necromancy.Server.Model
             Created = DateTime.Now;
             Updated = DateTime.Now;
             monsterCoords = new List<MonsterCoord>();
-            MonsterAgroList = new Dictionary<int, int>();
+            MonsterAgroList = new Dictionary<uint, int>();
             MonsterWalkVelocity = 175;
             MonsterRunVelocity = 500;
             MonsterVisible = false;
@@ -234,7 +234,7 @@ namespace Necromancy.Server.Model
             IBuffer res = BufferProvider.Provide();
             server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_pose_end_notify, res, ServerType.Area);
         }
-        public void MonsterHate(NecServer server, bool hateOn, int instanceId)
+        public void MonsterHate(NecServer server, bool hateOn, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(InstanceId);
@@ -264,7 +264,7 @@ namespace Necromancy.Server.Model
             }
             return hp;
         }
-        public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, int instanceId = 0)
+        public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, uint instanceId = 0)
         {
             if (verifyAgro)
             {
@@ -328,36 +328,36 @@ namespace Necromancy.Server.Model
             }
             return character;
         }
-        public void AddAgroList(int instanceId, int damage)
+        public void AddAgroList(uint instanceId, int damage)
         {
             lock (AgroListLock)
             {
-                MonsterAgroList.Add((int)instanceId, damage);
+                MonsterAgroList.Add(instanceId, damage);
             }
         }
 
-        public List<int> GetAgroInstanceList()
+        public List<uint> GetAgroInstanceList()
         {
-            List<int> agroInstanceList = new List<int>();
+            List<uint> agroInstanceList = new List<uint>();
             lock (AgroListLock)
             {
-                foreach (int instanceId in MonsterAgroList.Keys)
+                foreach (uint instanceId in MonsterAgroList.Keys)
                 {
                     agroInstanceList.Add(instanceId);
                 }
             }
             return agroInstanceList;
         }
-        public int GetAgroHigh()
+        public uint GetAgroHigh()
         {
-            int instancedId;
+            uint instancedId;
             lock (AgroListLock)
             {
                 instancedId = MonsterAgroList.Aggregate((x, y) => x.Value > y.Value ? x : y).Key;
             }
             return instancedId;
         }
-        public bool GetAgroCharacter(int instanceId)
+        public bool GetAgroCharacter(uint instanceId)
         {
             bool agro;
             lock (AgroListLock)

@@ -26,8 +26,8 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int skillID = packet.Data.ReadInt32();
-            int skillTarget = packet.Data.ReadInt32();
-            client.Character.eventSelectReadyCode = (uint)skillTarget;
+            uint skillTarget = packet.Data.ReadUInt32();
+            client.Character.eventSelectReadyCode = skillTarget;
             client.Character.skillStartCast = skillID;
             int skillLookup = skillID / 1000;
             Logger.Debug($"skillTarget [{skillTarget}]  skillID [{skillID}] skillLookup [{skillLookup}]");
@@ -84,13 +84,13 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                trapStack = client.Map.GetTrapCharacterRange((int)client.Character.InstanceId, 75, charPos);
+                trapStack = client.Map.GetTrapCharacterRange(client.Character.InstanceId, 75, charPos);
             }
             if (isBaseTrap)
             {
                 
                 Logger.Debug($"Is base trap skillId [{skillId}] skillBase [{skillBase}] trapStack._trapRadius [{trapStack._trapRadius}]");
-                if (client.Map.GetTrapsCharacterRange((int)client.Character.InstanceId, trapStack._trapRadius, charPos))
+                if (client.Map.GetTrapsCharacterRange(client.Character.InstanceId, trapStack._trapRadius, charPos))
                 {
                     Logger.Debug($"First trap with another trap too close [{skillId}]");
                     int errorCode = -1309;
@@ -102,7 +102,7 @@ namespace Necromancy.Server.Packet.Area
             else
             {
                 Logger.Debug($"Is trap enhancement skillId [{skillId}] skillBase [{skillBase}] trapRadius [{trapStack._trapRadius}]");
-                if (!client.Map.GetTrapsCharacterRange((int)client.Character.InstanceId, trapStack._trapRadius, charPos))
+                if (!client.Map.GetTrapsCharacterRange(client.Character.InstanceId, trapStack._trapRadius, charPos))
                 {
                     Logger.Debug($"Trap enhancement without a base trap [{skillId}]");
                     int errorCode = -1;
@@ -124,7 +124,7 @@ namespace Necromancy.Server.Packet.Area
 
             Logger.Debug($"skillBaseSetting.Id [{skillBaseSetting.Id}] skillBaseSetting.Name [{skillBaseSetting.Name} eoBaseSetting.]");
             Logger.Debug($"spearTrap.InstanceId [{trapStack.InstanceId}] SpearTrap skillID [{skillId}]");
-            client.Character.activeSkillInstance = (int)trapStack.InstanceId;
+            client.Character.activeSkillInstance = trapStack.InstanceId;
             client.Character.castingSkill = true;
             trapStack.StartCast(skillBaseSetting);
 
@@ -133,16 +133,16 @@ namespace Necromancy.Server.Packet.Area
         {
             Stealth stealth = new Stealth(_server, client, skillId);
             Server.Instances.AssignInstance(stealth);
-            client.Character.activeSkillInstance = (int)stealth.InstanceId;
+            client.Character.activeSkillInstance = stealth.InstanceId;
             stealth.StartCast();
         }
 
-        private void FlameArrow(NecClient client, int skillId, int skillTarget)
+        private void FlameArrow(NecClient client, int skillId, uint skillTarget)
         {
             Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
             Spell flameArrow = new Spell(_server, client, skillId, skillTarget, charCoord);
             Server.Instances.AssignInstance(flameArrow);
-            client.Character.activeSkillInstance = (int)flameArrow.InstanceId;
+            client.Character.activeSkillInstance = flameArrow.InstanceId;
             flameArrow.StartCast();
         }
 

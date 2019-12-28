@@ -27,15 +27,15 @@ namespace Necromancy.Server.Tasks
         public Vector3 TrapPos { get; }
         private DateTime expireTime;
         private Map _map;
-        public int ownerInstanceId { get; }
-        public int stackInstanceId { get; }
+        public uint ownerInstanceId { get; }
+        public uint stackInstanceId { get; }
         private int triggerRadius;
         private int detectRadius;
         private int detectHeight;
         private int tickTime;
         private bool triggered;
         private bool trapActive;
-        public TrapTask(NecServer server, Map map, Vector3 trapPos, int instanceId, Trap trap, int stackId)
+        public TrapTask(NecServer server, Map map, Vector3 trapPos, uint instanceId, Trap trap, uint stackId)
         {
             _server = server;
             TrapList = new List<Trap>();
@@ -119,13 +119,13 @@ namespace Necromancy.Server.Tasks
             }
             foreach (Trap trap in TrapList)
             {
-                RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData((int)trap.InstanceId, (int)trap.InstanceId, 0, TrapPos, 0, 0);
+                RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData(trap.InstanceId, trap.InstanceId, 0, TrapPos, 0, 0);
                 _server.Router.Send(_map, eoDestroyData);
-                RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)trap.InstanceId, 0.0F);
+                RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule(trap.InstanceId, 0.0F);
                 _server.Router.Send(_map, eoDisappear);
             }
             TrapList.Clear();
-            _map.RemoveTrap((int)stackInstanceId);
+            _map.RemoveTrap(stackInstanceId);
             this.Stop();
         }
 
@@ -133,17 +133,17 @@ namespace Necromancy.Server.Tasks
         {
             Logger.Debug($"trap._name [{trap._name}] trap.InstanceId [{trap.InstanceId}] trap._skillEffectId [{trap._skillEffectId}] trap._triggerEffectId [{trap._triggerEffectId}]");
             int damage = Util.GetRandomNumber(70, 90);
-            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData((int)trap.InstanceId, (int)monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
+            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
             _server.Router.Send(_map, eoTriggerData);
             float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(ownerInstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((uint)ownerInstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)monster.InstanceId);
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)monster.InstanceId);
-            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp((int)monster.InstanceId, damage);
-            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)monster.InstanceId, perHp);
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)monster.InstanceId, damage);
+            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(trap._skillId);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monster.InstanceId);
+            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(monster.InstanceId, damage);
+            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(monster.InstanceId, perHp);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monster.InstanceId, damage);
 
             brList.Add(brStart);
             //brList.Add(brAttack);

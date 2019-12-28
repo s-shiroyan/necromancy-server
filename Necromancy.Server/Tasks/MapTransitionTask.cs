@@ -22,13 +22,13 @@ namespace Necromancy.Server.Tasks
         private MapPosition _changePos;
 
         private Map _map;
-        private int _instanceId;
+        private uint _instanceId;
         private bool _taskActive;
         private bool _invertedTransition;
         private int _tickTime;
         private int _transitionMapId;
         private readonly ILogger _logger;
-        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 transitionPos1, Vector3 transitionPos2, int instanceId, bool invertedTransition, MapPosition changePos)
+        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 transitionPos1, Vector3 transitionPos2, uint instanceId, bool invertedTransition, MapPosition changePos)
         {
             _server = server;
             _transitionPos1 = transitionPos1;

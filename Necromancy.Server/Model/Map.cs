@@ -31,19 +31,19 @@ namespace Necromancy.Server.Model
         public byte Orientation { get; }
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
-        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
+        public Dictionary<uint, NpcSpawn> NpcSpawns { get; }
        // public Dictionary<int, TrapTransition> Trap { get; }
-        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
-        public Dictionary<int, TrapStack> Traps { get; }
-        public Dictionary<int, DeadBody> DeadBodies { get; }
+        public Dictionary<uint, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<uint, TrapStack> Traps { get; }
+        public Dictionary<uint, DeadBody> DeadBodies { get; }
 
         public Map(MapSetting setting, NecServer server)
         {
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
             ClientLookup = new ClientLookup();
-            NpcSpawns = new Dictionary<int, NpcSpawn>();
-            MonsterSpawns = new Dictionary<int, MonsterSpawn>();
+            NpcSpawns = new Dictionary<uint, NpcSpawn>();
+            MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -52,14 +52,14 @@ namespace Necromancy.Server.Model
             Area = setting.Area;
             Place = setting.Place;
             Orientation = (byte)(setting.Orientation/2);   // Client uses 180 degree orientation
-            Traps = new Dictionary<int, TrapStack>();
+            Traps = new Dictionary<uint, TrapStack>();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
                 server.Instances.AssignInstance(npcSpawn);
-                NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
+                NpcSpawns.Add(npcSpawn.InstanceId, npcSpawn);
             }
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
@@ -87,7 +87,7 @@ namespace Necromancy.Server.Model
                 monsterSpawn.CatalogId = monsterSetting.CatalogId;
                 monsterSpawn.TextureType = monsterSetting.TextureType;
                 monsterSpawn.Map = this;
-                MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
+                MonsterSpawns.Add(monsterSpawn.InstanceId, monsterSpawn);
 
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
                 if (coords.Count > 0)
@@ -258,7 +258,7 @@ namespace Necromancy.Server.Model
             }
             return traps;
         }
-        public List<TrapStack> GetTrapsCharacter(int characterInstanceId)
+        public List<TrapStack> GetTrapsCharacter(uint characterInstanceId)
         {
             List<TrapStack> traps = new List<TrapStack>();
             lock (TrapLock)
@@ -273,7 +273,7 @@ namespace Necromancy.Server.Model
             }
             return traps;
         }
-        public bool GetTrapsCharacterRange(int characterInstanceId, int range, Vector3 position)
+        public bool GetTrapsCharacterRange(uint characterInstanceId, int range, Vector3 position)
         {
             bool inRange = false;
             lock (TrapLock)
@@ -290,7 +290,7 @@ namespace Necromancy.Server.Model
             }
             return inRange;
         }
-        public TrapStack GetTrapCharacterRange(int characterInstanceId, int range, Vector3 position)
+        public TrapStack GetTrapCharacterRange(uint characterInstanceId, int range, Vector3 position)
         {
             lock (TrapLock)
             {
@@ -306,7 +306,7 @@ namespace Necromancy.Server.Model
             }
             return null;
         }
-        public void AddTrap(int instanceId, TrapStack trap)
+        public void AddTrap(uint instanceId, TrapStack trap)
         {
             lock (TrapLock)
             {
@@ -314,7 +314,7 @@ namespace Necromancy.Server.Model
             }
         }
 
-        public void RemoveTrap(int instanceId)
+        public void RemoveTrap(uint instanceId)
         {
             lock (TrapLock)
             {

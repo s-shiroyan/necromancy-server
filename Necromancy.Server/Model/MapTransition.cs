@@ -29,7 +29,7 @@ namespace Necromancy.Server.Model
             _mapPosition = mapPosition;
             _transitionMapId = transitionMapId;
             _invertedTransition = invertedTransition;
-            _transitionTask = new MapTransitionTask(_server, _map, _transitionMapId, _leftPos, _rightPos, (int)InstanceId, _invertedTransition, _mapPosition);
+            _transitionTask = new MapTransitionTask(_server, _map, _transitionMapId, _leftPos, _rightPos, InstanceId, _invertedTransition, _mapPosition);
             _transitionTask.Start();
 
         }

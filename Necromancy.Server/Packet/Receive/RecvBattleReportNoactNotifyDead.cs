@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Receive
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_instancedId);
-            res.WriteInt32(2); //Death int
+            res.WriteInt32(1); //Death int
             res.WriteInt32(0);
             res.WriteInt32(0);
             return res;

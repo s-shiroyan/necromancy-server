@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Area
                 switch (instance)
                 {
                     case NpcSpawn npcSpawn:
-                        client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
+                        client.Map.NpcSpawns.TryGetValue(npcSpawn.InstanceId, out npcSpawn);
                         Logger.Debug($"instanceId : {client.Character.eventSelectReadyCode} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
 
                         var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>

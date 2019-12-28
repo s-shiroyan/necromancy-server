@@ -49,7 +49,7 @@ namespace Necromancy.Server.Tasks
         private static int[] skillList = new[] { 200301411, 200301412, 200301413, 200301414, 200301415, 200301416, 200301417 };
         private static int[] effectList = new[] { 301411, 301412, 301413, 301414, 301415, 301416, 301417 };
         private int currentSkill;
-        private int skillInstanceId;
+        private uint skillInstanceId;
         
         public MonsterCoord monsterHome;
         public MonsterTask(NecServer server, MonsterSpawn monster)
@@ -158,7 +158,7 @@ namespace Necromancy.Server.Tasks
             {
                 monsterMoving = false;
                 _monster.MonsterStop(_server, 1,0, 0.1F);
-                _monster.MonsterHate(_server, true, (int)_monster.GetCurrentTarget().InstanceId);
+                _monster.MonsterHate(_server, true, _monster.GetCurrentTarget().InstanceId);
                 _monster.SendBattlePoseStartNotify(_server);
                 updateTime = agroTick;
                 if (_monster.MonsterId == 100201) 
@@ -191,7 +191,7 @@ namespace Necromancy.Server.Tasks
             float homeDistance = GetDistance(monsterHome.destination, monster);
             if (homeDistance >= (agroRange * 2))
             {
-                foreach (int instanceId in _monster.GetAgroInstanceList())
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
                     _monster.MonsterHate(_server, false, instanceId);
                 }
@@ -226,7 +226,7 @@ namespace Necromancy.Server.Tasks
                             //Casters
                             if (_monster.MonsterId == 100201) 
                             {
-                                skillInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
+                                skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
                                 Logger.Debug($"attackId [200301411]");
                                 //_monster.MonsterStop(Server,8, 231, 2.0F);
                                 StartMonsterCastQueue(200301411, skillInstanceId);
@@ -294,7 +294,7 @@ namespace Necromancy.Server.Tasks
             }
             return false;
         }
-        private void StartMonsterCast(int skillId, int instanceId)
+        private void StartMonsterCast(int skillId, uint instanceId)
         {
             casting = true;
             Character currentTarget = _monster.GetCurrentTarget();
@@ -308,14 +308,14 @@ namespace Necromancy.Server.Tasks
 
 
         }
-        private void StartMonsterCastQueue(int skillId, int instanceId)
+        private void StartMonsterCastQueue(int skillId, uint instanceId)
         {
             casting = true;
             Character currentTarget = _monster.GetCurrentTarget();
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast((int)currentTarget.InstanceId, skillId);
+            RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast(currentTarget.InstanceId, skillId);
             brList.Add(brStart);
             brList.Add(brStartCast);
             brList.Add(brEnd);
@@ -347,15 +347,15 @@ namespace Necromancy.Server.Tasks
         {
             int damage = (int)Util.GetRandomNumber(8, 43);
             Character currentTarget = _monster.GetCurrentTarget();
-            currentTarget.currentHp -= damage;
+            //currentTarget.currentHp -= damage;
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(currentTarget.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
-            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)currentTarget.currentHp);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(currentTarget.InstanceId);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(currentTarget.InstanceId, damage);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.currentHp);
 
             brList.Add(brStart);
             brList.Add(brHit);
@@ -370,7 +370,7 @@ namespace Necromancy.Server.Tasks
         {
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
-                foreach (int instanceId in _monster.GetAgroInstanceList())
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
                     _monster.MonsterHate(_server, false, instanceId);
                 }
@@ -391,7 +391,7 @@ namespace Necromancy.Server.Tasks
                 deadBody.Y = currentTarget.Y;
                 deadBody.Z = currentTarget.Z;
                 deadBody.Heading = currentTarget.Heading;
-                currentTarget.movementId = currentTarget.DeadBodyInstanceId;
+                currentTarget.movementId = (int)currentTarget.DeadBodyInstanceId;
                                              
                 Thread.Sleep(5000);
                 
@@ -442,7 +442,7 @@ namespace Necromancy.Server.Tasks
 
         }
 
-        private void SendDataNotifyEoData(int instanceId, int effectId)
+        private void SendDataNotifyEoData(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             IBuffer res6 = BufferProvider.Provide();
@@ -470,7 +470,7 @@ namespace Necromancy.Server.Tasks
         }
 
 
-        private void SendDataNotifyEoData2(int instanceId, int effectId)
+        private void SendDataNotifyEoData2(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             IBuffer res2 = BufferProvider.Provide();
@@ -496,7 +496,7 @@ namespace Necromancy.Server.Tasks
             res2.WriteInt32(0);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res2, ServerType.Area);
         }
-        private void SendDataNotifyItemObjectDataTask(int instanceId, int effectId)
+        private void SendDataNotifyItemObjectDataTask(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             int objectInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
@@ -532,7 +532,7 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res, ServerType.Area);
 
         }
-        public void MonsterCastMove(int instanceId, int castVelocity, byte pose, byte animation)
+        public void MonsterCastMove(uint instanceId, int castVelocity, byte pose, byte animation)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             Vector3 destPos = new Vector3(currentTarget.X, currentTarget.Y, currentTarget.Z);
@@ -558,7 +558,7 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);    //recv_0xE8B9  recv_0x1FC1 
 
         }
-        private void SendEoNotifyDisappearSchedule(int instanceId)
+        private void SendEoNotifyDisappearSchedule(uint instanceId)
         {
 
             IBuffer res = BufferProvider.Provide();
@@ -620,10 +620,11 @@ namespace Necromancy.Server.Tasks
             //Logger.Debug($"Monster HP [{_monster.GetHP()}]");
             if (_monster.GetHP() <= 0)
             {
-                foreach (int instanceId in _monster.GetAgroInstanceList())
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
                     _monster.MonsterHate(_server, false, instanceId);
                 }
+                Logger.Debug($"Monster is dead InstanceId [{_monster.InstanceId}]");
                 //Death Animation
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
@@ -753,7 +754,7 @@ namespace Necromancy.Server.Tasks
                     {
                         _monster.SetCurrentTarget(client.Character);
                         _monster.SetAgro(true);
-                        _monster.AddAgroList((int)client.Character.InstanceId, 0);
+                        _monster.AddAgroList(client.Character.InstanceId, 0);
                     }
                 }
             }
@@ -769,7 +770,7 @@ namespace Necromancy.Server.Tasks
                 agroCheckTime += updateTime;
                 return;
             }
-            int currentInstance = _monster.GetAgroHigh();
+            uint currentInstance = _monster.GetAgroHigh();
             if (currentTarget.InstanceId != currentInstance)
             {
                 currentTarget = Map.ClientLookup.GetByCharacterInstanceId((uint)currentInstance).Character;

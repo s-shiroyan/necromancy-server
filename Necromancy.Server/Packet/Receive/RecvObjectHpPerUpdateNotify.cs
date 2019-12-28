@@ -8,9 +8,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvObjectHpPerUpdateNotify : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly uint _instanceId;
         private float _perHp;
-        public RecvObjectHpPerUpdateNotify(int instanceId, float perHp)
+        public RecvObjectHpPerUpdateNotify(uint instanceId, float perHp)
             : base((ushort) AreaPacketId.recv_object_hp_per_update_notify, ServerType.Area)
         {
             _instanceId = instanceId;

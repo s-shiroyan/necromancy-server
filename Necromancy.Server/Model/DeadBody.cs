@@ -6,7 +6,7 @@ namespace Necromancy.Server.Model
     public class DeadBody : IInstance
     {
         public uint InstanceId { get; set; }
-        public int CharacterInstanceId { get; set; }
+        public uint CharacterInstanceId { get; set; }
         public int Id { get; set; }
         public string CharaName { get; set; }
         public string SoulName { get; set; }
