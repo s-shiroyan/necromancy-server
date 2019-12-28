@@ -347,7 +347,7 @@ namespace Necromancy.Server.Tasks
         {
             int damage = (int)Util.GetRandomNumber(8, 43);
             Character currentTarget = _monster.GetCurrentTarget();
-            //currentTarget.currentHp -= damage;
+            currentTarget.currentHp -= damage;
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
@@ -377,14 +377,18 @@ namespace Necromancy.Server.Tasks
 
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
-                RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead(currentTarget.InstanceId);
+                RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId,1);
+                RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
 
                 brList.Add(brStart);
-                brList.Add(cDead); //animate the death of your living body
+                brList.Add(cDead1); //animate the death of your living body
                 brList.Add(brEnd);
                 _server.Router.Send(Map, brList); //<-----  fix me.  i'm only sending to player 1 for some reason, even though /chara dead 505 2 works exactly the same way....
-                                             
+                brList[1] = cDead2;
+                NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+                _server.Router.Send(client, brList); //<-----  fix me.  i'm only sending to player 1 for some reason, even though /chara dead 505 2 works exactly the same way....
+
                 DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
 
                 deadBody.X = currentTarget.X;
@@ -397,7 +401,7 @@ namespace Necromancy.Server.Tasks
                 
                 //load your dead body on to the map for you to see in soul form. 
                 RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , currentTarget);
-                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
+                _server.Router.Send(client, cBodyData.ToPacket());
                         
                 currentTarget.hadDied = true;
 
@@ -629,7 +633,7 @@ namespace Necromancy.Server.Tasks
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead(_monster.InstanceId);
+                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead(_monster.InstanceId, 1);
                 brList.Add(brStart);
                 brList.Add(brDead);
                 brList.Add(brEnd);

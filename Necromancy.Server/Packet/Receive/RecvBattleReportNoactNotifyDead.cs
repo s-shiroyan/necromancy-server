@@ -9,17 +9,19 @@ namespace Necromancy.Server.Packet.Receive
     public class RecvBattleReportNoactDead : PacketResponse
     {
         private readonly uint _instancedId;
-        public RecvBattleReportNoactDead(uint instancedId)
+        private readonly int _state;
+        public RecvBattleReportNoactDead(uint instancedId, int state)
             : base((ushort) AreaPacketId.recv_battle_report_noact_notify_dead, ServerType.Area)
         {
             _instancedId = instancedId;
+            _state = state;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_instancedId);
-            res.WriteInt32(1); //Death int
+            res.WriteInt32(_state); //Death int
             res.WriteInt32(0);
             res.WriteInt32(0);
             return res;
