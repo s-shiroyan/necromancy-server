@@ -384,10 +384,12 @@ namespace Necromancy.Server.Tasks
                 brList.Add(brStart);
                 brList.Add(cDead1); //animate the death of your living body
                 brList.Add(brEnd);
-                _server.Router.Send(Map, brList); //<-----  fix me.  i'm only sending to player 1 for some reason, even though /chara dead 505 2 works exactly the same way....
-                brList[1] = cDead2;
+                _server.Router.Send(Map, brList); // send death animation to other players
+
                 NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
-                _server.Router.Send(client, brList); //<-----  fix me.  i'm only sending to player 1 for some reason, even though /chara dead 505 2 works exactly the same way....
+
+                brList[1] = cDead2;
+                _server.Router.Send(client, brList); // send death animaton to player 1
 
                 DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
 
@@ -395,8 +397,9 @@ namespace Necromancy.Server.Tasks
                 deadBody.Y = currentTarget.Y;
                 deadBody.Z = currentTarget.Z;
                 deadBody.Heading = currentTarget.Heading;
-                currentTarget.movementId = (int)currentTarget.DeadBodyInstanceId;
-                                             
+                currentTarget.movementId = currentTarget.DeadBodyInstanceId;
+
+
                 Thread.Sleep(5000);
                 
                 //load your dead body on to the map for you to see in soul form. 

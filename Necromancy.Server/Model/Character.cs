@@ -48,6 +48,8 @@ namespace Necromancy.Server.Model
         public byte movementPose { get; set; }
         public byte movementAnim { get; set; }
         public bool weaponEquipped { get; set; }
+        public uint movementId { get; set; }
+
 
         //Logout Cancel Detection
         public byte logoutCanceled { get; set; }
@@ -74,7 +76,6 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
-        public int movementId { get; set; }
 
 
         //Msg Value Holders
