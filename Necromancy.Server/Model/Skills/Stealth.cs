@@ -35,7 +35,7 @@ namespace Necromancy.Server.Model.Skills
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(_skillid, 2.0F);
             _server.Router.Send(_client.Map, startCast);
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionSkillStartCast brStartCast = new RecvBattleReportActionSkillStartCast(_skillid);
 

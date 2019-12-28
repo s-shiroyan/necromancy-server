@@ -217,7 +217,7 @@ namespace Necromancy.Server.Tasks
                 if (!monsterWaiting)
                 {
                     List<PacketResponse> brList = new List<PacketResponse>();
-                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
                     RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
                     switch (CastState)
                     {
@@ -313,7 +313,7 @@ namespace Necromancy.Server.Tasks
             casting = true;
             Character currentTarget = _monster.GetCurrentTarget();
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast((int)currentTarget.InstanceId, skillId);
             brList.Add(brStart);
@@ -334,7 +334,7 @@ namespace Necromancy.Server.Tasks
         private void MonsterAttackQueue(int skillId)
         {
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(skillId);
 
@@ -351,7 +351,7 @@ namespace Necromancy.Server.Tasks
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(currentTarget.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
@@ -376,81 +376,42 @@ namespace Necromancy.Server.Tasks
                 }
 
                 List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
+                RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead(currentTarget.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
 
-                currentTarget.hadDied = true;
                 brList.Add(brStart);
-                brList.Add(cDead);
+                brList.Add(cDead); //animate the death of your living body
                 brList.Add(brEnd);
-                _server.Router.Send(Map, brList);
+                _server.Router.Send(Map, brList); //<-----  fix me.  i'm only sending to player 1 for some reason, even though /chara dead 505 2 works exactly the same way....
+                                             
+                DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
 
-                //_monster.ClearAgroList();
-
-
+                deadBody.X = currentTarget.X;
+                deadBody.Y = currentTarget.Y;
+                deadBody.Z = currentTarget.Z;
+                deadBody.Heading = currentTarget.Heading;
+                currentTarget.movementId = currentTarget.DeadBodyInstanceId;
+                                             
+                Thread.Sleep(5000);
                 
-                IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
-                if (instance is Character character)
-                {
-                    IInstance instanceDead = _server.Instances.GetInstance((uint)character.DeadBodyInstanceId);
-                    if (instanceDead is DeadBody deadBody)
-                    {
-                        deadBody.X = character.X;
-                        deadBody.Y = character.Y;
-                        deadBody.Z = character.Z;
-                        deadBody.Heading = character.Heading;
-                        Logger.Debug($"Dead Body Id = {character.DeadBodyInstanceId}");
-                        character.movementId = character.DeadBodyInstanceId;
+                //load your dead body on to the map for you to see in soul form. 
+                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , currentTarget);
+                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
+                        
+                currentTarget.hadDied = true;
+
+                Thread.Sleep(100);
+
+                //reload your living body with no gear
+                RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
+                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+              
 
 
-                        Thread.Sleep(15000);
-                            {
-                                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody ,character);
-                                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cBodyData.ToPacket());
-                            }
 
-                        //things that didnt work to unequip items in soul form
-                        /*
-                        //this is for when someone collects your body...
-                        IBuffer res12 = BufferProvider.Provide();
-                        res12.WriteInt32(character.InstanceId);
-                        res12.WriteByte(0); //Decomposition byte.  setting to 1+ will make you invisible
-                                            //_server.Router.Send(Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
-
-                        IBuffer res13 = BufferProvider.Provide();
-
-                        res13.WriteInt64(1);
-                        res13.WriteInt32(11111111); // all slot bitmask
-
-                        res13.WriteInt32(0); // List of items that gonna be equip on the chara
-                        res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
-                        res13.WriteByte(0);
-                        res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
-
-                        res13.WriteInt32(1);
-                        res13.WriteByte(0);
-                        res13.WriteByte(0);
-                        res13.WriteByte(0);
-
-                        res13.WriteByte(0);
-                        res13.WriteByte(0);
-                        res13.WriteByte(0); //bool
-                        res13.WriteByte(0);
-                        res13.WriteByte(0);
-                        res13.WriteByte(0);
-                        res13.WriteByte(0); // 1 = body pink texture
-                        res13.WriteByte(0);
-                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
-
-                        IBuffer res17 = BufferProvider.Provide();
-                        res17.WriteInt64(0);
-                        res17.WriteInt32(11111111);
-                        _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), (ushort)AreaPacketId.recv_item_update_spirit_eqmask, res17, ServerType.Area);
-                        */
-
-                    }
-                }
+                    
+                
                 
 
             }
@@ -471,7 +432,7 @@ namespace Necromancy.Server.Tasks
         {
             casting = true;
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportActionMonsterSkillExec brExec = new RecvBattleReportActionMonsterSkillExec(skillId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             brList.Add(brStart);
@@ -665,9 +626,9 @@ namespace Necromancy.Server.Tasks
                 }
                 //Death Animation
                 List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead((int)_monster.InstanceId);
+                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead(_monster.InstanceId);
                 brList.Add(brStart);
                 brList.Add(brDead);
                 brList.Add(brEnd);

@@ -84,7 +84,7 @@ namespace Necromancy.Server.Tasks
                                 _server.Router.Send(_map, eoTriggerData);
                                 float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
                                 List<PacketResponse> brList = new List<PacketResponse>();
-                                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)TrapList[0].InstanceId);
+                                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(TrapList[0].InstanceId);
                                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
                                 RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)monster.InstanceId);
                                 RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)monster.InstanceId);
