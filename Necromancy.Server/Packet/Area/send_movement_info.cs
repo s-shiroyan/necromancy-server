@@ -80,7 +80,7 @@ namespace Necromancy.Server.Packet.Area
                     client.Character.activeSkillInstance = 0;
                     client.Character.castingSkill = false;
 
-            }
+                }
 
 
 

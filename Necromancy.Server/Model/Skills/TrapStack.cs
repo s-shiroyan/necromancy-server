@@ -39,7 +39,7 @@ namespace Necromancy.Server.Model.Skills
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(skillBase.Id, skillBase.CastingTime);
             _server.Router.Send(startCast, _client) ;
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionSkillStartCast brStartCast = new RecvBattleReportActionSkillStartCast(skillBase.Id);
 
@@ -59,7 +59,7 @@ namespace Necromancy.Server.Model.Skills
             }
 
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(trap._skillId);
 

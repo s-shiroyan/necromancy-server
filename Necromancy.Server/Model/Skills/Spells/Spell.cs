@@ -113,7 +113,7 @@ namespace Necromancy.Server.Model.Skills
                 return;
             }
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
             brList.Add(brStart);
