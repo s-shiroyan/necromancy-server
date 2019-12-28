@@ -62,7 +62,10 @@ namespace Necromancy.Server.Packet.Area
                             Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
                             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                             Server.Router.Send(monsterData, client);
-                            monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                            if (!monsterSpawn.GetAgro())
+                            {
+                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                            }
                         }
                     }
                 }
