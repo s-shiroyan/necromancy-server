@@ -6,13 +6,17 @@ using Arrowgene.Services.Tasks;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
     public class Map
     {
+        private readonly object TrapLock = new object();
+
         public const int NewCharacterMapId = 1001902;   //2006000
 
         private readonly NecLogger _logger;
@@ -28,9 +32,10 @@ namespace Necromancy.Server.Model
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<int, NpcSpawn> NpcSpawns { get; }
+       // public Dictionary<int, TrapTransition> Trap { get; }
         public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<int, TrapStack> Traps { get; }
         public Dictionary<int, DeadBody> DeadBodies { get; }
-        public TaskManager MonsterTasks;
 
         public Map(MapSetting setting, NecServer server)
         {
@@ -47,7 +52,7 @@ namespace Necromancy.Server.Model
             Area = setting.Area;
             Place = setting.Place;
             Orientation = (byte)(setting.Orientation/2);   // Client uses 180 degree orientation
-            MonsterTasks = new TaskManager();
+            Traps = new Dictionary<int, TrapStack>();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
@@ -197,6 +202,19 @@ namespace Necromancy.Server.Model
             }
         }
 
+        public bool MonsterInRange(Vector3 position, int range)
+        {
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                if (Vector3.Distance(position, monsterPos) <= range)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
         {
             List<MonsterSpawn> monsters = new List<MonsterSpawn>();
@@ -226,6 +244,82 @@ namespace Necromancy.Server.Model
                 }
             }
             return characters;
+        }
+
+        public List<TrapStack> GetTraps()
+        {
+            List<TrapStack> traps = new List<TrapStack>();
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    traps.Add(trap);
+                }
+            }
+            return traps;
+        }
+        public List<TrapStack> GetTrapsCharacter(int characterInstanceId)
+        {
+            List<TrapStack> traps = new List<TrapStack>();
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        traps.Add(trap);
+                    }
+                }
+            }
+            return traps;
+        }
+        public bool GetTrapsCharacterRange(int characterInstanceId, int range, Vector3 position)
+        {
+            bool inRange = false;
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        double distance = Vector3.Distance(trap._trapTask.TrapPos, position);
+                        if (distance < range)
+                            return true;
+                    }
+                }
+            }
+            return inRange;
+        }
+        public TrapStack GetTrapCharacterRange(int characterInstanceId, int range, Vector3 position)
+        {
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        double distance = Vector3.Distance(trap._trapTask.TrapPos, position);
+                        if (distance < range)
+                            return trap;
+                    }
+                }
+            }
+            return null;
+        }
+        public void AddTrap(int instanceId, TrapStack trap)
+        {
+            lock (TrapLock)
+            {
+                Traps.Add(instanceId, trap);
+            }
+        }
+
+        public void RemoveTrap(int instanceId)
+        {
+            lock (TrapLock)
+            {
+                Traps.Remove(instanceId);
+            }
         }
     }
 

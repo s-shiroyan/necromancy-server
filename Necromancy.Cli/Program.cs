@@ -1,4 +1,4 @@
-﻿/*
+/*
  * This file is part of Necromancy.Cli
  *
  * Necromancy.Cli is a server implementation for the game "Wizardry Online".
@@ -80,6 +80,7 @@ namespace Necromancy.Cli
         {
             AddCommand(new ShowCommand());
             AddCommand(new UnpackCommand());
+            AddCommand(new StripCommand());
             AddCommand(new ServerCommand(_logWriter));
             AddCommand(new HelpCommand(_commands));
             AddCommand(new ExitCommand());

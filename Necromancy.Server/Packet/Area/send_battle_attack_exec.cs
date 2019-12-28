@@ -119,7 +119,7 @@ namespace Necromancy.Server.Packet.Area
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
-            brList.Add(brPhyHp);
+            //brList.Add(brPhyHp);
             brList.Add(brHp);
             brList.Add(oHpUpdate);
             brList.Add(brEnd);

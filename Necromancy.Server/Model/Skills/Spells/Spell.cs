@@ -2,17 +2,17 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Id;
 using System.Collections.Generic;
 using System.Numerics;
 
 namespace Necromancy.Server.Model.Skills
 {
-   class FlameArrow : IInstance
+   class Spell : IInstance
     {
         public uint InstanceId { get; set; }
 
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Model.Skills
         private int _targetInstanceId;
         private Vector3 _srcCoord;
 
-        public FlameArrow(NecServer server, NecClient client, int skillId, int targetInstanceId, Vector3 srcCoord)
+        public Spell(NecServer server, NecClient client, int skillId, int targetInstanceId, Vector3 srcCoord)
         {
             _server = server;
             _client = client;
@@ -51,19 +51,25 @@ namespace Necromancy.Server.Model.Skills
                     _logger.Error($"Instance with InstanceId: {target.InstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
-            float castTime = 2.0F;
-            RecvSkillStartCastExR flameArrow = new RecvSkillStartCastExR((int)InstanceId, _skillId, castTime);
-            _server.Router.Send(_client.Map, flameArrow);
-            List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new Packet.Receive.RecvBattleReportStartNotify((int)_client.Character.InstanceId);
-            RecvBattleReportEndNotify brEnd = new Packet.Receive.RecvBattleReportEndNotify();
-            RecvBattleReportActionSkillStartCast brStartCast = new Packet.Receive.RecvBattleReportActionSkillStartCast(_skillId);
+            if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
+            {
+                _logger.Error($"Could not get SkillBaseSetting for skillId : {_skillId}");
+                return;
+            }
 
+            float castTime = skillBaseSetting.CastingTime;
+            _logger.Debug($"Start casting Skill [{_skillId}] cast time is [{castTime}]");
+            RecvSkillStartCastR flameArrow = new RecvSkillStartCastR(0, castTime);
+            //RecvSkillStartCastExR flameArrow = new RecvSkillStartCastExR((int)InstanceId, _skillId, castTime);
+            _server.Router.Send(flameArrow, _client);
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportActionSkillStartCast brStartCast = new RecvBattleReportActionSkillStartCast(_skillId);
             brList.Add(brStart);
             brList.Add(brStartCast);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
- 
         }
 
         public void SkillExec()
@@ -101,7 +107,11 @@ namespace Necromancy.Server.Model.Skills
                     _logger.Error($"Instance with InstanceId: {target.InstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
-
+            if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
+            {
+                _logger.Error($"Could not get SkillBaseSetting for skillId : {_skillId}");
+                return;
+            }
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -115,7 +125,8 @@ namespace Necromancy.Server.Model.Skills
                 _logger.Error($"Creating effectId from skillid [{_skillId}]");
             }
             trgCoord.Z += 10;
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, _targetInstanceId, 301411, trgCoord, 2, 2);
+            _logger.Debug($"skillid [{_skillId}] effectId [{effectId}]");
+            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData((int)InstanceId, _targetInstanceId, effectId, trgCoord, 2, 2);
             _server.Router.Send(_client.Map, eoData);
             RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule((int)InstanceId, 2.0F);
             _server.Router.Send(_client.Map, eoDisappear);

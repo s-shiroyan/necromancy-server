@@ -24,6 +24,8 @@ namespace Necromancy.Server.Data.Setting
             MapSymbols = new Dictionary<int, MapSymbolSetting>();
             Strings = new StrTableSettingLookup();
             Monster = new Dictionary<int, MonsterSetting>();
+            SkillBase = new Dictionary<int, SkillBaseSetting>();
+            EoBase = new Dictionary<int, EoBaseSetting>();
             Npc = new Dictionary<int, NpcSetting>();
             ModelAtr = new Dictionary<int, ModelAtrSetting>();
             ModelCommon = new Dictionary<int, ModelCommonSetting>();
@@ -33,6 +35,8 @@ namespace Necromancy.Server.Data.Setting
         public Dictionary<int, MapSetting> Maps { get; }
         public Dictionary<int, MapSymbolSetting> MapSymbols { get; }
         public Dictionary<int, MonsterSetting> Monster { get; }
+        public Dictionary<int, SkillBaseSetting> SkillBase { get; }
+        public Dictionary<int, EoBaseSetting> EoBase { get; }
         public StrTableSettingLookup Strings { get; }
         public Dictionary<int, NpcSetting> Npc { get; }
         public Dictionary<int, ModelAtrSetting> ModelAtr { get; }
@@ -45,12 +49,16 @@ namespace Necromancy.Server.Data.Setting
             MapSymbols.Clear();
             Strings.Clear();
             Monster.Clear();
+            SkillBase.Clear();
+            EoBase.Clear();
             Npc.Clear();
             ModelAtr.Clear();
             ModelCommon.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
             Load(Items, "iteminfo.csv", new ItemInfoCsvReader());
             Load(Monster, "monster.csv", new MonsterCsvReader());
+            Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
+            Load(EoBase, "eo_base.csv", new EoBaseCsvReader());
             Load(Npc, "npc.csv", new NpcCsvReader());
             Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());
             Load(Maps, "map.csv", new MapCsvReader(Strings));

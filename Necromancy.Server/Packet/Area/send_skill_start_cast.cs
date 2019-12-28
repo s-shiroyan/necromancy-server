@@ -1,9 +1,11 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,10 +33,9 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"skillTarget [{skillTarget}]  skillID [{skillID}] skillLookup [{skillLookup}]");
             var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
-                         { x => x == 114301, () => PoisonTrap(client, skillID) },
-                         { x => x == 114302, () => SpearTrap(client, skillID) },
+                        { x => (x > 114300 && x < 114399), () => Trap(client, skillID) },
+                         { x => (x > 113000 && x < 113999), () => FlameArrow(client, skillID, skillTarget) },
                          { x => x == 114607, () => Stealth(client, skillID) },
-                         { x => x == 113101, () => FlameArrow(client, skillID, skillTarget) },
                          { x => x <= 999999, () => FlameArrow(client, 113101, skillTarget) } //this is a default catch statement. it changes un-mapped skills to a fireball
 
             };
@@ -42,22 +43,91 @@ namespace Necromancy.Server.Packet.Area
             eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
 
         }
-        private void SpearTrap(NecClient client, int skillId)
+        private void Trap(NecClient client, int skillId)
         {
-            SpearTrap spearTrap = new SpearTrap(_server, client, skillId);
-            Server.Instances.AssignInstance(spearTrap);
-            Logger.Debug($"spearTrap.InstanceId [{spearTrap.InstanceId}] SpearTrap skillID [{skillId}]");
-            client.Character.activeSkillInstance = (int)spearTrap.InstanceId;
+            if (!int.TryParse($"{skillId}".Substring(1, 5), out int skillBase))
+            {
+                Logger.Error($"Creating skillBase from skillid [{skillId}]");
+                int errorCode = -1;
+                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                Router.Send(skillFail, client);
+                return;
+            }
+            if (!int.TryParse($"{skillId}".Substring(1, 7), out int effectBase))
+            {
+                Logger.Error($"Creating skillBase from skillid [{skillId}]");
+                int errorCode = -1;
+                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                Router.Send(skillFail, client);
+                return;
+            }
+            effectBase += 1;
+            Logger.Debug($"skillId [{skillId}] skillBase [{skillBase}] effectBase [{effectBase}]");
+            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
+            {
+                Logger.Error($"Getting SkillBaseSetting for skillid [{skillId}]");
+                return;
+            }
+            if (!_server.SettingRepository.EoBase.TryGetValue(effectBase, out EoBaseSetting eoBaseSetting))
+            {
+                Logger.Error($"Getting EoBaseSetting from effectBase [{effectBase}]");
+                return;
+            }
+            Vector3 charPos = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+            bool isBaseTrap = TrapTask.baseTrap(skillBase);
+            TrapStack trapStack = null;
+            if (isBaseTrap)
+            {
+                int trapRadius = eoBaseSetting.EffectRadius;
+                trapStack = new TrapStack(_server, client, charPos, trapRadius);
+                Server.Instances.AssignInstance(trapStack);
+            }
+            else
+            {
+                trapStack = client.Map.GetTrapCharacterRange((int)client.Character.InstanceId, 75, charPos);
+            }
+            if (isBaseTrap)
+            {
+                
+                Logger.Debug($"Is base trap skillId [{skillId}] skillBase [{skillBase}] trapStack._trapRadius [{trapStack._trapRadius}]");
+                if (client.Map.GetTrapsCharacterRange((int)client.Character.InstanceId, trapStack._trapRadius, charPos))
+                {
+                    Logger.Debug($"First trap with another trap too close [{skillId}]");
+                    int errorCode = -1309;
+                    RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                    Router.Send(skillFail, client);
+                    return;
+                }
+            }
+            else
+            {
+                Logger.Debug($"Is trap enhancement skillId [{skillId}] skillBase [{skillBase}] trapRadius [{trapStack._trapRadius}]");
+                if (!client.Map.GetTrapsCharacterRange((int)client.Character.InstanceId, trapStack._trapRadius, charPos))
+                {
+                    Logger.Debug($"Trap enhancement without a base trap [{skillId}]");
+                    int errorCode = -1;
+                    RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                    Router.Send(skillFail, client);
+                    return;
+                }
+            }
+            Logger.Debug($"Valid position check for monsters skillId [{skillId}] skillBase [{skillBase}]");
+            if (client.Map.MonsterInRange(charPos, trapStack._trapRadius))
+            {
+                Logger.Debug($"Monster too close [{skillId}]");
+                int errorCode = -1310;
+                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                Router.Send(skillFail, client);
+                return;
+
+            }
+
+            Logger.Debug($"skillBaseSetting.Id [{skillBaseSetting.Id}] skillBaseSetting.Name [{skillBaseSetting.Name} eoBaseSetting.]");
+            Logger.Debug($"spearTrap.InstanceId [{trapStack.InstanceId}] SpearTrap skillID [{skillId}]");
+            client.Character.activeSkillInstance = (int)trapStack.InstanceId;
             client.Character.castingSkill = true;
-            spearTrap.StartCast();
-        }
-        private void PoisonTrap(NecClient client, int skillId)
-        {
-            PoisonTrap poisonTrap = new PoisonTrap(_server, client, skillId);
-            Server.Instances.AssignInstance(poisonTrap);
-            Logger.Debug($"poisonTrap.InstanceId [{poisonTrap.InstanceId}] PoisonTrap skillID [{skillId}]");
-            client.Character.activeSkillInstance = (int)poisonTrap.InstanceId;
-            poisonTrap.StartCast();
+            trapStack.StartCast(skillBaseSetting);
+
         }
         private void Stealth(NecClient client, int skillId)
         {
@@ -70,7 +140,7 @@ namespace Necromancy.Server.Packet.Area
         private void FlameArrow(NecClient client, int skillId, int skillTarget)
         {
             Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
-            FlameArrow flameArrow = new FlameArrow(_server, client, skillId, skillTarget, charCoord);
+            Spell flameArrow = new Spell(_server, client, skillId, skillTarget, charCoord);
             Server.Instances.AssignInstance(flameArrow);
             client.Character.activeSkillInstance = (int)flameArrow.InstanceId;
             flameArrow.StartCast();

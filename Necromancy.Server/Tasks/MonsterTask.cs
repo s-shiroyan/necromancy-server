@@ -746,7 +746,7 @@ namespace Necromancy.Server.Tasks
 
             float distance = Vector3.Distance(monsterPos, charPos);
             //Logger.Debug($"distance [{distance}]");
-            ShowVectorInfo(_monster.X, _monster.Y, _monster.Z, currentTarget.X, currentTarget.Y, currentTarget.Z);
+            //ShowVectorInfo(_monster.X, _monster.Y, _monster.Z, currentTarget.X, currentTarget.Y, currentTarget.Z);
             if (distance <= _monster.GetGotoDistance())
             {
                 if (monsterMoving)
