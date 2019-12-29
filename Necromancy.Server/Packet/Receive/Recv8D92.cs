@@ -9,14 +9,14 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class Recv8D92 : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly uint _instanceId;
         private readonly int _skillId;
         private readonly int _castVelocity;
         private readonly byte _pose;
         private readonly byte _animation;
         private readonly Vector3 _srcCoord;
         private readonly Vector3 _trgCoord;
-        public Recv8D92(Vector3 srcCoord, Vector3 trgCoord, int instanceId, int skillId, int castVelocity, byte pose, byte animation)
+        public Recv8D92(Vector3 srcCoord, Vector3 trgCoord, uint instanceId, int skillId, int castVelocity, byte pose, byte animation)
             : base((ushort) AreaPacketId.recv_0x8D92, ServerType.Area)
         {
             _instanceId = instanceId;

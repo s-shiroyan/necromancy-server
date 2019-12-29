@@ -8,9 +8,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvBattleReportActionMonsterSkillStartCast : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly uint _instanceId;
         private readonly int _skillId;
-        public RecvBattleReportActionMonsterSkillStartCast(int instanceId, int skillId)
+        public RecvBattleReportActionMonsterSkillStartCast(uint instanceId, int skillId)
             : base((ushort) AreaPacketId.recv_battle_report_action_monster_skill_start_cast, ServerType.Area)
         {
             _instanceId = instanceId;

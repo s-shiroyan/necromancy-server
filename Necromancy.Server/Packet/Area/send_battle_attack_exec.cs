@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Necromancy.Server.Packet.Receive;
-
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -51,7 +51,7 @@ namespace Necromancy.Server.Packet.Area
             switch (instance)
             {
                 case NpcSpawn npcSpawn:
-                    client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
+                    client.Map.NpcSpawns.TryGetValue(npcSpawn.InstanceId, out npcSpawn);
                     {
                         double distanceToNPC = distance(npcSpawn.X, npcSpawn.Y, client.Character.X, client.Character.Y);
                         Logger.Debug($"NPC name [{npcSpawn.Name}] distanceToNPC [{distanceToNPC}] Radius [{npcSpawn.Radius}] {npcSpawn.Name}");
@@ -63,7 +63,7 @@ namespace Necromancy.Server.Packet.Area
                     }
                     break;
                 case MonsterSpawn monsterSpawn:
-                    client.Map.MonsterSpawns.TryGetValue((int)instanceId, out monsterSpawn);
+                    client.Map.MonsterSpawns.TryGetValue(instanceId, out monsterSpawn);
                     {
                         double distanceToMonster = distance(monsterSpawn.X, monsterSpawn.Y, client.Character.X, client.Character.Y);
                         Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
@@ -72,13 +72,13 @@ namespace Necromancy.Server.Packet.Area
                             //SendBattleReportEndNotify(client, instance);
                             return;
                         }
-                        if (monsterSpawn.GetAgroCharacter((int)client.Character.InstanceId))
+                        if (monsterSpawn.GetAgroCharacter(client.Character.InstanceId))
                         {
                             monsterSpawn.UpdateHP(-damage);
                         }
                         else
                         {
-                            monsterSpawn.UpdateHP(-damage, _server, true, (int)client.Character.InstanceId);
+                            monsterSpawn.UpdateHP(-damage, _server, true, client.Character.InstanceId);
                         }
                         perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
@@ -93,9 +93,12 @@ namespace Necromancy.Server.Packet.Area
                         //SendBattleReportEndNotify(client, instance);
                         return;
                     }
-                    targetClient.Character.currentHp -= (int)damage;
-                    perHp = (int)((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
+                    targetClient.Character.currentHp -= damage;
+                    perHp = ((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
                     Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
+                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.currentHp);
+                    _server.Router.Send(targetClient, cHpUpdate.ToPacket());
+
                     break;
 
                 default:
@@ -104,18 +107,19 @@ namespace Necromancy.Server.Packet.Area
             }
 
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)client.Character.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)instance.InstanceId);
-            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp((int)instance.InstanceId, damage);
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)instance.InstanceId, damage);
-            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify((int)instance.InstanceId, perHp);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(instance.InstanceId);
+            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(instance.InstanceId, damage);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(instance.InstanceId, damage);
+            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(instance.InstanceId, perHp);
+
 
             brList.Add(brStart);
             brList.Add(brAttack);
             brList.Add(brHit);
-            brList.Add(brPhyHp);
+            //brList.Add(brPhyHp);
             brList.Add(brHp);
             brList.Add(oHpUpdate);
             brList.Add(brEnd);
@@ -209,7 +213,7 @@ namespace Necromancy.Server.Packet.Area
         {
             MonsterSpawn monster = (MonsterSpawn)instance;
             IBuffer res2 = BufferProvider.Provide();
-            int skillInstanceID = (int)Server.Instances.CreateInstance<Skill>().InstanceId;
+            uint skillInstanceID = Server.Instances.CreateInstance<Skill>().InstanceId;
             Logger.Debug($"Skill instance {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
             res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
             res2.WriteFloat(monster.X);//Effect Object X

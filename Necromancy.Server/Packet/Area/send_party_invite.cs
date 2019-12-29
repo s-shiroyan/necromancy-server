@@ -29,35 +29,70 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_party_invite_r, res, ServerType.Area);
 
             SendPartyNotifyInvite(client, targetInstanceId);
+            Server.Clients.GetByCharacterInstanceId(targetInstanceId).Character.partyRequest = client.Character.InstanceId;
         }
 
         private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
             //recv_party_notify_invite
-
+            NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetInstanceId);
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(client.Character.InstanceId);//Party maker client id
-            res.WriteInt32(0);//Party type
-            res.WriteInt32(0);//Normal item distribution
-            res.WriteInt32(0);//Rare item distribution
-            res.WriteInt32(0);
-            res.WriteInt32(client.Character.Id);
-            for (int i = 0; i < 4; i++)
+            res.WriteInt32(1);//Party type; 0 = closed, 1 = open.
+            res.WriteInt32(1);//Normal item distribution; 0 = do not distribute, 1 = random.
+            res.WriteInt32(1);//Rare item distribution; 0 = do not distribute, 1 = Draw.
+            res.WriteInt32(1);
+            res.WriteInt32(0);//instance id here gets rid of "dummy"
             {
                 res.WriteInt32(0);
-                res.WriteInt32(0);
-                res.WriteFixedString("fixed1", 0x31); //size is 0x31
-                res.WriteFixedString("fixed2", 0x5B); //size is 0x5B
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0); //bool
-                res.WriteByte(0);
+                res.WriteInt32(1); //Instance Id?
+                res.WriteFixedString($"{targetClient.Soul.Name}", 0x31); //Soul name
+                res.WriteFixedString($"{targetClient.Character.Name}", 0x5B); //Chara name
+                res.WriteInt32(0); //Class
+                res.WriteByte(69); //Level
+                res.WriteByte(2); //Criminal Status
+                res.WriteByte(1); //Beginner Protection (bool) 
+                res.WriteByte(0); //Membership Status
                 res.WriteByte(0);
             }
-            res.WriteByte(0);
-            res.WriteFixedString("fixed3", 0xB5); //size is 0xB5
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(2); //Instance Id?
+                res.WriteFixedString($"{targetClient.Soul.Name}", 0x31); //Soul name
+                res.WriteFixedString($"{targetClient.Character.Name}", 0x5B); //Chara name
+                res.WriteInt32(1); //Class
+                res.WriteByte(69); //Level
+                res.WriteByte(2); //Criminal Status
+                res.WriteByte(1); //Beginner Protection (bool)
+                res.WriteByte(0); //Membership Status
+                res.WriteByte(2);
+            }
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(3); //Instance Id?
+                res.WriteFixedString($"{targetClient.Soul.Name}", 0x31); //Soul name
+                res.WriteFixedString($"{targetClient.Character.Name}", 0x5B); //Chara name
+                res.WriteInt32(2); //Class
+                res.WriteByte(69); //Level
+                res.WriteByte(2); //Criminal Status
+                res.WriteByte(1); //Beginner Protection (bool)
+                res.WriteByte(1); //Membership Status
+                res.WriteByte(3);
+            }
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0); //Instance Id?
+                res.WriteFixedString($"{""/*targetClient.Soul.Name*/}", 0x31); //Soul name
+                res.WriteFixedString($"{""/*targetClient.Character.Name*/}", 0x5B); //Chara name
+                res.WriteInt32(0); //Class
+                res.WriteByte(0); //Level
+                res.WriteByte(0); //Criminal Status
+                res.WriteByte(0); //Beginner Protection (bool)
+                res.WriteByte(0); //Membership Status
+                res.WriteByte(0);
+            }
+            res.WriteByte(1);
+            res.WriteFixedString($"{client.Character.Name}", 0xB5); //size is 0xB5
 
             Router.Send(Server.Clients.GetByCharacterInstanceId(targetInstanceId), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
         }

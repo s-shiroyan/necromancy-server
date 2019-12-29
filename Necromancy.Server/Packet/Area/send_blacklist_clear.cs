@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
 
             
 

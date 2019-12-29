@@ -12,6 +12,7 @@ namespace Necromancy.Server.Packet
     {
         private readonly NecLogger _logger;
         private readonly object AreaLock = new object();
+        private readonly object ClientLock = new object();
 
         public PacketRouter()
         {
@@ -118,6 +119,22 @@ namespace Necromancy.Server.Packet
                 foreach (PacketResponse data in buffers)
                 {
                     Send(map, data, excepts);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Send a List of packets to everyone in the map.
+        /// Will block until complete
+        /// </summary>
+        public void Send(NecClient client, List<PacketResponse> buffers)
+        {
+            lock (ClientLock)
+            {
+                foreach (PacketResponse response in buffers)
+                {
+                    response.AddClients(client);
+                    Send(response);
                 }
             }
         }

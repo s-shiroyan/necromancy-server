@@ -18,7 +18,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.Id);
+            res.WriteInt32(client.Character.InstanceId);
 
             Router.Send(client, (ushort) AreaPacketId.recv_mail_open_r, res, ServerType.Area);
         }

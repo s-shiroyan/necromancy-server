@@ -9,13 +9,13 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvDataNotifyEoData : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly uint _instanceId;
         private readonly int _effectId;
         private readonly int _unknown1;
         private readonly int _unknown2;
-        private readonly int _targetInstanceId;
+        private readonly uint _targetInstanceId;
         private readonly Vector3 _target;
-        public RecvDataNotifyEoData(int instanceId, int targetInstanceId, int effectId, Vector3 target,int unknown1, int unknown2)
+        public RecvDataNotifyEoData(uint instanceId, uint targetInstanceId, int effectId, Vector3 target,int unknown1, int unknown2)
             : base((ushort) AreaPacketId.recv_data_notify_eo_data, ServerType.Area)
         {
             _instanceId = instanceId;
