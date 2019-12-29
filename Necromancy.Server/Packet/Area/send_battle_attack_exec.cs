@@ -109,8 +109,8 @@ namespace Necromancy.Server.Packet.Area
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(instance.InstanceId);
+            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(600021);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(600021);
             RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(instance.InstanceId, damage);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(instance.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(instance.InstanceId, perHp);

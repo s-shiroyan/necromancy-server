@@ -96,8 +96,8 @@ namespace Necromancy.Server.Packet.Area
                 SendDataNotifyMaplink(client, 2002104, mapLinkDest, orientation);
             }
             // ToDo this should be a database lookup
-            //RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
-            //_server.Router.Send(mapFragments, client);
+            RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
+            _server.Router.Send(mapFragments, client);
 
         }
         public void SendDataNotifyMaplink(NecClient client, int mapId, Vector3 destCoords, byte orientation)
