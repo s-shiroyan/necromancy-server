@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Area
             int numEntries4 = 0x64;
             for (int i = 0; i < numEntries4; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(1); // 1 = bid ?
                 res.WriteInt64(2);
                 res.WriteInt32(1); // Lowest
                 res.WriteInt32(800); // Buy Now
