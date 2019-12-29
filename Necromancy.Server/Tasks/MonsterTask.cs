@@ -649,6 +649,9 @@ namespace Necromancy.Server.Tasks
                 _server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
 
                 //  Let a separate loot manager handle the monster body click?
+                DropTables drop = new DropTables();
+                DropItem droppedItem = drop.GetLoot(_monster.MonsterId);
+                Logger.Debug($"Loot is {droppedItem.NumItems}  of ItemId {droppedItem.ItemId}");
                 Thread.Sleep(_monster.RespawnTime);
                 //decompose the body
                 IBuffer res7 = BufferProvider.Provide();

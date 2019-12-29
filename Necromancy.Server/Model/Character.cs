@@ -50,7 +50,8 @@ namespace Necromancy.Server.Model
         public bool weaponEquipped { get; set; }
         public uint movementId { get; set; }
 
-
+        //Normal Attack
+        public int[] AttackIds { get; set; }
         //Logout Cancel Detection
         public byte logoutCanceled { get; set; }
 
