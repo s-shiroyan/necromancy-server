@@ -149,10 +149,6 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
                     break;
 
-                case "data":
-                    SendDataGetSelfCharaData(Server.Clients.GetByCharacterInstanceId(character2.InstanceId));
-                    break;
-
                 case "abyss":
                     //recv_charabody_self_notify_abyss_stead_pos = 0x679B,
                     IBuffer res13 = BufferProvider.Provide();
@@ -230,6 +226,21 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res14.WriteByte(0);// (bool) Beginner protection
                     res14.WriteInt32(1);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res14, ServerType.Area);
+                    break;
+
+                case "scaleopen":
+                    IBuffer res0 = BufferProvider.Provide();
+                    res0.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
+                    res0.WriteByte(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res0, ServerType.Area);
+
+                    IBuffer res15 = BufferProvider.Provide();
+                    //recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
+                    res15.WriteInt16(0);
+                    res15.WriteInt16(0);
+                    res15.WriteInt16(0);
+                    res15.WriteInt16(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_raisescale_view_open, res15, ServerType.Area);
                     break;
 
                 default:

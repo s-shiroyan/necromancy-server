@@ -401,9 +401,9 @@ namespace Necromancy.Server.Tasks
 
 
                 Thread.Sleep(5000);
-                
+
                 //load your dead body on to the map for you to see in soul form. 
-                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , currentTarget);
+                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , client);
                 _server.Router.Send(client, cBodyData.ToPacket());
                         
                 currentTarget.hadDied = true;
