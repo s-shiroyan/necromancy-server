@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Area
             SendPartyNotifyInvite(client, targetInstanceId);
             Server.Clients.GetByCharacterInstanceId(targetInstanceId).Character.partyRequest = client.Character.InstanceId;
         }
-
+        int i = 0;
         private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
             //recv_party_notify_invite
@@ -41,7 +41,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);//Party type; 0 = closed, 1 = open.
             res.WriteInt32(1);//Normal item distribution; 0 = do not distribute, 1 = random.
             res.WriteInt32(1);//Rare item distribution; 0 = do not distribute, 1 = Draw.
-            res.WriteInt32(1);
+            res.WriteInt32(i++);
             res.WriteInt32(0);//instance id here gets rid of "dummy"
             {
                 res.WriteInt32(0);
@@ -91,7 +91,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0); //Membership Status
                 res.WriteByte(0);
             }
-            res.WriteByte(1);
+            res.WriteByte(2); // Size of party
             res.WriteFixedString($"{client.Character.Name}", 0xB5); //size is 0xB5
 
             Router.Send(Server.Clients.GetByCharacterInstanceId(targetInstanceId), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
