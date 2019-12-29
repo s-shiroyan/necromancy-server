@@ -8,9 +8,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvBattleReportDamageHp : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly uint _instanceId;
         private readonly int _damage;
-        public RecvBattleReportDamageHp(int instanceId, int damage)
+        public RecvBattleReportDamageHp(uint instanceId, int damage)
             : base((ushort) AreaPacketId.recv_battle_report_notify_damage_hp, ServerType.Area)
         {
             _instanceId = instanceId;

@@ -49,7 +49,7 @@ namespace Necromancy.Server.Tasks
         private static int[] skillList = new[] { 200301411, 200301412, 200301413, 200301414, 200301415, 200301416, 200301417 };
         private static int[] effectList = new[] { 301411, 301412, 301413, 301414, 301415, 301416, 301417 };
         private int currentSkill;
-        private int skillInstanceId;
+        private uint skillInstanceId;
         
         public MonsterCoord monsterHome;
         public MonsterTask(NecServer server, MonsterSpawn monster)
@@ -158,7 +158,7 @@ namespace Necromancy.Server.Tasks
             {
                 monsterMoving = false;
                 _monster.MonsterStop(_server, 1,0, 0.1F);
-                _monster.MonsterHate(_server, true, (int)_monster.GetCurrentTarget().InstanceId);
+                _monster.MonsterHate(_server, true, _monster.GetCurrentTarget().InstanceId);
                 _monster.SendBattlePoseStartNotify(_server);
                 updateTime = agroTick;
                 if (_monster.MonsterId == 100201) 
@@ -191,7 +191,7 @@ namespace Necromancy.Server.Tasks
             float homeDistance = GetDistance(monsterHome.destination, monster);
             if (homeDistance >= (agroRange * 2))
             {
-                foreach (int instanceId in _monster.GetAgroInstanceList())
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
                     _monster.MonsterHate(_server, false, instanceId);
                 }
@@ -217,7 +217,7 @@ namespace Necromancy.Server.Tasks
                 if (!monsterWaiting)
                 {
                     List<PacketResponse> brList = new List<PacketResponse>();
-                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
                     RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
                     switch (CastState)
                     {
@@ -226,7 +226,7 @@ namespace Necromancy.Server.Tasks
                             //Casters
                             if (_monster.MonsterId == 100201) 
                             {
-                                skillInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
+                                skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
                                 Logger.Debug($"attackId [200301411]");
                                 //_monster.MonsterStop(Server,8, 231, 2.0F);
                                 StartMonsterCastQueue(200301411, skillInstanceId);
@@ -294,7 +294,7 @@ namespace Necromancy.Server.Tasks
             }
             return false;
         }
-        private void StartMonsterCast(int skillId, int instanceId)
+        private void StartMonsterCast(int skillId, uint instanceId)
         {
             casting = true;
             Character currentTarget = _monster.GetCurrentTarget();
@@ -308,14 +308,14 @@ namespace Necromancy.Server.Tasks
 
 
         }
-        private void StartMonsterCastQueue(int skillId, int instanceId)
+        private void StartMonsterCastQueue(int skillId, uint instanceId)
         {
             casting = true;
             Character currentTarget = _monster.GetCurrentTarget();
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast((int)currentTarget.InstanceId, skillId);
+            RecvBattleReportActionMonsterSkillStartCast brStartCast = new RecvBattleReportActionMonsterSkillStartCast(currentTarget.InstanceId, skillId);
             brList.Add(brStart);
             brList.Add(brStartCast);
             brList.Add(brEnd);
@@ -334,7 +334,7 @@ namespace Necromancy.Server.Tasks
         private void MonsterAttackQueue(int skillId)
         {
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(skillId);
 
@@ -351,11 +351,11 @@ namespace Necromancy.Server.Tasks
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(currentTarget.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect((int)currentTarget.InstanceId);
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp((int)currentTarget.InstanceId, (int)damage);
-            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp((int)currentTarget.currentHp);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(currentTarget.InstanceId);
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(currentTarget.InstanceId, damage);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.currentHp);
 
             brList.Add(brStart);
             brList.Add(brHit);
@@ -370,41 +370,56 @@ namespace Necromancy.Server.Tasks
         {
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
-                List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)currentTarget.InstanceId);
-                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                RecvBattleReportNoactDead cDead = new RecvBattleReportNoactDead((int)currentTarget.InstanceId);
-
-                currentTarget.hadDied = true;
-                brList.Add(brStart);
-                brList.Add(cDead);
-                brList.Add(brEnd);
-                _server.Router.Send(Map, brList);
-                Task.Delay(TimeSpan.FromSeconds(4)).ContinueWith
-                (t1 =>
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
-                    IInstance instance = _server.Instances.GetInstance(currentTarget.InstanceId);
-                    if (instance is Character character)
-                    {
-                        DeadBody deadBody = new DeadBody();
-                        _server.Instances.AssignInstance(deadBody);
-                        deadBody.InstanceId = character.InstanceId;
-                        deadBody.CharaName = character.Name;
-                        deadBody.MapId = character.MapId;
-                        deadBody.X = character.X;
-                        deadBody.Y = character.Y;
-                        deadBody.Z = character.Z;
-                        deadBody.Heading = character.Heading;
-                        deadBody.RaceId = character.Raceid;
-                        deadBody.SexId = character.Sexid;
-                        deadBody.HairStyle = character.HairId;
-                        deadBody.HairColor = character.HairColorId;
-                        deadBody.FaceId = character.FaceId;
+                    _monster.MonsterHate(_server, false, instanceId);
+                }
 
-                        RecvDataNotifyCharabodyData cBodyData = new RecvDataNotifyCharabodyData(deadBody);
-                        _server.Router.Send(Map, cBodyData);
-                    }
-                });
+                List<PacketResponse> brList = new List<PacketResponse>();
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
+                RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId,1);
+                RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
+                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+
+                brList.Add(brStart);
+                brList.Add(cDead1); //animate the death of your living body
+                brList.Add(brEnd);
+                _server.Router.Send(Map, brList); // send death animation to other players
+
+                NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+
+                brList[1] = cDead2;
+                _server.Router.Send(client, brList); // send death animaton to player 1
+
+                DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
+
+                deadBody.X = currentTarget.X;
+                deadBody.Y = currentTarget.Y;
+                deadBody.Z = currentTarget.Z;
+                deadBody.Heading = currentTarget.Heading;
+                currentTarget.movementId = currentTarget.DeadBodyInstanceId;
+
+
+                Thread.Sleep(5000);
+                
+                //load your dead body on to the map for you to see in soul form. 
+                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , currentTarget);
+                _server.Router.Send(client, cBodyData.ToPacket());
+                        
+                currentTarget.hadDied = true;
+
+                Thread.Sleep(100);
+
+                //reload your living body with no gear
+                RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
+                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+              
+
+
+
+                    
+                
+                
 
             }
         }
@@ -424,7 +439,7 @@ namespace Necromancy.Server.Tasks
         {
             casting = true;
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
             RecvBattleReportActionMonsterSkillExec brExec = new RecvBattleReportActionMonsterSkillExec(skillId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             brList.Add(brStart);
@@ -434,7 +449,7 @@ namespace Necromancy.Server.Tasks
 
         }
 
-        private void SendDataNotifyEoData(int instanceId, int effectId)
+        private void SendDataNotifyEoData(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             IBuffer res6 = BufferProvider.Provide();
@@ -462,7 +477,7 @@ namespace Necromancy.Server.Tasks
         }
 
 
-        private void SendDataNotifyEoData2(int instanceId, int effectId)
+        private void SendDataNotifyEoData2(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             IBuffer res2 = BufferProvider.Provide();
@@ -488,7 +503,7 @@ namespace Necromancy.Server.Tasks
             res2.WriteInt32(0);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_data_notify_eo_data2, res2, ServerType.Area);
         }
-        private void SendDataNotifyItemObjectDataTask(int instanceId, int effectId)
+        private void SendDataNotifyItemObjectDataTask(uint instanceId, int effectId)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             int objectInstanceId = (int)_server.Instances.CreateInstance<Skill>().InstanceId;
@@ -524,7 +539,7 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res, ServerType.Area);
 
         }
-        public void MonsterCastMove(int instanceId, int castVelocity, byte pose, byte animation)
+        public void MonsterCastMove(uint instanceId, int castVelocity, byte pose, byte animation)
         {
             Character currentTarget = _monster.GetCurrentTarget();
             Vector3 destPos = new Vector3(currentTarget.X, currentTarget.Y, currentTarget.Z);
@@ -550,14 +565,14 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);    //recv_0xE8B9  recv_0x1FC1 
 
         }
-        private void SendEoNotifyDisappearSchedule(int instanceId)
+        private void SendEoNotifyDisappearSchedule(uint instanceId)
         {
 
             IBuffer res = BufferProvider.Provide();
             res = BufferProvider.Provide();
                     
             res.WriteInt32(instanceId);
-            res.WriteFloat(6.0F);
+            res.WriteFloat(4.0F);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res, ServerType.Area);
 
         }
@@ -609,18 +624,19 @@ namespace Necromancy.Server.Tasks
         }
         public bool MonsterCheck()
         {
-            Logger.Debug($"Monster HP [{_monster.GetHP()}]");
+            //Logger.Debug($"Monster HP [{_monster.GetHP()}]");
             if (_monster.GetHP() <= 0)
             {
-                foreach (int instanceId in _monster.GetAgroInstanceList())
+                foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
                     _monster.MonsterHate(_server, false, instanceId);
                 }
+                Logger.Debug($"Monster is dead InstanceId [{_monster.InstanceId}]");
                 //Death Animation
                 List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((int)_monster.InstanceId);
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead((int)_monster.InstanceId);
+                RecvBattleReportNoactDead brDead = new RecvBattleReportNoactDead(_monster.InstanceId, 1);
                 brList.Add(brStart);
                 brList.Add(brDead);
                 brList.Add(brEnd);
@@ -699,7 +715,7 @@ namespace Necromancy.Server.Tasks
 
             float distance = Vector3.Distance(monsterPos, charPos);
             //Logger.Debug($"distance [{distance}]");
-            ShowVectorInfo(_monster.X, _monster.Y, _monster.Z, currentTarget.X, currentTarget.Y, currentTarget.Z);
+            //ShowVectorInfo(_monster.X, _monster.Y, _monster.Z, currentTarget.X, currentTarget.Y, currentTarget.Z);
             if (distance <= _monster.GetGotoDistance())
             {
                 if (monsterMoving)
@@ -745,7 +761,7 @@ namespace Necromancy.Server.Tasks
                     {
                         _monster.SetCurrentTarget(client.Character);
                         _monster.SetAgro(true);
-                        _monster.AddAgroList((int)client.Character.InstanceId, 0);
+                        _monster.AddAgroList(client.Character.InstanceId, 0);
                     }
                 }
             }
@@ -761,7 +777,7 @@ namespace Necromancy.Server.Tasks
                 agroCheckTime += updateTime;
                 return;
             }
-            int currentInstance = _monster.GetAgroHigh();
+            uint currentInstance = _monster.GetAgroHigh();
             if (currentTarget.InstanceId != currentInstance)
             {
                 currentTarget = Map.ClientLookup.GetByCharacterInstanceId((uint)currentInstance).Character;

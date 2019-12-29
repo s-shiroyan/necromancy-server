@@ -9,9 +9,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvTest : PacketResponse
     {
-        private readonly int _instanceId;
-        private readonly int _targetInstanceId;
-        public RecvTest(int instanceId, int targetInstanceId)
+        private readonly uint _instanceId;
+        private readonly uint _targetInstanceId;
+        public RecvTest(uint instanceId, uint targetInstanceId)
             : base((ushort) AreaPacketId.recv_0x1489, ServerType.Area)
         {
             _instanceId = instanceId;

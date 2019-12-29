@@ -148,10 +148,10 @@ namespace Necromancy.Server.Packet.Id
         send_chara_select_back = 0x4772, 
         send_chara_select_back_soul_select = 0x007, // placeholder until found
         send_friend_reply_to_link2 = 0x1852,
-        send_friend_request_delete_friend = 0x009, // placeholder until found
+        send_friend_request_delete_friend = 0xC552,
         send_friend_request_link_target = 0x470C,
         send_friend_accept_request_link = 0x46FB,
-        send_friend_request_load_msg = 0x615E, //0xE1DF                                 //Commented out for now becasue it has been moved to the AREA server
+        send_friend_request_load_msg = 0x615E, //0xE1DF
         send_soul_authenticate_passwd = 0xB4BB,
         send_skill_request_info = 0x4EB5,
         send_soul_create = 0xCE74,

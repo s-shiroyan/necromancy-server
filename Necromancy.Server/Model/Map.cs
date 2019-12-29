@@ -6,39 +6,44 @@ using Arrowgene.Services.Tasks;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
     public class Map
     {
+        private readonly object TrapLock = new object();
+
         public const int NewCharacterMapId = 1001902;   //2006000
 
         private readonly NecLogger _logger;
         private readonly NecServer _server;
         public int Id { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
+        public float X { get; }
+        public float Y { get; }
+        public float Z { get; }
         public string Country { get; set; }
         public string Area { get; set; }
         public string Place { get; set; }
-        public int Orientation { get; set; }
+        public byte Orientation { get; }
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
-        public Dictionary<int, NpcSpawn> NpcSpawns { get; }
-        public Dictionary<int, MonsterSpawn> MonsterSpawns { get; }
-        public Dictionary<int, DeadBody> DeadBodies { get; }
-        public TaskManager MonsterTasks;
+        public Dictionary<uint, NpcSpawn> NpcSpawns { get; }
+       // public Dictionary<int, TrapTransition> Trap { get; }
+        public Dictionary<uint, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<uint, TrapStack> Traps { get; }
+        public Dictionary<uint, DeadBody> DeadBodies { get; }
 
         public Map(MapSetting setting, NecServer server)
         {
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
             ClientLookup = new ClientLookup();
-            NpcSpawns = new Dictionary<int, NpcSpawn>();
-            MonsterSpawns = new Dictionary<int, MonsterSpawn>();
+            NpcSpawns = new Dictionary<uint, NpcSpawn>();
+            MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -46,15 +51,15 @@ namespace Necromancy.Server.Model
             Country = setting.Country;
             Area = setting.Area;
             Place = setting.Place;
-            Orientation = setting.Orientation;
-            MonsterTasks = new TaskManager();
+            Orientation = (byte)(setting.Orientation/2);   // Client uses 180 degree orientation
+            Traps = new Dictionary<uint, TrapStack>();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
                 server.Instances.AssignInstance(npcSpawn);
-                NpcSpawns.Add((int)npcSpawn.InstanceId, npcSpawn);
+                NpcSpawns.Add(npcSpawn.InstanceId, npcSpawn);
             }
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
@@ -82,7 +87,7 @@ namespace Necromancy.Server.Model
                 monsterSpawn.CatalogId = monsterSetting.CatalogId;
                 monsterSpawn.TextureType = monsterSetting.TextureType;
                 monsterSpawn.Map = this;
-                MonsterSpawns.Add((int)monsterSpawn.InstanceId, monsterSpawn);
+                MonsterSpawns.Add(monsterSpawn.InstanceId, monsterSpawn);
 
                 List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
                 if (coords.Count > 0)
@@ -133,16 +138,31 @@ namespace Necromancy.Server.Model
                 }
                 
             }
+            // ToDo this should be a database lookup
+            if (Id == 2002104)
+            {
+                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
+                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
+                MapTransition mapTransition = new MapTransition(_server, this, 2002105, leftVec, rightVec, false);
+            }
+            else if (Id == 2002105)
+            {
+                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
+                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
+                MapPosition returnPos = new MapPosition((float)-889.7094, (float)-11444.197, (float)462.58234);
+                MapTransition mapTransition = new MapTransition(_server, this, 2002104, leftVec, rightVec, true, returnPos);
+
+            }
         }
 
 
 
 
 
-        public void EnterForce(NecClient client)
+        public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
-            Enter(client);
-            _server.Router.Send(new RecvMapChangeForce(this), client);
+            Enter(client, mapPosition);
+            _server.Router.Send(new RecvMapChangeForce(this, mapPosition), client);
         }
 
         public void EnterSyncOk(NecClient client)
@@ -150,7 +170,7 @@ namespace Necromancy.Server.Model
             _server.Router.Send(new RecvMapChangeSyncOk(), client);
         }
 
-        public void Enter(NecClient client)
+        public void Enter(NecClient client, MapPosition mapPosition = null)
         {
             if (client.Map != null)
             {
@@ -161,27 +181,8 @@ namespace Necromancy.Server.Model
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
-            // ToDo   Stop using the Map object X,Y,Z for character transitions, this will cause issues with multi threaded transistion task
-            client.Character.X = X;
-            client.Character.Y = Y;
-            client.Character.Z = Z;
- 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
-            if (Id == 2002104)
-            {
-                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
-                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
-                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002105, leftVec, rightVec, false, new Vector3(0,0,0), 0);
-            } else if (Id == 2002105)
-            {
-                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
-                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
-                Vector3 returnPos = new Vector3((float)-889.7094, (float)-11053.159, (float)462.58234);
-                byte returnHeading = 0;
-                MapTransition mapTransition = new MapTransition(_server, client.Map, 2002104, leftVec, rightVec, true, returnPos, returnHeading);
-
-            }
         }
 
         public void Leave(NecClient client)
@@ -199,6 +200,19 @@ namespace Necromancy.Server.Model
                     monsterSpawn.SpawnActive = false;
                 }
             }
+        }
+
+        public bool MonsterInRange(Vector3 position, int range)
+        {
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
+                if (Vector3.Distance(position, monsterPos) <= range)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
@@ -230,6 +244,98 @@ namespace Necromancy.Server.Model
                 }
             }
             return characters;
+        }
+
+        public List<TrapStack> GetTraps()
+        {
+            List<TrapStack> traps = new List<TrapStack>();
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    traps.Add(trap);
+                }
+            }
+            return traps;
+        }
+        public List<TrapStack> GetTrapsCharacter(uint characterInstanceId)
+        {
+            List<TrapStack> traps = new List<TrapStack>();
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        traps.Add(trap);
+                    }
+                }
+            }
+            return traps;
+        }
+        public bool GetTrapsCharacterRange(uint characterInstanceId, int range, Vector3 position)
+        {
+            bool inRange = false;
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        double distance = Vector3.Distance(trap._trapTask.TrapPos, position);
+                        if (distance < range)
+                            return true;
+                    }
+                }
+            }
+            return inRange;
+        }
+        public TrapStack GetTrapCharacterRange(uint characterInstanceId, int range, Vector3 position)
+        {
+            lock (TrapLock)
+            {
+                foreach (TrapStack trap in Traps.Values)
+                {
+                    if (trap._trapTask.ownerInstanceId == characterInstanceId)
+                    {
+                        double distance = Vector3.Distance(trap._trapTask.TrapPos, position);
+                        if (distance < range)
+                            return trap;
+                    }
+                }
+            }
+            return null;
+        }
+        public void AddTrap(uint instanceId, TrapStack trap)
+        {
+            lock (TrapLock)
+            {
+                Traps.Add(instanceId, trap);
+            }
+        }
+
+        public void RemoveTrap(uint instanceId)
+        {
+            lock (TrapLock)
+            {
+                Traps.Remove(instanceId);
+            }
+        }
+    }
+
+    public class MapPosition
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
+        public byte Heading { get; set; }
+
+        public MapPosition(float Xpos = 0, float Ypos = 0, float Zpos = 0, byte heading = 0)
+        {
+            X = Xpos;
+            Y = Ypos;
+            Z = Zpos;
+            Heading = heading;
         }
     }
 }

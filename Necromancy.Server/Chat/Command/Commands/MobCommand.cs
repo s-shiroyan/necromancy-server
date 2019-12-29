@@ -38,7 +38,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             if (instance is MonsterSpawn monsterSpawn2)
             {
-                client.Map.MonsterSpawns.TryGetValue((int)monsterSpawn2.InstanceId, out monsterSpawn2);
+                client.Map.MonsterSpawns.TryGetValue(monsterSpawn2.InstanceId, out monsterSpawn2);
                 monsterSpawn = monsterSpawn2;
             }
 

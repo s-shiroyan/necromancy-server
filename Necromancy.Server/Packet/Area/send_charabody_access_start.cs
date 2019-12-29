@@ -9,6 +9,7 @@ namespace Necromancy.Server.Packet.Area
     {
         public send_charabody_access_start(NecServer server) : base(server)
         {
+            //ToDo :   If TargetId = Self.InstanceID,  warp to res statue.   if TargetId = Party member, Collect body.   else,  Loot
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_charabody_access_start;

@@ -32,7 +32,7 @@ namespace Necromancy.Server.Packet.Area
             switch (instance)
             {
                 case NpcSpawn npcSpawn:
-                    client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
+                    client.Map.NpcSpawns.TryGetValue(npcSpawn.InstanceId, out npcSpawn);
                     Logger.Debug($"instanceId : {npcSpawn.InstanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(npcSpawn.InstanceId);

@@ -33,7 +33,8 @@ namespace Necromancy.Server.Model
         public uint maxMp { get; set; }
         public uint maxOd { get; set; }
         public bool hadDied { get; set; }
-        public int DeadBodyInstanceId { get; set; } 
+        public uint DeadBodyInstanceId { get; set; } 
+        public int Channel { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -47,6 +48,8 @@ namespace Necromancy.Server.Model
         public byte movementPose { get; set; }
         public byte movementAnim { get; set; }
         public bool weaponEquipped { get; set; }
+        public uint movementId { get; set; }
+
 
         //Logout Cancel Detection
         public byte logoutCanceled { get; set; }
@@ -60,7 +63,7 @@ namespace Necromancy.Server.Model
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public int eventSelectExecCode { get; set; }
-        public int activeSkillInstance { get; set; }
+        public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
         public int currentHp { get; set; }
@@ -73,6 +76,11 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
+
+
+        //Msg Value Holders
+        public uint friendRequest { get; set; }
+        public uint partyRequest { get; set; }
 
         public Character()
         {
@@ -95,7 +103,7 @@ namespace Necromancy.Server.Model
             maxHp = 1000;
             maxMp = 500;
             maxOd = 200;
-            currentHp = 999;
+            currentHp = 99;
             currentMp = 1000;
             currentOd = 1000;
             shortcutBar0Id = -1;
@@ -107,7 +115,6 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            DeadBodyInstanceId = 0;
         }
     }
 }

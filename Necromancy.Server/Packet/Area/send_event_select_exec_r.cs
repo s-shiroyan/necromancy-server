@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Area
                 switch (instance)
                 {
                     case NpcSpawn npcSpawn:
-                        client.Map.NpcSpawns.TryGetValue((int)npcSpawn.InstanceId, out npcSpawn);
+                        client.Map.NpcSpawns.TryGetValue(npcSpawn.InstanceId, out npcSpawn);
                         Logger.Debug($"instanceId : {client.Character.eventSelectReadyCode} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
 
                         var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
@@ -153,7 +153,6 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002105);
-                        map.Orientation = 133;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
@@ -165,7 +164,6 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002104);
-                        map.Orientation = 90;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
@@ -177,12 +175,10 @@ namespace Necromancy.Server.Packet.Area
                     if (client.Character.eventSelectExecCode == 0)
                     {
                         map = Server.Maps.Get(2002104);
-                        map.Orientation = 90;
                     }
                     else if (client.Character.eventSelectExecCode == 1)
                     {
                         map = Server.Maps.Get(2002105);
-                        map.Orientation = 133;
                     }
                     break;
                 default:
