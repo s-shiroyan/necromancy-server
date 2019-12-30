@@ -12,7 +12,7 @@ using System.Numerics;
 
 namespace Necromancy.Server.Model.Skills
 {
-   class Spell : IInstance
+   class ThiefSkill : IInstance
     {
         public uint InstanceId { get; set; }
 
@@ -21,21 +21,19 @@ namespace Necromancy.Server.Model.Skills
         private readonly NecServer _server;
         private int _skillId;
         private uint _targetInstanceId;
-        private Vector3 _srcCoord;
 
-        public Spell(NecServer server, NecClient client, int skillId, uint targetInstanceId, Vector3 srcCoord)
+        public ThiefSkill(NecServer server, NecClient client, int skillId, uint targetInstanceId)
         {
             _server = server;
             _client = client;
             _skillId = skillId;
             _targetInstanceId = targetInstanceId;
             _logger = LogProvider.Logger<NecLogger>(this);
-            _srcCoord = srcCoord;
         }
 
         public void StartCast()
         {
-            IInstance target = _server.Instances.GetInstance((uint)_targetInstanceId);
+            IInstance target = _server.Instances.GetInstance(_targetInstanceId);
             switch (target)         // ToDO     Do a hositilty check to make sure this is allowed
             {
                 case NpcSpawn npcSpawn:
@@ -48,7 +46,7 @@ namespace Necromancy.Server.Model.Skills
                     _logger.Debug($"Start casting Skill [{_skillId}] on CharacterId: {character.InstanceId}");
                     break;
                 default:
-                    _logger.Error($"Instance with InstanceId: {target.InstanceId} does not exist.  the ground is gettin blasted");
+                    _logger.Error($"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
             if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
@@ -59,8 +57,8 @@ namespace Necromancy.Server.Model.Skills
 
             float castTime = skillBaseSetting.CastingTime;
             _logger.Debug($"Start casting Skill [{_skillId}] cast time is [{castTime}]");
-            RecvSkillStartCastR spell = new RecvSkillStartCastR(0, castTime);
-            _server.Router.Send(spell, _client);
+            RecvSkillStartCastR thiefSkill = new RecvSkillStartCastR(0, castTime);
+            _server.Router.Send(thiefSkill, _client);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -77,7 +75,7 @@ namespace Necromancy.Server.Model.Skills
             NpcSpawn npcSpawn = null;
             MonsterSpawn monsterSpawn = null;
             Character character = null;
-            IInstance target = _server.Instances.GetInstance((uint)_targetInstanceId);
+            IInstance target = _server.Instances.GetInstance(_targetInstanceId);
             switch (target)
             {
                 case NpcSpawn npc:
@@ -103,7 +101,7 @@ namespace Necromancy.Server.Model.Skills
                     trgCoord.Z = character.Z;
                     break;
                 default:
-                    _logger.Error($"Instance with InstanceId: {target.InstanceId} does not exist.  the ground is gettin blasted");
+                    _logger.Error($"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
             if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
@@ -111,53 +109,62 @@ namespace Necromancy.Server.Model.Skills
                 _logger.Error($"Could not get SkillBaseSetting for skillId : {_skillId}");
                 return;
             }
+            if (!int.TryParse($"{_skillId}".Substring(1, 6) + 1, out int effectId))
+            {
+                _logger.Error($"Creating effectId from skillid [{_skillId}]");
+            }
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
+            RecvBattleReportActionEffectOnHit brEof = new RecvBattleReportActionEffectOnHit(600021);
             brList.Add(brStart);
             brList.Add(brExec);
+            brList.Add(brEof);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
-            if (!int.TryParse($"{_skillId}".Substring(1, 6)+1, out int effectId))
-            {
-                _logger.Error($"Creating effectId from skillid [{_skillId}]");
-            }
+            brList.Clear();
             trgCoord.Z += 10;
             _logger.Debug($"skillid [{_skillId}] effectId [{effectId}]");
+
             RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(InstanceId, _targetInstanceId, effectId, trgCoord, 2, 2);
-            _server.Router.Send(_client.Map, eoData);
+            //_server.Router.Send(_client.Map, eoData);
             RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule(InstanceId, 2.0F);
-            _server.Router.Send(_client.Map, eoDisappear);
+            //_server.Router.Send(_client.Map, eoDisappear);
             
-            Vector3 _srcCoord  = new Vector3(_client.Character.X, _client.Character.Y, _client.Character.Z);
-            Recv8D92 effectMove = new Recv8D92(_srcCoord, trgCoord, InstanceId, _client.Character.skillStartCast, 3000, 2, 2);  // ToDo need real velocities
-            _server.Router.Send(_client.Map, effectMove);
+            //Vector3 _srcCoord  = new Vector3(_client.Character.X, _client.Character.Y, _client.Character.Z);
+            //Recv8D92 effectMove = new Recv8D92(_srcCoord, trgCoord, InstanceId, _client.Character.skillStartCast, 3000, 2, 2);  // ToDo need real velocities
+            //_server.Router.Send(_client.Map, effectMove);
 
             int damage = Util.GetRandomNumber(70, 90);
-            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(_client.Character.InstanceId, monsterSpawn.InstanceId, effectId, _srcCoord, 2, 2);
-            _server.Router.Send(_client.Map, eoTriggerData);
+            //RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(_client.Character.InstanceId, monsterSpawn.InstanceId, effectId, _srcCoord, 2, 2);
+            //_server.Router.Send(_client.Map, eoTriggerData);
             int monsterHP = monsterSpawn.GetHP();
+            List<PacketResponse> brList2 = new List<PacketResponse>();
             float perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.MaxHp) * 100) : 0;
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monsterSpawn.InstanceId, damage);
+            RecvBattleReportStartNotify brStart1 = new RecvBattleReportStartNotify(_client.Character.InstanceId);
+            RecvBattleReportEndNotify brEnd1 = new RecvBattleReportEndNotify();
+            //RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monsterSpawn.InstanceId, damage);
+            RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(monsterSpawn.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(monsterSpawn.InstanceId, perHp);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monsterSpawn.InstanceId);
 
-            brList.Add(brStart);
-            brList.Add(brHp);
-            brList.Add(oHpUpdate);
-            brList.Add(brHit);
-            brList.Add(brEnd);
-            brList.Add(oHpUpdate);
-            _server.Router.Send(_client.Map, brList);
-            if (monsterSpawn.GetAgroCharacter(_client.Character.InstanceId))
-            {
-                monsterSpawn.UpdateHP(-damage);
-            }
-            else
-            {
-                monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
-            }
+            brList2.Add(brStart1);
+            //brList2.Add(brHp);
+            brList2.Add(brPhyHp);
+            brList2.Add(oHpUpdate);
+            brList2.Add(brHit);
+            brList2.Add(brEnd1);
+            //brList.Add(oHpUpdate);
+            _server.Router.Send(_client.Map, brList2);
+            //if (monsterSpawn.GetAgroCharacter(_client.Character.InstanceId))
+            //{
+               // monsterSpawn.UpdateHP(-damage);
+            //}
+            //else
+            //{
+                //monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
+            //}
             _logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.GetHP()} HP left.");
         }
 

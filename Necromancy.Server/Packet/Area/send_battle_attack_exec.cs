@@ -106,24 +106,25 @@ namespace Necromancy.Server.Packet.Area
                     break;
             }
 
-            List<PacketResponse> brList = new List<PacketResponse>();
+            List<PacketResponse> brTargetList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(600021);
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(600021);
+            RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)instance.InstanceId);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(instance.InstanceId);
             RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(instance.InstanceId, damage);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(instance.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(instance.InstanceId, perHp);
 
 
-            brList.Add(brStart);
-            brList.Add(brAttack);
-            brList.Add(brHit);
-            //brList.Add(brPhyHp);
-            brList.Add(brHp);
-            brList.Add(oHpUpdate);
-            brList.Add(brEnd);
-            Router.Send(client.Map, brList);
+            brTargetList.Add(brStart);
+            brTargetList.Add(brAttack);
+            brTargetList.Add(brHit);
+            brTargetList.Add(brPhyHp);
+            //brTargetList.Add(brHp);
+            brTargetList.Add(oHpUpdate);
+            brTargetList.Add(brEnd);
+            Router.Send(client.Map, brTargetList);
+
 
 
             //SendReportAcctionAtackExec(client, instance);
