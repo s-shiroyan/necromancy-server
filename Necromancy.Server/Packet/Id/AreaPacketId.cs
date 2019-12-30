@@ -840,7 +840,7 @@ namespace Necromancy.Server.Packet.Id
         send_party_change_mode = 0x133, //opcode not found
         send_party_decline_to_apply = 0x134, //opcode not found
         send_party_decline_to_invite = 0x738C,
-        send_party_disband = 0x136,//opcode not found
+        send_party_disband = 0x6E26,
         send_party_entry_draw = 0x137, //opcode not found
         send_party_establish = 0xAF25,
         send_party_establish_2 = 0x139, //opcode not found
