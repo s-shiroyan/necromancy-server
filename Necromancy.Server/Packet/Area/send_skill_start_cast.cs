@@ -158,7 +158,7 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(skillFail, client);
                 return;
             }
-            ThiefSkill thiefSkill = new ThiefSkill(_server, client, skillId, skillTarget, charCoord);
+            ThiefSkill thiefSkill = new ThiefSkill(_server, client, skillId, skillTarget);
             Server.Instances.AssignInstance(thiefSkill);
             client.Character.activeSkillInstance = thiefSkill.InstanceId;
             thiefSkill.StartCast();

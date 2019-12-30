@@ -21,16 +21,14 @@ namespace Necromancy.Server.Model.Skills
         private readonly NecServer _server;
         private int _skillId;
         private uint _targetInstanceId;
-        private Vector3 _srcCoord;
 
-        public ThiefSkill(NecServer server, NecClient client, int skillId, uint targetInstanceId, Vector3 srcCoord)
+        public ThiefSkill(NecServer server, NecClient client, int skillId, uint targetInstanceId)
         {
             _server = server;
             _client = client;
             _skillId = skillId;
             _targetInstanceId = targetInstanceId;
             _logger = LogProvider.Logger<NecLogger>(this);
-            _srcCoord = srcCoord;
         }
 
         public void StartCast()
