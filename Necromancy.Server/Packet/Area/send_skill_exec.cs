@@ -53,9 +53,10 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"skillLookup : {skillLookup}");
             var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
                         {
+                        { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillId, targetId) },
                          { x => (x > 114300 && x < 114399), () => Trap(client, skillId) },
                          { x => x == 114607, () => Stealth(client, skillId) },
-                         { x => (x > 113000 && x < 113999), () => FlameArrow(client, skillId, targetId) }
+                         { x => (x > 113000 && x < 113999), () => Spell(client, skillId, targetId) }
                         };
 
             eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
@@ -141,10 +142,15 @@ namespace Necromancy.Server.Packet.Area
             stealth.SkillExec();
         }
 
-        private void FlameArrow(NecClient client, int skillId, int targetId)
+        private void Spell(NecClient client, int skillId, int targetId)
         {
-            Spell flameArrow = (Spell)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
-            flameArrow.SkillExec();
+            Spell spell = (Spell)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
+            spell.SkillExec();
+        }
+        private void ThiefSkill(NecClient client, int skillId, int targetId)
+        {
+            ThiefSkill thiefSkill = (ThiefSkill)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
+            thiefSkill.SkillExec();
         }
     }
 }

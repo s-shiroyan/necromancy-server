@@ -32,7 +32,7 @@ namespace Necromancy.Server.Model.Skills
 
         public void StartCast()
         {
-            RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(_skillid, 2.0F);
+            RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(_skillid, 0.0F);
             _server.Router.Send(_client.Map, startCast);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
@@ -48,9 +48,18 @@ namespace Necromancy.Server.Model.Skills
 
         public void SkillExec()
         {
-            IBuffer res12 = BufferProvider.Provide();
-            res12.WriteByte(1);
-            _server.Router.Send(_client.Map, (ushort)AreaPacketId.recv_cloak_notify_open, res12, ServerType.Area);
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+            RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
+            brList.Add(brStart);
+            brList.Add(brExec);
+            brList.Add(brEnd);
+            _server.Router.Send(_client.Map, brList);
+
+            //IBuffer res12 = BufferProvider.Provide();
+            //res12.WriteByte(1);
+            //_server.Router.Send(_client, (ushort)AreaPacketId.recv_cloak_notify_open, res12, ServerType.Area);
 
         }
 

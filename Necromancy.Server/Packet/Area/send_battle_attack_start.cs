@@ -23,8 +23,8 @@ namespace Necromancy.Server.Packet.Area
             client.Character.battleNext = 0;
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId); //0 means success
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area, client);
+            res.WriteInt32(client.Character.battleAttack); //0 means success
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area);
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(client.Character.InstanceId);
