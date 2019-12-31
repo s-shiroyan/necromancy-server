@@ -786,7 +786,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_soul_rankup_close = 0x4D03,
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
-        send_event_system_message_timer_r = 0x90, //opcode not found
+        send_event_system_message_timer_r = 0xF9B8,
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
         send_event_union_storage_close = 0x93, //opcode not found
