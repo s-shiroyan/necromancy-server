@@ -365,48 +365,51 @@ namespace Necromancy.Server.Tasks
         }
         private void PlayerDeadCheck(Character currentTarget)
         {
-            if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
+            if (currentTarget.currentHp <= 0)
             {
                 _monster.SetAgro(false);
-                currentTarget.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
-                List<PacketResponse> brList = new List<PacketResponse>();
-                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
-                RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
-                RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
-                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+                if (!currentTarget.hadDied)
+                {
 
-                brList.Add(brStart);
-                brList.Add(cDead1); //animate the death of your living body
-                brList.Add(brEnd);
-                _server.Router.Send(Map, brList, client); // send death animation to other players
+                    currentTarget.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
+                    List<PacketResponse> brList = new List<PacketResponse>();
+                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
+                    RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
+                    RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
+                    RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                    NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+
+                    brList.Add(brStart);
+                    brList.Add(cDead1); //animate the death of your living body
+                    brList.Add(brEnd);
+                    _server.Router.Send(Map, brList, client); // send death animation to other players
 
 
-                brList[1] = cDead2;
-                _server.Router.Send(client, brList); // send death animaton to player 1
+                    brList[1] = cDead2;
+                    _server.Router.Send(client, brList); // send death animaton to player 1
 
-                DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
+                    DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
 
-                deadBody.X = currentTarget.X;
-                deadBody.Y = currentTarget.Y;
-                deadBody.Z = currentTarget.Z;
-                deadBody.Heading = currentTarget.Heading;
-                currentTarget.movementId = currentTarget.DeadBodyInstanceId;
+                    deadBody.X = currentTarget.X;
+                    deadBody.Y = currentTarget.Y;
+                    deadBody.Z = currentTarget.Z;
+                    deadBody.Heading = currentTarget.Heading;
+                    currentTarget.movementId = currentTarget.DeadBodyInstanceId;
 
-                Thread.Sleep(5000);
-                currentTarget.hadDied =false; // quick switch to living state so your dead body loads with your gear
-                //load your dead body on to the map for you to see in soul form. 
-                RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , client);
-                _server.Router.Send(client, cBodyData.ToPacket());
-                        
-                currentTarget.hadDied = true; // back to dead so your soul appears with-out gear.
+                    Thread.Sleep(5000);
+                    currentTarget.hadDied = false; // quick switch to living state so your dead body loads with your gear
+                                                   //load your dead body on to the map for you to see in soul form. 
+                    RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+                    _server.Router.Send(client, cBodyData.ToPacket());
 
-                Thread.Sleep(100);
+                    currentTarget.hadDied = true; // back to dead so your soul appears with-out gear.
 
-                //reload your living body with no gear
-                RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
-                _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+                    Thread.Sleep(100);
 
+                    //reload your living body with no gear
+                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
+                    _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+                }
             }
         }
             

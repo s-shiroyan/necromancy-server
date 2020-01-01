@@ -333,6 +333,18 @@ namespace Necromancy.Server.Model
                 Traps.Remove(instanceId);
             }
         }
+
+        public MonsterSpawn MonsterInRange(uint instanceId)
+        {
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                if (monster.InstanceId == instanceId)
+                {
+                    return monster;
+                }
+            }
+            return null;
+        }
     }
 
     public class MapPosition
