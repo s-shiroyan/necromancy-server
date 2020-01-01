@@ -26,14 +26,15 @@ namespace Necromancy.Server.Packet.Area
 
             ///////////////test forced item receive. to be expanded upon using a drop table and slot checking logic
             ///
+            if (i > 24) { i = 0; }
             i++;
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt64(50100301); //Item Object ID 
+            res.WriteInt64(50100301+i); //Item Object Instance ID 
 
             res.WriteCString("Simple Camp Cheater loot"); //Name
 
-            res.WriteInt32(45); //Wep type
+            res.WriteInt32(45); //item type from itemType.csv
 
             res.WriteInt32(1);
 
