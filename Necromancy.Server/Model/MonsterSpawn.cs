@@ -59,7 +59,7 @@ namespace Necromancy.Server.Model
 
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
-        private Dictionary<uint, int> MonsterAgroList { get; set; }
+        public Dictionary<uint, int> MonsterAgroList { get; set; }
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);

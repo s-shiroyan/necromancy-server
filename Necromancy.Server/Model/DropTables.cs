@@ -48,7 +48,7 @@ namespace Necromancy.Server.Model
             }
             else
             {
-                item = new DropItem(50100301, 1);
+                item = new DropItem(50100301, 1);//this is a default Camp Item to prevent un-handled exceptions
             }
             return item;
         }
