@@ -903,7 +903,7 @@ namespace Necromancy.Server.Packet.Id
         send_skill_custom_slot_set = 0x182, //opcode not found
         send_skill_exec = 0x2D88,
         send_skill_next_cast = 0x184, //opcode not found
-        send_skill_onhit = 0x185, //opcode not found
+        send_skill_onhit = 0x421, 
         send_skill_request_base_from_item = 0x186, //opcode not found
         send_skill_request_gain = 0x6507, 
         send_skill_request_info = 0x4EB5, 

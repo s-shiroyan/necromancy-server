@@ -17,8 +17,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            //Router.Send(client.Map, (ushort) AreaPacketId.send_skill_onhit, res, ServerType.Area);
+            //ToDo,  find an appropriate recv.   Recv_skill_exec?
         }
     }
 }

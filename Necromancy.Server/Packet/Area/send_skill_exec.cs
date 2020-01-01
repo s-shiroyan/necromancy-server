@@ -52,12 +52,13 @@ namespace Necromancy.Server.Packet.Area
             int skillLookup = skillId / 1000;
             Logger.Debug($"skillLookup : {skillLookup}");
             var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
-                        {
-                        { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillId, targetId) },
+            {
+                         { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillId, targetId) },
                          { x => (x > 114300 && x < 114399), () => Trap(client, skillId) },
                          { x => x == 114607, () => Stealth(client, skillId) },
-                         { x => (x > 113000 && x < 113999), () => Spell(client, skillId, targetId) }
-                        };
+                         { x => (x > 113000 && x < 113999), () => Spell(client, skillId, targetId) },
+                         { x => (x > 114000 && x < 999999), () => Router.Send(new RecvSkillExecR(0, 0, 0), client) } //this is a default catch statement for unmapped skills to prevent un-handled exceptions 
+            };
 
             eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
             client.Character.castingSkill = false;
