@@ -409,6 +409,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_charabody_salvage_request_cancel(this));
             _areaConsumer.AddHandler(new send_charabody_salvage_abort(this));
             _areaConsumer.AddHandler(new send_party_disband(this));
+            _areaConsumer.AddHandler(new send_event_system_message_timer_r(this));
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND

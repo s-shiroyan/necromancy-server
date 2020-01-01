@@ -33,18 +33,8 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             //recv_0xE8B9 = 0xE8B9,
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0x38); //Monster instance ID
-            res.WriteFloat(client.Character.X); //X
-            res.WriteFloat(client.Character.Y); //Y
-            res.WriteFloat(client.Character.Z); //Z
-            //Location for monster to go to
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt16(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res.WriteInt32(client.Character.InstanceId);
+            res.WriteFloat(4);
             Router.Send(client, 0xE8B9, res, ServerType.Area);
 
             //--------------------------------------------------------------

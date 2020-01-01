@@ -243,6 +243,31 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_raisescale_view_open, res15, ServerType.Area);
                     break;
 
+                case "event":
+                    IBuffer res16 = BufferProvider.Provide();
+                    //recv_event_start = 0x1B5C, 
+                    res16.WriteInt32(1);
+                    res16.WriteByte((byte)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res16, ServerType.Area);
+
+                    IBuffer res17 = BufferProvider.Provide();
+                    //recv_event_change_type = 0x32ED,
+                    res17.WriteInt32(y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res17, ServerType.Area);
+
+                    Thread.Sleep(2000);
+                    IBuffer res18 = BufferProvider.Provide();
+                    //recv_event_end = 0x99D, 
+                    res18.WriteByte((byte)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_end, res18, ServerType.Area);
+                    break;
+
+                case "situationend":
+                    IBuffer res19 = BufferProvider.Provide();
+                    //recv_situation_end = 0x124C,
+                    Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res19, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;

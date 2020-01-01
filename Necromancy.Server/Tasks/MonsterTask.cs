@@ -1,7 +1,6 @@
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Tasks;
 using Necromancy.Server.Common;
-using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
@@ -9,10 +8,8 @@ using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Necromancy.Server.Tasks
 {
@@ -189,7 +186,7 @@ namespace Necromancy.Server.Tasks
                 return true;
             }
             float homeDistance = GetDistance(monsterHome.destination, monster);
-            if (homeDistance >= (agroRange * 2))
+            if (homeDistance >= (agroRange * 10))
             {
                 foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
@@ -370,23 +367,20 @@ namespace Necromancy.Server.Tasks
         {
             if (currentTarget.currentHp <= 0 && !currentTarget.hadDied)
             {
-                foreach (uint instanceId in _monster.GetAgroInstanceList())
-                {
-                    _monster.MonsterHate(_server, false, instanceId);
-                }
-
+                _monster.SetAgro(false);
+                currentTarget.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
-                RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId,1);
+                RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
                 RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
                 RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
 
                 brList.Add(brStart);
                 brList.Add(cDead1); //animate the death of your living body
                 brList.Add(brEnd);
-                _server.Router.Send(Map, brList); // send death animation to other players
+                _server.Router.Send(Map, brList, client); // send death animation to other players
 
-                NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
 
                 brList[1] = cDead2;
                 _server.Router.Send(client, brList); // send death animaton to player 1
@@ -399,27 +393,19 @@ namespace Necromancy.Server.Tasks
                 deadBody.Heading = currentTarget.Heading;
                 currentTarget.movementId = currentTarget.DeadBodyInstanceId;
 
-
                 Thread.Sleep(5000);
-
+                currentTarget.hadDied =false; // quick switch to living state so your dead body loads with your gear
                 //load your dead body on to the map for you to see in soul form. 
                 RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody , client);
                 _server.Router.Send(client, cBodyData.ToPacket());
                         
-                currentTarget.hadDied = true;
+                currentTarget.hadDied = true; // back to dead so your soul appears with-out gear.
 
                 Thread.Sleep(100);
 
                 //reload your living body with no gear
                 RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
                 _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
-              
-
-
-
-                    
-                
-                
 
             }
         }
@@ -613,7 +599,7 @@ namespace Necromancy.Server.Tasks
             _monster.Y = spawnCoords.destination.Y; 
             _monster.Z = spawnCoords.destination.Z; 
             _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination);
-            _monster.SetHP(100);
+            _monster.SetHP(_monster.MaxHp);
             respawnTime = _monster.RespawnTime;
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monster);
             _server.Router.Send(Map, monsterData);
@@ -756,16 +742,23 @@ namespace Necromancy.Server.Tasks
             Vector3 monster = new Vector3(_monster.X, _monster.Y, _monster.Z);
             foreach (NecClient client in mapsClients)
             {
-                Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
-                float distanceChar = GetDistance(character, monster);
-                if (distanceChar <= agroRange)
+                if (client.Character.hadDied == false)
                 {
-                    if (checkFOV(client))
+                    Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+                    float distanceChar = GetDistance(character, monster);
+                    if (distanceChar <= agroRange)
                     {
-                        _monster.SetCurrentTarget(client.Character);
-                        _monster.SetAgro(true);
-                        _monster.AddAgroList(client.Character.InstanceId, 0);
+                        if (checkFOV(client))
+                        {
+                            _monster.SetCurrentTarget(client.Character);
+                            _monster.SetAgro(true);
+                            _monster.AddAgroList(client.Character.InstanceId, 0);
+                        }
                     }
+                }
+                else 
+                {
+                    Logger.Debug($"character {client.Soul.Name} is dead. Looking for Living Targets.");
                 }
             }
 

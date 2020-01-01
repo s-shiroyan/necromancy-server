@@ -3,7 +3,9 @@ using System.Threading;
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Chat.Command.Commands
@@ -13,7 +15,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Revive(NecServer server) : base(server)
         {
         }
-        int i = 0;
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
@@ -21,8 +22,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteInt32(0); //Has to be 0 or else you DC
-                res1.WriteInt32(0);
-                res1.WriteInt32(0);
+                res1.WriteInt32(client.Character.DeadBodyInstanceId);
+                res1.WriteInt32(client.Character.InstanceId);
                 Router.Send(client, (ushort) AreaPacketId.recv_revive_init_r, res1, ServerType.Area);
                 
                 IBuffer res = BufferProvider.Provide();
@@ -38,7 +39,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res2.WriteInt32(0); // Error code, 0 = success
                 Router.Send(client, (ushort) AreaPacketId.recv_revive_execute_r, res2, ServerType.Area);
 
-                //
+                RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(client.Character.currentHp);
+                Router.Send(client, cHpUpdate.ToPacket());
+
                 IBuffer res4 = BufferProvider.Provide();
                 res4.WriteInt32(client.Character.InstanceId);
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
