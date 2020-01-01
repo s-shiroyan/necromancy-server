@@ -352,6 +352,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
             _areaConsumer.AddHandler(new send_skill_cast_cancel_request(this));
             _areaConsumer.AddHandler(new send_skill_exec(this));
+            _areaConsumer.AddHandler(new send_skill_onhit(this));
             _areaConsumer.AddHandler(new send_skill_request_gain(this));
             _areaConsumer.AddHandler(new send_skill_start_cast(this));
             _areaConsumer.AddHandler(new send_soul_dispitem_request_data(this));
