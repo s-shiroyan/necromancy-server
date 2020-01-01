@@ -215,6 +215,18 @@ namespace Necromancy.Server.Model
             return false;
         }
 
+        public MonsterSpawn GetMonsterByInstanceId(uint instanceId)
+        {
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                if (monster.InstanceId == instanceId)
+                {
+                    return monster;
+                }
+            }
+            return null;
+        }
+
         public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
         {
             List<MonsterSpawn> monsters = new List<MonsterSpawn>();
