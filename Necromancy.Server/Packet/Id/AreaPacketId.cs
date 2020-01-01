@@ -532,7 +532,7 @@ namespace Necromancy.Server.Packet.Id
         recv_raisescale_request_revive_r = 0xA0FA,
         recv_raisescale_update_success_per = 0xA508,
         recv_raisescale_view_close = 0x260E,
-        recv_raisescale_view_open = 0xC25D,
+        recv_raisescale_view_open = 0xC2E5,
         recv_random_box_close_r = 0x924E,
         recv_random_box_get_item_all_r = 0xF02B,
         recv_random_box_get_item_r = 0xC444,
