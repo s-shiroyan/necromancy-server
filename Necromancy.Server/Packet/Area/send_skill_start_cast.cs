@@ -31,18 +31,17 @@ namespace Necromancy.Server.Packet.Area
             client.Character.skillStartCast = skillID;
             int skillLookup = skillID / 1000;
             Logger.Debug($"skillTarget [{skillTarget}]  skillID [{skillID}] skillLookup [{skillLookup}]");
-            var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
+                var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                {
                         { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillID, skillTarget) },
                         { x => (x > 114300 && x < 114399), () => Trap(client, skillID) },
-                         { x => (x > 113000 && x < 113999), () => Spell(client, skillID, skillTarget) },
-                         { x => x == 114607, () => Stealth(client, skillID) },
-                         { x => x <= 999999, () => Spell(client, 113101, skillTarget) } //this is a default catch statement. it changes un-mapped skills to a fireball
-
-            };
-
-            eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
-
+                        { x => (x > 113000 && x < 113999), () => Spell(client, skillID, skillTarget) },
+                        { x => x == 114607, () => Stealth(client, skillID) },
+                        { x => (x > 114000 && x < 999999), () => SendSkillStartCastSelf(client, skillID, skillTarget, 0) } //this is a default catch statement for unmapped skills to prevent un-handled exceptions
+                };
+                eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
+            }
         }
         private void Trap(NecClient client, int skillId)
         {
@@ -232,7 +231,7 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget, float castingTime)
+        private void SendSkillStartCastSelf(NecClient client, int mySkillID,uint mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");

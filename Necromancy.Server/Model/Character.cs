@@ -105,8 +105,8 @@ namespace Necromancy.Server.Model
             maxMp = 500;
             maxOd = 200;
             currentHp = 1000;
-            currentMp = 1000;
-            currentOd = 1000;
+            currentMp = 450;
+            currentOd = 150;
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;

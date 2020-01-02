@@ -35,15 +35,21 @@ namespace Necromancy.Server.Model
         {
             int roll = LootRoll();
             DropTable monsterDrop = dropTables.Find(x => x.MonsterId == monsterId);
-            List<DropTableItem> ItemDrop = monsterDrop.FindAll(roll);
             DropItem item = null;
-            if (ItemDrop.Count == 1)
+
+            if (monsterDrop != null)
             {
+                List<DropTableItem> ItemDrop = monsterDrop.FindAll(roll);
+                if (ItemDrop.Count == 1)
+                {
 
-                item = new DropItem(ItemDrop[0].ItemId, GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems));
+                    item = new DropItem(ItemDrop[0].ItemId, GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems));
+                }
             }
-
-
+            else
+            {
+                item = new DropItem(50100301, 1);//this is a default Camp Item to prevent un-handled exceptions
+            }
             return item;
         }
         private int LootRoll()

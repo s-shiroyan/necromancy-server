@@ -368,6 +368,7 @@ namespace Necromancy.Server.Tasks
             if (currentTarget.currentHp <= 0)
             {
                 _monster.SetAgro(false);
+                _monster.MonsterAgroList.Remove(currentTarget.InstanceId);
                 if (!currentTarget.hadDied)
                 {
 
@@ -561,7 +562,7 @@ namespace Necromancy.Server.Tasks
             res = BufferProvider.Provide();
                     
             res.WriteInt32(instanceId);
-            res.WriteFloat(4.0F);
+            res.WriteFloat(3.0F);
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res, ServerType.Area);
 
         }
@@ -761,7 +762,7 @@ namespace Necromancy.Server.Tasks
                 }
                 else 
                 {
-                    Logger.Debug($"character {client.Soul.Name} is dead. Looking for Living Targets.");
+                    //Logger.Debug($"character {client.Soul.Name} is dead. Looking for Living Targets.");
                 }
             }
 

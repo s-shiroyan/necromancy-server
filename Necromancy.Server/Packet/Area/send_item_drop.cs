@@ -15,13 +15,12 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int unknown = packet.Data.ReadInt16();//Equip slot maybe?
-            int backpackSlot = packet.Data.ReadInt16();//Slot from backpack the item is in
-            byte itemSerialId = packet.Data.ReadByte();
+            int itemSlot = packet.Data.ReadInt32();
+            byte itemCount = packet.Data.ReadByte();
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);
+            res.WriteInt32(itemSlot);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_drop_r, res, ServerType.Area);
         }
