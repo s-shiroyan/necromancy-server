@@ -582,14 +582,6 @@ namespace Necromancy.Server.Tasks
             res.WriteInt32(currentTarget.InstanceId); 
             _server.Router.Send(Map, (ushort)AreaPacketId.recv_battle_attack_start, res, ServerType.Area);
         }
-        private void MonsterStateUpdateNotify()
-        {
-            IBuffer res = BufferProvider.Provide();
-            res = BufferProvider.Provide();
-            res.WriteInt32(_monster.InstanceId); //From monster attack
-            res.WriteInt32(11300000); //From monster attack
-            _server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res, ServerType.Area);
-        }
         public void MonsterSpawn()
         {
             _monster.SetAgro(false);
@@ -638,10 +630,6 @@ namespace Necromancy.Server.Tasks
                 res10.WriteInt32(2);//Toggles state between Alive(attackable),  Dead(lootable), or Inactive(nothing). 
                 _server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_state_update_notify, res10, ServerType.Area);
 
-                //  Let a separate loot manager handle the monster body click?
-                DropTables drop = new DropTables();
-                DropItem droppedItem = drop.GetLoot(_monster.MonsterId);
-                Logger.Debug($"Loot is {droppedItem.NumItems}  of ItemId {droppedItem.ItemId}");
                 Thread.Sleep(_monster.RespawnTime);
                 //decompose the body
                 IBuffer res7 = BufferProvider.Provide();
