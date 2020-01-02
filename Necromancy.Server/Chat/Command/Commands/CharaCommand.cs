@@ -54,6 +54,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "hp":
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(y);
+                    character2.currentHp = y;
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                     break;
 

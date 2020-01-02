@@ -762,7 +762,7 @@ namespace Necromancy.Server.Tasks
                 }
                 else 
                 {
-                    Logger.Debug($"character {client.Soul.Name} is dead. Looking for Living Targets.");
+                    //Logger.Debug($"character {client.Soul.Name} is dead. Looking for Living Targets.");
                 }
             }
 

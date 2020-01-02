@@ -93,7 +93,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(2118); // Charm
             res.WriteInt16(2119); // confus
             res.WriteInt16(2120); // fear
-            res.WriteInt16(2121); // changed nothing visably
+            res.WriteInt16(2121); // changed nothing visably (possibly EXP Boost Gauge. trying to find it
 
             // gold and alignment?
             res.WriteInt64(client.Character.AdventureBagGold); // gold
@@ -141,17 +141,17 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(99); // changed nothing visably
 
             // nothing
-            res.WriteInt16(51); // changed nothing visably
-            res.WriteInt16(25); // changed nothing visably
-            res.WriteInt16(10); // changed nothing visably
-            res.WriteInt16(25); // changed nothing visably
-            res.WriteInt16(87); // changed nothing visably
-            res.WriteInt16(122); // changed nothing visably
-            res.WriteInt16(14); // changed nothing visably
-            res.WriteInt16(73); // changed nothing visably
-            res.WriteInt16(69); // changed nothing visably
-            res.WriteInt16(73); // changed nothing visably
-            res.WriteInt16(69); // changed nothing visably
+            res.WriteInt16(111); // changed nothing visably
+            res.WriteInt16(112); // changed nothing visably
+            res.WriteInt16(113); // changed nothing visably
+            res.WriteInt16(114); // changed nothing visably
+            res.WriteInt16(115); // changed nothing visably
+            res.WriteInt16(116); // changed nothing visably
+            res.WriteInt16(117); // changed nothing visably
+            res.WriteInt16(118); // changed nothing visably
+            res.WriteInt16(119); // changed nothing visably
+            res.WriteInt16(120); // changed nothing visably
+            res.WriteInt16(121); // changed nothing visably
 
 
             //sub_484B00 map ip and connection
