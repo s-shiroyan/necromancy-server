@@ -269,6 +269,27 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res19, ServerType.Area);
                     break;
 
+                case "eo":
+                    IBuffer res20 = BufferProvider.Provide();
+                    //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+
+                    res20.WriteInt32(6969); // Unique Instance ID of Skill Cast
+                    res20.WriteFloat(character2.X); //Effect Object X
+                    res20.WriteFloat(character2.Y); //Effect Object y
+                    res20.WriteFloat(character2.Z); //Effect Object z
+
+                    res20.WriteFloat(0); //Rotation Along X Axis if above 0
+                    res20.WriteFloat(0); //Rotation Along Y Axis if above 0
+                    res20.WriteFloat(0); //Rotation Along Z Axis if above 0
+
+                    res20.WriteInt32(y); //Effect id
+                    res20.WriteInt32(0); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
+                    res20.WriteInt32(0); //unknown
+
+                    res20.WriteInt32(0);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res20, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
