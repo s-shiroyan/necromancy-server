@@ -41,36 +41,6 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
-            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
-            {
-                if (!monsterSpawn.Active)
-                {
-                    monsterSpawn.SpawnActive = true;
-                    if (!monsterSpawn.TaskActive)
-                    {
-                        MonsterTask monsterTask = new MonsterTask(Server, monsterSpawn);
-                        if (monsterSpawn.defaultCoords)
-                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
-                        else
-                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
-                        monsterTask.Start();
-                    }
-                    else
-                    {
-                        if (monsterSpawn.MonsterVisible)
-                        {
-                            Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
-                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                            Server.Router.Send(monsterData, client);
-                            if (!monsterSpawn.GetAgro())
-                            {
-                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
-                            }
-                        }
-                    }
-                }
-            }
-
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
             {
                 if (otherClient == client)
