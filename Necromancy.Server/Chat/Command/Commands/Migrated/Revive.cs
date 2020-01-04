@@ -13,7 +13,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Revive(NecServer server) : base(server)
         {
         }
-        int i = 0;
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {

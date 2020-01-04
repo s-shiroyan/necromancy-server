@@ -1289,8 +1289,8 @@ recv_quest_target_count_r = 0x465C,
 
 recv_battle_report_action_eq_break = 0xD426, // Parent = 0xD400 // Range ID = 01
                     
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0); // leave as 0
+            res.WriteInt32(0); //number of slot? to break
 			
 recv_storage_draw_item2_r = 0xD43D, // Parent = 0xD400 // Range ID = 02
                     
@@ -1558,9 +1558,9 @@ recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
             res.WriteByte(0);
             res.WriteInt16(0);
 
-            res.WriteInt16(0);
-            res.WriteCString(""); // Length 0x31 
-            res.WriteCString(""); // Length 0x5B
+            res.WriteInt16(0); //Number here is "pieces" 
+            res.WriteCString("item name"); // Length 0x31 
+            res.WriteCString("chara name"); // Length 0x5B
 
 recv_0x8D62 = 0x8D62, // Parent = 0x8CC6 // Range ID = 02  //No String - ERROR
             
