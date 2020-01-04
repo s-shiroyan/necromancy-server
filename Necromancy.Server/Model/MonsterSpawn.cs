@@ -76,7 +76,7 @@ namespace Necromancy.Server.Model
             monsterCoords = new List<MonsterCoord>();
             MonsterAgroList = new Dictionary<uint, int>();
             MonsterWalkVelocity = 175;
-            MonsterRunVelocity = 500;
+            MonsterRunVelocity = 300;
             MonsterVisible = false;
         }
         public void MonsterMove(NecServer server, NecClient client, int monsterVelocity, byte pose, byte animation, MonsterCoord monsterCoord = null)
