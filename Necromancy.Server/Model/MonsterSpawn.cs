@@ -196,7 +196,7 @@ namespace Necromancy.Server.Model
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x8D92, res, ServerType.Area);
         }
 
-        public void MonsterOrient(NecServer server)
+        public void MonsterOrient(NecServer server) // Need to change this to a recv_ with a time attribute, monsters shouldn't turn instantly
         {
             IBuffer res = BufferProvider.Provide();
 
@@ -209,7 +209,7 @@ namespace Necromancy.Server.Model
             res.WriteByte(1);
             server.Router.Send(Map, (ushort)AreaPacketId.recv_0x6B6A, res, ServerType.Area);
         }
-        public void MonsterOrient(NecServer server, NecClient client)
+        public void MonsterOrient(NecServer server, NecClient client) // Need to change this to a recv_ with a time attribute, monsters shouldn't turn instantly
         {
             IBuffer res = BufferProvider.Provide();
 
