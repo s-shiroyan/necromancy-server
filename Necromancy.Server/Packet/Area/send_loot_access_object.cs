@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Area
             int instanceID = packet.Data.ReadInt32();
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(objectID);
+            res2.WriteInt32(instanceID);
 
             Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
 
