@@ -19,6 +19,9 @@ namespace Necromancy.Server.Packet.Response
 
         protected override IBuffer ToBuffer()
         {
+            int numEntries = 19; //Max of 19 Equipment Slots for Character Player
+            int numStatusEffects = 0x80; //Statuses effects. Max 128
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_character.InstanceId);
             res.WriteCString(_soulName);
@@ -27,24 +30,31 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Y);
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
-            res.WriteInt32(6);
-            res.WriteInt32(0); //Character pose? 6 = guard, 8 = invisible,
-            res.WriteInt16(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0b00001000); //BITMASK for Character State
+                                        //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 
+                                        //0bxxxxxx1x - 1 Battle Pose / 0 Normal
+                                        //0bxxxxx1xx - 1 Block Pose / 0 Normal | (for coming out of stealth while blocking)
+                                        //0bxxxx1xxx - 1 transparent / 0 solid  | (stealth in party partial visibility)
+                                        //0bxxx1xxxx -
+                                        //0bxx1xxxxx - 1 invisible / 0 visible  | (Stealth to enemies)
+                                        //0bx1xxxxxx - 1 blinking  / 0 solid    | (10  second invulnerability blinking)
+                                        //0b1xxxxxxx - 
 
-            int numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19(defines how many int32s to read?)
+            res.WriteInt16(0); //Character Size/Radius?
+
+            res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, _character);
+            LoadEquip.SlotSetup(res, _character, numEntries);
             //sub_483420
-            numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19
+            res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, _character);
+            LoadEquip.EquipItems(res, _character, numEntries);
             //sub_483420
-            numEntries = 19; //influences a loop that needs to be under 19
-            res.WriteInt32(numEntries);
+            res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.EquipSlotBitMask(res, _character);
+            LoadEquip.EquipSlotBitMask(res, numEntries);
+
             //sub_4835C0
             res.WriteInt32(0); //1 here means crouching?
             //sub_484660
@@ -72,16 +82,14 @@ namespace Necromancy.Server.Packet.Response
             //sub_483580
             res.WriteInt32(244);
             //sub_483420
-            numEntries = 1;
-            res.WriteInt32(numEntries); //influences a loop that needs to be under 128
+            res.WriteInt32(numStatusEffects); //Number of Status Effects to display 128 Max
             //sub_485A70
-            for (int i = 0; i < numEntries; i++)
+            for (int i = 0; i < numStatusEffects; i++)
             {
-                res.WriteInt32(0);
+                res.WriteInt32(0); //Status effect ID
                 res.WriteInt32(0);
                 res.WriteInt32(0);
             }
-
             //sub_481AA0
             res.WriteCString(""); //Comment string
             return res;

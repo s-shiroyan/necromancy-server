@@ -215,19 +215,19 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries); //has to be less than 19(defines how many int32s to read?)
 
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, client.Character);
+            LoadEquip.SlotSetup(res, client.Character ,numEntries);
 
 
             //sub_483420
             res.WriteInt32(numEntries); //has to be less than 19
 
             //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, client.Character);
+            LoadEquip.EquipItems(res, client.Character, numEntries);
 
             //sub_483420
             res.WriteInt32(numEntries);
 
-            LoadEquip.EquipSlotBitMask(res, client.Character);
+            LoadEquip.EquipSlotBitMask(res, numEntries);
 
             //sub_483420
             numEntries = 128;

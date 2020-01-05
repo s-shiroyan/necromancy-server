@@ -36,17 +36,17 @@ namespace Necromancy.Server.Packet.Response
             int numEntries = 19;
             res14.WriteInt32(numEntries);//less than or equal to 19
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res14, _character);
+            LoadEquip.SlotSetup(res14, _character, numEntries);
 
             numEntries = 19;
             res14.WriteInt32(numEntries);
             //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res14, _character);
+            LoadEquip.EquipItems(res14, _character, numEntries);
 
             numEntries = 19;
             res14.WriteInt32(numEntries);
             //Consolidated Frequently Used Code
-            LoadEquip.EquipSlotBitMask(res14, _character);
+            LoadEquip.EquipSlotBitMask(res14, numEntries);
 
             //Consolidated Frequently Used Code
             LoadEquip.BasicTraits(res14, _character);
