@@ -24,7 +24,7 @@ namespace Necromancy.Server.Model
             item1.MinItems = 1;
             item1.Maxitems = 5;
             DropTableItem item2 = new DropTableItem();
-            item2.ItemId = 50430001;
+            item2.ItemId = 10200101;
             item2.Rarity = 2;
             item2.MinItems = 1;
             item2.Maxitems = 1;
@@ -33,6 +33,7 @@ namespace Necromancy.Server.Model
             item3.Rarity = 3;
             item3.MinItems = 1;
             item3.Maxitems = 1;
+            
             beetle.AddItem(item1);
             beetle.AddItem(item2);
             beetle.AddItem(item3);
@@ -56,13 +57,17 @@ namespace Necromancy.Server.Model
                         _logger.Error($"Could not retrieve ItemSettings for ItemId [{ItemDrop[0].ItemId}]");
                         return null;
                     }
-                    Item item = new Item(itemSetting);    //  Need to get fully populated Item repository
                     _logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
-                    if (item.Id > 1)
+                    if (itemSetting.Id == 10200101)
                     {
-                        item.IconType = 45;
-                        item.ItemType = 1;
+                        itemSetting.IconType = 2;
                     }
+                    else if (itemSetting.Id == 80000101)
+                    {
+                        itemSetting.IconType = 55;
+                    }
+                    Item item = _server.Instances.CreateInstance<Item>(); //  Need to get fully populated Item repository
+                    item.AddItemSetting(itemSetting);
                     int numItems = GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems + 1);
                     dropItem = new DropItem(numItems, item);
                 }
@@ -74,7 +79,7 @@ namespace Necromancy.Server.Model
                     _logger.Error($"Could not retrieve ItemSettings for default Item Camp");
                     return null;
                 }
-                Item item = new Item(itemSetting);    //  Need to get fully populated Item repository
+                Item item = new Item();    //  Need to get fully populated Item repository
                 item.IconType = 45;
                 item.ItemType = 1;
                 dropItem = new DropItem(1, item);

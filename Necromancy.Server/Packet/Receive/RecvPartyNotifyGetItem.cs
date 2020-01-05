@@ -1,0 +1,33 @@
+using Arrowgene.Services.Buffers;
+using Necromancy.Server.Chat;
+using Necromancy.Server.Common;
+using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
+using System;
+
+namespace Necromancy.Server.Packet.Receive
+{
+    public class RecvPartyNotifyGetItem : PacketResponse
+    {
+        private readonly int _itemId;
+        private readonly string _message;
+        private readonly byte _count;
+        public RecvPartyNotifyGetItem(int itemId, string message, byte count)
+            : base((ushort) MsgPacketId.recv_party_notify_get_item, ServerType.Msg)
+        {
+            _itemId = itemId;
+            _message = message;
+            _count = count;
+        }
+
+        protected override IBuffer ToBuffer()
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(_itemId);
+            res.WriteCString(_message);
+            res.WriteByte(_count);
+
+            return res;
+        }
+    }
+}

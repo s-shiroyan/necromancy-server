@@ -66,6 +66,7 @@ namespace Necromancy.Server.Model
         public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
+        public int nextBagSlot { get; set; } // Until bag management is done
         public uint eventSelectReadyCode { get; set; }
         public int currentHp { get; set; }
         public uint currentMp { get; set; }
@@ -116,6 +117,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
+            nextBagSlot = 0;
         }
     }
 }

@@ -5,12 +5,17 @@ namespace Necromancy.Server.Model
 {
     public class Item : IInstance
     {
-        public Item(ItemSetting setting)
+        public Item()
+        {
+        }
+
+        public void AddItemSetting(ItemSetting setting)
         {
             Id = setting.Id;
             Name = setting.Name;
+            ItemType = setting.ItemType;
+            IconType = setting.IconType;
         }
-
         public uint InstanceId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
