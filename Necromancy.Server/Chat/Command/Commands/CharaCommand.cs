@@ -103,9 +103,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "start":
+                    SendBattleReportStartNotify(client, character2);
                     IBuffer res7 = BufferProvider.Provide();
-                    res7.WriteInt32(character2.InstanceId);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res7, ServerType.Area);
+                    //recv_battle_report_action_item_enchant = 0x6BDC,
+                    res7.WriteInt32(517);
+                    res7.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_action_item_enchant, res7, ServerType.Area);
+                    SendBattleReportEndNotify(client, character2);
                     break;
 
                 case "end":
@@ -269,25 +273,42 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res19, ServerType.Area);
                     break;
 
-                case "eo":
-                    IBuffer res20 = BufferProvider.Provide();
-                    //recv_data_notify_eo_data = 0x8075, // Parent = 0x8066 // Range ID = 02
+                case "popup":
+                    IBuffer res22 = BufferProvider.Provide();
+                    //recv_event_start = 0x1B5C, 
+                    res22.WriteInt32(0);
+                    res22.WriteByte((byte)y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_start, res22, ServerType.Area);
 
-                    res20.WriteInt32(6969); // Unique Instance ID of Skill Cast
-                    res20.WriteFloat(character2.X); //Effect Object X
-                    res20.WriteFloat(character2.Y); //Effect Object y
-                    res20.WriteFloat(character2.Z); //Effect Object z
+                    IBuffer res21 = BufferProvider.Provide();
+                    //recv_normal_system_message = 0xAE2B,
+                    res21.WriteCString("ToBeFound");
+                    Router.Send(client, (ushort)AreaPacketId.recv_normal_system_message, res21, ServerType.Area);
 
-                    res20.WriteFloat(0); //Rotation Along X Axis if above 0
-                    res20.WriteFloat(0); //Rotation Along Y Axis if above 0
-                    res20.WriteFloat(0); //Rotation Along Z Axis if above 0
+                    IBuffer res23 = BufferProvider.Provide();
+                    //recv_event_end = 0x99D, 
+                    res23.WriteByte((byte)y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_end, res23, ServerType.Area);
+                    break;
 
-                    res20.WriteInt32(y); //Effect id
-                    res20.WriteInt32(0); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
-                    res20.WriteInt32(0); //unknown
+                case "recv":
+                    IBuffer res24 = BufferProvider.Provide();
+                    //recv_auction_receive_item_r = 0xB1CA,
+                    res24.WriteInt32(y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_auction_receive_gold_r, res24, ServerType.Area);
+                    break;
 
-                    res20.WriteInt32(0);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res20, ServerType.Area);
+                case "string":
+                    IBuffer res26 = BufferProvider.Provide();
+                    //recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
+                    res26.WriteByte(0);
+                    res26.WriteByte(0);
+                    res26.WriteInt16(0);
+
+                    res26.WriteInt16((short)y);
+                    res26.WriteCString("adad"); // Length 0x31 
+                    res26.WriteCString("adad"); // Length 0x5B
+                    Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_loot_item, res26, ServerType.Area);
                     break;
 
                 default:

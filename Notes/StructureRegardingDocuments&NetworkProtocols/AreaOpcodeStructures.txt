@@ -2717,8 +2717,8 @@ recv_cash_shop_notify_open = 0x732D,
 	
 recv_battle_report_notify_exp_bonus = 0x7181,
 
-	res.WriteInt64(0);
-	res.WriteInt32(0);
+	res.WriteInt64(0); //current exp
+	res.WriteInt32(0); //bonus exp
 	
 	
 recv_object_disappear_notify = 0x717D,
