@@ -28,6 +28,15 @@ namespace Necromancy.Server.Packet.Area
             int instanceID = packet.Data.ReadInt32();
             _logger.Debug($"{client.Character.Name} is {client.Character.Alignmentid}");
 
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(instanceID);
+
+            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
+
+            ///////////////test forced item receive. to be expanded upon using a drop table and slot checking logic
+            ///
+            if (i > 24) { i = 0; }
+            i++;
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(instanceID);
 
