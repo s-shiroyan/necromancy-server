@@ -600,7 +600,7 @@ recv_item_cooltime_notify = 0xECF,
 
 recv_chara_update_alignment = 0xEF9,
             
-            res.WriteInt32(1);
+            res.WriteInt32(1); //Alignment ID
 
 recv_trade_notify_replied = 0x102E,
             

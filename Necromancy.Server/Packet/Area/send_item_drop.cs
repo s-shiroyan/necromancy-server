@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(itemSlot);
+            res.WriteInt32(0);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_drop_r, res, ServerType.Area);
         }
