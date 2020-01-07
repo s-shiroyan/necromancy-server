@@ -32,7 +32,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteByte(1); //Number of items
 
-            res.WriteInt32(0); //Item status 0 = identified  (same as item status inside senditeminstance)
+            res.WriteInt32(1); //Item status 0 = identified  (same as item status inside senditeminstance)
 
             res.WriteInt32(10200101); //Item icon
             res.WriteByte(0);
@@ -58,9 +58,9 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
-            res.WriteInt64(0); //Sell price maybe? (in gold pieces)
+            res.WriteInt64(0);
 
-            res.WriteInt32(x++);
+            res.WriteInt32(1);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
         }

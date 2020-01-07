@@ -200,7 +200,7 @@ recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
 	
 recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
 						
-						res.WriteInt16(0);
+						res.WriteInt16(0); //Shop type
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 						res.WriteByte(0);

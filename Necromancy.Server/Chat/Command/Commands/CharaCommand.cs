@@ -328,6 +328,16 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_alignment_param, res28, ServerType.Area);
                     break;
 
+                case "shop":
+                    IBuffer res29 = BufferProvider.Provide();
+                    //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                    res29.WriteInt16((short)y); //Shop type
+                    res29.WriteInt32(0);
+                    res29.WriteInt32(0);
+                    res29.WriteByte(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res29, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
