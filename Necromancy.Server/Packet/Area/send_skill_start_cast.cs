@@ -31,17 +31,17 @@ namespace Necromancy.Server.Packet.Area
             client.Character.skillStartCast = skillID;
             int skillLookup = skillID / 1000;
             Logger.Debug($"skillTarget [{skillTarget}]  skillID [{skillID}] skillLookup [{skillLookup}]");
-            var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
+                var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
+                {
+                        { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillID, skillTarget) },
                         { x => (x > 114300 && x < 114399), () => Trap(client, skillID) },
-                         { x => (x > 113000 && x < 113999), () => FlameArrow(client, skillID, skillTarget) },
-                         { x => x == 114607, () => Stealth(client, skillID) },
-                         { x => x <= 999999, () => FlameArrow(client, 113101, skillTarget) } //this is a default catch statement. it changes un-mapped skills to a fireball
-
-            };
-
-            eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
-
+                        { x => (x > 113000 && x < 113999), () => Spell(client, skillID, skillTarget) },
+                        { x => x == 114607, () => Stealth(client, skillID) },
+                        { x => (x > 114000 && x < 999999), () => SendSkillStartCastSelf(client, skillID, skillTarget, 0) } //this is a default catch statement for unmapped skills to prevent un-handled exceptions
+                };
+                eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
+            }
         }
         private void Trap(NecClient client, int skillId)
         {
@@ -137,15 +137,31 @@ namespace Necromancy.Server.Packet.Area
             stealth.StartCast();
         }
 
-        private void FlameArrow(NecClient client, int skillId, uint skillTarget)
+        private void Spell(NecClient client, int skillId, uint skillTarget)
         {
             Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
-            Spell flameArrow = new Spell(_server, client, skillId, skillTarget, charCoord);
-            Server.Instances.AssignInstance(flameArrow);
-            client.Character.activeSkillInstance = flameArrow.InstanceId;
-            flameArrow.StartCast();
+            Spell spell = new Spell(_server, client, skillId, skillTarget, charCoord);
+            Server.Instances.AssignInstance(spell);
+            client.Character.activeSkillInstance = spell.InstanceId;
+            spell.StartCast();
         }
 
+        private void ThiefSkill(NecClient client, int skillId, uint skillTarget)
+        {
+
+            if (skillTarget == 0)
+            {
+                Logger.Debug($"Skill requires target!! [{skillId}]");
+                int errorCode = -1311;
+                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                Router.Send(skillFail, client);
+                return;
+            }
+            ThiefSkill thiefSkill = new ThiefSkill(_server, client, skillId, skillTarget);
+            Server.Instances.AssignInstance(thiefSkill);
+            client.Character.activeSkillInstance = thiefSkill.InstanceId;
+            thiefSkill.StartCast();
+        }
         private void SendBattleReportSkillStartCast(NecClient client, int mySkillID)
         {
             IBuffer res4 = BufferProvider.Provide();
@@ -215,7 +231,7 @@ namespace Necromancy.Server.Packet.Area
 
         }
 
-        private void SendSkillStartCastSelf(NecClient client, int mySkillID,int mySkillTarget, float castingTime)
+        private void SendSkillStartCastSelf(NecClient client, int mySkillID,uint mySkillTarget, float castingTime)
         {
             Logger.Debug($"Skill Int : {mySkillID}");
             Logger.Debug($"Target Int : {mySkillTarget}");

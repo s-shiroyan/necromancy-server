@@ -54,7 +54,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "hp":
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(y);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
+                    character2.currentHp = y;
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                     break;
 
                 case "dead":
@@ -102,9 +103,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "start":
+                    SendBattleReportStartNotify(client, character2);
                     IBuffer res7 = BufferProvider.Provide();
-                    res7.WriteInt32(character2.InstanceId);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res7, ServerType.Area);
+                    //recv_battle_report_action_item_enchant = 0x6BDC,
+                    res7.WriteInt32(517);
+                    res7.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_action_item_enchant, res7, ServerType.Area);
+                    SendBattleReportEndNotify(client, character2);
                     break;
 
                 case "end":
@@ -147,10 +152,6 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res12.WriteInt32(character2.InstanceId);
                     res12.WriteByte((byte)y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
-                    break;
-
-                case "data":
-                    SendDataGetSelfCharaData(Server.Clients.GetByCharacterInstanceId(character2.InstanceId));
                     break;
 
                 case "abyss":
@@ -232,6 +233,111 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res14, ServerType.Area);
                     break;
 
+                case "scaleopen":
+                    IBuffer res0 = BufferProvider.Provide();
+                    res0.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
+                    res0.WriteByte(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res0, ServerType.Area);
+
+                    IBuffer res15 = BufferProvider.Provide();
+                    //recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
+                    res15.WriteInt16(1); //Basic revival rate %
+                    res15.WriteInt16(5); //Penalty %
+                    res15.WriteInt16((short)y); //Offered item % (this probably changes with recv_raisescale_update_success_per)
+                    res15.WriteInt16(4); //Dimento medal addition %
+                    Router.Send(client, (ushort)AreaPacketId.recv_raisescale_view_open, res15, ServerType.Area);
+                    break;
+
+                case "event":
+                    IBuffer res16 = BufferProvider.Provide();
+                    //recv_event_start = 0x1B5C, 
+                    res16.WriteInt32(1);
+                    res16.WriteByte((byte)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res16, ServerType.Area);
+
+                    IBuffer res17 = BufferProvider.Provide();
+                    //recv_event_change_type = 0x32ED,
+                    res17.WriteInt32(y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res17, ServerType.Area);
+
+                    Thread.Sleep(2000);
+                    IBuffer res18 = BufferProvider.Provide();
+                    //recv_event_end = 0x99D, 
+                    res18.WriteByte((byte)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_end, res18, ServerType.Area);
+                    break;
+
+                case "situationend":
+                    IBuffer res19 = BufferProvider.Provide();
+                    //recv_situation_end = 0x124C,
+                    Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res19, ServerType.Area);
+                    break;
+
+                case "popup":
+                    IBuffer res22 = BufferProvider.Provide();
+                    //recv_event_start = 0x1B5C, 
+                    res22.WriteInt32(0);
+                    res22.WriteByte((byte)y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_start, res22, ServerType.Area);
+
+                    IBuffer res21 = BufferProvider.Provide();
+                    //recv_normal_system_message = 0xAE2B,
+                    res21.WriteCString("ToBeFound");
+                    Router.Send(client, (ushort)AreaPacketId.recv_normal_system_message, res21, ServerType.Area);
+
+                    IBuffer res23 = BufferProvider.Provide();
+                    //recv_event_end = 0x99D, 
+                    res23.WriteByte((byte)y);
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_end, res23, ServerType.Area);
+                    break;
+
+                case "recv":
+                    IBuffer res24 = BufferProvider.Provide();
+                    //recv_auction_receive_item_r = 0xB1CA,
+                    res24.WriteInt32(y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_auction_receive_gold_r, res24, ServerType.Area);
+                    break;
+
+                case "string":
+                    IBuffer res26 = BufferProvider.Provide();
+                    //recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
+                    res26.WriteByte(0);
+                    res26.WriteByte(0);
+                    res26.WriteInt16(0);
+
+                    res26.WriteInt16((short)y);
+                    res26.WriteCString("adad"); // Length 0x31 
+                    res26.WriteCString("adad"); // Length 0x5B
+                    Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_loot_item, res26, ServerType.Area);
+                    break;
+
+                case "itst":
+                    IBuffer res27 = BufferProvider.Provide();
+                    //recv_item_update_ac 
+                    res27.WriteInt64(10200101);
+                    res27.WriteInt16((short)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res27, ServerType.Area);
+                    break;
+
+                case "alignment":
+                    IBuffer res28 = BufferProvider.Provide();
+                    //recv_chara_update_alignment_param = 0xB435,
+                    res28.WriteInt32(1);
+                    res28.WriteInt32(2);
+                    res28.WriteInt32(3);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_alignment_param, res28, ServerType.Area);
+                    break;
+
+                case "shop":
+                    IBuffer res29 = BufferProvider.Provide();
+                    //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                    res29.WriteInt16((short)y); //Shop type
+                    res29.WriteInt32(0);
+                    res29.WriteInt32(0);
+                    res29.WriteByte(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res29, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
@@ -252,231 +358,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             IBuffer res4 = BufferProvider.Provide();
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res4, ServerType.Area);
-        }
-
-        private void SendDataGetSelfCharaData(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-
-            //sub_4953B0 - characteristics
-            //Consolidated Frequently Used Code
-            LoadEquip.BasicTraits(res, client.Character);
-
-            //sub_484720 - combat/leveling info
-            Logger.Debug($"Character ID Loading : {client.Character.Id}");
-            res.WriteInt32(client.Character.InstanceId); // InstanceId
-            res.WriteInt32(client.Character.ClassId); // class
-            res.WriteInt16(client.Character.Level); // current level
-            res.WriteInt64(555555550); // current exp
-            res.WriteInt64(777777712); // soul exp
-            res.WriteInt64(33); // exp needed to level
-            res.WriteInt64(44); // soul exp needed to level
-            res.WriteInt32(client.Character.currentHp); // current hp
-            res.WriteInt32(client.Character.currentMp); // current mp
-            res.WriteInt32(client.Character.currentOd); // current od
-            res.WriteInt32(client.Character.maxHp); // max hp
-            res.WriteInt32(client.Character.maxMp); // maxmp
-            res.WriteInt32(client.Character.maxOd); // max od
-            res.WriteInt32(client.Character.AdventureBagGold); // current gp
-            res.WriteInt32(2000000); // map gp
-            res.WriteInt32(1238); // value/100 = current weight
-            res.WriteInt32(1895); // value/100 = max weight
-            res.WriteByte(200); // condition
-
-            // total stat level includes bonus'?
-            res.WriteInt16(24); // str
-            res.WriteInt16(28); // vit
-            res.WriteInt16(35); // dex
-            res.WriteInt16(89); // agi
-            res.WriteInt16(42); // int
-            res.WriteInt16(52); // pie
-            res.WriteInt16(90); // luk
-
-            // mag atk atrb
-            res.WriteInt16(5); // fire
-            res.WriteInt16(52); // water
-            res.WriteInt16(58); // wind
-            res.WriteInt16(45); // earth
-            res.WriteInt16(33); // light
-            res.WriteInt16(12); // dark
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-            // mag def atrb
-            res.WriteInt16(5); // fire
-            res.WriteInt16(52); // water
-            res.WriteInt16(58); // wind
-            res.WriteInt16(45); // earth
-            res.WriteInt16(33); // light
-            res.WriteInt16(12); // dark
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-            //status change resistance
-            res.WriteInt16(215); // fire
-            res.WriteInt16(99); // water
-            res.WriteInt16(88); // wind
-            res.WriteInt16(455); // earth
-            res.WriteInt16(333); // light
-            res.WriteInt16(1222); // dark
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-            // gold and alignment?
-            res.WriteInt64(client.Character.AdventureBagGold); // gold
-            res.WriteInt32(187); // changed nothing visably
-            res.WriteInt32(600000); // lawful
-            res.WriteInt32(5000); // neutral
-            res.WriteInt32(4000); // chaos
-            res.WriteInt32(Util.GetRandomNumber(90400101, 90400130)); // title from honor.csv
-
-            //sub_484980
-            res.WriteInt32(0); // changed nothing visably
-            res.WriteInt32(0); // changed nothing visably
-            res.WriteInt32(0); // changed nothing visably
-
-            // characters stats
-            res.WriteInt16(client.Character.Strength); // str
-            res.WriteInt16(client.Character.vitality); // vit
-            res.WriteInt16(client.Character.dexterity); // dex
-            res.WriteInt16(client.Character.agility); // agi
-            res.WriteInt16(client.Character.intelligence); // int
-            res.WriteInt16(client.Character.piety); // pie
-            res.WriteInt16(client.Character.luck); // luk
-
-            // nothing
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-
-            // nothing
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-            // nothing
-            res.WriteInt16(51); // changed nothing visably
-            res.WriteInt16(25); // changed nothing visably
-            res.WriteInt16(10); // changed nothing visably
-            res.WriteInt16(25); // changed nothing visably
-            res.WriteInt16(87); // changed nothing visably
-            res.WriteInt16(122); // changed nothing visably
-            res.WriteInt16(14); // changed nothing visably
-            res.WriteInt16(73); // changed nothing visably
-            res.WriteInt16(69); // changed nothing visably
-            res.WriteInt16(73); // changed nothing visably
-            res.WriteInt16(69); // changed nothing visably
-
-
-            //sub_484B00 map ip and connection
-            res.WriteInt32(client.Character.MapId); //MapSerialID
-            res.WriteInt32(client.Character.MapId); //MapID
-            res.WriteFixedString("127.0.0.1", 65); //IP
-            res.WriteInt16(60002); //Port
-
-            //sub_484420 // Map Spawn coord
-            res.WriteFloat(client.Character.X); //X Pos
-            res.WriteFloat(client.Character.Y); //Y Pos
-            res.WriteFloat(client.Character.Z); //Z Pos
-            res.WriteByte(15); //view offset
-
-            //sub_read_int32 skill point
-            res.WriteInt32(101); // skill point
-
-            //sub_483420 character state like alive/dead/invis
-            res.WriteInt32(0); //-254 GM
-
-            //sub_494AC0
-            res.WriteByte(78); // soul level
-            res.WriteInt32(22); // current soul points
-            res.WriteInt32(29); // changed nothing visably
-            res.WriteInt32(12); // max soul points
-            res.WriteByte(0); // 0 is white,1 yellow 2 red 3+ skull
-            res.WriteByte(0); //Bool
-            res.WriteByte(0); // changed nothing visably
-            res.WriteByte(0); // changed nothing visably
-            res.WriteByte(0); // changed nothing visably
-            res.WriteByte(0); // changed nothing visably
-
-            //sub_read_3-int16 unknown
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-            res.WriteInt16(0); // changed nothing visably
-
-            //sub_4833D0
-            res.WriteInt64(0); // changed nothing visably
-
-            //sub_4833D0
-            res.WriteInt64(0); // changed nothing visably
-
-            //sub_4834A0
-            res.WriteFixedString("", 97); //Shopname
-
-            //sub_4834A0
-            res.WriteFixedString("", 385); //Comment
-
-            //sub_494890
-            res.WriteByte(1); //Bool
-
-            //sub_4834A0
-            res.WriteFixedString("aaaa", 385); //Chatbox?
-
-            //sub_494890
-            res.WriteByte(1); //Bool
-
-            //sub_483420
-            int numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19(defines how many int32s to read?)
-
-            //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, client.Character);
-
-
-            //sub_483420
-            res.WriteInt32(numEntries); //has to be less than 19
-
-            //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, client.Character);
-
-            //sub_483420
-            res.WriteInt32(numEntries);
-
-            LoadEquip.EquipSlotBitMask(res, client.Character);
-
-            //sub_483420
-            numEntries = 128;
-            res.WriteInt32(numEntries); //has to be less than 128
-
-            //sub_485A70
-            for (int imac = 0; imac < numEntries; imac++) //status buffs / debuffs
-            {
-                res.WriteInt32(15100901); //[eax]:&L"i.dllext-ms-mf-pal-l2-1-0"
-                res.WriteInt32(15100901);
-                res.WriteInt32(15100901);
-            }
-
-            //Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
-
-            IBuffer res2 = BufferProvider.Provide();
-            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
         }
     }
 

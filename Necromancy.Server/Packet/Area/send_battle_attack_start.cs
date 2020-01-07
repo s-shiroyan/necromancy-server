@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //0 means success
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area, client);
+            Router.Send(client, (ushort)AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area);
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(client.Character.InstanceId);

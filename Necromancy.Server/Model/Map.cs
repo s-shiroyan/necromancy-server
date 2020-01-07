@@ -70,11 +70,13 @@ namespace Necromancy.Server.Model
                 server.Instances.AssignInstance(monsterSpawn);
                 if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
                 {
-                    return;
+                    _logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
+                    continue;
                 }
                 if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId, out MonsterSetting monsterSetting))
                 {
-                    return;
+                    _logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
+                    continue;
                 }
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
@@ -183,6 +185,35 @@ namespace Necromancy.Server.Model
             client.Character.MapId = Id;
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            {
+                if (!monsterSpawn.Active)
+                {
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
+                    {
+                        MonsterTask monsterTask = new MonsterTask(_server, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+                    else
+                    {
+                        if (monsterSpawn.MonsterVisible)
+                        {
+                            _logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                            _server.Router.Send(monsterData, client);
+                            if (!monsterSpawn.GetAgro())
+                            {
+                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void Leave(NecClient client)
@@ -213,6 +244,18 @@ namespace Necromancy.Server.Model
                 }
             }
             return false;
+        }
+
+        public MonsterSpawn GetMonsterByInstanceId(uint instanceId)
+        {
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                if (monster.InstanceId == instanceId)
+                {
+                    return monster;
+                }
+            }
+            return null;
         }
 
         public List<MonsterSpawn> GetMonstersRange(Vector3 position, int range)
@@ -321,21 +364,17 @@ namespace Necromancy.Server.Model
                 Traps.Remove(instanceId);
             }
         }
-    }
 
-    public class MapPosition
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Z { get; set; }
-        public byte Heading { get; set; }
-
-        public MapPosition(float Xpos = 0, float Ypos = 0, float Zpos = 0, byte heading = 0)
+        public MonsterSpawn MonsterInRange(uint instanceId)
         {
-            X = Xpos;
-            Y = Ypos;
-            Z = Zpos;
-            Heading = heading;
+            foreach (MonsterSpawn monster in MonsterSpawns.Values)
+            {
+                if (monster.InstanceId == instanceId)
+                {
+                    return monster;
+                }
+            }
+            return null;
         }
     }
 }

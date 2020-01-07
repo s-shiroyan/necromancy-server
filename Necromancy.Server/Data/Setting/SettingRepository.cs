@@ -36,6 +36,7 @@ namespace Necromancy.Server.Data.Setting
         public Dictionary<int, MapSymbolSetting> MapSymbols { get; }
         public Dictionary<int, MonsterSetting> Monster { get; }
         public Dictionary<int, SkillBaseSetting> SkillBase { get; }
+        public Dictionary<int, CharacterAttackSetting> CharacterAttack { get; }
         public Dictionary<int, EoBaseSetting> EoBase { get; }
         public StrTableSettingLookup Strings { get; }
         public Dictionary<int, NpcSetting> Npc { get; }
@@ -58,6 +59,7 @@ namespace Necromancy.Server.Data.Setting
             Load(Items, "iteminfo.csv", new ItemInfoCsvReader());
             Load(Monster, "monster.csv", new MonsterCsvReader());
             Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
+            //Load(CharacterAttack, "chara_attack.csv", new CharacterAttackCsvReader());
             Load(EoBase, "eo_base.csv", new EoBaseCsvReader());
             Load(Npc, "npc.csv", new NpcCsvReader());
             Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());

@@ -9,35 +9,45 @@ namespace Necromancy.Server.Chat.Command.Commands
     //Adds an Identified item to inventory
     public class SendItemInstance : ServerChatCommand
     {
+        private readonly NecServer _server;
         public SendItemInstance(NecServer server) : base(server)
         {
+            _server = server;
         }
 
         int x = 0;
+        int y = 0;
+        int z = 0;
+        int w = 0;
+        int a = 1;
+        int b = 0;
+        int c = 0;
+        int d = 0;
 
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            Item item = _server.Instances.CreateInstance<Item>();
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt64(69); //ItemID
-            res.WriteInt32((int) x); //Icon type, [x]00000 = certain armors, 1 = orb? 2 = helmet, up to 6
-            res.WriteByte(0); //Number of "items"
-            res.WriteInt32(0); //Item status, in multiples of numbers, 8 = blessed/cursed/both 
-            res.WriteFixedString("fixed", 0x10);
+            res.WriteInt64(item.InstanceId); //InstanceID
+            res.WriteInt32(10200101); //Icon serial id
+            res.WriteByte(1); //Number of "items"
+            res.WriteInt32(9); //Item status, in multiples of numbers, 1/3 = unidentified, 4/6 = broken, 5/7 = broken unidentified, 8 = cursed, loops after a while, only odd numbers are correct i think
+            res.WriteFixedString("DAGGER", 0x10);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2 // maybe.. more bag index?
             res.WriteInt16(1); // bag index
-            res.WriteInt32(0); //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
-            res.WriteInt32(1); //Percentage stat, 9 max i think
-            res.WriteByte(1);
-            res.WriteByte(3);
-            res.WriteCString("cstring"); // find max size 
-            res.WriteInt16(2);
-            res.WriteInt16(1);
-            res.WriteInt32(1); //Divides max % by this number
-            res.WriteByte(1);
+            res.WriteInt32(0); //Equip bitmap
+            res.WriteInt32(10200101); //Percentage stat, 9 max i think
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteCString(""); // Soul name of who it is bound  to
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0); //Divides max % by this number
+            res.WriteByte(0);
             res.WriteInt32(0);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
@@ -50,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(numEntries); // less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteByte(0); //bool
+                res.WriteByte(1); //bool
                 res.WriteInt32(0);
                 res.WriteInt32(0);
                 res.WriteInt32(0);

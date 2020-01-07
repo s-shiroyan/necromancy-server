@@ -50,7 +50,8 @@ namespace Necromancy.Server.Model
         public bool weaponEquipped { get; set; }
         public uint movementId { get; set; }
 
-
+        //Normal Attack
+        public int[] AttackIds { get; set; }
         //Logout Cancel Detection
         public byte logoutCanceled { get; set; }
 
@@ -65,6 +66,7 @@ namespace Necromancy.Server.Model
         public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
+        public int nextBagSlot { get; set; } // Until bag management is done
         public uint eventSelectReadyCode { get; set; }
         public int currentHp { get; set; }
         public uint currentMp { get; set; }
@@ -103,9 +105,9 @@ namespace Necromancy.Server.Model
             maxHp = 1000;
             maxMp = 500;
             maxOd = 200;
-            currentHp = 99;
-            currentMp = 1000;
-            currentOd = 1000;
+            currentHp = 1000;
+            currentMp = 450;
+            currentOd = 150;
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
@@ -115,6 +117,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
+            nextBagSlot = 0;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace Necromancy.Server.Common
 {
     class LoadEquip
     {
-        static int numEntries = 19;
         public static void BasicTraits(IBuffer res, Character myCharacter)
         {
             res.WriteInt32(myCharacter.Raceid); //race
@@ -19,10 +18,10 @@ namespace Necromancy.Server.Common
         }
 
             
-            public static void SlotSetup( IBuffer res, Character myCharacter)
+            public static void SlotSetup( IBuffer res, Character myCharacter, int numEntries)
             {
                 
-                TemporaryCharacterSwitch(myCharacter); //needed to instantiate Weapon ID for Weapon logic below
+                TemporaryCharacterSwitch(myCharacter, numEntries); //needed to instantiate Weapon ID for Weapon logic below
                 int Armor = 25;         //Armor 25
                 int Accessory = 26;     //Accessory 26
                 int Shield = 21;        //Shield 19-21
@@ -44,14 +43,12 @@ namespace Necromancy.Server.Common
 
             }
 
-        public static void EquipItems(IBuffer res, Character myCharacter)
+        public static void EquipItems(IBuffer res, Character myCharacter, int numEntries)
         {
             //sub_483420
-            int x = 0;
-            myCharacter.EquipId = new int[numEntries];
-            
+            int x = 0;        
 
-            byte[] headSlot = TemporaryCharacterSwitch(myCharacter);
+            byte[] headSlot = TemporaryCharacterSwitch(myCharacter, numEntries);
             
             //sub_4948C0
             for (int i = 0; i < numEntries; i++)
@@ -80,12 +77,11 @@ namespace Necromancy.Server.Common
 
         }
 
-        public static void EquipSlotBitMask(IBuffer res, Character myCharacter)
+        public static void EquipSlotBitMask(IBuffer res, int numEntries)
         {
             int[] EquipBitMask = new int[] //Correct Bit Mask
             {
-                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144,/* 524288,
-                1048576, 2097152*/
+                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144
             };
             EquipBitMask = new int[] //Temporary Bit Mask until i re-figure out Avatar Item Display Precedence.
             {
@@ -99,7 +95,7 @@ namespace Necromancy.Server.Common
             
         }
 
-        private static byte[] TemporaryCharacterSwitch(Character myCharacter)
+        private static byte[] TemporaryCharacterSwitch(Character myCharacter, int numEntries)
         {
             string CharacterSet = myCharacter.Name;
             byte[] headSlot = new byte[numEntries];
@@ -108,12 +104,12 @@ namespace Necromancy.Server.Common
             {
                 myCharacter.EquipId = new int[]
                 {
-                    10800405 /*Weapon*/, 0 /*Shield* */, 0 /*Arrow*/, 0 /*head*/, 0 /*Torso*/,
+                    11200301 /*Weapon*/, 0 /*Shield* */, 0 /*Arrow*/, 0 /*head*/, 0 /*Torso*/,
                     0 /*Pants*/, 0 /*Hands*/, 0 /*Feet*/, 0 /*Cape*/, 0 /*Necklace*/,
                     0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
                     0 /*Avatar Torso*/, 0 /*Avatar Pants*/, 0 /*Avatar Hands*/, 0 /*Avatar Feet*/
                 };
-                headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
+                headSlot = new byte[19] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             }
             else
             {

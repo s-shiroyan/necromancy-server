@@ -532,7 +532,7 @@ namespace Necromancy.Server.Packet.Id
         recv_raisescale_request_revive_r = 0xA0FA,
         recv_raisescale_update_success_per = 0xA508,
         recv_raisescale_view_close = 0x260E,
-        recv_raisescale_view_open = 0xC25D,
+        recv_raisescale_view_open = 0xC2E5,
         recv_random_box_close_r = 0x924E,
         recv_random_box_get_item_all_r = 0xF02B,
         recv_random_box_get_item_r = 0xC444,
@@ -786,7 +786,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_soul_rankup_close = 0x4D03,
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
-        send_event_system_message_timer_r = 0x90, //opcode not found
+        send_event_system_message_timer_r = 0xF9B8,
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
         send_event_union_storage_close = 0x93, //opcode not found
@@ -840,7 +840,7 @@ namespace Necromancy.Server.Packet.Id
         send_party_change_mode = 0x133, //opcode not found
         send_party_decline_to_apply = 0x134, //opcode not found
         send_party_decline_to_invite = 0x738C,
-        send_party_disband = 0x136,//opcode not found
+        send_party_disband = 0x6E26,
         send_party_entry_draw = 0x137, //opcode not found
         send_party_establish = 0xAF25,
         send_party_establish_2 = 0x139, //opcode not found
@@ -871,13 +871,13 @@ namespace Necromancy.Server.Packet.Id
         send_quest_get_story_quest_history = 0xCB91, 
         send_quest_get_story_quest_works = 0x2A95, 
         send_quest_target_count = 0x154, //opcode not found
-        send_raisescale_add_item = 0x155, //opcode not found
-        send_raisescale_move_money = 0x156, //opcode not found
-        send_raisescale_open_cash_shop = 0x157, //opcode not found
+        send_raisescale_add_item = 0xA234,
+        send_raisescale_move_money = 0xC94,
+        send_raisescale_open_cash_shop = 0xD0B3,
         send_raisescale_remove_item = 0x158, //opcode not found
-        send_raisescale_request_revive = 0x159, //opcode not found
-        send_raisescale_request_revive_event = 0x160, //opcode not found
-        send_raisescale_view_close_request = 0x161, //opcode not found
+        send_raisescale_request_revive = 0x764A,
+        send_raisescale_request_revive_event = 0x9A0D,
+        send_raisescale_view_close_request = 0xF08C,
         send_random_box_close = 0x6ABB,
         send_random_box_get_item = 0x163, //opcode not found  TODO
         send_random_box_get_item_all = 0x164, //opcode not found
@@ -903,7 +903,7 @@ namespace Necromancy.Server.Packet.Id
         send_skill_custom_slot_set = 0x182, //opcode not found
         send_skill_exec = 0x2D88,
         send_skill_next_cast = 0x184, //opcode not found
-        send_skill_onhit = 0x185, //opcode not found
+        send_skill_onhit = 0x421, 
         send_skill_request_base_from_item = 0x186, //opcode not found
         send_skill_request_gain = 0x6507, 
         send_skill_request_info = 0x4EB5, 

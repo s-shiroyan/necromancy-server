@@ -59,8 +59,8 @@ namespace Necromancy.Server.Model.Skills
 
             float castTime = skillBaseSetting.CastingTime;
             _logger.Debug($"Start casting Skill [{_skillId}] cast time is [{castTime}]");
-            RecvSkillStartCastR flameArrow = new RecvSkillStartCastR(0, castTime);
-            _server.Router.Send(flameArrow, _client);
+            RecvSkillStartCastR spell = new RecvSkillStartCastR(0, castTime);
+            _server.Router.Send(spell, _client);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();

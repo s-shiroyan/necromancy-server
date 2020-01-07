@@ -7,9 +7,13 @@
     "Start No Arguments": {
       "commandName": "Project"
     },
-    "Start /w no packets": {
+    "decrypt": {
       "commandName": "Project",
-      "commandLineArgs": "server start --w-list=1:1000"
+      "commandLineArgs": "unpack \"C:/Program Files (x86)/Steam/steamapps/common/Wizardry Online/data/\" \"C:/Wo\""
+    },
+    "movemement": {
+      "commandName": "Project",
+      "commandLineArgs": "server start --w-list=3:0x6A72"
     }
   }
 }

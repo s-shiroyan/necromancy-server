@@ -352,6 +352,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
             _areaConsumer.AddHandler(new send_skill_cast_cancel_request(this));
             _areaConsumer.AddHandler(new send_skill_exec(this));
+            _areaConsumer.AddHandler(new send_skill_onhit(this));
             _areaConsumer.AddHandler(new send_skill_request_gain(this));
             _areaConsumer.AddHandler(new send_skill_start_cast(this));
             _areaConsumer.AddHandler(new send_soul_dispitem_request_data(this));
@@ -407,6 +408,14 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_charabody_salvage_request(this));
             _areaConsumer.AddHandler(new send_charabody_salvage_request_cancel(this));
             _areaConsumer.AddHandler(new send_charabody_salvage_abort(this));
+            _areaConsumer.AddHandler(new send_party_disband(this));
+            _areaConsumer.AddHandler(new send_event_system_message_timer_r(this));
+            _areaConsumer.AddHandler(new send_raisescale_open_cash_shop(this));
+            _areaConsumer.AddHandler(new send_raisescale_move_money(this));
+            _areaConsumer.AddHandler(new send_raisescale_view_close_request(this));
+            _areaConsumer.AddHandler(new send_raisescale_add_item(this));
+            _areaConsumer.AddHandler(new send_raisescale_request_revive_event(this));
+            _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
