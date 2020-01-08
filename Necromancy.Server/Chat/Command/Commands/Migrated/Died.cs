@@ -70,7 +70,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 (t1 =>
                     {
                         //reload your living body with no gear
-                        RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Character.Name);
+                        RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
                         Server.Router.Send(client, cData.ToPacket());
                     }
                 );

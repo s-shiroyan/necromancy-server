@@ -164,7 +164,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "charadata":
-                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(character2, character2.Name);
+                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(character2, client.Soul.Name/*Should be client of supplied instanceID. this is a band-aid*/);
                     Router.Send(Server.Clients.GetAll(), cData.ToPacket());
                     break;
 
