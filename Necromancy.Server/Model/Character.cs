@@ -35,6 +35,7 @@ namespace Necromancy.Server.Model
         public bool hadDied { get; set; }
         public uint DeadBodyInstanceId { get; set; } 
         public int Channel { get; set; }
+        public int state { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -118,6 +119,7 @@ namespace Necromancy.Server.Model
             battleAnim = 0;
             hadDied = false;
             nextBagSlot = 0;
+            state = 0b00000000;
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 client.Character.soulFormState -= 1;
                 client.Character.currentHp = client.Character.maxHp;
                 client.Character.movementId = client.Character.InstanceId;
+                client.Character.state = 0b00000000;
 
 
                 IBuffer res2 = BufferProvider.Provide();

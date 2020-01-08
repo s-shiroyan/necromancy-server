@@ -10,6 +10,8 @@ using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using System;
 using System.Collections.Generic;
+using Necromancy.Server.Packet.Response;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Model.Skills
 {
@@ -56,6 +58,21 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brExec);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
+
+            IBuffer res11 = BufferProvider.Provide();
+            res11.WriteInt32(_client.Character.InstanceId);
+            res11.WriteInt32(2 ^ 8); //2^16 is normal state.  0001 0000 0000 0000 0000
+            _server.Router.Send(_client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
+
+            Task.Delay(TimeSpan.FromSeconds(30)).ContinueWith
+            (t1 =>
+                {
+                    IBuffer res12 = BufferProvider.Provide();
+                    res12.WriteInt32(_client.Character.InstanceId);
+                    res12.WriteInt32(2 ^ 16); //2^16 is normal state.  0001 0000 0000 0000 0000
+                    _server.Router.Send(_client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res12, ServerType.Area);
+                }
+            );
 
             //IBuffer res12 = BufferProvider.Provide();
             //res12.WriteByte(1);
