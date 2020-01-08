@@ -1379,9 +1379,9 @@ recv_0xB586 = 0xB586,
 	
 recv_chara_update_alignment_param = 0xB435,
 
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteInt32(0);
+	res.WriteInt32(0); //Lawful
+	res.WriteInt32(0); //Neutral
+	res.WriteInt32(0); //Chaotic
 	
 	
 recv_charabody_self_notify_deadnext_time = 0xB417,
@@ -1694,9 +1694,9 @@ recv_skill_cooltime_notify = 0xA6F8,
 	
 recv_item_update_physics = 0xA611,
 
-	res.WriteInt64(0);
+	res.WriteInt64(0); //item instance id
 	
-	res.WriteInt16(0);
+	res.WriteInt16(0); //item's attack stat
 	
 	
 recv_get_honor_notify = 0xA54C,
@@ -3552,8 +3552,8 @@ recv_event_soul_rankup_open = 0x394F,
 	
 recv_item_update_state = 0x3247, 
 
-	res.WriteInt64(1);
-    res.WriteInt32(1);
+	res.WriteInt64(1); //item instance id
+    res.WriteInt32(1); //item state flag, same as inside SendItemInstance and SendItemInstanceUnidentified
 	
 	
 recv_event_change_type = 0x32ED,
