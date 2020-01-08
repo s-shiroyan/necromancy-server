@@ -391,7 +391,7 @@ namespace Necromancy.Server.Tasks
                     Thread.Sleep(100);
 
                     //reload your living body with no gear
-                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
+                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, client.Soul.Name);
                     _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
                 }
             }

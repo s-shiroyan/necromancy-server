@@ -33,6 +33,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 client.Character.soulFormState -= 1;
                 client.Character.currentHp = client.Character.maxHp;
                 client.Character.movementId = client.Character.InstanceId;
+                client.Character.state = 0b00000000;
 
 
                 IBuffer res2 = BufferProvider.Provide();
@@ -59,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
                 client.Character.hadDied = false;
-                RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Character.Name);
+                RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
                 Router.Send(client, cData.ToPacket());
             }
 
