@@ -19,6 +19,7 @@ namespace Necromancy.Cli.Command.Commands
             if (parameter.Arguments.Count == 1)
             {
                 FpmfArchiveIO archiveIO = new FpmfArchiveIO();
+                FpmfArchive archive = archiveIO.Open(parameter.Arguments[0]);
                 archiveIO.OpenWoItm(parameter.Arguments[0]);
                 return CommandResultType.Completed;
             }

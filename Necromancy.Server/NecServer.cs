@@ -198,6 +198,7 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new Takeover(this));
             Chat.CommandHandler.AddCommand(new MobCommand(this));
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
+            Chat.CommandHandler.AddCommand(new ItemCommand(this));
         }
 
         private void LoadSettingRepository()

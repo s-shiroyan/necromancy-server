@@ -23,6 +23,7 @@ recv_shop_sell_r = 0xD4F8,
 						
 						
 
+String=L"network::proto_area_implement_client::recv_item_update_place_change() [ id1 = %llu, pos1 = (%u, %u, %u) ] <-> [ id2 = %llu, pos2 = (%u, %u, %u) ]\n"
 	
 recv_item_update_place_change = 0xD6A8,
 
@@ -700,6 +701,7 @@ recv_dbg_battle_guard_end_notify = 0x170B,
             
             res.WriteInt32(0);			
 
+String=L"network::proto_area_implement_client::recv_message_board_notify_open() msgid:%d yesterday:(%d, %d, %d, %d) lastmonth:(%d, %d, %d, %d)\n"
 recv_message_board_notify_open = 0x170F, 
             
             res.WriteInt32(0);

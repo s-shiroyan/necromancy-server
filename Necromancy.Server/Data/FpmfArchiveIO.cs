@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
@@ -122,7 +123,11 @@ namespace Necromancy.Server.Data
                     datBufferPool.Add(archiveFile.DatNumber, datBuffer);
                 }
 
-                IBuffer decrypted = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                IBuffer decrypted  = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                if (archiveFile.FilePath.Contains("\\item.csv"))
+                {
+                    decrypted = OpenWoItm(decrypted);
+                }
                 archiveFile.Data = decrypted.GetAllBytes();
 
                 archive.AddFile(archiveFile);
@@ -183,7 +188,7 @@ namespace Necromancy.Server.Data
             {
                 if (magicBytes[i] != MagicBytes_WOITM[i])
                 {
-                    throw new Exception("Invalid WOITM File");
+                    //throw new Exception("Invalid WOITM File");
                 }
             }
 
@@ -203,7 +208,6 @@ namespace Necromancy.Server.Data
                 woItm.Data = data;
                 woItems.Add(woItm);
             }
-
             List<string> str = new List<string>();
             foreach (WoItm woItem in woItems)
             {
@@ -219,6 +223,58 @@ namespace Necromancy.Server.Data
             _logger.Info("done");
         }
 
+        public IBuffer OpenWoItm(IBuffer buffer)
+        {
+            List<string> itemData = new List<string>();
+            buffer.SetPositionStart();
+            byte[] magicBytes = buffer.ReadBytes(5);
+            for (int i = 0; i < 5; i++)
+            {
+                if (magicBytes[i] != MagicBytes_WOITM[i])
+                {
+                    //throw new Exception("Invalid WOITM File");
+                }
+            }
+            itemData.Add(System.Text.Encoding.UTF8.GetString(magicBytes)  + "\r\n");
+            //System.IO.StreamWriter outFile = new System.IO.StreamWriter(filePath);
+            short version = buffer.ReadInt16(); // cmp to 1
+            itemData.Add(version.ToString() + "\r\n");
+            List<WoItm> woItems = new List<WoItm>();
+            while (buffer.Position < buffer.Size)
+            {
+                int itemId = buffer.ReadInt32();
+                int chunkSize = buffer.ReadInt32();
+                int chunkLen = buffer.ReadInt32();
+                byte[] data = buffer.ReadBytes(chunkSize - 4);
+
+                itemData.Add(itemId.ToString() + "," + chunkSize.ToString() + "," + chunkLen.ToString() + ","+ BitConverter.ToString(data).Replace("-", string.Empty) + "\r\n");
+                //outFile.WriteLine(outLine);
+                //outFile.Flush();
+                WoItm woItm = new WoItm();
+                woItm.Id = itemId;
+                woItm.Size = chunkSize;
+                woItm.Size2 = chunkLen;
+                woItm.Data = data;
+                woItems.Add(woItm);
+            }
+            //outFile.Close();
+            IBuffer itemRet = new StreamBuffer(itemData.SelectMany(s => Encoding.ASCII.GetBytes(s)).ToArray());
+
+            List<string> str = new List<string>();
+            foreach (WoItm woItem in woItems)
+            {
+                byte[] outp = Xor(woItem.Data, new byte[] { 0x00 });
+                string test = Encoding.UTF8.GetString(outp);
+                if (str.Contains(","))
+                {
+                    str.Add(test);
+                    _logger.Info(test);
+                }
+            }
+
+            _logger.Info("done");
+            return itemRet;
+        }
         public byte[] Xor(byte[] text, byte[] key)
         {
             byte[] xor = new byte[text.Length];
