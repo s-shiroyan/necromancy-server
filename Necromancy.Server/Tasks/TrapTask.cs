@@ -132,6 +132,14 @@ namespace Necromancy.Server.Tasks
         public void TriggerTrap(Trap trap, MonsterSpawn monster)
         {
             Logger.Debug($"trap._name [{trap._name}] trap.InstanceId [{trap.InstanceId}] trap._skillEffectId [{trap._skillEffectId}] trap._triggerEffectId [{trap._triggerEffectId}]");
+            ClientLookup clientLookup = new ClientLookup();
+            NecClient client = clientLookup.GetByCharacterInstanceId(ownerInstanceId);
+            if (client.Character.IsStealthed())
+            {
+                int newState = client.Character.ClearStateBit(0x8);
+                RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                _server.Router.Send(client.Map, charState);
+            }
             int damage = Util.GetRandomNumber(70, 90);
             RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
             _server.Router.Send(_map, eoTriggerData);

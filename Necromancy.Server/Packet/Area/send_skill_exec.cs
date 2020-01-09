@@ -4,6 +4,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Tasks;
 using System;
@@ -54,9 +55,9 @@ namespace Necromancy.Server.Packet.Area
             var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
             {
                          { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillId, targetId) },
-                         { x => (x > 114300 && x < 114399), () => Trap(client, skillId) },
-                         { x => x == 114607, () => Stealth(client, skillId) },
-                         { x => (x > 113000 && x < 113999), () => Spell(client, skillId, targetId) },
+                         { x => (x > 114300 && x < 114399), () => ThiefSkill(client, skillId, targetId) },
+                         { x => x == 114607, () => ThiefSkill(client, skillId, targetId) },
+                         { x => (x > 113000 && x < 113999), () => MageSkill(client, skillId, targetId) },
                          { x => (x > 114000 && x < 999999), () => Router.Send(new RecvSkillExecR(0, 0, 0), client) } //this is a default catch statement for unmapped skills to prevent un-handled exceptions 
             };
 
@@ -83,7 +84,50 @@ namespace Necromancy.Server.Packet.Area
 
 
         }
-        private void Trap(NecClient client, int skillId)
+
+        private void MageSkill(NecClient client, int skillId, int targetId)
+        {
+            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
+            {
+                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
+                int errorCode = -1;
+                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
+                Router.Send(execFail, client);
+                return;
+            }
+            RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
+            Router.Send(execSuccess, client);
+
+            Spell spell = (Spell)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
+            spell.SkillExec();
+        }
+        private void ThiefSkill(NecClient client, int skillId, int targetId)
+        {
+            int skillBase = skillId / 1000;
+            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
+            {
+                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
+                int errorCode = -1;
+                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
+                Router.Send(execFail, client);
+                return;
+            }
+            if (skillBase > 114300 && skillBase < 114399)
+            {
+                Trap(client, skillId, skillBaseSetting);
+                return;
+            }
+            else if (skillBase == 114607)
+            {
+                Stealth(client, skillId, skillBaseSetting);
+                return;
+            }
+            RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
+            Router.Send(execSuccess, client);
+            ThiefSkill thiefSkill = (ThiefSkill)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
+            thiefSkill.SkillExec();
+        }
+        private void Trap(NecClient client, int skillId, SkillBaseSetting skillBaseSetting)
         {
             Logger.Debug($"skillId : {skillId}");
             if (!int.TryParse($"{skillId}".Substring(1, 5), out int skillBase))
@@ -104,14 +148,6 @@ namespace Necromancy.Server.Packet.Area
             }
             bool isBaseTrap = TrapTask.baseTrap(skillBase);
             effectBase += 1;
-            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
-            {
-                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
-                int errorCode = -1;
-                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
-                Router.Send(execFail, client);
-                return;
-            }
             if (!_server.SettingRepository.EoBase.TryGetValue(effectBase, out EoBaseSetting eoBaseSetting))
             {
                 Logger.Error($"Getting EoBaseSetting from effectBase [{effectBase}]");
@@ -122,7 +158,7 @@ namespace Necromancy.Server.Packet.Area
             }
             if (!_server.SettingRepository.EoBase.TryGetValue(effectBase + 1, out EoBaseSetting eoBaseSettingTriggered))
             {
-                Logger.Error($"Getting EoBaseSetting from effectBase+1 [{effectBase+1}]");
+                Logger.Error($"Getting EoBaseSetting from effectBase+1 [{effectBase + 1}]");
                 int errorCode = -1;
                 RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
                 Router.Send(execFail, client);
@@ -130,7 +166,7 @@ namespace Necromancy.Server.Packet.Area
             }
             RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
             Router.Send(execSuccess, client);
-            
+
             // ToDo  verify trap parts available and remove correct number from inventory
             TrapStack trapStack = (TrapStack)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
             Trap trap = new Trap(skillBase, skillBaseSetting, eoBaseSetting, eoBaseSettingTriggered);
@@ -140,53 +176,18 @@ namespace Necromancy.Server.Packet.Area
             Vector3 trapPos = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
         }
 
-        private void Stealth(NecClient client, int skillId)
+        private void Stealth(NecClient client, int skillId, SkillBaseSetting skillBaseSetting)
         {
-            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
-            {
-                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
-                int errorCode = -1;
-                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
-                Router.Send(execFail, client);
-                return;
-            }
-            RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
+            float cooldown = 0.0F;
+            Logger.Debug($"IsStealthed [{client.Character.IsStealthed()}]");
+            if (client.Character.IsStealthed())
+                cooldown = skillBaseSetting.CastingCooldown;
+            RecvSkillExecR execSuccess = new RecvSkillExecR(0, cooldown, skillBaseSetting.RigidityTime);
             Router.Send(execSuccess, client);
 
             Stealth stealth = (Stealth)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
             stealth.SkillExec();
         }
 
-        private void Spell(NecClient client, int skillId, int targetId)
-        {
-            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
-            {
-                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
-                int errorCode = -1;
-                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
-                Router.Send(execFail, client);
-                return;
-            }
-            RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
-            Router.Send(execSuccess, client);
-
-            Spell spell = (Spell)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
-            spell.SkillExec();
-        }
-        private void ThiefSkill(NecClient client, int skillId, int targetId)
-        {
-            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
-            {
-                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
-                int errorCode = -1;
-                RecvSkillExecR execFail = new RecvSkillExecR(errorCode, 0, 0);
-                Router.Send(execFail, client);
-                return;
-            }
-            RecvSkillExecR execSuccess = new RecvSkillExecR(0, skillBaseSetting.CastingCooldown, skillBaseSetting.RigidityTime);
-            Router.Send(execSuccess, client);
-            ThiefSkill thiefSkill = (ThiefSkill)Server.Instances.GetInstance((uint)client.Character.activeSkillInstance);
-            thiefSkill.SkillExec();
-        }
     }
 }

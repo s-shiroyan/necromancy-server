@@ -80,6 +80,12 @@ namespace Necromancy.Server.Packet.Area
                         {
                             monsterSpawn.UpdateHP(-damage, _server, true, client.Character.InstanceId);
                         }
+                        if (client.Character.IsStealthed())
+                        {
+                            int newState = client.Character.ClearStateBit(0x8);
+                            RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                            _server.Router.Send(client.Map, charState);
+                        }
                         perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
                     }

@@ -1,10 +1,12 @@
 using System;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Model
 {
     public class Character : IInstance
     {
+        private readonly object StateLock = new object();
         public uint InstanceId { get; set; }
 
         //core attributes
@@ -35,7 +37,7 @@ namespace Necromancy.Server.Model
         public bool hadDied { get; set; }
         public uint DeadBodyInstanceId { get; set; } 
         public int Channel { get; set; }
-        public int state { get; set; }
+        private int state { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -120,6 +122,53 @@ namespace Necromancy.Server.Model
             hadDied = false;
             nextBagSlot = 0;
             state = 0b00000000;
+        }
+
+        public int GetState ()
+        {
+            int charState = 0;
+            lock (StateLock)
+            {
+                charState = state;
+            }
+            return charState;
+        }
+        public void SetState(int charState)
+        {
+            lock (StateLock)
+            {
+                state = charState;
+            }
+        }
+        public int AddStateBit(int stateBit)
+        {
+            int newState = 0;
+            lock (StateLock)
+            {
+                state |= stateBit;
+                newState = state;
+            }
+            return newState;
+        }
+        public int ClearStateBit(int stateBit)
+        {
+            int newState = 0;
+            lock (StateLock)
+            {
+                state &= ~stateBit;
+                newState = state;
+            }
+            return newState;
+        }
+        public bool IsStealthed()
+        {
+            bool isStealthed = false;
+            lock (StateLock)
+            {
+                if ((state & 0x8) == 0x8)
+                    isStealthed = true;
+            }
+            return isStealthed;
         }
     }
 }

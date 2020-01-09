@@ -705,7 +705,7 @@ namespace Necromancy.Server.Tasks
                 {
                     Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
                     float distanceChar = GetDistance(character, monster);
-                    if (distanceChar <= agroRange)
+                    if ((distanceChar <= agroRange) && !StealthCheck(client))
                     {
                         Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);
                         if (checkFOV(characterPos, agroDetectAngle))
@@ -726,6 +726,15 @@ namespace Necromancy.Server.Tasks
             return _monster.GetAgro();
         }
 
+        private bool StealthCheck(NecClient client)
+        {
+            // Needs to be expanded to consider skill, distance and orientation 
+            if ((client.Character.GetState() & 0x100) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private void MonsterAgroAdjust()
         {
             Character currentTarget = _monster.GetCurrentTarget();
