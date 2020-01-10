@@ -50,6 +50,7 @@ namespace Necromancy.Server
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
         public InstanceGenerator Instances { get; }
+        public InstanceGenerator64 Instances64 { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -67,6 +68,7 @@ namespace Necromancy.Server
             _logger = LogProvider.Logger<NecLogger>(this);
 
             Instances = new InstanceGenerator();
+            Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Chat = new ChatManager(this);

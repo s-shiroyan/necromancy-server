@@ -16,11 +16,26 @@ namespace Necromancy.Server.Packet.Area
         int x;
         public override void Handle(NecClient client, NecPacket packet)
         {
-       
-            //int unknown = packet.Data.ReadInt16();
-            int fromSlot = packet.Data.ReadInt32(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
-            int toSlot = packet.Data.ReadInt32();
+
+            byte toStoreType = packet.Data.ReadByte(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
+            byte toBagId = packet.Data.ReadByte();
+            short fromSlot = packet.Data.ReadInt16();
+            byte fromStoreType = packet.Data.ReadByte();
+            byte fromBagId = packet.Data.ReadByte();
+            short toSlot = packet.Data.ReadInt16();
+
+            Logger.Debug($"fromStoreType byte [{fromStoreType}]");
+            Logger.Debug($"fromBagId byte [{fromBagId}]");
+            Logger.Debug($"fromSlot byte [{fromSlot}]");
+            Logger.Debug($"toStoreType byte [{toStoreType}]");
+            Logger.Debug($"toBagId byte [{toBagId}]");
+            Logger.Debug($"toSlot [{toSlot}]");
+
+
+
             int itemCount = packet.Data.ReadByte(); //last byte is stack count?
+
+            Logger.Debug($"itemCount [{itemCount}]");
 
             IBuffer res = BufferProvider.Provide();
 
@@ -46,8 +61,23 @@ namespace Necromancy.Server.Packet.Area
             */
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
-            SendItemPlace(client);
-            SendItemPlaceChange(client);
+
+            InventoryItem invItem = client.Character.GetInventoryItem(toStoreType, toBagId, fromSlot);
+            invItem.StorageType = toStoreType;
+            invItem.StorageId = toBagId;
+            invItem.StorageSlot = toSlot;
+            client.Character.UpdateInventoryItem(invItem);
+            Logger.Debug($"invItem.StorageItem.InstanceId [{invItem.StorageItem.InstanceId}]");
+            res = null;
+            res = BufferProvider.Provide();
+            res.WriteInt64(invItem.StorageItem.InstanceId); // item id
+            res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+            res.WriteByte(toBagId); // Position 2 ??
+            res.WriteInt16(toSlot); // bag index 0 to 24
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+
+            //SendItemPlace(client);
+            //SendItemPlaceChange(client);
         }
         private void SendItemPlace(NecClient client)
         {
@@ -66,14 +96,14 @@ namespace Necromancy.Server.Packet.Area
             x = -1;
             x++;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(itemIDs[x]); // item id
-            res.WriteByte(0);// 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
-            res.WriteByte(0); // Position 2 ??
-            res.WriteInt16((short)23); // bag index 0 to 24
-            res.WriteInt64(0); // item id
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
-            res.WriteByte(0); // Position 2 ??
-            res.WriteInt16((short)23); // bag index 0 to 24
+            //res.WriteInt64(invItem.StorageItem.InstanceId); // item id
+            //res.WriteByte(fromStoreType);// 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+            //res.WriteByte(fromBagId); // Position 2 ??
+            //res.WriteInt16(fromSlot); // bag index 0 to 24
+            //res.WriteInt64(invItem.StorageItem.InstanceId); // item id
+            //res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+            //res.WriteByte(toBagId); // Position 2 ??
+            //res.WriteInt16(toSlot); // bag index 0 to 24
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_place_change, res, ServerType.Area);
         }
 

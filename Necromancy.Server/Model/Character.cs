@@ -1,4 +1,6 @@
+using System.Linq;
 using System;
+using System.Collections.Generic;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Packet.Receive;
 
@@ -79,6 +81,8 @@ namespace Necromancy.Server.Model
         public int shortcutBar2Id { get; set; }
         public int shortcutBar3Id { get; set; }
         public int shortcutBar4Id { get; set; }
+        public List<InventoryItem> inventoryItems { get; set; }
+        public List<Bag> inventoryBags { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
 
@@ -122,6 +126,12 @@ namespace Necromancy.Server.Model
             hadDied = false;
             nextBagSlot = 0;
             state = 0b00000000;
+            inventoryItems = new List<InventoryItem>();
+            inventoryBags = new List<Bag>();
+            Bag bag = new Bag();
+            bag.StorageId = 0;
+            bag.NumSlots = 24;
+            inventoryBags.Add(bag);
         }
 
         public int GetState ()
@@ -169,6 +179,73 @@ namespace Necromancy.Server.Model
                     isStealthed = true;
             }
             return isStealthed;
+        }
+
+        public InventoryItem GetInventoryItem(byte storageType, byte storageId, short storageSlot)
+        {
+            InventoryItem invItem = inventoryItems.Find(x => x.StorageType == storageType && x.StorageId == storageId && x.StorageSlot == storageSlot);
+            return invItem;
+        }
+
+        public InventoryItem GetInventoryItem(ulong instanceId)
+        {
+            InventoryItem invItem = inventoryItems.Find(x => x.StorageItem.InstanceId == instanceId);
+            return invItem;
+        }
+        public InventoryItem GetInventoryItem(Item item)
+        {
+            InventoryItem invItem = inventoryItems.Find(x => x.StorageItem == item);
+            return invItem;
+        }
+        public void UpdateInventoryItem(InventoryItem invItem)
+        {
+            InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
+            invItm.StorageId = invItem.StorageId;
+            invItm.StorageItem = invItem.StorageItem;
+            invItm.StorageSlot = invItem.StorageSlot;
+            invItm.StorageType = invItem.StorageType;
+        }
+        public InventoryItem GetNextInventoryItem(NecServer server)
+        {
+            InventoryItem invItem = null;
+            byte bagId = 0;
+            short slotId = -1;
+            foreach (Bag bag in inventoryBags)
+            {
+                bagId = bag.StorageId;
+                List<InventoryItem> invItems = inventoryItems.FindAll(x => x.StorageId == bag.StorageId);
+                if (invItems.Count == bag.NumSlots)
+                    continue;
+                else if (invItems.Count == 0)
+                {
+                    slotId = 0;
+                    break;
+                }
+                bagId = bag.StorageId;
+                short[] slots = invItems.Select(invItems => invItems.StorageSlot).OrderBy(StorageSlot => StorageSlot).ToArray();   // Get a sorted list of occupied slots
+                short i = 0;
+                foreach (short slot in slots)
+                {
+                    if (slot != i)
+                    {
+                        slotId = i;
+                        break;
+                    }
+                    i++;
+                }
+                if (slotId == -1 && i < bag.NumSlots)
+                {
+                    slotId = i;
+                }
+            }
+            if (slotId != -1)
+            {
+                invItem = server.Instances64.CreateInstance<InventoryItem>();
+                invItem.StorageId = bagId;
+                invItem.StorageSlot = slotId;
+                inventoryItems.Add(invItem);
+            }
+            return invItem;
         }
     }
 }

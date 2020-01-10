@@ -27,7 +27,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            Item item = _server.Instances.CreateInstance<Item>();
+            Item item = _server.Instances64.CreateInstance<Item>();
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 

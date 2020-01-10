@@ -28,16 +28,29 @@ namespace Necromancy.Server.Packet.Area
             int instanceID = packet.Data.ReadInt32();
             _logger.Debug($"{client.Character.Name} is {client.Character.Alignmentid}");
 
-            IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(instanceID);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
+            IBuffer res = null;
+            //res2.WriteInt32(instanceID);
+
+            //Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
 
             ///////////////test forced item receive. to be expanded upon using a drop table and slot checking logic
             ///
+
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            if (invItem == null)
+            {
+                res = BufferProvider.Provide();
+                res.WriteInt32(-207);
+                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+
+                RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
+                _server.Router.Send(noSpace, client);
+                return;
+            }
             if (i > 24) { i = 0; }
             i++;
-            IBuffer res = BufferProvider.Provide();
+            res = BufferProvider.Provide();
             res.WriteInt32(instanceID);
 
             Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
