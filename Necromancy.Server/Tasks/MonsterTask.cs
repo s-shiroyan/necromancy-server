@@ -342,7 +342,7 @@ namespace Necromancy.Server.Tasks
             brList.Add(brHp);
             brList.Add(brEnd);
             _server.Router.Send(Map, brList);
-            _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
+            _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
 
             PlayerDeadCheck(currentTarget);
         }
@@ -361,7 +361,7 @@ namespace Necromancy.Server.Tasks
                     RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
                     RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
                     RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                    NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+                    NecClient client = Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId);
 
                     brList.Add(brStart);
                     brList.Add(cDead1); //animate the death of your living body
@@ -392,7 +392,7 @@ namespace Necromancy.Server.Tasks
 
                     //reload your living body with no gear
                     RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, client.Soul.Name);
-                    _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+                    _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
                 }
             }
         }
