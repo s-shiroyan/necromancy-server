@@ -166,7 +166,7 @@ namespace Necromancy.Server.Data
         }
 
         /// <summary>
-        /// 0x401D20
+        /// 0x403700
         /// </summary>
         public void OpenWoItm(string itemPath)
         {
@@ -207,18 +207,53 @@ namespace Necromancy.Server.Data
             List<string> str = new List<string>();
             foreach (WoItm woItem in woItems)
             {
-                byte[] outp = Xor(woItem.Data, new byte[] {0x00});
-                string test = Encoding.UTF8.GetString(outp);
-                if (str.Contains(","))
+                IBuffer itemBuffer = new StreamBuffer(woItem.Data);
+                itemBuffer.SetPositionStart();
+
+                IBuffer outBuffer = new StreamBuffer();
+
+                uint[] xor =
                 {
-                    str.Add(test);
-                    _logger.Info(test);
+                    0xA522C3ED,
+                    0x482E64B9,
+                    0x0E52712B,
+                    0x3ABC1D26
+                };
+                
+                for (int i = 0; i < 4; i++)
+                {
+                    uint a = itemBuffer.ReadUInt32();
+                    uint b = RotateRight(a, 8); // 00403035 | C1CE 08 | ror esi,8
+                    uint c = b & 0xFF00FF00;
+                    uint d = RotateLeft(a, 8); // 0040303E | C1C0 08 | rol eax,8
+                    uint e = d & 0xFF00FF;
+                    uint f = c | e;
+
+                    uint g =f ^ xor[i];
+                    
+                    outBuffer.WriteInt32(g);
                 }
+
+
+                
+                
+                
+         
             }
 
             _logger.Info("done");
         }
+        
+        private uint RotateLeft(uint x, int n)
+        {
+            return (x << n) | (x >> (32 - n));
+        }
 
+        private uint RotateRight(uint x, int n)
+        {
+            return (x >> n) | (x << (32 - n));
+        }
+        
         public byte[] Xor(byte[] text, byte[] key)
         {
             byte[] xor = new byte[text.Length];

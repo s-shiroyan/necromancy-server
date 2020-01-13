@@ -8,6 +8,10 @@ namespace Necromancy.Cli.Command.Commands
     {
         public override CommandResultType Handle(ConsoleParameter parameter)
         {
+            FpmfArchiveIO archiveIO2 = new FpmfArchiveIO();
+            archiveIO2.OpenWoItm("C:\\Games\\Wizardry Online\\data_un\\settings\\item.csv");
+ 
+            return CommandResultType.Continue;
             if (parameter.Arguments.Count == 2)
             {
                 FpmfArchiveIO archiveIO = new FpmfArchiveIO();
