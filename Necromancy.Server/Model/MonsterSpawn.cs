@@ -166,7 +166,7 @@ namespace Necromancy.Server.Model
             res.WriteFloat(this.Z);
             res.WriteFloat(0.0F);       //X per tick
             res.WriteFloat(0.0F);       //Y Per tick
-            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+            res.WriteFloat(0.0F);              //verticalMovementSpeedMultiplier
 
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move
@@ -186,7 +186,7 @@ namespace Necromancy.Server.Model
             res.WriteFloat(this.Z);
             res.WriteFloat(0.0F);       //X per tick
             res.WriteFloat(0.0F);       //Y Per tick
-            res.WriteFloat((float)1);              //verticalMovementSpeedMultiplier
+            res.WriteFloat(0.0F);              //verticalMovementSpeedMultiplier
 
             res.WriteFloat((float)1 / travelTime);              //movementMultiplier
             res.WriteFloat((float)travelTime);              //Seconds to move

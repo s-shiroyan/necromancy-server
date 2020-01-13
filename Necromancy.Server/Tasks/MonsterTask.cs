@@ -640,7 +640,7 @@ namespace Necromancy.Server.Tasks
                 float monsterGoto = _monster.GetGotoDistance();
                 Vector3 moveTo = Vector3.Subtract(targetPos, monsterPos);
                 distance = GetDistance(monsterPos, targetPos);
-                Logger.Debug($"Target distance [{distance}] targetPos.X [{targetPos.X}] targetPos.Y [{targetPos.Y}] targetPos.Z [{targetPos.Z}]");
+                //Logger.Debug($"Target distance [{distance}] targetPos.X [{targetPos.X}] targetPos.Y [{targetPos.Y}] targetPos.Z [{targetPos.Z}]");
                 float factor = (float)Math.Sqrt(((monsterPos.X - targetPos.X) * (monsterPos.X - targetPos.X)) + ((monsterPos.Y - targetPos.Y) * (monsterPos.Y - targetPos.Y))) / monsterGoto;
                 currentDest.Z = targetPos.Z;
                 currentDest.X = targetPos.X - (moveTo.X / factor);
@@ -649,7 +649,7 @@ namespace Necromancy.Server.Tasks
 
                 // Now do the move
                 distance = GetDistance(monsterPos, currentDest);
-                Logger.Debug($"Moving distance [{distance}] currentDest.X [{currentDest.X}] currentDest.Y [{currentDest.Y}] currentDest.Z [{currentDest.Z}]");
+                //Logger.Debug($"Moving distance [{distance}] currentDest.X [{currentDest.X}] currentDest.Y [{currentDest.Y}] currentDest.Z [{currentDest.Z}]");
                 if (distance <= _monster.GetGotoDistance())
                     return;
                 float travelTime = distance / _monster.MonsterRunVelocity;
@@ -666,8 +666,8 @@ namespace Necromancy.Server.Tasks
             }
             else
             {
-                float travelTime = (float)distance / _monster.MonsterRunVelocity;
-                Vector3 moveTo = Vector3.Subtract(currentDest, monsterPos);
+                //float travelTime = (float)distance / _monster.MonsterRunVelocity;
+                //Vector3 moveTo = Vector3.Subtract(currentDest, monsterPos);
                 distance = GetDistance(monsterPos, currentDest);
                 if (distance >= _monster.MonsterRunVelocity / tickDivisor)
                 {
@@ -822,7 +822,7 @@ namespace Necromancy.Server.Tasks
             double direction = (Math.Atan2(dy, dx) / System.Math.PI) * 180f; ;
             if (direction < 0) direction += 360f;
             direction = direction < 270 ? (direction + 90) / 2 : (direction - 270) / 2;
-            //Logger.Debug($"direction after [{direction}]");
+            //Logger.Debug($"New direction [{direction}]");
             _monster.Heading = (byte)direction;
         }
         private bool CheckHeading() // Will return heading for x2/y2 object to look at x1/y1 object
