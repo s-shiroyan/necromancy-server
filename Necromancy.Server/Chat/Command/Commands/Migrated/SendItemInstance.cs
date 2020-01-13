@@ -32,7 +32,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt64(item.InstanceId); //InstanceID
-            res.WriteInt32(10200101); //Icon serial id
+            res.WriteInt32(100101); //Icon serial id
             res.WriteByte(1); //Number of "items"
             res.WriteInt32(9); //Item status, in multiples of numbers, 1/3 = unidentified, 4/6 = broken, 5/7 = broken unidentified, 8 = cursed, loops after a while, only odd numbers are correct i think
             res.WriteFixedString("DAGGER", 0x10);
