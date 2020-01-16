@@ -238,11 +238,53 @@ namespace Necromancy.Server.Data
                     outBuffer.WriteInt32(g);
                 }
 
+/*              These 4 words are from the previous function after xor of xor[] above
+                uint word1 = 0x6B9306F7;    
+                uint word2 = 0xFE7D4F35;
+                uint word3 = 0x406D7743;
+                uint word4 = 0x9C07F4C0;
 
-                
-                
-                
-         
+                uint seed = 0;
+                uint seed1 = 0xFFFFFFFE;
+                word1 = word1 ^ seed;
+                uint a = ((word1 >> 16) & 0xFF) * 4;
+                uint b = ((word1 >> 8) & 0xFF) * 4;
+                uint c = (word1 >> 24) * 4;
+                uint e = table1[c];
+                uint f = table3[a];
+                uint g = e ^ f;
+                uint i = table3[b];
+                uint j = g ^ i;
+
+                uint k = (word2 & 0xFF) * 4;
+                uint l = j ^ table2[k];
+                uint m = (((word2 ^ seed) >> 16) & 0xFF) * 4;
+                uint n = ((word2 >> 24) * 4;
+                uint o = table3[n];
+                uint p = table4[m];
+                uint q = o ^ p;
+                uint r = ((word2 >> 8) & 0xFF) * 4;
+                uint s = (q ^ table2[r]);
+                uint t = (word2 & 0xFF) * 4;
+                uint u = table1[t] ^ s;
+                uint v = u ^ l;
+
+                word3 = word3 ^ v;
+                uint w = ((l & 0xFF) << 18) | ((l >> 8) & 0x00FFFFFF);
+                uint x = w ^ word4;
+                uint y = u ^ x;
+                word4 = l ^ y;
+                uint z = (seed1 * 4) + ???? (1628EEC8);   // Missed a push earlier
+                uint aa = word3 ^ z;
+                uint ab = ((aa >> 16) & 0xFF) * 4;
+                uint ac = (aa >> 24) * 4;
+                uint ad = table1[ac];
+                uint ae = (ad ^ table3[ab]);
+                */
+
+
+
+
             }
 
             _logger.Info("done");
