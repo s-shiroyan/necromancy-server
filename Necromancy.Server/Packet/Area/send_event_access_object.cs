@@ -48,6 +48,10 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
                          { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
                          { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
+                         { x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -275,6 +279,50 @@ namespace Necromancy.Server.Packet.Area
             
 
         }
+
+        private void Blacksmith(NecClient client, NpcSpawn npcSpawn)
+        {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(0); // 1 = cinematic
+                res.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+
+            if (client.Character.helperText)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res2.WriteCString("By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res3 = BufferProvider.Provide();
+                res3.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res3.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res3.WriteCString("sometimes the process fails.");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperText = false;
+            }
+            else
+            {
+                IBuffer res4 = BufferProvider.Provide();
+                //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                res4.WriteInt16(16); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
+                res4.WriteInt32(0);
+                res4.WriteInt32(0);
+                res4.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
+                IBuffer res5 = BufferProvider.Provide();
+                res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+            }
+        }
+
+
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {
