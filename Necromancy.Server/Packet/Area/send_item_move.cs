@@ -17,10 +17,13 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
        
-            //int unknown = packet.Data.ReadInt16();
-            int fromSlot = packet.Data.ReadInt32(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
-            int toSlot = packet.Data.ReadInt32();
-            int itemCount = packet.Data.ReadByte(); //last byte is stack count?
+            byte fromStoreType = packet.Data.ReadByte(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
+            byte fromBagId = packet.Data.ReadByte();
+            ushort fromSlot = packet.Data.ReadUInt16(); //last byte is stack count?
+            byte toStoreType = packet.Data.ReadByte(); // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
+            byte toBagId = packet.Data.ReadByte();
+            ushort toSlot = packet.Data.ReadUInt16(); 
+            byte itemCount = packet.Data.ReadByte(); //last byte is stack count?
 
             IBuffer res = BufferProvider.Provide();
 
@@ -46,19 +49,16 @@ namespace Necromancy.Server.Packet.Area
             */
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
-            SendItemPlace(client);
-            SendItemPlaceChange(client);
+            SendItemPlace(client, toStoreType, toBagId, toSlot); //Used for moving to a location that isn't inhabited
+            //SendItemPlaceChange(client); //Used for changing an items place with another
         }
-        private void SendItemPlace(NecClient client)
+        private void SendItemPlace(NecClient client, byte toStoreType, byte toBagId, ushort toSlot)
         {
-            x = -1;
-            x++;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(itemIDs[x]); // item id
-
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
-            res.WriteByte(0); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
-            res.WriteInt16((short)23); // bag index 0 to 24
+            res.WriteInt64(10200101); // item id
+            res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
+            res.WriteByte(toBagId); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
+            res.WriteInt16(toSlot); // bag index 0 to 24
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
         }
         private void SendItemPlaceChange(NecClient client)
