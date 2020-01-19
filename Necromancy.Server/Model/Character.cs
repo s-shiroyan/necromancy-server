@@ -90,7 +90,7 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
-
+        public Event currentEvent { get; set; }
         //Msg Value Holders
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
@@ -136,6 +136,12 @@ namespace Necromancy.Server.Model
             bag.StorageId = 0;
             bag.NumSlots = 24;
             inventoryBags.Add(bag);
+            helperText = true;
+            helperTextBlacksmith = true;
+            helperTextDonkey = true;
+            helperTextCloakRoom = true;
+            beginnerProtection = 1;
+            currentEvent = null;
         }
 
         public uint GetState ()
@@ -250,11 +256,6 @@ namespace Necromancy.Server.Model
                 inventoryItems.Add(invItem);
             }
             return invItem;
-            helperText = true;
-            helperTextBlacksmith = true;
-            helperTextDonkey = true;
-            helperTextCloakRoom = true;
-            beginnerProtection = 1;
         }
     }
 }

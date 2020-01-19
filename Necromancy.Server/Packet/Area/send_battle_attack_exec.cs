@@ -3,7 +3,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Common.Instance;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Necromancy.Server.Packet.Receive;

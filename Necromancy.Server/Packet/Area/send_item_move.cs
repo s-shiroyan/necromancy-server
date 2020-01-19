@@ -2,14 +2,16 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Packet.Area
 {
     public class send_item_move : ClientHandler
     {
+        private readonly NecServer _server;
         public send_item_move(NecServer server) : base(server)
         {
-       
+            _server = server;
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_item_move;
@@ -63,19 +65,46 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
 
             InventoryItem invItem = client.Character.GetInventoryItem(toStoreType, toBagId, fromSlot);
-            invItem.StorageType = toStoreType;
-            invItem.StorageId = toBagId;
-            invItem.StorageSlot = toSlot;
-            client.Character.UpdateInventoryItem(invItem);
-            Logger.Debug($"invItem.StorageItem.InstanceId [{invItem.StorageItem.InstanceId}]");
-            res = null;
-            res = BufferProvider.Provide();
-            res.WriteInt64(invItem.StorageItem.InstanceId); // item id
-            res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
-            res.WriteByte(toBagId); // Position 2 ??
-            res.WriteInt16(toSlot); // bag index 0 to 24
-            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
-
+            if (invItem.StorageCount > 1)
+            {
+                if (client.Character.currentEvent != null)
+                {
+                    if (client.Character.currentEvent != null)
+                        Logger.Error($"Trying to start new event with another outstanding event active! Outstanding event type [{client.Character.currentEvent.EventType}]");
+                    else
+                        Logger.Error($"Trying to start new event with another outstanding event active! Unable to determine event type.");
+                }
+                MoveItem moveItem = _server.Instances.CreateInstance<MoveItem>();
+                moveItem.toStoreType = toStoreType;
+                moveItem.toBagId=  toBagId;
+                moveItem.toSlot = toSlot;
+                moveItem.fromStoreType = fromStoreType;
+                moveItem.fromBagId = moveItem.fromBagId;
+                moveItem.fromSlot = fromSlot;
+                moveItem.itemCount = (byte)itemCount;
+                moveItem.item = invItem.StorageItem;
+                client.Character.currentEvent = moveItem;
+                Logger.Debug($"InstanceID [{moveItem.InstanceId}]");
+                RecvEventStart eventStart = new RecvEventStart(moveItem.InstanceId, 0);
+                Router.Send(eventStart, client);
+                RecvEventRequestInt getCount = new RecvEventRequestInt("Select number to move.",1, invItem.StorageCount, invItem.StorageCount);
+                Router.Send(getCount, client);
+            }
+            else
+            {
+                invItem.StorageType = toStoreType;
+                invItem.StorageId = toBagId;
+                invItem.StorageSlot = toSlot;
+                client.Character.UpdateInventoryItem(invItem);
+                Logger.Debug($"invItem.StorageItem.InstanceId [{invItem.StorageItem.InstanceId}]");
+                res = null;
+                res = BufferProvider.Provide();
+                res.WriteInt64(invItem.StorageItem.InstanceId); // item id
+                res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
+                res.WriteByte(toBagId); // Position 2 ??
+                res.WriteInt16(toSlot); // bag index 0 to 24
+                Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+            }
             //SendItemPlace(client);
             //SendItemPlaceChange(client);
         }

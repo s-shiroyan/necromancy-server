@@ -34,8 +34,9 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendItemPlace(NecClient client, byte toStoreType, byte toBagId, ushort toStorageSlot)
         {
+            ulong instanceId = client.Character.GetInventoryItem(toStoreType, toBagId, (short)toStorageSlot).InstanceId;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(10200101); // item id
+            res.WriteInt64(instanceId); // item id
             res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag, 3 = warehouse
             res.WriteByte(toBagId); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
             res.WriteInt16(toStorageSlot); // bag index 0 to 24
