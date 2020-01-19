@@ -40,27 +40,31 @@ namespace Necromancy.Server.Packet.Area
 
                     //logic to execute different actions based on the event that triggered this select execution.
                     var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
-                        {
-                         { x => x == 10000704, () => SendEventSelectMapAndChannel(client, instanceId) }, //set to Manaphes in slums for testing.
-                         { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
-                         { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
-                         { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn) },
-                         { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
-                         { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
-                         { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
-                         { x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                         //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
-                         { x => x < 900000100 ,  () =>  UpdateNPC(client, npcSpawn) }
+                    {
+                        { x => x == 10000704, () => SendEventSelectMapAndChannel(client, instanceId) }, //set to Manaphes in slums for testing.
+                        { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
+                        { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
+                        { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn) },
+                        { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
+                        { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
+                        { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
+                        { x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
+                        { x => x == 10000010, () =>  DonkeysItems(client, npcSpawn) },
+                        { x => x == 80000003, () => CloakRoomShopClerk(client, npcSpawn) },
+                        { x => x == 10000002, () => RegularInn(client, npcSpawn) },
+                        { x => x == 10000703, () => CrimInn(client, npcSpawn) },
+                        { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 10000 ,   () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 100000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 1000000 ,  () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
+                        { x => x < 900000100 ,  () =>  UpdateNPC(client, npcSpawn) }
 
-                        };
+                    };
 
                     eventSwitchPerObjectID.First(sw => sw.Key((int)npcSpawn.NpcId)).Value();
 
@@ -287,7 +291,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
 
-            if (client.Character.helperText)
+            if (client.Character.helperTextBlacksmith)
             {
                 IBuffer res2 = BufferProvider.Provide();
                 res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
@@ -304,7 +308,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res6 = BufferProvider.Provide();
                 Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
-                client.Character.helperText = false;
+                client.Character.helperTextBlacksmith = false;
             }
             else
             {
@@ -322,6 +326,139 @@ namespace Necromancy.Server.Packet.Area
             }
         }
 
+        private void DonkeysItems(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // 1 = cinematic
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+
+            if (client.Character.helperTextDonkey)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperTextDonkey = false;
+            }
+            else
+            {
+                IBuffer res4 = BufferProvider.Provide();
+                //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                res4.WriteInt16(14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
+                res4.WriteInt32(0);
+                res4.WriteInt32(0);
+                res4.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
+                IBuffer res5 = BufferProvider.Provide();
+                res5.WriteCString($"{npcSpawn.Name}'s Goods");
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+            }
+        }
+
+        private void CloakRoomShopClerk(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // 1 = cinematic
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+
+            if (client.Character.helperTextCloakRoom)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res2.WriteCString("Welcome! We take care of your belongings and money.");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperTextCloakRoom = false;
+            }
+            else
+            {
+                IBuffer res4 = BufferProvider.Provide();
+                //recv_event_soul_storage_open = 0x3DD0, 
+                res4.WriteInt64(client.Soul.WarehouseGold);// Gold in the storage
+                Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
+            }
+        }
+
+        private void RegularInn(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // 1 = cinematic
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+
+            if(client.Character.beginnerProtection == 1)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // It's the first choice
+            }
+
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteCString("Small Stable  Free!"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteCString("Simple Bed  60 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice
+
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteCString("Economy Room  300 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the third choice
+
+            IBuffer res6 = BufferProvider.Provide();
+            res6.WriteCString("Suite Room  1,200 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // It's the fourth choice
+
+            IBuffer res7 = BufferProvider.Provide();
+            res7.WriteCString("Royal Suite  3000 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteCString("Back"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+
+            IBuffer res9 = BufferProvider.Provide();
+            res9.WriteCString("Welcome! Please choose a  room to stay in!"); // Window Heading / Name
+            res9.WriteInt32(npcSpawn.InstanceId);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+            /*IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+            res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+            res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//need to find max size; Text block
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+            //IBuffer res6 = BufferProvider.Provide();
+            //Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+            IBuffer res4 = BufferProvider.Provide();
+            //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+            res4.WriteInt16(14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
+            res4.WriteInt32(0);
+            res4.WriteInt32(0);
+            res4.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);*/
+        }
+
+        private void CrimInn(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); // 1 = cinematic
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+        }
 
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)

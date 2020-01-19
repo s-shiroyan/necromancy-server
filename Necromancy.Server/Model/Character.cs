@@ -33,8 +33,9 @@ namespace Necromancy.Server.Model
         public uint maxMp { get; set; }
         public uint maxOd { get; set; }
         public bool hadDied { get; set; }
-        public uint DeadBodyInstanceId { get; set; } 
+        public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
+        public int beginnerProtection { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -78,7 +79,9 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
-        public bool helperText { get; set; }
+        public bool helperTextBlacksmith { get; set; }
+        public bool helperTextDonkey { get; set; }
+        public bool helperTextCloakRoom { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -118,7 +121,10 @@ namespace Necromancy.Server.Model
             battleAnim = 0;
             hadDied = false;
             nextBagSlot = 0;
-            helperText = true;
+            helperTextBlacksmith = true;
+            helperTextDonkey = true;
+            helperTextCloakRoom = true;
+            beginnerProtection = 1;
         }
     }
 }

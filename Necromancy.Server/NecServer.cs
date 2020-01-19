@@ -417,6 +417,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_request_revive_event(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
             _areaConsumer.AddHandler(new Send_shop_repair(this));
+            _areaConsumer.AddHandler(new send_storage_draw_item(this));
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
