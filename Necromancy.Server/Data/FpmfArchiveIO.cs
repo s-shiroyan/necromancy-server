@@ -379,6 +379,9 @@ namespace Necromancy.Server.Data
             //byte dl = 0xEA;
             //byte sub = 0x0A;
 
+            //Uncomment for Beta Client
+            //byte dl = 0x7D;
+            //byte sub = 0xC4;
 
             // Uncomment for JP client
             // dl = 0x67;
