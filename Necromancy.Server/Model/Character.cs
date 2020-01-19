@@ -85,7 +85,7 @@ namespace Necromancy.Server.Model
         public List<Bag> inventoryBags { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
-
+        public bool helperText { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -246,6 +246,7 @@ namespace Necromancy.Server.Model
                 inventoryItems.Add(invItem);
             }
             return invItem;
+            helperText = true;
         }
     }
 }

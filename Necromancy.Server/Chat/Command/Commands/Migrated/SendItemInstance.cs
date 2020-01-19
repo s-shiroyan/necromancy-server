@@ -15,15 +15,6 @@ namespace Necromancy.Server.Chat.Command.Commands
             _server = server;
         }
 
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        int w = 0;
-        int a = 1;
-        int b = 0;
-        int c = 0;
-        int d = 0;
-
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {

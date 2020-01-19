@@ -311,7 +311,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_charabody_notify_loot_item, res26, ServerType.Area);
                     break;
 
-                case "itst":
+                case "ac":
                     IBuffer res27 = BufferProvider.Provide();
                     //recv_item_update_ac 
                     res27.WriteInt64(10200101);
@@ -336,6 +336,27 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res29.WriteInt32(0);
                     res29.WriteByte(0);
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res29, ServerType.Area);
+                    break;
+
+                case "dura":
+
+                    IBuffer res30 = BufferProvider.Provide();
+                    res30.WriteInt64(10200101);
+                    res30.WriteInt32(y); // MaxDura points
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_maxdur, res30, ServerType.Area);
+
+                    //recv_item_update_durability = 0x1F5A, 
+                    IBuffer res31 = BufferProvider.Provide();
+                    res31.WriteInt64(10200101);
+                    res31.WriteInt32(y-1);
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res31, ServerType.Area);
+                    break;
+
+                case "sc":
+                    IBuffer res32 = BufferProvider.Provide();
+                    //recv_shop_sell_check_r = 0x4E8D,
+                    res32.WriteInt32(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_shop_sell_check_r, res32, ServerType.Area);
                     break;
 
                 default:

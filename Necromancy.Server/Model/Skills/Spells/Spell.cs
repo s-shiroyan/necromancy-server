@@ -82,7 +82,7 @@ namespace Necromancy.Server.Model.Skills
             {
                 case NpcSpawn npc:
                     npcSpawn = npc;
-                    _logger.Debug($"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
+                    _logger.Debug($"NPCId: {npcSpawn.InstanceId} SerialId: {npcSpawn.Id} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
                     trgCoord.X = npcSpawn.X;
                     trgCoord.Y = npcSpawn.Y;
                     trgCoord.Z = npcSpawn.Z;

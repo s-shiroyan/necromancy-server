@@ -1,4 +1,4 @@
-﻿using Arrowgene.Services.Buffers;
+using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -26,11 +26,11 @@ namespace Necromancy.Server.Packet.Area
         private void SendShopNotifyClose(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(0);
-
             Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_notify_close, res, ServerType.Area, client);
 
+            IBuffer res2 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res2, ServerType.Area);
         }
     }
 }
