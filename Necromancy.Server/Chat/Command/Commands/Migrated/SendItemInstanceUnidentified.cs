@@ -28,7 +28,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(1); //Bit mask designation? (Only lets you apply this to certain slots dependant on what you send here) 1 for right hand, 2 for left hand
 
-            res.WriteByte(1); //Number of items
+            res.WriteByte(100); //Number of items
 
             res.WriteInt32(0); //Item status 0 = identified  (same as item status inside senditeminstance)
 

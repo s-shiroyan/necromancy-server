@@ -251,26 +251,21 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "event":
                     IBuffer res16 = BufferProvider.Provide();
                     //recv_event_start = 0x1B5C, 
-                    res16.WriteInt32(1);
-                    res16.WriteByte((byte)y);
+                    res16.WriteInt32(0);
+                    res16.WriteByte(0);
                     Router.Send(client, (ushort)AreaPacketId.recv_event_start, res16, ServerType.Area);
 
                     IBuffer res17 = BufferProvider.Provide();
-                    //recv_event_change_type = 0x32ED,
-                    res17.WriteInt32(y);
-                    //Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res17, ServerType.Area);
+                    //recv_event_quest_report = 0xE07E,
+                    res17.WriteInt32(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_quest_report, res17, ServerType.Area);
 
-                    Thread.Sleep(2000);
                     IBuffer res18 = BufferProvider.Provide();
-                    //recv_event_end = 0x99D, 
-                    res18.WriteByte((byte)y);
-                    Router.Send(client, (ushort)AreaPacketId.recv_event_end, res18, ServerType.Area);
-                    break;
+                    //recv_event_block_message_end_no_object = 0x1AB,
+                    //Router.Send(client, (ushort)AreaPacketId.recv_event_block_message_end_no_object, res18, ServerType.Area);
 
-                case "situationend":
                     IBuffer res19 = BufferProvider.Provide();
-                    //recv_situation_end = 0x124C,
-                    Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res19, ServerType.Area);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res19, ServerType.Area);
                     break;
 
                 case "popup":
@@ -357,6 +352,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                     //recv_shop_sell_check_r = 0x4E8D,
                     res32.WriteInt32(0);
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_sell_check_r, res32, ServerType.Area);
+                    break;
+
+                case "view":
+                    IBuffer res33 = BufferProvider.Provide();
+                    //recv_chara_view_landing_notify = 0x14DA, 
+                    res33.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_view_landing_notify, res33, ServerType.Area);
                     break;
 
                 default:

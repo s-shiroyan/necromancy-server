@@ -79,16 +79,13 @@ namespace Necromancy.Server.Packet.Area
             //SendItemPlace(client);
             //SendItemPlaceChange(client);
         }
-        private void SendItemPlace(NecClient client)
+        private void SendItemPlace(NecClient client, byte toStoreType, byte toBagId, ushort toSlot)
         {
-            x = -1;
-            x++;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(itemIDs[x]); // item id
-
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
-            res.WriteByte(0); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
-            res.WriteInt16((short)23); // bag index 0 to 24
+            res.WriteInt64(10200101); // item id
+            res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag
+            res.WriteByte(toBagId); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
+            res.WriteInt16(toSlot); // bag index 0 to 24
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
         }
         private void SendItemPlaceChange(NecClient client)

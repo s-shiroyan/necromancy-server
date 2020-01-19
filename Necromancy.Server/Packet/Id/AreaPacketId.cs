@@ -922,7 +922,7 @@ namespace Necromancy.Server.Packet.Id
         send_stall_shopping_start = 0xB248,
         send_storage_deposit_item = 0x2FA4,
         send_storage_deposit_money = 0xA40B,
-        send_storage_draw_item = 0x198, //opcode not found
+        send_storage_draw_item = 0x45AA,
         send_storage_draw_money = 0xCE05,
         send_sv_conf_option_change = 0x1B99, 
         send_sv_conf_option_request = 0x615E, 

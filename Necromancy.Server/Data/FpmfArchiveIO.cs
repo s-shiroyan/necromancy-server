@@ -387,6 +387,10 @@ namespace Necromancy.Server.Data
             // dl = 0x67;
             // sub = 0xC7;
 
+            //Uncomment for beta client
+            //dl = 0x7D;
+            //sub = 0xC4;
+
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < buffer.Size)
