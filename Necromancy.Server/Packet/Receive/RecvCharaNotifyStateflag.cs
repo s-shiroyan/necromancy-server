@@ -10,8 +10,8 @@ namespace Necromancy.Server.Packet.Receive
     public class RecvCharaNotifyStateflag : PacketResponse
     {
         private readonly uint _instanceId;
-        private readonly int _state;
-        public RecvCharaNotifyStateflag(uint instanceId, int state)
+        private readonly uint _state;
+        public RecvCharaNotifyStateflag(uint instanceId, uint state)
             : base((ushort) AreaPacketId.recv_chara_notify_stateflag, ServerType.Area)
         {
             _instanceId = instanceId;

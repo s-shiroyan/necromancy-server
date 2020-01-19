@@ -135,7 +135,7 @@ namespace Necromancy.Server.Tasks
             NecClient client = _map.ClientLookup.GetByCharacterInstanceId(ownerInstanceId);
             if (client.Character.IsStealthed())
             {
-                int newState = client.Character.ClearStateBit(0x8);
+                uint newState = client.Character.ClearStateBit(0x8);
                 RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
                 _server.Router.Send(client.Map, charState);
             }
@@ -144,7 +144,7 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(_map, eoTriggerData);
             float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((uint)ownerInstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(ownerInstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(trap._skillId);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monster.InstanceId);

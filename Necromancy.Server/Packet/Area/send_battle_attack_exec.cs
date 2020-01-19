@@ -82,7 +82,7 @@ namespace Necromancy.Server.Packet.Area
                         }
                         if (client.Character.IsStealthed())
                         {
-                            int newState = client.Character.ClearStateBit(0x8);
+                            uint newState = client.Character.ClearStateBit(0x8);
                             RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
                             _server.Router.Send(client.Map, charState);
                         }

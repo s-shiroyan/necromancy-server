@@ -70,8 +70,8 @@ namespace Necromancy.Server.Model.Skills
 
             res11.WriteInt32(_client.Character.InstanceId);
 
-            int state = _client.Character.GetState();
-            int newState = 0;
+            uint state = _client.Character.GetState();
+            uint newState = 0;
             if (_client.Character.IsStealthed())
             {
                 newState = _client.Character.ClearStateBit(0x8);

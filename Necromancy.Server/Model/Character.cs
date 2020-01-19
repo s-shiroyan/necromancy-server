@@ -40,6 +40,7 @@ namespace Necromancy.Server.Model
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
         public int beginnerProtection { get; set; }
+        public uint state { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -85,6 +86,7 @@ namespace Necromancy.Server.Model
         public List<Bag> inventoryBags { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
+        public bool helperText { get; set; }
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
@@ -136,25 +138,25 @@ namespace Necromancy.Server.Model
             inventoryBags.Add(bag);
         }
 
-        public int GetState ()
+        public uint GetState ()
         {
-            int charState = 0;
+            uint charState = 0;
             lock (StateLock)
             {
                 charState = state;
             }
             return charState;
         }
-        public void SetState(int charState)
+        public void SetState(uint charState)
         {
             lock (StateLock)
             {
                 state = charState;
             }
         }
-        public int AddStateBit(int stateBit)
+        public uint AddStateBit(uint stateBit)
         {
-            int newState = 0;
+            uint newState = 0;
             lock (StateLock)
             {
                 state |= stateBit;
@@ -162,9 +164,9 @@ namespace Necromancy.Server.Model
             }
             return newState;
         }
-        public int ClearStateBit(int stateBit)
+        public uint ClearStateBit(uint stateBit)
         {
-            int newState = 0;
+            uint newState = 0;
             lock (StateLock)
             {
                 state &= ~stateBit;
