@@ -90,6 +90,7 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
+        public bool openEvent { get; set; }
         public Event currentEvent { get; set; }
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -142,6 +143,7 @@ namespace Necromancy.Server.Model
             helperTextCloakRoom = true;
             beginnerProtection = 1;
             currentEvent = null;
+            openEvent = false;
         }
 
         public uint GetState ()
@@ -214,6 +216,11 @@ namespace Necromancy.Server.Model
             invItm.StorageItem = invItem.StorageItem;
             invItm.StorageSlot = invItem.StorageSlot;
             invItm.StorageType = invItem.StorageType;
+        }
+        public void RemoveInventoryItem(InventoryItem invItem)
+        {
+            InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
+            inventoryItems.Remove(invItm);
         }
         public InventoryItem GetNextInventoryItem(NecServer server)
         {

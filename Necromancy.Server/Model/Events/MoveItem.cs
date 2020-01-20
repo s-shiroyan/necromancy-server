@@ -25,40 +25,66 @@ namespace Necromancy.Server.Model
 
         public void Move(NecServer server, NecClient client)
         {
-            InventoryItem invItem = client.Character.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
-            if (invItem.StorageCount == itemCount)
+            InventoryItem fromInvItem = client.Character.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
+            InventoryItem toInvItem = client.Character.GetInventoryItem(toStoreType, toBagId, toSlot);
+
+            if (toInvItem != null && (fromInvItem.StorageCount + toInvItem.StorageCount > 255))
             {
-                IBuffer res = BufferProvider.Provide();
-                client.Character.UpdateInventoryItem(invItem);
-                _logger.Debug($"invItem.StorageItem.InstanceId [{invItem.StorageItem.InstanceId}]");
-                res = null;
-                res = BufferProvider.Provide();
-                res.WriteInt64(invItem.StorageItem.InstanceId); // item id
-                res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag ??
-                res.WriteByte(toBagId); // Position 2 ??
-                res.WriteInt16(toSlot); // bag index 0 to 24
-                server.Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
-                invItem.StorageType = toStoreType;
-                invItem.StorageId = toBagId;
-                invItem.StorageSlot = toSlot;
-                client.Character.UpdateInventoryItem(invItem);
+                RecvNormalSystemMessage unlikeItems = new RecvNormalSystemMessage("The move would place too many items in destination slot!");
+                server.Router.Send(unlikeItems, client);
+                return;
+            }
+            if (fromInvItem.StorageCount == itemCount)
+            {
+                if (toInvItem != null)
+                {
+                    toInvItem.StorageCount = (byte)(fromInvItem.StorageCount + toInvItem.StorageCount); // huh??? byte - byte is cast as int???? 
+                    RecvItemUpdateNum itemNum = new RecvItemUpdateNum(toInvItem.InstanceId, toInvItem.StorageCount);
+                    server.Router.Send(itemNum, client);
+                    RecvItemRemove removeItem = new RecvItemRemove(fromInvItem.InstanceId);
+                    server.Router.Send(removeItem, client);
+                    client.Character.RemoveInventoryItem(fromInvItem);
+                    client.Character.UpdateInventoryItem(toInvItem);
+                }
+                else
+                {
+                    fromInvItem.StorageType = toStoreType;
+                    fromInvItem.StorageId = toBagId;
+                    fromInvItem.StorageSlot = toSlot;
+                    RecvItemUpdatePlace itemPlace = new RecvItemUpdatePlace(fromInvItem.InstanceId, fromInvItem.StorageType, fromInvItem.StorageId, fromInvItem.StorageSlot);
+                    server.Router.Send(itemPlace, client);
+                    client.Character.UpdateInventoryItem(fromInvItem);
+                }
             }
             else
             {
-                byte remainCount = (byte)(invItem.StorageCount - itemCount); // huh??? byte - byte is cast as int????
-                RecvItemUpdateNum updateNum = new RecvItemUpdateNum(invItem.InstanceId, remainCount);
-                server.Router.Send(updateNum, client);
-                InventoryItem newInvItem = client.Character.GetNextInventoryItem(server);
-                _logger.Debug($"newInvitem.InstanceId [{newInvItem.InstanceId}]");
-                newInvItem.StorageCount = (byte)itemCount;
-                newInvItem.StorageType = toStoreType;
-                newInvItem.StorageId = toBagId;
-                newInvItem.StorageSlot = toSlot;
-                newInvItem.StorageItem = item;
-                RecvItemInstanceUnidentified itemUnidentified = new RecvItemInstanceUnidentified(newInvItem);
-                server.Router.Send(itemUnidentified, client);
-                invItem.StorageCount = remainCount;
-                client.Character.UpdateInventoryItem(invItem);
+                byte remainCount = (byte)(fromInvItem.StorageCount - itemCount); // huh??? byte - byte is cast as int????
+                if (toInvItem != null)
+                {
+                    toInvItem.StorageCount = (byte)(itemCount + toInvItem.StorageCount); // huh??? byte - byte is cast as int???? 
+                    fromInvItem.StorageCount = remainCount;
+                    RecvItemUpdateNum toItemNum = new RecvItemUpdateNum(toInvItem.InstanceId, toInvItem.StorageCount);
+                    server.Router.Send(toItemNum, client);
+                    RecvItemUpdateNum fromItemNum = new RecvItemUpdateNum(fromInvItem.InstanceId, fromInvItem.StorageCount);
+                    server.Router.Send(fromItemNum, client);
+                    client.Character.RemoveInventoryItem(fromInvItem);
+                    client.Character.UpdateInventoryItem(toInvItem);
+                }
+                else
+                {
+                    RecvItemUpdateNum updateNum = new RecvItemUpdateNum(fromInvItem.InstanceId, remainCount);
+                    server.Router.Send(updateNum, client);
+                    InventoryItem newInvItem = client.Character.GetNextInventoryItem(server);
+                    newInvItem.StorageCount = (byte)itemCount;
+                    newInvItem.StorageType = toStoreType;
+                    newInvItem.StorageId = toBagId;
+                    newInvItem.StorageSlot = toSlot;
+                    newInvItem.StorageItem = item;
+                    RecvItemInstanceUnidentified itemUnidentified = new RecvItemInstanceUnidentified(newInvItem);
+                    server.Router.Send(itemUnidentified, client);
+                    fromInvItem.StorageCount = remainCount;
+                    client.Character.UpdateInventoryItem(fromInvItem);
+                }
             }
         }
     }

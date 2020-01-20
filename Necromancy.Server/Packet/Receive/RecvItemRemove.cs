@@ -9,8 +9,8 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvItemRemove : PacketResponse
     {
-        private readonly long _instanceId;
-        public RecvItemRemove(long instanceId)
+        private readonly ulong _instanceId;
+        public RecvItemRemove(ulong instanceId)
             : base((ushort) AreaPacketId.recv_item_remove, ServerType.Area)
         {
             _instanceId = instanceId;

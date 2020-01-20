@@ -44,7 +44,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
             }
 
-
+            
             switch (command[0])
             {
                 case "dagger":
@@ -60,6 +60,30 @@ namespace Necromancy.Server.Chat.Command.Commands
                     if (item == null)
                         return;
                     _logger.Debug($"dagger instanceId [{item.InstanceId}]");
+                    break;
+                case "healpot":
+                    Item healItem = null;
+                    if (y == 0)
+                    {
+                        healItem = SendItemInstanceUnidentified(client, 50100101, x);
+                    }
+                    else
+                    {
+                        healItem = SendItemInstance(client);
+                    }
+                    _logger.Debug($"dagger instanceId [{healItem.InstanceId}]");
+                    break;
+                case "create":
+                    Item createItem = null;
+                    if (y == 0)
+                    {
+                        createItem = SendItemInstanceUnidentified(client, x, y);
+                    }
+                    else
+                    {
+                        createItem = SendItemInstance(client);
+                    }
+                    _logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
                     break;
                 case "draw":
                     RecvPartyNotifyAddDrawItem itemMsg = new RecvPartyNotifyAddDrawItem((ulong)x, 30.0F, 0);
