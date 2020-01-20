@@ -116,7 +116,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res = BufferProvider.Provide();
 
             //res.WriteInt64(dropItem.Item.Id); //Item Object Instance ID 
-            res.WriteInt64(item.InstanceId); //Item Object Instance ID 
+            res.WriteInt64(invItem.InstanceId); //Item Object Instance ID 
 
             res.WriteCString("dagger"); //Name
 
@@ -157,7 +157,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
-            ConfigureItem(client, item.InstanceId);
+            ConfigureItem(client, invItem.InstanceId);
 
             client.Character.inventoryItems.Add(invItem);
             return item;

@@ -65,6 +65,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
 
             InventoryItem invItem = client.Character.GetInventoryItem(toStoreType, toBagId, fromSlot);
+            Logger.Debug($"newInvitem.InstanceId [{invItem.InstanceId}]");
             if (invItem.StorageCount > 1)
             {
                 if (client.Character.currentEvent != null)
@@ -85,7 +86,7 @@ namespace Necromancy.Server.Packet.Area
                 moveItem.item = invItem.StorageItem;
                 client.Character.currentEvent = moveItem;
                 Logger.Debug($"InstanceID [{moveItem.InstanceId}]");
-                RecvEventStart eventStart = new RecvEventStart(moveItem.InstanceId, 0);
+                RecvEventStart eventStart = new RecvEventStart(0, 0);
                 Router.Send(eventStart, client);
                 RecvEventRequestInt getCount = new RecvEventRequestInt("Select number to move.",1, invItem.StorageCount, invItem.StorageCount);
                 Router.Send(getCount, client);

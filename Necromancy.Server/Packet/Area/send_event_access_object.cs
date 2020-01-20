@@ -177,7 +177,7 @@ namespace Necromancy.Server.Packet.Area
                 res7.WriteByte(6); //Number or Channels  - comment from other recv
             }
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
         }
 
         // I added these to Npc database for now, should it be handled differently?????

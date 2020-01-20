@@ -49,6 +49,7 @@ namespace Necromancy.Server.Model
                 RecvItemUpdateNum updateNum = new RecvItemUpdateNum(invItem.InstanceId, remainCount);
                 server.Router.Send(updateNum, client);
                 InventoryItem newInvItem = client.Character.GetNextInventoryItem(server);
+                _logger.Debug($"newInvitem.InstanceId [{newInvItem.InstanceId}]");
                 newInvItem.StorageCount = (byte)itemCount;
                 newInvItem.StorageType = toStoreType;
                 newInvItem.StorageId = toBagId;

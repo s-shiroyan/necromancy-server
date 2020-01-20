@@ -33,13 +33,14 @@ namespace Necromancy.Server.Packet.Area
                     IBuffer res = BufferProvider.Provide();
                     int count = packet.Data.ReadInt32();
                     Logger.Debug($"Returned [{count}]");
+                    SendEventEnd(client);
                     MoveItem(client, moveItem, count);
+                    client.Character.currentEvent = null;
                     break;
                 default:
                     Logger.Error($"Recevied AreaPacketId.send_event_request_int_r with undefined event type.");
                     break;
             }
-            SendEventEnd(client);
         }
 
         private void MoveItem(NecClient client, MoveItem moveItem, int count)
@@ -56,7 +57,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area, client);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
 
         }
 
