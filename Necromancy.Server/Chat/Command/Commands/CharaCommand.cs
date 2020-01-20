@@ -361,6 +361,14 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_view_landing_notify, res33, ServerType.Area);
                     break;
 
+                case "itemnum":
+                    IBuffer res34 = BufferProvider.Provide();
+                    //recv_item_update_num = 0x5F8, 
+                    res34.WriteInt64(10200101);
+                    res34.WriteByte(25);
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_num, res34, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;

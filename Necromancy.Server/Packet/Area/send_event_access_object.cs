@@ -288,7 +288,7 @@ namespace Necromancy.Server.Packet.Area
         {
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0); // 1 = cinematic
-                res.WriteByte(0);
+                res.WriteByte(0); // bool
                 Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
 
             if (client.Character.helperTextBlacksmith)
