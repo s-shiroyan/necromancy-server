@@ -33,14 +33,9 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"toBagId byte [{toBagId}]");
             Logger.Debug($"toSlot [{toSlot}]");
 
-
-
             int itemCount = packet.Data.ReadByte(); //last byte is stack count?
-
             Logger.Debug($"itemCount [{itemCount}]");
-
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(0); //error check. 0 to work
 
             /*

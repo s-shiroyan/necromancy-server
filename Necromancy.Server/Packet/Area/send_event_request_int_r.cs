@@ -25,6 +25,7 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.currentEvent == null)
             {
                 Logger.Error($"Recevied AreaPacketId.send_event_request_int_r with no current event saved.");
+                SendEventEnd(client);
                 return;
             }
             switch (client.Character.currentEvent)
@@ -47,7 +48,6 @@ namespace Necromancy.Server.Packet.Area
         {
             if (count <= 0)
             {
-                client.Character.currentEvent = null;
                 return;
             }
             moveItem.itemCount = (byte)count;
