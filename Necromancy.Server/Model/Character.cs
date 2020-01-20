@@ -87,6 +87,7 @@ namespace Necromancy.Server.Model
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
 
+
         public Character()
         {
             Id = -1;
