@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Area
                     client.Map.NpcSpawns.TryGetValue(npcSpawn.InstanceId, out npcSpawn);
                     Logger.Debug($"instanceId : {npcSpawn.InstanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
                     IBuffer res = BufferProvider.Provide();
-                    res.WriteInt32(npcSpawn.InstanceId);
+                    res.WriteInt32(0);
                     Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
                     //logic to execute different actions based on the event that triggered this select execution.
@@ -286,11 +286,6 @@ namespace Necromancy.Server.Packet.Area
 
         private void Blacksmith(NecClient client, NpcSpawn npcSpawn)
         {
-                IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(0); // 1 = cinematic
-                res.WriteByte(0); // bool
-                Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
-
             if (client.Character.helperTextBlacksmith)
             {
                 IBuffer res2 = BufferProvider.Provide();
@@ -323,16 +318,11 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
-            }
+            }            
         }
 
         private void DonkeysItems(NecClient client, NpcSpawn npcSpawn)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // 1 = cinematic
-            res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
-
             if (client.Character.helperTextDonkey)
             {
                 IBuffer res2 = BufferProvider.Provide();
@@ -364,11 +354,6 @@ namespace Necromancy.Server.Packet.Area
 
         private void CloakRoomShopClerk(NecClient client, NpcSpawn npcSpawn)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // 1 = cinematic
-            res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
-
             if (client.Character.helperTextCloakRoom)
             {
                 IBuffer res2 = BufferProvider.Provide();
@@ -393,11 +378,6 @@ namespace Necromancy.Server.Packet.Area
 
         private void RegularInn(NecClient client, NpcSpawn npcSpawn)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // 1 = cinematic
-            res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
-
             if(client.Character.beginnerProtection == 1)
             {
                 IBuffer res2 = BufferProvider.Provide();
@@ -454,10 +434,7 @@ namespace Necromancy.Server.Packet.Area
 
         private void CrimInn(NecClient client, NpcSpawn npcSpawn)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // 1 = cinematic
-            res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res, ServerType.Area);
+
         }
 
 
