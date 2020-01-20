@@ -90,7 +90,6 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
-        public bool openEvent { get; set; }
         public Event currentEvent { get; set; }
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -143,7 +142,6 @@ namespace Necromancy.Server.Model
             helperTextCloakRoom = true;
             beginnerProtection = 1;
             currentEvent = null;
-            openEvent = false;
         }
 
         public uint GetState ()
