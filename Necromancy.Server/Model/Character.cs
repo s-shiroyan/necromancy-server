@@ -82,6 +82,7 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
+        public bool secondInnAccess { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -126,6 +127,7 @@ namespace Necromancy.Server.Model
             helperTextDonkey = true;
             helperTextCloakRoom = true;
             beginnerProtection = 1;
+            secondInnAccess = false;
         }
     }
 }

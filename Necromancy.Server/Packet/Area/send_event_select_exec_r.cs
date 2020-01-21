@@ -51,9 +51,13 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 74013071 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013161 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013271 ,  () => ChangeMap(client, npcSpawn.NpcId) },
-                         { x => x == 10000002, () => RegularInn(client, npcSpawn.NpcId, npcSpawn) },
+                         { x => x == 10000002, () => {  if(client.Character.secondInnAccess == false)
+                                                            RegularInn(client, npcSpawn.NpcId, npcSpawn);
+                                                        else if(client.Character.secondInnAccess == true)                  
+                                                            ResolveInn(client,npcSpawn.NpcId, npcSpawn); 
+                                                     }
+                         },
                          { x => x == 10000703, () => CrimInn(client, npcSpawn.NpcId, npcSpawn) },
-                         //{x => x == 16969692, () => ResolveInn(client, npcSpawn.NpcId, npcSpawn) },
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -254,7 +258,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if (client.Character.eventSelectExecCode == 1)
             {
@@ -263,7 +267,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if (client.Character.eventSelectExecCode == 2)
             {
@@ -272,7 +276,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if (client.Character.eventSelectExecCode == 3)
             {
@@ -281,7 +285,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if (client.Character.eventSelectExecCode == 4)
             {
@@ -290,7 +294,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if (client.Character.eventSelectExecCode == 5)
             {
@@ -299,7 +303,7 @@ namespace Necromancy.Server.Packet.Area
                 res9.WriteInt32(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
-                //ResolveInn(client, objectID, npcSpawn);
+                client.Character.secondInnAccess = true;
             }
             else if(client.Character.eventSelectExecCode == 6)
             {
@@ -315,12 +319,19 @@ namespace Necromancy.Server.Packet.Area
         {
             if (client.Character.eventSelectExecCode == 0)
             {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(1);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_change_type, res, ServerType.Area);
 
-                SendEventEnd(client);
+                IBuffer res2 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res2, ServerType.Area);
+
                 Logger.Debug("We hit the end of the inn");
                 //we need the sleep script to fire here
                 //this is a placeholder for now until we find how to do so
                 //npcSpawn.NpcId = 10000002;
+
+                client.Character.secondInnAccess = false;
             }
             else if (client.Character.eventSelectExecCode == 1)
             {
