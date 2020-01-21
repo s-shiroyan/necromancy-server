@@ -91,6 +91,8 @@ namespace Necromancy.Server.Model
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
         public Event currentEvent { get; set; }
+        public bool secondInnAccess { get; set; }
+
         //Msg Value Holders
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
@@ -143,6 +145,7 @@ namespace Necromancy.Server.Model
             helperTextCloakRoom = true;
             beginnerProtection = 1;
             currentEvent = null;
+           secondInnAccess = false;
         }
 
         public uint GetState ()
@@ -262,6 +265,6 @@ namespace Necromancy.Server.Model
                 inventoryItems.Add(invItem);
             }
             return invItem;
-        }
+         }
     }
 }
