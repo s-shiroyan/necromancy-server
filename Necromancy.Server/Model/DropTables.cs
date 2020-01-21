@@ -24,12 +24,12 @@ namespace Necromancy.Server.Model
             item1.MinItems = 1;
             item1.Maxitems = 5;
             DropTableItem item2 = new DropTableItem();
-            item2.ItemId = 10200101;
+            item2.ItemId = 50100101;
             item2.Rarity = 2;
             item2.MinItems = 1;
-            item2.Maxitems = 1;
+            item2.Maxitems = 3;
             DropTableItem item3 = new DropTableItem();
-            item3.ItemId = 80000101;
+            item3.ItemId = 10200101;
             item3.Rarity = 3;
             item3.MinItems = 1;
             item3.Maxitems = 1;
