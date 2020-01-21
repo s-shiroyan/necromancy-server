@@ -206,9 +206,10 @@ namespace Necromancy.Server.Model
             InventoryItem invItem = inventoryItems.Find(x => x.StorageItem.InstanceId == instanceId);
             return invItem;
         }
-        public InventoryItem GetInventoryItem(Item item)
+
+        public InventoryItem GetInventoryItem(Item item, byte canHold = 0) // If just need to get the item only pass item, if looking for a stack to add looted/traded items use canHold
         {
-            InventoryItem invItem = inventoryItems.Find(x => x.StorageItem == item);
+            InventoryItem invItem = inventoryItems.Find(x => (x.StorageItem == item) && (x.StorageCount + canHold <= 255));
             return invItem;
         }
         public void UpdateInventoryItem(InventoryItem invItem)
