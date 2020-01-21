@@ -447,6 +447,7 @@ recv_wanted_jail_open = 0xE7BB,
 	
 	res.WriteInt64(0);
 	
+String=L"network::proto_area_implement_client::recv_party_notify_add_draw_item() itemid : %llu, remain_sec %f, drawstate %d\n"
 	
 recv_party_notify_add_draw_item = 0xE748,
 
@@ -471,6 +472,11 @@ recv_battle_report_notify_exp = 0xE526,
 	res.WriteInt32(0);
 	
 	
+send_party_entry_draw = recv_0xC7AF
+send_party_pass_draw = 0x663C
+
+
+
 recv_union_request_rename_r = 0xE462, // afterward sends send_union_rename_close (0xC9A9)
 
 	res.WriteInt32(0);
@@ -2058,6 +2064,7 @@ recv_random_box_close_r = 0x924E,
 
 	res.WriteInt32(0);
 	
+String=L"network::proto_area_implement_client::recv_message_board_notify_update() yesterday:(%d, %d, %d, %d) lastmonth:(%d, %d, %d, %d)\n"
 	
 recv_message_board_notify_update = 0x9227,
 

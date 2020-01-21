@@ -36,6 +36,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort) AreaPacketId.recv_battle_attack_pose_start_notify, res, ServerType.Area, client);
 
             client.Character.weaponEquipped = true;
+            client.Character.AddStateBit(0x2);
 
         }
 

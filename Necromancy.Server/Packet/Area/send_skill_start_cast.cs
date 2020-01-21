@@ -4,6 +4,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Tasks;
 using System;
@@ -35,13 +36,55 @@ namespace Necromancy.Server.Packet.Area
                 var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
                 {
                         { x => (x > 114100 && x < 114199), () => ThiefSkill(client, skillID, skillTarget) },
-                        { x => (x > 114300 && x < 114399), () => Trap(client, skillID) },
-                        { x => (x > 113000 && x < 113999), () => Spell(client, skillID, skillTarget) },
-                        { x => x == 114607, () => Stealth(client, skillID) },
+                        { x => (x > 114300 && x < 114399), () => ThiefSkill(client, skillID, skillTarget) },
+                        { x => (x > 113000 && x < 113999), () => MageSkill(client, skillID, skillTarget) },
+                        { x => x == 114607, () => ThiefSkill(client, skillID, skillTarget) },
                         { x => (x > 114000 && x < 999999), () => SendSkillStartCastSelf(client, skillID, skillTarget, 0) } //this is a default catch statement for unmapped skills to prevent un-handled exceptions
                 };
                 eventSwitchPerObjectID.First(sw => sw.Key(skillLookup)).Value();
             }
+        }
+
+        private void MageSkill(NecClient client, int skillId, uint skillTarget)
+        {
+            Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+            Spell spell = new Spell(_server, client, skillId, skillTarget, charCoord);
+            Server.Instances.AssignInstance(spell);
+            client.Character.activeSkillInstance = spell.InstanceId;
+            spell.StartCast();
+        }
+
+        private void ThiefSkill(NecClient client, int skillId, uint skillTarget)
+        {
+            int skillBase = skillId / 1000;
+            if (client.Character.IsStealthed() && skillBase != 114607)
+            {
+                uint newState = client.Character.ClearStateBit(0x8);
+                RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                _server.Router.Send(client.Map, charState);
+            }
+
+            if (skillBase > 114300 && skillBase < 114399)
+            {
+                Trap(client, skillId);
+                return;
+            } else if (skillBase == 114607)
+            {
+                Stealth(client, skillId);
+                return;
+            }
+            if (skillTarget == 0)
+            {
+                Logger.Debug($"Skill requires target!! [{skillId}]");
+                int errorCode = -1311;
+                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
+                Router.Send(skillFail, client);
+                return;
+            }
+            ThiefSkill thiefSkill = new ThiefSkill(_server, client, skillId, skillTarget);
+            Server.Instances.AssignInstance(thiefSkill);
+            client.Character.activeSkillInstance = thiefSkill.InstanceId;
+            thiefSkill.StartCast();
         }
         private void Trap(NecClient client, int skillId)
         {
@@ -88,7 +131,7 @@ namespace Necromancy.Server.Packet.Area
             }
             if (isBaseTrap)
             {
-                
+
                 Logger.Debug($"Is base trap skillId [{skillId}] skillBase [{skillBase}] trapStack._trapRadius [{trapStack._trapRadius}]");
                 if (client.Map.GetTrapsCharacterRange(client.Character.InstanceId, trapStack._trapRadius, charPos))
                 {
@@ -131,36 +174,25 @@ namespace Necromancy.Server.Packet.Area
         }
         private void Stealth(NecClient client, int skillId)
         {
+            // I am doing this from memory, it could very well be wrong  :)
+            // Not blocking any actions if stealthed.
+            // Stealth will be turned off if start casting another skill or damage is done.
+
+            int errorCode = 0;
             Stealth stealth = new Stealth(_server, client, skillId);
             Server.Instances.AssignInstance(stealth);
             client.Character.activeSkillInstance = stealth.InstanceId;
-            stealth.StartCast();
-        }
-
-        private void Spell(NecClient client, int skillId, uint skillTarget)
-        {
-            Vector3 charCoord = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
-            Spell spell = new Spell(_server, client, skillId, skillTarget, charCoord);
-            Server.Instances.AssignInstance(spell);
-            client.Character.activeSkillInstance = spell.InstanceId;
-            spell.StartCast();
-        }
-
-        private void ThiefSkill(NecClient client, int skillId, uint skillTarget)
-        {
-
-            if (skillTarget == 0)
+            if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out SkillBaseSetting skillBaseSetting))
             {
-                Logger.Debug($"Skill requires target!! [{skillId}]");
-                int errorCode = -1311;
-                RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, 0);
-                Router.Send(skillFail, client);
+                Logger.Error($"Getting SkillBaseSetting from skillid [{skillId}]");
+                errorCode = -1;
+                RecvSkillStartCastR startFail = new RecvSkillStartCastR(errorCode, 0.0F);
+                Router.Send(startFail, client);
                 return;
             }
-            ThiefSkill thiefSkill = new ThiefSkill(_server, client, skillId, skillTarget);
-            Server.Instances.AssignInstance(thiefSkill);
-            client.Character.activeSkillInstance = thiefSkill.InstanceId;
-            thiefSkill.StartCast();
+            RecvSkillStartCastR skillFail = new RecvSkillStartCastR(errorCode, skillBaseSetting.CastingTime);
+            Router.Send(skillFail, client);
+            stealth.StartCast();
         }
         private void SendBattleReportSkillStartCast(NecClient client, int mySkillID)
         {

@@ -9,10 +9,10 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvPartyNotifyAddDrawItem : PacketResponse
     {
-        private readonly long _instanceId;
+        private readonly ulong _instanceId;
         private readonly float _timeout;
         private readonly int _iconId;
-        public RecvPartyNotifyAddDrawItem(long instanceId, float timeout, int iconId)
+        public RecvPartyNotifyAddDrawItem(ulong instanceId, float timeout, int iconId)
             : base((ushort) AreaPacketId.recv_party_notify_add_draw_item, ServerType.Area)
         {
             _instanceId = instanceId;

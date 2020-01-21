@@ -14,6 +14,10 @@
     "movemement": {
       "commandName": "Project",
       "commandLineArgs": "server start --w-list=3:0x6A72"
+    },
+    "Start/w --MaxPacket64 - Whitelist": {
+      "commandName": "Project",
+      "commandLineArgs": "server start --max-packet-size=64 --w-list=0x1B5C,0x99D"
     }
   }
 }

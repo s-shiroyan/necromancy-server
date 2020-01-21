@@ -64,7 +64,7 @@ namespace Necromancy.Server.Tasks
                         {
                             return;
                         }
-                        NecClient client = _server.Clients.GetByCharacterInstanceId(character.InstanceId);
+                        NecClient client = _map.ClientLookup.GetByCharacterInstanceId(character.InstanceId);
                         transitionMap.EnterForce(client, _changePos);
                     }
                     //_logger.Debug($"{character.Name} in range [transition] [{transition}].");

@@ -50,6 +50,7 @@ namespace Necromancy.Server
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
         public InstanceGenerator Instances { get; }
+        public InstanceGenerator64 Instances64 { get; }
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -67,6 +68,7 @@ namespace Necromancy.Server
             _logger = LogProvider.Logger<NecLogger>(this);
 
             Instances = new InstanceGenerator();
+            Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Chat = new ChatManager(this);
@@ -198,6 +200,8 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new Takeover(this));
             Chat.CommandHandler.AddCommand(new MobCommand(this));
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
+            Chat.CommandHandler.AddCommand(new ItemCommand(this));
+            Chat.CommandHandler.AddCommand(new BagCommand(this));
         }
 
         private void LoadSettingRepository()
@@ -416,6 +420,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_add_item(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive_event(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
+            _areaConsumer.AddHandler(new Send_shop_repair(this));
+            _areaConsumer.AddHandler(new send_storage_draw_item(this));
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND

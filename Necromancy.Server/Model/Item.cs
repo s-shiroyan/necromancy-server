@@ -3,7 +3,7 @@ using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Model
 {
-    public class Item : IInstance
+    public class Item : IInstance64
     {
         public Item()
         {
@@ -16,7 +16,7 @@ namespace Necromancy.Server.Model
             ItemType = setting.ItemType;
             IconType = setting.IconType;
         }
-        public uint InstanceId { get; set; }
+        public ulong InstanceId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public int ItemType { get; set; }

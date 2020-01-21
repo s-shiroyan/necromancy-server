@@ -342,7 +342,7 @@ namespace Necromancy.Server.Tasks
             brList.Add(brHp);
             brList.Add(brEnd);
             _server.Router.Send(Map, brList);
-            _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
+            _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
 
             PlayerDeadCheck(currentTarget);
         }
@@ -361,7 +361,7 @@ namespace Necromancy.Server.Tasks
                     RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
                     RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
                     RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                    NecClient client = _server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId);
+                    NecClient client = Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId);
 
                     brList.Add(brStart);
                     brList.Add(cDead1); //animate the death of your living body
@@ -391,8 +391,8 @@ namespace Necromancy.Server.Tasks
                     Thread.Sleep(100);
 
                     //reload your living body with no gear
-                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, currentTarget.Name);
-                    _server.Router.Send(_server.Clients.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
+                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, client.Soul.Name);
+                    _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
                 }
             }
         }
@@ -640,7 +640,7 @@ namespace Necromancy.Server.Tasks
                 float monsterGoto = _monster.GetGotoDistance();
                 Vector3 moveTo = Vector3.Subtract(targetPos, monsterPos);
                 distance = GetDistance(monsterPos, targetPos);
-                Logger.Debug($"Target distance [{distance}] targetPos.X [{targetPos.X}] targetPos.Y [{targetPos.Y}] targetPos.Z [{targetPos.Z}]");
+                //Logger.Debug($"Target distance [{distance}] targetPos.X [{targetPos.X}] targetPos.Y [{targetPos.Y}] targetPos.Z [{targetPos.Z}]");
                 float factor = (float)Math.Sqrt(((monsterPos.X - targetPos.X) * (monsterPos.X - targetPos.X)) + ((monsterPos.Y - targetPos.Y) * (monsterPos.Y - targetPos.Y))) / monsterGoto;
                 currentDest.Z = targetPos.Z;
                 currentDest.X = targetPos.X - (moveTo.X / factor);
@@ -649,7 +649,7 @@ namespace Necromancy.Server.Tasks
 
                 // Now do the move
                 distance = GetDistance(monsterPos, currentDest);
-                Logger.Debug($"Moving distance [{distance}] currentDest.X [{currentDest.X}] currentDest.Y [{currentDest.Y}] currentDest.Z [{currentDest.Z}]");
+                //Logger.Debug($"Moving distance [{distance}] currentDest.X [{currentDest.X}] currentDest.Y [{currentDest.Y}] currentDest.Z [{currentDest.Z}]");
                 if (distance <= _monster.GetGotoDistance())
                     return;
                 float travelTime = distance / _monster.MonsterRunVelocity;
@@ -666,8 +666,8 @@ namespace Necromancy.Server.Tasks
             }
             else
             {
-                float travelTime = (float)distance / _monster.MonsterRunVelocity;
-                Vector3 moveTo = Vector3.Subtract(currentDest, monsterPos);
+                //float travelTime = (float)distance / _monster.MonsterRunVelocity;
+                //Vector3 moveTo = Vector3.Subtract(currentDest, monsterPos);
                 distance = GetDistance(monsterPos, currentDest);
                 if (distance >= _monster.MonsterRunVelocity / tickDivisor)
                 {
@@ -705,7 +705,7 @@ namespace Necromancy.Server.Tasks
                 {
                     Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
                     float distanceChar = GetDistance(character, monster);
-                    if (distanceChar <= agroRange)
+                    if ((distanceChar <= agroRange) && !StealthCheck(client))
                     {
                         Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);
                         if (checkFOV(characterPos, agroDetectAngle))
@@ -726,6 +726,15 @@ namespace Necromancy.Server.Tasks
             return _monster.GetAgro();
         }
 
+        private bool StealthCheck(NecClient client)
+        {
+            // Needs to be expanded to consider skill, distance and orientation 
+            if ((client.Character.GetState() & 0x100) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private void MonsterAgroAdjust()
         {
             Character currentTarget = _monster.GetCurrentTarget();
@@ -813,7 +822,7 @@ namespace Necromancy.Server.Tasks
             double direction = (Math.Atan2(dy, dx) / System.Math.PI) * 180f; ;
             if (direction < 0) direction += 360f;
             direction = direction < 270 ? (direction + 90) / 2 : (direction - 270) / 2;
-            //Logger.Debug($"direction after [{direction}]");
+            //Logger.Debug($"New direction [{direction}]");
             _monster.Heading = (byte)direction;
         }
         private bool CheckHeading() // Will return heading for x2/y2 object to look at x1/y1 object

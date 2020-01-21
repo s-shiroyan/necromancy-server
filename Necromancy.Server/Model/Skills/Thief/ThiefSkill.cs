@@ -37,7 +37,7 @@ namespace Necromancy.Server.Model.Skills
             switch (target)         // ToDO     Do a hositilty check to make sure this is allowed
             {
                 case NpcSpawn npcSpawn:
-                    _logger.Debug($"Start casting Skill [{_skillId}] on NPCId: {npcSpawn.InstanceId}");
+                    _logger.Debug($"Start casting Skill [{_skillId}] on NPCId: {npcSpawn.InstanceId} SerialId: {npcSpawn.NpcId}");
                     break;
                 case MonsterSpawn monsterSpawn:
                     _logger.Debug($"Start casting Skill [{_skillId}] on MonsterId: {monsterSpawn.InstanceId}");

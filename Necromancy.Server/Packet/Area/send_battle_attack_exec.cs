@@ -3,7 +3,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Common.Instance;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using Necromancy.Server.Packet.Receive;
@@ -79,6 +78,12 @@ namespace Necromancy.Server.Packet.Area
                         else
                         {
                             monsterSpawn.UpdateHP(-damage, _server, true, client.Character.InstanceId);
+                        }
+                        if (client.Character.IsStealthed())
+                        {
+                            uint newState = client.Character.ClearStateBit(0x8);
+                            RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                            _server.Router.Send(client.Map, charState);
                         }
                         perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
                         Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");

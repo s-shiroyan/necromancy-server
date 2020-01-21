@@ -15,24 +15,15 @@ namespace Necromancy.Server.Chat.Command.Commands
             _server = server;
         }
 
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        int w = 0;
-        int a = 1;
-        int b = 0;
-        int c = 0;
-        int d = 0;
-
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            Item item = _server.Instances.CreateInstance<Item>();
+            Item item = _server.Instances64.CreateInstance<Item>();
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt64(item.InstanceId); //InstanceID
-            res.WriteInt32(10200101); //Icon serial id
+            res.WriteInt32(100101); //Icon serial id
             res.WriteByte(1); //Number of "items"
             res.WriteInt32(9); //Item status, in multiples of numbers, 1/3 = unidentified, 4/6 = broken, 5/7 = broken unidentified, 8 = cursed, loops after a while, only odd numbers are correct i think
             res.WriteFixedString("DAGGER", 0x10);

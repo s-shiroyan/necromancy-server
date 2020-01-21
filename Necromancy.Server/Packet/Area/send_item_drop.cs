@@ -15,14 +15,18 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int itemSlot = packet.Data.ReadInt32();
-            byte itemCount = packet.Data.ReadByte();
+            byte storageType = packet.Data.ReadByte();
+            byte bagId = packet.Data.ReadByte();
+            ushort bagSlot = packet.Data.ReadUInt16();
+            byte stackSize = packet.Data.ReadByte();
 
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(0);
-
             Router.Send(client, (ushort) AreaPacketId.recv_item_drop_r, res, ServerType.Area);
+
+            res.SetPositionStart();
+            res.WriteInt64(10200101); //Item instance Id here
+            Router.Send(client, (ushort)AreaPacketId.recv_item_remove, res, ServerType.Area);
         }
     }
 }

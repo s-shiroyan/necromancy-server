@@ -132,12 +132,19 @@ namespace Necromancy.Server.Tasks
         public void TriggerTrap(Trap trap, MonsterSpawn monster)
         {
             Logger.Debug($"trap._name [{trap._name}] trap.InstanceId [{trap.InstanceId}] trap._skillEffectId [{trap._skillEffectId}] trap._triggerEffectId [{trap._triggerEffectId}]");
+            NecClient client = _map.ClientLookup.GetByCharacterInstanceId(ownerInstanceId);
+            if (client.Character.IsStealthed())
+            {
+                uint newState = client.Character.ClearStateBit(0x8);
+                RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                _server.Router.Send(client.Map, charState);
+            }
             int damage = Util.GetRandomNumber(70, 90);
             RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
             _server.Router.Send(_map, eoTriggerData);
             float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
             List<PacketResponse> brList = new List<PacketResponse>();
-            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify((uint)ownerInstanceId);
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(ownerInstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec(trap._skillId);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monster.InstanceId);

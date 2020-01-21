@@ -9,9 +9,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvEventStart : PacketResponse
     {
-        private readonly int _type;
+        private readonly uint _type;
         private readonly byte _unknown;
-        public RecvEventStart(int type, byte unknown)
+        public RecvEventStart(uint type, byte unknown)
             : base((ushort) AreaPacketId.recv_event_start, ServerType.Area)
         {
             _type = type;

@@ -9,9 +9,9 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvItemUpdateLevel : PacketResponse
     {
-        private readonly int _instanceId;
+        private readonly ulong _instanceId;
         private readonly byte _level;
-        public RecvItemUpdateLevel(int instanceId, byte level)
+        public RecvItemUpdateLevel(ulong instanceId, byte level)
             : base((ushort) AreaPacketId.recv_item_update_level, ServerType.Area)
         {
             _instanceId = instanceId;
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_instanceId); // 0 = normal 1 = cinematic
+            res.WriteInt64(_instanceId);
             res.WriteByte(_level);
 
             return res;

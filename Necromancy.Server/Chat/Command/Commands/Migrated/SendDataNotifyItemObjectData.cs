@@ -42,6 +42,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
-        public override string Key => "item";
+        public override string Key => "itemobject";
     }
 }
