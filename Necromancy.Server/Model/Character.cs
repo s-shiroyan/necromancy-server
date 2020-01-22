@@ -64,7 +64,7 @@ namespace Necromancy.Server.Model
         //Normal Attack
         public int[] AttackIds { get; set; }
         //Logout Cancel Detection
-        public byte logoutCanceled { get; set; }
+        //public byte logoutCanceled { get; set; }
 
         //Map Related
         public int MapId { get; set; }
@@ -119,7 +119,6 @@ namespace Necromancy.Server.Model
             Name = null;
             Level = 0;
             ////// 
-            logoutCanceled = 0;
             WeaponType = 8;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;

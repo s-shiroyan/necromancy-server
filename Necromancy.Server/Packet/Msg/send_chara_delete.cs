@@ -24,6 +24,8 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             int characterId = packet.Data.ReadInt32();
+            _logger.Debug($"CharacterId [{characterId}] deleted from Soul [{client.Soul.Name}]");
+            _server.Database.DeleteCharacter(characterId);
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(0);
@@ -31,8 +33,6 @@ namespace Necromancy.Server.Packet.Msg
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_delete_r, res, ServerType.Msg);
 
-            _logger.Debug($"CharacterId [{characterId}] deleted from Soul [{client.Soul.Name}]");
-            _server.Database.DeleteCharacter(characterId);
 
         }
     }
