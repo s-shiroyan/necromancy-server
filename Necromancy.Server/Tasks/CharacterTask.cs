@@ -54,12 +54,12 @@ namespace Necromancy.Server.Tasks
         }
         public void Logout(DateTime logoutTime, byte logoutType)
         {
-            _logger.Debug($"logoutTime [{logoutTime}] _logoutType [{_logoutType}]");
             lock (LogoutLock)
             {
                 _logoutTime = logoutTime;
                 _logoutType = logoutType;
             }
+            _logger.Debug($"logoutTime [{logoutTime}] _logoutType [{_logoutType}]");
         }
 
         private void LogOutRequest()
@@ -84,13 +84,13 @@ namespace Necromancy.Server.Tasks
                 res.WriteInt32(0);
                 _server.Router.Send(_client, (ushort)MsgPacketId.recv_chara_select_back_soul_select_r, res, ServerType.Msg);
                 
-                //Thread.Sleep(4100);
+                Thread.Sleep(4100);
 
-                //res = null;
-                //res = BufferProvider.Provide();
-                //res.WriteInt32(0);
-                //res.WriteByte(0);
-               // _server.Router.Send(_client, (ushort)MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);
+                res = null;
+                res = BufferProvider.Provide();
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                _server.Router.Send(_client, (ushort)MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);
             }
 
             if (_logoutType == 0x02)
