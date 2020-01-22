@@ -1,13 +1,18 @@
+using Arrowgene.Services.Logging;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
     public class Character : IInstance
     {
+        private readonly NecLogger _logger;
         private readonly object StateLock = new object();
         public uint InstanceId { get; set; }
 
@@ -97,9 +102,11 @@ namespace Necromancy.Server.Model
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
 
-
+        public CharacterTask characterTask;
+        public bool characterActive { get; set; }
         public Character()
         {
+            _logger = LogProvider.Logger<NecLogger>(this);
             Id = -1;
             AccountId = -1;
             SoulId = -1;
@@ -145,9 +152,19 @@ namespace Necromancy.Server.Model
             helperTextCloakRoom = true;
             beginnerProtection = 1;
             currentEvent = null;
-           secondInnAccess = false;
+            secondInnAccess = false;
+            characterActive = true;
         }
 
+        public void SetCharacterActive(bool active)
+        {
+            characterActive = active;
+        }
+        public void CreateTask(NecServer server, NecClient client)
+        {
+            characterTask = new CharacterTask(server, client);
+            characterTask.Start();
+        }
         public uint GetState ()
         {
             uint charState = 0;

@@ -157,10 +157,6 @@ namespace Necromancy.Server.Model
             }
         }
 
-
-
-
-
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
             Enter(client, mapPosition);
