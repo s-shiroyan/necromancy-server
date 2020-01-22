@@ -66,10 +66,10 @@ namespace Necromancy.Server.Packet.Area
                     }
 
                     IBuffer res13 = BufferProvider.Provide();
-                    res13.WriteCString("NPC Updated"); // Length 0xC01
+                    res13.WriteCString($"NPC {npcModelUpdate.npcSpawn.Name} Updated. Model {newModelId}"); // Length 0xC01
                     Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res13, ServerType.Area);// show system message on middle of the screen.
 
-                    SendEventEnd(client);
+                    DelayedEventEnd(client);
                     client.Character.currentEvent = null;
                     break;
 
