@@ -16,8 +16,7 @@ namespace Necromancy.Server.Packet.Response
             : base((ushort) AreaPacketId.recv_data_notify_npc_data, ServerType.Area)
         {
             _npcSpawn = npcSpawn;
-            _character.Name = npcSpawn.Name;
-
+            _character.Name = npcSpawn.Title;
         }
 
         protected override IBuffer ToBuffer()
@@ -55,7 +54,7 @@ namespace Necromancy.Server.Packet.Response
             res.WriteByte(4); //Hair ID for Character models
             res.WriteByte(5); //Hair Color ID for Character models
             res.WriteByte(3); //Face ID for Character models
-            res.WriteInt32(0b10101110); //BITMASK for NPC State
+            res.WriteInt32(0b10100110); //BITMASK for NPC State
                                         //0bxxxxxxx1 - 1 dead / 0 alive | for character models only 
                                         //0bxxxxxx1x - 1 Soul form visible / 0 soul form invisible
                                         //0bxxxxx1xx -
