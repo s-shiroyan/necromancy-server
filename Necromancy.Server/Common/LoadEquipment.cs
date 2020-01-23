@@ -166,7 +166,7 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
-                    case "Thief":
+                    case "Wolfzen":
                         myCharacter.EquipId = new int[]
                         {
                         10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
@@ -176,7 +176,7 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
-                    case "Mage":
+                    case "Wolf":
                         myCharacter.EquipId = new int[]
                         {
                         11300404 /*Weapon*/, 0 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
