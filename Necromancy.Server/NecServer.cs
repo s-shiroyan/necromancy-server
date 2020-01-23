@@ -425,6 +425,13 @@ namespace Necromancy.Server
 
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
+
+            _areaConsumer.AddHandler(new send_party_entry_draw(this));
+            _areaConsumer.AddHandler(new send_party_pass_draw(this));
+            _areaConsumer.AddHandler(new send_party_change_leader(this));
+            _areaConsumer.AddHandler(new send_party_kick(this));
+            _areaConsumer.AddHandler(new send_party_change_mode(this));
+            _areaConsumer.AddHandler(new send_party_cancel_member_recruit(this));
         }
     }
 }
