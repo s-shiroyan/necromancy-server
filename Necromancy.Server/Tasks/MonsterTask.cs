@@ -327,7 +327,7 @@ namespace Necromancy.Server.Tasks
         {
             int damage = (int)Util.GetRandomNumber(8, 43);
             Character currentTarget = _monster.GetCurrentTarget();
-            currentTarget.currentHp -= damage;
+            currentTarget.damage(damage, _monster.InstanceId);
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
@@ -344,57 +344,12 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, brList);
             _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
 
-            PlayerDeadCheck(currentTarget);
-        }
-        private void PlayerDeadCheck(Character currentTarget)
-        {
-            if (currentTarget.currentHp <= 0)
+            if (currentTarget.playerDead)
             {
                 _monster.SetAgro(false);
                 _monster.MonsterAgroList.Remove(currentTarget.InstanceId);
-                if (!currentTarget.hadDied)
-                {
-
-                    currentTarget.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
-                    List<PacketResponse> brList = new List<PacketResponse>();
-                    RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_monster.InstanceId);
-                    RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 1);
-                    RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(currentTarget.InstanceId, 2);
-                    RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-                    NecClient client = Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId);
-
-                    brList.Add(brStart);
-                    brList.Add(cDead1); //animate the death of your living body
-                    brList.Add(brEnd);
-                    _server.Router.Send(Map, brList, client); // send death animation to other players
-
-
-                    brList[1] = cDead2;
-                    _server.Router.Send(client, brList); // send death animaton to player 1
-
-                    DeadBody deadBody = _server.Instances.GetInstance((uint)currentTarget.DeadBodyInstanceId) as DeadBody;
-
-                    deadBody.X = currentTarget.X;
-                    deadBody.Y = currentTarget.Y;
-                    deadBody.Z = currentTarget.Z;
-                    deadBody.Heading = currentTarget.Heading;
-                    currentTarget.movementId = currentTarget.DeadBodyInstanceId;
-
-                    Thread.Sleep(5000);
-                    currentTarget.hadDied = false; // quick switch to living state so your dead body loads with your gear
-                                                   //load your dead body on to the map for you to see in soul form. 
-                    RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
-                    _server.Router.Send(client, cBodyData.ToPacket());
-
-                    currentTarget.hadDied = true; // back to dead so your soul appears with-out gear.
-
-                    Thread.Sleep(100);
-
-                    //reload your living body with no gear
-                    RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(currentTarget, client.Soul.Name);
-                    _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cData.ToPacket());
-                }
             }
+            //PlayerDeadCheck(currentTarget);
         }
         private void MonsterCastQueue(int skillId)
         {
@@ -701,7 +656,7 @@ namespace Necromancy.Server.Tasks
             Vector3 monster = new Vector3(_monster.X, _monster.Y, _monster.Z);
             foreach (NecClient client in mapsClients)
             {
-                if (client.Character.hadDied == false)
+                if (client.Character.playerDead == false)
                 {
                     Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
                     float distanceChar = GetDistance(character, monster);
@@ -729,7 +684,7 @@ namespace Necromancy.Server.Tasks
         private bool StealthCheck(NecClient client)
         {
             // Needs to be expanded to consider skill, distance and orientation 
-            if ((client.Character.GetState() & 0x100) > 0)
+            if ((client.Character.state & 0x100) > 0)
             {
                 return true;
             }

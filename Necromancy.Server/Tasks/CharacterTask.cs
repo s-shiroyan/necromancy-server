@@ -12,6 +12,7 @@ using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
 using System;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace Necromancy.Server.Tasks
 {
@@ -24,6 +25,7 @@ namespace Necromancy.Server.Tasks
         private int tickTime;
         private DateTime _logoutTime;
         private byte _logoutType;
+        private bool playerDied;
         public CharacterTask(NecServer server, NecClient client)
         {
             _logger = LogProvider.Logger<NecLogger>(server);
@@ -31,6 +33,7 @@ namespace Necromancy.Server.Tasks
             _client = client;
             tickTime = 500;
             _logoutTime = DateTime.MinValue;
+            playerDied = false;
         }
 
         public override string Name { get; }
@@ -47,11 +50,56 @@ namespace Necromancy.Server.Tasks
                         LogOutRequest();
                     }
                 }
-                // ToDo Character task 
+                if (_client.Character.playerDead && !playerDied)
+                    PlayerDead();
+                else if (!_client.Character.playerDead && playerDied)
+                    playerDied = false;
+
                 Thread.Sleep(tickTime);
             }
             this.Stop();
         }
+        private void PlayerDead()
+        {
+            playerDied = true;
+            List<PacketResponse> brList = new List<PacketResponse>();
+            RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.killerInstanceId);
+            RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(_client.Character.InstanceId, 1);
+            RecvBattleReportNoactDead cDead2 = new RecvBattleReportNoactDead(_client.Character.InstanceId, 2);
+            RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+
+            brList.Add(brStart);
+            brList.Add(cDead1); //animate the death of your living body
+            brList.Add(brEnd);
+            _server.Router.Send(_client.Map, brList, _client); // send death animation to other players
+
+
+            brList[1] = cDead2;
+            _server.Router.Send(_client, brList); // send death animaton to player 1
+
+            DeadBody deadBody = _server.Instances.GetInstance((uint)_client.Character.DeadBodyInstanceId) as DeadBody;
+
+            deadBody.X = _client.Character.X;
+            deadBody.Y = _client.Character.Y;
+            deadBody.Z = _client.Character.Z;
+            deadBody.Heading = _client.Character.Heading;
+            _client.Character.movementId = _client.Character.DeadBodyInstanceId;
+
+            Thread.Sleep(5000);
+            _client.Character.hadDied = false; // quick switch to living state so your dead body loads with your gear
+                                               //load your dead body on to the map for you to see in soul form. 
+            RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, _client);
+            _server.Router.Send(_client, cBodyData.ToPacket());
+
+            _client.Character.hadDied = true; // back to dead so your soul appears with-out gear.
+
+            Thread.Sleep(100);
+
+            //reload your living body with no gear
+            RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(_client.Character, _client.Soul.Name);
+            _server.Router.Send(_client.Map, cData.ToPacket());
+        }
+
         public void Logout(DateTime logoutTime, byte logoutType)
         {
             lock (LogoutLock)

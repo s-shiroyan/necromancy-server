@@ -70,7 +70,6 @@ namespace Necromancy.Server.Model.Skills
 
             res11.WriteInt32(_client.Character.InstanceId);
 
-            uint state = _client.Character.GetState();
             uint newState = 0;
             if (_client.Character.IsStealthed())
             {
@@ -93,20 +92,6 @@ namespace Necromancy.Server.Model.Skills
             //0bxx1xxxxx - 1 invisible / 0 visible  | (Stealth to enemies)
             //0bx1xxxxxx - 1 blinking  / 0 solid    | (10  second invulnerability blinking)
             //0b1xxxxxxx - 
-
-            //Task.Delay(TimeSpan.FromSeconds(30)).ContinueWith
-            //(t1 =>
-            //{
-            //IBuffer res12 = BufferProvider.Provide();
-            //res12.WriteInt32(_client.Character.InstanceId);
-            //res12.WriteInt32(2 ^ 16); //2^16 is normal state.  0001 0000 0000 0000 0000
-            //_server.Router.Send(_client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res12, ServerType.Area);
-            //}
-            //);
-
-            //IBuffer res12 = BufferProvider.Provide();
-            //res12.WriteByte(1);
-            //_server.Router.Send(_client, (ushort)AreaPacketId.recv_cloak_notify_open, res12, ServerType.Area);
 
         }
 

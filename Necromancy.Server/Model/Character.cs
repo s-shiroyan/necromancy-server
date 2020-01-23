@@ -14,6 +14,10 @@ namespace Necromancy.Server.Model
     {
         private readonly NecLogger _logger;
         private readonly object StateLock = new object();
+        private readonly object HPLock = new object();
+        private readonly object DamageLock = new object();
+        private readonly object MPLock = new object();
+        private readonly object ODLock = new object();
         public uint InstanceId { get; set; }
 
         //core attributes
@@ -45,7 +49,7 @@ namespace Necromancy.Server.Model
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
         public int beginnerProtection { get; set; }
-        public uint state { get; set; }
+        public uint _state { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -77,11 +81,10 @@ namespace Necromancy.Server.Model
         public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
-        public int nextBagSlot { get; set; } // Until bag management is done
         public uint eventSelectReadyCode { get; set; }
-        public int currentHp { get; set; }
-        public uint currentMp { get; set; }
-        public uint currentOd { get; set; }
+        private int _currentHp { get; set; }
+        private uint _currentMp { get; set; }
+        private uint _currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
         public int shortcutBar1Id { get; set; }
         public int shortcutBar2Id { get; set; }
@@ -97,13 +100,16 @@ namespace Necromancy.Server.Model
         public bool helperTextCloakRoom { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
+        public uint killerInstanceId { get; private set; }
+        public bool playerDead { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
 
+        //Task
         public CharacterTask characterTask;
-        public bool characterActive { get; set; }
+        public bool _characterActive { get; private set; }
         public Character()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -125,9 +131,9 @@ namespace Necromancy.Server.Model
             maxHp = 1000;
             maxMp = 500;
             maxOd = 200;
-            currentHp = 1000;
-            currentMp = 450;
-            currentOd = 150;
+            _currentHp = 1000;
+            _currentMp = 450;
+            _currentOd = 150;
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
@@ -137,8 +143,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            nextBagSlot = 0;
-            state = 0b00000000;
+            _state = 0b00000000;
             inventoryItems = new List<InventoryItem>();
             inventoryBags = new List<Bag>();
             Bag bag = new Bag();
@@ -152,32 +157,80 @@ namespace Necromancy.Server.Model
             beginnerProtection = 1;
             currentEvent = null;
             secondInnAccess = false;
-            characterActive = true;
+            _characterActive = true;
+            killerInstanceId = 0;
+            playerDead = false;
         }
 
-        public void SetCharacterActive(bool active)
+        public int currentHp
         {
-            characterActive = active;
+            get => _currentHp;
+            set
+            {
+                lock (HPLock)
+                {
+                    _currentHp = value;
+                }
+            }
+        }
+        public void damage(int amount, uint instanceId)
+        {
+            lock (DamageLock)
+            {
+                if (playerDead)
+                    return;
+                _currentHp -= amount;
+                if (_currentHp <= 0)
+                {
+                    playerDead = true;
+                    killerInstanceId = instanceId;
+                }
+            }
+        }
+        public uint currentMp
+        {
+            get => _currentMp;
+            set
+            {
+                lock (MPLock)
+                {
+                    _currentMp = value;
+                }
+            }
+        }
+        public uint currentOd
+        {
+            get => _currentOd;
+            set
+            {
+                lock (ODLock)
+                {
+                    _currentOd = value;
+                }
+            }
+        }
+        public bool characterActive
+        {
+            get => _characterActive;
+            set
+            {
+                _characterActive = value;
+            }
         }
         public void CreateTask(NecServer server, NecClient client)
         {
             characterTask = new CharacterTask(server, client);
             characterTask.Start();
         }
-        public uint GetState ()
+        public uint state
         {
-            uint charState = 0;
-            lock (StateLock)
+            get => _state;
+            set
             {
-                charState = state;
-            }
-            return charState;
-        }
-        public void SetState(uint charState)
-        {
-            lock (StateLock)
-            {
-                state = charState;
+                lock (StateLock)
+                {
+                    _state = value;
+                }
             }
         }
         public uint AddStateBit(uint stateBit)
@@ -185,8 +238,8 @@ namespace Necromancy.Server.Model
             uint newState = 0;
             lock (StateLock)
             {
-                state |= stateBit;
-                newState = state;
+                _state |= stateBit;
+                newState = _state;
             }
             return newState;
         }
@@ -195,8 +248,8 @@ namespace Necromancy.Server.Model
             uint newState = 0;
             lock (StateLock)
             {
-                state &= ~stateBit;
-                newState = state;
+                _state &= ~stateBit;
+                newState = _state;
             }
             return newState;
         }
