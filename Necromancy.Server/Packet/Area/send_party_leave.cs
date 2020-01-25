@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.InstanceId);
 
             Router.Send(client, (ushort) AreaPacketId.recv_party_leave_r, res, ServerType.Area);
         }

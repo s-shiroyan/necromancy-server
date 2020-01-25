@@ -92,6 +92,7 @@ namespace Necromancy.Server.Model
         public bool helperTextCloakRoom { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
+        public uint partyId { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }

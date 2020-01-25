@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
             int partyType = packet.Data.ReadInt32();
             int normItemDist = packet.Data.ReadInt32();
             int rareItemDist = packet.Data.ReadInt32();
-            int targetClient = packet.Data.ReadInt32();
+            uint targetClientId = packet.Data.ReadUInt32();
 
             IBuffer res = BufferProvider.Provide();
 
@@ -32,31 +32,42 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
 
-            SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClient);
+            SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClientId);
         }
 
-        private void SendPartyNotifyEstablish(NecClient client, int partyType, int normItemDist, int rareItemDist, int targetClient)
+        private void SendPartyNotifyEstablish(NecClient client, int partyType, int normItemDist, int rareItemDist, uint targetClientId)
         {
+            Party myFirstParty = new Party();
+            Server.Instances.AssignInstance(myFirstParty);
+            myFirstParty.PartyType = partyType;
+            myFirstParty.NormalItemDist = normItemDist;
+            myFirstParty.RareItemDist = rareItemDist;
+            myFirstParty.TargetClientId = targetClientId;
+
+            client.Character.partyId = myFirstParty.InstanceId;
+
+            NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetClientId);
+
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.InstanceId);//Party maker client id
+            res.WriteInt32(myFirstParty.InstanceId);//Party maker client id
             res.WriteInt32(partyType);//Party type
             res.WriteInt32(normItemDist);//Normal item distribution
             res.WriteInt32(rareItemDist);//Rare item distribution
-            res.WriteInt32(69);
-            res.WriteInt32(client.Character.InstanceId);
+            res.WriteInt32(client.Character.InstanceId); // ??
+            res.WriteInt32(targetClient.Character.InstanceId); //client 2 instance ID?
             //for (int i = 0; i < 4; i++)
             {
-                res.WriteInt32(client.Character.InstanceId);
-                res.WriteInt32(0);
-                res.WriteFixedString("asdf1", 0x31); //size is 0x31
-                res.WriteFixedString("asdf2", 0x5B); //size is 0x5B
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);//bool
-                res.WriteByte(0);
-                res.WriteByte(0);
+                res.WriteInt32(4);
+                res.WriteInt32(targetClient.Character.InstanceId); //Instance Id?
+                res.WriteFixedString($"{targetClient.Soul.Name}", 0x31); //Soul name
+                res.WriteFixedString($"{targetClient.Character.Name}", 0x5B); //Chara name
+                res.WriteInt32(targetClient.Character.ClassId); //Class
+                res.WriteByte(targetClient.Character.Level); //Level
+                res.WriteByte(2); //Criminal Status
+                res.WriteByte(1); //Beginner Protection (bool) 
+                res.WriteByte(1); //Membership Status
+                res.WriteByte(1);
 
                 res.WriteInt32(0);
                 res.WriteInt32(0);
