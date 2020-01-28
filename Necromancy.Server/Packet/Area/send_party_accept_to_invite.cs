@@ -29,7 +29,10 @@ namespace Necromancy.Server.Packet.Area
 
             foreach(NecClient partyClient in myParty.PartyMembers)
             {
-                SendPartyNotifyAddMember(partyClient, myParty);
+                //if (partyClient != client)
+                {
+                    SendPartyNotifyAddMember(partyClient, myParty);
+                }
             }
 
             
@@ -52,18 +55,18 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);
             res.WriteInt32(1);
             res.WriteInt32(1);
-            res.WriteInt32(client.Character.MapId); //Might make the character selectable?
+            res.WriteInt32(0); //Might make the character selectable?
             res.WriteInt32(client.Character.MapId); //One half of location? 1001902 = Illfalo Port but is actually Deep Sea Port
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteFixedString("", 0x61); //Location of player if not in same zone
-            res.WriteFloat(1);
-            res.WriteFloat(1);
-            res.WriteFloat(1);
-            res.WriteByte(3);
-            res.WriteByte(4);
-            res.WriteByte(5);
-            res.WriteByte(6);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("This is a Test", 0x61); //Location of player if not in same zone
+            res.WriteFloat(client.Character.X);
+            res.WriteFloat(client.Character.Y);
+            res.WriteFloat(client.Character.Z);
+            res.WriteByte(client.Character.Heading);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
             Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_add_member, res, ServerType.Msg);
             //Router.Send(Server.Clients.GetByCharacterInstanceId(instanceId), (ushort)MsgPacketId.recv_party_notify_add_member, res, ServerType.Msg);
         }
