@@ -19,18 +19,23 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"character {client.Character.Name} accepted Application to party from character Instance ID {applicantInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(applicantInstanceId);
-
             Router.Send(client, (ushort)AreaPacketId.recv_party_accept_to_apply_r, res, ServerType.Area);
 
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
             NecClient applicantClient = Server.Clients.GetByCharacterInstanceId(applicantInstanceId);
             myParty.Join(applicantClient);
 
+
+            IBuffer res2 = BufferProvider.Provide();
+            Router.Send(applicantClient, (ushort)MsgPacketId.recv_party_notify_accept_to_apply, res2, ServerType.Msg);
+
             foreach (NecClient partyClient in myParty.PartyMembers)
             {
-                SendPartyNotifyAddMember(partyClient, myParty);
+                //if (partyClient != client)
+                {
+                    SendPartyNotifyAddMember(partyClient, myParty);
+                }
             }
 
             SendCharaBodyNotifyPartyJoin(applicantClient, myParty.InstanceId);
