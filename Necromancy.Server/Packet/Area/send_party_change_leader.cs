@@ -15,11 +15,11 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int target = packet.Data.ReadInt32();
+            int target = packet.Data.ReadInt32(); // use to make logic to set leader
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(target);
+            res.WriteInt32(0); //set to 0 to mean "success" or inject an error code from str_table.csv
 
             Router.Send(client, (ushort) AreaPacketId.recv_party_change_leader_r, res, ServerType.Area);
         }

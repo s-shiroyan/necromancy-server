@@ -16,14 +16,29 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int PartyLeaderInstanceId = packet.Data.ReadInt32();
-            int myCharacterInstanceId = packet.Data.ReadInt32();
-            Logger.Debug($"{client.Character.Name }Applied to party {myCharacterInstanceId}");
+            uint targetPartyInstanceId = packet.Data.ReadUInt32();
+            Logger.Debug($"{client.Character.Name }Applied to party {targetPartyInstanceId}");
+
+            Party myParty = Server.Instances.GetInstance(targetPartyInstanceId) as Party;
+            NecClient myPartyLeaderClient = Server.Clients.GetByCharacterInstanceId(myParty.PartyLeaderId);
+
 
             IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(myCharacterInstanceId);
-
+            res.WriteInt32(myParty.PartyLeaderId);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_party_apply_r, res, ServerType.Area);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(client.Character.partyId); //Party ID?
+            res2.WriteInt32(client.Character.InstanceId);
+            res2.WriteFixedString($"{client.Soul.Name}", 0x31);
+            res2.WriteFixedString($"{client.Character.Name}", 0x5B);
+            res2.WriteInt32(client.Character.ClassId);
+            res2.WriteByte(client.Character.Level);
+            res2.WriteByte(2); //Criminal Status
+            res2.WriteByte(1); //Beginner Protection (bool) 
+            res2.WriteByte(1); //Membership Status
+            res2.WriteByte(1);
+            Router.Send(myPartyLeaderClient, (ushort)MsgPacketId.recv_party_notify_apply, res2, ServerType.Msg);
         }
     }
 }

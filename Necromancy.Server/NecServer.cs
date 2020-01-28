@@ -433,6 +433,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_change_mode(this));
             _areaConsumer.AddHandler(new send_party_cancel_member_recruit(this));
             _areaConsumer.AddHandler(new send_party_apply(this));
+            _areaConsumer.AddHandler(new send_party_accept_to_apply(this));
 
         }
     }
