@@ -15,14 +15,14 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int response = packet.Data.ReadInt32();
-            int unknown = packet.Data.ReadByte();
+            uint friendInstanceId = packet.Data.ReadUInt32();
+            int acceptOrDenyResponse = packet.Data.ReadByte();
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(response);  // 0 = sucess, 1 = Request was not approved
-            res.WriteInt32(unknown); // ??
+            res.WriteInt32(acceptOrDenyResponse);  // 0 = Deny, 1 = Accept
+            res.WriteInt32(friendInstanceId); // ??
             Router.Send(client, (ushort)MsgPacketId.recv_friend_reply_to_link_r, res, ServerType.Msg);
             SendFriendNotifyAddMember(client);
-            SendFriendNotifyAddMember(client, client.Character.friendRequest);
+            SendFriendNotifyAddMember(client, friendInstanceId);
         }
 
         private void SendFriendNotifyAddMember(NecClient client)
@@ -30,7 +30,7 @@ namespace Necromancy.Server.Packet.Msg
             NecClient targetClient = Server.Clients.GetByCharacterInstanceId(client.Character.friendRequest);
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.friendRequest);
-            res.WriteInt32(0);
+            res.WriteInt32(targetClient.Character.InstanceId);
             res.WriteFixedString($"{targetClient.Soul.Name}", 0x31); //soul name
             res.WriteFixedString($"{targetClient.Character.Name}", 0x5B); //character name
             res.WriteInt32(targetClient.Character.ClassId);  // Class 0 = Fighter, 1 = thief, ect....
@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId);
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.InstanceId);
             res.WriteFixedString($"{client.Soul.Name}", 0x31); //soul name
             res.WriteFixedString($"{client.Character.Name}", 0x5B); //character name
             res.WriteInt32(client.Character.ClassId);  // Class 0 = Fighter, 1 = thief, ect....
