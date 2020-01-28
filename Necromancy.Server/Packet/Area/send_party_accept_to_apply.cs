@@ -5,35 +5,35 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_party_accept_to_invite : ClientHandler
+    public class send_party_accept_to_apply : ClientHandler
     {
-        public send_party_accept_to_invite(NecServer server) : base(server)
+        public send_party_accept_to_apply(NecServer server) : base(server)
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_party_accept_to_invite;
+        public override ushort Id => (ushort) AreaPacketId.send_party_accept_to_apply;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            uint partyInstanceId = packet.Data.ReadUInt32(); //Could be a Party ID value hidden as character-who-made-it's value
-            Logger.Debug($"character {client.Character.Name} accepted invite to party ID {partyInstanceId}");
+            uint applicantInstanceId = packet.Data.ReadUInt32(); //Could be a Party ID value hidden as character-who-made-it's value
+            Logger.Debug($"character {client.Character.Name} accepted Application to party from character Instance ID {applicantInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(partyInstanceId);
+            res.WriteInt32(applicantInstanceId);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_party_accept_to_invite_r, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_accept_to_apply_r, res, ServerType.Area);
 
-            Party myParty = Server.Instances.GetInstance(partyInstanceId) as Party;
-            myParty.Join(client);
+            Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
+            NecClient applicantClient = Server.Clients.GetByCharacterInstanceId(applicantInstanceId);
+            myParty.Join(applicantClient);
 
-            foreach(NecClient partyClient in myParty.PartyMembers)
+            foreach (NecClient partyClient in myParty.PartyMembers)
             {
                 SendPartyNotifyAddMember(partyClient, myParty);
             }
 
-            
-            SendCharaBodyNotifyPartyJoin(client, partyInstanceId);
+            SendCharaBodyNotifyPartyJoin(applicantClient, myParty.InstanceId);
         }
         private void SendPartyNotifyAddMember(NecClient client, Party myParty)
         {
@@ -77,6 +77,6 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }
 
-          
-        }
+
+    }
 }

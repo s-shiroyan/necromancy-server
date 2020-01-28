@@ -102,6 +102,7 @@ namespace Necromancy.Server.Model
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
         public bool playerDead { get; set; }
+        public uint partyId { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -160,6 +161,8 @@ namespace Necromancy.Server.Model
             _characterActive = true;
             killerInstanceId = 0;
             playerDead = false;
+           secondInnAccess = false;
+            partyId = 0;
         }
 
         public int currentHp
