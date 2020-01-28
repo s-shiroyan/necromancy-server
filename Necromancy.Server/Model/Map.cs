@@ -220,6 +220,10 @@ namespace Necromancy.Server.Model
         {
             _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
             ClientLookup.Remove(client);
+            if (!_server.Database.UpdateCharacter(client.Character))
+            {
+                _logger.Error("Could not update the database with last known player position");
+            }
             client.Map = null;
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);

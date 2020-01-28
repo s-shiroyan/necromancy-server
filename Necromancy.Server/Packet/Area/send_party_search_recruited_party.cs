@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Area
                 int numEntries2 = 0x4;
                 for (int j = 0; j < numEntries2; j++)
                 {
-                    res.WriteInt32(1999); //Party ID?
+                    res.WriteInt32(client.Character.partyId); //Party ID?
                     res.WriteInt32(client.Character.InstanceId);
                     res.WriteFixedString($"{client.Soul.Name}{j}", 0x31);
                     res.WriteFixedString($"{client.Character.Name}{j}", 0x5B);

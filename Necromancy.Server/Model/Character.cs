@@ -147,6 +147,7 @@ namespace Necromancy.Server.Model
             beginnerProtection = 1;
             currentEvent = null;
            secondInnAccess = false;
+            partyId = 0;
         }
 
         public uint GetState ()

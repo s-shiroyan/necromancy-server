@@ -15,14 +15,15 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int partyModeMaybe = packet.Data.ReadInt32();
+            int PartyLeaderInstanceId = packet.Data.ReadInt32();
             int myCharacterInstanceId = packet.Data.ReadInt32();
+            Logger.Debug($"{client.Character.Name }Applied to party {myCharacterInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(myCharacterInstanceId);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_party_apply_r, res, ServerType.Area);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_party_apply_r, res, ServerType.Area);
         }
     }
 }

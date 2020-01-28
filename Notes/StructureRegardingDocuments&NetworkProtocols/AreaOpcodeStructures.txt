@@ -645,7 +645,7 @@ recv_charabody_salvage_end = 0xD688,
 	res.WriteInt32(0);
 	
 	
-recv_item_instance_unidentified = 0xD67D,
+recv_charabody_notify_party_join = 0xD67D,
 
 	res.WriteInt32(0);
 	
