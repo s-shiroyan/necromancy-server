@@ -702,7 +702,7 @@ namespace Necromancy.Server.Packet.Id
         send_auction_cancel_exhibit = 0x375B,
         send_auction_close = 0xE732,
         send_auction_exhibit = 0xED52, 
-        send_auction_re_exhibit = 0x33, //opcode not found
+        send_auction_re_exhibit = 0x61FA,
         send_auction_receive_gold = 0x4657,
         send_auction_receive_item = 0x7E18,
         send_auction_search = 0x8865, 

@@ -265,6 +265,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_close(this));
             _areaConsumer.AddHandler(new send_auction_exhibit(this));
+            _areaConsumer.AddHandler(new send_auction_re_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_search(this));
             _areaConsumer.AddHandler(new send_auction_receive_item(this));
             _areaConsumer.AddHandler(new send_auction_receive_gold(this));
