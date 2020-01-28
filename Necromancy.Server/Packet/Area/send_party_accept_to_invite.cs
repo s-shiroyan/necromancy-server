@@ -27,7 +27,12 @@ namespace Necromancy.Server.Packet.Area
             Party myParty = Server.Instances.GetInstance(partyInstanceId) as Party;
             myParty.Join(client);
 
-            SendPartyNotifyAddMember(client, myParty);
+            foreach(NecClient partyClient in myParty.PartyMembers)
+            {
+                SendPartyNotifyAddMember(partyClient, myParty);
+            }
+
+            
             SendCharaBodyNotifyPartyJoin(client, partyInstanceId);
         }
         private void SendPartyNotifyAddMember(NecClient client, Party myParty)
@@ -66,8 +71,8 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //Chara Instance ID
-            res.WriteInt32(client.Character.partyId); //Party InstancID?
-            res.WriteInt32(3); //Party Leader InstanceId?
+            res.WriteInt32(client.Character.InstanceId); //Party InstancID?
+            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }

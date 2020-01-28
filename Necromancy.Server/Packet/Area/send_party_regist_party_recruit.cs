@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Area
         {
             int objectiveID = packet.Data.ReadInt32(); // always 0, 1, or 2. based on drop down selection
             int detailsID = packet.Data.ReadInt32(); // Can Be Dungeon ID or Quest ID based on objective
-            int targetID = packet.Data.ReadInt32(); // Unknown. possbly Target ID???
+            uint targetID = packet.Data.ReadUInt32(); // Unknown. possbly Target ID???
             int otherID = packet.Data.ReadInt32(); // Selected check box under other
             string comment = packet.Data.ReadFixedString(60); //Comment Box accepts up to 60 characters. 
 
@@ -31,8 +31,10 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-
-            Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
+            if (targetID != 0)
+            {
+                Router.Send(Server.Clients.GetByCharacterInstanceId(targetID), (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
+            }
         }
     }
 }

@@ -15,26 +15,19 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
+            myParty.Leave(myParty.PartyMembers);
+
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(client.Character.partyId);
-
             Router.Send(client, (ushort) AreaPacketId.recv_party_disband_r, res, ServerType.Area);
 
             IBuffer res2 = BufferProvider.Provide();
-
-            Router.Send(client, (ushort)MsgPacketId.recv_party_notify_disband, res2, ServerType.Msg);
+            Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_disband, res2, ServerType.Msg);
              
-            //for each character in myParty.members,  leave notify, and leave dictionary
             IBuffer res3 = BufferProvider.Provide();
-
             res3.WriteInt32(client.Character.InstanceId);
-
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_leave, res3, ServerType.Area);
-
-            Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
-
-            myParty.Leave(myParty.PartyMembers);
         }
     }
 }
