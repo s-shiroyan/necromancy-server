@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
             DropItem dropItem = dropTable.GetLoot(monster.MonsterId);
             if (dropItem == null)
                 return;
-            InventoryItem invItem = client.Character.GetInventoryItem(dropItem.Item, (byte)dropItem.NumItems);
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server, (byte)dropItem.NumItems, dropItem.Item);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();

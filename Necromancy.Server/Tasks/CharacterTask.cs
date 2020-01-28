@@ -119,14 +119,14 @@ namespace Necromancy.Server.Tasks
             IBuffer res4 = BufferProvider.Provide();
             IBuffer res5 = BufferProvider.Provide();
             _logger.Debug($"_logoutType [{_logoutType}]");
-            if (_logoutType == 0x00)
+            if (_logoutType == 0x00)   // Return to Title   also   Exit Game
             {
                 //res.WriteInt32(0);
 
                 _server.Router.Send(_client, (ushort)AreaPacketId.recv_escape_start, res, ServerType.Area);
             }
 
-            if (_logoutType == 0x01)
+            if (_logoutType == 0x01) // Return to Character Select
             {
 
                 res.WriteInt32(0);

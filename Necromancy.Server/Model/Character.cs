@@ -294,9 +294,15 @@ namespace Necromancy.Server.Model
             InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
             inventoryItems.Remove(invItm);
         }
-        public InventoryItem GetNextInventoryItem(NecServer server)
+        public InventoryItem GetNextInventoryItem(NecServer server, byte desiredCount = 1, Item item = null)
         {
             InventoryItem invItem = null;
+            if (item != null)
+            {
+                invItem = GetInventoryItem(item, desiredCount);
+                if (invItem != null)
+                    return invItem;
+            }
             byte bagId = 0;
             short slotId = -1;
             foreach (Bag bag in inventoryBags)
