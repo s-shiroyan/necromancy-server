@@ -36,7 +36,6 @@ namespace Necromancy.Server.Packet.Area
         int i = 0;
         private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
-            NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetInstanceId);
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
             //Sanity check.  Who is in the party List at the time of sending the invite?
             foreach (NecClient necClient in myParty.PartyMembers) { Logger.Debug($"my party with instance ID {myParty.InstanceId} contains members {necClient.Character.Name}"); }
