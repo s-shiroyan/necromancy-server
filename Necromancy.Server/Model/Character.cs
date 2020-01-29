@@ -148,6 +148,9 @@ namespace Necromancy.Server.Model
             currentEvent = null;
            secondInnAccess = false;
             partyId = 0;
+            InstanceId = 0;
+            Name = "";
+            ClassId = 0;
         }
 
         public uint GetState ()

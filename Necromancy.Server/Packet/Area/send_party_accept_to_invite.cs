@@ -25,14 +25,11 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_party_accept_to_invite_r, res, ServerType.Area);
 
             Party myParty = Server.Instances.GetInstance(partyInstanceId) as Party;
-            myParty.Join(client);
+            if (!myParty.PartyMembers.Contains(client)) {myParty.Join(client); } //add client to party list if it doesn't exist
 
             foreach(NecClient partyClient in myParty.PartyMembers)
             {
-                //if (partyClient != client)
-                {
-                    SendPartyNotifyAddMember(partyClient, myParty);
-                }
+                SendPartyNotifyAddMember(partyClient, myParty);
             }
 
             
@@ -67,15 +64,15 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(1);
             res.WriteByte(1);
             res.WriteByte(1);
-            Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_add_member, res, ServerType.Msg);
+            Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_add_member, res, ServerType.Msg, client);
             //Router.Send(Server.Clients.GetByCharacterInstanceId(instanceId), (ushort)MsgPacketId.recv_party_notify_add_member, res, ServerType.Msg);
         }
         private void SendCharaBodyNotifyPartyJoin(NecClient client, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //Chara Instance ID
-            res.WriteInt32(client.Character.InstanceId); //Party InstancID?
-            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
+            res.WriteInt32(11111111); //Party InstancID?
+            res.WriteInt32(11111111); //Party Leader InstanceId?
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }

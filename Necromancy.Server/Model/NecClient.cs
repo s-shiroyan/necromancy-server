@@ -16,6 +16,8 @@ namespace Necromancy.Server.Model
             _logger = LogProvider.Logger<NecLogger>(this);
             Creation = DateTime.Now;
             Identity = "";
+            Soul = new Soul();
+            Character = new Character();
         }
 
         public DateTime Creation { get; }
