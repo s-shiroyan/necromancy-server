@@ -9,7 +9,6 @@ namespace Necromancy.Server.Packet.Receive
 {
     public class RecvNormalSystemMessage : PacketResponse
     {
-        private readonly uint _instanceId;
         private readonly string _message;
         public RecvNormalSystemMessage(string message)
             : base((ushort) AreaPacketId.recv_normal_system_message, ServerType.Area)

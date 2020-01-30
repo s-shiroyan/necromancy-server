@@ -28,6 +28,7 @@ namespace Necromancy.Server.Packet.Msg
 
             client.Character = character;
             client.UpdateIdentity();
+            client.Character.CreateTask(Server, client);
 
             Logger.Debug(client, $"Selected Character: {character.Name}");
 

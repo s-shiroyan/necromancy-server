@@ -369,6 +369,14 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_item_update_num, res34, ServerType.Area);
                     break;
 
+                case "damage":
+                    int hp = character2.currentHp;
+                    client.Character.damage(hp, character2.InstanceId);
+                    IBuffer res35 = BufferProvider.Provide();
+                    res35.WriteInt32(hp);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res35, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;

@@ -56,6 +56,7 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 80000003, () => CloakRoomShopClerk(client, npcSpawn) },
                         { x => x == 10000002, () => RegularInn(client, npcSpawn) },
                         { x => x == 10000703, () => CrimInn(client, npcSpawn) },
+                        { x => x == 70000029, () => LostBBS(client, npcSpawn) },
                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                         { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -436,7 +437,25 @@ namespace Necromancy.Server.Packet.Area
         {
 
         }
+        private void LostBBS(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            //recv_message_board_notify_open = 0x170F, 
+            
+            res.WriteInt32(2); //String lookup inside str_table.csv around line 3366
 
+            res.WriteInt16(2);
+            res.WriteInt16(4); // Lost souls yesterday.
+            res.WriteInt16(6);
+            res.WriteInt16(8);
+
+            res.WriteInt16(10);
+            res.WriteInt16(12); // Lost souls last month.
+            res.WriteInt16(14);
+            res.WriteInt16(16);
+
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_message_board_notify_open, res, ServerType.Area);
+        }
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {

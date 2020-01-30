@@ -1,14 +1,23 @@
+using Arrowgene.Services.Logging;
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
     public class Character : IInstance
     {
+        private readonly NecLogger _logger;
         private readonly object StateLock = new object();
+        private readonly object HPLock = new object();
+        private readonly object DamageLock = new object();
+        private readonly object MPLock = new object();
+        private readonly object ODLock = new object();
         public uint InstanceId { get; set; }
 
         //core attributes
@@ -40,7 +49,7 @@ namespace Necromancy.Server.Model
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
         public int beginnerProtection { get; set; }
-        public uint state { get; set; }
+        public uint _state { get; set; }
 
         //Movement Related
         public float X { get; set; }
@@ -59,7 +68,7 @@ namespace Necromancy.Server.Model
         //Normal Attack
         public int[] AttackIds { get; set; }
         //Logout Cancel Detection
-        public byte logoutCanceled { get; set; }
+        //public byte logoutCanceled { get; set; }
 
         //Map Related
         public int MapId { get; set; }
@@ -72,11 +81,10 @@ namespace Necromancy.Server.Model
         public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
-        public int nextBagSlot { get; set; } // Until bag management is done
         public uint eventSelectReadyCode { get; set; }
-        public int currentHp { get; set; }
-        public uint currentMp { get; set; }
-        public uint currentOd { get; set; }
+        private int _currentHp { get; set; }
+        private uint _currentMp { get; set; }
+        private uint _currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
         public int shortcutBar1Id { get; set; }
         public int shortcutBar2Id { get; set; }
@@ -92,15 +100,20 @@ namespace Necromancy.Server.Model
         public bool helperTextCloakRoom { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
+        public uint killerInstanceId { get; private set; }
+        public bool playerDead { get; set; }
         public uint partyId { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
         public uint partyRequest { get; set; }
 
-
+        //Task
+        public CharacterTask characterTask;
+        public bool _characterActive { get; private set; }
         public Character()
         {
+            _logger = LogProvider.Logger<NecLogger>(this);
             Id = -1;
             AccountId = -1;
             SoulId = -1;
@@ -113,16 +126,15 @@ namespace Necromancy.Server.Model
             Name = null;
             Level = 0;
             ////// 
-            logoutCanceled = 0;
             WeaponType = 8;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;
             maxHp = 1000;
             maxMp = 500;
             maxOd = 200;
-            currentHp = 1000;
-            currentMp = 450;
-            currentOd = 150;
+            _currentHp = 1000;
+            _currentMp = 450;
+            _currentOd = 150;
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
@@ -132,8 +144,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            nextBagSlot = 0;
-            state = 0b00000000;
+            _state = 0b00000000;
             inventoryItems = new List<InventoryItem>();
             inventoryBags = new List<Bag>();
             Bag bag = new Bag();
@@ -146,6 +157,10 @@ namespace Necromancy.Server.Model
             helperTextCloakRoom = true;
             beginnerProtection = 1;
             currentEvent = null;
+            secondInnAccess = false;
+            _characterActive = true;
+            killerInstanceId = 0;
+            playerDead = false;
            secondInnAccess = false;
             partyId = 0;
             InstanceId = 0;
@@ -153,20 +168,75 @@ namespace Necromancy.Server.Model
             ClassId = 0;
         }
 
-        public uint GetState ()
+        public int currentHp
         {
-            uint charState = 0;
-            lock (StateLock)
+            get => _currentHp;
+            set
             {
-                charState = state;
+                lock (HPLock)
+                {
+                    _currentHp = value;
+                }
             }
-            return charState;
         }
-        public void SetState(uint charState)
+        public void damage(int amount, uint instanceId)
         {
-            lock (StateLock)
+            lock (DamageLock)
             {
-                state = charState;
+                if (playerDead)
+                    return;
+                _currentHp -= amount;
+                if (_currentHp <= 0)
+                {
+                    playerDead = true;
+                    killerInstanceId = instanceId;
+                }
+            }
+        }
+        public uint currentMp
+        {
+            get => _currentMp;
+            set
+            {
+                lock (MPLock)
+                {
+                    _currentMp = value;
+                }
+            }
+        }
+        public uint currentOd
+        {
+            get => _currentOd;
+            set
+            {
+                lock (ODLock)
+                {
+                    _currentOd = value;
+                }
+            }
+        }
+        public bool characterActive
+        {
+            get => _characterActive;
+            set
+            {
+                _characterActive = value;
+            }
+        }
+        public void CreateTask(NecServer server, NecClient client)
+        {
+            characterTask = new CharacterTask(server, client);
+            characterTask.Start();
+        }
+        public uint state
+        {
+            get => _state;
+            set
+            {
+                lock (StateLock)
+                {
+                    _state = value;
+                }
             }
         }
         public uint AddStateBit(uint stateBit)
@@ -174,8 +244,8 @@ namespace Necromancy.Server.Model
             uint newState = 0;
             lock (StateLock)
             {
-                state |= stateBit;
-                newState = state;
+                _state |= stateBit;
+                newState = _state;
             }
             return newState;
         }
@@ -184,8 +254,8 @@ namespace Necromancy.Server.Model
             uint newState = 0;
             lock (StateLock)
             {
-                state &= ~stateBit;
-                newState = state;
+                _state &= ~stateBit;
+                newState = _state;
             }
             return newState;
         }
@@ -230,9 +300,15 @@ namespace Necromancy.Server.Model
             InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
             inventoryItems.Remove(invItm);
         }
-        public InventoryItem GetNextInventoryItem(NecServer server)
+        public InventoryItem GetNextInventoryItem(NecServer server, byte desiredCount = 1, Item item = null)
         {
             InventoryItem invItem = null;
+            if (item != null)
+            {
+                invItem = GetInventoryItem(item, desiredCount);
+                if (invItem != null)
+                    return invItem;
+            }
             byte bagId = 0;
             short slotId = -1;
             foreach (Bag bag in inventoryBags)

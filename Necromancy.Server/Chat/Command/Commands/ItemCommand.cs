@@ -55,7 +55,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     else
                     {
-                        item = SendItemInstance(client);
+                        item = SendItemInstance(client, "3130323030313031");
                     }
                     if (item == null)
                         return;
@@ -69,7 +69,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     else
                     {
-                        healItem = SendItemInstance(client);
+                        healItem = SendItemInstance(client, "Test");
                     }
                     _logger.Debug($"dagger instanceId [{healItem.InstanceId}]");
                     break;
@@ -81,7 +81,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     else
                     {
-                        createItem = SendItemInstance(client);
+                        createItem = SendItemInstance(client, "Test");
                     }
                     _logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
                     break;
@@ -187,28 +187,45 @@ namespace Necromancy.Server.Chat.Command.Commands
             return item;
         }
 
-        public Item SendItemInstance(NecClient client)
+        public Item SendItemInstance(NecClient client, string key)
         {
-            Item item = _server.Instances64.CreateInstance<Item>();
             IBuffer res = BufferProvider.Provide();
+            //Item item = _server.Instances64.CreateInstance<Item>();
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            if (invItem == null)
+            {
+                res = BufferProvider.Provide();
+                res.WriteInt32(-207);
+                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+                RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
+                _server.Router.Send(noSpace, client);
+                return null;
+            }
+            Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
+            Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
+            item.Id = 10200101;
+            item.IconType = 2;
+            item.Name = "dagger";
+            invItem.StorageType = 0;
+            invItem.StorageCount = (byte)1;
 
             uint instanceId = _server.Instances.CreateInstance<Model.Object>().InstanceId;
             Logger.Debug($"instanceId [{instanceId}]");
             //res.WriteInt32(instanceId); //InstanceId
             // res.WriteInt32(10200101); //ItemID
             res.WriteInt64(instanceId); //ItemID
-            res.WriteInt32(2); // 0 does not display icon
+            res.WriteInt32(item.IconType); // 0 does not display icon
             res.WriteByte((byte)1); //Number of "items"
             res.WriteInt32(0); //Item status, in multiples of numbers, 8 = blessed/cursed/both 
-            res.WriteFixedString("Dagger", 0x10);
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
-            res.WriteByte(0); // 0~2 // maybe.. more bag index?
-            res.WriteInt16((short)3); // bag index
+            res.WriteFixedString(key, 0x10);
+            res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(invItem.StorageId); // 0~2 // maybe.. more bag index?
+            res.WriteInt16(invItem.StorageSlot); // bag index
             res.WriteInt32(0); //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
             res.WriteInt32(0); //Percentage stat, 9 max i think
             res.WriteByte(0);
             res.WriteByte(0);  // Dest slot
-            res.WriteCString("Wolfzen"); // find max size 
+            res.WriteCString("Dagger"); // find max size 
             res.WriteInt16(0);
             res.WriteInt16(0);
             res.WriteInt32(0); //Divides max % by this number
@@ -231,8 +248,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(0);
             }
 
-            res.WriteInt32(10200101);
-            res.WriteInt32(10200101);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
             res.WriteInt16(0);
             res.WriteInt32(0); //Guard protection toggle, 1 = on, everything else is off
             res.WriteInt16(0);
@@ -316,7 +333,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteInt64(instanceId); //Item Object ID 
-            res.WriteInt16((short)client.Character.Alignmentid);
+            res.WriteInt16((short)10000);
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
             
             res = null;

@@ -217,7 +217,8 @@ namespace Necromancy.Server
                 _connections.Remove(socket);
                 _logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
             }
-
+            if (connection.Client.Character != null)
+                connection.Client.Character.characterActive = false;
             Action<NecConnection> onClientDisconnected = ClientDisconnected;
             if (onClientDisconnected != null)
             {
