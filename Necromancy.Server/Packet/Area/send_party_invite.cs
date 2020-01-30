@@ -50,7 +50,7 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.partyId);//Party maker client id // should be Party Instance ID
+            res.WriteInt32(client.Character.partyId);//Party Instance ID
             res.WriteInt32(myParty.PartyType);//Party type; 0 = closed, 1 = open.
             res.WriteInt32(myParty.NormalItemDist);//Normal item distribution; 0 = do not distribute, 1 = random.
             res.WriteInt32(myParty.RareItemDist);//Rare item distribution; 0 = do not distribute, 1 = Draw.

@@ -24,46 +24,43 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.InstanceId + 1000);
-
+            res.WriteInt32(client.Character.InstanceId);
             res.WriteInt32(0x14); // cmp to 0x14
 
             int numEntries = 0x14;
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(Objective);
-                res.WriteInt32(Details);
-                res.WriteInt32(Unknown);
-                res.WriteInt32(OtherCheckBoxSelection);
-
-                res.WriteInt32(0);
-
-                res.WriteInt32(0);
+                res.WriteInt32(510+i);//Party ID
+                res.WriteInt32(1);//Party type; 0 = closed, 1 = open.
+                res.WriteInt32(1);//Normal item distribution; 0 = do not distribute, 1 = random.
+                res.WriteInt32(1);//Rare item distribution; 0 = do not distribute, 1 = Draw.
+                res.WriteInt32(client.Character.InstanceId); //Target playyer?
+                res.WriteInt32(client.Character.InstanceId);//From player instance ID (but doesn't work?)
 
                 int numEntries2 = 0x4;
                 for (int j = 0; j < numEntries2; j++)
                 {
-                    res.WriteInt32(client.Character.partyId); //Party ID?
+                    res.WriteInt32(0); //?
                     res.WriteInt32(client.Character.InstanceId);
                     res.WriteFixedString($"{client.Soul.Name}{j}", 0x31);
                     res.WriteFixedString($"{client.Character.Name}{j}", 0x5B);
                     res.WriteInt32(client.Character.ClassId);
                     res.WriteByte(client.Character.Level);
-                    res.WriteByte(0);
-                    res.WriteByte(0); // bool
-                    res.WriteByte(0);
-                    res.WriteByte(0);
+                    res.WriteByte(2); //Criminal Status
+                    res.WriteByte(1); //Beginner Protection (bool) 
+                    res.WriteByte(1); //Membership Status
+                    res.WriteByte(1);
                 }
 
-                res.WriteByte(0);
+                res.WriteByte(3); //party member count per listed party
 
-                res.WriteInt32(24);
-                res.WriteInt32(2);
-                res.WriteInt32(3);
-                res.WriteByte(0);
-                res.WriteInt32(0);
+                res.WriteInt32(Objective); //objective per listed party
+                res.WriteInt32(Details);
+                res.WriteInt32(Unknown);
+                res.WriteByte(0); //party match requirements. 1 for no match error
+                res.WriteInt32(i); //recruiting classes per listed party
 
-                res.WriteInt32(0);
+                res.WriteInt32(i); //"other" column or objective per listed party
 
                 res.WriteFixedString($"Party Comment Box : Loop{i}", 0xB5);
             }
