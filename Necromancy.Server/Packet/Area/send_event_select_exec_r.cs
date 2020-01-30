@@ -58,7 +58,13 @@ namespace Necromancy.Server.Packet.Area
                                                             ResolveInn(client,npcSpawn.NpcId, npcSpawn); 
                                                      }
                          },
-                         { x => x == 10000703, () => CrimInn(client, npcSpawn.NpcId, npcSpawn) },
+                         { x => x == 10000703, () => {
+                                                        if(client.Character.secondInnAccess == false)
+                                                            CrimInn(client, npcSpawn.NpcId, npcSpawn);
+                                                        else if(client.Character.secondInnAccess == true)
+                                                            ResolveInn(client,npcSpawn.NpcId, npcSpawn);
+                                                     }
+                         },
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -321,9 +327,73 @@ namespace Necromancy.Server.Packet.Area
         }
         private void CrimInn(NecClient client, int objectID, NpcSpawn npcSpawn)
         {
-            IBuffer res12 = BufferProvider.Provide();
-            res12.WriteCString("This Feature is under development"); // Length 0xC01
-            Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+
+            IBuffer res7 = BufferProvider.Provide();
+            res7.WriteCString("Stay"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteCString("Back"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+
+            if (client.Character.eventSelectExecCode == 0)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and Beginner Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 1)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/2 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 2)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/4 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 3)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/8 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 4)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/16 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 5)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/32 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 6)
+            {
+                SendEventEnd(client);
+            }
         }
 
         private void ResolveInn(NecClient client, int objectId, NpcSpawn npcSpawn)
