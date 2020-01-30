@@ -15,10 +15,64 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            //Acknowledge send
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(client.Character.InstanceId); //probably error check. 0 for success
            
-            Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res, ServerType.Msg);
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res2, ServerType.Msg);
+
+            int currentDay = System.DateTime.Today.Day;
+
+            //Notify client if msg server found Union settings in database(memory) for client character Unique Persistant ID.
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(8888); //Union Instance ID
+            res.WriteFixedString("Trade_Union", 0x31); //size is 0x31
+            res.WriteInt32(client.Character.InstanceId); //leader
+            res.WriteInt32(client.Character.InstanceId); //subleader.  We need to assign character Instance IDs at server start instead of login...
+            res.WriteInt32(client.Character.InstanceId); //subleader2
+            res.WriteInt32(1111);
+            res.WriteInt32(2222);
+            res.WriteInt32(3333);
+            res.WriteInt32(4444);
+            res.WriteByte(6); //Union Level
+            res.WriteInt32(800123 /*myUnion.currentExp*/); //Union EXP Current
+            res.WriteInt32(1000000 /*UnionLevels.Level2EXP*/); //Union EXP next level Target
+            res.WriteByte(30); //Increase Union Member Limit above default 50 (See Union Bonuses
+            res.WriteByte(10);
+            res.WriteInt32(client.Character.InstanceId);
+            res.WriteInt16(55555);
+            res.WriteFixedString("You are all members of Trade Union now.  Welcome!", 0x196); //size is 0x196
+            for (int i = 0; i < 8; i++)
+                res.WriteInt32(currentDay);
+            res.WriteByte(15);
+
+            Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
+
+            //for each unionMember in myUnion.UnionMembers {  }
+            //Notify client of each union member in above union, queried by charaname and InstanceId (for menu based interactions)
+            for (int i = 0; i < 4; i++)
+            {
+                IBuffer res3 = BufferProvider.Provide();
+                res3.WriteInt32(1001007); //not sure what this is
+                res3.WriteInt32(client.Character.InstanceId);
+                res3.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
+                res3.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
+                res3.WriteInt32(client.Character.ClassId);
+                res3.WriteByte(client.Character.Level);
+                res3.WriteInt32(1001007); //Location?
+                res3.WriteInt32(1001007); //Area? STR table lookup?
+                res3.WriteFixedString("Have a wonderful day"/*Client.Character.Comment*/, 0x61); //size is 0x61
+                res3.WriteInt32(currentDay);
+                res3.WriteInt32(1001001);
+                res3.WriteInt32(1001001);
+                res3.WriteInt32(1001001);
+                res3.WriteInt32(1001001);
+                res3.WriteInt32(1001001);
+
+                Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
+            }
+
+
         }
     }
 }
