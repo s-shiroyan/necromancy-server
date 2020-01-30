@@ -15,12 +15,25 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int target = packet.Data.ReadInt32();
+            uint kickTargetInstanceID = packet.Data.ReadUInt32();
             IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(0);
-
+            res.WriteInt32(0); //Kick Reason?  error check?  probably error check
             Router.Send(client, (ushort) AreaPacketId.recv_party_kick_r, res, ServerType.Area);
+
+
+            NecClient targetClient = Server.Clients.GetByCharacterInstanceId(kickTargetInstanceID);
+
+            Router.Send(targetClient, (ushort)MsgPacketId.recv_party_notify_kick, BufferProvider.Provide(), ServerType.Msg);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(targetClient.Character.InstanceId);
+            Router.Send(targetClient.Map, (ushort)AreaPacketId.recv_charabody_notify_party_leave, res2, ServerType.Area);
+
+
+            Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
+            myParty.PartyMembers.Remove(targetClient);
+
+
         }
     }
 }

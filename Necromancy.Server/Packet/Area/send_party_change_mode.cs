@@ -11,16 +11,23 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_party_change_mode;
+        public override ushort Id => (ushort)AreaPacketId.send_party_change_mode;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             int partyMode = packet.Data.ReadInt32();
             IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_change_mode_r, res, ServerType.Area);
 
-            res.WriteInt32(partyMode);
+            Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
 
-            Router.Send(client, (ushort) AreaPacketId.recv_party_change_mode_r, res, ServerType.Area);
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(partyMode); //must be newLeaderInstanceId
+            Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_change_mode, res2, ServerType.Msg);
+
+            myParty.PartyType = partyMode;
+
         }
     }
 }
