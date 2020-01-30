@@ -42,9 +42,16 @@ namespace Necromancy.Server.Packet.Area
 
             client.Character.partyId = myParty.InstanceId;
 
+            //SendPartyEstablish(client, myParty.InstanceId);
             SendCharaBodyNotifyPartyJoin(client, partyInstanceId); //Only send the Join Notify of the Accepting Client to the Map.  Existing members already did that when they joined.
             SendCharaNotifyPartyJoin(client, myParty); //Only send the Join of the Accepting Client to the Accepting Client. 
 
+        }
+        private void SendPartyEstablish(NecClient thisClient, uint PartyInstanceId)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(PartyInstanceId);
+            Router.Send(thisClient, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
         }
         private void SendPartyNotifyAddMember(NecClient thisClient, List<NecClient> PartyMembersList)
         {
@@ -91,8 +98,8 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //object ID
             res.WriteInt32(myParty.InstanceId); //party ID
-            res.WriteInt32(0); //Party Leader InstanceId?
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
+            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
+            Router.Send(myParty.PartyMembers, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
         }
 
 

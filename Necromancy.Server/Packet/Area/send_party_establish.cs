@@ -41,8 +41,8 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Party Instance ID {myFirstParty.InstanceId}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
+            res.WriteInt32(client.Character.partyId);
+            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
 
             SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClientId, myFirstParty.InstanceId);
             SendCharaBodyNotifyPartyJoin(client);
