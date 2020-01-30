@@ -45,6 +45,7 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
+        public CharacterLookup Characters { get; }
         public MapLookup Maps { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
@@ -70,6 +71,7 @@ namespace Necromancy.Server
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
+            Characters = new CharacterLookup();
             Maps = new MapLookup();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
@@ -106,6 +108,7 @@ namespace Necromancy.Server
             LoadChatCommands();
             LoadSettingRepository();
             LoadHandler();
+            LoadCharacterRepository();
         }
 
         private void AuthClientDisconnected(NecConnection client)
@@ -210,6 +213,16 @@ namespace Necromancy.Server
             {
                 Map map = new Map(mapSetting, this);
                 Maps.Add(map);
+            }
+        }
+
+        private void LoadCharacterRepository()
+        {
+            foreach (Character character  in Database.SelectCharacters())
+            {
+                Instances.AssignInstance(character);
+                Characters.Add(character);
+                _logger.Debug($"Charater {character.Name} from database added to memory. Assigned Intance ID {character.InstanceId} ");
             }
         }
 
