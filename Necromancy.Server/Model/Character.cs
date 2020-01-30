@@ -163,6 +163,9 @@ namespace Necromancy.Server.Model
             playerDead = false;
            secondInnAccess = false;
             partyId = 0;
+            InstanceId = 0;
+            Name = "";
+            ClassId = 0;
         }
 
         public int currentHp

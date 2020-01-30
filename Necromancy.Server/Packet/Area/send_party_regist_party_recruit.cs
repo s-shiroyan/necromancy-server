@@ -21,7 +21,6 @@ namespace Necromancy.Server.Packet.Area
             int otherID = packet.Data.ReadInt32(); // Selected check box under other
             string comment = packet.Data.ReadFixedString(60); //Comment Box accepts up to 60 characters. 
 
-
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(objectiveID);
@@ -29,12 +28,15 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(targetID);
             res.WriteInt32(otherID);
 
-
-
             if (targetID != 0)
             {
                 Router.Send(Server.Clients.GetByCharacterInstanceId(targetID), (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
             }
+            else
+            {
+                Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
+            }
+            // make an event popup message that says A  p  p  l  y  .  v  i  a  .  t  h  e  .  P  a  r  t  y  .  R  e  c  e  p  t  i  o  n  .  S  t  a  f  f  .  P
         }
     }
 }

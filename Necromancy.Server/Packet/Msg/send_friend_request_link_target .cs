@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Msg
         private void NotifyFriendInvite(NecClient client, uint targetInstanceId)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId); // Change nothing visibaly ?
+            res2.WriteInt32(client.Character.InstanceId); // Change nothing visibaly ?  Friend Relationship instance ID??? for database lookup?
             res2.WriteInt32(client.Character.InstanceId);//?
             res2.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
             res2.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
