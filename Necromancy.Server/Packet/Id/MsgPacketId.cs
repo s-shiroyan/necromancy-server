@@ -166,11 +166,11 @@ namespace Necromancy.Server.Packet.Id
         //send_union_request_detail = 0x7950,                                       //Commented out for now becasue it has been moved to the AREA server
         send_union_request_disband = 0x015, // placeholder until found
         send_union_request_expel_member = 0x016, // placeholder until found
-        send_union_request_invite_target = 0x017, // placeholder until found
+        send_union_request_invite_target = 0x208E,
         send_union_request_member_priv = 0x018, // placeholder until found
-        send_union_request_news = 0x019, // placeholder until found
+        send_union_request_news = 0x2F8A,
         send_union_request_secede = 0x020, // placeholder until found
-        send_union_request_set_info = 0x021, // placeholder until found
+        send_union_request_set_info = 0x5A33, 
         send_union_request_set_mantle = 0x5088,
         send_comment_set = 0xFC37,
     }
