@@ -103,6 +103,7 @@ namespace Necromancy.Server.Model
         public uint killerInstanceId { get; private set; }
         public bool playerDead { get; set; }
         public uint partyId { get; set; }
+        public uint unionId { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -166,6 +167,7 @@ namespace Necromancy.Server.Model
             InstanceId = 0;
             Name = "";
             ClassId = 0;
+            unionId = 8888;
         }
 
         public int currentHp

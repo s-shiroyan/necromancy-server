@@ -53,21 +53,21 @@ namespace Necromancy.Server.Packet.Msg
             for (int i = 0; i < 4; i++)
             {
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(1001007); //not sure what this is
+                res3.WriteInt32(1001007); //not sure what this is.  union_Notify ID?
                 res3.WriteInt32(client.Character.InstanceId);
                 res3.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
                 res3.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
                 res3.WriteInt32(client.Character.ClassId);
                 res3.WriteByte(client.Character.Level);
-                res3.WriteInt32(1001007); //Location?
-                res3.WriteInt32(1001007); //Area? STR table lookup?
-                res3.WriteFixedString("Have a wonderful day"/*Client.Character.Comment*/, 0x61); //size is 0x61
-                res3.WriteInt32(currentDay);
-                res3.WriteInt32(1001001);
-                res3.WriteInt32(1001001);
-                res3.WriteInt32(1001001);
-                res3.WriteInt32(1001001);
-                res3.WriteInt32(1001001);
+                res3.WriteInt32(client.Character.MapId); // Location of your Union Member
+                res3.WriteInt32(0); //Area of Map, somehow.
+                res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
+                res3.WriteInt32(99999);
+                res3.WriteInt32(888888);
+                res3.WriteInt32(77777777);
+                res3.WriteInt32(666666666);
+                res3.WriteInt32(5555555);
+                res3.WriteInt32(44444);
 
                 Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
             }

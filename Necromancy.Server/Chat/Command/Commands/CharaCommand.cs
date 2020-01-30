@@ -377,6 +377,20 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res35, ServerType.Area);
                     break;
 
+                case "union":
+                    IBuffer res36 = BufferProvider.Provide();
+                    res36.WriteInt32(client.Character.InstanceId);
+                    res36.WriteInt32(8888 /*client.Character.UnionId*/);
+                    res36.WriteCString("Trade_Union"); Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+                    break;
+
+                case "xunion":
+                    IBuffer res37 = BufferProvider.Provide();
+                    res37.WriteInt32(client.Character.InstanceId);
+                    res37.WriteInt32(0 /*client.Character.UnionId*/);
+                    res37.WriteCString(""); Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res37, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;

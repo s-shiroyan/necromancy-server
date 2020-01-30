@@ -161,7 +161,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_select_C44F = 0xC44F,
         send_soul_set_passwd = 0x8C9D,
         send_system_register_error_report = 0xC789, 
-        send_union_reply_to_invite2 = 0x013, // placeholder until found
+        send_union_reply_to_invite2 = 0x4301,
         send_union_request_change_role = 0x014, // placeholder until found
         //send_union_request_detail = 0x7950,                                       //Commented out for now becasue it has been moved to the AREA server
         send_union_request_disband = 0x015, // placeholder until found
