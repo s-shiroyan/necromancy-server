@@ -422,10 +422,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
             _areaConsumer.AddHandler(new Send_shop_repair(this));
             _areaConsumer.AddHandler(new send_storage_draw_item(this));
-
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
-
             _areaConsumer.AddHandler(new send_party_entry_draw(this));
             _areaConsumer.AddHandler(new send_party_pass_draw(this));
             _areaConsumer.AddHandler(new send_party_change_leader(this));
@@ -435,6 +433,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_apply(this));
             _areaConsumer.AddHandler(new send_party_accept_to_apply(this));
             _areaConsumer.AddHandler(new send_party_decline_to_apply(this));
+            _areaConsumer.AddHandler(new send_message_board_close(this));
                      
         }
     }

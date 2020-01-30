@@ -828,7 +828,7 @@ namespace Necromancy.Server.Packet.Id
         send_map_enter = 0x70FD, 
         send_map_entry = 0x2DE3, 
         send_map_get_info = 0x25D7, 
-        send_message_board_close = 0x125, //opcode not found   // TODO
+        send_message_board_close = 0xC7E9,
         send_open_mailbox = 0xEF32,
         send_package_all_delete = 0x8E0C,
         send_party_accept_to_apply = 0x8812,
