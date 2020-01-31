@@ -32,7 +32,8 @@ namespace Necromancy.Server.Packet.Msg
                 IBuffer res36 = BufferProvider.Provide();
                 res36.WriteInt32(client.Character.InstanceId);
                 res36.WriteInt32(8888 /*client.Character.UnionId*/);
-                res36.WriteCString("Trade_Union" /*myUnion.Name*/); Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+                res36.WriteCString("Trade_Union" /*myUnion.Name*/); 
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
             }
         }
     }

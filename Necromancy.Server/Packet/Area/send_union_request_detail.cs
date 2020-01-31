@@ -50,18 +50,18 @@ namespace Necromancy.Server.Packet.Msg
 
             //for each unionMember in myUnion.UnionMembers {  }
             //Notify client of each union member in above union, queried by charaname and InstanceId (for menu based interactions)
-            for (int i = 0; i < 4; i++)
+            foreach (Character character in Server.Characters.GetAll())
             {
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(1001007); //not sure what this is.  union_Notify ID?
-                res3.WriteInt32(client.Character.InstanceId);
+                res3.WriteInt32(Util.GetRandomNumber(12000,12100)); //not sure what this is.  union_Notify ID?
+                res3.WriteInt32(character.InstanceId);
                 res3.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
-                res3.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
-                res3.WriteInt32(client.Character.ClassId);
-                res3.WriteByte(client.Character.Level);
-                res3.WriteInt32(client.Character.MapId); // Location of your Union Member
+                res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
+                res3.WriteInt32(character.ClassId);
+                res3.WriteByte(character.Level);
+                res3.WriteInt32(character.MapId); // Location of your Union Member
                 res3.WriteInt32(0); //Area of Map, somehow.
-                res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
+                res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
                 res3.WriteInt32(99999);
                 res3.WriteInt32(888888);
                 res3.WriteInt32(77777777);
