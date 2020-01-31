@@ -222,7 +222,7 @@ namespace Necromancy.Server
             {
                 Instances.AssignInstance(character);
                 Characters.Add(character);
-                _logger.Debug($"Charater {character.Name} from database added to memory. Assigned Intance ID {character.InstanceId} ");
+                _logger.Debug($"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
             }
         }
 

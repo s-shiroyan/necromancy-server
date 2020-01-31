@@ -105,6 +105,37 @@ namespace Necromancy.Server.Chat.Command.Commands
                     resm.WriteByte((byte)y);
                     Router.Send(client, (ushort)MsgPacketId.recv_party_notify_get_item, resm, ServerType.Msg);
                     break;
+                case "soulitem":
+                    IBuffer res19 = BufferProvider.Provide();
+                    res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
+                    Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
+                    break;
+                case "soulmat":
+                    IBuffer res20 = BufferProvider.Provide();        
+                    res20.WriteInt32(x);
+
+                    res20.WriteFloat(client.Character.X);//X
+                    res20.WriteFloat(client.Character.Y);//Y
+                    res20.WriteFloat(client.Character.Z);//Z
+
+                    res20.WriteFloat(client.Character.X+10);//X
+                    res20.WriteFloat(client.Character.Y+10);//Y
+                    res20.WriteFloat(client.Character.Z+10);//Z
+                    res20.WriteByte(client.Character.Heading);
+
+                    res20.WriteInt32(14);
+
+                    res20.WriteInt32(10);
+                    res20.WriteInt32(10);
+                    res20.WriteInt32(1); // movement speed per tick?
+                    if (y==1) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_goldobject_data, res20, ServerType.Area);
+
+                    res20.WriteInt32(11);
+                    if (y == 2) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_soulmaterialobject_data, res20, ServerType.Area);
+                    if (y == 3) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res20, ServerType.Area);
+
+                    break;
+
 
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
