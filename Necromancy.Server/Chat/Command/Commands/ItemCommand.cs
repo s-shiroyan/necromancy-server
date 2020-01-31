@@ -109,6 +109,41 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "state":
                     UpdateState(client, 0);
                     break;
+                case "soulitem":
+                    IBuffer res19 = BufferProvider.Provide();
+                    res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
+                    Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
+                    break;
+                case "soulmat":
+                    for (int i = 0; i < x; i++)
+                    {
+                        IBuffer res20 = BufferProvider.Provide();
+                        res20.WriteInt32(Util.GetRandomNumber(998000,1000000));
+
+                        res20.WriteFloat(client.Character.X);//X
+                        res20.WriteFloat(client.Character.Y);//Y
+                        res20.WriteFloat(client.Character.Z);//Z
+
+                        res20.WriteFloat(client.Character.X + Util.GetRandomNumber(-300,300));//X
+                        res20.WriteFloat(client.Character.Y + Util.GetRandomNumber(-300, 200));//Y
+                        res20.WriteFloat(client.Character.Z + 10);//Z
+                        res20.WriteByte((byte)Util.GetRandomNumber(0,255));
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        res20.WriteInt32(Util.GetRandomNumber(0,1000)); // bitmask  0bxxxxx1 = arch  0bxxxxx0 = no arch
+                        y = Util.GetRandomNumber(1, 4);
+                        if (y == 1) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_goldobject_data, res20, ServerType.Area);
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        if (y == 2) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_soulmaterialobject_data, res20, ServerType.Area);
+                        if (y == 3) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res20, ServerType.Area);
+                    }
+                    break;
+
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;

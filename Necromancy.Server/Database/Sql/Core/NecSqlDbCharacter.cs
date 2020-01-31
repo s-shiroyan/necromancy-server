@@ -28,6 +28,8 @@ namespace Necromancy.Server.Database.Sql.Core
 
         private const string SqlDeleteCharacter =
             "DELETE FROM `nec_character` WHERE `id`=@id;";
+        private const string SqlSelectCharacters =
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character`;";
 
         public bool InsertCharacter(Character character)
         {
@@ -178,6 +180,21 @@ namespace Necromancy.Server.Database.Sql.Core
             int rowsAffected = ExecuteNonQuery(SqlDeleteCharacter,
                 command => { AddParameter(command, "@id", characterId); });
             return rowsAffected > NoRowsAffected;
+        }
+
+        public List<Character> SelectCharacters()
+        {
+            List<Character> characters = new List<Character>();
+            ExecuteReader(SqlSelectCharacters,
+                command => { }, reader =>
+                {
+                    while (reader.Read())
+                    {
+                        Character character = ReadCharacter(reader);
+                        characters.Add(character);
+                    }
+                });
+            return characters;
         }
 
         private Character ReadCharacter(DbDataReader reader)
