@@ -401,6 +401,19 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res38, ServerType.Area);
                     break;
 
+                case "disconnect":
+                    NecClient DeadManClient = Server.Clients.GetByCharacterInstanceId(x);
+                    IBuffer res39 = BufferProvider.Provide();
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    Router.Send(DeadManClient, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res39, ServerType.Area);
+                    break;
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
