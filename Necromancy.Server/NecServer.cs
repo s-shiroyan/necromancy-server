@@ -237,6 +237,7 @@ namespace Necromancy.Server
             _authConsumer.AddHandler(new send_base_select_world(this));
 
             // Message Handler
+            _msgConsumer.AddHandler(new SendDisconnect(this));
             _msgConsumer.AddHandler(new SendHeartbeat(this));
             _msgConsumer.AddHandler(new SendUnknown1(this));
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));

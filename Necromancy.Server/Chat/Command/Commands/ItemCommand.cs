@@ -142,7 +142,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                         if (y == 3) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res20, ServerType.Area);
                     }
                     break;
-
+                case "physics":                
+                    IBuffer res21 = BufferProvider.Provide();
+	                res21.WriteInt64(x); //item instance id
+                    res21.WriteInt16((short)y); //item's attack stat
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res21, ServerType.Area);
+                    break;
 
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");

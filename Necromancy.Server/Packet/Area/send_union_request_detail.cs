@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(30); //Increase Union Member Limit above default 50 (See Union Bonuses
             res.WriteByte(10);
             res.WriteInt32(client.Character.InstanceId);
-            res.WriteInt16(55555);
+            res.WriteInt16(0x0B); //Mantle/Cape?
             res.WriteFixedString("You are all members of Trade Union now.  Welcome!", 0x196); //size is 0x196
             for (int i = 0; i < 8; i++)
                 res.WriteInt32(currentDay);

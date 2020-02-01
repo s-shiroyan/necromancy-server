@@ -16,6 +16,8 @@ namespace Necromancy.Server.Packet
         public const int PacketLengthTypeSize = 1;
         public const int HeartbeatPacketBodySize = 8;
         public const int Unknown1PacketBodySize = 8;
+        public const int DisconnectPacketBodySize = 4;
+
 
         private bool _readHeader;
         private bool _readPacketLengthType;
@@ -53,6 +55,11 @@ namespace Necromancy.Server.Packet
                     break;
                 case PacketType.Unknown1:
                     packetType = PacketType.Unknown1;
+                    buffer.WriteByte((byte) packetType);
+                    buffer.WriteBytes(data);
+                    break;
+                case PacketType.Disconnect:
+                    packetType = PacketType.Disconnect;
                     buffer.WriteByte((byte) packetType);
                     buffer.WriteBytes(data);
                     break;
@@ -176,6 +183,13 @@ namespace Necromancy.Server.Packet
                             _readHeader = true;
                             break;
                         }
+                        case PacketType.Disconnect:
+                        {
+                            _dataSize = DisconnectPacketBodySize;
+                            _id = (ushort)CustomPacketId.SendDisconnect;
+                            _readHeader = true;
+                            break;
+                        }
                         default:
                         {
                             // TODO update arrowgene service to read uint24 && int24
@@ -234,6 +248,10 @@ namespace Necromancy.Server.Packet
                     return PacketLengthTypeSize;
                 }
                 case PacketType.Unknown1:
+                {
+                    return PacketLengthTypeSize;
+                }
+                case PacketType.Disconnect:
                 {
                     return PacketLengthTypeSize;
                 }
