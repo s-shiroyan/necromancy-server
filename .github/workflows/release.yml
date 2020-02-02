@@ -26,7 +26,7 @@ jobs:
           mkdir ./release
           for NEC_RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
               # Server
-              dotnet publish Necromancy.Cli/Necromancy.Cli.csproj /p:Version=$NEC_VERSION /p:FromMSBuild=true --runtime $NEC_RUNTIME --configuration Release --output ./publish/$NEC_RUNTIME-$NEC_VERSION/Server
+              dotnet publish Necromancy.Cli/Necromancy.Cli.csproj --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:Version=$NEC_VERSION /p:FromMSBuild=true --runtime $NEC_RUNTIME --configuration Release --output ./publish/$NEC_RUNTIME-$NEC_VERSION/Server
               # ReleaseFiles
               cp -r ./ReleaseFiles/. ./publish/$NEC_RUNTIME-$NEC_VERSION/
               # Pack
