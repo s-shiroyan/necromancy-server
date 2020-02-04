@@ -448,7 +448,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_accept_to_apply(this));
             _areaConsumer.AddHandler(new send_party_decline_to_apply(this));
             _areaConsumer.AddHandler(new send_message_board_close(this));
-                     
+            _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
+
         }
     }
 }

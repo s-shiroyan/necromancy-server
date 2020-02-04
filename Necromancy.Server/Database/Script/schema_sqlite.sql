@@ -157,3 +157,31 @@ CREATE TABLE IF NOT EXISTS `nec_item` (
   `id`   INTEGER PRIMARY KEY NOT NULL, 
   `name` TEXT                NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS `nec_block_list` (
+	`id`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`soul_id`	    INTEGER NOT NULL,
+	`block_soul_id`	INTEGER NOT NULL,
+	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`),
+	FOREIGN KEY(`block_soul_id`) REFERENCES `nec_soul`(`id`)
+);
+CREATE TABLE IF NOT EXISTS `nec_union_member` (
+	`id`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`union_id`	    INTEGER NOT NULL,
+	`character_id`	INTEGER NOT NULL,
+	FOREIGN KEY(`character_id`) REFERENCES `nec_character`(`id`)
+);
+CREATE TABLE IF NOT EXISTS `nec_black_list` (
+	`id`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`soul_id`	    INTEGER NOT NULL,
+	`black_soul_id`	INTEGER NOT NULL,
+	FOREIGN KEY(`black_soul_id`) REFERENCES `nec_soul`(`id`),
+	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`)
+);
+CREATE TABLE IF NOT EXISTS `nec_friend_list` (
+	`id`	            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`soul_id`	        INTEGER NOT NULL,
+	`friend_soul_id`	INTEGER NOT NULL,
+	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`),
+	FOREIGN KEY(`friend_soul_id`) REFERENCES `nec_soul`(`id`)
+);
