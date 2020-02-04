@@ -17,22 +17,23 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             string targetSoulName = packet.Data.ReadCString();
-            int targetSoulId =0;
-            int result=0;
+            int targetSoulId;
+            int result;
 
             try 
             {
-                targetSoulId = Server.Database.SelectAccountByName(targetSoulName).Id;  //ToDo, make a new query to get Soul ID by Soul Name, and do it from memory, not DB query
+                Soul blockSoul = Server.Database.SelectSoulByName(targetSoulName);
+                targetSoulId = blockSoul.Id;
+                result = 0;
                 Logger.Debug($"target Soul Id is {targetSoulId}");
             }         
-            catch (System.NullReferenceException NRE)
+            catch //(System.NullReferenceException NRE)
             {
                 targetSoulId = 0;
                 result = -20;
+                Logger.Debug($"Database Lookup for soul name {targetSoulName} returned null. Result {result}");
             }
-
-            targetSoulId = Server.Clients.GetBySoulName(targetSoulName).Soul.Id;
-            result = 0;
+            
             /*
             REFUSAL_LIST	0	%s is added to your Block List
             REFUSAL_LIST	1	%s is removed from your Block List
