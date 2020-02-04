@@ -5,35 +5,19 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_refusallist_add_user : ClientHandler
+    public class send_refusallist_remove_user : ClientHandler
     {
-        public send_refusallist_add_user(NecServer server) : base(server)
+        public send_refusallist_remove_user(NecServer server) : base(server)
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_refusallist_add_user;
+        public override ushort Id => (ushort) AreaPacketId.send_refusallist_remove_user;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            string targetSoulName = packet.Data.ReadCString();
-            int targetSoulId;
-            int result;
+            int targetSoulId = packet.Data.ReadInt32();
 
-            try 
-            {
-                Soul blockSoul = Server.Database.SelectSoulByName(targetSoulName);
-                targetSoulId = blockSoul.Id;
-                result = 0;
-                Logger.Debug($"target Soul Id is {targetSoulId}");
-            }         
-            catch //(System.NullReferenceException NRE)
-            {
-                targetSoulId = 0;
-                result = -20;
-                Logger.Debug($"Database Lookup for soul name {targetSoulName} returned null. Result {result}");
-            }
-            
             /*
             REFUSAL_LIST	0	%s is added to your Block List
             REFUSAL_LIST	1	%s is removed from your Block List
@@ -50,10 +34,11 @@ namespace Necromancy.Server.Packet.Area
             REFUSAL_LIST	-2208	You may not add party members to the Block List
             REFUSAL_LIST	GENERIC	Unable to add to Block List
             */
-            res.WriteInt32(result); //error check
-            res.WriteInt32(targetSoulId); //ref_soulid
 
-            Router.Send(client, (ushort) AreaPacketId.recv_refusallist_add_user_r, res, ServerType.Area);
+            res.WriteInt32(1); //Result 
+            res.WriteInt32(targetSoulId); //ref)soulId
+
+            Router.Send(client, (ushort) AreaPacketId.recv_refusallist_remove_user_r, res, ServerType.Area);
         }
     }
 }

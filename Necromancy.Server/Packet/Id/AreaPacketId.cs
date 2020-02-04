@@ -883,7 +883,8 @@ namespace Necromancy.Server.Packet.Id
         send_random_box_get_item_all = 0x164, //opcode not found
         send_random_box_next_open = 0x167, //opcode not found  TODO
         send_record_close = 0x168, //opcode not found
-        send_refusallist_add_user = 0xF1D5, 
+        send_refusallist_add_user = 0xF1D5,
+        send_refusallist_remove_user = 0xCEAC,
         send_return_home_request_exec = 0x09F4,
         send_revive_execute = 0x170, //opcode not found TODO
         send_revive_init = 0x171, //opcode not found  TODO
