@@ -21,21 +21,21 @@ namespace Necromancy.Server.Packet.Receive
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt64(_instanceId);
-            res.WriteInt32(2);
+            res.WriteInt32(0);   //Equip bitmask
 
             res.WriteInt32(10200101);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
-            res.WriteInt32(1);
+            res.WriteInt32(0);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
 
             res.WriteByte(0);
             res.WriteByte(0);
-            res.WriteByte(1);//bool
+            res.WriteByte(0);//bool
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);

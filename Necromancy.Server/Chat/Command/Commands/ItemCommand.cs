@@ -25,7 +25,6 @@ namespace Necromancy.Server.Chat.Command.Commands
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
         }
-        InventoryItem invItem = null;
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
@@ -106,9 +105,6 @@ namespace Necromancy.Server.Chat.Command.Commands
                     resm.WriteByte((byte)y);
                     Router.Send(client, (ushort)MsgPacketId.recv_party_notify_get_item, resm, ServerType.Msg);
                     break;
-                case "state":
-                    UpdateState(client, 0);
-                    break;
                 case "soulitem":
                     IBuffer res19 = BufferProvider.Provide();
                     res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
@@ -162,7 +158,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Item SendItemInstanceUnidentified(NecClient client, int itemId, int count)
         {
             IBuffer res = null;
-            invItem = client.Character.GetNextInventoryItem(_server);
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();
@@ -175,7 +171,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
             item.Id = itemId;
-            item.IconType = 2;
+            item.IconType = (int)ITEM_TYPE.DAGGER;
             item.Name = "Dagger";
             invItem.StorageType = 0;
             invItem.StorageCount = (byte)count;
@@ -238,8 +234,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Item SendItemInstance(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            //Item item = _server.Instances64.CreateInstance<Item>();
-            //InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            Item item = _server.Instances64.CreateInstance<Item>();
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();
@@ -251,14 +247,14 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
             //Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
-            //item.Id = 10200101;
-            //item.IconType = 2;
-            //item.Name = "dagger";
-            //invItem.StorageType = 0;
-            //invItem.StorageCount = (byte)1;
+            item.Id = 10200101;
+            item.IconType = (int)ITEM_TYPE.DAGGER;
+            item.Name = "dagger";
+            invItem.StorageType = 0;
+            invItem.StorageCount = (byte)1;
 
-            uint instanceId = _server.Instances.CreateInstance<Model.Object>().InstanceId;
-            Logger.Debug($"instanceId [{instanceId}]");
+            //uint instanceId = _server.Instances.CreateInstance<Model.Object>().InstanceId;
+            Logger.Debug($"instanceId [{invItem.InstanceId}]");
             //res.WriteInt32(instanceId); //InstanceId
             // res.WriteInt32(10200101); //ItemID
             res.WriteInt64(invItem.InstanceId); //ItemID
@@ -309,13 +305,13 @@ namespace Necromancy.Server.Chat.Command.Commands
             return invItem.StorageItem;
         }
 
-        public void UpdateEqMask(NecClient client)
+        public void UpdateEqMask(NecClient client, InventoryItem invItem)
         {
             RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem.StorageItem.InstanceId);
             Router.Send(eqMask, client);
 
         }
-        public void UpdateState(NecClient client, uint state)
+        public void UpdateState(NecClient client, InventoryItem invItem, uint state)
         {
             IBuffer res = BufferProvider.Provide();
 
