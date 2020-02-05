@@ -23,6 +23,9 @@ namespace Necromancy.Server.Packet.Msg
            
 
             Router.Send(client, (ushort) MsgPacketId.recv_soul_delete_r, res, ServerType.Msg);
+
+            //TODO
+            //L"network::proto_msg_implement_client::recv_refusallist_notify_remove_user_souldelete()
         }
     }
 }
