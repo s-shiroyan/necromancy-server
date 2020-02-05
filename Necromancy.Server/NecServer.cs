@@ -45,6 +45,7 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
+        public CharacterLookup Characters { get; }
         public MapLookup Maps { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
@@ -70,6 +71,7 @@ namespace Necromancy.Server
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
+            Characters = new CharacterLookup();
             Maps = new MapLookup();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
@@ -106,6 +108,7 @@ namespace Necromancy.Server
             LoadChatCommands();
             LoadSettingRepository();
             LoadHandler();
+            LoadCharacterRepository();
         }
 
         private void AuthClientDisconnected(NecConnection client)
@@ -213,6 +216,16 @@ namespace Necromancy.Server
             }
         }
 
+        private void LoadCharacterRepository()
+        {
+            foreach (Character character  in Database.SelectCharacters())
+            {
+                Instances.AssignInstance(character);
+                Characters.Add(character);
+                _logger.Debug($"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
+            }
+        }
+
         private void LoadHandler()
         {
             // Authentication Handler
@@ -224,6 +237,7 @@ namespace Necromancy.Server
             _authConsumer.AddHandler(new send_base_select_world(this));
 
             // Message Handler
+            _msgConsumer.AddHandler(new SendDisconnect(this));
             _msgConsumer.AddHandler(new SendHeartbeat(this));
             _msgConsumer.AddHandler(new SendUnknown1(this));
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
@@ -422,9 +436,20 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
             _areaConsumer.AddHandler(new Send_shop_repair(this));
             _areaConsumer.AddHandler(new send_storage_draw_item(this));
-
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
+            _areaConsumer.AddHandler(new send_party_entry_draw(this));
+            _areaConsumer.AddHandler(new send_party_pass_draw(this));
+            _areaConsumer.AddHandler(new send_party_change_leader(this));
+            _areaConsumer.AddHandler(new send_party_kick(this));
+            _areaConsumer.AddHandler(new send_party_change_mode(this));
+            _areaConsumer.AddHandler(new send_party_cancel_member_recruit(this));
+            _areaConsumer.AddHandler(new send_party_apply(this));
+            _areaConsumer.AddHandler(new send_party_accept_to_apply(this));
+            _areaConsumer.AddHandler(new send_party_decline_to_apply(this));
+            _areaConsumer.AddHandler(new send_message_board_close(this));
+            _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
+
         }
     }
 }

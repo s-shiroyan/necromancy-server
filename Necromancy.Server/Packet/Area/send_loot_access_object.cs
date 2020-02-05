@@ -34,22 +34,6 @@ namespace Necromancy.Server.Packet.Area
 
             //Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
 
-            ///////////////test forced item receive. to be expanded upon using a drop table and slot checking logic
-            ///
-
-            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
-            if (invItem == null)
-            {
-                res = BufferProvider.Provide();
-                res.WriteInt32(-207);
-                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
-
-                RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
-                _server.Router.Send(noSpace, client);
-                return;
-            }
-            if (i > 24) { i = 0; }
-            i++;
             res = BufferProvider.Provide();
             res.WriteInt32(instanceID);
 
@@ -61,6 +45,18 @@ namespace Necromancy.Server.Packet.Area
             DropItem dropItem = dropTable.GetLoot(monster.MonsterId);
             if (dropItem == null)
                 return;
+            InventoryItem invItem = client.Character.GetNextInventoryItem(_server, (byte)dropItem.NumItems, dropItem.Item);
+            if (invItem == null)
+            {
+                res = BufferProvider.Provide();
+                res.WriteInt32(-207);
+                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+
+                RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
+                _server.Router.Send(noSpace, client);
+                return;
+            }
+
             string lootMsg = $"Looted {dropItem.NumItems} {dropItem.Item.Name} from {monster.Name}.";
             _logger.Debug($"Loot is {dropItem.NumItems} of {dropItem.Item.Id}");
 
@@ -107,10 +103,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(0);
                 res.WriteByte(0);
 
-                res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
-                res.WriteByte(0); // 0~2
-                res.WriteInt16((short)client.Character.nextBagSlot); // bag index
-                client.Character.nextBagSlot++;
+                res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
+                res.WriteByte(invItem.StorageId); // 0~2
+                res.WriteInt16(invItem.StorageSlot); // bag index
                 res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
                 res.WriteInt64(0);

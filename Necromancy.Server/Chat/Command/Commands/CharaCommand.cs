@@ -7,6 +7,7 @@ using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Packet.Response;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -367,6 +368,67 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res34.WriteInt64(10200101);
                     res34.WriteByte(25);
                     Router.Send(client, (ushort)AreaPacketId.recv_item_update_num, res34, ServerType.Area);
+                    break;
+
+                case "damage":
+                    int hp = character2.currentHp;
+                    client.Character.damage(hp, character2.InstanceId);
+                    IBuffer res35 = BufferProvider.Provide();
+                    res35.WriteInt32(hp);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res35, ServerType.Area);
+                    break;
+
+                case "union":
+                    IBuffer res36 = BufferProvider.Provide();
+                    res36.WriteInt32(client.Character.InstanceId);
+                    res36.WriteInt32(8888 /*client.Character.UnionId*/);
+                    res36.WriteCString("Trade_Union"); 
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+                    break;
+
+                case "xunion":
+                    IBuffer res37 = BufferProvider.Provide();
+                    res37.WriteInt32(client.Character.InstanceId);
+                    res37.WriteInt32(0 /*client.Character.UnionId*/);
+                    res37.WriteCString(""); 
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res37, ServerType.Area);
+                    break;
+
+                case "itemforth":
+                    IBuffer res38 = BufferProvider.Provide();
+                    res38.WriteInt32(client.Character.InstanceId);
+                    res38.WriteInt32(10200101);
+                    res38.WriteInt32(client.Character.InstanceId);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res38, ServerType.Area);
+                    break;
+
+                case "disconnect":
+                    NecClient DeadManClient = Server.Clients.GetByCharacterInstanceId(x);
+                    IBuffer res39 = BufferProvider.Provide();
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    res39.WriteInt32(client.Character.InstanceId);
+                    Router.Send(DeadManClient, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res39, ServerType.Area);
+                    break;
+
+                case "crime":
+                    for (byte i = 0; i < y; i++)
+                    {
+                        NecClient crimeClient = Server.Clients.GetByCharacterInstanceId(x);
+                        IBuffer res40 = BufferProvider.Provide();
+                        res40.WriteInt32(crimeClient.Character.InstanceId);
+                        res40.WriteByte(i);
+
+                        Logger.Debug($"Setting crime level for Character {crimeClient.Character.Name} to {i}");
+                        Router.Send(crimeClient, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
+                        Router.Send(crimeClient.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, crimeClient);
+                        Thread.Sleep(2000);
+
+                    }
                     break;
 
                 default:

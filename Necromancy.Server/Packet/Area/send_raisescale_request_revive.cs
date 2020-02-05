@@ -40,6 +40,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
             client.Character.hadDied = false;
+            client.Character.playerDead = false;
             RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             Router.Send(client, cData.ToPacket());
 

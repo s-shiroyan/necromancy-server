@@ -9,6 +9,7 @@ using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -24,7 +25,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             _server = server;
             _logger = LogProvider.Logger<NecLogger>(this);
         }
-
+        InventoryItem invItem = null;
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
@@ -69,7 +70,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     else
                     {
-                        healItem = SendItemInstance(client);
+                        //healItem = SendItemInstance(client, "Test");
                     }
                     _logger.Debug($"dagger instanceId [{healItem.InstanceId}]");
                     break;
@@ -81,7 +82,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     else
                     {
-                        createItem = SendItemInstance(client);
+                        //createItem = SendItemInstance(client, "Test");
                     }
                     _logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
                     break;
@@ -105,6 +106,48 @@ namespace Necromancy.Server.Chat.Command.Commands
                     resm.WriteByte((byte)y);
                     Router.Send(client, (ushort)MsgPacketId.recv_party_notify_get_item, resm, ServerType.Msg);
                     break;
+                case "state":
+                    UpdateState(client, 0);
+                    break;
+                case "soulitem":
+                    IBuffer res19 = BufferProvider.Provide();
+                    res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
+                    Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
+                    break;
+                case "soulmat":
+                    for (int i = 0; i < x; i++)
+                    {
+                        IBuffer res20 = BufferProvider.Provide();
+                        res20.WriteInt32(Util.GetRandomNumber(998000,1000000));
+
+                        res20.WriteFloat(client.Character.X);//X
+                        res20.WriteFloat(client.Character.Y);//Y
+                        res20.WriteFloat(client.Character.Z);//Z
+
+                        res20.WriteFloat(client.Character.X + Util.GetRandomNumber(-300,300));//X
+                        res20.WriteFloat(client.Character.Y + Util.GetRandomNumber(-300, 200));//Y
+                        res20.WriteFloat(client.Character.Z + 10);//Z
+                        res20.WriteByte((byte)Util.GetRandomNumber(0,255));
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        res20.WriteInt32(Util.GetRandomNumber(0,1000)); // bitmask  0bxxxxx1 = arch  0bxxxxx0 = no arch
+                        y = Util.GetRandomNumber(1, 4);
+                        if (y == 1) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_goldobject_data, res20, ServerType.Area);
+
+                        res20.WriteInt32(Util.GetRandomNumber(0, 199999));
+                        if (y == 2) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_soulmaterialobject_data, res20, ServerType.Area);
+                        if (y == 3) Router.Send(client, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res20, ServerType.Area);
+                    }
+                    break;
+                case "physics":                
+                    IBuffer res21 = BufferProvider.Provide();
+	                res21.WriteInt64(x); //item instance id
+                    res21.WriteInt16((short)y); //item's attack stat
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res21, ServerType.Area);
+                    break;
 
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
@@ -119,7 +162,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Item SendItemInstanceUnidentified(NecClient client, int itemId, int count)
         {
             IBuffer res = null;
-            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            invItem = client.Character.GetNextInventoryItem(_server);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();
@@ -133,7 +176,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
             item.Id = itemId;
             item.IconType = 2;
-            item.Name = "dagger";
+            item.Name = "Dagger";
             invItem.StorageType = 0;
             invItem.StorageCount = (byte)count;
             res = null;
@@ -142,12 +185,12 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt64(dropItem.Item.Id); //Item Object Instance ID 
             res.WriteInt64(invItem.InstanceId); //Item Object Instance ID 
 
-            res.WriteCString("dagger"); //Name
+            res.WriteCString("Dagger"); //Name
 
             //res.WriteInt32(dropItem.Item.IconType); 
             res.WriteInt32(item.IconType); //item type
 
-            res.WriteInt32(0);
+            res.WriteInt32(1);
 
             res.WriteByte(invItem.StorageCount); //Number of items
 
@@ -157,7 +200,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
-            res.WriteInt32(0);
+            res.WriteInt32(1);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -174,7 +217,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(invItem.StorageId); // 0~2
             res.WriteInt16(invItem.StorageSlot); // bag index
-            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
+            res.WriteInt32(1); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
             res.WriteInt64(0);
 
@@ -184,31 +227,53 @@ namespace Necromancy.Server.Chat.Command.Commands
             ConfigureItem(client, invItem.InstanceId);
 
             client.Character.inventoryItems.Add(invItem);
+            //client.Character.EquipId[0] = 10200101;
+            //RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name,false);
+            //Router.Send(myCharacterData, client);
+
+            //UpdateEqMask(client);
             return item;
         }
 
         public Item SendItemInstance(NecClient client)
         {
-            Item item = _server.Instances64.CreateInstance<Item>();
             IBuffer res = BufferProvider.Provide();
+            //Item item = _server.Instances64.CreateInstance<Item>();
+            //InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            if (invItem == null)
+            {
+                res = BufferProvider.Provide();
+                res.WriteInt32(-207);
+                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+                RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
+                _server.Router.Send(noSpace, client);
+                return null;
+            }
+            //Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
+            Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
+            //item.Id = 10200101;
+            //item.IconType = 2;
+            //item.Name = "dagger";
+            //invItem.StorageType = 0;
+            //invItem.StorageCount = (byte)1;
 
             uint instanceId = _server.Instances.CreateInstance<Model.Object>().InstanceId;
             Logger.Debug($"instanceId [{instanceId}]");
             //res.WriteInt32(instanceId); //InstanceId
             // res.WriteInt32(10200101); //ItemID
-            res.WriteInt64(instanceId); //ItemID
-            res.WriteInt32(2); // 0 does not display icon
+            res.WriteInt64(invItem.InstanceId); //ItemID
+            res.WriteInt32(invItem.StorageItem.IconType); // 0 does not display icon
             res.WriteByte((byte)1); //Number of "items"
             res.WriteInt32(0); //Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("Dagger", 0x10);
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
-            res.WriteByte(0); // 0~2 // maybe.. more bag index?
-            res.WriteInt16((short)3); // bag index
+            res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(invItem.StorageId); // 0~2 // maybe.. more bag index?
+            res.WriteInt16(invItem.StorageSlot); // bag index
             res.WriteInt32(0); //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)
             res.WriteInt32(0); //Percentage stat, 9 max i think
             res.WriteByte(0);
             res.WriteByte(0);  // Dest slot
-            res.WriteCString("Wolfzen"); // find max size 
+            res.WriteCString("Dagger"); // find max size 
             res.WriteInt16(0);
             res.WriteInt16(0);
             res.WriteInt32(0); //Divides max % by this number
@@ -231,18 +296,35 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(0);
             }
 
-            res.WriteInt32(10200101);
-            res.WriteInt32(10200101);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
             res.WriteInt16(0);
             res.WriteInt32(0); //Guard protection toggle, 1 = on, everything else is off
             res.WriteInt16(0);
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
 
-            ConfigureItem(client, item.InstanceId);
-            return item;
+            //ConfigureItem(client, item.InstanceId);
+            //client.Character.inventoryItems.Add(invItem);
+            return invItem.StorageItem;
         }
 
+        public void UpdateEqMask(NecClient client)
+        {
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem.StorageItem.InstanceId);
+            Router.Send(eqMask, client);
+
+        }
+        public void UpdateState(NecClient client, uint state)
+        {
+            IBuffer res = BufferProvider.Provide();
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(invItem.InstanceId); //client.Character.EquipId[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
+            res.WriteInt32(state);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
+
+        }
         public void ConfigureItem(NecClient client, ulong instanceId)
         {
             IBuffer res = BufferProvider.Provide();
@@ -316,7 +398,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteInt64(instanceId); //Item Object ID 
-            res.WriteInt16((short)client.Character.Alignmentid);
+            res.WriteInt16((short)10000);
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
             
             res = null;

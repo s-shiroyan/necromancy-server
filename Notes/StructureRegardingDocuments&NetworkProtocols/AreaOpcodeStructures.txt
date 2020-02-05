@@ -645,7 +645,7 @@ recv_charabody_salvage_end = 0xD688,
 	res.WriteInt32(0);
 	
 	
-recv_item_instance_unidentified = 0xD67D,
+recv_charabody_notify_party_join = 0xD67D,
 
 	res.WriteInt32(0);
 	
@@ -1739,35 +1739,56 @@ recv_gimmick_access_object_r = 0xA4A5,
 	
 recv_party_search_recruited_party_r = 0xA45C,
 
-	res.WriteInt32(0);
-	
-	res.WriteInt32(0x14); // cmp to 0x14
-	
-	int numEntries = 0x14;
-	for (int i = 0; i < numEntries; i++)
-	{
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(client.Character.InstanceId+1000);
+
+            res.WriteInt32(0x14); // cmp to 0x14
+
+            int numEntries = 0x14;
+            for (int i = 0; i < numEntries; i++)
+            { 
+                    res.WriteInt32(5009); 
+                    res.WriteInt32(5010); 
+                    res.WriteInt32(5110); 
+                    res.WriteInt32(5120); 
+
+                        res.WriteInt32(0);
+
+                        res.WriteInt32(0); 
+
+                        int numEntries2 = 0x4;
+                            for (int j = 0; j < numEntries2; j++)
+                            {
+                                res.WriteInt32(1999); 
+                                res.WriteInt32(0); 
+                                res.WriteFixedString($"soulname{j}", 0x31); 
+                                res.WriteFixedString($"charaname{j}", 0x5B);
+                                res.WriteInt32(0); 
+                                res.WriteByte(0);
+                                res.WriteByte(0);
+                                res.WriteByte(0); // bool
+                                res.WriteByte(0);
+                                res.WriteByte(0);    
+                            }
+
+                            res.WriteByte(0);
+
+                                res.WriteInt32(24);
+                                res.WriteInt32(2);
+                                res.WriteInt32(3);
+                                res.WriteByte(0);
+                                    res.WriteInt32(0);
+
+                                    res.WriteInt32(0);
+
+                                res.WriteFixedString($"PartyLoop{i}", 0xB5); 
+                }
+			
+
+
 		
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("soulname", 49);
-		res.WriteFixedString("charaname", 91);
-		res.WriteInt32(0);
-		res.WriteByte(0);
-		res.WriteByte(0);
-		res.WriteByte(0); // bool
-		res.WriteByte(0);
-		res.WriteByte(0);
-		
-	}
-	
+
 	
 recv_temple_notify_close = 0xA43B, // hit after -> send_stall_set_name
 

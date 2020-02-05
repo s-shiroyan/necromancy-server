@@ -42,6 +42,7 @@ namespace Necromancy.Server.Model
 
         public DropItem GetLoot(int monsterId)
         {
+            monsterId = 40101; //   All monsters are beetles for now!!
             int roll = LootRoll();
             DropTable monsterDrop = dropTables.Find(x => x.MonsterId == monsterId);
             DropItem dropItem = null;

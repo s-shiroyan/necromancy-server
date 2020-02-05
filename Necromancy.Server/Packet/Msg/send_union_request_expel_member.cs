@@ -17,10 +17,17 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
-           
+            uint expelledCharacterInstanceId = packet.Data.ReadUInt32();
 
-            Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res, ServerType.Msg);
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(0);
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_expel_member_r, res, ServerType.Msg);
+
+            Router.Send(Server.Clients.GetByCharacterInstanceId(expelledCharacterInstanceId), (ushort)MsgPacketId.recv_union_notify_expelled_member, BufferProvider.Provide(), ServerType.Msg);
+
+
         }
+
     }
 }

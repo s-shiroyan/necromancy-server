@@ -16,7 +16,8 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             int characterId = packet.Data.ReadInt32();
-            Character character = Database.SelectCharacterById(characterId);
+            //Character character = Database.SelectCharacterById(characterId);
+            Character character = Server.Characters.GetByCharacterId(characterId);
             if (character == null)
             {
                 Logger.Error(client, $"No character for CharacterId: {characterId}");
@@ -24,10 +25,11 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
 
-            Server.Instances.AssignInstance(character);
+            //Server.Instances.AssignInstance(character); ///nope moved to database load. 
 
             client.Character = character;
             client.UpdateIdentity();
+            client.Character.CreateTask(Server, client);
 
             Logger.Debug(client, $"Selected Character: {character.Name}");
 
@@ -57,7 +59,7 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteByte(10); //# of channels
             Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
 
-            //Logic to support your dead body
+            //Logic to support your dead body //Do Dead Body IDs need to be persistant, or can they change at each login?  TODO...
             DeadBody deadBody = new DeadBody();
             Server.Instances.AssignInstance(deadBody);
             character.DeadBodyInstanceId = deadBody.InstanceId;

@@ -48,6 +48,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             Character character = new Character();
+            Server.Instances.AssignInstance(character);
             character.MapId = map.Id;
             character.X = map.X;
             character.Y = map.Y;
@@ -105,7 +106,7 @@ namespace Necromancy.Server.Packet.Msg
             Logger.Info($"Created class_id: {class_id}");
 
             //-------------------------------------------------------------------------------
-
+            Server.Characters.Add(character);
             //-------------------------------------------------------------------------------
 
 

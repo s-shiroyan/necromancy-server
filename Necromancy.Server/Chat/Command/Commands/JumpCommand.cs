@@ -35,7 +35,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);
             res.WriteByte(client.Character.Heading);
-            res.WriteByte(0);
+            res.WriteByte(client.Character.movementAnim);
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
 

@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort)AreaPacketId.send_movement_info;
 
-        int i = 0;
+
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -117,7 +117,7 @@ namespace Necromancy.Server.Packet.Area
 
             if (client.Character.takeover == true)
             {
-                Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}.  i is {i}");
+                Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}.");
                 IBuffer res = BufferProvider.Provide();
                 IBuffer res3 = BufferProvider.Provide();
 
@@ -127,11 +127,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);
                 res.WriteByte(client.Character.Heading); //Heading
-                res.WriteByte((byte)i);//state
-                i++;
-                if (i == 255) i = 0;
+                res.WriteByte(client.Character.movementAnim);//state
                 
-                Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                 Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
 
 

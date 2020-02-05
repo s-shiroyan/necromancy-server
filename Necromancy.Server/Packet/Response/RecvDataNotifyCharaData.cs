@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
             res.WriteInt32(0);
-            res.WriteInt32(_character.GetState()); //BITMASK for Character State
+            res.WriteInt32(_character.state); //BITMASK for Character State
                                         //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 
                                         //0bxxxxxx1x - 1 Battle Pose / 0 Normal
                                         //0bxxxxx1xx - 1 Block Pose / 0 Normal | (for coming out of stealth while blocking)

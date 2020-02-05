@@ -22,6 +22,7 @@ namespace Necromancy.Server.Database
         // Soul
         bool InsertSoul(Soul soul);
         Soul SelectSoulById(int soulId);
+        Soul SelectSoulByName(string soulName);
         List<Soul> SelectSoulsByAccountId(int accountId);
         bool UpdateSoul(Soul soul);
         bool DeleteSoul(int soulId);
@@ -48,6 +49,8 @@ namespace Necromancy.Server.Database
         List<Character> SelectCharactersBySoulId(int soulId);
         bool UpdateCharacter(Character character);
         bool DeleteCharacter(int characterId);
+        List<Character> SelectCharacters();
+
 
         // NpcSpawn
         bool InsertNpcSpawn(NpcSpawn npcSpawn);

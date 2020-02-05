@@ -166,7 +166,7 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
-                    case "Thief":
+                    case "Wolfzen":
                         myCharacter.EquipId = new int[]
                         {
                         10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
@@ -176,7 +176,7 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
-                    case "Mage":
+                    case "Wolf":
                         myCharacter.EquipId = new int[]
                         {
                         11300404 /*Weapon*/, 0 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
@@ -186,13 +186,24 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
+                    case "Quopaty Monk":
+                    case "Quopaty Priest":
+                        myCharacter.EquipId = new int[]
+                        {
+                        11200301 /*Weapon*/, 0 /*Shield* */, 0 /*Arrow*/, 0 /*head*/, 220601 /*Torso*/,
+                        320101 /*Pants*/, 400101 /*Hands*/, 500101 /*Feet*/, 0 /*Cape*/, 0 /*Necklace*/,
+                        0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
+                        220601 /*Avatar Torso*/, 320601 /*Avatar Pants*/, 400101 /*Avatar Hands*/, 500101 /*Avatar Feet*/
+                        };
+                        headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
+                        break;
                     default:
                         myCharacter.EquipId = new int[]
                         {
-                        10800405 /*Weapon*/, 15200702 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
-                        360103 /*Pants*/, 460103 /*Hands*/, 560103 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
-                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161401 /*Avatar Head */,
-                        261401 /*Avatar Torso*/, 361401 /*Avatar Pants*/, 461401 /*Avatar Hands*/, 561401 /*Avatar Feet*/
+                        10300102 /*Weapon*/, 15000101 /*Shield* */, 0 /*Arrow*/, 0 /*head*/, 200101 /*Torso*/,
+                        300101 /*Pants*/, 400101 /*Hands*/, 500101 /*Feet*/, 0 /*Cape*/, 0 /*Necklace*/,
+                        0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
+                        200101 /*Avatar Torso*/, 300101 /*Avatar Pants*/, 400101 /*Avatar Hands*/, 500101 /*Avatar Feet*/
                         };
                         headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
                         break;

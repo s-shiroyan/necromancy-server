@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Necromancy.Server.Packet.Area
 
                         var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
                         {
-                         { x => x == 10000704, () => defaultEvent(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
+                         { x => x == 10000704,   () => ChangeMap(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
                          { x => x == 10000012 ,  () => defaultEvent(client, npcSpawn.NpcId) },
                          { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
                          { x => x == 74013071 ,  () => ChangeMap(client, npcSpawn.NpcId) },
@@ -57,7 +58,13 @@ namespace Necromancy.Server.Packet.Area
                                                             ResolveInn(client,npcSpawn.NpcId, npcSpawn); 
                                                      }
                          },
-                         { x => x == 10000703, () => CrimInn(client, npcSpawn.NpcId, npcSpawn) },
+                         { x => x == 10000703, () => {
+                                                        if(client.Character.secondInnAccess == false)
+                                                            CrimInn(client, npcSpawn.NpcId, npcSpawn);
+                                                        else if(client.Character.secondInnAccess == true)
+                                                            ResolveInn(client,npcSpawn.NpcId, npcSpawn);
+                                                     }
+                         },
                          { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                          { x => x < 1000 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -78,7 +85,7 @@ namespace Necromancy.Server.Packet.Area
                         break;
                     default:
                         Logger.Error($"Instance with InstanceId: {client.Character.eventSelectReadyCode} does not exist");
-                        RecvEventEnd(client);
+                        SendEventEnd(client);
                         break;
                 }
 
@@ -197,7 +204,7 @@ namespace Necromancy.Server.Packet.Area
 
         private void defaultEvent(NecClient client, int objectID)
         {
-            RecvEventEnd(client);
+            SendEventEnd(client);
         }
 
         private void UpdateNPC(NecClient client, NpcSpawn npcSpawn)
@@ -223,21 +230,29 @@ namespace Necromancy.Server.Packet.Area
                     return;
                 }
 
+                IBuffer res13 = BufferProvider.Provide();
+                res13.WriteCString("NPC Updated"); // Length 0xC01
+                Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res13, ServerType.Area);// show system message on middle of the screen.
+
+                RecvEventEnd(client); //End The Event 
+
 
             }
             else if (client.Character.eventSelectExecCode == 1)
             {
+                NpcModelUpdate npcModelUpdate = Server.Instances.CreateInstance<NpcModelUpdate>();
+                npcModelUpdate.npcSpawn = npcSpawn;
 
-                IBuffer res12 = BufferProvider.Provide();
-                res12.WriteCString("This Feature is under development"); // Length 0xC01
-                Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+                client.Character.currentEvent = npcModelUpdate;
+
+                IBuffer res14 = BufferProvider.Provide();
+                RecvEventRequestInt getModelId = new RecvEventRequestInt("Select Model ID from Model_common.csv", 11000, 1911105, npcSpawn.ModelId);
+                Router.Send(getModelId, client);
+
+
             }
 
-            IBuffer res13 = BufferProvider.Provide();
-            res13.WriteCString("NPC Updated"); // Length 0xC01
-            Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res13, ServerType.Area);// show system message on middle of the screen.
 
-            RecvEventEnd(client); //End The Event 
         }
 
         private void RegularInn(NecClient client, int objectID, NpcSpawn npcSpawn)
@@ -312,7 +327,73 @@ namespace Necromancy.Server.Packet.Area
         }
         private void CrimInn(NecClient client, int objectID, NpcSpawn npcSpawn)
         {
-            
+
+            IBuffer res7 = BufferProvider.Provide();
+            res7.WriteCString("Stay"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteCString("Back"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+
+            if (client.Character.eventSelectExecCode == 0)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and Beginner Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 1)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/2 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 2)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/4 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 3)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/8 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 4)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/16 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 5)
+            {
+                IBuffer res9 = BufferProvider.Provide();
+                res9.WriteCString("Effect: Recover half HP, half MP, and 1/32 Condition"); // Window Heading / Name
+                res9.WriteInt32(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
+
+                client.Character.secondInnAccess = true;
+            }
+            else if (client.Character.eventSelectExecCode == 6)
+            {
+                SendEventEnd(client);
+            }
         }
 
         private void ResolveInn(NecClient client, int objectId, NpcSpawn npcSpawn)

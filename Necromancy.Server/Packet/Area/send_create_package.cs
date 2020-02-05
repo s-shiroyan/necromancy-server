@@ -36,13 +36,14 @@ namespace Necromancy.Server.Packet.Area
         private void SendPackageNotifyAdd(NecClient client, string recipient, string title, string content,
                                          byte unknownByte, int unknownInt, long money)
         {
+            NecClient RecipientClient = Server.Clients.GetBySoulName(recipient);
             IBuffer res = BufferProvider.Provide();
             //recv_package_notify_add = 0x556E,
 
             res.WriteInt32(0);//Failed to send message error if not 0
             res.WriteInt32(Util.GetRandomNumber(100,200));//Object ID
-            res.WriteFixedString("unknown", 0x31);//Soul name of sender
-            res.WriteFixedString("master", 0x5B);//Character name but of what?
+            res.WriteFixedString(client.Soul.Name, 0x31);//Soul name of sender
+            res.WriteFixedString(client.Character.Name, 0x5B);//Character name but of what?
             res.WriteFixedString($"{title}", 0x5B);//Title
             res.WriteFixedString($"{content}", 0x259);//Content
             res.WriteInt32(0);
@@ -60,18 +61,18 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);
             res.WriteInt32(1);
 
-            res.WriteByte(0);//bool
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-
-            res.WriteByte(0);//bool
-            res.WriteInt32(0);
+            res.WriteByte(1);//bool
+            res.WriteInt32(1001001);
             res.WriteInt32(0);
             res.WriteInt32(0);
 
-            res.WriteByte(0);//bool
+            res.WriteByte(1);//bool
+            res.WriteInt32(1001001);
             res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            res.WriteByte(1);//bool
+            res.WriteInt32(1001001);
             res.WriteInt32(0);
             res.WriteInt32(0);
 
@@ -80,7 +81,7 @@ namespace Necromancy.Server.Packet.Area
             i += 2;
             
 
-            Router.Send(client, (ushort)AreaPacketId.recv_package_notify_add, res, ServerType.Area);
+            Router.Send(RecipientClient, (ushort)AreaPacketId.recv_package_notify_add, res, ServerType.Area);
         }
     }
 }
