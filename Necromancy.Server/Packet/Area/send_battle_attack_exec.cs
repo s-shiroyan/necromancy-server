@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Area
                             //SendBattleReportEndNotify(client, instance);
                             return;
                         }
-                        if (client.Character.criminalState <= 1 ) 
+                        if (client.Character.criminalState < 1 ) 
                         { 
                             client.Character.criminalState = 1;
                             IBuffer res40 = BufferProvider.Provide();
@@ -118,7 +118,7 @@ namespace Necromancy.Server.Packet.Area
 
                     //logic to turn characters to criminals on criminal actions.  possibly should move to character task.
                     client.Character.criminalState += 1;
-                    if(client.Character.criminalState == 1 | client.Character.criminalState == 2)
+                    if(client.Character.criminalState == 1 | client.Character.criminalState == 2 | client.Character.criminalState ==3)
                     {
                         IBuffer res40 = BufferProvider.Provide();
                         res40.WriteInt32(client.Character.InstanceId);

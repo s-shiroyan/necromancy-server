@@ -41,7 +41,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Party Instance ID {myFirstParty.InstanceId}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.partyId);
+            res.WriteInt32(0);
             Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
 
             SendPartyNotifyEstablish(client, partyType, normItemDist, rareItemDist, targetClientId, myFirstParty.InstanceId);
@@ -145,7 +145,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFixedString($"{client.Character.Name}", 0x5B); //Chara name
                 res.WriteInt32(client.Character.ClassId); //Class
                 res.WriteByte(client.Character.Level); //Level
-                res.WriteByte(2); //Criminal Status
+                res.WriteByte(client.Character.criminalState); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
                 res.WriteByte(1); //Membership Status
                 res.WriteByte(1);
@@ -157,7 +157,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFixedString($"{partyClient1.Character.Name}", 0x5B); //Chara name
                 res.WriteInt32(partyClient1.Character.ClassId); //Class
                 res.WriteByte(partyClient1.Character.Level); //Level
-                res.WriteByte(2); //Criminal Status
+                res.WriteByte(partyClient1.Character.criminalState); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
                 res.WriteByte(1); //Membership Status
                 res.WriteByte(1);
@@ -169,7 +169,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFixedString($"{partyClient2.Character.Name}", 0x5B); //Chara name
                 res.WriteInt32(partyClient2.Character.ClassId); //Class
                 res.WriteByte(partyClient2.Character.Level); //Level
-                res.WriteByte(2); //Criminal Status
+                res.WriteByte(partyClient3.Character.criminalState); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
                 res.WriteByte(1); //Membership Status
                 res.WriteByte(1);
@@ -181,7 +181,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFixedString($"{partyClient3.Character.Name}", 0x5B); //Chara name
                 res.WriteInt32(partyClient3.Character.ClassId); //Class
                 res.WriteByte(partyClient3.Character.Level); //Level
-                res.WriteByte(2); //Criminal Status
+                res.WriteByte(partyClient3.Character.criminalState); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
                 res.WriteByte(1); //Membership Status
                 res.WriteByte(1);
@@ -197,7 +197,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //Chara Instance ID?
             res.WriteInt32(client.Character.partyId); //Party InstancID?
-            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
+            res.WriteInt32(0); //Party Leader InstanceId?
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }
@@ -207,61 +207,10 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.InstanceId); //Chara Instance ID?
             res.WriteInt32(client.Character.partyId); //Party InstancID?
-            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
+            res.WriteInt32(0); //Party Leader InstanceId?
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
         }
 
-        private void SendPartyRegistMemberRecruit(NecClient client)
-        {
-            //recv_party_regist_member_recruit_r = 0xA7BF,
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_party_establish_r, res, ServerType.Area);
-        }
-
-        private void SendPartyNotifyRecruitRequest(NecClient client, int partyType, int normItemDist, int rareItemDist, int targetClient)
-        {
-            //recv_party_notify_recruit_request = 0x9F8F, // Parent = 0x9F70 // Range ID = 02 // after -> send_party_regist_party_recruit
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(partyType);
-            res.WriteInt32(normItemDist);
-            res.WriteInt32(rareItemDist);
-            res.WriteInt32(targetClient);
-            Router.Send(client, (ushort)AreaPacketId.recv_party_notify_recruit_request, res, ServerType.Area);
-        }
-
-        private void SendPartyInvite(NecClient client, int targetClient)
-        {
-            //recv_party_invite_r = 0x300A, 
-            IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(0);
-
-            Router.Send(client, (ushort)AreaPacketId.recv_party_invite_r, res, ServerType.Area);
-        }
-
-        private void SendPartyApply(NecClient client, int targetClient)
-        {
-            //recv_party_apply_r = 0x5F1A,
-
-            IBuffer res = BufferProvider.Provide();
-
-        	res.WriteInt32(targetClient);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_apply_r, res, ServerType.Area);
-        }
-
-        private void SendPartyChangeLeader(NecClient client)
-        {
-            //recv_party_change_leader_r = 0x7BB3,
-            IBuffer res = BufferProvider.Provide();
-
-            res.WriteInt32(client.Character.InstanceId);
-
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_party_change_leader_r, res, ServerType.Area);
-        }
     }
 }
