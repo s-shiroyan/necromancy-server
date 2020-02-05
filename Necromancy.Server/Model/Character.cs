@@ -104,6 +104,7 @@ namespace Necromancy.Server.Model
         public bool playerDead { get; set; }
         public uint partyId { get; set; }
         public uint unionId { get; set; }
+        public byte criminalState { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -168,6 +169,7 @@ namespace Necromancy.Server.Model
             Name = "";
             ClassId = 0;
             unionId = 8888;
+            criminalState = 0;
         }
 
         public int currentHp
