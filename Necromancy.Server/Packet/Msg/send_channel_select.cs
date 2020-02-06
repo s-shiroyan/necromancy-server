@@ -22,18 +22,19 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
 
+            int channelId = packet.Data.ReadInt32();
+            client.Character.Channel = channelId;
 
             IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0); //Error Check
 
-            res.WriteInt32(0); //Error
-
-            //sub_4E4210_2341  // impacts map spawn ID
+            //sub_4E4210_2341  // impacts map spawn ID (old Comment)
             res.WriteInt32(map.Id); //MapSerialID
-            res.WriteInt32(map.Id); //MapID
-            res.WriteFixedString("127.0.0.1", 65); //IP
+            res.WriteInt32(channelId); //channel??????
+            res.WriteFixedString("127.0.0.1", 0x41); //IP?
             res.WriteInt16(60002); //Port
 
-            //sub_484420   //  does not impact map spawn coord
+            //sub_484420   //  does not impact map spawn coord (old Comment)
             res.WriteFloat(client.Character.X); //X Pos
             res.WriteFloat(client.Character.Y); //Y Pos
             res.WriteFloat(client.Character.Z); //Z Pos
@@ -41,6 +42,21 @@ namespace Necromancy.Server.Packet.Msg
             //
 
             Router.Send(client, (ushort) MsgPacketId.recv_channel_select_r, res, ServerType.Msg);
+
+            map.EnterForce(client);
+            SendEventEnd(client);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(client.Character.InstanceId);
+            res2.WriteCString("IsThisMyChannel?????"); //Length to be Found
+            Router.Send(Server.Clients.GetAll(), (ushort)AreaPacketId.recv_channel_notify, res2, ServerType.Area);
+
+        }
+        private void SendEventEnd(NecClient client)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
         }
     }
 }

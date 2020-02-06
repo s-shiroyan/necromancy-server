@@ -57,6 +57,7 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 10000002, () => RegularInn(client, npcSpawn) },
                         { x => x == 10000703, () => CrimInn(client, npcSpawn) },
                         { x => x == 70000029, () => LostBBS(client, npcSpawn) },
+                        { x =>(x == 70009008) || (x == 70000025) || (x == 70001001), () => EventChangeChannel(client, npcSpawn) },
                         { x => x == 80000009, () => UnionWindow(client, npcSpawn) },
                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -499,6 +500,61 @@ namespace Necromancy.Server.Packet.Area
             //recv_union_open_window = 0x7D75,
             //no structure
             Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res, ServerType.Area);
+        }
+        private void EventChangeChannel(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            //res2.WriteInt32(0); // error check
+            //res2.WriteInt32(client.Character.InstanceId); // ??
+            //sub_494c50
+            res2.WriteInt32(client.Character.MapId); //Stage ID from Stage.CSV
+            res2.WriteInt32(client.Character.MapId); //Map ID. Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+            res2.WriteInt32(partySize[2]); //max players
+            res2.WriteInt16(levels[2]);
+            //sub_4834C0
+            res2.WriteByte(10); //loops to display
+            //sub_494B90 - for loop
+            for (int i = 0; i < 0x80; i++)
+            {
+                res2.WriteInt32(i);//Channel ID for passing to Send_Channel_Select
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1); //bool 1 | 0
+                res2.WriteInt16(0xF); //Max players
+                res2.WriteInt16((short)i); //Current players
+                res2.WriteByte(3);
+                res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                //
+            }
+            res2.WriteByte(10); //# of channels
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_channel, res2, ServerType.Area);
+        }
+        private void CharaChangeChannel(NecClient client, NpcSpawn npcSpawn) //Usage TBD. calls up Send_Channel_Select
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0); // error check
+            res2.WriteInt32(client.Character.InstanceId); // ??
+            //sub_494c50
+            res2.WriteInt32(client.Character.MapId); //Stage ID from Stage.CSV
+            res2.WriteInt32(client.Character.MapId); //Map ID. Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+            res2.WriteInt32(partySize[2]); //max players
+            res2.WriteInt16(levels[2]);
+            //sub_4834C0
+            res2.WriteByte(10); //loops to display
+            //sub_494B90 - for loop
+            for (int i = 0; i < 0x80; i++)
+            {
+                res2.WriteInt32(i);//Channel ID for passing to Send_Channel_Select
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1); //bool 1 | 0
+                res2.WriteInt16(0xF); //Max players
+                res2.WriteInt16((short)i); //Current players
+                res2.WriteByte(3);
+                res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                //
+            }
+
+            res2.WriteByte(10); //# of channels
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
         }
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {
