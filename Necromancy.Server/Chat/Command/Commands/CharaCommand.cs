@@ -7,6 +7,7 @@ using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Packet.Response;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -412,6 +413,22 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res39.WriteInt32(client.Character.InstanceId);
                     res39.WriteInt32(client.Character.InstanceId);
                     Router.Send(DeadManClient, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res39, ServerType.Area);
+                    break;
+
+                case "crime":
+                    //for (byte i = 0; i < y; i++)
+                    {
+                        NecClient crimeClient = Server.Clients.GetByCharacterInstanceId(x);
+                        IBuffer res40 = BufferProvider.Provide();
+                        res40.WriteInt32(crimeClient.Character.InstanceId);
+                        res40.WriteByte((byte)y);
+                        client.Character.criminalState = (byte)y;
+                        Logger.Debug($"Setting crime level for Character {crimeClient.Character.Name} to {y}");
+                        Router.Send(crimeClient, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
+                        Router.Send(crimeClient.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, crimeClient);
+                        Thread.Sleep(400);
+
+                    }
                     break;
 
                 default:

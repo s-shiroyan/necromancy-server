@@ -59,6 +59,18 @@ namespace Necromancy.Server.Packet.Area
                             //SendBattleReportEndNotify(client, instance);
                             return;
                         }
+                        if (client.Character.criminalState < 1 ) 
+                        { 
+                            client.Character.criminalState = 1;
+                            IBuffer res40 = BufferProvider.Provide();
+                            res40.WriteInt32(client.Character.InstanceId);
+                            res40.WriteByte(client.Character.criminalState);
+
+                            Logger.Debug($"Setting crime level for Character {client.Character.Name} to {client.Character.criminalState}");
+                            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
+                            Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, client);
+                        }
+
                     }
                     break;
                 case MonsterSpawn monsterSpawn:
@@ -103,6 +115,20 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
                     RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.currentHp);
                     _server.Router.Send(targetClient, cHpUpdate.ToPacket());
+
+                    //logic to turn characters to criminals on criminal actions.  possibly should move to character task.
+                    client.Character.criminalState += 1;
+                    if(client.Character.criminalState == 1 | client.Character.criminalState == 2 | client.Character.criminalState ==3)
+                    {
+                        IBuffer res40 = BufferProvider.Provide();
+                        res40.WriteInt32(client.Character.InstanceId);
+                        res40.WriteByte(client.Character.criminalState);
+
+                        Logger.Debug($"Setting crime level for Character {client.Character.Name} to {client.Character.criminalState}");
+                        Router.Send(client, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
+                        Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, client);
+                    }
+                    if (client.Character.criminalState > 255) { client.Character.criminalState = 255; }
 
                     break;
 
