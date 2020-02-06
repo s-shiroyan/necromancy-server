@@ -282,6 +282,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_union_request_set_mantle(this));
 
             // Area Handler
+            _areaConsumer.AddHandler(new SendDisconnect(this));
             _areaConsumer.AddHandler(new SendHeartbeat(this));
             _areaConsumer.AddHandler(new SendUnknown1(this));
             _areaConsumer.AddHandler(new send_auction_bid(this));

@@ -21,7 +21,6 @@ namespace Necromancy.Server.Packet.Area
 
             if (mapId == -2147483648)
             {
-                // TODO remove this when done testing
                 Logger.Debug("Escape button was selected to close dungeun select. MapID code  == -2147483648 => SendEventEnd");
                 SendEventEnd(client);
                 return;
@@ -32,6 +31,7 @@ namespace Necromancy.Server.Packet.Area
                 Logger.Error($"MapId: {mapId} does not exist");
                 return;
             }
+            client.Character.Channel = channelId;
             map.EnterForce(client);
             SendEventEnd(client);
         }

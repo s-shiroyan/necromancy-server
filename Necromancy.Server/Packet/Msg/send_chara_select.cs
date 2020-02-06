@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
 
-            //Server.Instances.AssignInstance(character); ///nope moved to database load. 
+            //Server.Instances.AssignInstance(character); //moved to database load. 
 
             client.Character = character;
             client.UpdateIdentity();
@@ -33,31 +33,28 @@ namespace Necromancy.Server.Packet.Msg
 
             Logger.Debug(client, $"Selected Character: {character.Name}");
 
-            IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(0); // error check
-            res2.WriteInt32(0); // error check
-            //sub_494c50
-            res2.WriteInt32(character.MapId);
-            res2.WriteInt32(character.MapId);
-            res2.WriteInt32(20);
-            res2.WriteInt16(4);
-            //sub_4834C0
-            res2.WriteByte(69);
-            //sub_494B90 - for loop
-            for (int i = 0; i < 0x80; i++)
-            {
-                res2.WriteInt32(character.MapId);
-                res2.WriteFixedString($"Channel {i}", 97);
-                res2.WriteByte(1); //bool 1 | 0
-                res2.WriteInt16(0xFFFF); //Max players
-                res2.WriteInt16(0xFF); //Current players
-                res2.WriteByte(0);
-                res2.WriteByte(0);
-                //
-            }
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteInt32(0); //ERR-CHARSELECT error check
+            res3.WriteInt32(client.Character.InstanceId);
 
-            res2.WriteByte(10); //# of channels
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+            //sub_4E4210_2341  // 
+            res3.WriteInt32(client.Character.MapId); //MapSerialID //passeed to Send_Map_Entry
+            res3.WriteInt32(client.Character.MapId); //MapID
+            res3.WriteFixedString("127.0.0.1", 0x41); //IP
+            res3.WriteInt16(60002); //Port
+
+            res3.WriteFloat(client.Character.X);
+            res3.WriteFloat(client.Character.Y);
+            res3.WriteFloat(client.Character.Z);
+            res3.WriteByte(client.Character.Heading);
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_r, res3, ServerType.Msg);
+
+            /*
+             ERR_CHARSELECT	GENERIC	Failed to select a character (CODE:<errcode>)
+             ERR_CHARSELECT	-8	Maintenance
+             ERR_CHARSELECT	-13	You have selected an illegal character
+            */
+
 
             //Logic to support your dead body //Do Dead Body IDs need to be persistant, or can they change at each login?  TODO...
             DeadBody deadBody = new DeadBody();
@@ -78,5 +75,6 @@ namespace Necromancy.Server.Packet.Msg
             deadBody.HairColor = character.HairColorId;
             deadBody.FaceId = character.FaceId;
         }
+
     }
 }

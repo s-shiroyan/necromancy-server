@@ -28,12 +28,12 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(8888); //Union Instance ID
             res.WriteFixedString("Trade_Union", 0x31); //size is 0x31
             res.WriteInt32(client.Character.InstanceId); //leader
-            res.WriteInt32(client.Character.InstanceId); //subleader.  We need to assign character Instance IDs at server start instead of login...
-            res.WriteInt32(client.Character.InstanceId); //subleader2
-            res.WriteInt32(1111);
-            res.WriteInt32(2222);
-            res.WriteInt32(3333);
-            res.WriteInt32(4444);
+            res.WriteInt32(510); //subleader.  We need to assign character Instance IDs at server start instead of login...
+            res.WriteInt32(511); //subleader2
+            res.WriteInt32(1);
+            res.WriteInt32(2);
+            res.WriteInt32(3);
+            res.WriteInt32(4);
             res.WriteByte(6); //Union Level
             res.WriteInt32(800123 /*myUnion.currentExp*/); //Union EXP Current
             res.WriteInt32(1000000 /*UnionLevels.Level2EXP*/); //Union EXP next level Target
@@ -43,7 +43,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt16(0x0B); //Mantle/Cape?
             res.WriteFixedString("You are all members of Trade Union now.  Welcome!", 0x196); //size is 0x196
             for (int i = 0; i < 8; i++)
-                res.WriteInt32(currentDay);
+                res.WriteInt32(i);
             res.WriteByte(15);
 
             Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
@@ -52,22 +52,23 @@ namespace Necromancy.Server.Packet.Msg
             //Notify client of each union member in above union, queried by charaname and InstanceId (for menu based interactions)
             foreach (Character character in Server.Characters.GetAll())
             {
+                Soul soul = Server.Database.SelectSoulById(character.SoulId);
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteInt32(Util.GetRandomNumber(12000,12100)); //not sure what this is.  union_Notify ID?
                 res3.WriteInt32(character.InstanceId);
-                res3.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
+                res3.WriteFixedString($"{soul.Name}", 0x31); //size is 0x31
                 res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
                 res3.WriteInt32(character.ClassId);
                 res3.WriteByte(character.Level);
                 res3.WriteInt32(character.MapId); // Location of your Union Member
-                res3.WriteInt32(0); //Area of Map, somehow.
+                res3.WriteInt32(0); //Area of Map, somehow. or Channe;
                 res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
-                res3.WriteInt32(99999);
-                res3.WriteInt32(888888);
-                res3.WriteInt32(77777777);
-                res3.WriteInt32(666666666);
-                res3.WriteInt32(5555555);
-                res3.WriteInt32(44444);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
+                res3.WriteInt32(0);
 
                 Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
             }
