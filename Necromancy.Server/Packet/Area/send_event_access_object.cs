@@ -495,10 +495,13 @@ namespace Necromancy.Server.Packet.Area
 
         private void UnionWindow(NecClient client, NpcSpawn npcSpawn)
         {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_union_request_establish_r, res, ServerType.Area);
             IBuffer res = BufferProvider.Provide();
             //recv_union_open_window = 0x7D75,
             //no structure
-            Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res, ServerType.Area);
         }
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {
