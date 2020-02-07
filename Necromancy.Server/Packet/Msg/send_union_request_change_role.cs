@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            uint roleModifierCharacterInstanceId = packet.Data.ReadUInt32();
+            uint roleModifierCharacterInstanceId = packet.Data.ReadUInt32();//?
             uint targetInstanceId = packet.Data.ReadUInt32();
             uint modification = packet.Data.ReadUInt32();
 
@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Msg
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(roleModifierCharacterInstanceId);
+            res2.WriteInt32(roleModifierCharacterInstanceId);//?
             res2.WriteInt32(targetInstanceId);
             res2.WriteInt32(modification);
             Router.Send(client.Map, (ushort)MsgPacketId.recv_union_notify_changed_role, res2, ServerType.Msg);

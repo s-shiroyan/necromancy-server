@@ -150,6 +150,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new UnionCommand(this));
             Chat.CommandHandler.AddCommand(new HelpCommand(this));
             Chat.CommandHandler.AddCommand(new StatusCommand(this));
             Chat.CommandHandler.AddCommand(new NpcCommand(this));
@@ -450,6 +451,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_decline_to_apply(this));
             _areaConsumer.AddHandler(new send_message_board_close(this));
             _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
+            _areaConsumer.AddHandler(new send_union_request_rename(this));
 
         }
     }

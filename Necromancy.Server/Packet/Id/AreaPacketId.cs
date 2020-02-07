@@ -944,7 +944,7 @@ namespace Necromancy.Server.Packet.Id
         send_union_mantle_close = 0xCF06,
         send_union_rename_close = 0xC9A9, 
         send_union_request_establish = 0x9956,
-        send_union_request_rename = 0x217, //opcode not found
+        send_union_request_rename = 0x6568,
         send_union_storage_deposit_money = 0x218, //opcode not found
         send_union_storage_draw_money = 0x219, //opcode not found
         send_union_storage_move_item = 0x220, //opcode not found

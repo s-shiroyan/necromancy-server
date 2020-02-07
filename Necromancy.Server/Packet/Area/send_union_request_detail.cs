@@ -63,12 +63,12 @@ namespace Necromancy.Server.Packet.Msg
                 res3.WriteInt32(character.MapId); // Location of your Union Member
                 res3.WriteInt32(0); //Area of Map, somehow. or Channe;
                 res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
-                res3.WriteInt32(0);
+                res3.WriteInt32(Util.GetRandomNumber(0,2));
+                res3.WriteInt32(Util.GetRandomNumber(0, 2));
+                res3.WriteInt32(Util.GetRandomNumber(0, 2));
+                res3.WriteInt32(Util.GetRandomNumber(0, 2));
+                res3.WriteInt32(Util.GetRandomNumber(0, 2));
+                res3.WriteInt32(Util.GetRandomNumber(0, 2));
 
                 Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
             }
