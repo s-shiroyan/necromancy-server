@@ -396,9 +396,9 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                 case "itemforth":
                     IBuffer res38 = BufferProvider.Provide();
-                    res38.WriteInt32(client.Character.InstanceId);
-                    res38.WriteInt32(10200101);
-                    res38.WriteInt32(client.Character.InstanceId);
+                    res38.WriteInt32(client.Character.InstanceId); //item ID?
+                    res38.WriteInt32(10200101); //Owner going 'forth'  id?
+                    res38.WriteInt32(client.Character.InstanceId); //item state setting?
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_notify_item_forth, res38, ServerType.Area);
                     break;
 
@@ -427,7 +427,27 @@ namespace Necromancy.Server.Chat.Command.Commands
                         Router.Send(crimeClient, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
                         Router.Send(crimeClient.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, crimeClient);
                         Thread.Sleep(400);
+                    }
+                    break;
 
+                case "inherit":
+                    //for (byte i = 0; i < y; i++)
+                    {
+                        NecClient inheritClient = Server.Clients.GetByCharacterInstanceId(x);
+                        IBuffer res41 = BufferProvider.Provide();
+                        res41.WriteInt32(y);
+                        res41.WriteInt32(0x64);//less than or equal to 0x64
+                        for (int i = 0; i < 0x64; i++) //limit is the int32 above
+                        {
+                            res41.WriteInt32(i);
+                            res41.WriteFixedString("127.0.0.1", 0x10); //size is 0x10
+                        }
+                        res41.WriteInt32(client.Character.InstanceId);
+                        res41.WriteFixedString("127.0.0.1", 0x10); //size is 0x10
+                        res41.WriteByte((byte)y);
+                        Router.Send(inheritClient, (ushort)MsgPacketId.recv_chara_get_inheritinfo_r, res41, ServerType.Msg);
+
+                        Thread.Sleep(400);
                     }
                     break;
 

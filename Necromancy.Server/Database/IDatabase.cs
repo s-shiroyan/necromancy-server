@@ -74,5 +74,17 @@ namespace Necromancy.Server.Database
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
+
+        // Items
+        bool InsertItems(Items items);
+        Items SelectitemsById(int itemsId);
+        bool UpdateItems(Items items);
+        bool DeleteItems(int itemsId);
+
+        // Quest
+        bool InsertQuest(Quest quest);
+        Quest SelectQuestById(int questId);
+        bool UpdateQuest(Quest quest);
+        bool DeleteQuest(int questId);
     }
 }

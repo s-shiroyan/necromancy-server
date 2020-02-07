@@ -44,6 +44,7 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 10000704, () => SendEventSelectMapAndChannel(client, instanceId) }, //set to Manaphes in slums for testing.
                         { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
                         { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
+                        { x => x == 10000019 ,  () => Abdul(client, npcSpawn)  },
                         { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn) },
                         { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
@@ -181,6 +182,51 @@ namespace Necromancy.Server.Packet.Area
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+        }
+
+
+
+        private void Abdul(NecClient client, NpcSpawn npcSpawn)
+
+        {
+            if (client.Character.helperTextAbdul)
+
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res2.WriteCString("I used to drive a cab.");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperTextAbdul = false;
+            }
+            else
+            {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteCString(npcSpawn.Title); // Title at top of Window
+                res.WriteInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
+                Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+
+                IBuffer res3 = BufferProvider.Provide();
+                res3.WriteCString("Accept Mission"); //Length 0x601  // name of the choice 
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+
+                IBuffer res4 = BufferProvider.Provide();
+                res4.WriteCString("Report Mission"); //Length 0x601 // name of the choice
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice 
+
+                IBuffer res5 = BufferProvider.Provide();
+                res5.WriteCString("Back"); //Length 0x601 // name of the choice
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the second choice 
+
+                IBuffer res11 = BufferProvider.Provide();
+                res11.WriteCString("Pick a Button..  What are you waiting for"); // Window Heading / Name
+                res11.WriteInt32(npcSpawn.InstanceId);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11, ServerType.Area); // It's the windows that contain the multiple choice
+            }
         }
 
         // I added these to Npc database for now, should it be handled differently?????
