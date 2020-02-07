@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Arrowgene.Services.Buffers;
 using Arrowgene.Services.Logging;
@@ -122,7 +123,11 @@ namespace Necromancy.Server.Data
                     datBufferPool.Add(archiveFile.DatNumber, datBuffer);
                 }
 
-                IBuffer decrypted = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                IBuffer decrypted  = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                if (archiveFile.FilePath.Contains("\\item.csv"))
+                {
+                    decrypted = OpenWoItm(decrypted);
+                }
                 archiveFile.Data = decrypted.GetAllBytes();
 
                 archive.AddFile(archiveFile);
@@ -166,7 +171,7 @@ namespace Necromancy.Server.Data
         }
 
         /// <summary>
-        /// 0x401D20
+        /// 0x403700
         /// </summary>
         public void OpenWoItm(string itemPath)
         {
@@ -183,11 +188,11 @@ namespace Necromancy.Server.Data
             {
                 if (magicBytes[i] != MagicBytes_WOITM[i])
                 {
-                    throw new Exception("Invalid WOITM File");
+                    //throw new Exception("Invalid WOITM File");
                 }
             }
 
-            short unknown0 = buffer.ReadInt16(); // cmp to 1
+            short version = buffer.ReadInt16(); // cmp to 1
             List<WoItm> woItems = new List<WoItm>();
             while (buffer.Position < buffer.Size)
             {
@@ -198,40 +203,155 @@ namespace Necromancy.Server.Data
 
                 WoItm woItm = new WoItm();
                 woItm.Id = itemId;
+                woItm.Size = chunkSize;
+                woItm.Size2 = chunkLen;
                 woItm.Data = data;
                 woItems.Add(woItm);
             }
-
-            
-            // TODO decrypt data
-            byte[] key = new byte[]
-                {0x2A, 0xE3, 0x48, 0xB4, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
-            byte[] key1 = new byte[]
-                {0x2A, 0xE3, 0x48, 0xB4, 0x14, 0x26, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
-            byte[] key2 = new byte[]
-                {0x2A, 0xE3, 0x14, 0x26, 0x00, 0x00, 0x34, 0x11, 0x68, 0xA6, 0xEE, 0x5C, 0x20, 0x8F, 0x83, 0xA7};
-            
-            IBuffer exe = new StreamBuffer(@"C:\Games\Wizardry Online\WizardryOnline_no_encryption.exe");
-            exe.SetPositionStart();
-            
             List<string> str = new List<string>();
             foreach (WoItm woItem in woItems)
             {
-                for (int j = 0; j < exe.Size - 16; j++)
+                IBuffer itemBuffer = new StreamBuffer(woItem.Data);
+                itemBuffer.SetPositionStart();
+
+                IBuffer outBuffer = new StreamBuffer();
+
+                uint[] xor =
                 {
-                    byte[] k = exe.GetBytes(j, 16);
-                    byte[] outp = Xor(woItem.Data, k);
-                    string test = Encoding.UTF8.GetString(outp);
-                    if (str.Contains(","))
-                    {
-                        str.Add(test);
-                        _logger.Info(test);
-                    }
+                    0xA522C3ED,
+                    0x482E64B9,
+                    0x0E52712B,
+                    0x3ABC1D26
+                };
+                
+                for (int i = 0; i < 4; i++)
+                {
+                    uint a = itemBuffer.ReadUInt32();
+                    uint b = RotateRight(a, 8); // 00403035 | C1CE 08 | ror esi,8
+                    uint c = b & 0xFF00FF00;
+                    uint d = RotateLeft(a, 8); // 0040303E | C1C0 08 | rol eax,8
+                    uint e = d & 0xFF00FF;
+                    uint f = c | e;
+
+                    uint g =f ^ xor[i];
+                    
+                    outBuffer.WriteInt32(g);
                 }
+
+/*              These 4 words are from the previous function after xor of xor[] above
+                uint word1 = 0x6B9306F7;    
+                uint word2 = 0xFE7D4F35;
+                uint word3 = 0x406D7743;
+                uint word4 = 0x9C07F4C0;
+
+                uint seed = 0;
+                uint seed1 = 0xFFFFFFFE;
+                word1 = word1 ^ seed;
+                uint a = ((word1 >> 16) & 0xFF) * 4;
+                uint b = ((word1 >> 8) & 0xFF) * 4;
+                uint c = (word1 >> 24) * 4;
+                uint e = table1[c];
+                uint f = table3[a];
+                uint g = e ^ f;
+                uint i = table3[b];
+                uint j = g ^ i;
+
+                uint k = (word2 & 0xFF) * 4;
+                uint l = j ^ table2[k];
+                uint m = (((word2 ^ seed) >> 16) & 0xFF) * 4;
+                uint n = ((word2 >> 24) * 4;
+                uint o = table3[n];
+                uint p = table4[m];
+                uint q = o ^ p;
+                uint r = ((word2 >> 8) & 0xFF) * 4;
+                uint s = (q ^ table2[r]);
+                uint t = (word2 & 0xFF) * 4;
+                uint u = table1[t] ^ s;
+                uint v = u ^ l;
+
+                word3 = word3 ^ v;
+                uint w = ((l & 0xFF) << 18) | ((l >> 8) & 0x00FFFFFF);
+                uint x = w ^ word4;
+                uint y = u ^ x;
+                word4 = l ^ y;
+                uint z = (seed1 * 4) + ???? (1628EEC8);   // Missed a push earlier
+                uint aa = word3 ^ z;
+                uint ab = ((aa >> 16) & 0xFF) * 4;
+                uint ac = (aa >> 24) * 4;
+                uint ad = table1[ac];
+                uint ae = (ad ^ table3[ab]);
+                */
+
+
+
+
             }
+
             _logger.Info("done");
         }
+        
+        private uint RotateLeft(uint x, int n)
+        {
+            return (x << n) | (x >> (32 - n));
+        }
 
+        public IBuffer OpenWoItm(IBuffer buffer)
+        {
+            List<string> itemData = new List<string>();
+            buffer.SetPositionStart();
+            byte[] magicBytes = buffer.ReadBytes(5);
+            for (int i = 0; i < 5; i++)
+            {
+                if (magicBytes[i] != MagicBytes_WOITM[i])
+                {
+                    //throw new Exception("Invalid WOITM File");
+                }
+            }
+            itemData.Add(System.Text.Encoding.UTF8.GetString(magicBytes)  + "\r\n");
+            //System.IO.StreamWriter outFile = new System.IO.StreamWriter(filePath);
+            short version = buffer.ReadInt16(); // cmp to 1
+            itemData.Add(version.ToString() + "\r\n");
+            List<WoItm> woItems = new List<WoItm>();
+            while (buffer.Position < buffer.Size)
+            {
+                int itemId = buffer.ReadInt32();
+                int chunkSize = buffer.ReadInt32();
+                int chunkLen = buffer.ReadInt32();
+                byte[] data = buffer.ReadBytes(chunkSize - 4);
+
+                itemData.Add(itemId.ToString() + "," + chunkSize.ToString() + "," + chunkLen.ToString() + ","+ BitConverter.ToString(data).Replace("-", string.Empty) + "\r\n");
+                //outFile.WriteLine(outLine);
+                //outFile.Flush();
+                WoItm woItm = new WoItm();
+                woItm.Id = itemId;
+                woItm.Size = chunkSize;
+                woItm.Size2 = chunkLen;
+                woItm.Data = data;
+                woItems.Add(woItm);
+            }
+            //outFile.Close();
+            IBuffer itemRet = new StreamBuffer(itemData.SelectMany(s => Encoding.ASCII.GetBytes(s)).ToArray());
+
+            List<string> str = new List<string>();
+            foreach (WoItm woItem in woItems)
+            {
+                byte[] outp = Xor(woItem.Data, new byte[] { 0x00 });
+                string test = Encoding.UTF8.GetString(outp);
+                if (str.Contains(","))
+                {
+                    str.Add(test);
+                    _logger.Info(test);
+                }
+            }
+
+            _logger.Info("done");
+            return itemRet;
+        }
+        private uint RotateRight(uint x, int n)
+        {
+            return (x >> n) | (x << (32 - n));
+        }
+        
         public byte[] Xor(byte[] text, byte[] key)
         {
             byte[] xor = new byte[text.Length];
@@ -239,6 +359,7 @@ namespace Necromancy.Server.Data
             {
                 xor[i] = (byte) (text[i] ^ key[i % key.Length]);
             }
+
             return xor;
         }
 
@@ -247,14 +368,28 @@ namespace Necromancy.Server.Data
         /// </summary>
         private IBuffer DecryptHed(IBuffer buffer)
         {
-            byte dl = 0xA6;
             byte bl = 0;
             byte al = 0;
+
+            //Uncomment for US Steam Client
+            byte dl = 0xA6;
             byte sub = 0x21;
+
+            //Uncomment for US Sunset Client.
+            //byte dl = 0xEA;
+            //byte sub = 0x0A;
+
+            //Uncomment for Beta Client
+            //byte dl = 0x7D;
+            //byte sub = 0xC4;
 
             // Uncomment for JP client
             // dl = 0x67;
             // sub = 0xC7;
+
+            //Uncomment for beta client
+            //dl = 0x7D;
+            //sub = 0xC4;
 
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();

@@ -10,6 +10,7 @@ namespace Necromancy.Server.Model
         public string Password { get; set; }
         public byte Level { get; set; }
         public DateTime Created { get; set; }
+        public int WarehouseGold { get; set; }
 
         public Soul()
         {
@@ -19,6 +20,8 @@ namespace Necromancy.Server.Model
             Password = null;
             Name = null;
             Created = DateTime.Now;
+            WarehouseGold = 10203040;
+            Name = "";
         }
     }
 }

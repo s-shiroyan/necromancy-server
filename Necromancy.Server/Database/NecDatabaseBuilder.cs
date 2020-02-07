@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Arrowgene.Services.Logging;
-using Necromancy.Server.Common;
 using Necromancy.Server.Database.Sql;
 using Necromancy.Server.Model;
 using Necromancy.Server.Setting;
@@ -23,7 +22,7 @@ namespace Necromancy.Server.Database
             switch (settings.Type)
             {
                 case DatabaseType.SQLite:
-                    database = PrepareSqlLiteDb(settings.SqLitePath);
+                    database = PrepareSqlLiteDb(settings.SqLiteFolder);
                     break;
             }
 
@@ -36,19 +35,20 @@ namespace Necromancy.Server.Database
             return database;
         }
 
-        private SqLiteDb PrepareSqlLiteDb(string sqlLitePath)
+        private NecSqLiteDb PrepareSqlLiteDb(string sqLiteFolder)
         {
-            if (!File.Exists($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319"))
-                {
-                Console.WriteLine($"DB Flag File not found. Creating : {Util.ExecutingDirectory()}/DBVersionFlagFile92319");
-                File.Create($"{Util.ExecutingDirectory()}/DBVersionFlagFile92319");
-                Console.WriteLine($"Deleting outdated Database file. Db.sqlite will be re-created with updated schema : {Util.ExecutingDirectory()}/db.sqlite");
-                File.Delete($"{Util.ExecutingDirectory()}/db.sqlite");
-                }
+            string sqLitePath = Path.Combine(sqLiteFolder, $"db.v{NecSqLiteDb.Version}.sqlite");
+            NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
+            if (db.CreateDatabase())
+            {
+                ScriptRunner scriptRunner = new ScriptRunner(db);
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/schema_sqlite.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_item.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_npc.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_monster.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_account.sql"));
+            }
 
-            SqLiteDb db = new SqLiteDb(sqlLitePath);
-            ScriptRunner scriptRunner = new ScriptRunner(db);
-            scriptRunner.Run(Path.Combine(Util.RelativeCommonDirectory(), "Database/sqlite_schema.sql"));
             return db;
         }
     }

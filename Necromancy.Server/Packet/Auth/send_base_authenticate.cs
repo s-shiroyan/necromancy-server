@@ -6,7 +6,7 @@ using Necromancy.Server.Setting;
 
 namespace Necromancy.Server.Packet.Auth
 {
-    public class send_base_authenticate : Handler
+    public class send_base_authenticate : ConnectionHandler
     {
         public send_base_authenticate(NecServer server) : base(server)
         {
@@ -14,7 +14,7 @@ namespace Necromancy.Server.Packet.Auth
 
         public override ushort Id => (ushort) AuthPacketId.send_base_authenticate;
 
-        public override void Handle(NecClient client, NecPacket packet)
+        public override void Handle(NecConnection connection, NecPacket packet)
         {
             string accountName = packet.Data.ReadCString();
             string password = packet.Data.ReadCString();
@@ -27,9 +27,9 @@ namespace Necromancy.Server.Packet.Auth
             {
                 if (Settings.NeedRegistration)
                 {
-                    Logger.Error(client, $"AccountName: {accountName} doesn't exist");
-                    SendResponse(client, null);
-                    client.Socket.Close();
+                    Logger.Error(connection, $"AccountName: {accountName} doesn't exist");
+                    SendResponse(connection, null);
+                    connection.Socket.Close();
                     return;
                 }
 
@@ -39,22 +39,23 @@ namespace Necromancy.Server.Packet.Auth
 
             if (!BCrypt.Net.BCrypt.Verify(password, account.Hash))
             {
-                Logger.Error(client, $"Invalid password for AccountName: {accountName}");
-                SendResponse(client, null);
-                client.Socket.Close();
+                Logger.Error(connection, $"Invalid password for AccountName: {accountName}");
+                SendResponse(connection, null);
+                connection.Socket.Close();
                 return;
             }
 
-            // TODO replace with sessionId
-            Session session = new Session(account.Id.ToString(), account);
-            Server.Sessions.StoreSession(session);
-            client.Session = session;
-
+            NecClient client = new NecClient();
+            client.Account = account;
+            client.AuthConnection = connection;
+            connection.Client = client;
+            client.UpdateIdentity();
             Server.Clients.Add(client);
-            SendResponse(client, account);
+
+            SendResponse(connection, account);
         }
 
-        private void SendResponse(NecClient client, Account account)
+        private void SendResponse(NecConnection connection, Account account)
         {
             IBuffer res = BufferProvider.Provide();
             if (account == null)
@@ -68,7 +69,7 @@ namespace Necromancy.Server.Packet.Auth
                 res.WriteInt32(account.Id);
             }
 
-            Router.Send(client, (ushort) AuthPacketId.recv_base_authenticate_r, res);
+            Router.Send(connection, (ushort) AuthPacketId.recv_base_authenticate_r, res);
         }
     }
 }

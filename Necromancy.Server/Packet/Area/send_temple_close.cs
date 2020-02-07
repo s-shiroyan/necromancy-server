@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_temple_close : Handler
+    public class send_temple_close : ClientHandler
     {
         public send_temple_close(NecServer server) : base(server)
         {
@@ -19,14 +19,14 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_temple_close_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_temple_close_r, res, ServerType.Area);
             SendTempleNotifyClose(client);
         }
 
         private void SendTempleNotifyClose(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_temple_notify_close, res, client);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_temple_notify_close, res, ServerType.Area, client);
 
         }
     }

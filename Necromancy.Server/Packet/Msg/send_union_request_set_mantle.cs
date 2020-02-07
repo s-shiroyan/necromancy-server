@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_union_request_set_mantle : Handler
+    public class send_union_request_set_mantle : ClientHandler
     {
         public send_union_request_set_mantle(NecServer server) : base(server)
         {
@@ -17,11 +17,17 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
-           
-            res.WriteInt32(0);
-            
-            Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_mantle_r, res);
+            ushort mantleDesign = packet.Data.ReadUInt16();
+
+            IBuffer res = BufferProvider.Provide();           
+            res.WriteInt32(0);            
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_mantle_r, res, ServerType.Msg);
+
+            IBuffer res2 = BufferProvider.Provide();
+
+            res2.WriteInt16(mantleDesign); //design
+
+            Router.Send(client.Map /*myUnion.UnionMembers*/, (ushort)MsgPacketId.recv_union_notify_mantle, res2, ServerType.Msg);
         }
 
     }

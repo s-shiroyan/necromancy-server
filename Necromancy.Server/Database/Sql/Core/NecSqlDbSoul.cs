@@ -12,10 +12,13 @@ namespace Necromancy.Server.Database.Sql.Core
             "INSERT INTO `nec_soul` (`account_id`, `name`, `level`, `created`, `password`) VALUES (@account_id, @name, @level, @created, @password);";
 
         private const string SqlSelectSoulById =
-            "SELECT `id`, `account_id`, `name`, `level`, `created`, `password` FROM `nec_soul` WHERE `id`=@id; ";
+            "SELECT `id`, `account_id`, `name`, `level`, `created`, `password` FROM `nec_soul` WHERE `id`=@id;";
+
+        private const string SqlSelectSoulByName =
+            "SELECT `id`, `account_id`, `name`, `level`, `created`, `password` FROM `nec_soul` WHERE `name`=@name;";
 
         private const string SqlSelectSoulsByAccountId =
-            "SELECT `id`, `account_id`, `name`, `level`, `created`, `password` FROM `nec_soul` WHERE `account_id`=@account_id; ";
+            "SELECT `id`, `account_id`, `name`, `level`, `created`, `password` FROM `nec_soul` WHERE `account_id`=@account_id;";
 
         private const string SqlUpdateSoul =
             "UPDATE `nec_soul` SET `account_id`=@account_id, `name`=@name, `level`=@level, `created`=@created, `password`=@password WHERE `id`=@id;";
@@ -47,6 +50,20 @@ namespace Necromancy.Server.Database.Sql.Core
             Soul soul = null;
             ExecuteReader(SqlSelectSoulById,
                 command => { AddParameter(command, "@id", soulId); }, reader =>
+                {
+                    if (reader.Read())
+                    {
+                        soul = ReadSoul(reader);
+                    }
+                });
+            return soul;
+        }
+
+        public Soul SelectSoulByName(string soulName)
+        {
+            Soul soul = null;
+            ExecuteReader(SqlSelectSoulByName,
+                command => { AddParameter(command, "@name", soulName); }, reader =>
                 {
                     if (reader.Read())
                     {

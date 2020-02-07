@@ -2,61 +2,79 @@ using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_chara_select : Handler
+    public class send_chara_select : ClientHandler
     {
         public send_chara_select(NecServer server) : base(server)
         {
-
         }
 
         public override ushort Id => (ushort) MsgPacketId.send_chara_select;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            byte CharacterIdInSelectedSlot = packet.Data.ReadByte();
-
-            foreach (Character myCharacter in Database.SelectCharacterBySoulId(client.Character.SoulId))
+            int characterId = packet.Data.ReadInt32();
+            //Character character = Database.SelectCharacterById(characterId);
+            Character character = Server.Characters.GetByCharacterId(characterId);
+            if (character == null)
             {
-                Console.WriteLine($"CharacterSlotId: {myCharacter.Id} Comparing to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
-                if (myCharacter.Id == CharacterIdInSelectedSlot)
-                {
-                    client.Character = myCharacter;
-                    Console.WriteLine($"Found a Match! myCharacter.Id: {myCharacter.Id} is equal to CharacterIdInSelectedSlot: {CharacterIdInSelectedSlot}");
-                }
+                Logger.Error(client, $"No character for CharacterId: {characterId}");
+                client.Close();
+                return;
             }
 
-            IBuffer res2 = BufferProvider.Provide();
+            //Server.Instances.AssignInstance(character); //moved to database load. 
 
-            res2.WriteInt32(0);
-            res2.WriteInt32(0);
+            client.Character = character;
+            client.UpdateIdentity();
+            client.Character.CreateTask(Server, client);
 
-            //sub_494c50
-            res2.WriteInt32(128);
-            res2.WriteInt32(2);
-            res2.WriteInt32(3);
-            res2.WriteInt16(4);
-            res2.WriteByte(69);
+            Logger.Debug(client, $"Selected Character: {character.Name}");
 
-            //sub_494B90 - for loop
-          for(int i =0; i < 0x80; i++)  {
-                res2.WriteInt32(i);
-                res2.WriteFixedString($"Channel {i}", 97);
-                res2.WriteByte(1);   //bool 1 | 0
-                res2.WriteInt16(0xFFFF);  //Max players
-                res2.WriteInt16(0xFF);  //Current players
-                res2.WriteByte(0);
-                res2.WriteByte(0);
-                //
-            }
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteInt32(0); //ERR-CHARSELECT error check
+            res3.WriteInt32(client.Character.InstanceId);
+
+            //sub_4E4210_2341  // 
+            res3.WriteInt32(client.Character.MapId); //MapSerialID //passeed to Send_Map_Entry
+            res3.WriteInt32(client.Character.MapId); //MapID
+            res3.WriteFixedString("127.0.0.1", 0x41); //IP
+            res3.WriteInt16(60002); //Port
+
+            res3.WriteFloat(client.Character.X);
+            res3.WriteFloat(client.Character.Y);
+            res3.WriteFloat(client.Character.Z);
+            res3.WriteByte(client.Character.Heading);
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_r, res3, ServerType.Msg);
+
+            /*
+             ERR_CHARSELECT	GENERIC	Failed to select a character (CODE:<errcode>)
+             ERR_CHARSELECT	-8	Maintenance
+             ERR_CHARSELECT	-13	You have selected an illegal character
+            */
 
 
-            res2.WriteByte(10); //# of channels
-
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2);
+            //Logic to support your dead body //Do Dead Body IDs need to be persistant, or can they change at each login?  TODO...
+            DeadBody deadBody = new DeadBody();
+            Server.Instances.AssignInstance(deadBody);
+            character.DeadBodyInstanceId = deadBody.InstanceId;
+            deadBody.CharacterInstanceId = character.InstanceId;
+            character.movementId = character.InstanceId;
+            Logger.Debug($"Dead Body Instance ID {deadBody.InstanceId}   |  Character Instance ID {character.InstanceId}");
+            deadBody.CharaName = character.Name;
+            deadBody.MapId = character.MapId;
+            deadBody.X = character.X;
+            deadBody.Y = character.Y;
+            deadBody.Z = character.Z;
+            deadBody.Heading = character.Heading;
+            deadBody.RaceId = character.Raceid;
+            deadBody.SexId = character.Sexid;
+            deadBody.HairStyle = character.HairId;
+            deadBody.HairColor = character.HairColorId;
+            deadBody.FaceId = character.FaceId;
         }
+
     }
 }

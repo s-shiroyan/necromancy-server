@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_trade_offer : Handler
+    public class send_trade_offer : ClientHandler
     {
         public send_trade_offer(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // error check?
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_notify_offerd, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_trade_notify_offerd, res, ServerType.Area);
         }
 
     }

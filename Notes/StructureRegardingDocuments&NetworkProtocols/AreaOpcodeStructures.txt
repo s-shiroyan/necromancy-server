@@ -447,6 +447,7 @@ recv_wanted_jail_open = 0xE7BB,
 	
 	res.WriteInt64(0);
 	
+String=L"network::proto_area_implement_client::recv_party_notify_add_draw_item() itemid : %llu, remain_sec %f, drawstate %d\n"
 	
 recv_party_notify_add_draw_item = 0xE748,
 
@@ -471,6 +472,11 @@ recv_battle_report_notify_exp = 0xE526,
 	res.WriteInt32(0);
 	
 	
+send_party_entry_draw = recv_0xC7AF
+send_party_pass_draw = 0x663C
+
+
+
 recv_union_request_rename_r = 0xE462, // afterward sends send_union_rename_close (0xC9A9)
 
 	res.WriteInt32(0);
@@ -639,7 +645,7 @@ recv_charabody_salvage_end = 0xD688,
 	res.WriteInt32(0);
 	
 	
-recv_item_instance_unidentified = 0xD67D,
+recv_charabody_notify_party_join = 0xD67D,
 
 	res.WriteInt32(0);
 	
@@ -1373,9 +1379,9 @@ recv_0xB586 = 0xB586,
 	
 recv_chara_update_alignment_param = 0xB435,
 
-	res.WriteInt32(0);
-	res.WriteInt32(0);
-	res.WriteInt32(0);
+	res.WriteInt32(0); //Lawful
+	res.WriteInt32(0); //Neutral
+	res.WriteInt32(0); //Chaotic
 	
 	
 recv_charabody_self_notify_deadnext_time = 0xB417,
@@ -1688,9 +1694,9 @@ recv_skill_cooltime_notify = 0xA6F8,
 	
 recv_item_update_physics = 0xA611,
 
-	res.WriteInt64(0);
+	res.WriteInt64(0); //item instance id
 	
-	res.WriteInt16(0);
+	res.WriteInt16(0); //item's attack stat
 	
 	
 recv_get_honor_notify = 0xA54C,
@@ -1733,35 +1739,56 @@ recv_gimmick_access_object_r = 0xA4A5,
 	
 recv_party_search_recruited_party_r = 0xA45C,
 
-	res.WriteInt32(0);
-	
-	res.WriteInt32(0x14); // cmp to 0x14
-	
-	int numEntries = 0x14;
-	for (int i = 0; i < numEntries; i++)
-	{
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteInt32(0);
+            IBuffer res = BufferProvider.Provide();
+
+            res.WriteInt32(client.Character.InstanceId+1000);
+
+            res.WriteInt32(0x14); // cmp to 0x14
+
+            int numEntries = 0x14;
+            for (int i = 0; i < numEntries; i++)
+            { 
+                    res.WriteInt32(5009); 
+                    res.WriteInt32(5010); 
+                    res.WriteInt32(5110); 
+                    res.WriteInt32(5120); 
+
+                        res.WriteInt32(0);
+
+                        res.WriteInt32(0); 
+
+                        int numEntries2 = 0x4;
+                            for (int j = 0; j < numEntries2; j++)
+                            {
+                                res.WriteInt32(1999); 
+                                res.WriteInt32(0); 
+                                res.WriteFixedString($"soulname{j}", 0x31); 
+                                res.WriteFixedString($"charaname{j}", 0x5B);
+                                res.WriteInt32(0); 
+                                res.WriteByte(0);
+                                res.WriteByte(0);
+                                res.WriteByte(0); // bool
+                                res.WriteByte(0);
+                                res.WriteByte(0);    
+                            }
+
+                            res.WriteByte(0);
+
+                                res.WriteInt32(24);
+                                res.WriteInt32(2);
+                                res.WriteInt32(3);
+                                res.WriteByte(0);
+                                    res.WriteInt32(0);
+
+                                    res.WriteInt32(0);
+
+                                res.WriteFixedString($"PartyLoop{i}", 0xB5); 
+                }
+			
+
+
 		
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		
-		res.WriteInt32(0);
-		res.WriteInt32(0);
-		res.WriteFixedString("soulname", 49);
-		res.WriteFixedString("charaname", 91);
-		res.WriteInt32(0);
-		res.WriteByte(0);
-		res.WriteByte(0);
-		res.WriteByte(0); // bool
-		res.WriteByte(0);
-		res.WriteByte(0);
-		
-	}
-	
+
 	
 recv_temple_notify_close = 0xA43B, // hit after -> send_stall_set_name
 
@@ -2058,6 +2085,7 @@ recv_random_box_close_r = 0x924E,
 
 	res.WriteInt32(0);
 	
+String=L"network::proto_area_implement_client::recv_message_board_notify_update() yesterday:(%d, %d, %d, %d) lastmonth:(%d, %d, %d, %d)\n"
 	
 recv_message_board_notify_update = 0x9227,
 
@@ -2717,8 +2745,8 @@ recv_cash_shop_notify_open = 0x732D,
 	
 recv_battle_report_notify_exp_bonus = 0x7181,
 
-	res.WriteInt64(0);
-	res.WriteInt32(0);
+	res.WriteInt64(0); //current exp
+	res.WriteInt32(0); //bonus exp
 	
 	
 recv_object_disappear_notify = 0x717D,
@@ -3545,8 +3573,8 @@ recv_event_soul_rankup_open = 0x394F,
 	
 recv_item_update_state = 0x3247, 
 
-	res.WriteInt64(1);
-    res.WriteInt32(1);
+	res.WriteInt64(1); //item instance id
+    res.WriteInt32(1); //item state flag, same as inside SendItemInstance and SendItemInstanceUnidentified
 	
 	
 recv_event_change_type = 0x32ED,

@@ -8,7 +8,7 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCon : DbConnection
         where TCom : DbCommand
     {
-        private const string SqlCreateAccount =
+        private const string SqlInsertAccount =
             "INSERT INTO `account` (`name`, `normal_name`, `hash`, `mail`, `mail_verified`, `mail_verified_at`, `mail_token`, `password_token`, `state`, `last_login`, `created`) VALUES (@name, @normal_name, @hash, @mail, @mail_verified, @mail_verified_at, @mail_token, @password_token, @state, @last_login, @created);";
 
         private const string SqlSelectAccountById =
@@ -32,7 +32,7 @@ namespace Necromancy.Server.Database.Sql.Core
             account.Hash = hash;
             account.State = AccountStateType.User;
             account.Created = DateTime.Now;
-            int rowsAffected = ExecuteNonQuery(SqlCreateAccount, command =>
+            int rowsAffected = ExecuteNonQuery(SqlInsertAccount, command =>
             {
                 AddParameter(command, "@name", account.Name);
                 AddParameter(command, "@normal_name", account.NormalName);

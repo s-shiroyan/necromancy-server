@@ -5,7 +5,7 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
 {
-    public class send_soul_delete : Handler
+    public class send_soul_delete : ClientHandler
     {
         public send_soul_delete(NecServer server) : base(server)
         {
@@ -22,7 +22,10 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0);
            
 
-            Router.Send(client, (ushort) MsgPacketId.recv_soul_delete_r, res);
+            Router.Send(client, (ushort) MsgPacketId.recv_soul_delete_r, res, ServerType.Msg);
+
+            //TODO
+            //L"network::proto_msg_implement_client::recv_refusallist_notify_remove_user_souldelete()
         }
     }
 }

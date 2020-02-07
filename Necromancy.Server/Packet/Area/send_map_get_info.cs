@@ -1,177 +1,92 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks;
+using System.Numerics;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_map_get_info : Handler
+    public class send_map_get_info : ClientHandler
     {
+        private readonly NecServer _server;
         public send_map_get_info(NecServer server) : base(server)
         {
+            _server = server;
         }
 
-        public override ushort Id => (ushort)AreaPacketId.send_map_get_info;
+        public override ushort Id => (ushort) AreaPacketId.send_map_get_info;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(2001007);
+            res.WriteInt32(client.Map.Id);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
-
-            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res);
-            int TestInt = 0;
-            SendDataNotifyNpcData(client,TestInt);
-        }
-        int[] NPCModelID = new int[] { 1911105, 1112101, 1122401, 1122101, 1311102, 1111301, 1121401, 1131401, 2073002, 1421101 };
-        int[] NPCSerialID = new int[] { 10000101, 10000102, 10000103, 10000104, 10000105, 10000106, 10000107, 10000108, 80000009, 10000101 };
-        int[] NPCX = new int[] { 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 1000 };
-        int[] NPCY = new int[] { 0 , -100, -200, -300, 100, 200, 300, 400, 0, 100 };
-        int[] NPCZ = new int[] { 25, -25, -25, 25, 25, -22, -25, 25, 0, 0 };
-        int[] TestArrayInt = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
-        byte[] NPCViewAngle = new byte[] {  45, 46, 47, 48, 49 , 40, 41, 42, 43, 44};
-
-       
-
-
-        private void SendDataNotifyNpcData(NecClient client,int TestInt)
-        {
-            int x = -1;
-            //IBuffer res2 = BufferProvider.Provide();
-
-            foreach (int y in NPCModelID)
+            foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
             {
-                x++;
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteInt32(x+44444444);             // NPC ID (object id)
-
-                res2.WriteInt32(NPCSerialID[x]) ;      // NPC Serial ID from "npc.csv"
-
-                res2.WriteByte(0);              // 0 - Clickable NPC (Active NPC, player can select and start dialog), 1 - Not active NPC (Player can't start dialog)
-
-                res2.WriteCString($"NPC Name : {x}");//Name
-
-                res2.WriteCString($"NPC Title : {x}");//Title
-
-                res2.WriteFloat(NPCX[x]);//X Pos
-                res2.WriteFloat(NPCY[x]);//Y Pos
-                res2.WriteFloat(NPCZ[x]);//Z Pos
-                res2.WriteByte(NPCViewAngle[x]);//view offset
-
-                res2.WriteInt32(19);
-
-                //this is an x19 loop but i broke it up
-                res2.WriteInt32(24);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-                res2.WriteInt32(1);
-
-                res2.WriteInt32(19);
-
-
-                int numEntries = 19;
-
-
-                for (int i = 0; i < numEntries; i++)
-
+                // This requires database changes to add the GGates to the Npc database!!!!!
+                if (npcSpawn.Name == "GGate")
                 {
-                    // loop start
-                    res2.WriteInt32(210901); // this is a loop within a loop i went ahead and broke it up
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-
-                    res2.WriteInt32(10310503);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(1); // bool
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-                    res2.WriteByte(0);
-
+                    RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(npcSpawn);
+                    Router.Send(gGateData, client);
                 }
-
-                res2.WriteInt32(19);
-
-                //this is an x19 loop but i broke it up
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-                res2.WriteInt32(3);
-
-                res2.WriteInt32(NPCModelID[x]);   //NPC Model from file "model_common.csv"
-                
-
-
-                res2.WriteInt16(100);       //NPC Model Size
-
-                res2.WriteByte(237);
-
-                res2.WriteByte(237);
-
-                res2.WriteByte(237);
-
-                res2.WriteInt32(11111110); //Hp Related Bitmask?  This setting makes the NPC "alive"
-
-                res2.WriteInt32(Util.GetRandomNumber(1, 9)); //npc Emoticon above head 1 for skull
-
-                res2.WriteInt32(11111110);
-                res2.WriteFloat(1000);
-                res2.WriteFloat(1000);
-                res2.WriteFloat(1000);
-
-                res2.WriteInt32(128);
-
-                int numEntries2 = 128;
-
-
-                for (int i = 0; i < numEntries2; i++)
-
+                else
                 {
-                    res2.WriteInt32(237);
-                    res2.WriteInt32(237);
-                    res2.WriteInt32(237);
-
+                    RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
+                    Router.Send(npcData, client);
                 }
-
-                Router.Send(client, (ushort)AreaPacketId.recv_data_notify_npc_data, res2);
             }
+
+            foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
+            {
+                if (otherClient == client)
+                {
+                    // skip myself
+                    continue;
+                }
+
+                RecvDataNotifyCharaData otherCharacterData =
+                    new RecvDataNotifyCharaData(otherClient.Character, otherClient.Soul.Name);
+                Router.Send(otherCharacterData, client);
+            }
+            if (client.Map.Id == 2002104)
+            {
+                Vector3 mapLinkSrc = new Vector3((float)-871.1273, (float)-11966.361, (float)462.58215);
+                byte orientation = 90;
+                SendDataNotifyMaplink(client, 2002105, mapLinkSrc, orientation);
+            }
+            else if (client.Map.Id == 2002105)
+            {
+                Vector3 mapLinkDest = new Vector3((float)-5778.367, (float)-6010.0425, (float)-1.6068916);
+                byte orientation = 45;
+                SendDataNotifyMaplink(client, 2002104, mapLinkDest, orientation);
+            }
+            // ToDo this should be a database lookup
+            RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
+            _server.Router.Send(mapFragments, client);
+
+        }
+        public void SendDataNotifyMaplink(NecClient client, int mapId, Vector3 destCoords, byte orientation)
+        {
+            IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
+            res1.WriteInt32(mapId); // Unique ID
+
+            res1.WriteFloat(destCoords.X); //x
+            res1.WriteFloat(destCoords.Y); //y
+            res1.WriteFloat(destCoords.Z + 2); //z
+            res1.WriteByte(orientation); // offset
+
+            res1.WriteFloat(1000); // Height
+            res1.WriteFloat(100); // Width
+
+            res1.WriteInt32(1); // Aura color 0=blue 1=gold 2=white 3=red 4=purple 5=black  0 to 5, crash above 5
+            Router.Send(client, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
         }
     }
+
+
 }

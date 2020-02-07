@@ -1,4 +1,4 @@
-﻿using Arrowgene.Services.Buffers;
+using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_event_removetrap_end : Handler
+    public class send_event_removetrap_end : ClientHandler
     {
         public send_event_removetrap_end(NecServer server) : base(server)
         {
@@ -20,13 +20,13 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_end, res);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
             SendEventRemoveTrapClose(client);
         }
         private void SendEventRemoveTrapClose(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_close, res, client);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_removetrap_close, res, ServerType.Area, client); //to-do verify expected behavior
 
         }
 

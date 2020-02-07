@@ -1,4 +1,4 @@
-
+Security Descriptor Definition Language
 						
 recv_soul_dispitem_request_data_r = 0xD5FD,   
 
@@ -23,6 +23,7 @@ recv_shop_sell_r = 0xD4F8,
 						
 						
 
+String=L"network::proto_area_implement_client::recv_item_update_place_change() [ id1 = %llu, pos1 = (%u, %u, %u) ] <-> [ id2 = %llu, pos2 = (%u, %u, %u) ]\n"
 	
 recv_item_update_place_change = 0xD6A8,
 
@@ -200,7 +201,7 @@ recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
 	
 recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
 						
-						res.WriteInt16(0);
+						res.WriteInt16(0); //Shop type
 						res.WriteInt32(0);
 						res.WriteInt32(0);
 						res.WriteByte(0);
@@ -600,7 +601,7 @@ recv_item_cooltime_notify = 0xECF,
 
 recv_chara_update_alignment = 0xEF9,
             
-            res.WriteInt32(1);
+            res.WriteInt32(1); //Alignment ID
 
 recv_trade_notify_replied = 0x102E,
             
@@ -700,6 +701,7 @@ recv_dbg_battle_guard_end_notify = 0x170B,
             
             res.WriteInt32(0);			
 
+String=L"network::proto_area_implement_client::recv_message_board_notify_open() msgid:%d yesterday:(%d, %d, %d, %d) lastmonth:(%d, %d, %d, %d)\n"
 recv_message_board_notify_open = 0x170F, 
             
             res.WriteInt32(0);
@@ -1289,8 +1291,8 @@ recv_quest_target_count_r = 0x465C,
 
 recv_battle_report_action_eq_break = 0xD426, // Parent = 0xD400 // Range ID = 01
                     
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(0); // leave as 0
+            res.WriteInt32(0); //number of slot? to break
 			
 recv_storage_draw_item2_r = 0xD43D, // Parent = 0xD400 // Range ID = 02
                     
@@ -1558,9 +1560,9 @@ recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
             res.WriteByte(0);
             res.WriteInt16(0);
 
-            res.WriteInt16(0);
-            res.WriteCString(""); // Length 0x31 
-            res.WriteCString(""); // Length 0x5B
+            res.WriteInt16(0); //Number here is "pieces" 
+            res.WriteCString("item name"); // Length 0x31 
+            res.WriteCString("chara name"); // Length 0x5B
 
 recv_0x8D62 = 0x8D62, // Parent = 0x8CC6 // Range ID = 02  //No String - ERROR
             
@@ -1757,7 +1759,7 @@ recv_premium_service_notify_attach = 0x3B1, // Parent = 0x397 // Range ID = 01
 
 
 
-recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
+recv_raisescale_view_open = 0xC2E5 , // Parent = 0xC2A1 // Range ID = 01  // was 0xC25D
             
             res.WriteInt16(1);
             res.WriteInt16(1);
@@ -1891,3 +1893,89 @@ recv_0xFA0B = 0xFA0B, //Goes to Error
 				
 recv_0xFB79 = 0xFB79, //Goes to Error					
 				res.WriteInt32(0);					
+
+///////////////////////////////////////Updated 9/27/19				
+recv_0x692A = 0x692A; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);		
+
+recv_0x6B6A = 0x6B6A; //Goes to 016711D6 | 68 03494D00       | push wizardryonline_patched.4D4903                                          |
+            res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+			res.WriteByte(1);
+
+            res.WriteByte(1);	
+
+recv_0x735E = 0x735E; //Goes to Error
+            res.WriteInt32(0);			
+			
+recv_0x746F = 0x746F; //Goes to Error  // 73D1 + 9E
+            res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteByte(1);	
+
+recv_0x755C = 0x755C; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);	
+
+recv_0x7697 = 0x7697; //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+			
+recv_0x7B86 = 0x7B86; //Goes to Error // 7B5D + 29
+            res.WriteInt32(0);
+            res.WriteByte(1);
+
+recv_0x8066 = 0x8066; // No Structure.  Goes to 004D464D | 68 D84CD600       | push wizardryonline_patched.D64CD8  | D64CD8:L"<area> - RecvException. func = %d, code = %d\n"
+			
+recv_0x825D = 0x825D; // No Structure.
+
+recv_0x97D9 = 0x97D9 //Goes to Error
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+			
+recv_0x9899 = 0x9899 // No Structure.  
+
+recv_0x9CA1 = 0x9CA1 //Goes to Error
+            res.WriteInt32(0);
+            res.WriteCString(""); //0x31
+            res.WriteCString(""); //0x5B
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+			
+recv_0xA8BB = 0xA8BB // Goes to Error 
+            res.WriteInt32(0);
+            for (int i = 0; i < 5; i++)
+            {
+              
+                res.WriteFixedString("", 0x31);
+                res.WriteFixedString("", 0x25);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteInt32(0);
+            }
+
+            res.WriteFixedString("", 0x31);
+            res.WriteFixedString("", 0x25);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);			
+			
+recv_self_dragon_pos_notify	= 0x6FB2;
+
+			res.WriteInt32(0);
+
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+            res.WriteFloat(1);
+			
+			res.WriteByte(1);

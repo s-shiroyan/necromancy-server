@@ -6,7 +6,7 @@ using System;
 
 namespace Necromancy.Server.Packet.Area
 {
-    public class send_auction_cancel_exhibit : Handler
+    public class send_auction_cancel_exhibit : ClientHandler
     {
         public send_auction_cancel_exhibit(NecServer server) : base(server)
         {
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_cancel_exhibit_r, res);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_cancel_exhibit_r, res, ServerType.Area);
         }
     }
 }

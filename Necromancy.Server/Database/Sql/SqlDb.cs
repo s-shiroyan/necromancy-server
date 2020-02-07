@@ -159,17 +159,6 @@ namespace Necromancy.Server.Database.Sql
             parameter.DbType = type;
             return parameter;
         }
-        ///added by Xeno.  delete this tag after success.  Never had success, fix or delete
-        protected DbParameter Parameter(TCom command, string name, object value, string name2, object value2, DbType type)
-        {
-            DbParameter parameter = command.CreateParameter();
-            parameter.ParameterName = name;
-            parameter.Value = value;
-            parameter.ParameterName = name2;
-            parameter.Value = value2;
-            parameter.DbType = type;
-            return parameter;
-        }
 
         protected DbParameter Parameter(TCom command, string name, string value)
         {
@@ -181,12 +170,6 @@ namespace Necromancy.Server.Database.Sql
             DbParameter parameter = Parameter(command, name, value, type);
             command.Parameters.Add(parameter);
         }
-        ///added by Xeno.  delete this tag after success.  Never had success, fix or delete
-        protected void AddParameter(TCom command, string name, int value, string name2, byte value2)
-        {
-            DbParameter parameter = Parameter(command, name, value, name2, value, DbType.Int32);
-            command.Parameters.Add(parameter);
-        }
 
         protected void AddParameter(TCom command, string name, string value)
         {
@@ -196,6 +179,11 @@ namespace Necromancy.Server.Database.Sql
         protected void AddParameter(TCom command, string name, Int32 value)
         {
             AddParameter(command, name, value, DbType.Int32);
+        }
+
+        protected void AddParameter(TCom command, string name, float value)
+        {
+            AddParameter(command, name, value, DbType.Double);
         }
 
         protected void AddParameter(TCom command, string name, byte value)
@@ -256,6 +244,16 @@ namespace Necromancy.Server.Database.Sql
         protected byte GetByte(DbDataReader reader, string column)
         {
             return reader.GetByte(reader.GetOrdinal(column));
+        }
+
+        protected short GetInt16(DbDataReader reader, string column)
+        {
+            return reader.GetInt16(reader.GetOrdinal(column));
+        }
+
+        protected float GetFloat(DbDataReader reader, string column)
+        {
+            return reader.GetFloat(reader.GetOrdinal(column));
         }
 
         protected string GetString(DbDataReader reader, string column)
