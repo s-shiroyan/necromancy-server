@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(client.Character.Level); // current level //+50 Temporary client.Character.Level
             res.WriteInt64(91978348); // current exp
             res.WriteInt64(50); // soul exp
-            res.WriteInt64(1000000); // exp needed to level
+            res.WriteInt64(96978348); // exp needed to level
             res.WriteInt64(1100); // soul exp needed to level
             res.WriteInt32(client.Character.currentHp); // current hp
             res.WriteInt32(client.Character.currentMp); // current mp
