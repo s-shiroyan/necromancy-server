@@ -44,6 +44,12 @@ namespace Necromancy.Server.Database
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
+
+        List<Character> SelectCharacterByAccountId(int accountId);
+        List<Character> SelectCharacterBySoulId(int soulId);
+        bool UpdateCharacter(Character character);
+        bool DeleteCharacter(int characterId);
+
         Character SelectCharacterBySlot(int soulId, int slot);
         List<Character> SelectCharactersByAccountId(int accountId);
         List<Character> SelectCharactersBySoulId(int soulId);
@@ -74,6 +80,7 @@ namespace Necromancy.Server.Database
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
+
 
         // Items
         bool InsertItems(Items items);

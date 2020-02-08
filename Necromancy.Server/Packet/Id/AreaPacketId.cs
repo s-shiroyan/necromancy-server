@@ -704,9 +704,15 @@ namespace Necromancy.Server.Packet.Id
         send_auction_cancel_exhibit = 0x375B,
         send_auction_close = 0xE732,
         send_auction_exhibit = 0xED52, 
+
+        send_auction_re_exhibit = 0x61FA,
+        send_auction_receive_gold = 0x4657,
+        send_auction_receive_item = 0x7E18,
+
         send_auction_re_exhibit = 0x61FA, 
         send_auction_receive_gold = 0x4657, 
         send_auction_receive_item = 0x7E18, 
+
         send_auction_search = 0x8865, 
         send_base_check_version = 0x5705, 
         send_base_enter = 0xAE43, 
@@ -782,7 +788,11 @@ namespace Necromancy.Server.Packet.Id
         send_event_script_play_r = 0xA3B5,
         send_event_select_channel_r = 0x1C22,
         send_event_select_exec_r = 0x6439,
+
+        send_event_select_map_and_channel_r = 0xB87F, //opcode not found
+
         send_event_select_map_and_channel_r = 0xB87F,
+
         send_event_soul_rankup_close = 0x4D03,
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
@@ -831,17 +841,30 @@ namespace Necromancy.Server.Packet.Id
         send_message_board_close = 0xC7E9,
         send_open_mailbox = 0xEF32,
         send_package_all_delete = 0x8E0C,
+
+        send_party_accept_to_apply = 0x127, //opcode not found
+
         send_party_accept_to_apply = 0x8812,
+
         send_party_accept_to_invite = 0x19E3,
         send_party_apply = 0x534F, 
         send_party_cancel_member_recruit = 0x6E9F, 
         send_party_cancel_party_recruit = 0x131, //opcode not found
+
+        send_party_change_leader = 0x132, //opcode not found
+        send_party_change_mode = 0x133, //opcode not found
+        send_party_decline_to_apply = 0x134, //opcode not found
+        send_party_decline_to_invite = 0x738C,
+        send_party_disband = 0x136,//opcode not found
+        send_party_entry_draw = 0x137, //opcode not found
+
         send_party_change_leader = 0xBB50, 
         send_party_change_mode = 0x87A9, 
         send_party_decline_to_apply = 0xA739,
         send_party_decline_to_invite = 0x738C,
         send_party_disband = 0x6E26,
         send_party_entry_draw = 0xC7AF,
+
         send_party_establish = 0xAF25,
         send_party_establish_2 = 0x139, //opcode not found
         send_party_establish_3 = 0x140, //opcode not found
@@ -852,11 +875,19 @@ namespace Necromancy.Server.Packet.Id
         send_party_invite = 0x9471,
         send_party_invite_2 = 0x142, //opcode not found
         send_party_invite_3 = 0x143, //opcode not found
+
+        send_party_kick = 0x144, //opcode not found
+        send_party_leave = 0x5F80,
+        send_party_pass_draw = 0x146, //opcode not found
+        send_party_regist_member_recruit = 0xC342, //opcode not found
+        send_party_regist_party_recruit = 0x7B6C, //opcode not found
+
         send_party_kick = 0xE129, 
         send_party_leave = 0x5F80,
         send_party_pass_draw = 0x663C, 
         send_party_regist_member_recruit = 0xC342, 
         send_party_regist_party_recruit = 0x7B6C, 
+
         send_party_request_draw_item_list = 0x86FD, 
         send_party_search_recruited_member = 0xCB62, 
         send_party_search_recruited_party = 0x90BD, 

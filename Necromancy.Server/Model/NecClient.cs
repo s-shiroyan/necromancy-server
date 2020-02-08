@@ -15,9 +15,11 @@ namespace Necromancy.Server.Model
         {
             _logger = LogProvider.Logger<NecLogger>(this);
             Creation = DateTime.Now;
+
             Identity = "";
             Soul = new Soul();
             Character = new Character();
+
         }
 
         public DateTime Creation { get; }
@@ -25,15 +27,20 @@ namespace Necromancy.Server.Model
         public Account Account { get; set; }
         public Soul Soul { get; set; }
         public Character Character { get; set; }
+
+        public Items Items { get; set; }
+        public Quest Quest { get; set; }
+
         public Channel Channel { get; set; }
         public Map Map { get; set; }
         public NecConnection AuthConnection { get; set; }
         public NecConnection MsgConnection { get; set; }
         public NecConnection AreaConnection { get; set; }
 
-        public void Send(NecPacket packet)
+
+        public void Send(NecPacket packet, ServerType serverType)
         {
-            switch (packet.ServerType)
+            switch (serverType)
             {
                 case ServerType.Area:
                     AreaConnection.Send(packet);
@@ -50,33 +57,56 @@ namespace Necromancy.Server.Model
             }
         }
 
-        public void UpdateIdentity()
-        {
-            Identity = "";
-
-            if (Character != null)
+            public void Send(NecPacket packet)
             {
-                Identity += $"[Char:{Character.Id}:{Character.Name}]";
-                return;
+                switch (packet.ServerType)
+                {
+                    case ServerType.Area:
+                        AreaConnection.Send(packet);
+                        break;
+                    case ServerType.Msg:
+                        MsgConnection.Send(packet);
+                        break;
+                    case ServerType.Auth:
+                        AuthConnection.Send(packet);
+                        break;
+                    default:
+                        _logger.Error(this, "Invalid ServerType");
+                        break;
+                }
             }
-
-            if (Account != null)
+        }
+            public void UpdateIdentity()
             {
-                Identity += $"[Acc:{Account.Id}:{Account.Name}]";
-                return;
-            }
+                Identity = "";
 
-            if (AuthConnection != null)
-            {
-                Identity += $"[Con:{AuthConnection.Identity}]";
+                if (Character != null)
+                {
+                    Identity += $"[Char:{Character.Id}:{Character.Name}]";
+                    return;
+                }
+
+                if (Account != null)
+                {
+                    Identity += $"[Acc:{Account.Id}:{Account.Name}]";
+                    return;
+                }
+
+                if (AuthConnection != null)
+                {
+                    Identity += $"[Con:{AuthConnection.Identity}]";
+                }
+
             }
         }
 
-        public void Close()
-        {
-            AuthConnection?.Socket.Close();
-            MsgConnection?.Socket.Close();
-            AreaConnection?.Socket.Close();
-        }
-    }
-}
+            public void Close()
+            {
+                AuthConnection?.Socket.Close();
+                MsgConnection?.Socket.Close();
+                AreaConnection?.Socket.Close();
+            }
+        
+    
+
+
