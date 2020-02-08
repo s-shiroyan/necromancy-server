@@ -45,17 +45,13 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
-
         public CharacterLookup Characters { get; }
-
         public MapLookup Maps { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
         public InstanceGenerator Instances { get; }
-
         public InstanceGenerator64 Instances64 { get; }
-
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -73,13 +69,9 @@ namespace Necromancy.Server
             _logger = LogProvider.Logger<NecLogger>(this);
 
             Instances = new InstanceGenerator();
-
-            Clients = new ClientLookup();
-
             Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
             Characters = new CharacterLookup();
-
             Maps = new MapLookup();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
@@ -174,13 +166,9 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new QuestStarted(this));
             Chat.CommandHandler.AddCommand(new Revive(this));
             Chat.CommandHandler.AddCommand(new SendAuctionNotifyOpen(this));
-
-            Chat.CommandHandler.AddCommand(new SendCharacterId(this));
-
             Chat.CommandHandler.AddCommand(new SendCharacterHome(this));
             Chat.CommandHandler.AddCommand(new SendCharacterId(this));
             Chat.CommandHandler.AddCommand(new SendCharacterSave(this));
-
             Chat.CommandHandler.AddCommand(new SendCharaUpdateEvent(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifiyGGateStoneData(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
@@ -192,15 +180,10 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
             Chat.CommandHandler.AddCommand(new SendMapChangeForce(this));
-
-            Chat.CommandHandler.AddCommand(new SendMapEntry(this));
-            Chat.CommandHandler.AddCommand(new SendMapLink(this));
-
             Chat.CommandHandler.AddCommand(new SendMapCoord(this));
             Chat.CommandHandler.AddCommand(new SendMapEntry(this));
             Chat.CommandHandler.AddCommand(new SendMapLink(this));
             Chat.CommandHandler.AddCommand(new SendMapMove(this));
-
             Chat.CommandHandler.AddCommand(new SendMessageEvent(this));
             Chat.CommandHandler.AddCommand(new SendMonsterStateUpdateNotify(this));
             Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
@@ -216,10 +199,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendWantedJailOpen(this));
             Chat.CommandHandler.AddCommand(new SendWantedListOpen(this));
             Chat.CommandHandler.AddCommand(new SoulShop(this));
-
-            Chat.CommandHandler.AddCommand(new Takeover(this));
-
-
             Chat.CommandHandler.AddCommand(new JumpCommand(this));
             Chat.CommandHandler.AddCommand(new NoStringTestCommand(this));
             Chat.CommandHandler.AddCommand(new Takeover(this));
@@ -227,7 +206,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
             Chat.CommandHandler.AddCommand(new ItemCommand(this));
             Chat.CommandHandler.AddCommand(new BagCommand(this));
-
         }
 
         private void LoadSettingRepository()
@@ -239,7 +217,6 @@ namespace Necromancy.Server
             }
         }
 
-
         private void LoadCharacterRepository()
         {
             foreach (Character character  in Database.SelectCharacters())
@@ -249,7 +226,6 @@ namespace Necromancy.Server
                 _logger.Debug($"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
             }
         }
-
 
         private void LoadHandler()
         {
@@ -262,9 +238,7 @@ namespace Necromancy.Server
             _authConsumer.AddHandler(new send_base_select_world(this));
 
             // Message Handler
-
             _msgConsumer.AddHandler(new SendDisconnect(this));
-
             _msgConsumer.AddHandler(new SendHeartbeat(this));
             _msgConsumer.AddHandler(new SendUnknown1(this));
             _msgConsumer.AddHandler(new send_base_check_version_msg(this));
@@ -299,10 +273,6 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_skill_request_info(this));
             _msgConsumer.AddHandler(new send_union_reply_to_invite2(this));
             _msgConsumer.AddHandler(new send_union_request_change_role(this));
-
-            //_msgConsumer.AddHandler(new Send_union_request_detail(this));
-
-
             _msgConsumer.AddHandler(new send_union_request_disband(this));
             _msgConsumer.AddHandler(new send_union_request_expel_member(this));
             _msgConsumer.AddHandler(new send_union_request_invite_target(this));
@@ -313,9 +283,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_union_request_set_mantle(this));
 
             // Area Handler
-
             _areaConsumer.AddHandler(new SendDisconnect(this));
-
             _areaConsumer.AddHandler(new SendHeartbeat(this));
             _areaConsumer.AddHandler(new SendUnknown1(this));
             _areaConsumer.AddHandler(new send_auction_bid(this));
@@ -323,14 +291,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_close(this));
             _areaConsumer.AddHandler(new send_auction_exhibit(this));
-
-            _areaConsumer.AddHandler(new send_auction_re_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_search(this));
-            _areaConsumer.AddHandler(new send_auction_receive_item(this));
-            _areaConsumer.AddHandler(new send_auction_receive_gold(this));
-
-            _areaConsumer.AddHandler(new send_auction_search(this));
-
             _areaConsumer.AddHandler(new send_base_check_version_area(this));
             _areaConsumer.AddHandler(new send_base_enter(this));
             _areaConsumer.AddHandler(new send_battle_attack_exec(this));
@@ -411,9 +372,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_shortcut_request_regist(this));
             _areaConsumer.AddHandler(new send_skill_cast_cancel_request(this));
             _areaConsumer.AddHandler(new send_skill_exec(this));
-
             _areaConsumer.AddHandler(new send_skill_onhit(this));
-
             _areaConsumer.AddHandler(new send_skill_request_gain(this));
             _areaConsumer.AddHandler(new send_skill_start_cast(this));
             _areaConsumer.AddHandler(new send_soul_dispitem_request_data(this));
@@ -451,22 +410,13 @@ namespace Necromancy.Server
             //_areaConsumer.AddHandler(new send_gem_close(this));  
             _areaConsumer.AddHandler(new send_get_refusallist(this));
             _areaConsumer.AddHandler(new send_party_request_draw_item_list(this));
-
-            //_areaConsumer.AddHandler(new send_quest_get_mission_quest_works(this));
-            //_areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
-            //_areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
-
             _areaConsumer.AddHandler(new send_quest_get_mission_quest_works(this));
             _areaConsumer.AddHandler(new send_quest_get_soul_mission_quest_works(this));
             _areaConsumer.AddHandler(new send_quest_get_story_quest_works(this));
-
             _areaConsumer.AddHandler(new send_shortcut_request_data(this));
             _areaConsumer.AddHandler(new send_skill_request_info(this));
             _areaConsumer.AddHandler(new send_sv_conf_option_change(this));
             _areaConsumer.AddHandler(new send_charabody_self_salvage_notify_r(this));
-
-            _areaConsumer.AddHandler(new send_event_select_map_and_channel_r(this));
-
             _areaConsumer.AddHandler(new send_return_home_request_exec(this));
             _areaConsumer.AddHandler(new send_event_select_map_and_channel_r(this));
             _areaConsumer.AddHandler(new send_gimmick_access_object(this));
@@ -502,7 +452,6 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_message_board_close(this));
             _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
             _areaConsumer.AddHandler(new send_union_request_rename(this));
-
 
         }
     }
