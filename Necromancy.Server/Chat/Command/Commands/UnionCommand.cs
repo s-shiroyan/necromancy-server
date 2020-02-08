@@ -31,7 +31,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "union":
                     res36.WriteInt32(client.Character.InstanceId);
-                    res36.WriteInt32(8888 /*client.Character.UnionId*/);
+                    res36.WriteInt32(client.Character.unionId);
                     res36.WriteCString("Trade_Union");
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
                     break;
@@ -47,11 +47,18 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)MsgPacketId.recv_union_notify_disband, res36, ServerType.Msg);
 
                     res36.WriteInt32(0); //error check
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_union_request_disband_result, res36, ServerType.Area);
+                    Router.Send(client, (ushort)AreaPacketId.recv_union_request_disband_result, res36, ServerType.Area);
 
                     IBuffer res37 = BufferProvider.Provide();
-                    res37.WriteInt32(8888 /*client.Character.UnionId*/);
-                    Router.Send(client.Map, (ushort)MsgPacketId.recv_union_request_disband_r, res37, ServerType.Msg);
+                    res37.WriteInt32(client.Character.unionId);
+                    Router.Send(client, (ushort)MsgPacketId.recv_union_request_disband_r, res37, ServerType.Msg);
+
+                    IBuffer res40 = BufferProvider.Provide();
+                    res40.WriteInt32(client.Character.InstanceId);
+                    res40.WriteInt32(0 /*client.Character.UnionId*/);
+                    res40.WriteCString("");
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res40, ServerType.Area);
+
                     client.Character.unionId = 0;
 
                     break;
@@ -81,6 +88,14 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
                 case "resetid":
                     client.Character.unionId = 0;
+                    break;
+
+                case "growth":
+                    res36.WriteInt32(0); //error check
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_union_request_growth_result, res36, ServerType.Area);
+                    IBuffer res39 = BufferProvider.Provide();
+                    res39.WriteInt16(3); //sets union current exp
+                    Router.Send(client.Map, (ushort)MsgPacketId.recv_union_notify_growth, res39, ServerType.Msg);
                     break;
 
 

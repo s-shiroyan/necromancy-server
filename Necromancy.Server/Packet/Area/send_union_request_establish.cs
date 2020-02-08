@@ -64,14 +64,14 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(client.Character.ClassId);
             res3.WriteByte(client.Character.Level);
             res3.WriteInt32(client.Character.MapId); // Location of your Union Member
-            res3.WriteInt32(1); //1 = offline, 0 = online?
+            res3.WriteInt32(0b11111111); //Area of Map, somehow. or Channel;
             res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
-            res3.WriteInt32(0b111111); //leader?
-            res3.WriteInt32(0b111111); //Subleader?
-            res3.WriteInt32(0b111111); //Invite?
-            res3.WriteInt32(0b111111); //Kick?
-            res3.WriteInt32(0b111111); //News?
-            res3.WriteInt32(0b111111); //Storage?
+            res3.WriteInt32(0b01100111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //
 
             Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
 
@@ -80,22 +80,22 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Character.unionId); //Union Instance ID
             res.WriteFixedString(unionName, 0x31); //size is 0x31
             res.WriteInt32(client.Character.InstanceId); //leader
-            res.WriteInt32(0); //subleader. 
-            res.WriteInt32(0); //subleader2
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.InstanceId); //subleader. 
+            res.WriteInt32(client.Character.InstanceId); //subleader2
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
             res.WriteByte(1); //Union Level
             res.WriteInt32(1 /*myUnion.currentExp*/); //Union EXP Current
             res.WriteInt32(100 /*UnionLevels.Level2EXP*/); //Union EXP next level Target
             res.WriteByte(5); //Increase Union Member Limit above default 50 (See Union Bonuses
             res.WriteByte(10);
-            res.WriteInt32(0);
+            res.WriteInt32(client.Character.InstanceId);
             res.WriteInt16(0x0B); //Mantle/Cape design
             res.WriteFixedString($"You are all members of {unionName} now.  Welcome!", 0x196); //size is 0x196
             for (int i = 0; i < 8; i++)
-                res.WriteInt32(i);
+                res.WriteInt32(client.Character.InstanceId);
             res.WriteByte(15);
 
             Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);

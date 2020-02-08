@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Msg
             uint modification = packet.Data.ReadUInt32();
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); //error check
             Router.Send(client, (ushort) MsgPacketId.recv_union_request_change_role_r, res, ServerType.Msg);
 
 
