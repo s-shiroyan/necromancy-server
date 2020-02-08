@@ -48,6 +48,7 @@ namespace Necromancy.Server.Packet.Area
                         {
                          { x => x == 10000704,   () => ChangeMap(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
                          { x => x == 10000012 ,  () => defaultEvent(client, npcSpawn.NpcId) },
+                         { x => x == 10000019 ,  () => Abdul(client, npcSpawn)  },
                          { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
                          { x => x == 74013071 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013161 ,  () => ChangeMap(client, npcSpawn.NpcId) },
@@ -94,7 +95,7 @@ namespace Necromancy.Server.Packet.Area
         private void RecvEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
             Task.Delay(TimeSpan.FromMilliseconds((int)(2 * 1000))).ContinueWith
            (t1 =>
                {
@@ -157,6 +158,59 @@ namespace Necromancy.Server.Packet.Area
 
             RecvEventEnd(client); //End The Event 
         }
+
+
+        private void Abdul(NecClient client, NpcSpawn npcSpawn)
+        {
+            if (client.Character.eventSelectExecCode == 0)
+            {
+
+                if ((client.Character.currentHp == client.Character.maxHp) && (client.Character.currentMp == client.Character.maxMp))
+                {
+                    IBuffer res12 = BufferProvider.Provide();
+                    res12.WriteCString("What do you want Adul to say?"); // Length 0xC01
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+                }
+                else
+                {
+                    IBuffer res12 = BufferProvider.Provide();
+                    res12.WriteCString("You drink The water and it replenishes you"); // Length 0xC01
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+
+                    IBuffer res7 = BufferProvider.Provide();
+                    res7.WriteInt32((client.Character.maxHp)); //To-Do : Math for Max gain of 50% MaxHp
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res7, ServerType.Area);
+                    client.Character.currentHp = client.Character.maxHp;
+
+                    IBuffer res9 = BufferProvider.Provide();
+                    res9.WriteInt32(client.Character.maxMp); //To-Do : Math for Max gain of 50% MaxMp
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res9, ServerType.Area);
+                    client.Character.currentMp = client.Character.maxMp;
+
+                }
+
+
+            }
+            else if (client.Character.eventSelectExecCode == 1)
+            {
+
+                IBuffer res12 = BufferProvider.Provide();
+                res12.WriteCString("You hate Abdul,  He's messed up"); // Length 0xC01
+                Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+            }
+            else if (client.Character.eventSelectExecCode == 2)
+            {
+
+                IBuffer res12 = BufferProvider.Provide();
+                res12.WriteCString("You Stoll hate Abdul,  He's messed up"); // Length 0xC01
+                Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
+            }
+
+
+            RecvEventEnd(client); //End The Event 
+        }
+
+
         private void ChangeMap(NecClient client, int objectID)
         {
             Map map = null;

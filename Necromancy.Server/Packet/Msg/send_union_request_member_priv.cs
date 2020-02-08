@@ -17,10 +17,15 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
-           
+            uint targetMemberInstanceId = packet.Data.ReadUInt32();
+            int newPermissionBitmask = packet.Data.ReadInt32();
+            NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetMemberInstanceId);
 
-            Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res, ServerType.Msg);
+
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(newPermissionBitmask);
+            Router.Send(targetClient, (ushort) MsgPacketId.recv_union_request_member_priv_r, res, ServerType.Msg);
         }
     }
 }

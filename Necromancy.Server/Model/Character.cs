@@ -113,6 +113,7 @@ namespace Necromancy.Server.Model
         //Task
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
+        public bool helperTextAbdul { get; set; }
         public Character()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -170,6 +171,7 @@ namespace Necromancy.Server.Model
             ClassId = 0;
             unionId = 8888;
             criminalState = 0;
+            helperTextAbdul = true;
         }
 
         public int currentHp

@@ -185,3 +185,60 @@ CREATE TABLE IF NOT EXISTS `nec_friend_list` (
 	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`),
 	FOREIGN KEY(`friend_soul_id`) REFERENCES `nec_soul`(`id`)
 );
+
+
+
+CREATE TABLE IF NOT EXISTS `Inventory`(
+   `BagID` INTEGER,
+   `Gold` INTEGER,
+   PRIMARY KEY(`BagID`)
+);
+
+CREATE TABLE IF NOT EXISTS `SlotsNumbers`(
+   `BagID` INTEGER,
+   `BagIndex` INTEGER,
+   PRIMARY KEY(`BagID`, `BagIndex`),
+   FOREIGN KEY(`BagID`) REFERENCES `Inventory`(`BagID`)
+);
+
+CREATE TABLE IF NOT EXISTS `Items`(
+   `ItemsID` BIGINT,
+   `ItemName` TEXT NOT NULL,
+   `ItemType` INT,
+   `Physics` SMALLINT,
+   `Magic` SMALLINT,
+   `EnchantID` INT,
+   `Durab` INT,
+   `Hardness` TINYINT,
+   `MaxDur` INT,
+   `Numbers` TINYINT,
+   `Level` TINYINT,
+   `Splevel` TINYINT,
+   `Weight` INT,
+   `State` INT,
+   PRIMARY KEY(`ItemsID`)
+);
+
+
+CREATE TABLE IF NOT EXISTS `ItemsInSlot`(
+   `BagID` INT,
+   `BagIndex` INT,
+   `ItemsID` INT,
+   PRIMARY KEY(`BagID`, `BagIndex`, `ItemsID`),
+   FOREIGN KEY(`BagID`, `BagIndex`) REFERENCES `SlotsNumbers`(`BagID`, `BagIndex`),
+   FOREIGN KEY(`ItemsID`) REFERENCES Items(`ItemsID`)
+);
+
+ CREATE TABLE IF NOT EXISTS QuestRequest(
+   QuestID INT,
+   SoulLevelMission BYTE,
+   QuestName CHAR(50),
+   QuestLevel INT,
+   TimeLimit INT,
+   QuestGiverName CHAR(50),
+   RewardEXP INT,
+   RewardGold INT,
+   NumbersOfItems SMALLINT,
+   ItemsType INT,
+   PRIMARY KEY(QuestID)
+);
