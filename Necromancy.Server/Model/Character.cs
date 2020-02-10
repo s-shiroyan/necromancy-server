@@ -99,6 +99,7 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
+        public bool helperTextAbdul { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
@@ -114,7 +115,6 @@ namespace Necromancy.Server.Model
         //Task
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
-        public bool helperTextAbdul { get; set; }
         public Character()
         {
             _logger = LogProvider.Logger<NecLogger>(this);

@@ -8,15 +8,15 @@ namespace Necromancy.Server.Model.Union
     public class Union : IInstance
     {
         public uint InstanceId { get; set; }
-        public uint Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public uint UnionLeaderId { get; set; }
+        public int UnionLeaderId { get; set; }
         public uint UnionSubLeader1Id { get; set; }
         public uint UnionSubLeader2Id { get; set; }
         public uint Level { get; set; }
         public uint CurrentExp { get; set; }
         public uint NextLevelExp { get; set; }
-        public uint MemberLimitIncrease { get; set; }
+        public byte MemberLimitIncrease { get; set; }
         public short CapeDesignID { get; set; }
         public string UnionNews { get; set; }
         public DateTime Created { get; set; }
@@ -27,12 +27,12 @@ namespace Necromancy.Server.Model.Union
         public Union()
         {
             UnionMembers = new List<NecClient>();
-            Id = 0;
+            Id = 1;
             Name = "";
             UnionLeaderId = 0;
             Level = 0;
             CurrentExp = 0;
-            NextLevelExp = 0;
+            NextLevelExp = 100;
             MemberLimitIncrease = 0;
             CapeDesignID = 0;
             Created = DateTime.Now;

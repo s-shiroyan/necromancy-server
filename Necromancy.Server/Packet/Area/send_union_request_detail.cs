@@ -17,8 +17,7 @@ namespace Necromancy.Server.Packet.Msg
         {
             //Acknowledge send
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId); //probably error check. 0 for success
-           
+            res2.WriteInt32(client.Character.unionId); //probably error check. 0 for success           
             Router.Send(client, (ushort) MsgPacketId.recv_union_request_detail_r, res2, ServerType.Msg);
 
             int currentDay = System.DateTime.Today.Day;

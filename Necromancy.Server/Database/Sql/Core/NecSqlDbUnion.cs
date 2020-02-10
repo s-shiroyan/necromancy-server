@@ -49,7 +49,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 return false;
             }
 
-            union.Id = (uint)autoIncrement;
+            union.Id = (int)autoIncrement;
             return true;
         }
         
@@ -124,15 +124,15 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             {
                 Union union = new Union();
-                union.Id = (uint)GetInt32(reader, "id");
+                union.Id = GetInt32(reader, "id");
                 union.Name = GetStringNullable(reader, "name");
-                union.UnionLeaderId = (uint)GetInt32(reader, "union_leader_id");
+                union.UnionLeaderId = GetInt32(reader, "union_leader_id");
                 union.UnionSubLeader1Id = (uint)GetInt32(reader, "union_sub_leader1_id");
                 union.UnionSubLeader2Id = (uint)GetInt32(reader, "union_sub_leader1_id");
                 union.Level = (uint)GetInt32(reader, "level");
                 union.CurrentExp = (uint)GetInt32(reader, "current_exp");
                 union.NextLevelExp = (uint)GetInt32(reader, "next_level_exp");
-                union.MemberLimitIncrease = (uint)GetInt32(reader, "memver_limit_increase");
+                union.MemberLimitIncrease = GetByte(reader, "memver_limit_increase");
                 union.CapeDesignID = GetInt16(reader, "cape_design_id");
                 union.UnionNews = GetStringNullable(reader, "union_news");
                 union.Created = GetDateTime(reader, "created");
