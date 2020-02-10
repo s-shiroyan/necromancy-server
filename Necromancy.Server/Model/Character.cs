@@ -27,6 +27,7 @@ namespace Necromancy.Server.Model
         public DateTime Created { get; set; }
         public byte Slot { get; set; }
         public string Name { get; set; }
+        public string SoulName { get; set; }
         public byte Level { get; set; }
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }

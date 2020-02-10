@@ -1,6 +1,8 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
+
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
@@ -22,6 +24,7 @@ namespace Necromancy.Server.Packet.Msg
             NecClient replyToClient = Server.Clients.GetByCharacterInstanceId(replyToInstanceId);
             client.Character.unionId = replyToClient.Character.unionId;
 
+            Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(resultAcceptOrDeny); //Result
@@ -30,11 +33,11 @@ namespace Necromancy.Server.Packet.Msg
 
             if (resultAcceptOrDeny == 0)
             {
-                //client.Character.UnionId == inviterClient.Character.UnionId
+                //client.Character.UnionId == inviteCharacter.UnionId
                 IBuffer res36 = BufferProvider.Provide();
                 res36.WriteInt32(client.Character.InstanceId);
-                res36.WriteInt32(client.Character.unionId /*client.Character.UnionId*/);
-                res36.WriteCString("Trade_Union" /*myUnion.Name*/); 
+                res36.WriteInt32(client.Character.unionId);
+                res36.WriteCString(myUnion.Name); 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
             }
         }

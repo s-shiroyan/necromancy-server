@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Database
 {
@@ -86,5 +87,12 @@ namespace Necromancy.Server.Database
         Quest SelectQuestById(int questId);
         bool UpdateQuest(Quest quest);
         bool DeleteQuest(int questId);
+        //Union
+        bool InsertUnion(Union union);
+        Union SelectUnionById(int unionId);
+        Union SelectUnionByUnionLeaderId(int leaderId);
+        Union SelectUnionByName(string unionName);
+        bool UpdateUnion(Union union);
+        bool DeleteUnion(int unionId);
     }
 }
