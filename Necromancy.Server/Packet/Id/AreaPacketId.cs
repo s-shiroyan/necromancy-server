@@ -772,9 +772,9 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_order_list_end = 0x73, //opcode not found
         send_event_quest_order_r = 0x86A9,
         send_event_quest_order_select = 0x75, //opcode not found 
-        send_event_quest_report_list_end = 0x76, //opcode not found
+        send_event_quest_report_list_end = 0x8D8,
         send_event_quest_report_r = 0x77, //opcode not found
-        send_event_quest_report_select = 0x78, //opcode not found
+        send_event_quest_report_select = 0x90D4,
         send_event_removetrap_end = 0x87CD,
         send_event_removetrap_select = 0x4CE9,
         send_event_removetrap_skill = 0x81, //opcode not found  TODO

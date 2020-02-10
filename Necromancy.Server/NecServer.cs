@@ -452,6 +452,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_message_board_close(this));
             _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
             _areaConsumer.AddHandler(new send_union_request_rename(this));
+            _areaConsumer.AddHandler(new send_event_quest_report_list_end(this));
+            _areaConsumer.AddHandler(new send_event_quest_report_select(this));            
 
         }
     }

@@ -98,7 +98,85 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)MsgPacketId.recv_union_notify_growth, res39, ServerType.Msg);
                     break;
 
+                case "display":
+                    res36.WriteInt32(333); //error check
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_quest_display_r, res36, ServerType.Area);
+                    break;
 
+                case "order":
+                    IBuffer res2 = BufferProvider.Provide();
+                    res2.WriteInt32(0); // 0 = normal 1 = cinematic
+                    res2.WriteByte(0);
+
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2, ServerType.Area);
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(1999);
+                    res.WriteByte(1);
+                    res.WriteFixedString("aaaaaaa", 0x61);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteFixedString("ffffffffff", 0x61);
+                    res.WriteByte(1);
+                    res.WriteByte(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    res.WriteInt32(1);
+                    int numEntries4 = 0xA;
+                    res.WriteInt32(numEntries4);
+                    for (int i = 0; i < numEntries4; i++)
+                    {
+                        res.WriteInt32(0x10); //size of string
+                        res.WriteFixedString("asfsaf", 0x10);
+                        res.WriteInt16(1);
+                        res.WriteInt32(1);
+                    }
+                    res.WriteByte(1);
+                    int numEntries5 = 0xC;
+                    for (int k = 0; k < numEntries5; k++)
+                    {
+                        res.WriteInt32(0x10); //size of string
+                        res.WriteFixedString("boooooo", 0x10);
+                        res.WriteInt16(1);
+                        res.WriteInt32(1);
+                    }
+                    res.WriteByte(1);
+                    //??res.WriteByte(1);
+                    res.WriteFixedString("Eat the monster", 0x181);
+                    res.WriteFixedString("no wait,  that'd be a really weird quest", 0x181);
+                    for (int m = 0; m < 0x5; m++)
+                    {
+                        res.WriteByte(1);
+                        res.WriteInt32(10101);
+                        res.WriteInt32(100101);
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                    }
+                    res.WriteByte(2);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_quest_order, res, ServerType.Area);
+                    break;
+
+                case "mission":
+                    IBuffer res3 = BufferProvider.Provide();
+                    res3.WriteInt32(0); // 0 = normal 1 = cinematic
+                    res3.WriteByte(0);
+
+                   // Router.Send(client, (ushort)AreaPacketId.recv_event_start, res3, ServerType.Area);
+
+                    IBuffer res4 = BufferProvider.Provide();
+                    res4.WriteInt32(1); // 0 = normal 1 = cinematic
+                    res4.WriteInt32(1); // 0 = normal 1 = cinematic
+
+                    Router.Send(client, (ushort)AreaPacketId.recv_quest_get_mission_quest_works_r, res4, ServerType.Area);
+                    break;
+
+                case "begin":
+                    IBuffer res5 = BufferProvider.Provide();
+                    res5.WriteInt32(0); // 0 = normal 1 = cinematic
+                    res5.WriteByte(0);
+
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res5, ServerType.Area);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_quest_report_list_begin, res36, ServerType.Area);
+                    break;
 
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
