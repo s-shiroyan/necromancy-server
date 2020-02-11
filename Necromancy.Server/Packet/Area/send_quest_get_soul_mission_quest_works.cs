@@ -72,8 +72,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(1);
             res.WriteInt32(1);
             res.WriteFloat(1);
-
-            Router.Send(client, (ushort)AreaPacketId.recv_quest_get_soul_mission_quest_works_r, res, ServerType.Area);
+            //Commented out until further testing. this is called at login
+            //Router.Send(client, (ushort)AreaPacketId.recv_quest_get_soul_mission_quest_works_r, res, ServerType.Area);
 
             //SendQuestDisplay(client);
         }

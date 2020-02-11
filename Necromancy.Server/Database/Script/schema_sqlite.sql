@@ -168,11 +168,11 @@ CREATE TABLE IF NOT EXISTS `nec_block_list` (
 
 CREATE TABLE IF NOT EXISTS `nec_union_news` (
 	`Id`	                INTEGER     NOT NULL UNIQUE,
-	`character_soul_name`	STRING      NOT NULL,
-	`character_name`	    STRING      NOT NULL,
+	`character_soul_name`	TEXT      NOT NULL,
+	`character_name`	    TEXT      NOT NULL,
 	`activity`	            INTEGER     NOT NULL,
-	`string3`	            STRING,
-	`string4`	            STRING,
+	`string3`	            TEXT,
+	`string4`	            TEXT,
 	`itemcount`	            INTEGER     NOT NULL,
 	PRIMARY KEY(`Id`),
 	FOREIGN KEY(`character_name`) REFERENCES `nec_character`(`name`),
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `nec_union_news` (
 
 CREATE TABLE IF NOT EXISTS `nec_union` (
 	`id`	                INTEGER     NOT NULL UNIQUE,
-	`name`	                STRING      NOT NULL,
+	`name`	                TEXT      NOT NULL,
 	`union_leader_id`	    INTEGER     NOT NULL,
 	`union_sub_leader1_id`	INTEGER,
 	`union_sub_leader2_id`	INTEGER,
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `nec_union` (
 	`next_level_exp`	    INTEGER     NOT NULL,
 	`member_limit_increase`	INTEGER     NOT NULL,
 	`cape_design_id`	    INTEGER,
-	`union_news`	        STRING,
+	`union_news`	        TEXT,
 	`created`	            DATETIME    NOT NULL,
 	PRIMARY KEY(`id`),
 	FOREIGN KEY(`union_sub_leader1_id`) REFERENCES `nec_character`(`id`),

@@ -68,6 +68,17 @@ namespace Necromancy.Server.Packet.Area
             }
             Logger.Debug($"{unionName} established with Id {myFirstUnion.Id} and instanceId {myFirstUnion.InstanceId}");
 
+            UnionMember myFirstUnionMember = Server.Instances.CreateInstance<UnionMember>();
+            myFirstUnionMember.UnionId = (int)myFirstUnion.Id;
+            myFirstUnionMember.CharacterDatabaseId = client.Character.Id;
+
+            if (!Server.Database.InsertUnionMember(myFirstUnionMember))
+            {
+                Logger.Error($"union member could not be saved to database table nec_union_member");
+                return;
+            }
+            Logger.Debug($"union member ID{myFirstUnionMember.Id} added to nec_union_member table");
+
             myFirstUnion.Join(client);  //to-do,  add to unionMembers table.
 
             IBuffer res3 = BufferProvider.Provide();

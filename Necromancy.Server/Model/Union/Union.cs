@@ -27,7 +27,7 @@ namespace Necromancy.Server.Model.Union
         public Union()
         {
             UnionMembers = new List<NecClient>();
-            Id = 1;
+            Id = -1;
             Name = "";
             UnionLeaderId = 0;
             Level = 0;

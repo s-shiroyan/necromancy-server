@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Character ID Loading : {client.Character.Id}");
             res.WriteInt32(client.Character.InstanceId); // InstanceId
             res.WriteInt32(client.Character.ClassId); // class
-            res.WriteInt16(50); // current level //+50 Temporary client.Character.Level
+            res.WriteInt16(client.Character.Level); // current level //+50 Temporary client.Character.Level
             res.WriteInt64(500); // current exp
             res.WriteInt64(600); // soul exp
             res.WriteInt64(1000); // exp needed to level

@@ -9,7 +9,7 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertUnion =
-            "INSERT INTO `nec_union` (`id`,`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created`)VALUES(@id,@name,@union_leader_id,@union_sub_leader1_id,@union_sub_leader2_id,@level,@current_exp,@next_level_exp,@member_limit_increase,@cape_design_id,@union_news,@created);";
+            "INSERT INTO `nec_union` (`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created`)VALUES(@name,@union_leader_id,@union_sub_leader1_id,@union_sub_leader2_id,@level,@current_exp,@next_level_exp,@member_limit_increase,@cape_design_id,@union_news,@created);";
         
         private const string SqlSelectUnionById =
             "SELECT `id`,`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `id`=@id;";
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             int rowsAffected = ExecuteNonQuery(SqlInsertUnion, command =>
             {
-                AddParameter(command, "@id", union.Id);
+                //AddParameter(command, "@id", union.Id);
                 AddParameter(command, "@name", union.Name);
                 AddParameter(command, "@union_leader_id", union.UnionLeaderId);
                 AddParameter(command, "@union_sub_leader1_id", union.UnionSubLeader1Id);
@@ -49,7 +49,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 return false;
             }
 
-            union.Id = (int)autoIncrement;
+            union.Id = (int) autoIncrement;
             return true;
         }
         
@@ -69,8 +69,8 @@ namespace Necromancy.Server.Database.Sql.Core
         public Union SelectUnionByUnionLeaderId(int leaderId)
         {
             Union union = null;
-            ExecuteReader(SqlSelectUnionById,
-                command => { AddParameter(command, "@id", leaderId); }, reader =>
+            ExecuteReader(SqlSelectUnionByUnionLeaderId,
+                command => { AddParameter(command, "@union_leader_id", leaderId); }, reader =>
                 {
                     if (reader.Read())
                     {
