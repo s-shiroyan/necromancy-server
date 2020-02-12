@@ -22,23 +22,92 @@ namespace Necromancy.Server.Packet.Msg
             uint replyToInstanceId = packet.Data.ReadUInt32();
             uint resultAcceptOrDeny = packet.Data.ReadUInt32();
             NecClient replyToClient = Server.Clients.GetByCharacterInstanceId(replyToInstanceId);
-            client.Character.unionId = replyToClient.Character.unionId;
+            Logger.Debug($"replyToInstanceId {replyToInstanceId} resultAcceptOrDeny {resultAcceptOrDeny} replyToClient.Character.unionId {replyToClient.Character.unionId}");
 
-            Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
-            IBuffer res = BufferProvider.Provide();
+            //Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
+            Union myUnion = Server.Database.SelectUnionById(replyToClient.Character.unionId);
+            IBuffer res4 = BufferProvider.Provide();
 
-            res.WriteInt32(resultAcceptOrDeny); //Result
-            res.WriteInt32(replyToInstanceId); //object id | Instance ID
-            Router.Send(replyToClient, (ushort) MsgPacketId.recv_union_reply_to_invite_r, res, ServerType.Msg);
+            res4.WriteInt32(resultAcceptOrDeny); //Result
+            res4.WriteInt32(client.Character.InstanceId); //object id | Instance ID
+            Router.Send(replyToClient, (ushort) MsgPacketId.recv_union_reply_to_invite_r, res4, ServerType.Msg);
 
             if (resultAcceptOrDeny == 0)
             {
+                client.Character.unionId = replyToClient.Character.unionId;
                 //client.Character.UnionId == inviteCharacter.UnionId
                 IBuffer res36 = BufferProvider.Provide();
                 res36.WriteInt32(client.Character.InstanceId);
                 res36.WriteInt32(client.Character.unionId);
                 res36.WriteCString(myUnion.Name); 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+
+
+                UnionMember myUnionMember = Server.Instances.CreateInstance<UnionMember>();
+                myUnionMember.UnionId = (int)myUnion.Id;
+                myUnionMember.CharacterDatabaseId = client.Character.Id;
+
+                if (!Server.Database.InsertUnionMember(myUnionMember))
+                {
+                    Logger.Error($"union member could not be saved to database table nec_union_member");
+                    return;
+                }
+                Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
+
+                myUnion.Join(client);  //to-do,  add to unionMembers table.
+
+
+                foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Character.unionId))
+                {
+                    Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    Soul soul = Server.Database.SelectSoulById(character.SoulId);
+                    if (character.Id == myUnion.UnionLeaderId) { unionMemberList.Rank = 0; } //temporary pending rank addition to nec_union_member table
+                    IBuffer res3 = BufferProvider.Provide();
+                    res3.WriteInt32(character.InstanceId); //not sure what this is.  union_Notify ID?
+                    res3.WriteInt32(character.InstanceId);
+                    res3.WriteFixedString($"{soul.Name}", 0x31); //size is 0x31
+                    res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
+                    res3.WriteInt32(character.ClassId);
+                    res3.WriteByte(character.Level);
+                    res3.WriteInt32(character.MapId); // Location of your Union Member
+                    res3.WriteInt32(0); //Area of Map, somehow. or Channel;
+                    res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
+                    res3.WriteInt32(Util.GetRandomNumber(0b01100111, 0b01100111)); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+                    res3.WriteInt32(3); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
+                    res3.WriteInt32(Util.GetRandomNumber(0, 0));
+                    res3.WriteInt32(Util.GetRandomNumber(0, 0));
+                    res3.WriteInt32(Util.GetRandomNumber(0, 0));
+                    res3.WriteInt32(Util.GetRandomNumber(0, 0));
+
+                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
+                }
+
+                uint UnionLeaderInstanceId = Server.Characters.GetByCharacterId(myUnion.UnionLeaderId).InstanceId;
+                //Notify client if msg server found Union settings in database(memory) for client character Unique Persistant ID.
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(client.Character.unionId); //Union Instance ID
+                res.WriteFixedString(myUnion.Name, 0x31); //size is 0x31
+                res.WriteInt32(UnionLeaderInstanceId); //leader
+                res.WriteInt32(myUnion.UnionSubLeader1Id); //subleader.  We need to assign character Instance IDs at server start instead of login...
+                res.WriteInt32(myUnion.UnionSubLeader2Id); //subleader2
+                res.WriteInt32(1);
+                res.WriteInt32(1);
+                res.WriteInt32(1);
+                res.WriteInt32(1);
+                res.WriteByte(0); //Union Level
+                res.WriteInt32(myUnion.CurrentExp); //Union EXP Current
+                res.WriteInt32(myUnion.NextLevelExp); //Union EXP next level Target
+                res.WriteByte(myUnion.MemberLimitIncrease); //Increase Union Member Limit above default 50 (See Union Bonuses
+                res.WriteByte(3);
+                res.WriteInt32(client.Character.InstanceId);
+                res.WriteInt16(myUnion.CapeDesignID); //Mantle/Cape design
+                res.WriteFixedString($"You are all members of {myUnion.Name} now.  Welcome!", 0x196); //size is 0x196
+                for (int i = 0; i < 8; i++)
+                    res.WriteInt32(i);
+                res.WriteByte(0);
+
+                Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
+
             }
         }
     }

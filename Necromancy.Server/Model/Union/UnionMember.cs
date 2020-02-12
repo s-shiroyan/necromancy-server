@@ -12,6 +12,7 @@ namespace Necromancy.Server.Model.Union
         public int CharacterDatabaseId { get; set; }
        // public uint CharacterInstanceId { get; set; }
         public uint MemberPriviledgeBitMask { get; set; }
+        public uint Rank { get; set; }
 
         public DateTime Joined { get; set; }
 
@@ -23,6 +24,7 @@ namespace Necromancy.Server.Model.Union
             CharacterDatabaseId = 1;
             //CharacterInstanceId = 0;
             MemberPriviledgeBitMask = 0b01100111;
+            Rank = 3;
             Joined = DateTime.Now;
 
         }

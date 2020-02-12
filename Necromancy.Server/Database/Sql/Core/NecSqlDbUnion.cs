@@ -132,7 +132,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 union.Level = (uint)GetInt32(reader, "level");
                 union.CurrentExp = (uint)GetInt32(reader, "current_exp");
                 union.NextLevelExp = (uint)GetInt32(reader, "next_level_exp");
-                union.MemberLimitIncrease = GetByte(reader, "memver_limit_increase");
+                union.MemberLimitIncrease = (byte)GetInt32(reader, "member_limit_increase");
                 union.CapeDesignID = GetInt16(reader, "cape_design_id");
                 union.UnionNews = GetStringNullable(reader, "union_news");
                 union.Created = GetDateTime(reader, "created");

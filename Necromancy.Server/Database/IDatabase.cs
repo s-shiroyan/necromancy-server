@@ -99,6 +99,7 @@ namespace Necromancy.Server.Database
         //UnionMember
         bool InsertUnionMember(UnionMember unionMember);
         UnionMember SelectUnionMemberByCharacterId(int CharacterDatabaseId);
+        List<UnionMember> SelectUnionMembersByUnionId(int unionId);
         bool UpdateUnionMember(UnionMember unionMember);
         bool DeleteUnionMember(int characterDatabaseId);
         bool DeleteAllUnionMembers(int unionId);

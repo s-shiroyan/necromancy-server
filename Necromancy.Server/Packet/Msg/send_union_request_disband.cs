@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Msg
            
 
             Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res, ServerType.Msg);
-            Union myUnion = Server.Instances.GetInstance(client.Character.unionId) as Union;
+            Union myUnion = Server.Instances.GetInstance((uint)client.Character.unionId) as Union;
 
             if (!Server.Database.DeleteUnion(myUnion.Id))
             {

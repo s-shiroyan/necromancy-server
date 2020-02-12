@@ -105,7 +105,7 @@ namespace Necromancy.Server.Model
         public uint killerInstanceId { get; private set; }
         public bool playerDead { get; set; }
         public uint partyId { get; set; }
-        public uint unionId { get; set; }
+        public int unionId { get; set; }
         public byte criminalState { get; set; }
 
         //Msg Value Holders

@@ -14,6 +14,9 @@ namespace Necromancy.Server.Database.Sql.Core
         private const string SqlSelectUnionMemberByCharacterId =
             "SELECT `id`,`union_id`,`character_id`,`member_priviledge_bitmask`,`joined` FROM `nec_union_member` WHERE `character_id`=@character_id;";
 
+        private const string SqlSelectUnionMembersByUnionId =
+            "SELECT `id`,`union_id`,`character_id`,`member_priviledge_bitmask`,`joined` FROM `nec_union_member` WHERE `union_id`=@union_id;";
+
         private const string SqlUpdateUnionMember =
             "UPDATE `nec_union_member` SET `id`=@id,`union_id`=@union_id,`character_id`=@character_id,`member_priviledge_bitmask`=@member_priviledge_bitmask,`joined`=@joined  WHERE `character_id`=@character_id;";
 
@@ -54,6 +57,21 @@ namespace Necromancy.Server.Database.Sql.Core
                     }
                 });
             return unionMember;
+        }
+
+        public List<UnionMember> SelectUnionMembersByUnionId(int unionId)
+        {
+            List<UnionMember> unionMembers = new List<UnionMember>();
+            ExecuteReader(SqlSelectUnionMembersByUnionId,
+                command => { AddParameter(command, "@union_id", unionId); }, reader =>
+                {
+                    while (reader.Read())
+                    {
+                        UnionMember unionMember = ReadUnionMember(reader);
+                        unionMembers.Add(unionMember);
+                    }
+                });
+            return unionMembers;
         }
 
         public bool UpdateUnionMember(UnionMember unionMember)

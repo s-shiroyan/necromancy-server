@@ -55,7 +55,7 @@ namespace Necromancy.Server.Packet.Area
             if (sys_msg != 0) { return; }
 
             Union myFirstUnion = Server.Instances.CreateInstance<Union>();
-            client.Character.unionId = myFirstUnion.InstanceId;
+            client.Character.unionId = (int)myFirstUnion.InstanceId;
             myFirstUnion.Name = unionName;
             myFirstUnion.UnionLeaderId = client.Character.Id;
 
@@ -89,10 +89,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(client.Character.ClassId);
             res3.WriteByte(client.Character.Level);
             res3.WriteInt32(client.Character.MapId); // Location of your Union Member
-            res3.WriteInt32(0); //
+            res3.WriteInt32(3); //online stauts?/
             res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
             res3.WriteInt32(0b01100111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
-            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
             res3.WriteInt32(0); //
             res3.WriteInt32(0); //
             res3.WriteInt32(0); //
@@ -115,7 +115,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(myFirstUnion.CurrentExp); //Union EXP Current
             res.WriteInt32(myFirstUnion.NextLevelExp); //Union EXP next level Target
             res.WriteByte(myFirstUnion.MemberLimitIncrease); //Increase Union Member Limit above default 50 (See Union Bonuses
-            res.WriteByte(2);
+            res.WriteByte(3);
             res.WriteInt32(client.Character.InstanceId);
             res.WriteInt16(myFirstUnion.CapeDesignID); //Mantle/Cape design
             res.WriteFixedString($"You are all members of {unionName} now.  Welcome!", 0x196); //size is 0x196

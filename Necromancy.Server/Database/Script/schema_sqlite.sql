@@ -166,45 +166,39 @@ CREATE TABLE IF NOT EXISTS `nec_block_list` (
 	FOREIGN KEY(`block_soul_id`) REFERENCES `nec_soul`(`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `nec_union_news` (
-	`Id`	                INTEGER     NOT NULL UNIQUE,
-	`character_soul_name`	TEXT      NOT NULL,
-	`character_name`	    TEXT      NOT NULL,
-	`activity`	            INTEGER     NOT NULL,
-	`string3`	            TEXT,
-	`string4`	            TEXT,
-	`itemcount`	            INTEGER     NOT NULL,
-	PRIMARY KEY(`Id`),
-	FOREIGN KEY(`character_name`) REFERENCES `nec_character`(`name`),
-	FOREIGN KEY(`character_soul_name`) REFERENCES `nec_soul`(`name`)
-);
-
 CREATE TABLE IF NOT EXISTS `nec_union` (
-	`id`	                INTEGER     NOT NULL UNIQUE,
-	`name`	                TEXT      NOT NULL,
-	`union_leader_id`	    INTEGER     NOT NULL,
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`name`	TEXT NOT NULL,
+	`union_leader_id`	INTEGER NOT NULL,
 	`union_sub_leader1_id`	INTEGER,
 	`union_sub_leader2_id`	INTEGER,
-	`level`	                INTEGER     NOT NULL,
-	`current_exp`	        INTEGER     NOT NULL,
-	`next_level_exp`	    INTEGER     NOT NULL,
-	`member_limit_increase`	INTEGER     NOT NULL,
-	`cape_design_id`	    INTEGER,
-	`union_news`	        TEXT,
-	`created`	            DATETIME    NOT NULL,
-	PRIMARY KEY(`id`),
-	FOREIGN KEY(`union_sub_leader1_id`) REFERENCES `nec_character`(`id`),
-	FOREIGN KEY(`union_leader_id`) REFERENCES `nec_character`(`id`),
-	FOREIGN KEY(`union_sub_leader2_id`) REFERENCES `nec_character`(`id`)
+	`level`	INTEGER NOT NULL,
+	`current_exp`	INTEGER NOT NULL,
+	`next_level_exp`	INTEGER NOT NULL,
+	`member_limit_increase`	INTEGER NOT NULL,
+	`cape_design_id`	INTEGER,
+	`union_news`	TEXT,
+	`created`	DATETIME NOT NULL,
+	FOREIGN KEY(`union_leader_id`) REFERENCES `nec_character`(`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_member` (
-	`id`	                    INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`union_id`	                INTEGER     NOT NULL,
-	`character_id`	            INTEGER     NOT NULL,
-	`member_priviledge_bitmask`	INTEGER     NOT NULL,
-	`joined`	                DATETIME    NOT NULL,
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`union_id`	INTEGER NOT NULL,
+	`character_id`	INTEGER NOT NULL,
+	`member_priviledge_bitmask`	INTEGER NOT NULL,
+	`joined`	DATETIME NOT NULL,
 	FOREIGN KEY(`character_id`) REFERENCES `nec_character`(`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `nec_union_news` (
+	`Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`character_soul_name`	STRING NOT NULL,
+	`character_name`	STRING NOT NULL,
+	`activity`	INTEGER NOT NULL,
+	`string3`	STRING,
+	`string4`	STRING,
+	`itemcount`	INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_black_list` (

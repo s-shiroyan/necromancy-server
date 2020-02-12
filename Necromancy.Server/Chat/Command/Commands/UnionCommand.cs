@@ -44,7 +44,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "disband":
-                    Router.Send(client.Map, (ushort)MsgPacketId.recv_union_notify_disband, res36, ServerType.Msg);
+                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_disband, res36, ServerType.Msg);
 
                     res36.WriteInt32(0); //error check
                     Router.Send(client, (ushort)AreaPacketId.recv_union_request_disband_result, res36, ServerType.Area);
