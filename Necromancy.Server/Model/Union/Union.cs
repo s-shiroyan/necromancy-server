@@ -21,7 +21,6 @@ namespace Necromancy.Server.Model.Union
         public string UnionNews { get; set; }
         public DateTime Created { get; set; }
 
-
         public List<NecClient> UnionMembers { get; set; }
         public List<UnionNewsEntry> UnionNewsEntries { get; set; }
         public Union()

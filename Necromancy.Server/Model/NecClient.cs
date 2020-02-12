@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Arrowgene.Services.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
+using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Model
 {
@@ -27,6 +28,7 @@ namespace Necromancy.Server.Model
         public Character Character { get; set; }
         public Channel Channel { get; set; }
         public Map Map { get; set; }
+        public Union.Union Union { get; set; }
         public NecConnection AuthConnection { get; set; }
         public NecConnection MsgConnection { get; set; }
         public NecConnection AreaConnection { get; set; }

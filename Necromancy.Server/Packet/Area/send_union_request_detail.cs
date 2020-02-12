@@ -38,6 +38,8 @@ namespace Necromancy.Server.Packet.Msg
                     //Union myUnion = Server.Instances.GetInstance(unionMember.UnionId) as Union;
 
                     client.Character.unionId = myUnion.Id;
+                    client.Union = myUnion;
+                    client.Union.Join(client);
 
                     //for each unionMember in myUnion.UnionMembers {  } //ToDo.  add member rank to union member table
                     //Notify client of each union member in above union, queried by charaname and InstanceId (for menu based interactions)

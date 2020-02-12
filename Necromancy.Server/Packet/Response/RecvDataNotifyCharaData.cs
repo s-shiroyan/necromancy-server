@@ -91,7 +91,7 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt32(0);
             }
             //sub_481AA0
-            res.WriteCString(""); //Comment string
+            res.WriteCString(""/*_character.comment*/); //Comment string
             return res;
         }
     }

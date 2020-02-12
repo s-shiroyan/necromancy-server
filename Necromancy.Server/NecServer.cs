@@ -29,6 +29,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Area.SendChatPostMessage;
@@ -131,6 +132,12 @@ namespace Necromancy.Server
             if (map != null)
             {
                 map.Leave(client);
+            }
+
+            Union union = client.Union;
+            if (union != null)
+            {
+                union.Leave(client);
             }
         }
 
