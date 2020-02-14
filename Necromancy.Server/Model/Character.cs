@@ -27,6 +27,7 @@ namespace Necromancy.Server.Model
         public DateTime Created { get; set; }
         public byte Slot { get; set; }
         public string Name { get; set; }
+        public string SoulName { get; set; }
         public byte Level { get; set; }
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }
@@ -98,12 +99,13 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
+        public bool helperTextAbdul { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
         public bool playerDead { get; set; }
         public uint partyId { get; set; }
-        public uint unionId { get; set; }
+        public int unionId { get; set; }
         public byte criminalState { get; set; }
 
         //Msg Value Holders
@@ -113,7 +115,6 @@ namespace Necromancy.Server.Model
         //Task
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
-        public bool helperTextAbdul { get; set; }
         public Character()
         {
             _logger = LogProvider.Logger<NecLogger>(this);

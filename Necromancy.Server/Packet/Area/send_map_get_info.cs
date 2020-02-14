@@ -52,6 +52,12 @@ namespace Necromancy.Server.Packet.Area
                 RecvDataNotifyCharaData otherCharacterData =
                     new RecvDataNotifyCharaData(otherClient.Character, otherClient.Soul.Name);
                 Router.Send(otherCharacterData, client);
+
+                if (otherClient.Union != null)
+                {
+                    RecvDataNotifyUnionData otherUnionData = new RecvDataNotifyUnionData(otherClient.Character, otherClient.Union.Name);
+                    Router.Send(otherUnionData, client);
+                }
             }
             if (client.Map.Id == 2002104)
             {

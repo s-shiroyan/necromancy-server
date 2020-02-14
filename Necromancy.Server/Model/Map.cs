@@ -181,6 +181,12 @@ namespace Necromancy.Server.Model
             client.Character.MapId = Id;
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
+            if (client.Union != null)
+            {
+                RecvDataNotifyUnionData myUnionData = new RecvDataNotifyUnionData(client.Character, client.Union.Name);
+                _server.Router.Send(this, myUnionData, client);
+            }
+
             foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
             {
                 if (!monsterSpawn.Active)

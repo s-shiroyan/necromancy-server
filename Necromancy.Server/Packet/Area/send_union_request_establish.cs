@@ -1,6 +1,7 @@
 using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet.Id;
 using System;
 
@@ -20,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             string unionName = packet.Data.ReadCString(); //It's the Name of your new Union
             int sys_msg = 0;
 
-            if (unionName.Length >= 9) { sys_msg = -1; }
+            if (unionName.Length >= 16) { sys_msg = -1; }
             else if (client.Character.AdventureBagGold < 30000) { sys_msg = -2; }
             else if (client.Soul.Level < 3) { sys_msg = -3; }
             else if (client.Character.unionId != 0) { sys_msg = -4; }
@@ -53,8 +54,32 @@ namespace Necromancy.Server.Packet.Area
 
             if (sys_msg != 0) { return; }
 
-            //Server.Instances.CreateInstance<Union>();
-            client.Character.unionId = (uint)Util.GetRandomNumber(8890, 8900); // crash if you get a pre-established number
+            Union myFirstUnion = Server.Instances.CreateInstance<Union>();
+            client.Character.unionId = (int)myFirstUnion.InstanceId;
+            myFirstUnion.Name = unionName;
+            myFirstUnion.UnionLeaderId = client.Character.Id;
+
+            if (!Server.Database.InsertUnion(myFirstUnion))
+            {
+                Logger.Error($"{unionName} could not be saved to database");
+                Logger.Error($"{unionName} could not be saved to database");
+                Logger.Error($"{unionName} could not be saved to database");
+                return;
+            }
+            Logger.Debug($"{unionName} established with Id {myFirstUnion.Id} and instanceId {myFirstUnion.InstanceId}");
+
+            UnionMember myFirstUnionMember = Server.Instances.CreateInstance<UnionMember>();
+            myFirstUnionMember.UnionId = (int)myFirstUnion.Id;
+            myFirstUnionMember.CharacterDatabaseId = client.Character.Id;
+
+            if (!Server.Database.InsertUnionMember(myFirstUnionMember))
+            {
+                Logger.Error($"union member could not be saved to database table nec_union_member");
+                return;
+            }
+            Logger.Debug($"union member ID{myFirstUnionMember.Id} added to nec_union_member table");
+
+            myFirstUnion.Join(client);  //to-do,  add to unionMembers table.
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteInt32(client.Character.unionId); //Union Member ID
@@ -64,10 +89,10 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteInt32(client.Character.ClassId);
             res3.WriteByte(client.Character.Level);
             res3.WriteInt32(client.Character.MapId); // Location of your Union Member
-            res3.WriteInt32(0b11111111); //Area of Map, somehow. or Channel;
+            res3.WriteInt32(3); //online stauts?/
             res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
             res3.WriteInt32(0b01100111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
-            res3.WriteInt32(0); //
+            res3.WriteInt32(0); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
             res3.WriteInt32(0); //
             res3.WriteInt32(0); //
             res3.WriteInt32(0); //
@@ -86,25 +111,27 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1);
             res.WriteInt32(1);
             res.WriteInt32(1);
-            res.WriteByte(1); //Union Level
-            res.WriteInt32(1 /*myUnion.currentExp*/); //Union EXP Current
-            res.WriteInt32(100 /*UnionLevels.Level2EXP*/); //Union EXP next level Target
-            res.WriteByte(5); //Increase Union Member Limit above default 50 (See Union Bonuses
-            res.WriteByte(10);
+            res.WriteByte(0); //Union Level
+            res.WriteInt32(myFirstUnion.CurrentExp); //Union EXP Current
+            res.WriteInt32(myFirstUnion.NextLevelExp); //Union EXP next level Target
+            res.WriteByte(myFirstUnion.MemberLimitIncrease); //Increase Union Member Limit above default 50 (See Union Bonuses
+            res.WriteByte(3);
             res.WriteInt32(client.Character.InstanceId);
-            res.WriteInt16(0x0B); //Mantle/Cape design
+            res.WriteInt16(myFirstUnion.CapeDesignID); //Mantle/Cape design
             res.WriteFixedString($"You are all members of {unionName} now.  Welcome!", 0x196); //size is 0x196
             for (int i = 0; i < 8; i++)
-                res.WriteInt32(client.Character.InstanceId);
-            res.WriteByte(15);
+                res.WriteInt32(i);
+            res.WriteByte(0);
 
             Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
 
             IBuffer res36 = BufferProvider.Provide();
             res36.WriteInt32(client.Character.InstanceId);
-            res36.WriteInt32(client.Character.unionId /*client.Character.UnionId*/);
+            res36.WriteInt32(client.Character.unionId);
             res36.WriteCString(unionName);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+
+
 
         }
     }
