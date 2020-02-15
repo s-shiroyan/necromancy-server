@@ -185,7 +185,7 @@ namespace Necromancy.Server.Packet.Area
                     IBuffer res9 = BufferProvider.Provide();
                     res9.WriteInt32(client.Character.Mp.max); //To-Do : Math for Max gain of 50% MaxMp
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res9, ServerType.Area);
-                    client.Character.Mp.setCurrent(client.Character.Mp.max);
+                    client.Character.Mp.toMax();
 
                 }
 
