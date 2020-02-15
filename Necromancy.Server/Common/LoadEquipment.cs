@@ -186,6 +186,16 @@ namespace Necromancy.Server.Common
                         };
                         headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
+                    case "Hades":
+                        myCharacter.EquipId = new int[]
+                        {
+                        11300706 /*Weapon*/, 0 /*Shield* */, 0 /*Arrow*/, 161101 /*head*/, 220401 /*Torso*/,
+                        320401 /*Pants*/, 420302 /*Hands*/, 520302 /*Feet*/, 600101 /*Cape*/, 30300101 /*Necklace*/,
+                        30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161101 /*Avatar Head */,
+                        220401 /*Avatar Torso*/, 320101 /*Avatar Pants*/, 420101 /*Avatar Hands*/, 520101 /*Avatar Feet*/
+                        };
+                        headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                        break;
                     case "Quopaty Monk":
                     case "Quopaty Priest":
                         myCharacter.EquipId = new int[]
