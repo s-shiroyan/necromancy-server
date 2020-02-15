@@ -71,6 +71,8 @@ namespace Necromancy.Server.Packet.Area
             UnionMember myFirstUnionMember = Server.Instances.CreateInstance<UnionMember>();
             myFirstUnionMember.UnionId = (int)myFirstUnion.Id;
             myFirstUnionMember.CharacterDatabaseId = client.Character.Id;
+            myFirstUnionMember.MemberPriviledgeBitMask = 0b11111111;
+            myFirstUnionMember.Rank = 0;
 
             if (!Server.Database.InsertUnionMember(myFirstUnionMember))
             {
@@ -80,37 +82,39 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"union member ID{myFirstUnionMember.Id} added to nec_union_member table");
 
             myFirstUnion.Join(client);  //to-do,  add to unionMembers table.
+            TimeSpan differenceCreated = DateTime.Now - DateTime.UnixEpoch;
+            int unionCreatedCalculation = (int)Math.Floor(differenceCreated.TotalSeconds);
+
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(client.Character.unionId); //Union Member ID
+            res3.WriteInt32(client.Character.unionId); //Union ID
             res3.WriteInt32(client.Character.InstanceId);
             res3.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
             res3.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
             res3.WriteInt32(client.Character.ClassId);
             res3.WriteByte(client.Character.Level);
             res3.WriteInt32(client.Character.MapId); // Location of your Union Member
-            res3.WriteInt32(3); //online stauts?/
+            res3.WriteInt32(3); //??
             res3.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
-            res3.WriteInt32(0b01100111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+            res3.WriteInt32(0b11111111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
             res3.WriteInt32(0); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
+            res3.WriteInt32(0); //online status. 0 = online, 1 = away, 2 = offline
+            res3.WriteInt32(unionCreatedCalculation); //
             res3.WriteInt32(0); //
             res3.WriteInt32(0); //
-            res3.WriteInt32(0); //
-            res3.WriteInt32(0); //
-
             Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
 
             //Notify client if msg server found Union settings in database(memory) for client character Unique Persistant ID.
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Character.unionId); //Union Instance ID
             res.WriteFixedString(unionName, 0x31); //size is 0x31
-            res.WriteInt32(client.Character.InstanceId); //leader
-            res.WriteInt32(client.Character.InstanceId); //subleader. 
-            res.WriteInt32(client.Character.InstanceId); //subleader2
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
-            res.WriteInt32(1);
+            res.WriteInt32(unionCreatedCalculation);
+            res.WriteInt32(client.Character.InstanceId); //Leader
+            res.WriteInt32(-1);
+            res.WriteInt32(0); //subleader1
+            res.WriteInt32(-1);
+            res.WriteInt32(0); //subleader2
+            res.WriteInt32(-1);
             res.WriteByte(0); //Union Level
             res.WriteInt32(myFirstUnion.CurrentExp); //Union EXP Current
             res.WriteInt32(myFirstUnion.NextLevelExp); //Union EXP next level Target

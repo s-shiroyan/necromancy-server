@@ -11,8 +11,8 @@ namespace Necromancy.Server.Model.Union
         public int Id { get; set; }
         public string Name { get; set; }
         public int UnionLeaderId { get; set; }
-        public uint UnionSubLeader1Id { get; set; }
-        public uint UnionSubLeader2Id { get; set; }
+        public int UnionSubLeader1Id { get; set; }
+        public int UnionSubLeader2Id { get; set; }
         public uint Level { get; set; }
         public uint CurrentExp { get; set; }
         public uint NextLevelExp { get; set; }
