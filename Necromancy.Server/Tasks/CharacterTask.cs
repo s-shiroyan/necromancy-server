@@ -50,9 +50,9 @@ namespace Necromancy.Server.Tasks
                         LogOutRequest();
                     }
                 }
-                if (_client.Character.playerDead && !playerDied)
+                if (_client.Character.Hp.depleted && !playerDied)
                     PlayerDead();
-                else if (!_client.Character.playerDead && playerDied)
+                else if (!_client.Character.Hp.depleted && playerDied)
                     playerDied = false;
 
                 Thread.Sleep(tickTime);

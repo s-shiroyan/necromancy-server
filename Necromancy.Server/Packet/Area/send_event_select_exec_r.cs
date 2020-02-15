@@ -118,7 +118,7 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.eventSelectExecCode == 0)
             {
 
-                if ((client.Character.currentHp == client.Character.maxHp) && (client.Character.currentMp == client.Character.maxMp))
+                if ((client.Character.Hp.current == client.Character.Hp.max) && (client.Character.Mp.current == client.Character.Mp.max))
                 {
                     IBuffer res12 = BufferProvider.Provide();
                     res12.WriteCString("You try drinking the water but it doesn't seem to have an effect."); // Length 0xC01
@@ -131,14 +131,14 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
 
                     IBuffer res7 = BufferProvider.Provide();
-                    res7.WriteInt32((client.Character.maxHp)); //To-Do : Math for Max gain of 50% MaxHp
+                    res7.WriteInt32((client.Character.Hp.max)); //To-Do : Math for Max gain of 50% MaxHp
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res7, ServerType.Area);
-                    client.Character.currentHp = client.Character.maxHp;
+                    client.Character.Hp.toMax();
 
                     IBuffer res9 = BufferProvider.Provide();
-                    res9.WriteInt32(client.Character.maxMp); //To-Do : Math for Max gain of 50% MaxMp
+                    res9.WriteInt32(client.Character.Mp.max); //To-Do : Math for Max gain of 50% MaxMp
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res9, ServerType.Area);
-                    client.Character.currentMp = client.Character.maxMp;
+                    client.Character.Mp.setCurrent(client.Character.Mp.max);
 
                 }
 
@@ -165,7 +165,7 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.eventSelectExecCode == 0)
             {
 
-                if ((client.Character.currentHp == client.Character.maxHp) && (client.Character.currentMp == client.Character.maxMp))
+                if ((client.Character.Hp.current == client.Character.Hp.max) && (client.Character.Mp.current == client.Character.Mp.max))
                 {
                     IBuffer res12 = BufferProvider.Provide();
                     res12.WriteCString("What do you want Adul to say?"); // Length 0xC01
@@ -178,14 +178,14 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area);// show system message on middle of the screen.
 
                     IBuffer res7 = BufferProvider.Provide();
-                    res7.WriteInt32((client.Character.maxHp)); //To-Do : Math for Max gain of 50% MaxHp
+                    res7.WriteInt32((client.Character.Hp.max)); //To-Do : Math for Max gain of 50% MaxHp
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res7, ServerType.Area);
-                    client.Character.currentHp = client.Character.maxHp;
+                    client.Character.Hp.toMax();
 
                     IBuffer res9 = BufferProvider.Provide();
-                    res9.WriteInt32(client.Character.maxMp); //To-Do : Math for Max gain of 50% MaxMp
+                    res9.WriteInt32(client.Character.Mp.max); //To-Do : Math for Max gain of 50% MaxMp
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res9, ServerType.Area);
-                    client.Character.currentMp = client.Character.maxMp;
+                    client.Character.Mp.setCurrent(client.Character.Mp.max);
 
                 }
 
