@@ -20,6 +20,7 @@ namespace Necromancy.Server.Chat.Command.Commands
     {
         private readonly NecLogger _logger;
         private readonly NecServer _server;
+        InventoryItem invItem;
         public ItemCommand(NecServer server) : base(server)
         {
             _server = server;
@@ -35,22 +36,19 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
             _logger.Debug($"command [0]");
 
-            if (!int.TryParse(command[1], out int x))
-            {
-                responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
-            }
-            if (!int.TryParse(command[2], out int y))
-            {
-                responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
-            }
+            int.TryParse(command[1], out int x);
+            int.TryParse(command[2], out int y);
+            int.TryParse(command[3], out int z);
 
-            
+
             switch (command[0])
             {
                 case "dagger":
                     Item item = null;
                     if (y == 0)
                     {
+                        RecvCharaUpdateAlignment charAlign = new RecvCharaUpdateAlignment(1);
+                        _server.Router.Send(charAlign, client);
                         item = SendItemInstanceUnidentified(client, 10200101, x, (int)ITEM_TYPE.DAGGER, "Dagger");
                     }
                     else
@@ -171,7 +169,28 @@ namespace Necromancy.Server.Chat.Command.Commands
                     if (item == null)
                         return;
                     _logger.Debug($"dagger instanceId [{item.InstanceId}]");
-                    break;                   
+                    break;
+                case "buff":
+                    Buff[] selfBuffs = new Buff[1];
+                    Buff testBuff = new Buff();
+                    testBuff.buffId = x;
+                    testBuff.unknown1 = y;
+                    testBuff.unknown2 = z;
+                    selfBuffs[0] = testBuff;
+                    RecvSelfBuffNotify selfBuff = new RecvSelfBuffNotify(selfBuffs);
+                    _server.Router.Send(selfBuff, client);
+                    break;
+                case "itemt":
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt64(invItem.InstanceId);
+                    res.WriteInt16((short)x);
+                    Router.Send(client, (ushort)AreaPacketId.recv_0x746F, res, ServerType.Area);
+                    break;
+                case "testitem":
+                    Item item1 = SendItemInstanceUnidentified(client, 10200101, 1, (int)ITEM_TYPE.DAGGER, "Dagger");
+                    RecvItemTest recvTest = new RecvItemTest((ulong)item1.InstanceId, (ushort)x, (uint)y, (uint)z);
+                    Router.Send(recvTest, client);
+                    break;
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
@@ -185,7 +204,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public Item SendItemInstanceUnidentified(NecClient client, int itemId, int count, int itemType, string name)
         {
             IBuffer res = null;
-            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            invItem = client.Character.GetNextInventoryItem(_server);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();
@@ -262,7 +281,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             IBuffer res = BufferProvider.Provide();
             //Item item = _server.Instances64.CreateInstance<Item>();
-            InventoryItem invItem = client.Character.GetNextInventoryItem(_server);
+            invItem = client.Character.GetNextInventoryItem(_server);
             if (invItem == null)
             {
                 res = BufferProvider.Provide();

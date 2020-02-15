@@ -121,9 +121,19 @@ namespace Necromancy.Server.Tasks
             _logger.Debug($"_logoutType [{_logoutType}]");
             if (_logoutType == 0x00)   // Return to Title   also   Exit Game
             {
-                //res.WriteInt32(0);
 
+                res = null;
+                res = BufferProvider.Provide();
+                //res.WriteInt64(1);
+                //res.WriteInt16(1);
                 _server.Router.Send(_client, (ushort)AreaPacketId.recv_escape_start, res, ServerType.Area);
+
+
+                //IBuffer buffer = BufferProvider.Provide();
+                //buffer.WriteInt32(0);
+                //NecPacket response = new NecPacket((ushort)CustomPacketId.RecvDisconnect,buffer,ServerType.Msg,PacketType.Disconnect);
+
+                //_server.Router.Send(_client, response);
             }
 
             if (_logoutType == 0x01) // Return to Character Select
