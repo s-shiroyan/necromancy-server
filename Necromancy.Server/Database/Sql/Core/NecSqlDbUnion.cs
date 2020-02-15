@@ -127,8 +127,8 @@ namespace Necromancy.Server.Database.Sql.Core
                 union.Id = GetInt32(reader, "id");
                 union.Name = GetStringNullable(reader, "name");
                 union.UnionLeaderId = GetInt32(reader, "union_leader_id");
-                union.UnionSubLeader1Id = (uint)GetInt32(reader, "union_sub_leader1_id");
-                union.UnionSubLeader2Id = (uint)GetInt32(reader, "union_sub_leader1_id");
+                union.UnionSubLeader1Id = GetInt32(reader, "union_sub_leader1_id");
+                union.UnionSubLeader2Id = GetInt32(reader, "union_sub_leader1_id");
                 union.Level = (uint)GetInt32(reader, "level");
                 union.CurrentExp = (uint)GetInt32(reader, "current_exp");
                 union.NextLevelExp = (uint)GetInt32(reader, "next_level_exp");
