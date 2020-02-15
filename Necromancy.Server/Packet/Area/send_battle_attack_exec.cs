@@ -110,7 +110,7 @@ namespace Necromancy.Server.Packet.Area
                         //SendBattleReportEndNotify(client, instance);
                         return;
                     }
-                    targetClient.Character.currentHp -= damage;
+                    targetClient.Character.damage(damage, character.InstanceId);
                     perHp = ((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
                     Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
                     RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.currentHp);
