@@ -182,14 +182,13 @@ CREATE TABLE IF NOT EXISTS `nec_union` (
 	FOREIGN KEY(`union_leader_id`) REFERENCES `nec_character`(`id`)
 );
 
-CREATE TABLE IF NOT EXISTS `nec_union_member` (
-	`id`	                    INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`union_id`	                INTEGER     NOT NULL,
-	`character_id`	            INTEGER     NOT NULL,
-	`member_priviledge_bitmask`	INTEGER     NOT NULL,
-	`joined`	                DATETIME    NOT NULL,
-	FOREIGN KEY(`character_id`) REFERENCES `nec_character`(`id`)
-);
+CREATE TABLE IF NOT EXISTS "nec_union_member" (
+	"id"	                    INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"union_id"	                INTEGER     NOT NULL,
+	"character_id"	            INTEGER     NOT NULL,
+	"member_priviledge_bitmask"	INTEGER     NOT NULL,
+	"rank"	                    INTEGER     NOT NULL,
+	"joined"	                DATETIME    NOT NULL,
 
 CREATE TABLE IF NOT EXISTS `nec_union_news` (
 	`Id`	                INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,

@@ -35,10 +35,10 @@ namespace Necromancy.Server.Packet.Msg
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(previousLeaderCharacterInstanceId);
             res2.WriteInt32(targetInstanceId);
+            res2.WriteInt32(previousLeaderCharacterInstanceId);
             res2.WriteInt32(targetRole);
-            Router.Send(targetClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res2, ServerType.Msg);
+            if (targetClient != null) Router.Send(targetClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res2, ServerType.Msg);
 
             if (previousLeaderCharacterInstanceId > 0)
             {
@@ -51,7 +51,7 @@ namespace Necromancy.Server.Packet.Msg
                 res3.WriteInt32(targetInstanceId);
                 res3.WriteInt32(previousLeaderCharacterInstanceId);
                 res3.WriteInt32(targetRole);
-                Router.Send(oldLeaderClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res3, ServerType.Msg);
+                if (oldLeaderClient!= null) Router.Send(oldLeaderClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res3, ServerType.Msg);
             }
 
         }

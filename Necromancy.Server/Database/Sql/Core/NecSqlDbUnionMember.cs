@@ -18,7 +18,7 @@ namespace Necromancy.Server.Database.Sql.Core
             "SELECT `id`,`union_id`,`character_id`,`member_priviledge_bitmask`,`rank`,`joined` FROM `nec_union_member` WHERE `union_id`=@union_id;";
 
         private const string SqlUpdateUnionMember =
-            "UPDATE `nec_union_member` SET `id`=@id,`union_id`=@union_id,`character_id`=@character_id,`member_priviledge_bitmask`=@member_priviledge_bitmask,`rank`=@rank,`joined`=@joined  WHERE `character_id`=@character_id;";
+            "UPDATE `nec_union_member` SET `union_id`=@union_id,`character_id`=@character_id,`member_priviledge_bitmask`=@member_priviledge_bitmask,`rank`=@rank,`joined`=@joined  WHERE `character_id`=@character_id;";
 
         private const string SqlDeleteUnionMember =
             "DELETE FROM `nec_union_member` WHERE `character_id`=@character_id;";
@@ -82,7 +82,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@id", unionMember.Id);
                 AddParameter(command, "@union_id", unionMember.UnionId);
                 AddParameter(command, "@character_id", unionMember.CharacterDatabaseId);
-                AddParameter(command, "@member_proviledge_bitmask", unionMember.MemberPriviledgeBitMask);
+                AddParameter(command, "@member_priviledge_bitmask", unionMember.MemberPriviledgeBitMask);
                 AddParameter(command, "@rank", unionMember.Rank);
                 AddParameter(command, "@joined", unionMember.Joined);
             });
