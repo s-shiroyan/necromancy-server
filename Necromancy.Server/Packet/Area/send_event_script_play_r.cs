@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -17,18 +18,21 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-
-            IBuffer res = BufferProvider.Provide();
-            res.WriteCString("ToBeFound"); // find max size 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
-            SendEventEnd(client);
-        }
-        private void SendEventEnd(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
-
+            if (client.Character.eventSelectExecCode != 1)
+            {
+                client.Character.eventSelectExecCode = 1;
+                IBuffer res = BufferProvider.Provide();
+                res.WriteCString("inn/fadein"); // find max size 
+                Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
+                Task.Delay(TimeSpan.FromMilliseconds((int)(10 * 1000))).ContinueWith
+                    (t1 =>
+                        {
+                            IBuffer res = BufferProvider.Provide();
+                            res.WriteByte(0);
+                            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
+                        }
+                    );
+            }
         }
 
     }

@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 10000002, () => RegularInn(client, npcSpawn) },
                         { x => x == 10000703, () => CrimInn(client, npcSpawn) },
                         { x => x == 70000029, () => LostBBS(client, npcSpawn) },
-                        { x =>(x == 70009008) || (x == 70000025) || (x == 70001001), () => EventChangeChannel(client, npcSpawn) },
+                        { x =>(x == 70009008) || (x == 70000025) || (x == 70001001), () => CharaChangeChannel(client, npcSpawn) },
                         { x => x == 80000009, () => UnionWindow(client, npcSpawn) },
                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },

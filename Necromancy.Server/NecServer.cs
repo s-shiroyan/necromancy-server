@@ -157,6 +157,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new ScriptCommand(this));
             Chat.CommandHandler.AddCommand(new UnionCommand(this));
             Chat.CommandHandler.AddCommand(new HelpCommand(this));
             Chat.CommandHandler.AddCommand(new StatusCommand(this));
