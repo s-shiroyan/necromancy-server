@@ -33,6 +33,7 @@ namespace Necromancy.Server.Packet.Area
                         }
                     );
             }
+            else client.Character.eventSelectExecCode = 0;
         }
 
     }

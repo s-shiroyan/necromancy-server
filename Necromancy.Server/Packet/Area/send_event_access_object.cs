@@ -50,9 +50,6 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
                         { x => x == 10000010, () =>  DonkeysItems(client, npcSpawn) },
                         { x => x == 80000003, () => CloakRoomShopClerk(client, npcSpawn) },
                         { x => x == 10000002, () => RegularInn(client, npcSpawn) },
@@ -427,36 +424,34 @@ namespace Necromancy.Server.Packet.Area
 
         private void RegularInn(NecClient client, NpcSpawn npcSpawn)
         {
-            if(client.Character.beginnerProtection == 1)
-            {
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
-                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // It's the first choice
-            }
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString("While Beginner (Usable until SR 2) : 100 G"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0       
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteCString("Small Stable  Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+            res3.WriteCString("Floor : Free!"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteCString("Simple Bed  60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice
+            res4.WriteCString("Simple Bed : 60 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteCString("Economy Room  300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the third choice
+            res5.WriteCString("Economy Room : 300 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteCString("Suite Room  1,200 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // It's the fourth choice
+            res6.WriteCString("Suite Room : 1,200 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res7 = BufferProvider.Provide();
-            res7.WriteCString("Royal Suite  3000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+            res7.WriteCString("Royal Suite : 3000 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // 5
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 6
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
@@ -483,36 +478,29 @@ namespace Necromancy.Server.Packet.Area
 
         private void CrimInn(NecClient client, NpcSpawn npcSpawn)
         {
-            if (client.Character.beginnerProtection == 1)
-            {
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
-                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // It's the first choice
-            }
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteCString("Small Pallet  Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+            res3.WriteCString("Pig stable : Free!"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteCString("Simple Pallet  60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice
+            res4.WriteCString("Storage room : 60 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteCString("Economy Pallet  300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the third choice
+            res5.WriteCString("Sleeper : 300 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteCString("Suite Pallet  1,200 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // It's the fourth choice
-
-            IBuffer res7 = BufferProvider.Provide();
-            res7.WriteCString("Royal Pallet  3000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+            res6.WriteCString("Slum Suite : 10,000 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 5
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name

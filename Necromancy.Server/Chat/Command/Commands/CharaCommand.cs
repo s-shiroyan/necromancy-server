@@ -121,13 +121,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "gimmick":
                     //recv_data_notify_gimmick_data = 0xBFE9,
                     IBuffer res9 = BufferProvider.Provide();
-                    res9.WriteInt32(69696);
+                    res9.WriteInt32(y); //Gimmick instance id
                     res9.WriteFloat(client.Character.X + 100);
                     res9.WriteFloat(client.Character.Y);
                     res9.WriteFloat(client.Character.Z);
                     res9.WriteByte(client.Character.Heading);
                     res9.WriteInt32(y); //Gimmick number (from gimmick.csv)
-                    res9.WriteInt32(0);
+                    res9.WriteInt32(0); //Gimmick State
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, res9, ServerType.Area);
                     break;
 
