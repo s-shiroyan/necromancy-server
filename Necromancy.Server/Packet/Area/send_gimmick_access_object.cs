@@ -20,6 +20,8 @@ namespace Necromancy.Server.Packet.Area
             int targetInstanceId = packet.Data.ReadInt32();
             int unknown = packet.Data.ReadInt32();
 
+            Logger.Debug($"accessing gimick with instance ID {targetInstanceId}");
+
             IBuffer res = BufferProvider.Provide();  // this is the buffer we create 
             res.WriteInt32(0); //Error Check?
             Router.Send(client, (ushort)AreaPacketId.recv_gimmick_access_object_r, res, ServerType.Area); //this sends out our packet to the first operand

@@ -82,6 +82,19 @@ namespace Necromancy.Server.Chat.Command.Commands
                             return;
                         }
                         break;
+                    case Gimmick gimmick:
+                        Logger.Debug($"MonsterId: {gimmick.Id} is being updated in the database");
+                        gimmick.Heading = (byte)(client.Character.Heading);
+                        gimmick.X = (client.Character.X);
+                        gimmick.Y = (client.Character.Y);
+                        gimmick.Z = (client.Character.Z);
+                        gimmick.Updated = DateTime.Now;
+                        if (!Server.Database.UpdateGimmick(gimmick))
+                        {
+                            Logger.Error("Could not update the database");
+                            return;
+                        }
+                        break;
                     default:
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");
                         break;
@@ -110,6 +123,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                         Logger.Debug($"CharacterId: {skill.InstanceId} is now under your movement control. /takeover to Cancel");
                         client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
                         break;
+                    case Gimmick gimmick:
+                        Logger.Debug($"CharacterId: {gimmick.InstanceId} is now under your movement control. /takeover to Cancel");
+                        client.Character.eventSelectReadyCode = specifiedInstance.InstanceId;
+                        break;
                     default:
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");
                         break;
@@ -133,7 +150,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                         break;
                     case Skill skill:
                         Logger.Debug($"CharacterId: {skill.InstanceId} is now under your movement control. /takeover to Cancel");
-
+                                                break;
+                    case Gimmick gimmick:
+                        Logger.Debug($"CharacterId: {gimmick.InstanceId} is now under your movement control. /takeover to Cancel");
                         break;
                     default:
                         Logger.Error($"Instance with InstanceId: {instance.InstanceId} does not exist");

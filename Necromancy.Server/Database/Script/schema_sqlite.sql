@@ -273,3 +273,17 @@ CREATE TABLE IF NOT EXISTS `ItemsInSlot`(
    ItemsType            INT,
    PRIMARY KEY(QuestID)
 );
+
+-- Table: nec_gimmick
+CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn` (
+    `id`       INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `map_id`   INTEGER  NOT NULL,
+    `x`        INTEGER  NOT NULL,
+    `y`        INTEGER  NOT NULL,
+    `z`        INTEGER  NOT NULL,
+    `heading`  INTEGER  NOT NULL,
+    `model_id` INTEGER  NOT NULL,
+    `state`    INTEGER  NOT NULL,
+    `created`  DATETIME,
+    `updated`  DATETIME
+);

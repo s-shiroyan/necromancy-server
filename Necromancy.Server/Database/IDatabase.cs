@@ -103,5 +103,12 @@ namespace Necromancy.Server.Database
         bool UpdateUnionMember(UnionMember unionMember);
         bool DeleteUnionMember(int characterDatabaseId);
         bool DeleteAllUnionMembers(int unionId);
+
+        // Gimmick Spawn
+        bool InsertGimmick(Gimmick gimmick);
+        List<Gimmick> SelectGimmicks();
+        List<Gimmick> SelectGimmicksByMapId(int mapId);
+        bool UpdateGimmick(Gimmick gimmick);
+        bool DeleteGimmick(int gimmickId);
     }
 }

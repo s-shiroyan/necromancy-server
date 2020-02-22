@@ -355,9 +355,9 @@ namespace Necromancy.Server.Packet.Area
             {
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res4.WriteInt16(16); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
-                res4.WriteInt32(0);
-                res4.WriteInt32(0);
+                res4.WriteInt16(0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
+                res4.WriteInt32(10800405);
+                res4.WriteInt32(10800405);
                 res4.WriteByte(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
