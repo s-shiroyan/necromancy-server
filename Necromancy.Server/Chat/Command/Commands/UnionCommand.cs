@@ -5,6 +5,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Packet.Id;
 using System.Threading;
 using System;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -177,9 +178,32 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)AreaPacketId.recv_event_start, res5, ServerType.Area);
                     Router.Send(client, (ushort)AreaPacketId.recv_event_quest_report_list_begin, res36, ServerType.Area);
                     break;
+                case "start":
+                    uint.TryParse(command[1], out uint x);
+                    IBuffer res21 = BufferProvider.Provide();
+                    res21.WriteInt32(1); // 0 = normal 1 = cinematic
+                    res21.WriteByte(255);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_start, res21, ServerType.Area);
+
+                    IBuffer res22 = BufferProvider.Provide();
+
+	                res22.WriteCString("tutorial/tutorial_soul"); //ReadScript query to ...\Data\script\event\. Will play if found
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res22, ServerType.Area);
+
+
+
+                    break;
 
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
+                    Task.Delay(TimeSpan.FromMilliseconds((int)(10 * 1000))).ContinueWith
+                    (t1 =>
+                    {
+                        IBuffer res = BufferProvider.Provide();
+                        res.WriteByte(0);
+                        Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
+                    }
+                    );
                     break;
 
             }

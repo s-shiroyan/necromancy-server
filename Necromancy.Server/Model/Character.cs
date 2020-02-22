@@ -79,10 +79,11 @@ namespace Necromancy.Server.Model
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
-        public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
+        public int eventSelectExecCode { get; set; }
+        public int eventSelectExtraSelectionCode { get; set; }
         private int _currentHp { get; set; }
         private uint _currentMp { get; set; }
         private uint _currentOd { get; set; }
