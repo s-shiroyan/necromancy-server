@@ -41,6 +41,12 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
+            foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
+            {
+                RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
+                    Router.Send(gimmickData, client);
+            }
+
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
             {
                 if (otherClient == client)

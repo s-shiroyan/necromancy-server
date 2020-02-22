@@ -34,6 +34,7 @@ namespace Necromancy.Server.Model
         public Dictionary<uint, NpcSpawn> NpcSpawns { get; }
        // public Dictionary<int, TrapTransition> Trap { get; }
         public Dictionary<uint, MonsterSpawn> MonsterSpawns { get; }
+        public Dictionary<uint, Gimmick> GimmickSpawns { get; }
         public Dictionary<uint, TrapStack> Traps { get; }
         public Dictionary<uint, DeadBody> DeadBodies { get; }
 
@@ -44,6 +45,7 @@ namespace Necromancy.Server.Model
             ClientLookup = new ClientLookup();
             NpcSpawns = new Dictionary<uint, NpcSpawn>();
             MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
+            GimmickSpawns = new Dictionary<uint, Gimmick>();
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -60,6 +62,14 @@ namespace Necromancy.Server.Model
             {
                 server.Instances.AssignInstance(npcSpawn);
                 NpcSpawns.Add(npcSpawn.InstanceId, npcSpawn);
+            }
+
+            //Assign Unique Instance ID to each Gimmick per map. Add to dictionary stored with the Map object
+            List<Gimmick> gimmickSpawns = server.Database.SelectGimmicksByMapId(setting.Id);
+            foreach (Gimmick gimmickSpawn in gimmickSpawns)
+            {
+                server.Instances.AssignInstance(gimmickSpawn);
+                GimmickSpawns.Add(gimmickSpawn.InstanceId, gimmickSpawn);
             }
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
