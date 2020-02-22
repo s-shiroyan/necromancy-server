@@ -8,20 +8,25 @@ using Arrowgene.Services.Logging;
 
 namespace Necromancy.Server.Data
 {
+    public class UnknownItem
+    {
+        public int count;
+        public int size;
+    }
     public class FpmfArchiveIO
     {
         private static byte[] MagicBytes = {0x46, 0x50, 0x4D, 0x46};
         private static byte[] MagicBytes_WOITM = {0x57, 0x4F, 0x49, 0x54, 0x4D};
         private ILogger _logger;
 
-
         public FpmfArchiveIO()
         {
             _logger = LogProvider.Logger(this);
         }
 
-        public FpmfArchive Open(string hedFilePath)
+        public FpmfArchive Open(string hedFilePath, string outPath = "")
         {
+            Dictionary<uint, UnknownItem> unknownList = new Dictionary<uint, UnknownItem>();
             FileInfo hedFile = new FileInfo(hedFilePath);
             if (!hedFile.Exists)
             {
@@ -29,12 +34,13 @@ namespace Necromancy.Server.Data
             }
 
             IBuffer hedBuffer = new StreamBuffer(hedFile.FullName);
+            StreamBuffer headerBuff = new StreamBuffer();
+            headerBuff.SetPositionStart();
 
             if (hedBuffer.Size < 12)
             {
                 throw new Exception("File to small");
             }
-
             hedBuffer.SetPositionStart();
             byte[] magicBytes = hedBuffer.ReadBytes(4);
             for (int i = 0; i < 4; i++)
@@ -43,39 +49,86 @@ namespace Necromancy.Server.Data
                 {
                     throw new Exception("Invalid File");
                 }
+                headerBuff.WriteByte(magicBytes[i]);
             }
 
             FpmfArchive archive = new FpmfArchive();
             archive.Size = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(archive.Size);
             uint unknown0 = hedBuffer.ReadUInt32();
 
+            //BinaryWriter tmpwriter = new BinaryWriter(File.Open("C:\\Users\\kevin\\Desktop\\GameFilesSteamTest\\script_encrypted.hed", FileMode.Create));
+            //tmpwriter.Write(hedBuffer.GetAllBytes());
+            //tmpwriter.Flush();
+            //tmpwriter.Close();
+
             hedBuffer = DecryptHed(hedBuffer);
+            //tmpwriter = new BinaryWriter(File.Open("C:\\Users\\kevin\\Desktop\\GameFilesSteamTest\\script_unencrypted.hed", FileMode.Create));
+            //tmpwriter.Write(magicBytes);
+            //tmpwriter.Write(archive.Size);
+            //tmpwriter.Write(unknown0);
+            //tmpwriter.Write(hedBuffer.GetAllBytes());
+            //tmpwriter.Flush();
+            //tmpwriter.Close();
+
             hedBuffer.SetPositionStart();
-
+            headerBuff.WriteInt32(unknown0);
             uint unknown1 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown1);
             uint unknown2 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown2);
             byte unknown3 = hedBuffer.ReadByte();
+            headerBuff.WriteByte(unknown3);
             byte unknown4 = hedBuffer.ReadByte();
+            headerBuff.WriteByte(unknown4);
             uint unknown5 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown5);
             uint unknown6 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown6);
             int strLen = hedBuffer.ReadByte();
+            headerBuff.WriteByte((byte)strLen);
             archive.DatPath = hedBuffer.ReadString(strLen);
+            headerBuff.WriteCString(archive.DatPath, Encoding.UTF8);
+            headerBuff.Position = headerBuff.Position - 1;
             uint unknown7 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown7);
             uint unknown8 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown8);
             uint unknown9 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown9);
             uint unknown10 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown10);
             uint keyLen = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(keyLen);
             archive.Key = hedBuffer.ReadBytes((int) keyLen);
+            headerBuff.WriteBytes(archive.Key);
             uint unknown11 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown11);
             uint unknown12 = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(unknown12);
             uint numFiles = hedBuffer.ReadUInt32();
+            headerBuff.WriteInt32(numFiles);
+            archive.Header = headerBuff.GetAllBytes();
 
+            //headerBuff.SetPositionStart();
             string relativeArchiveDir = archive.DatPath
                 .Replace("/%08x.dat", "")
                 .Replace("./", "")
                 .Replace('/', Path.DirectorySeparatorChar);
             string hedPath = hedFile.FullName.Replace(".hed", "");
+            string hedName = hedPath.Substring(hedPath.LastIndexOf("\\") + 1);
             string rootPath = hedPath.Replace(relativeArchiveDir, "");
+            if (outPath.Length > 0)
+            {
+                headerBuff.SetPositionStart();
+                BinaryWriter writer = new BinaryWriter(File.Open(outPath + "\\" + hedName + "_header.bin", FileMode.Create));
+                for (int i = 0; i < headerBuff.Size; i++)
+                {
+                    writer.Write(headerBuff.ReadByte());
+                }
+                writer.Flush();
+                writer.Close();
+            }
             DirectoryInfo rootDirectory = new DirectoryInfo(rootPath);
             if (!rootDirectory.Exists)
             {
@@ -99,6 +152,8 @@ namespace Necromancy.Server.Data
                 uint unknown13 = hedBuffer.ReadUInt32();
                 uint unknown14 = hedBuffer.ReadUInt32();
 
+                uint unknown15 = addFileName(archiveFile.FilePath);
+                uint unknown16 = addFileName(archiveFile.DirectoryPath);
                 _logger.Info($"Processing: {archiveFile.FilePath}");
 
                 IBuffer datBuffer;
@@ -132,18 +187,20 @@ namespace Necromancy.Server.Data
 
                 archive.AddFile(archiveFile);
             }
-
             return archive;
         }
 
         public void Save(FpmfArchive archive, string directoryPath)
         {
+            string archiveType = archive.DatPath
+                .Replace("/%08x.dat", "")
+                .Replace("./", "")
+                .Replace('/', Path.DirectorySeparatorChar);
             DirectoryInfo directory = new DirectoryInfo(directoryPath);
             if (!directory.Exists)
             {
                 throw new FileNotFoundException($"Directory: {directoryPath} not found.");
             }
-
 
             string relativeArchiveDir = archive.DatPath
                 .Replace("/%08x.dat", "")
@@ -168,6 +225,109 @@ namespace Necromancy.Server.Data
 
                 File.WriteAllBytes(filePath, file.Data);
             }
+            string keyPath = archive.DatPath;
+            BinaryWriter writer = new BinaryWriter(File.Open(directoryPath + "\\" + archiveType + ".key", FileMode.Create));
+            for (int i = 0; i < archive.Key.Length; i++)
+            {
+                writer.Write(archive.Key[i]);
+            }
+            writer.Flush();
+            writer.Close();
+            writer = new BinaryWriter(File.Open(directoryPath + "\\" + archiveType + "_header.bin", FileMode.Create));
+            writer.Write(archive.Header);
+            writer.Flush();
+            writer.Close();
+        }
+
+        public void Pack(string inPath, string outPath, string archiveName)
+        {
+            uint fileTime = 0x506fa78e;
+
+            FpmfArchive archive = new FpmfArchive();
+            if (inPath.EndsWith("\\"))
+            {
+                inPath = inPath.Substring(0, inPath.Length - 1);
+            }
+            uint currentOffset = 0;
+            //HedFile hedFile = new HedFile();
+            IBuffer keyReader = new StreamBuffer(inPath + "\\" + archiveName + ".key");
+            string baseArchivePath = inPath + "\\" + archiveName;
+
+            archive.KeyLen = keyReader.Size;
+            archive.Key = keyReader.GetAllBytes();
+            string[] inFiles = Directory.GetFiles(baseArchivePath, "*", SearchOption.AllDirectories);
+            archive.NumFiles = (uint)inFiles.Length;
+            uint archiveSize = 0;
+
+            foreach (string inFile in inFiles)
+            {
+                IBuffer inReader = new StreamBuffer(inFile);
+                FpmfArchiveFile datFile = new FpmfArchiveFile();
+                datFile.Size = (uint)inReader.Size;
+                datFile.DatNumber = 0;
+                datFile.Offset = currentOffset;
+                IBuffer encryptedBuff = EncryptDat(inReader, archive.Key);
+                datFile.Data = encryptedBuff.GetAllBytes();
+                archiveSize += (uint)datFile.Data.Length;
+                datFile.FilePath = inFile.Replace(inPath + "\\" + archiveName, ".");
+                //datFile.FilePath =  ".\\" + inFile.Substring(inFile.LastIndexOf(archiveName)+archiveName.Length+1);
+                datFile.FilePathSize = (uint)datFile.FilePath.Length;
+                datFile.DirectoryPath = ".\\" + archiveName + "\\";
+                datFile.DirectoryPathSize = (uint)datFile.DirectoryPath.Length;
+                datFile.Unknown0 = fileTime;
+                datFile.Unknown1 = 0;
+                archive.AddFile(datFile);
+                currentOffset += datFile.Size;
+            }
+            IBuffer headerReader = new StreamBuffer(inPath + "\\" + archiveName + "_header.bin");
+            archive.Header = headerReader.GetAllBytes();
+
+            SavePack(archive, inPath, outPath, archiveName);
+        }
+        private void SavePack(FpmfArchive archive, string inPath, string archivePath, string archiveName)
+        {
+            Directory.CreateDirectory(archivePath + "\\" + archiveName);
+            IBuffer headerBuff = new StreamBuffer();
+            headerBuff.WriteBytes(archive.Header);
+            List<FpmfArchiveFile> archiveFiles = archive.GetFiles();
+            foreach (FpmfArchiveFile archiveFile in archiveFiles)
+            {
+                headerBuff.WriteByte((byte)archiveFile.DirectoryPathSize);
+                headerBuff.WriteCString(archiveFile.DirectoryPath);
+                headerBuff.Position = headerBuff.Position - 1;
+                headerBuff.WriteByte((byte)archiveFile.FilePathSize);
+                headerBuff.WriteCString(archiveFile.FilePath);
+                headerBuff.Position = headerBuff.Position - 1;
+                headerBuff.WriteInt32(archiveFile.DatNumber);
+                headerBuff.WriteInt32(archiveFile.Offset);
+                headerBuff.WriteInt32(archiveFile.Size);
+                headerBuff.WriteInt32(archiveFile.Unknown0);
+                headerBuff.WriteInt32(archiveFile.Unknown1);
+            }
+            //BinaryWriter hedWriter = new BinaryWriter(File.Open(archivePath + "\\" + archiveName + "_unencrypted.hed", FileMode.Create));
+            //hedWriter.Write(headerBuff.GetAllBytes());
+            //hedWriter.Flush();
+            //hedWriter.Close();
+            headerBuff = EncryptHed(headerBuff);
+            BinaryWriter headerWriter = new BinaryWriter(File.Open(archivePath + "\\" + archiveName + ".hed", FileMode.Create));
+            headerBuff.Position = 4;
+            headerBuff.WriteInt32(headerBuff.Size - 12);
+            headerWriter.Write(headerBuff.GetAllBytes(), 0, headerBuff.Size);
+            headerWriter.Flush();
+            headerWriter.Close();
+
+            BinaryWriter datWriter = new BinaryWriter(File.Open(archivePath + "\\" + archiveName + "\\" + "00000000.dat", FileMode.Create));
+            IBuffer outBuff = new StreamBuffer();
+            foreach (FpmfArchiveFile archiveFile in archiveFiles)
+            {
+                string inputFile = inPath + "\\" + archiveName + archiveFile.FilePath.Substring(1);
+                IBuffer datFileReader = new StreamBuffer(inputFile);
+                datFileReader = EncryptDat(datFileReader, archive.Key);
+                outBuff.WriteBytes(datFileReader.GetAllBytes());
+            }
+            datWriter.Write(outBuff.GetAllBytes(), 0, outBuff.Size);
+            datWriter.Flush();
+            datWriter.Close();
         }
 
         /// <summary>
@@ -290,6 +450,17 @@ namespace Necromancy.Server.Data
             _logger.Info("done");
         }
         
+        public uint addFileName(string path)
+        {
+            uint fileValue = 0;
+            for (int i = 0; i < path.Length; i++)
+            {
+                char value = path[i];
+                fileValue += (uint)Convert.ToByte(value);
+            }
+            return fileValue;
+        }
+
         private uint RotateLeft(uint x, int n)
         {
             return (x << n) | (x >> (32 - n));
@@ -390,7 +561,6 @@ namespace Necromancy.Server.Data
             //Uncomment for beta client
             //dl = 0x7D;
             //sub = 0xC4;
-
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < buffer.Size)
@@ -404,7 +574,6 @@ namespace Necromancy.Server.Data
                 dl = cl;
                 outBuffer.WriteByte(bl);
             }
-
             return outBuffer;
         }
 
@@ -436,5 +605,74 @@ namespace Necromancy.Server.Data
 
             return outBuffer;
         }
+        private IBuffer EncryptHed(IBuffer inBuff)
+        {
+            byte bl = 0;
+            byte al = 0;
+
+            //Uncomment for US Steam Client
+            byte dl = 0xA6;
+            byte add = 0x21;
+
+            //Uncomment for US Sunset Client.
+            //byte dl = 0xEA;
+            //byte sub = 0x0A;
+
+            //Uncomment for Beta Client
+            //byte dl = 0x7D;
+            //byte sub = 0xC4;
+
+            // Uncomment for JP client
+            // dl = 0x67;
+            // sub = 0xC7;
+
+            //Uncomment for beta client
+            //dl = 0x7D;
+            //sub = 0xC4;
+
+            //inBuff.Position = 12;
+            inBuff.SetPositionStart();
+            IBuffer outBuffer = new StreamBuffer();
+            outBuffer.WriteBytes(inBuff.ReadBytes(4));
+            outBuffer.WriteInt32(inBuff.Size - 12);
+            inBuff.Position = 8;
+            outBuffer.WriteInt32(inBuff.ReadInt32());
+
+            int hedPos = inBuff.Position;
+            //inBuff.SetPositionStart();
+            // WORKING!!!!
+            while (inBuff.Position < inBuff.Size)
+            {
+                byte cl = inBuff.ReadByte();
+                cl = (byte)(cl + add);
+                bl = (byte)(dl - al);
+                bl = (byte)(bl ^ cl);
+                al = (byte)(al - 1);
+                dl = bl;
+                outBuffer.WriteByte(bl);
+            }
+            return outBuffer;
+        }
+        private IBuffer EncryptDat(IBuffer buffer, byte[] Key)
+        {
+
+            int rotKeyIndex = 0;
+            buffer.SetPositionStart();
+            IBuffer outBuffer = new StreamBuffer();
+            while (buffer.Position < buffer.Size)
+            {
+                byte al = buffer.ReadByte();
+                al = (byte)(al + Key[rotKeyIndex]);
+                outBuffer.WriteByte(al);
+                rotKeyIndex++;
+                if (rotKeyIndex >= Key.Length)
+                {
+                    rotKeyIndex = 0;
+                }
+            }
+
+            return outBuffer;
+        }
+
     }
 }
