@@ -52,6 +52,35 @@ namespace Necromancy.Server.Chat.Command.Commands
                     resI.WriteInt32(0); //Gimmick State
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, resI, ServerType.Area);
                     Logger.Debug($"You just created a gimmick with instance ID {myGimmick.InstanceId}");
+
+                    //Add a sign above them so you know their ID.
+                    GGateSpawn gGateSpawn = Server.Instances.CreateInstance<GGateSpawn>();
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(gGateSpawn.InstanceId); // Unique Object ID.  Crash if already in use (dont use your character ID)
+                    res.WriteInt32(gGateSpawn.SerialId); // Serial ID for Interaction? from npc.csv????
+                    res.WriteByte(0); // 0 = Text, 1 = F to examine  , 2 or above nothing
+                    res.WriteCString($"You spawned a Gimmick here : {client.Character.Name}"); //"0x5B" //Name
+                    res.WriteCString($"The Instance ID of your Gimmick is: {myGimmick.InstanceId}"); //"0x5B" //Title
+                    res.WriteFloat(client.Character.X ); //X Pos
+                    res.WriteFloat(client.Character.Y ); //Y Pos
+                    res.WriteFloat(client.Character.Z+200); //Z Pos
+                    res.WriteByte(client.Character.Heading); //view offset
+                    res.WriteInt32(gGateSpawn.ModelId); // Optional Model ID. Warp Statues. Gaurds, Pedistals, Etc., to see models refer to the model_common.csv
+                    res.WriteInt16(gGateSpawn.Size); //  size of the object
+                    res.WriteInt32(gGateSpawn.Active); // 0 = collision, 1 = no collision  (active/Inactive?)
+                    res.WriteInt32(gGateSpawn.Glow); //0= no effect color appear, //Red = 0bxx1x   | Gold = obxxx1   |blue = 0bx1xx
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_ggate_stone_data, res, ServerType.Area);
+
+                    //Jump over your gimmick
+                    IBuffer res2 = BufferProvider.Provide();
+                    res2.WriteInt32(client.Character.InstanceId);
+                    res2.WriteFloat(client.Character.X-25);
+                    res2.WriteFloat(client.Character.Y-25);
+                    res2.WriteFloat(client.Character.Z+250);
+                    res2.WriteByte(client.Character.Heading);
+                    res2.WriteByte(client.Character.movementAnim);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res2, ServerType.Area);
+
                     break;
                 case "move":
                     Gimmick myGimmick2 = Server.Instances.GetInstance((uint)x) as Gimmick;
