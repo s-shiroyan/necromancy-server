@@ -15,7 +15,13 @@ namespace Necromancy.Cli.Command.Commands
                 FpmfArchiveIO hedFile = new FpmfArchiveIO();
                 hedFile.Pack(parameter.Arguments[0], parameter.Arguments[1], parameter.Arguments[2]);
                 return CommandResultType.Completed;
+            } else if (parameter.Arguments.Count == 4)
+            {
+                FpmfArchiveIO hedFile = new FpmfArchiveIO();
+                hedFile.Pack(parameter.Arguments[0], parameter.Arguments[1], parameter.Arguments[2], parameter.Arguments[3]);
+                return CommandResultType.Completed;
             }
+
 
             return CommandResultType.Continue;
         }
@@ -24,10 +30,11 @@ namespace Necromancy.Cli.Command.Commands
 
         /* Please save a copy of your client's data directory before using.
          * Currently need to unpack the client files for the type you want to modify.
-         * The current version saves a _header.bin and .key file for each archive type during unpack that are used for pack command, ignore them, but leave them. :)
          * Example:  unpack "C:\Wizardy Online\data\script.hed" "C:\UnpackedFiles"
          * Once changes are made use "pack source_dir target_dir type"
          * Example: pack "C:\UnpackedFiles" "C:\PackedFiles" script
+         * If target .hed is not in the root of the out directory and typethe relative path after "pack source_dir target_dir type path"
+         * Example: pack "C:\UnpackedFiles" "C:\PackedFiles" chara 00\01
          * When complete, delete .hed and type, script, directory in client, script.hed and script directory 
          * Copy .hed and directory from PackedFiles to client data directory. Example: "C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data"
          * Run the client

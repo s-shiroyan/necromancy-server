@@ -10,7 +10,7 @@ namespace Necromancy.Server.Data
         private string _directoryPath;
         private uint _directoryPathSize;
         private byte[] _data;
-        private uint _unknown0;
+        private uint _fileTime;
         private uint _unknown1;
 
         public uint Size
@@ -60,8 +60,8 @@ namespace Necromancy.Server.Data
         }
         public uint Unknown0
         {
-            get => _unknown0;
-            set => _unknown0 = value;
+            get => _fileTime;
+            set => _fileTime = value;
         }
         public uint Unknown1
         {
