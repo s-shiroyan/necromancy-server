@@ -485,7 +485,7 @@ namespace Necromancy.Server.Tasks
             _monster.Y = spawnCoords.destination.Y; 
             _monster.Z = spawnCoords.destination.Z; 
             _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination);
-            _monster.SetHP(_monster.MaxHp);
+            _monster.Hp.toMax();
             respawnTime = _monster.RespawnTime;
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monster);
             _server.Router.Send(Map, monsterData);
@@ -497,7 +497,7 @@ namespace Necromancy.Server.Tasks
         public bool MonsterCheck()
         {
            // Logger.Debug($"Monster HP [{_monster.GetHP()}]");
-            if (_monster.GetHP() <= 0)
+            if (_monster.Hp.current <= 0)
             {
                 foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {

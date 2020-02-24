@@ -7,7 +7,7 @@ using System.Numerics;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
-using Necromancy.Server.Packet;
+using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
 
@@ -15,7 +15,6 @@ namespace Necromancy.Server.Model
 {
     public class MonsterSpawn : IInstance
     {
-        private readonly object HpLock = new object();
         private readonly object AgroLock = new object();
         private readonly object TargetLock = new object();
         private readonly object AgroListLock = new object();
@@ -40,9 +39,9 @@ namespace Necromancy.Server.Model
         public byte Heading { get; set; }
         public short Size { get; set; }
         public short Radius { get; set; }
-        private int CurrentHp { get; set; }
+        //private int CurrentHp { get; set; }
         private int GotoDistance;
-        public int MaxHp { get; set; }
+        //public int MaxHp { get; set; }
         public bool CombatMode { get; set; }
         public int AttackSkillId { get; set; }
         public int RespawnTime { get; set; }
@@ -60,11 +59,14 @@ namespace Necromancy.Server.Model
         public List<MonsterCoord> monsterCoords;
         public bool defaultCoords { get; set; }
         public Dictionary<uint, int> MonsterAgroList { get; set; }
+        public BaseStat Hp;
+        public BaseStat Mp;
+        public BaseStat Od;
+
         public MonsterSpawn()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
-            CurrentHp = 300;
-            MaxHp = 300;
+            Hp = new BaseStat(300, 300);
             RespawnTime = 10000;
             GotoDistance = 10;
             SpawnActive = false;
@@ -248,7 +250,7 @@ namespace Necromancy.Server.Model
                 server.Router.Send(Map, (ushort)AreaPacketId.recv_monster_hate_off, res, ServerType.Area);
             }
         }
-        public void SetHP(int modifier)
+        /*public void SetHP(int modifier)
         {
             lock (HpLock)
             {
@@ -264,6 +266,7 @@ namespace Necromancy.Server.Model
             }
             return hp;
         }
+        */
         public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, uint instanceId = 0)
         {
             if (verifyAgro)
@@ -288,10 +291,7 @@ namespace Necromancy.Server.Model
 
                 }
             }
-            lock (HpLock)
-            {
-                CurrentHp += modifier;
-            }
+            
         }
         public void SetAgro(bool agroOn)
         {

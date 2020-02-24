@@ -66,8 +66,8 @@ namespace Necromancy.Server.Packet.Response
             res.WriteInt64(1); // item Id ?
             res.WriteByte(231);
             res.WriteByte(232);
-            res.WriteInt32(_monsterSpawn.GetHP()); //Current HP
-            res.WriteInt32(_monsterSpawn.MaxHp); //Max HP
+            res.WriteInt32(_monsterSpawn.Hp.current); //Current HP
+            res.WriteInt32(_monsterSpawn.Hp.max); //Max HP
             res.WriteInt32(numStatusEffects); // cmp to 0x80 = 128
             for (int i = 0; i < numStatusEffects; i++)
             {

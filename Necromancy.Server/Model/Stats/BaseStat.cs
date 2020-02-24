@@ -14,6 +14,8 @@ namespace Necromancy.Server.Model.Stats
         protected bool _depleted;
         public BaseStat(int currVal, int maxVal)
         {
+            _current = currVal;
+            _max = maxVal;
             _depleted = false;
         }
 
