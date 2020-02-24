@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
@@ -43,9 +44,9 @@ namespace Necromancy.Server.Model
         public ushort piety { get; set; }
         public ushort luck { get; set; }
         public uint ClassId { get; set; }
-        public int maxHp { get; set; }
-        public uint maxMp { get; set; }
-        public uint maxOd { get; set; }
+        //public int maxHp { get; set; }
+        //public int maxMp { get; set; }
+        //public int maxOd { get; set; }
         public bool hadDied { get; set; }
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
@@ -84,9 +85,12 @@ namespace Necromancy.Server.Model
         public uint eventSelectReadyCode { get; set; }
         public int eventSelectExecCode { get; set; }
         public int eventSelectExtraSelectionCode { get; set; }
-        private int _currentHp { get; set; }
-        private uint _currentMp { get; set; }
-        private uint _currentOd { get; set; }
+        //private int _currentHp { get; set; }
+        public BaseStat Hp;
+        public BaseStat Mp;
+        public BaseStat Od;
+        //private int _currentMp { get; set; }
+        //private int _currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
         public int shortcutBar1Id { get; set; }
         public int shortcutBar2Id { get; set; }
@@ -104,7 +108,7 @@ namespace Necromancy.Server.Model
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
-        public bool playerDead { get; set; }
+        //public bool playerDead { get; set; }
         public uint partyId { get; set; }
         public int unionId { get; set; }
         public byte criminalState { get; set; }
@@ -134,12 +138,9 @@ namespace Necromancy.Server.Model
             WeaponType = 8;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;
-            maxHp = 1000;
-            maxMp = 500;
-            maxOd = 200;
-            _currentHp = 1000;
-            _currentMp = 450;
-            _currentOd = 150;
+            Hp = new BaseStat(1000, 1000);
+            Mp = new BaseStat(450, 500);
+            Od = new BaseStat(150, 200);
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
@@ -165,8 +166,7 @@ namespace Necromancy.Server.Model
             secondInnAccess = false;
             _characterActive = true;
             killerInstanceId = 0;
-            playerDead = false;
-           secondInnAccess = false;
+            secondInnAccess = false;
             partyId = 0;
             InstanceId = 0;
             Name = "";
@@ -174,54 +174,6 @@ namespace Necromancy.Server.Model
             unionId = 0;
             criminalState = 0;
             helperTextAbdul = true;
-        }
-
-        public int currentHp
-        {
-            get => _currentHp;
-            set
-            {
-                lock (HPLock)
-                {
-                    _currentHp = value;
-                }
-            }
-        }
-        public void damage(int amount, uint instanceId)
-        {
-            lock (DamageLock)
-            {
-                if (playerDead)
-                    return;
-                _currentHp -= amount;
-                if (_currentHp <= 0)
-                {
-                    playerDead = true;
-                    killerInstanceId = instanceId;
-                }
-            }
-        }
-        public uint currentMp
-        {
-            get => _currentMp;
-            set
-            {
-                lock (MPLock)
-                {
-                    _currentMp = value;
-                }
-            }
-        }
-        public uint currentOd
-        {
-            get => _currentOd;
-            set
-            {
-                lock (ODLock)
-                {
-                    _currentOd = value;
-                }
-            }
         }
         public bool characterActive
         {

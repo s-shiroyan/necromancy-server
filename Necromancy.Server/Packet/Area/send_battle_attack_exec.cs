@@ -110,10 +110,10 @@ namespace Necromancy.Server.Packet.Area
                         //SendBattleReportEndNotify(client, instance);
                         return;
                     }
-                    targetClient.Character.damage(damage, character.InstanceId);
-                    perHp = ((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
-                    Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
-                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.currentHp);
+                    targetClient.Character.Hp.Modify(-damage, character.InstanceId);
+                    perHp = ((targetClient.Character.Hp.current / targetClient.Character.Hp.max) * 100);
+                    Logger.Debug($"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
+                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
                     _server.Router.Send(targetClient, cHpUpdate.ToPacket());
 
                     //logic to turn characters to criminals on criminal actions.  possibly should move to character task.
