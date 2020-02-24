@@ -25,31 +25,4 @@
             <TargetPath>Client\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
-    <ItemGroup>
-      <_UnmanagedRegistrationCache Remove="obj\Necromancy.Server.csproj.UnmanagedRegistration.cache" />
-    </ItemGroup>
-    <ItemGroup>
-      <_ResolveComReferenceCache Remove="obj\Debug\netstandard2.1\Necromancy.Server.csproj.ResolveComReference.cache" />
-    </ItemGroup>
-    <ItemGroup>
-      <IntermediateAssembly Remove="obj\Debug\netstandard2.1\Necromancy.Server.dll" />
-    </ItemGroup>
-    <ItemGroup>
-      <_DebugSymbolsIntermediatePath Remove="obj\Debug\netstandard2.1\Necromancy.Server.pdb" />
-    </ItemGroup>
-    <ItemGroup>
-      <_DeploymentManifestEntryPoint Remove="obj\Debug\netstandard2.1\Necromancy.Server.dll" />
-    </ItemGroup>
-    <ItemGroup>
-      <ApplicationManifest Remove="obj\Debug\netstandard2.1\Native.Necromancy.Server.manifest" />
-    </ItemGroup>
-    <ItemGroup>
-      <DeployManifest Remove="obj\Debug\netstandard2.1\Necromancy.Server.application" />
-    </ItemGroup>
-    <ItemGroup>
-      <ClsidMap Remove="obj\Debug\netstandard2.1\Necromancy.Server.clsidmap" />
-    </ItemGroup>
-    <ItemGroup>
-      <RegFreeComManifest Remove="obj\Debug\netstandard2.1\Necromancy.Server.X.manifest" />
-    </ItemGroup>
 </Project>

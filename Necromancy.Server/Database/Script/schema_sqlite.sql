@@ -5,30 +5,30 @@ CREATE TABLE IF NOT EXISTS `setting` (
 );
 
 CREATE TABLE IF NOT EXISTS `account` (
-  `id`               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  `name`             TEXT                              NOT NULL,
-  `normal_name`      TEXT                              NOT NULL,
-  `hash`             TEXT                              NOT NULL,
-  `mail`             TEXT                              NOT NULL,
-  `mail_verified`    INTEGER                           NOT NULL,
-  `mail_verified_at` DATETIME DEFAULT NULL,
-  `mail_token`       TEXT     DEFAULT NULL,
-  `password_token`   TEXT     DEFAULT NULL,
-  `state`            INTEGER                           NOT NULL,
-  `last_login`       DATETIME DEFAULT NULL,
-  `created`          DATETIME                          NOT NULL,
+  `id`               INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL,
+  `name`             TEXT                               NOT NULL,
+  `normal_name`      TEXT                               NOT NULL,
+  `hash`             TEXT                               NOT NULL,
+  `mail`             TEXT                               NOT NULL,
+  `mail_verified`    INTEGER                            NOT NULL,
+  `mail_verified_at` DATETIME   DEFAULT                 NULL,
+  `mail_token`       TEXT       DEFAULT                 NULL,
+  `password_token`   TEXT       DEFAULT                 NULL,
+  `state`            INTEGER                            NOT NULL,
+  `last_login`       DATETIME   DEFAULT                 NULL,
+  `created`          DATETIME                           NOT NULL,
   CONSTRAINT `uq_account_name` UNIQUE (`name`),
   CONSTRAINT `uq_account_normal_name` UNIQUE (`normal_name`),
   CONSTRAINT `uq_account_mail` UNIQUE (`mail`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_soul` (
-  `id`         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  `account_id` INTEGER                           NOT NULL,
-  `name`       TEXT                              NOT NULL,
-  `level`      INTEGER                           NOT NULL,
-  `created`    DATETIME                          NOT NULL,  
-  `password`   TEXT     DEFAULT NULL,
+  `id`         INTEGER PRIMARY KEY AUTOINCREMENT    NOT NULL,
+  `account_id` INTEGER                              NOT NULL,
+  `name`       TEXT                                 NOT NULL,
+  `level`      INTEGER                              NOT NULL,
+  `created`    DATETIME                             NOT NULL,  
+  `password`   TEXT         DEFAULT                 NULL,
   CONSTRAINT `fk_nec_soul_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
   CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
@@ -41,27 +41,27 @@ CREATE TABLE IF NOT EXISTS `nec_skilltree_item` (
 );
 
 CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
-  `id`    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-  `slot0` INTEGER                           NOT NULL,
-  `slot1` INTEGER                           NOT NULL,
-  `slot2` INTEGER                           NOT NULL,
-  `slot3` INTEGER                           NOT NULL,
-  `slot4` INTEGER                           NOT NULL,
-  `slot5` INTEGER                           NOT NULL,
-  `slot6` INTEGER                           NOT NULL,
-  `slot7` INTEGER                           NOT NULL,
-  `slot8` INTEGER                           NOT NULL,
-  `slot9` INTEGER                           NOT NULL,
-  `action0` INTEGER                           NOT NULL,
-  `action1` INTEGER                           NOT NULL,
-  `action2` INTEGER                           NOT NULL,
-  `action3` INTEGER                           NOT NULL,
-  `action4` INTEGER                           NOT NULL,
-  `action5` INTEGER                           NOT NULL,
-  `action6` INTEGER                           NOT NULL,
-  `action7` INTEGER                           NOT NULL,
-  `action8` INTEGER                           NOT NULL,
-  `action9` INTEGER                           NOT NULL
+  `id`    INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL,
+  `slot0` INTEGER                               NOT NULL,
+  `slot1` INTEGER                               NOT NULL,
+  `slot2` INTEGER                               NOT NULL,
+  `slot3` INTEGER                               NOT NULL,
+  `slot4` INTEGER                               NOT NULL,
+  `slot5` INTEGER                               NOT NULL,
+  `slot6` INTEGER                               NOT NULL,
+  `slot7` INTEGER                               NOT NULL,
+  `slot8` INTEGER                               NOT NULL,
+  `slot9` INTEGER                               NOT NULL,
+  `action0` INTEGER                             NOT NULL,
+  `action1` INTEGER                             NOT NULL,
+  `action2` INTEGER                             NOT NULL,
+  `action3` INTEGER                             NOT NULL,
+  `action4` INTEGER                             NOT NULL,
+  `action5` INTEGER                             NOT NULL,
+  `action6` INTEGER                             NOT NULL,
+  `action7` INTEGER                             NOT NULL,
+  `action8` INTEGER                             NOT NULL,
+  `action9` INTEGER                             NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_character` (
@@ -165,23 +165,125 @@ CREATE TABLE IF NOT EXISTS `nec_block_list` (
 	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`),
 	FOREIGN KEY(`block_soul_id`) REFERENCES `nec_soul`(`id`)
 );
-CREATE TABLE IF NOT EXISTS `nec_union_member` (
-	`id`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`union_id`	    INTEGER NOT NULL,
-	`character_id`	INTEGER NOT NULL,
-	FOREIGN KEY(`character_id`) REFERENCES `nec_character`(`id`)
+
+CREATE TABLE IF NOT EXISTS `nec_union` (
+	`id`	                INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`name`	                TEXT        NOT NULL,
+	`union_leader_id`	    INTEGER     NOT NULL,
+	`union_sub_leader1_id`	INTEGER,
+	`union_sub_leader2_id`	INTEGER,
+	`level`	                INTEGER     NOT NULL,
+	`current_exp`	        INTEGER     NOT NULL,
+	`next_level_exp`	    INTEGER     NOT NULL,
+	`member_limit_increase`	INTEGER     NOT NULL,
+	`cape_design_id`	    INTEGER,
+	`union_news`	        TEXT,
+	`created`	            DATETIME    NOT NULL,
+	FOREIGN KEY(`union_leader_id`) REFERENCES `nec_character`(`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `nec_union_member` (
+	`id`	                    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`union_id`	                INTEGER NOT NULL,
+	`character_id`	            INTEGER NOT NULL,
+	`member_priviledge_bitmask`	INTEGER NOT NULL,
+	`rank`	                    INTEGER NOT NULL,
+	`joined`	                DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_union_news` (
+	`Id`	                INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`character_soul_name`	STRING      NOT NULL,
+	`character_name`	    STRING      NOT NULL,
+	`activity`	            INTEGER     NOT NULL,
+	`string3`	            STRING,
+	`string4`	            STRING,
+	`itemcount`	            INTEGER     NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `nec_black_list` (
-	`id`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`soul_id`	    INTEGER NOT NULL,
-	`black_soul_id`	INTEGER NOT NULL,
+	`id`	                INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`soul_id`	            INTEGER     NOT NULL,
+	`black_soul_id`	        INTEGER     NOT NULL,
 	FOREIGN KEY(`black_soul_id`) REFERENCES `nec_soul`(`id`),
 	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`)
 );
+
 CREATE TABLE IF NOT EXISTS `nec_friend_list` (
-	`id`	            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`soul_id`	        INTEGER NOT NULL,
-	`friend_soul_id`	INTEGER NOT NULL,
+	`id`	            INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`soul_id`	        INTEGER     NOT NULL,
+	`friend_soul_id`	INTEGER     NOT NULL,
 	FOREIGN KEY(`soul_id`) REFERENCES `nec_soul`(`id`),
 	FOREIGN KEY(`friend_soul_id`) REFERENCES `nec_soul`(`id`)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS `Inventory`(
+   `BagID`  INTEGER,
+   `Gold`   INTEGER,
+   PRIMARY KEY(`BagID`)
+);
+
+CREATE TABLE IF NOT EXISTS `SlotsNumbers`(
+   `BagID`      INTEGER,
+   `BagIndex`   INTEGER,
+   PRIMARY KEY(`BagID`, `BagIndex`),
+   FOREIGN KEY(`BagID`) REFERENCES `Inventory`(`BagID`)
+);
+
+CREATE TABLE IF NOT EXISTS `Items`(
+   `ItemsID`    BIGINT,
+   `ItemName`   TEXT        NOT NULL,
+   `ItemType`   INT,
+   `Physics`    SMALLINT,
+   `Magic`      SMALLINT,
+   `EnchantID`  INT,
+   `Durab`      INT,
+   `Hardness`   TINYINT,
+   `MaxDur`     INT,
+   `Numbers`    TINYINT,
+   `Level`      TINYINT,
+   `Splevel`    TINYINT,
+   `Weight`     INT,
+   `State`      INT,
+   PRIMARY KEY(`ItemsID`)
+);
+
+
+CREATE TABLE IF NOT EXISTS `ItemsInSlot`(
+   `BagID`      INT,
+   `BagIndex`   INT,
+   `ItemsID`    INT,
+   PRIMARY KEY(`BagID`, `BagIndex`, `ItemsID`),
+   FOREIGN KEY(`BagID`, `BagIndex`) REFERENCES `SlotsNumbers`(`BagID`, `BagIndex`),
+   FOREIGN KEY(`ItemsID`) REFERENCES Items(`ItemsID`)
+);
+
+ CREATE TABLE IF NOT EXISTS QuestRequest(
+   QuestID              INT,
+   SoulLevelMission     BYTE,
+   QuestName            CHAR(50),
+   QuestLevel           INT,
+   TimeLimit            INT,
+   QuestGiverName       CHAR(50),
+   RewardEXP            INT,
+   RewardGold           INT,
+   NumbersOfItems       SMALLINT,
+   ItemsType            INT,
+   PRIMARY KEY(QuestID)
+);
+
+-- Table: nec_gimmick
+CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn` (
+    `id`       INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `map_id`   INTEGER  NOT NULL,
+    `x`        INTEGER  NOT NULL,
+    `y`        INTEGER  NOT NULL,
+    `z`        INTEGER  NOT NULL,
+    `heading`  INTEGER  NOT NULL,
+    `model_id` INTEGER  NOT NULL,
+    `state`    INTEGER  NOT NULL,
+    `created`  DATETIME,
+    `updated`  DATETIME
 );

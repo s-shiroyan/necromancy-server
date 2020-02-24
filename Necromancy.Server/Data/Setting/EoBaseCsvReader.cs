@@ -22,12 +22,12 @@ namespace Necromancy.Server.Data.Setting
                 return null;
             }
 
-            if (id == 1430211)
+            /*if (id == 1430211)
             {
                 _logger.Debug($"properties[9] [{properties[9]}]");
                 _logger.Debug($"properties[10] [{properties[10]}]");
                 _logger.Debug($"properties[11] [{properties[11]}]");
-            }
+            }*/
             int.TryParse(properties[2], out int logId);
             bool.TryParse(properties[4], out bool onlyOwner);
             bool.TryParse(properties[5], out bool showActivationTime);

@@ -20,21 +20,24 @@ namespace Necromancy.Server.Packet.Area
             int targetInstanceId = packet.Data.ReadInt32();
             int unknown = packet.Data.ReadInt32();
 
+            Logger.Debug($"accessing gimick with instance ID {targetInstanceId}");
+
             IBuffer res = BufferProvider.Provide();  // this is the buffer we create 
-            res.WriteInt32(2); //our packets data
+            res.WriteInt32(0); //Error Check?
             Router.Send(client, (ushort)AreaPacketId.recv_gimmick_access_object_r, res, ServerType.Area); //this sends out our packet to the first operand
 
-            SendGimmickAccessObjectNotify(client, targetInstanceId);
-        }
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(client.Character.InstanceId); //this is probably for letting others know who accessed it (Instance Id)
+            res2.WriteInt32(targetInstanceId);
+            res2.WriteInt32(unknown);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_gimmick_access_object_notify, res2, ServerType.Area);
 
-        private void SendGimmickAccessObjectNotify(NecClient client, int targetInstanceId)
-        {
-            //recv_gimmick_access_object_notify = 0xD804,
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId); //this is probably for letting others know who accessed it (Instance Id)
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_gimmick_access_object_notify, res, ServerType.Area);
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteInt32(targetInstanceId); //Gimmick Object ID.
+            res3.WriteInt32(unknown); //Gimmick State
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_gimmick_state_update, res3, ServerType.Area);
+
+
         }
     }
 }

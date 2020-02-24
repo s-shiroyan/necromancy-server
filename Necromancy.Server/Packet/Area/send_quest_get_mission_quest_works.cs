@@ -19,8 +19,8 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
             res.WriteInt32(0);
-
-            Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res, ServerType.Area);
+            //Commented out until further testing. this is called at login
+            //Router.Send(client, (ushort) AreaPacketId.recv_quest_get_mission_quest_works_r, res, ServerType.Area);
         }
     }
 }

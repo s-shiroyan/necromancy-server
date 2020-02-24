@@ -29,6 +29,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
 using Necromancy.Server.Packet.Area.SendChatPostMessage;
@@ -132,6 +133,12 @@ namespace Necromancy.Server
             {
                 map.Leave(client);
             }
+
+            Union union = client.Union;
+            if (union != null)
+            {
+                union.Leave(client);
+            }
         }
 
         public void Start()
@@ -150,6 +157,9 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new GimmickCommand(this));
+            Chat.CommandHandler.AddCommand(new ScriptCommand(this));
+            Chat.CommandHandler.AddCommand(new UnionCommand(this));
             Chat.CommandHandler.AddCommand(new HelpCommand(this));
             Chat.CommandHandler.AddCommand(new StatusCommand(this));
             Chat.CommandHandler.AddCommand(new NpcCommand(this));
@@ -282,6 +292,7 @@ namespace Necromancy.Server
             _msgConsumer.AddHandler(new send_union_request_set_mantle(this));
 
             // Area Handler
+            _areaConsumer.AddHandler(new SendDisconnect(this));
             _areaConsumer.AddHandler(new SendHeartbeat(this));
             _areaConsumer.AddHandler(new SendUnknown1(this));
             _areaConsumer.AddHandler(new send_auction_bid(this));
@@ -449,6 +460,9 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_party_decline_to_apply(this));
             _areaConsumer.AddHandler(new send_message_board_close(this));
             _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
+            _areaConsumer.AddHandler(new send_union_request_rename(this));
+            _areaConsumer.AddHandler(new send_event_quest_report_list_end(this));
+            _areaConsumer.AddHandler(new send_event_quest_report_select(this));            
 
         }
     }

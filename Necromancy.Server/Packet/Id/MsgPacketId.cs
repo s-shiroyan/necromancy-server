@@ -162,12 +162,12 @@ namespace Necromancy.Server.Packet.Id
         send_soul_set_passwd = 0x8C9D,
         send_system_register_error_report = 0xC789, 
         send_union_reply_to_invite2 = 0x4301,
-        send_union_request_change_role = 0x014, // placeholder until found
+        send_union_request_change_role = 0x1091,
         //send_union_request_detail = 0x7950,                                       //Commented out for now becasue it has been moved to the AREA server
         send_union_request_disband = 0x015, // placeholder until found
         send_union_request_expel_member = 0xC30D, 
         send_union_request_invite_target = 0x208E,
-        send_union_request_member_priv = 0x018, // placeholder until found
+        send_union_request_member_priv = 0x3845,
         send_union_request_news = 0x2F8A,
         send_union_request_secede = 0x020, // placeholder until found
         send_union_request_set_info = 0x5A33, 

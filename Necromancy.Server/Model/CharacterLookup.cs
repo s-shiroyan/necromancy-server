@@ -85,6 +85,23 @@ namespace Necromancy.Server.Model
             return null;
         }
 
+        /// <summary>
+        /// Returns a Character by CharacterInstanceId if it exists.
+        /// </summary>
+        public Character GetByCharacterInstanceId(uint characterInstanceId)
+        {
+            List<Character> characters = GetAll();
+            foreach (Character character in characters)
+            {
+                if (character.InstanceId == characterInstanceId)
+                {
+                    return character;
+                }
+            }
+
+            return null;
+        }
+
 
     }
 }

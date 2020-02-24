@@ -27,6 +27,7 @@ namespace Necromancy.Server.Model
         public DateTime Created { get; set; }
         public byte Slot { get; set; }
         public string Name { get; set; }
+        public string SoulName { get; set; }
         public byte Level { get; set; }
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }
@@ -78,10 +79,11 @@ namespace Necromancy.Server.Model
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
-        public int eventSelectExecCode { get; set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
+        public int eventSelectExecCode { get; set; }
+        public int eventSelectExtraSelectionCode { get; set; }
         private int _currentHp { get; set; }
         private uint _currentMp { get; set; }
         private uint _currentOd { get; set; }
@@ -98,12 +100,14 @@ namespace Necromancy.Server.Model
         public bool helperTextBlacksmith { get; set; }
         public bool helperTextDonkey { get; set; }
         public bool helperTextCloakRoom { get; set; }
+        public bool helperTextAbdul { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
         public bool playerDead { get; set; }
         public uint partyId { get; set; }
-        public uint unionId { get; set; }
+        public int unionId { get; set; }
+        public byte criminalState { get; set; }
 
         //Msg Value Holders
         public uint friendRequest { get; set; }
@@ -167,7 +171,9 @@ namespace Necromancy.Server.Model
             InstanceId = 0;
             Name = "";
             ClassId = 0;
-            unionId = 8888;
+            unionId = 0;
+            criminalState = 0;
+            helperTextAbdul = true;
         }
 
         public int currentHp

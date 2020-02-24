@@ -704,9 +704,9 @@ namespace Necromancy.Server.Packet.Id
         send_auction_cancel_exhibit = 0x375B,
         send_auction_close = 0xE732,
         send_auction_exhibit = 0xED52, 
-        send_auction_re_exhibit = 0x33, //opcode not found
-        send_auction_receive_gold = 0x34, //opcode not found
-        send_auction_receive_item = 0x35, //opcode not found
+        send_auction_re_exhibit = 0x61FA, 
+        send_auction_receive_gold = 0x4657, 
+        send_auction_receive_item = 0x7E18, 
         send_auction_search = 0x8865, 
         send_base_check_version = 0x5705, 
         send_base_enter = 0xAE43, 
@@ -772,9 +772,9 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_order_list_end = 0x73, //opcode not found
         send_event_quest_order_r = 0x86A9,
         send_event_quest_order_select = 0x75, //opcode not found 
-        send_event_quest_report_list_end = 0x76, //opcode not found
+        send_event_quest_report_list_end = 0x8D8,
         send_event_quest_report_r = 0x77, //opcode not found
-        send_event_quest_report_select = 0x78, //opcode not found
+        send_event_quest_report_select = 0x90D4,
         send_event_removetrap_end = 0x87CD,
         send_event_removetrap_select = 0x4CE9,
         send_event_removetrap_skill = 0x81, //opcode not found  TODO
@@ -782,7 +782,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_script_play_r = 0xA3B5,
         send_event_select_channel_r = 0x1C22,
         send_event_select_exec_r = 0x6439,
-        send_event_select_map_and_channel_r = 0xB87F, //opcode not found
+        send_event_select_map_and_channel_r = 0xB87F,
         send_event_soul_rankup_close = 0x4D03,
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
@@ -944,7 +944,7 @@ namespace Necromancy.Server.Packet.Id
         send_union_mantle_close = 0xCF06,
         send_union_rename_close = 0xC9A9, 
         send_union_request_establish = 0x9956,
-        send_union_request_rename = 0x217, //opcode not found
+        send_union_request_rename = 0x6568,
         send_union_storage_deposit_money = 0x218, //opcode not found
         send_union_storage_draw_money = 0x219, //opcode not found
         send_union_storage_move_item = 0x220, //opcode not found

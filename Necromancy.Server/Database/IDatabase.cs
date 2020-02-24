@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Database
 {
@@ -74,5 +75,40 @@ namespace Necromancy.Server.Database
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
+
+        // Items
+        bool InsertItems(Items items);
+        Items SelectitemsById(int itemsId);
+        bool UpdateItems(Items items);
+        bool DeleteItems(int itemsId);
+
+        // Quest
+        bool InsertQuest(Quest quest);
+        Quest SelectQuestById(int questId);
+        bool UpdateQuest(Quest quest);
+        bool DeleteQuest(int questId);
+
+        //Union
+        bool InsertUnion(Union union);
+        Union SelectUnionById(int unionId);
+        Union SelectUnionByUnionLeaderId(int leaderId);
+        Union SelectUnionByName(string unionName);
+        bool UpdateUnion(Union union);
+        bool DeleteUnion(int unionId);
+
+        //UnionMember
+        bool InsertUnionMember(UnionMember unionMember);
+        UnionMember SelectUnionMemberByCharacterId(int CharacterDatabaseId);
+        List<UnionMember> SelectUnionMembersByUnionId(int unionId);
+        bool UpdateUnionMember(UnionMember unionMember);
+        bool DeleteUnionMember(int characterDatabaseId);
+        bool DeleteAllUnionMembers(int unionId);
+
+        // Gimmick Spawn
+        bool InsertGimmick(Gimmick gimmick);
+        List<Gimmick> SelectGimmicks();
+        List<Gimmick> SelectGimmicksByMapId(int mapId);
+        bool UpdateGimmick(Gimmick gimmick);
+        bool DeleteGimmick(int gimmickId);
     }
 }

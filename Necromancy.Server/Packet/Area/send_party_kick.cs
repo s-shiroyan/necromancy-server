@@ -31,8 +31,19 @@ namespace Necromancy.Server.Packet.Area
 
 
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
-            myParty.PartyMembers.Remove(targetClient);
 
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteInt32(1); //Remove Reason
+            res3.WriteInt32(targetClient.Character.InstanceId); //Instance ID
+            Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_remove_member, res3, ServerType.Msg);
+
+            /*
+            PARTY_REMOVE	0	%s has left the party
+            PARTY_REMOVE	1	You have kicked %s from the party
+            PARTY_REMOVE	2	%s has been buried
+             */
+
+            myParty.PartyMembers.Remove(targetClient);
 
         }
     }

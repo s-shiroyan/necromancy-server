@@ -44,19 +44,18 @@ namespace Necromancy.Server.Packet.Area
                         { x => x == 10000704, () => SendEventSelectMapAndChannel(client, instanceId) }, //set to Manaphes in slums for testing.
                         { x => x == 10000005 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
                         { x => x == 10000012 ,  () => SendEventSelectMapAndChannel(client, instanceId) },
+                        { x => x == 10000019 ,  () => Abdul(client, npcSpawn)  },
                         { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn) },
                         { x => x == 74013071,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => x == 74013161,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => x == 74013271,  () => SendGetWarpTarget(client, npcSpawn) },
                         { x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
-                        //{ x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) || (x == 10000702), () => Blacksmith(client, npcSpawn) },
                         { x => x == 10000010, () =>  DonkeysItems(client, npcSpawn) },
                         { x => x == 80000003, () => CloakRoomShopClerk(client, npcSpawn) },
                         { x => x == 10000002, () => RegularInn(client, npcSpawn) },
                         { x => x == 10000703, () => CrimInn(client, npcSpawn) },
                         { x => x == 70000029, () => LostBBS(client, npcSpawn) },
+                        { x =>(x == 70009008) || (x == 70000025) || (x == 70001001), () => CharaChangeChannel(client, npcSpawn) },
                         { x => x == 80000009, () => UnionWindow(client, npcSpawn) },
                         { x => x < 10 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
                         { x => x < 100 ,    () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached") },
@@ -180,6 +179,51 @@ namespace Necromancy.Server.Packet.Area
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+        }
+
+
+
+        private void Abdul(NecClient client, NpcSpawn npcSpawn)
+
+        {
+            if (client.Character.helperTextAbdul)
+
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+                res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+                res2.WriteCString("I used to drive a cab.");//need to find max size; Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperTextAbdul = false;
+            }
+            else
+            {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteCString(npcSpawn.Title); // Title at top of Window
+                res.WriteInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
+                Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+
+                IBuffer res3 = BufferProvider.Provide();
+                res3.WriteCString("Accept Mission"); //Length 0x601  // name of the choice 
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+
+                IBuffer res4 = BufferProvider.Provide();
+                res4.WriteCString("Report Mission"); //Length 0x601 // name of the choice
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice 
+
+                IBuffer res5 = BufferProvider.Provide();
+                res5.WriteCString("Back"); //Length 0x601 // name of the choice
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the second choice 
+
+                IBuffer res11 = BufferProvider.Provide();
+                res11.WriteCString("Pick a Button..  What are you waiting for"); // Window Heading / Name
+                res11.WriteInt32(npcSpawn.InstanceId);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11, ServerType.Area); // It's the windows that contain the multiple choice
+            }
         }
 
         // I added these to Npc database for now, should it be handled differently?????
@@ -311,9 +355,9 @@ namespace Necromancy.Server.Packet.Area
             {
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res4.WriteInt16(16); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
-                res4.WriteInt32(0);
-                res4.WriteInt32(0);
+                res4.WriteInt16(0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
+                res4.WriteInt32(10800405);
+                res4.WriteInt32(10800405);
                 res4.WriteByte(0);
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
@@ -380,36 +424,34 @@ namespace Necromancy.Server.Packet.Area
 
         private void RegularInn(NecClient client, NpcSpawn npcSpawn)
         {
-            if(client.Character.beginnerProtection == 1)
-            {
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
-                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // It's the first choice
-            }
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString("While Beginner (Usable until SR 2) : 100 G"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0       
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteCString("Small Stable  Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+            res3.WriteCString("Floor : Free!"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteCString("Simple Bed  60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice
+            res4.WriteCString("Simple Bed : 60 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteCString("Economy Room  300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the third choice
+            res5.WriteCString("Economy Room : 300 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteCString("Suite Room  1,200 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // It's the fourth choice
+            res6.WriteCString("Suite Room : 1,200 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res7 = BufferProvider.Provide();
-            res7.WriteCString("Royal Suite  3000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+            res7.WriteCString("Royal Suite : 3000 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // 5
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 6
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
@@ -436,36 +478,30 @@ namespace Necromancy.Server.Packet.Area
 
         private void CrimInn(NecClient client, NpcSpawn npcSpawn)
         {
-            if (client.Character.beginnerProtection == 1)
-            {
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
-                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // It's the first choice
-            }
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteCString("Small Pallet  Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // It's the first choice
+            res3.WriteCString("Pig stable : Free!"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteCString("Simple Pallet  60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // It's the second choice
+            res4.WriteCString("Storage room : 60 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteCString("Economy Pallet  300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // It's the third choice
+            res5.WriteCString("Sleeper : 300 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
-            res6.WriteCString("Suite Pallet  1,200 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // It's the fourth choice
-
-            IBuffer res7 = BufferProvider.Provide();
-            res7.WriteCString("Royal Pallet  3000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // It's the fifth choice
+            res6.WriteCString("Slum Suite : 10,000 G"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // It's the sixth choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 5
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
@@ -495,10 +531,68 @@ namespace Necromancy.Server.Packet.Area
 
         private void UnionWindow(NecClient client, NpcSpawn npcSpawn)
         {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0);
+            //Router.Send(client, (ushort)AreaPacketId.recv_union_request_establish_r, res2, ServerType.Area);
             IBuffer res = BufferProvider.Provide();
             //recv_union_open_window = 0x7D75,
             //no structure
             Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res, ServerType.Area);
+        }
+        private void EventChangeChannel(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            //res2.WriteInt32(0); // error check
+            //res2.WriteInt32(client.Character.InstanceId); // ??
+            //sub_494c50
+            res2.WriteInt32(client.Character.MapId); //Stage ID from Stage.CSV
+            res2.WriteInt32(client.Character.MapId); //Map ID. Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+            res2.WriteInt32(partySize[2]); //max players
+            res2.WriteInt16(levels[2]);
+            //sub_4834C0
+            res2.WriteByte(10); //loops to display
+            //sub_494B90 - for loop
+            for (int i = 0; i < 0x80; i++)
+            {
+                res2.WriteInt32(i);//Channel ID for passing to Send_Channel_Select
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1); //bool 1 | 0
+                res2.WriteInt16(0xF); //Max players
+                res2.WriteInt16((short)i); //Current players
+                res2.WriteByte(3);
+                res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                //
+            }
+            res2.WriteByte(10); //# of channels
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_channel, res2, ServerType.Area);
+        }
+        private void CharaChangeChannel(NecClient client, NpcSpawn npcSpawn) //Usage TBD. calls up Send_Channel_Select
+        {
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0); // error check
+            res2.WriteInt32(client.Character.InstanceId); // ??
+            //sub_494c50
+            res2.WriteInt32(client.Character.MapId); //Stage ID from Stage.CSV
+            res2.WriteInt32(client.Character.MapId); //Map ID. Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
+            res2.WriteInt32(partySize[2]); //max players
+            res2.WriteInt16(levels[2]);
+            //sub_4834C0
+            res2.WriteByte(10); //loops to display
+            //sub_494B90 - for loop
+            for (int i = 0; i < 0x80; i++)
+            {
+                res2.WriteInt32(i);//Channel ID for passing to Send_Channel_Select
+                res2.WriteFixedString($"Channel {i}", 97);
+                res2.WriteByte(1); //bool 1 | 0
+                res2.WriteInt16(0xF); //Max players
+                res2.WriteInt16((short)i); //Current players
+                res2.WriteByte(3);
+                res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                //
+            }
+
+            res2.WriteByte(10); //# of channels
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
         }
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {
