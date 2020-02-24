@@ -42,6 +42,11 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "spawn":
                     Gimmick myGimmick = Server.Instances.CreateInstance<Gimmick>();
                     myGimmick.ModelId = x;
+                    myGimmick.X = client.Character.X;
+                    myGimmick.Y = client.Character.Y;
+                    myGimmick.Z = client.Character.Z;
+                    myGimmick.Heading = client.Character.Heading;
+                    myGimmick.State = 0xA;
                     IBuffer resI = BufferProvider.Provide();
                     resI.WriteInt32(myGimmick.InstanceId);
                     resI.WriteFloat(client.Character.X);
@@ -76,7 +81,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res2.WriteInt32(client.Character.InstanceId);
                     res2.WriteFloat(client.Character.X-25);
                     res2.WriteFloat(client.Character.Y-25);
-                    res2.WriteFloat(client.Character.Z+250);
+                    res2.WriteFloat(client.Character.Z+500);
                     res2.WriteByte(client.Character.Heading);
                     res2.WriteByte(client.Character.movementAnim);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res2, ServerType.Area);
@@ -101,7 +106,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     myGimmick3.Y = client.Character.Y;
                     myGimmick3.Z = client.Character.Z;
                     myGimmick3.Heading = client.Character.Heading;
-                    myGimmick3.State = 0;
+                    myGimmick3.State = 0xA;
                     myGimmick3.Updated = DateTime.Now;
                     if (!Server.Database.InsertGimmick(myGimmick3))
                     {
@@ -117,9 +122,25 @@ namespace Necromancy.Server.Chat.Command.Commands
                         return;
                     }
                     break;
+                    case "rotate":
+                    Gimmick myGimmick5 = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    //myGimmick5.Z += y;
+                    IBuffer res6 = BufferProvider.Provide();
+                    res6.WriteInt32(myGimmick5.InstanceId);
+                    res6.WriteFloat(myGimmick5.X);
+                    res6.WriteFloat(myGimmick5.Y);
+                    res6.WriteFloat(myGimmick5.Z);
+                    res6.WriteByte((byte)y);
+                    res6.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res6, ServerType.Area);
+                    Logger.Debug($"Gimmick {myGimmick5.InstanceId} has been rotated by {y*2} degrees.");
+                    break;
+
+
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
+                    
             }
         }
 
