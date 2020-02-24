@@ -450,20 +450,20 @@ namespace Necromancy.Server.Packet.Area
                 int[] GoldCostPerChoice = new int[] { 0, 0, 60, 300, 1200, 3000, 100, 0, 60, 300, 10000 };
                 Logger.Debug($"The selection you have made is {client.Character.eventSelectExtraSelectionCode}");
 
-                client.Character.currentHp += (HPandMPperChoice[client.Character.eventSelectExtraSelectionCode] * client.Character.maxHp / 100);
-                client.Character.currentMp += ((uint)HPandMPperChoice[client.Character.eventSelectExtraSelectionCode] * client.Character.maxMp / 100);
+                client.Character.Hp.setCurrent((sbyte)HPandMPperChoice[client.Character.eventSelectExtraSelectionCode], true);
+                client.Character.Mp.setCurrent((sbyte)HPandMPperChoice[client.Character.eventSelectExtraSelectionCode],true);
                 /*client.Character.condition*/
-                client.Character.currentOd = client.Character.maxOd;
+                client.Character.Od.toMax();
                 client.Character.AdventureBagGold -= GoldCostPerChoice[client.Character.eventSelectExtraSelectionCode];
-                if (client.Character.currentHp >= client.Character.maxHp) client.Character.currentHp = client.Character.maxHp;
-                if (client.Character.currentMp >= client.Character.maxMp) client.Character.currentMp = client.Character.maxMp;
+                if (client.Character.Hp.current >= client.Character.Hp.max) client.Character.Hp.toMax();
+                if (client.Character.Mp.current >= client.Character.Mp.current) client.Character.Mp.toMax();
 
 
                 IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(client.Character.currentHp);
+                res.WriteInt32(client.Character.Hp.current);
                 Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                 res = BufferProvider.Provide();
-                res.WriteInt32(client.Character.currentMp);
+                res.WriteInt32(client.Character.Mp.current);
                 Router.Send(client, (ushort)AreaPacketId.recv_chara_update_mp, res, ServerType.Area);
                 res = BufferProvider.Provide();
                 res.WriteByte((byte)ConditionPerChoice[client.Character.eventSelectExtraSelectionCode]);
