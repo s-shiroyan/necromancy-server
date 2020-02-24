@@ -36,31 +36,32 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 responses.Add(ChatResponse.CommandError(client, $"No 2nd parameter provided.  that's ok"));
             }
+            Gimmick myGimmick = new Gimmick();
+            IBuffer res = BufferProvider.Provide();
 
             switch (command[0])
             {
                 case "spawn":
-                    Gimmick myGimmick = Server.Instances.CreateInstance<Gimmick>();
+                    myGimmick = Server.Instances.CreateInstance<Gimmick>();
                     myGimmick.ModelId = x;
                     myGimmick.X = client.Character.X;
                     myGimmick.Y = client.Character.Y;
                     myGimmick.Z = client.Character.Z;
                     myGimmick.Heading = client.Character.Heading;
                     myGimmick.State = 0xA;
-                    IBuffer resI = BufferProvider.Provide();
-                    resI.WriteInt32(myGimmick.InstanceId);
-                    resI.WriteFloat(client.Character.X);
-                    resI.WriteFloat(client.Character.Y);
-                    resI.WriteFloat(client.Character.Z);
-                    resI.WriteByte(client.Character.Heading);
-                    resI.WriteInt32(x); //Gimmick number (from gimmick.csv)
-                    resI.WriteInt32(0); //Gimmick State
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, resI, ServerType.Area);
+                    res.WriteInt32(myGimmick.InstanceId);
+                    res.WriteFloat(client.Character.X);
+                    res.WriteFloat(client.Character.Y);
+                    res.WriteFloat(client.Character.Z);
+                    res.WriteByte(client.Character.Heading);
+                    res.WriteInt32(x); //Gimmick number (from gimmick.csv)
+                    res.WriteInt32(0); //Gimmick State
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, res, ServerType.Area);
                     Logger.Debug($"You just created a gimmick with instance ID {myGimmick.InstanceId}");
 
                     //Add a sign above them so you know their ID.
                     GGateSpawn gGateSpawn = Server.Instances.CreateInstance<GGateSpawn>();
-                    IBuffer res = BufferProvider.Provide();
+                    res = BufferProvider.Provide();
                     res.WriteInt32(gGateSpawn.InstanceId); // Unique Object ID.  Crash if already in use (dont use your character ID)
                     res.WriteInt32(gGateSpawn.SerialId); // Serial ID for Interaction? from npc.csv????
                     res.WriteByte(0); // 0 = Text, 1 = F to examine  , 2 or above nothing
@@ -77,73 +78,85 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_ggate_stone_data, res, ServerType.Area);
 
                     //Jump over your gimmick
-                    IBuffer res2 = BufferProvider.Provide();
-                    res2.WriteInt32(client.Character.InstanceId);
-                    res2.WriteFloat(client.Character.X-25);
-                    res2.WriteFloat(client.Character.Y-25);
-                    res2.WriteFloat(client.Character.Z+500);
-                    res2.WriteByte(client.Character.Heading);
-                    res2.WriteByte(client.Character.movementAnim);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res2, ServerType.Area);
+                    res = BufferProvider.Provide();
+                    res.WriteInt32(client.Character.InstanceId);
+                    res.WriteFloat(client.Character.X);
+                    res.WriteFloat(client.Character.Y);
+                    res.WriteFloat(client.Character.Z+500);
+                    res.WriteByte(client.Character.Heading);
+                    res.WriteByte(client.Character.movementAnim);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
 
                     break;
                 case "move": //move a gimmick to your current position and heading
                     Gimmick myGimmick2 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    IBuffer res5 = BufferProvider.Provide();
-                    res5.WriteInt32(myGimmick2.InstanceId);
-                    res5.WriteFloat(client.Character.X);
-                    res5.WriteFloat(client.Character.Y);
-                    res5.WriteFloat(client.Character.Z);
-                    res5.WriteByte(client.Character.Heading);
-                    res5.WriteByte(0xA);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res5, ServerType.Area);
+                    res.WriteInt32(myGimmick2.InstanceId);
+                    res.WriteFloat(client.Character.X);
+                    res.WriteFloat(client.Character.Y);
+                    res.WriteFloat(client.Character.Z);
+                    res.WriteByte(client.Character.Heading);
+                    res.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                     break;
                 case "heading": //only update the heading to your current heading
-                    Gimmick myGimmick4 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    IBuffer res7 = BufferProvider.Provide();
-                    res7.WriteInt32(myGimmick4.InstanceId);
-                    res7.WriteFloat(myGimmick4.X);
-                    res7.WriteFloat(myGimmick4.Y);
-                    res7.WriteFloat(myGimmick4.Z);
-                    res7.WriteByte(client.Character.Heading);
-                    res7.WriteByte(0xA);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res7, ServerType.Area);
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    res.WriteInt32(myGimmick.InstanceId);
+                    res.WriteFloat(myGimmick.X);
+                    res.WriteFloat(myGimmick.Y);
+                    res.WriteFloat(myGimmick.Z);
+                    res.WriteByte(client.Character.Heading);
+                    res.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                     break;
                 case "add":
-                    Gimmick myGimmick3 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    myGimmick3.MapId = client.Character.MapId;
-                    myGimmick3.X = client.Character.X;
-                    myGimmick3.Y = client.Character.Y;
-                    myGimmick3.Z = client.Character.Z;
-                    myGimmick3.Heading = client.Character.Heading;
-                    myGimmick3.State = 0xA;
-                    myGimmick3.Updated = DateTime.Now;
-                    if (!Server.Database.InsertGimmick(myGimmick3))
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick.MapId = client.Character.MapId;
+                    myGimmick.X = client.Character.X;
+                    myGimmick.Y = client.Character.Y;
+                    myGimmick.Z = client.Character.Z;
+                    myGimmick.Heading = client.Character.Heading;
+                    myGimmick.State = 0xA;
+                    myGimmick.Updated = DateTime.Now;
+                    if (!Server.Database.InsertGimmick(myGimmick))
+                    {
+                        responses.Add(ChatResponse.CommandError(client, "myGimmick3 could not be saved to database"));
+                        return;
+                    }
+                    break;
+                case "update":
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick.MapId = client.Character.MapId;
+                    myGimmick.X = client.Character.X;
+                    myGimmick.Y = client.Character.Y;
+                    myGimmick.Z = client.Character.Z;
+                    myGimmick.Heading = client.Character.Heading;
+                    myGimmick.State = 0xA;
+                    myGimmick.Updated = DateTime.Now;
+                    if (!Server.Database.UpdateGimmick(myGimmick))
                     {
                         responses.Add(ChatResponse.CommandError(client, "myGimmick3 could not be saved to database"));
                         return;
                     }
                     break;
                 case "remove":
-                    Gimmick myGimmick6 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    if (!Server.Database.DeleteGimmick(myGimmick6.Id))
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    if (!Server.Database.DeleteGimmick(myGimmick.Id))
                     {
                         responses.Add(ChatResponse.CommandError(client, "myGimmick3 could not be deleted from database"));
                         return;
                     }
                     break;
                     case "rotate":
-                    Gimmick myGimmick5 = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
                     //myGimmick5.Z += y;
-                    IBuffer res6 = BufferProvider.Provide();
-                    res6.WriteInt32(myGimmick5.InstanceId);
-                    res6.WriteFloat(myGimmick5.X);
-                    res6.WriteFloat(myGimmick5.Y);
-                    res6.WriteFloat(myGimmick5.Z);
-                    res6.WriteByte((byte)y);
-                    res6.WriteByte(0xA);
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res6, ServerType.Area);
-                    Logger.Debug($"Gimmick {myGimmick5.InstanceId} has been rotated by {y*2} degrees.");
+                    res.WriteInt32(myGimmick.InstanceId);
+                    res.WriteFloat(myGimmick.X);
+                    res.WriteFloat(myGimmick.Y);
+                    res.WriteFloat(myGimmick.Z);
+                    res.WriteByte((byte)y);
+                    res.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                    Logger.Debug($"Gimmick {myGimmick.InstanceId} has been rotated to {y*2} degrees.");
                     break;
 
 
