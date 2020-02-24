@@ -30,6 +30,7 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
             Logger.Debug($"{myUnion.Name} with Id {myUnion.Id} and instanceId {myUnion.InstanceId} removed and disbanded");
+            client.Union = null;
         }
     }
 }
