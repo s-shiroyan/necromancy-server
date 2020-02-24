@@ -171,7 +171,7 @@ namespace Necromancy.Server.Model
             InstanceId = 0;
             Name = "";
             ClassId = 0;
-            unionId = 8888;
+            unionId = 0;
             criminalState = 0;
             helperTextAbdul = true;
         }

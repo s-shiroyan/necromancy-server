@@ -21,20 +21,20 @@ namespace Necromancy.Server.Packet.Msg
             NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetInstanceId);
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(8888); //union instance id?
+            res.WriteInt32(client.Character.unionId); //union instance id?
             res.WriteInt32(targetInstanceId); //TargetInstanceId
 
-            Router.Send(client.Map, (ushort) MsgPacketId.recv_union_request_invite_target_r, res, ServerType.Msg);
+            Router.Send(client, (ushort) MsgPacketId.recv_union_request_invite_target_r, res, ServerType.Msg);
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(20000/*myUnion.UnionInviteList.InstanceId*/); //invite Instance ID
-            res2.WriteInt32(client.Character.InstanceId); //Change this to client.Character.UnionId after Union Class exists
+            res2.WriteInt32(client.Character.unionId); //ID of the Union
+            res2.WriteInt32(client.Character.InstanceId); //Reply to Instance Id for the invite
             res2.WriteFixedString($"by member {client.Character.Name}", 0x31); //size is 0x31
-            res2.WriteFixedString("Trade_Union"/*myUnion.Name*/, 0x5B); //size is 0x5B
-            res2.WriteInt32(2000); //Unknown
+            res2.WriteFixedString(client.Union.Name, 0x5B); //size is 0x5B
+            res2.WriteInt32(client.Character.unionId); //Unknown
             res2.WriteByte(99); //Unknown
-            res2.WriteCString("Trade_Union"/*myUnion.Name*/);//max size 0x31
+            res2.WriteCString(client.Union.Name);//max size 0x31
 
             Router.Send(targetClient, (ushort)MsgPacketId.recv_union_notify_invite, res2, ServerType.Msg);
 

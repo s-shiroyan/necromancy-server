@@ -26,7 +26,8 @@ namespace Necromancy.Server.Packet.Msg
             Logger.Debug($"replyToInstanceId {replyToInstanceId} resultAcceptOrDeny {resultAcceptOrDeny} replyToClient.Character.unionId {replyToClient.Character.unionId}");
 
             //Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
-            Union myUnion = Server.Database.SelectUnionById(replyToClient.Character.unionId);
+            Union myUnion = Server.Database.SelectUnionByUnionLeaderId(replyToClient.Character.Id); 
+            Logger.Debug($"my union is {myUnion.Name}");
             IBuffer res5 = BufferProvider.Provide();
 
             res5.WriteInt32(resultAcceptOrDeny); //Result
@@ -35,16 +36,9 @@ namespace Necromancy.Server.Packet.Msg
 
             if (resultAcceptOrDeny == 0)
             {
-                client.Character.unionId = replyToClient.Character.unionId;
+                client.Character.unionId = myUnion.Id;
                 client.Union = myUnion;
                 client.Union.Join(client);
-
-                IBuffer res36 = BufferProvider.Provide();
-                res36.WriteInt32(client.Character.InstanceId);
-                res36.WriteInt32(client.Character.unionId);
-                res36.WriteCString(myUnion.Name); 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
-
 
                 UnionMember myUnionMember = Server.Instances.CreateInstance<UnionMember>();
                 myUnionMember.UnionId = (int)myUnion.Id;
@@ -56,54 +50,6 @@ namespace Necromancy.Server.Packet.Msg
                     return;
                 }
                 Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
-
-                //Add all union members to your own instance of the union member list on your client
-                foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Character.unionId))
-                {
-                    Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
-                    Soul soul = Server.Database.SelectSoulById(character.SoulId);
-                    TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
-                    int unionJoinedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
-                    IBuffer res3 = BufferProvider.Provide();
-                    res3.WriteInt32(client.Character.unionId); //Union Id
-                    res3.WriteInt32(character.InstanceId);
-                    res3.WriteFixedString($"{soul.Name}", 0x31); //size is 0x31
-                    res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
-                    res3.WriteInt32(character.ClassId);
-                    res3.WriteByte(character.Level);
-                    res3.WriteInt32(character.MapId); // Location of your Union Member
-                    res3.WriteInt32(0); //Area of Map, somehow. or Channel;
-                    res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
-                    res3.WriteInt32(unionMemberList.MemberPriviledgeBitMask); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
-                    res3.WriteInt32(unionMemberList.Rank); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
-                    res3.WriteInt32(0); //online status. 0 = online, 1 = away, 2 = offline
-                    res3.WriteInt32(unionJoinedCalculation); //Date Joined in seconds since unix time
-                    res3.WriteInt32(Util.GetRandomNumber(0, 3));
-                    res3.WriteInt32(Util.GetRandomNumber(0, 3));
-                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
-                }
-
-                TimeSpan differenceInviteted = DateTime.Now - DateTime.UnixEpoch;
-                int unionInvitedCalculation = (int)Math.Floor(differenceInviteted.TotalSeconds);
-                //add you to all the member list of your union mates that were logged in when you joined.
-                IBuffer res4 = BufferProvider.Provide(); ;
-                res4.WriteInt32(client.Character.unionId); //not sure what this is.  union_Notify ID?
-                res4.WriteInt32(client.Character.InstanceId);
-                res4.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
-                res4.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
-                res4.WriteInt32(client.Character.ClassId);
-                res4.WriteByte(client.Character.Level);
-                res4.WriteInt32(client.Character.MapId); // Location of your Union Member
-                res4.WriteInt32(0); //Area of Map, somehow. or Channel;
-                res4.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
-                res4.WriteInt32(0b11111111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
-                res4.WriteInt32(3); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
-                res4.WriteInt32(0); //online status. 0 = online, 1 = away, 2 = offline
-                res4.WriteInt32(unionInvitedCalculation); //Date Joined in seconds since unix time
-                res4.WriteInt32(Util.GetRandomNumber(0, 3));
-                res4.WriteInt32(Util.GetRandomNumber(0, 3));
-
-                Router.Send(client.Union.UnionMembers, (ushort)MsgPacketId.recv_union_notify_detail_member, res4, ServerType.Msg, client);
 
                 uint UnionLeaderInstanceId = Server.Characters.GetByCharacterId(myUnion.UnionLeaderId).InstanceId;
                 uint UnionSubLeader1InstanceId = 0;
@@ -139,6 +85,65 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteByte(0);
 
                 Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
+
+                //Add all union members to your own instance of the union member list on your client
+                foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Union.Id))
+                {
+                    Logger.Debug($"Loading union info for Member Id {unionMemberList.Id}");
+                    Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    Logger.Debug($"character is named {character.Name}");
+                    Soul soul = Server.Database.SelectSoulById(character.SoulId);
+                    Logger.Debug($"Soul is named {soul.Name}");
+                    TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
+                    int unionJoinedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
+                    IBuffer res3 = BufferProvider.Provide();
+                    res3.WriteInt32(client.Character.unionId); //Union Id
+                    res3.WriteInt32(character.InstanceId);
+                    res3.WriteFixedString($"{soul.Name}", 0x31); //size is 0x31
+                    res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
+                    res3.WriteInt32(character.ClassId);
+                    res3.WriteByte(character.Level);
+                    res3.WriteInt32(character.MapId); // Location of your Union Member
+                    res3.WriteInt32(0); //Area of Map, somehow. or Channel;
+                    res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
+                    res3.WriteInt32(unionMemberList.MemberPriviledgeBitMask); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+                    res3.WriteInt32(unionMemberList.Rank); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
+                    res3.WriteInt32(0); //online status. 0 = online, 1 = away, 2 = offline
+                    res3.WriteInt32(unionJoinedCalculation); //Date Joined in seconds since unix time
+                    res3.WriteInt32(Util.GetRandomNumber(0, 3));
+                    res3.WriteInt32(Util.GetRandomNumber(0, 3));
+                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
+                }
+
+                TimeSpan differenceInviteted = DateTime.Now - DateTime.UnixEpoch;
+                int unionInvitedCalculation = (int)Math.Floor(differenceInviteted.TotalSeconds);
+
+                //add you to all the member list of your union mates that were logged in when you joined.
+                IBuffer res4 = BufferProvider.Provide(); ;
+                res4.WriteInt32(client.Character.unionId); //not sure what this is.  union_Notify ID?
+                res4.WriteInt32(client.Character.InstanceId);
+                res4.WriteFixedString($"{client.Soul.Name}", 0x31); //size is 0x31
+                res4.WriteFixedString($"{client.Character.Name}", 0x5B); //size is 0x5B
+                res4.WriteInt32(client.Character.ClassId);
+                res4.WriteByte(client.Character.Level);
+                res4.WriteInt32(client.Character.MapId); // Location of your Union Member
+                res4.WriteInt32(0); //Area of Map, somehow. or Channel;
+                res4.WriteFixedString($"Channel {client.Character.Channel}", 0x61); // Channel location
+                res4.WriteInt32(0b11111111); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+                res4.WriteInt32(3); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
+                res4.WriteInt32(0); //online status. 0 = online, 1 = away, 2 = offline
+                res4.WriteInt32(unionInvitedCalculation); //Date Joined in seconds since unix time
+                res4.WriteInt32(Util.GetRandomNumber(0, 3));
+                res4.WriteInt32(Util.GetRandomNumber(0, 3));
+
+                Router.Send(client.Union.UnionMembers, (ushort)MsgPacketId.recv_union_notify_detail_member, res4, ServerType.Msg, client);
+
+                IBuffer res36 = BufferProvider.Provide();
+                res36.WriteInt32(client.Character.InstanceId);
+                res36.WriteInt32(client.Character.unionId);
+                res36.WriteCString(myUnion.Name);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
+
 
             }
         }
