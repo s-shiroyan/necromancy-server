@@ -31,7 +31,16 @@ namespace Necromancy.Server.Packet.Area
                 // This requires database changes to add the GGates to the Npc database!!!!!
                 if (npcSpawn.Name == "GGate")
                 {
-                    RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(npcSpawn);
+                    GGateSpawn gGate = new GGateSpawn();
+                    gGate.X = npcSpawn.X;
+                    gGate.Y = npcSpawn.Y;
+                    gGate.Z = npcSpawn.Z;
+                    gGate.Heading = npcSpawn.Heading;
+                    gGate.MapId = npcSpawn.MapId;
+                    gGate.Name = npcSpawn.Name;
+                    gGate.Title = npcSpawn.Title;
+
+                    RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
                     Router.Send(gGateData, client);
                 }
                 else
@@ -45,6 +54,21 @@ namespace Necromancy.Server.Packet.Area
             {
                 RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
                     Router.Send(gimmickData, client);
+                GGateSpawn gGateSpawn = new GGateSpawn();
+                Server.Instances.AssignInstance(gGateSpawn);
+                gGateSpawn.X = gimmickSpawn.X;
+                gGateSpawn.Y = gimmickSpawn.Y;
+                gGateSpawn.Z = gimmickSpawn.Z+300;
+                gGateSpawn.Heading = gimmickSpawn.Heading;
+                gGateSpawn.Name = "gGateSpawn to your current position.";
+                gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
+                gGateSpawn.MapId = gimmickSpawn.MapId;
+                gGateSpawn.ModelId = 1900001;
+                gGateSpawn.Active = 0;
+                gGateSpawn.SerialId = 1900001;
+
+                RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateData, client);
             }
 
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())

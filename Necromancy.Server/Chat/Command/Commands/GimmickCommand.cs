@@ -87,17 +87,27 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res2, ServerType.Area);
 
                     break;
-                case "move":
+                case "move": //move a gimmick to your current position and heading
                     Gimmick myGimmick2 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    myGimmick2.Z += y;
                     IBuffer res5 = BufferProvider.Provide();
                     res5.WriteInt32(myGimmick2.InstanceId);
-                    res5.WriteFloat(myGimmick2.X);
-                    res5.WriteFloat(myGimmick2.Y);
-                    res5.WriteFloat(myGimmick2.Z);
-                    res5.WriteByte(myGimmick2.Heading);
+                    res5.WriteFloat(client.Character.X);
+                    res5.WriteFloat(client.Character.Y);
+                    res5.WriteFloat(client.Character.Z);
+                    res5.WriteByte(client.Character.Heading);
                     res5.WriteByte(0xA);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res5, ServerType.Area);
+                    break;
+                case "heading": //only update the heading to your current heading
+                    Gimmick myGimmick4 = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    IBuffer res7 = BufferProvider.Provide();
+                    res7.WriteInt32(myGimmick4.InstanceId);
+                    res7.WriteFloat(myGimmick4.X);
+                    res7.WriteFloat(myGimmick4.Y);
+                    res7.WriteFloat(myGimmick4.Z);
+                    res7.WriteByte(client.Character.Heading);
+                    res7.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res7, ServerType.Area);
                     break;
                 case "add":
                     Gimmick myGimmick3 = Server.Instances.GetInstance((uint)x) as Gimmick;
@@ -115,8 +125,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                     break;
                 case "remove":
-                    Gimmick myGimmick4 = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    if (!Server.Database.DeleteGimmick(myGimmick4.Id))
+                    Gimmick myGimmick6 = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    if (!Server.Database.DeleteGimmick(myGimmick6.Id))
                     {
                         responses.Add(ChatResponse.CommandError(client, "myGimmick3 could not be deleted from database"));
                         return;
