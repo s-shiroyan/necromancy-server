@@ -478,6 +478,7 @@ namespace Necromancy.Server.Packet.Area
 
         private void CrimInn(NecClient client, NpcSpawn npcSpawn)
         {
+
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0

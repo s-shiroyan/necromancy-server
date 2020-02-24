@@ -318,11 +318,23 @@ namespace Necromancy.Server.Packet.Area
                 switch (client.Character.eventSelectExecCode)
                 {
                     case 0:
-                        res9.WriteCString("Effect: Recover all HP, all MP, and 150 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
-                        Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
-                        client.Character.eventSelectExtraSelectionCode = 0;
-                        break;
+                        if (client.Soul.Level > 3)
+                        {
+                            SendEventEnd(client);
+                            client.Character.eventSelectExtraSelectionCode = 0;
+                            client.Character.eventSelectExecCode = 0;
+                            client.Character.eventSelectReadyCode = 0;
+                            client.Character.secondInnAccess = false;
+                            break;
+                        }
+                        else
+                        {
+                            res9.WriteCString("Effect: Recover all HP, all MP, and 150 Condition"); // 
+                            res9.WriteInt32(client.Character.InstanceId);
+                            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
+                            client.Character.eventSelectExtraSelectionCode = 0;
+                            break;
+                        }
                     case 1:                
                         res9.WriteCString("Effect: Recover all HP, all MP, and 50 Condition"); //
                         res9.WriteInt32(client.Character.InstanceId);
@@ -379,12 +391,24 @@ namespace Necromancy.Server.Packet.Area
 
                 switch (client.Character.eventSelectExecCode)
                 {
-                    case 0:                        
-                        res9.WriteCString("Effect: Recover full HP, full MP, and 150 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
-                        Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
-                        client.Character.eventSelectExtraSelectionCode = 6;
-                        break;
+                    case 0:
+                        if (client.Soul.Level > 3)
+                        {
+                            SendEventEnd(client);
+                            client.Character.eventSelectExtraSelectionCode = 0;
+                            client.Character.eventSelectExecCode = 0;
+                            client.Character.eventSelectReadyCode = 0;
+                            client.Character.secondInnAccess = false;
+                            break;
+                        }
+                        else
+                        {
+                            res9.WriteCString("Effect: Recover full HP, full MP, and 150 Condition"); // 
+                            res9.WriteInt32(client.Character.InstanceId);
+                            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
+                            client.Character.eventSelectExtraSelectionCode = 6;
+                            break;
+                        }
                     case 1:
                         res9.WriteCString("Effect: Recover half HP, half MP, and 50 Condition"); // 
                         res9.WriteInt32(client.Character.InstanceId);
