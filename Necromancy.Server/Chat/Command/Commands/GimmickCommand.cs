@@ -111,10 +111,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "add":
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
                     myGimmick.MapId = client.Character.MapId;
-                    myGimmick.X = client.Character.X;
-                    myGimmick.Y = client.Character.Y;
-                    myGimmick.Z = client.Character.Z;
-                    myGimmick.Heading = client.Character.Heading;
+                    //myGimmick.X = myGimmick.X;
+                    //myGimmick.Y = myGimmick.Y;
+                    //myGimmick.Z = myGimmick.Z;
+                    //myGimmick.Heading = myGimmick.Heading;
                     myGimmick.State = 0xA;
                     myGimmick.Updated = DateTime.Now;
                     if (!Server.Database.InsertGimmick(myGimmick))
