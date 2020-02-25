@@ -150,7 +150,7 @@ namespace Necromancy.Server.Model
                 }
                 
             }
-            // ToDo this should be a database lookup
+            // ToDo this should be a database lookup for monster coords by serial ID
             if (Id == 2002104)
             {
                 Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
@@ -199,7 +199,7 @@ namespace Necromancy.Server.Model
 
             foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
             {
-                if (!monsterSpawn.Active)
+                if (monsterSpawn.Active == true)
                 {
                     monsterSpawn.SpawnActive = true;
                     if (!monsterSpawn.TaskActive)
@@ -224,6 +224,14 @@ namespace Necromancy.Server.Model
                             }
                         }
                     }
+                }
+                else if (monsterSpawn.Active == false)
+                {
+                    monsterSpawn.SpawnActive = false;
+                    monsterSpawn.MonsterVisible = true;
+                    _logger.Debug($"Inactive monster.  loading model with out monsterTask [{monsterSpawn.Name}]");
+                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                    _server.Router.Send(monsterData, client);
                 }
             }
         }
