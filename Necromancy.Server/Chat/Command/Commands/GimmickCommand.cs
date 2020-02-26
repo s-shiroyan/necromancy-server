@@ -49,6 +49,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     myGimmick.Z = client.Character.Z;
                     myGimmick.Heading = client.Character.Heading;
                     myGimmick.State = 0xA;
+                    myGimmick.MapId = client.Character.MapId;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(client.Character.X);
                     res.WriteFloat(client.Character.Y);
@@ -127,6 +128,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
                 case "heading": //only update the heading to your current heading
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick.Heading = client.Character.Heading;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(myGimmick.X);
                     res.WriteFloat(myGimmick.Y);
@@ -136,8 +138,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                     break;
                 case "rotate": //rotates a gimmick to a specified heading
+                    int newHeading = y;
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    //myGimmick5.Z += y;
+                    myGimmick.Heading = (byte)newHeading;
+                    myGimmick.Heading = (byte)y;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(myGimmick.X);
                     res.WriteFloat(myGimmick.Y);
