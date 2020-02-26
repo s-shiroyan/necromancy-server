@@ -226,7 +226,7 @@ namespace Necromancy.Server.Packet.Area
             //sub_483420
             res.WriteInt32(numEntries);
 
-            LoadEquip.EquipSlotBitMask(res, numEntries);
+            LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
 
             //sub_483420
             numEntries = 128;

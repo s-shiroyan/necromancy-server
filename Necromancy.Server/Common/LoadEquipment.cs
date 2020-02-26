@@ -48,7 +48,7 @@ namespace Necromancy.Server.Common
             //sub_483420
             int x = 0;        
 
-            byte[] headSlot = TemporaryCharacterSwitch(myCharacter, numEntries);
+            int[] headSlot = TemporaryCharacterSwitch(myCharacter, numEntries);
             
             //sub_4948C0
             for (int i = 0; i < numEntries; i++)
@@ -64,7 +64,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0);// (theory bag)
                 res.WriteByte(0);// (theory Slot)
 
-                res.WriteByte(headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte((byte)headSlot[x]);// Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                 res.WriteByte(0); // testing (Theory Torso Tex)
                 res.WriteByte(0); // testing (Theory Pants Tex)
@@ -77,7 +77,7 @@ namespace Necromancy.Server.Common
 
         }
 
-        public static void EquipSlotBitMask(IBuffer res, int numEntries)
+        public static void EquipSlotBitMask(IBuffer res, Character myCharacter, int numEntries)
         {
             int[] EquipBitMask = new int[] //Correct Bit Mask
             {
@@ -87,6 +87,7 @@ namespace Necromancy.Server.Common
             {
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128
             };
+            EquipBitMask = TemporaryCharacterSwitch(myCharacter, numEntries,1);
             for (int i = 0; i < numEntries; i++)
             {
                 //sub_483420   
@@ -95,10 +96,11 @@ namespace Necromancy.Server.Common
             
         }
 
-        private static byte[] TemporaryCharacterSwitch(Character myCharacter, int numEntries)
+        private static int[] TemporaryCharacterSwitch(Character myCharacter, int numEntries, int type = 0)
         {
             string CharacterSet = myCharacter.Name;
-            byte[] headSlot = new byte[numEntries];
+            int[] headSlot = new int[numEntries];
+            int[] EquipBitMask = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128};
 
             if (myCharacter.hadDied == true) //removes all gear in soul form
             {
@@ -109,7 +111,7 @@ namespace Necromancy.Server.Common
                     0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
                     0 /*Avatar Torso*/, 0 /*Avatar Pants*/, 0 /*Avatar Hands*/, 0 /*Avatar Feet*/
                 };
-                headSlot = new byte[19] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                headSlot = new int[19] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             }
             else
             {
@@ -124,7 +126,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 110301 /*Avatar Head */,
                         210701 /*Avatar Torso*/, 360103 /*Avatar Pants*/, 410505 /*Avatar Hands*/, 560103 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
                     case "Kadred":
                         myCharacter.EquipId = new int[]
@@ -134,7 +136,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
                         260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
                     case "Zakura":
                         myCharacter.EquipId = new int[]
@@ -144,7 +146,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 100403 /*Avatar Head */,
                         260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 510301 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
                     case "Test1":
                         myCharacter.EquipId = new int[]
@@ -154,7 +156,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161101 /*Avatar Head */,
                         261101 /*Avatar Torso*/, 361101 /*Avatar Pants*/, 461101 /*Avatar Hands*/, 561101 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
                     case "One":
                         myCharacter.EquipId = new int[]
@@ -164,17 +166,18 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
                         260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
                     case "Wolfzen":
                         myCharacter.EquipId = new int[]
                         {
-                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110504 /*head*/, 260103 /*Torso*/,
+                        10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110501 /*head*/, 260103 /*Torso*/,
                         360103 /*Pants*/, 460103 /*Hands*/, 510301 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
                         260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                        //EquipBitMask = new int[] {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 0, 0, 0, 0, 0};
                         break;
                     case "Wolf":
                         myCharacter.EquipId = new int[]
@@ -184,7 +187,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 100403 /*Avatar Head */,
                         260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 510301 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0 };
                         break;
                     case "Hades":
                         myCharacter.EquipId = new int[]
@@ -194,7 +197,7 @@ namespace Necromancy.Server.Common
                         30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 161101 /*Avatar Head */,
                         220401 /*Avatar Torso*/, 320101 /*Avatar Pants*/, 420101 /*Avatar Hands*/, 520101 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0 };
                         break;
                     case "Quopaty Monk":
                     case "Quopaty Priest":
@@ -205,7 +208,7 @@ namespace Necromancy.Server.Common
                         0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
                         220601 /*Avatar Torso*/, 320601 /*Avatar Pants*/, 400101 /*Avatar Hands*/, 500101 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
                         break;
                     default:
                         myCharacter.EquipId = new int[]
@@ -215,14 +218,17 @@ namespace Necromancy.Server.Common
                         0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
                         200101 /*Avatar Torso*/, 300101 /*Avatar Pants*/, 400101 /*Avatar Hands*/, 500101 /*Avatar Feet*/
                         };
-                        headSlot = new byte[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
+                        headSlot = new int[19] { 0, 0, 0, 004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 04, 0, 0, 0, 0 };
                         break;
 
                 }
             }
-            
-            return headSlot;
+            if (type == 0)
+                return headSlot;
+            else if (type == 1)
+                return EquipBitMask;
 
+            return headSlot;
         }
         
     }

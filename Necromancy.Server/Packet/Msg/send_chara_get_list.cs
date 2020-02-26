@@ -61,7 +61,7 @@ namespace Necromancy.Server.Packet.Msg
                 LoadEquip.BasicTraits(res, character);
                 LoadEquip.SlotSetup(res, character, 19);
                 LoadEquip.EquipItems(res, character, 19);
-                LoadEquip.EquipSlotBitMask(res, 19);
+                LoadEquip.EquipSlotBitMask(res, character, 19);
                 
                 //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
                 res.WriteInt32(10); //Right Hand    //1 for weapon

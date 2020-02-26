@@ -46,7 +46,7 @@ namespace Necromancy.Server.Packet.Response
             numEntries = 19;
             res14.WriteInt32(numEntries);
             //Consolidated Frequently Used Code
-            LoadEquip.EquipSlotBitMask(res14, numEntries);
+            LoadEquip.EquipSlotBitMask(res14, _character, numEntries);
 
             //Consolidated Frequently Used Code
             LoadEquip.BasicTraits(res14, _character);

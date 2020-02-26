@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.EquipSlotBitMask(res, numEntries);
+            LoadEquip.EquipSlotBitMask(res, _character, numEntries);
 
             res.WriteInt32(_npcSpawn.ModelId); //NPC Model from file "model_common.csv"
             res.WriteInt16(_npcSpawn.Size); //NPC Model Size
