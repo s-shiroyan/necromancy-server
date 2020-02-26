@@ -45,8 +45,18 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             if (!int.TryParse(command[2], out int y))
             {
-                responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
-                return;
+                try
+                {
+                    string binaryString = command[2];
+                    binaryString = binaryString.Replace("0b", "");
+                    Logger.Debug(binaryString);
+                    y = Convert.ToInt32(binaryString, 2);
+                }
+                catch
+                {
+                    responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
+                    return;
+                }
             }
 
 
@@ -137,6 +147,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res10.WriteInt32(character2.InstanceId);
                     res10.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_state_update_notify, res10, ServerType.Area);
+                    responses.Add(ChatResponse.CommandError(client, $"setting bodyState to {y} for character {character2.Name}"));
+
                     break;
 
                 case "charastate":
@@ -145,6 +157,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res11.WriteInt32(character2.InstanceId);
                     res11.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
+                    responses.Add(ChatResponse.CommandError(client, $"setting charaState to {y} for character {character2.Name}"));
                     break;
 
                 case "spirit":
