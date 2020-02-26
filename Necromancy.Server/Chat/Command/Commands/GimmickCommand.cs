@@ -128,6 +128,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
                 case "heading": //only update the heading to your current heading
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick.Heading = client.Character.Heading;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(myGimmick.X);
                     res.WriteFloat(myGimmick.Y);
@@ -140,6 +141,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     int newHeading = y;
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
                     myGimmick.Heading = (byte)newHeading;
+                    myGimmick.Heading = (byte)y;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(myGimmick.X);
                     res.WriteFloat(myGimmick.Y);
