@@ -225,14 +225,6 @@ namespace Necromancy.Server.Model
                         }
                     }
                 }
-                else if (monsterSpawn.Active == false)
-                {
-                    monsterSpawn.SpawnActive = false;
-                    monsterSpawn.MonsterVisible = true;
-                    _logger.Debug($"Inactive monster.  loading model with out monsterTask [{monsterSpawn.Name}]");
-                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                    _server.Router.Send(monsterData, client);
-                }
             }
         }
 

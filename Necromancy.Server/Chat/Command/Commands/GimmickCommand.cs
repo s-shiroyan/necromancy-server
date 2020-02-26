@@ -49,6 +49,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     myGimmick.Z = client.Character.Z;
                     myGimmick.Heading = client.Character.Heading;
                     myGimmick.State = 0xA;
+                    myGimmick.MapId = client.Character.MapId;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(client.Character.X);
                     res.WriteFloat(client.Character.Y);

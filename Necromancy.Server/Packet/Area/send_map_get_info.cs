@@ -26,6 +26,15 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Map.Id);
             Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
+            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
+            {
+                if (monsterSpawn.Active == false)
+                {
+                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                    Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
+                    Router.Send(monsterData, client);
+                }
+            }
             foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
             {
                 // This requires database changes to add the GGates to the Npc database!!!!!
@@ -60,7 +69,7 @@ namespace Necromancy.Server.Packet.Area
                 gGateSpawn.Y = gimmickSpawn.Y;
                 gGateSpawn.Z = gimmickSpawn.Z+300;
                 gGateSpawn.Heading = gimmickSpawn.Heading;
-                gGateSpawn.Name = "gGateSpawn to your current position.";
+                gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
                 gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
                 gGateSpawn.MapId = gimmickSpawn.MapId;
                 gGateSpawn.ModelId = 1900001;
