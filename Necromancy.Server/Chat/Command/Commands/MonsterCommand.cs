@@ -60,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             monsterSpawn.Level = (byte)monsterSetting.Level;
 
             monsterSpawn.ModelId = modelSetting.Id;
-            monsterSpawn.Size = (short)modelSetting.Height;
+            monsterSpawn.Size = (short)(modelSetting.Height/2);
             monsterSpawn.Radius = (short)modelSetting.Radius;
 
             monsterSpawn.MapId = client.Character.MapId;
