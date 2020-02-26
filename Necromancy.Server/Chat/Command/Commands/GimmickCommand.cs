@@ -137,8 +137,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                     break;
                 case "rotate": //rotates a gimmick to a specified heading
+                    int newHeading = y;
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
-                    //myGimmick5.Z += y;
+                    myGimmick.Heading = (byte)newHeading;
                     res.WriteInt32(myGimmick.InstanceId);
                     res.WriteFloat(myGimmick.X);
                     res.WriteFloat(myGimmick.Y);
