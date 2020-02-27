@@ -151,6 +151,18 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                     Logger.Debug($"Gimmick {myGimmick.InstanceId} has been rotated to {y}*2 degrees.");
                     break;
+                case "height": //adjusts the height of gimmick by current value +- Y
+                    myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
+                    myGimmick.Z = myGimmick.Z + y;
+                    res.WriteInt32(myGimmick.InstanceId);
+                    res.WriteFloat(myGimmick.X); 
+                    res.WriteFloat(myGimmick.Y);
+                    res.WriteFloat(myGimmick.Z);
+                    res.WriteByte(myGimmick.Heading);
+                    res.WriteByte(0xA);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                    Logger.Debug($"Gimmick {myGimmick.InstanceId} has been adjusted by a height of {y}.");
+                    break;
                 case "add": //Adds a new entry to the database
                     myGimmick = Server.Instances.GetInstance((uint)x) as Gimmick;
                     myGimmick.Updated = DateTime.Now;
