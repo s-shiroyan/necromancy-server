@@ -31,19 +31,17 @@ namespace Necromancy.Server.Packet.Response
             res14.WriteFloat(_deadBody.Y); // Y
             res14.WriteFloat(_deadBody.Z); // Z
             res14.WriteByte(_deadBody.Heading); // Heading
-            res14.WriteInt32(8);
+            res14.WriteInt32(_character.Level);
 
             int numEntries = 19;
             res14.WriteInt32(numEntries);//less than or equal to 19
             //Consolidated Frequently Used Code
             LoadEquip.SlotSetup(res14, _character, numEntries);
 
-            numEntries = 19;
             res14.WriteInt32(numEntries);
             //Consolidated Frequently Used Code
             LoadEquip.EquipItems(res14, _character, numEntries);
 
-            numEntries = 19;
             res14.WriteInt32(numEntries);
             //Consolidated Frequently Used Code
             LoadEquip.EquipSlotBitMask(res14, numEntries);
