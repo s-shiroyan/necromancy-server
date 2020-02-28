@@ -80,6 +80,18 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(gGateData, client);
             }
 
+            foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
+            {
+                RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateSpawnData, client);
+            }
+
+            foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
+            {
+                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody,client);
+                Router.Send(deadBodyData, client);
+            }
+
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
             {
                 if (otherClient == client)

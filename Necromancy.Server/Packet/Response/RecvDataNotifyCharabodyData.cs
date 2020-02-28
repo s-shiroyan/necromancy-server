@@ -9,7 +9,7 @@ namespace Necromancy.Server.Packet.Response
     public class RecvDataNotifyCharaBodyData : PacketResponse
     {
         private readonly DeadBody _deadBody;
-        private readonly Character _character;
+        private readonly Character _character; //no.. do better!
         private readonly Soul _soul;
 
         public RecvDataNotifyCharaBodyData(DeadBody deadBody, NecClient client)// Character character, client)
@@ -25,13 +25,13 @@ namespace Necromancy.Server.Packet.Response
             IBuffer res14 = BufferProvider.Provide();
             res14.WriteInt32(_deadBody.InstanceId); //Instance ID of dead body
             res14.WriteInt32(_deadBody.CharacterInstanceId); //Reference to actual player's instance ID
-            res14.WriteCString($"{_soul.Name}"); // Soul name 
+            res14.WriteCString($"{_deadBody.SoulName}"); // Soul name 
             res14.WriteCString($"{_deadBody.CharaName}"); // Character name
             res14.WriteFloat(_deadBody.X); // X
             res14.WriteFloat(_deadBody.Y); // Y
             res14.WriteFloat(_deadBody.Z); // Z
             res14.WriteByte(_deadBody.Heading); // Heading
-            res14.WriteInt32(_character.Level);
+            res14.WriteInt32(_deadBody.Level);
 
             int numEntries = 19;
             res14.WriteInt32(numEntries);//less than or equal to 19

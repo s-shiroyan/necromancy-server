@@ -87,6 +87,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
-        public override string Key => "GGate";
+        public override string Key => "GGateOld";
     }
 }

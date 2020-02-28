@@ -9,19 +9,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertGGateSpawn =
-            "INSERT INTO `nec_gGateSpawn_spawn` (`serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated`) VALUES (@serial_id,@interaction,@name,@title,@map_id, @x, @y, @z, @heading, @model_id, @size, @active, @glow, @created, @updated);";
+            "INSERT INTO `nec_gGate_spawn` (`serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated`) VALUES (@serial_id,@interaction,@name,@title,@map_id, @x, @y, @z, @heading, @model_id, @size, @active, @glow, @created, @updated);";
 
         private const string SqlSelectGGateSpawns =
-            "SELECT `id`, `serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated` FROM `nec_gGateSpawn_spawn`;";
+            "SELECT `id`, `serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated` FROM `nec_ggate_spawn`;";
 
         private const string SqlSelectGGateSpawnsByMapId =
-            "SELECT `id`, `serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated` FROM `nec_gGateSpawn_spawn` WHERE `map_id`=@map_id;";
+            "SELECT `id`, `serial_id`,`interaction`,`name`,`title`,`map_id`, `x`,  `y`, `z`, `heading`, `model_id`, `size`,`active`,`glow`,`created`, `updated` FROM `nec_ggate_spawn` WHERE `map_id`=@map_id;";
 
         private const string SqlUpdateGGateSpawn =
-            "UPDATE `nec_gGateSpawn_spawn` SET `id`=@id,`serial_id`=@serial_id,`interaction`=@interaction,`name`=@name,`title`=@title,`map_id`=@map_id, `x`=@x,  `y`=@y, `z`=@z, `heading`=@heading, `model_id`=@model_id, `size`=@size,`active`=@active,`glow`=@glow,`created`=@created, `updated`=@updated WHERE `id`=@id;";
+            "UPDATE `nec_ggate_spawn` SET `id`=@id,`serial_id`=@serial_id,`interaction`=@interaction,`name`=@name,`title`=@title,`map_id`=@map_id, `x`=@x,  `y`=@y, `z`=@z, `heading`=@heading, `model_id`=@model_id, `size`=@size,`active`=@active,`glow`=@glow,`created`=@created, `updated`=@updated WHERE `id`=@id;";
 
         private const string SqlDeleteGGateSpawn =
-            "DELETE FROM `nec_gGateSpawn_spawn` WHERE `id`=@id;";
+            "DELETE FROM `nec_ggate_spawn` WHERE `id`=@id;";
 
         public bool InsertGGateSpawn(GGateSpawn gGateSpawn)
         {

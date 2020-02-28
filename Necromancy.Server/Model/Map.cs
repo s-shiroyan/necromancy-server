@@ -37,6 +37,8 @@ namespace Necromancy.Server.Model
         public Dictionary<uint, Gimmick> GimmickSpawns { get; }
         public Dictionary<uint, TrapStack> Traps { get; }
         public Dictionary<uint, DeadBody> DeadBodies { get; }
+        public Dictionary<uint, GGateSpawn> GGateSpawns { get; }
+
 
         public Map(MapSetting setting, NecServer server)
         {
@@ -46,6 +48,10 @@ namespace Necromancy.Server.Model
             NpcSpawns = new Dictionary<uint, NpcSpawn>();
             MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
             GimmickSpawns = new Dictionary<uint, Gimmick>();
+            GGateSpawns = new Dictionary<uint, GGateSpawn>();
+            DeadBodies = new Dictionary<uint, DeadBody>();
+
+
             Id = setting.Id;
             X = setting.X;
             Y = setting.Y;
@@ -70,6 +76,12 @@ namespace Necromancy.Server.Model
             {
                 server.Instances.AssignInstance(gimmickSpawn);
                 GimmickSpawns.Add(gimmickSpawn.InstanceId, gimmickSpawn);
+            }
+            List<GGateSpawn> gGateSpawns = server.Database.SelectGGateSpawnsByMapId(setting.Id);
+            foreach (GGateSpawn gGateSpawn in gGateSpawns)
+            {
+                server.Instances.AssignInstance(gGateSpawn);
+                GGateSpawns.Add(gGateSpawn.InstanceId, gGateSpawn);
             }
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
@@ -171,6 +183,7 @@ namespace Necromancy.Server.Model
         {
             Enter(client, mapPosition);
             _server.Router.Send(new RecvMapChangeForce(this, mapPosition), client);
+            EnterSyncOk(client);
         }
 
         public void EnterSyncOk(NecClient client)
