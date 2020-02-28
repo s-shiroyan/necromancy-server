@@ -316,3 +316,21 @@ CREATE TABLE IF NOT EXISTS `nec_map_transition` (
     `created`               DATETIME,
     `updated`               DATETIME
 );
+CREATE TABLE IF NOT EXISTS `nec_ggate_spawn` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `serial_id`     INTEGER             NOT NULL,
+  `interaction`     INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `glow` INTEGER             NOT NULL,
+  `created`    DATETIME            NOT NULL,
+  `updated`    DATETIME            NOT NULL
+);

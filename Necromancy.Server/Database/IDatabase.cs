@@ -117,5 +117,11 @@ namespace Necromancy.Server.Database
         List<MapTransition> SelectMapTransitionsByMapId(int mapId);
         bool UpdateMapTransition(MapTransition mapTran);
         bool DeleteMapTransition(int mapTranId);
+        // GGate Spawn
+        bool InsertGGateSpawn(GGateSpawn gGateSpawn);
+        List<GGateSpawn> SelectGGateSpawns();
+        List<GGateSpawn> SelectGGateSpawnsByMapId(int mapId);
+        bool UpdateGGateSpawn(GGateSpawn gGateSpawn);
+        bool DeleteGGateSpawn(int gGateSpawnId);
     }
 }
