@@ -214,7 +214,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                     res14.WriteInt32(numEntries);
                     //Consolidated Frequently Used Code
-                    LoadEquip.EquipSlotBitMask(res14, numEntries);
+                    LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
                     //Consolidated Frequently Used Code
                     LoadEquip.BasicTraits(res14, character2);
