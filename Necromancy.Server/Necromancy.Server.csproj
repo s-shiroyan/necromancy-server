@@ -25,4 +25,7 @@
             <TargetPath>Client\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
+    <ItemGroup>
+      <ContentWithTargetPath Remove="Database\Script\data_maptransition.sql" />
+    </ItemGroup>
 </Project>
