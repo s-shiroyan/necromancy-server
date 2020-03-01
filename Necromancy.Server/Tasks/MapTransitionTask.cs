@@ -10,10 +10,12 @@ using System.Threading;
 
 namespace Necromancy.Server.Tasks
 {
-    // Usage: create a monster and spawn it then use the following
-    //MonsterThread monsterThread = new MonsterThread(Server, client, monsterSpawn);
-    //Thread workerThread2 = new Thread(monsterThread.InstanceMethod);
-    //workerThread2.Start();
+    // create a map transition
+    // Sets a refernce point for the thread to use -  _referencePos
+    // Set 2 points and draw a line between them, if character crosses it change map  -  _transitionPos1, _transitionPos2
+    // The transition is reversed on some maps - _invertedTransition
+    // Once triggered set character.mapChange = true    this prevents updating character.X,Y and Z until transition is complete.
+
     class MapTransitionTask : PeriodicTask
     {
         private NecServer _server { get; }
