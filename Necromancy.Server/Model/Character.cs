@@ -66,6 +66,7 @@ namespace Necromancy.Server.Model
         public byte movementAnim { get; set; }
         public bool weaponEquipped { get; set; }
         public uint movementId { get; set; }
+        public bool mapChange { get; set; }
 
         //Normal Attack
         public int[] AttackIds { get; set; }
@@ -217,6 +218,7 @@ namespace Necromancy.Server.Model
             unionId = 0;
             criminalState = 0;
             helperTextAbdul = true;
+            mapChange = false;
         }
         public bool characterActive
         {

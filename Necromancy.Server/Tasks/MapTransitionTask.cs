@@ -60,6 +60,10 @@ namespace Necromancy.Server.Tasks
                 List<Character> characters =_map.GetCharactersRange(_referencePos, _refDistance);
                 foreach (Character character in characters)
                 {
+                    if (character.mapChange)
+                    {
+                        continue;
+                    }
                     Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);
                     bool transition = TransitionCheck(characterPos);
                     if (transition)
@@ -69,6 +73,7 @@ namespace Necromancy.Server.Tasks
                             return;
                         }
                         NecClient client = _map.ClientLookup.GetByCharacterInstanceId(character.InstanceId);
+                        client.Character.mapChange = true;
                         transitionMap.EnterForce(client, _toPos);
                     }
                     _logger.Debug($"{character.Name} in range [transition] [{transition}].");

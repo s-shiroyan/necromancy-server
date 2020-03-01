@@ -167,23 +167,8 @@ namespace Necromancy.Server.Model
             List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
             foreach (MapTransition mapTran in mapTransitions)
             {
-                if (mapTran.MapId == 1001004)
-                {
-                    int debug = 0;
-                }
                 server.Instances.AssignInstance(mapTran);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);
-                /*
-                * MapTransition mapTran = server.Database.SelectMapTransitionsByMapId(setting.Id);
-               Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
-               Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
-               MapTransition mapTransition = new MapTransition(_server, this, 2002105, leftVec, rightVec, false);
-
-               Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
-               Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
-               MapPosition returnPos = new MapPosition((float)-889.7094, (float)-11444.197, (float)462.58234);
-               MapTransition mapTransition = new MapTransition(_server, this, 2002104, leftVec, rightVec, true, returnPos);
-               */
             }
         }
 
@@ -207,9 +192,24 @@ namespace Necromancy.Server.Model
             }
 
             _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
+            if (mapPosition != null)
+            {
+                client.Character.X = mapPosition.X;
+                client.Character.Y = mapPosition.Y;
+                client.Character.Z = mapPosition.Z;
+                client.Character.Heading = mapPosition.Heading;
+            }
+            else
+            {
+                client.Character.X = this.X;
+                client.Character.Y = this.Y;
+                client.Character.Z = this.Z;
+                client.Character.Heading = this.Orientation;
+            }
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
+            client.Character.mapChange = false;
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
             if (client.Union != null)

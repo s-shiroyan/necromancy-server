@@ -21,6 +21,11 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
 
+            if (client.Character.mapChange)
+            {
+                return;
+            }
+                
                 client.Character.X = packet.Data.ReadFloat();
                 client.Character.Y = packet.Data.ReadFloat();
                 client.Character.Z = packet.Data.ReadFloat();
