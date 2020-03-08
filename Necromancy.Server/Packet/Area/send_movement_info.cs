@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-
+            // If changing maps don't update position
             if (client.Character.mapChange)
             {
                 return;

@@ -191,8 +191,9 @@ namespace Necromancy.Server.Model
                 client.Map.Leave(client);
             }
 
-            // If position is passed in use it and set character position, if null then use map default coords
             _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
+            // If position is passed in use it and set character position, if null then use map default coords
+            // If this isn't set here, the wrong coords are in character until send_movement_info updates it. 
             if (mapPosition != null)
             {
                 client.Character.X = mapPosition.X;
