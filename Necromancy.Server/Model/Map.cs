@@ -32,9 +32,10 @@ namespace Necromancy.Server.Model
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
         public Dictionary<uint, NpcSpawn> NpcSpawns { get; }
-       // public Dictionary<int, TrapTransition> Trap { get; }
+        // public Dictionary<int, TrapTransition> Trap { get; }
         public Dictionary<uint, MonsterSpawn> MonsterSpawns { get; }
         public Dictionary<uint, Gimmick> GimmickSpawns { get; }
+        public Dictionary<uint, MapTransition> MapTransitions { get; }
         public Dictionary<uint, TrapStack> Traps { get; }
         public Dictionary<uint, DeadBody> DeadBodies { get; }
         public Dictionary<uint, GGateSpawn> GGateSpawns { get; }
@@ -48,6 +49,7 @@ namespace Necromancy.Server.Model
             NpcSpawns = new Dictionary<uint, NpcSpawn>();
             MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
             GimmickSpawns = new Dictionary<uint, Gimmick>();
+            MapTransitions = new Dictionary<uint, MapTransition>();
             GGateSpawns = new Dictionary<uint, GGateSpawn>();
             DeadBodies = new Dictionary<uint, DeadBody>();
 
@@ -59,7 +61,7 @@ namespace Necromancy.Server.Model
             Country = setting.Country;
             Area = setting.Area;
             Place = setting.Place;
-            Orientation = (byte)(setting.Orientation/2);   // Client uses 180 degree orientation
+            Orientation = (byte)(setting.Orientation / 2);   // Client uses 180 degree orientation
             Traps = new Dictionary<uint, TrapStack>();
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
@@ -103,8 +105,8 @@ namespace Necromancy.Server.Model
                 monsterSpawn.ModelId = modelSetting.Id;
                 monsterSpawn.Size = (short)(modelSetting.Height / 2);
                 monsterSpawn.Radius = (short)modelSetting.Radius;
-                monsterSpawn.MaxHp = 300;
-                monsterSpawn.SetHP(300);
+                monsterSpawn.Hp.setMax(300);
+                monsterSpawn.Hp.setCurrent(300);
                 monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
                 monsterSpawn.Level = (byte)monsterSetting.Level;
                 monsterSpawn.CombatMode = monsterSetting.CombatMode;
@@ -143,7 +145,7 @@ namespace Necromancy.Server.Model
                     defaultCoord.Id = monsterSpawn.Id;
                     defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
                     defaultCoord.MapId = (uint)monsterSpawn.MapId;
-                    defaultCoord.CoordIdx = 1; 
+                    defaultCoord.CoordIdx = 1;
                     defaultCoord.destination = defaultVector3;
 
                     monsterSpawn.monsterCoords.Add(defaultCoord);
@@ -160,22 +162,13 @@ namespace Necromancy.Server.Model
                     monsterSpawn.monsterCoords.Add(defaultCoord2);
 
                 }
-                
-            }
-            // ToDo this should be a database lookup for monster coords by serial ID
-            if (Id == 2002104)
-            {
-                Vector3 leftVec = new Vector3((float)-515.07556, -12006, (float)462.58215);
-                Vector3 rightVec = new Vector3((float)-1230.5432, -12006, (float)462.58215);
-                MapTransition mapTransition = new MapTransition(_server, this, 2002105, leftVec, rightVec, false);
-            }
-            else if (Id == 2002105)
-            {
-                Vector3 leftVec = new Vector3((float)-5821.617, (float)-5908.8086, (float)-0.22658157);
-                Vector3 rightVec = new Vector3((float)-5820.522, (float)-6114.8306, (float)0.046382904);
-                MapPosition returnPos = new MapPosition((float)-889.7094, (float)-11444.197, (float)462.58234);
-                MapTransition mapTransition = new MapTransition(_server, this, 2002104, leftVec, rightVec, true, returnPos);
 
+            }
+            List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
+            foreach (MapTransition mapTran in mapTransitions)
+            {
+                server.Instances.AssignInstance(mapTran);
+                MapTransitions.Add(mapTran.InstanceId, mapTran);
             }
         }
 
@@ -199,9 +192,26 @@ namespace Necromancy.Server.Model
             }
 
             _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
+            // If position is passed in use it and set character position, if null then use map default coords
+            // If this isn't set here, the wrong coords are in character until send_movement_info updates it. 
+            if (mapPosition != null)
+            {
+                client.Character.X = mapPosition.X;
+                client.Character.Y = mapPosition.Y;
+                client.Character.Z = mapPosition.Z;
+                client.Character.Heading = mapPosition.Heading;
+            }
+            else
+            {
+                client.Character.X = this.X;
+                client.Character.Y = this.Y;
+                client.Character.Z = this.Z;
+                client.Character.Heading = this.Orientation;
+            }
             ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
+            client.Character.mapChange = false;
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
             if (client.Union != null)
@@ -239,8 +249,15 @@ namespace Necromancy.Server.Model
                     }
                 }
             }
-        }
 
+            foreach (MapTransition mapTran in this.MapTransitions.Values)
+            {
+                if (mapTran.State == true)
+                {
+                    mapTran.Start(_server, this);
+                }
+            }
+        }
         public void Leave(NecClient client)
         {
             _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
@@ -250,6 +267,13 @@ namespace Necromancy.Server.Model
                 _logger.Error("Could not update the database with last known player position");
             }
             client.Map = null;
+            foreach (MapTransition mapTran in this.MapTransitions.Values)
+            {
+                if (mapTran.State == true)
+                {
+                    mapTran.Stop();
+                }
+            }
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
             _server.Router.Send(this, objectDisappearData, client);
@@ -306,7 +330,7 @@ namespace Necromancy.Server.Model
         {
             List<Character> characters = new List<Character>();
 
-           foreach (NecClient client in ClientLookup.GetAll())
+            foreach (NecClient client in ClientLookup.GetAll())
             {
                 Character character = client.Character;
                 Vector3 characterPos = new Vector3(character.X, character.Y, character.Z);

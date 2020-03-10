@@ -8,19 +8,23 @@ using Arrowgene.Services.Logging;
 
 namespace Necromancy.Server.Data
 {
+    public class UnknownItem
+    {
+        public int count;
+        public int size;
+    }
     public class FpmfArchiveIO
     {
-        private static byte[] MagicBytes = {0x46, 0x50, 0x4D, 0x46};
-        private static byte[] MagicBytes_WOITM = {0x57, 0x4F, 0x49, 0x54, 0x4D};
+        private static byte[] MagicBytes = { 0x46, 0x50, 0x4D, 0x46 };
+        private static byte[] MagicBytes_WOITM = { 0x57, 0x4F, 0x49, 0x54, 0x4D };
         private ILogger _logger;
-
 
         public FpmfArchiveIO()
         {
             _logger = LogProvider.Logger(this);
         }
 
-        public FpmfArchive Open(string hedFilePath)
+        public FpmfArchive Open(string hedFilePath, string outPath = "")
         {
             FileInfo hedFile = new FileInfo(hedFilePath);
             if (!hedFile.Exists)
@@ -34,7 +38,6 @@ namespace Necromancy.Server.Data
             {
                 throw new Exception("File to small");
             }
-
             hedBuffer.SetPositionStart();
             byte[] magicBytes = hedBuffer.ReadBytes(4);
             for (int i = 0; i < 4; i++)
@@ -49,9 +52,21 @@ namespace Necromancy.Server.Data
             archive.Size = hedBuffer.ReadUInt32();
             uint unknown0 = hedBuffer.ReadUInt32();
 
-            hedBuffer = DecryptHed(hedBuffer);
-            hedBuffer.SetPositionStart();
+            //BinaryWriter tmpwriter = new BinaryWriter(File.Open("C:\\Users\\kevin\\Desktop\\GameFilesSteamTest\\script_encrypted.hed", FileMode.Create));
+            //tmpwriter.Write(hedBuffer.GetAllBytes());
+            //tmpwriter.Flush();
+            //tmpwriter.Close();
 
+            hedBuffer = DecryptHed(hedBuffer);
+            //tmpwriter = new BinaryWriter(File.Open("C:\\Users\\kevin\\Desktop\\GameFilesSteamTest\\script_unencrypted.hed", FileMode.Create));
+            //tmpwriter.Write(magicBytes);
+            //tmpwriter.Write(archive.Size);
+            //tmpwriter.Write(unknown0);
+            //tmpwriter.Write(hedBuffer.GetAllBytes());
+            //tmpwriter.Flush();
+            //tmpwriter.Close();
+
+            hedBuffer.SetPositionStart();
             uint unknown1 = hedBuffer.ReadUInt32();
             uint unknown2 = hedBuffer.ReadUInt32();
             byte unknown3 = hedBuffer.ReadByte();
@@ -65,16 +80,18 @@ namespace Necromancy.Server.Data
             uint unknown9 = hedBuffer.ReadUInt32();
             uint unknown10 = hedBuffer.ReadUInt32();
             uint keyLen = hedBuffer.ReadUInt32();
-            archive.Key = hedBuffer.ReadBytes((int) keyLen);
+            archive.Key = hedBuffer.ReadBytes((int)keyLen);
             uint unknown11 = hedBuffer.ReadUInt32();
             uint unknown12 = hedBuffer.ReadUInt32();
             uint numFiles = hedBuffer.ReadUInt32();
 
+            //headerBuff.SetPositionStart();
             string relativeArchiveDir = archive.DatPath
                 .Replace("/%08x.dat", "")
                 .Replace("./", "")
                 .Replace('/', Path.DirectorySeparatorChar);
             string hedPath = hedFile.FullName.Replace(".hed", "");
+            string hedName = hedPath.Substring(hedPath.LastIndexOf("\\") + 1);
             string rootPath = hedPath.Replace(relativeArchiveDir, "");
             DirectoryInfo rootDirectory = new DirectoryInfo(rootPath);
             if (!rootDirectory.Exists)
@@ -84,7 +101,6 @@ namespace Necromancy.Server.Data
             }
 
             _logger.Info($"Using Root:{rootPath}");
-
             Dictionary<uint, IBuffer> datBufferPool = new Dictionary<uint, IBuffer>();
             for (int i = 0; i < numFiles; i++)
             {
@@ -99,6 +115,8 @@ namespace Necromancy.Server.Data
                 uint unknown13 = hedBuffer.ReadUInt32();
                 uint unknown14 = hedBuffer.ReadUInt32();
 
+                uint unknown15 = addFileName(archiveFile.FilePath);
+                uint unknown16 = addFileName(archiveFile.DirectoryPath);
                 _logger.Info($"Processing: {archiveFile.FilePath}");
 
                 IBuffer datBuffer;
@@ -123,7 +141,7 @@ namespace Necromancy.Server.Data
                     datBufferPool.Add(archiveFile.DatNumber, datBuffer);
                 }
 
-                IBuffer decrypted  = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
+                IBuffer decrypted = DecryptDat(datBuffer, archiveFile.Offset, archiveFile.Size, archive.Key);
                 if (archiveFile.FilePath.Contains("\\item.csv"))
                 {
                     decrypted = OpenWoItm(decrypted);
@@ -132,18 +150,20 @@ namespace Necromancy.Server.Data
 
                 archive.AddFile(archiveFile);
             }
-
             return archive;
         }
 
         public void Save(FpmfArchive archive, string directoryPath)
         {
+            string archiveType = archive.DatPath
+                .Replace("/%08x.dat", "")
+                .Replace("./", "")
+                .Replace('/', Path.DirectorySeparatorChar);
             DirectoryInfo directory = new DirectoryInfo(directoryPath);
             if (!directory.Exists)
             {
                 throw new FileNotFoundException($"Directory: {directoryPath} not found.");
             }
-
 
             string relativeArchiveDir = archive.DatPath
                 .Replace("/%08x.dat", "")
@@ -168,6 +188,202 @@ namespace Necromancy.Server.Data
 
                 File.WriteAllBytes(filePath, file.Data);
             }
+        }
+        public void Header(string hedFilePath, string outPath)
+        {
+            if (outPath.LastIndexOf("\\") != outPath.Length -1 )
+            {
+                outPath += "\\";
+            }
+            string type = hedFilePath.Substring(hedFilePath.LastIndexOf("\\")+1, (hedFilePath.LastIndexOf(".") - hedFilePath.LastIndexOf("\\"))-1).Replace("\\data", "");
+            FileInfo hedFile = new FileInfo(hedFilePath);
+            if (!hedFile.Exists)
+            {
+                throw new FileNotFoundException($"File: {hedFilePath} not found.");
+            }
+
+            IBuffer hedBuffer = new StreamBuffer(hedFile.FullName);
+
+            if (hedBuffer.Size < 12)
+            {
+                throw new Exception("File to small");
+            }
+            hedBuffer.SetPositionStart();
+            byte[] magicBytes = hedBuffer.ReadBytes(4);
+            for (int i = 0; i < 4; i++)
+            {
+                if (magicBytes[i] != MagicBytes[i])
+                {
+                    throw new Exception("Invalid File");
+                }
+            }
+
+            FpmfArchive archive = new FpmfArchive();
+            archive.Size = hedBuffer.ReadUInt32();
+            uint unknown0 = hedBuffer.ReadUInt32();
+
+            hedBuffer = DecryptHed(hedBuffer);
+            BinaryWriter tmpwriter = new BinaryWriter(File.Open(outPath + type + "_header.bin", FileMode.Create));
+            tmpwriter.Write(magicBytes);
+            tmpwriter.Write(archive.Size);
+            tmpwriter.Write(unknown0);
+            tmpwriter.Write(hedBuffer.GetAllBytes());
+            tmpwriter.Flush();
+            tmpwriter.Close();
+
+
+        }
+        public void Pack(string inPath, string outPath, string archiveName, string archivePath = "")
+        {
+            uint fileTime = 0x506fa78e;
+            string dirPath = archivePath;
+            if (archivePath.Length > 0)
+            {
+                if (!dirPath.StartsWith("\\"))
+                {
+                    dirPath = "\\" + dirPath;
+                    archivePath = "\\" + archivePath;
+                }
+                if (!dirPath.EndsWith("\\"))
+                {
+                    dirPath = dirPath + "\\";
+                    archivePath = archivePath + "\\";
+                }
+                dirPath = ".\\" + archiveName + dirPath + "%08x.dat";
+            }
+            else
+            {
+                dirPath = ".\\" + archiveName + "\\" + "%08x.dat";
+            }
+            dirPath = dirPath.Replace("\\", "/");
+            FpmfArchive archive = new FpmfArchive();
+            if (inPath.EndsWith("\\"))
+            {
+                inPath = inPath.Substring(0, inPath.Length - 1);
+            }
+            uint currentOffset = 0;
+            //HedFile hedFile = new HedFile();
+            string baseArchivePath = inPath + "\\" + archiveName + archivePath;
+            string[] inFiles = Directory.GetFiles(baseArchivePath, "*", SearchOption.AllDirectories);
+            archive.NumFiles = (uint)inFiles.Length;
+            archive.DatPath = dirPath;
+            archive.DatPathLen = dirPath.Length;
+
+            foreach (string inFile in inFiles)
+            {
+                IBuffer inReader = new StreamBuffer(inFile);
+                FpmfArchiveFile datFile = new FpmfArchiveFile();
+                datFile.Size = (uint)inReader.Size;
+                datFile.DatNumber = 0;
+                datFile.Offset = currentOffset;
+                IBuffer encryptedBuff = EncryptDat(inReader, archive.Key);
+                datFile.Data = encryptedBuff.GetAllBytes();
+                datFile.FilePath = inFile.Replace(inPath + "\\" + archiveName, ".");
+                //datFile.FilePath =  ".\\" + inFile.Substring(inFile.LastIndexOf(archiveName)+archiveName.Length+1);
+                datFile.FilePathSize = (uint)datFile.FilePath.Length;
+                datFile.DirectoryPath = ".\\" + archiveName + "\\";
+                datFile.DirectoryPathSize = (uint)datFile.DirectoryPath.Length;
+                datFile.Unknown0 = fileTime;
+                datFile.Unknown1 = 0;
+                archive.AddFile(datFile);
+                currentOffset += datFile.Size;
+            }
+
+            //IBuffer headerReader = new StreamBuffer(inPath + "\\" + archiveName + "_header.bin");
+            //archive.Header = headerReader.GetAllBytes();
+
+            if (archivePath.Length > 0)
+            {
+                outPath = outPath + "\\" + archiveName + archivePath;
+            }
+            else
+            {
+                outPath = outPath + "\\" + archiveName + "\\";
+            }
+            SavePack(archive, inPath, outPath, archiveName);
+        }
+        private void SavePack(FpmfArchive archive, string inPath, string outPath, string archiveName)
+        {
+            Directory.CreateDirectory(outPath);
+            IBuffer fileBuff = new StreamBuffer();
+            IBuffer headerBuff = new StreamBuffer();
+            List<FpmfArchiveFile> archiveFiles = archive.GetFiles();
+            foreach (FpmfArchiveFile archiveFile in archiveFiles)
+            {
+                fileBuff.WriteByte((byte)archiveFile.DirectoryPathSize);
+                fileBuff.WriteCString(archiveFile.DirectoryPath);
+                fileBuff.Position = fileBuff.Position - 1;
+                fileBuff.WriteByte((byte)archiveFile.FilePathSize);
+                fileBuff.WriteCString(archiveFile.FilePath);
+                fileBuff.Position = fileBuff.Position - 1;
+                fileBuff.WriteInt32(archiveFile.DatNumber);
+                fileBuff.WriteInt32(archiveFile.Offset);
+                fileBuff.WriteInt32(archiveFile.Size);
+                fileBuff.WriteInt32(archiveFile.Unknown0);
+                fileBuff.WriteInt32(archiveFile.Unknown1);
+            }
+            headerBuff.WriteBytes(MagicBytes);
+            headerBuff.WriteInt32(0);
+            headerBuff.WriteInt32(archive.Unknown0);
+            headerBuff.WriteInt32(archive.Unknown1);
+            headerBuff.WriteInt32(archive.Unknown2);
+            headerBuff.WriteByte(archive.Unknown3);
+            headerBuff.WriteByte(archive.Unknown4);
+            headerBuff.WriteInt32(archive.Unknown5);
+            headerBuff.WriteInt32(archive.DatPath.Length + 9);
+            headerBuff.WriteByte((byte)archive.DatPath.Length);
+            headerBuff.WriteCString(archive.DatPath);
+            headerBuff.Position = headerBuff.Position - 1;
+            uint type = 0;
+            switch (archiveName)
+            {
+                case "script":
+                case "settings":
+                case "item":
+                case "interface":
+                    type = 1;
+                    break;
+                case "help_end":
+                    type = 2;
+                    break;
+            }
+            headerBuff.WriteInt32(type);
+            headerBuff.WriteInt32(archive.Unknown8);
+            headerBuff.WriteInt32(archive.Unknown9);
+            headerBuff.WriteInt32(archive.Unknown10);
+            headerBuff.WriteInt32(archive.Key.Length);
+            headerBuff.WriteBytes(archive.Key);
+            headerBuff.WriteInt32(archive.Unknown11);
+            headerBuff.WriteInt32(fileBuff.Size+4);
+            headerBuff.WriteInt32(archive.NumFiles);
+            headerBuff.WriteBytes(fileBuff.GetAllBytes());
+
+            //BinaryWriter hedWriter = new BinaryWriter(File.Open(archivePath + "\\" + archiveName + "_unencrypted.hed", FileMode.Create));
+            //hedWriter.Write(headerBuff.GetAllBytes());
+            //hedWriter.Flush();
+            //hedWriter.Close();
+            headerBuff = EncryptHed(headerBuff);
+
+            string hedPath = outPath.Substring(0, outPath.LastIndexOf("\\")) + ".hed";
+            BinaryWriter headerWriter = new BinaryWriter(File.Open(hedPath, FileMode.Create));
+            headerBuff.Position = 4;
+            headerBuff.WriteInt32(headerBuff.Size - 12);
+            headerWriter.Write(headerBuff.GetAllBytes(), 0, headerBuff.Size);
+            headerWriter.Flush();
+            headerWriter.Close();
+
+            BinaryWriter datWriter = new BinaryWriter(File.Open(outPath + "\\" + "00000000.dat", FileMode.Create));
+            IBuffer outBuff = new StreamBuffer();
+            foreach (FpmfArchiveFile archiveFile in archiveFiles)
+            {
+                string inputFile = inPath + "\\" + archiveName + archiveFile.FilePath.Substring(1);
+                IBuffer datFileReader = new StreamBuffer(inputFile);
+                datFileReader = EncryptDat(datFileReader, archive.Key);
+                outBuff.WriteBytes(datFileReader.GetAllBytes());
+            }
+            datWriter.Write(outBuff.GetAllBytes(), 0, outBuff.Size);
+            datWriter.Flush();
+            datWriter.Close();
         }
 
         /// <summary>
@@ -223,7 +439,7 @@ namespace Necromancy.Server.Data
                     0x0E52712B,
                     0x3ABC1D26
                 };
-                
+
                 for (int i = 0; i < 4; i++)
                 {
                     uint a = itemBuffer.ReadUInt32();
@@ -233,54 +449,54 @@ namespace Necromancy.Server.Data
                     uint e = d & 0xFF00FF;
                     uint f = c | e;
 
-                    uint g =f ^ xor[i];
-                    
+                    uint g = f ^ xor[i];
+
                     outBuffer.WriteInt32(g);
                 }
 
-/*              These 4 words are from the previous function after xor of xor[] above
-                uint word1 = 0x6B9306F7;    
-                uint word2 = 0xFE7D4F35;
-                uint word3 = 0x406D7743;
-                uint word4 = 0x9C07F4C0;
+                /*              These 4 words are from the previous function after xor of xor[] above
+                                uint word1 = 0x6B9306F7;    
+                                uint word2 = 0xFE7D4F35;
+                                uint word3 = 0x406D7743;
+                                uint word4 = 0x9C07F4C0;
 
-                uint seed = 0;
-                uint seed1 = 0xFFFFFFFE;
-                word1 = word1 ^ seed;
-                uint a = ((word1 >> 16) & 0xFF) * 4;
-                uint b = ((word1 >> 8) & 0xFF) * 4;
-                uint c = (word1 >> 24) * 4;
-                uint e = table1[c];
-                uint f = table3[a];
-                uint g = e ^ f;
-                uint i = table3[b];
-                uint j = g ^ i;
+                                uint seed = 0;
+                                uint seed1 = 0xFFFFFFFE;
+                                word1 = word1 ^ seed;
+                                uint a = ((word1 >> 16) & 0xFF) * 4;
+                                uint b = ((word1 >> 8) & 0xFF) * 4;
+                                uint c = (word1 >> 24) * 4;
+                                uint e = table1[c];
+                                uint f = table3[a];
+                                uint g = e ^ f;
+                                uint i = table3[b];
+                                uint j = g ^ i;
 
-                uint k = (word2 & 0xFF) * 4;
-                uint l = j ^ table2[k];
-                uint m = (((word2 ^ seed) >> 16) & 0xFF) * 4;
-                uint n = ((word2 >> 24) * 4;
-                uint o = table3[n];
-                uint p = table4[m];
-                uint q = o ^ p;
-                uint r = ((word2 >> 8) & 0xFF) * 4;
-                uint s = (q ^ table2[r]);
-                uint t = (word2 & 0xFF) * 4;
-                uint u = table1[t] ^ s;
-                uint v = u ^ l;
+                                uint k = (word2 & 0xFF) * 4;
+                                uint l = j ^ table2[k];
+                                uint m = (((word2 ^ seed) >> 16) & 0xFF) * 4;
+                                uint n = ((word2 >> 24) * 4;
+                                uint o = table3[n];
+                                uint p = table4[m];
+                                uint q = o ^ p;
+                                uint r = ((word2 >> 8) & 0xFF) * 4;
+                                uint s = (q ^ table2[r]);
+                                uint t = (word2 & 0xFF) * 4;
+                                uint u = table1[t] ^ s;
+                                uint v = u ^ l;
 
-                word3 = word3 ^ v;
-                uint w = ((l & 0xFF) << 18) | ((l >> 8) & 0x00FFFFFF);
-                uint x = w ^ word4;
-                uint y = u ^ x;
-                word4 = l ^ y;
-                uint z = (seed1 * 4) + ???? (1628EEC8);   // Missed a push earlier
-                uint aa = word3 ^ z;
-                uint ab = ((aa >> 16) & 0xFF) * 4;
-                uint ac = (aa >> 24) * 4;
-                uint ad = table1[ac];
-                uint ae = (ad ^ table3[ab]);
-                */
+                                word3 = word3 ^ v;
+                                uint w = ((l & 0xFF) << 18) | ((l >> 8) & 0x00FFFFFF);
+                                uint x = w ^ word4;
+                                uint y = u ^ x;
+                                word4 = l ^ y;
+                                uint z = (seed1 * 4) + ???? (1628EEC8);   // Missed a push earlier
+                                uint aa = word3 ^ z;
+                                uint ab = ((aa >> 16) & 0xFF) * 4;
+                                uint ac = (aa >> 24) * 4;
+                                uint ad = table1[ac];
+                                uint ae = (ad ^ table3[ab]);
+                                */
 
 
 
@@ -289,7 +505,18 @@ namespace Necromancy.Server.Data
 
             _logger.Info("done");
         }
-        
+
+        public uint addFileName(string path)
+        {
+            uint fileValue = 0;
+            for (int i = 0; i < path.Length; i++)
+            {
+                char value = path[i];
+                fileValue += (uint)Convert.ToByte(value);
+            }
+            return fileValue;
+        }
+
         private uint RotateLeft(uint x, int n)
         {
             return (x << n) | (x >> (32 - n));
@@ -307,7 +534,7 @@ namespace Necromancy.Server.Data
                     //throw new Exception("Invalid WOITM File");
                 }
             }
-            itemData.Add(System.Text.Encoding.UTF8.GetString(magicBytes)  + "\r\n");
+            itemData.Add(System.Text.Encoding.UTF8.GetString(magicBytes) + "\r\n");
             //System.IO.StreamWriter outFile = new System.IO.StreamWriter(filePath);
             short version = buffer.ReadInt16(); // cmp to 1
             itemData.Add(version.ToString() + "\r\n");
@@ -319,7 +546,7 @@ namespace Necromancy.Server.Data
                 int chunkLen = buffer.ReadInt32();
                 byte[] data = buffer.ReadBytes(chunkSize - 4);
 
-                itemData.Add(itemId.ToString() + "," + chunkSize.ToString() + "," + chunkLen.ToString() + ","+ BitConverter.ToString(data).Replace("-", string.Empty) + "\r\n");
+                itemData.Add(itemId.ToString() + "," + chunkSize.ToString() + "," + chunkLen.ToString() + "," + BitConverter.ToString(data).Replace("-", string.Empty) + "\r\n");
                 //outFile.WriteLine(outLine);
                 //outFile.Flush();
                 WoItm woItm = new WoItm();
@@ -351,13 +578,13 @@ namespace Necromancy.Server.Data
         {
             return (x >> n) | (x << (32 - n));
         }
-        
+
         public byte[] Xor(byte[] text, byte[] key)
         {
             byte[] xor = new byte[text.Length];
             for (int i = 0; i < text.Length; i++)
             {
-                xor[i] = (byte) (text[i] ^ key[i % key.Length]);
+                xor[i] = (byte)(text[i] ^ key[i % key.Length]);
             }
 
             return xor;
@@ -390,21 +617,19 @@ namespace Necromancy.Server.Data
             //Uncomment for beta client
             //dl = 0x7D;
             //sub = 0xC4;
-
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < buffer.Size)
             {
                 byte cl = buffer.ReadByte();
                 bl = al;
-                bl = (byte) (bl + dl);
-                bl = (byte) (bl ^ cl);
-                bl = (byte) (bl - sub);
-                al = (byte) (al + 1);
+                bl = (byte)(bl + dl);
+                bl = (byte)(bl ^ cl);
+                bl = (byte)(bl - sub);
+                al = (byte)(al + 1);
                 dl = cl;
                 outBuffer.WriteByte(bl);
             }
-
             return outBuffer;
         }
 
@@ -420,12 +645,12 @@ namespace Necromancy.Server.Data
             }
 
             int rotKeyIndex = 0;
-            buffer.Position = (int) fileOffset;
+            buffer.Position = (int)fileOffset;
             IBuffer outBuffer = new StreamBuffer();
             while (buffer.Position < endPosition)
             {
                 byte al = buffer.ReadByte();
-                al = (byte) (al - key[rotKeyIndex]);
+                al = (byte)(al - key[rotKeyIndex]);
                 outBuffer.WriteByte(al);
                 rotKeyIndex++;
                 if (rotKeyIndex >= key.Length)
@@ -436,5 +661,74 @@ namespace Necromancy.Server.Data
 
             return outBuffer;
         }
+        private IBuffer EncryptHed(IBuffer inBuff)
+        {
+            byte bl = 0;
+            byte al = 0;
+
+            //Uncomment for US Steam Client
+            byte dl = 0xA6;
+            byte add = 0x21;
+
+            //Uncomment for US Sunset Client.
+            //byte dl = 0xEA;
+            //byte sub = 0x0A;
+
+            //Uncomment for Beta Client
+            //byte dl = 0x7D;
+            //byte sub = 0xC4;
+
+            // Uncomment for JP client
+            // dl = 0x67;
+            // sub = 0xC7;
+
+            //Uncomment for beta client
+            //dl = 0x7D;
+            //sub = 0xC4;
+
+            //inBuff.Position = 12;
+            inBuff.SetPositionStart();
+            IBuffer outBuffer = new StreamBuffer();
+            outBuffer.WriteBytes(inBuff.ReadBytes(4));
+            outBuffer.WriteInt32(inBuff.Size - 12);
+            inBuff.Position = 8;
+            outBuffer.WriteInt32(inBuff.ReadInt32());
+
+            int hedPos = inBuff.Position;
+            //inBuff.SetPositionStart();
+            // WORKING!!!!
+            while (inBuff.Position < inBuff.Size)
+            {
+                byte cl = inBuff.ReadByte();
+                cl = (byte)(cl + add);
+                bl = (byte)(dl - al);
+                bl = (byte)(bl ^ cl);
+                al = (byte)(al - 1);
+                dl = bl;
+                outBuffer.WriteByte(bl);
+            }
+            return outBuffer;
+        }
+        private IBuffer EncryptDat(IBuffer buffer, byte[] Key)
+        {
+
+            int rotKeyIndex = 0;
+            buffer.SetPositionStart();
+            IBuffer outBuffer = new StreamBuffer();
+            while (buffer.Position < buffer.Size)
+            {
+                byte al = buffer.ReadByte();
+                al = (byte)(al + Key[rotKeyIndex]);
+                outBuffer.WriteByte(al);
+                rotKeyIndex++;
+                if (rotKeyIndex >= Key.Length)
+                {
+                    rotKeyIndex = 0;
+                }
+            }
+
+            return outBuffer;
+        }
+
     }
 }

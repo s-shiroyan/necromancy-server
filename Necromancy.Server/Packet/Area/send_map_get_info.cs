@@ -18,13 +18,13 @@ namespace Necromancy.Server.Packet.Area
             _server = server;
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_map_get_info;
+        public override ushort Id => (ushort)AreaPacketId.send_map_get_info;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Map.Id);
-            Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
             foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
@@ -62,12 +62,12 @@ namespace Necromancy.Server.Packet.Area
             foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
             {
                 RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
-                    Router.Send(gimmickData, client);
+                Router.Send(gimmickData, client);
                 GGateSpawn gGateSpawn = new GGateSpawn();
                 Server.Instances.AssignInstance(gGateSpawn);
                 gGateSpawn.X = gimmickSpawn.X;
                 gGateSpawn.Y = gimmickSpawn.Y;
-                gGateSpawn.Z = gimmickSpawn.Z+300;
+                gGateSpawn.Z = gimmickSpawn.Z + 300;
                 gGateSpawn.Heading = gimmickSpawn.Heading;
                 gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
                 gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
@@ -110,17 +110,11 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(otherUnionData, client);
                 }
             }
-            if (client.Map.Id == 2002104)
+            foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
             {
-                Vector3 mapLinkSrc = new Vector3((float)-871.1273, (float)-11966.361, (float)462.58215);
-                byte orientation = 90;
-                SendDataNotifyMaplink(client, 2002105, mapLinkSrc, orientation);
-            }
-            else if (client.Map.Id == 2002105)
-            {
-                Vector3 mapLinkDest = new Vector3((float)-5778.367, (float)-6010.0425, (float)-1.6068916);
-                byte orientation = 45;
-                SendDataNotifyMaplink(client, 2002104, mapLinkDest, orientation);
+                MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y, mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
+                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
+                _server.Router.Send(mapLink, client);
             }
             // ToDo this should be a database lookup
             RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
@@ -144,6 +138,4 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
         }
     }
-
-
 }

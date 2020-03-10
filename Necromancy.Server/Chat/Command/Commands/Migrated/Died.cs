@@ -30,7 +30,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             if (client.Character.hadDied == false)
             {
                 client.Character.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
-                client.Character.currentHp = 0;
+                client.Character.Hp.Modify(-client.Character.Hp.current);
                 client.Character.state = 0b00000001;
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);

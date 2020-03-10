@@ -72,4 +72,18 @@ namespace Necromancy.Server.Model
         LEATHER,
         FORGETICKET
     }
+
+    public enum EQUIP_BIT : int
+    { 
+        HAND_R = 1,
+        HAND_L = 1 << 1,
+        QUIVER = 1 << 2,
+        HEAD = 1 << 3,
+        BODY = 1 << 4,
+        LEGS = 1 << 5,
+        ARMS = 1 << 6,
+        FEET = 1 << 7,
+        MANTLE = 1 << 8
+    }
+
 }

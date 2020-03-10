@@ -97,8 +97,8 @@ namespace Necromancy.Server.Packet.Area
                             RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
                             _server.Router.Send(client.Map, charState);
                         }
-                        perHp = (((float)monsterSpawn.GetHP() / (float)monsterSpawn.MaxHp) * 100);
-                        Logger.Debug($"CurrentHp [{monsterSpawn.GetHP()}] MaxHp[{ monsterSpawn.MaxHp}] perHp[{perHp}]");
+                        perHp = (((float)monsterSpawn.Hp.current / (float)monsterSpawn.Hp.max) * 100);
+                        Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{ monsterSpawn.Hp.max}] perHp[{perHp}]");
                     }
                     break;
                 case Character character:
@@ -110,10 +110,10 @@ namespace Necromancy.Server.Packet.Area
                         //SendBattleReportEndNotify(client, instance);
                         return;
                     }
-                    targetClient.Character.currentHp -= damage;
-                    perHp = ((targetClient.Character.currentHp / targetClient.Character.maxHp) * 100);
-                    Logger.Debug($"CurrentHp [{targetClient.Character.currentHp}] MaxHp[{targetClient.Character.maxHp}] perHp[{perHp}]");
-                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.currentHp);
+                    targetClient.Character.Hp.Modify(-damage, character.InstanceId);
+                    perHp = ((targetClient.Character.Hp.current / targetClient.Character.Hp.max) * 100);
+                    Logger.Debug($"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
+                    RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
                     _server.Router.Send(targetClient, cHpUpdate.ToPacket());
 
                     //logic to turn characters to criminals on criminal actions.  possibly should move to character task.

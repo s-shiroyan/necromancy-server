@@ -44,7 +44,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.EquipSlotBitMask(res, numEntries);
+            LoadEquip.EquipSlotBitMask(res, _character, numEntries);
 
             //sub_4835C0
             res.WriteInt32(0); //1 here means crouching?

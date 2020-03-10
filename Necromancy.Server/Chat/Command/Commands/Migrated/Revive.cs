@@ -31,7 +31,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Router.Send(client, (ushort) AreaPacketId.recv_raisescale_request_revive_r, res, ServerType.Area); //responsible for camera movement
 
                 client.Character.soulFormState -= 1;
-                client.Character.currentHp = client.Character.maxHp;
+                client.Character.Hp.toMax();
                 client.Character.movementId = client.Character.InstanceId;
                 client.Character.state = 0b00000000;
 
@@ -40,7 +40,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res2.WriteInt32(0); // Error code, 0 = success
                 Router.Send(client, (ushort) AreaPacketId.recv_revive_execute_r, res2, ServerType.Area);
 
-                RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(client.Character.currentHp);
+                RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(client.Character.Hp.current);
                 Router.Send(client, cHpUpdate.ToPacket());
 
                 IBuffer res4 = BufferProvider.Provide();
@@ -60,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
                 client.Character.hadDied = false;
-                client.Character.playerDead = false;
+                client.Character.Hp.depleted = false;
                 RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
                 Router.Send(client, cData.ToPacket());
             }

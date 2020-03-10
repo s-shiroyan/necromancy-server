@@ -2,37 +2,48 @@ using Arrowgene.Services.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Tasks;
+using System;
 using System.Numerics;
 
 namespace Necromancy.Server.Model
 {
-   class MapTransition : IInstance
+    public class MapTransition : IInstance
     {
         public uint InstanceId { get; set; }
+        public int Id { get; set; }
 
-        private readonly NecLogger _logger;
-        private readonly NecServer _server;
-        private readonly Vector3 _leftPos;
-        private readonly Vector3 _rightPos;
-        private readonly MapTransitionTask _transitionTask;
-        private readonly Map _map;
-        private readonly MapPosition _mapPosition;
-        private readonly int _transitionMapId;
-        private readonly bool _invertedTransition;
-        public MapTransition(NecServer server, Map map, int transitionMapId, Vector3 leftPos, Vector3 rightPos, bool invertedTransition, MapPosition mapPosition = null)
+        private NecServer _server;
+        private MapTransitionTask _transitionTask;
+        public Vector3 ReferencePos;
+        public int RefDistance;
+        public Vector3 LeftPos;
+        public Vector3 RightPos;
+        public byte MaplinkHeading;
+        public int MaplinkColor;
+        public int MaplinkOffset;
+        public int MaplinkWidth;
+        public int MapId;
+        public MapPosition ToPos;
+        public int TransitionMapId;
+        public bool State { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Updated { get; set; }
+        public bool InvertedTransition;
+        public MapTransition()
         {
-            _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
-            _leftPos = leftPos;
-            _rightPos = rightPos;
-            _map = map;
-            _mapPosition = mapPosition;
-            _transitionMapId = transitionMapId;
-            _invertedTransition = invertedTransition;
-            _transitionTask = new MapTransitionTask(_server, _map, _transitionMapId, _leftPos, _rightPos, InstanceId, _invertedTransition, _mapPosition);
-            _transitionTask.Start();
-
+            ToPos = new MapPosition();
         }
 
+        public void Start(NecServer server, Map map)
+        {
+            _server = server;
+            _transitionTask = new MapTransitionTask(_server, map, TransitionMapId, ReferencePos, RefDistance, LeftPos, RightPos, InstanceId, InvertedTransition, ToPos);
+            _transitionTask.Start();
+        }
+
+        public void Stop()
+        {
+            _transitionTask.Stop();
+        }
     }
 }

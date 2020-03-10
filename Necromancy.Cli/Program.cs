@@ -80,6 +80,7 @@ namespace Necromancy.Cli
         {
             AddCommand(new ShowCommand());
             AddCommand(new UnpackCommand());
+            AddCommand(new PackCommand());
             AddCommand(new StripCommand());
             AddCommand(new ConvertCommand());
             AddCommand(new ServerCommand(_logWriter));
