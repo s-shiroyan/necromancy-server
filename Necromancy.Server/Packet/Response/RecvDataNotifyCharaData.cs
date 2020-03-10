@@ -30,18 +30,9 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Y);
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
-            res.WriteInt32(0);
-            res.WriteInt32(_character.state); //BITMASK for Character State
-                                        //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 
-                                        //0bxxxxxx1x - 1 Battle Pose / 0 Normal
-                                        //0bxxxxx1xx - 1 Block Pose / 0 Normal | (for coming out of stealth while blocking)
-                                        //0bxxxx1xxx - 1 transparent / 0 solid  | (stealth in party partial visibility)
-                                        //0bxxx1xxxx -
-                                        //0bxx1xxxxx - 1 invisible / 0 visible  | (Stealth to enemies)
-                                        //0bx1xxxxxx - 1 blinking  / 0 solid    | (10  second invulnerability blinking)
-                                        //0b1xxxxxxx - 
-
-            res.WriteInt16(0); //Character Size/Radius?
+            res.WriteInt32(_character.Level); //?????
+            res.WriteInt32(_character._state); 
+            res.WriteInt16(100); //Character Size/Radius?
 
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
@@ -60,27 +51,27 @@ namespace Necromancy.Server.Packet.Response
             //sub_484660
             LoadEquip.BasicTraits(res, _character);
             //sub_483420
-            res.WriteInt32(0); // party id?
+            res.WriteInt32(_character.partyId); // party id?
             //sub_4837C0
-            res.WriteInt32(1); // party id? // i don't think sooo'
+            res.WriteInt32(_character.partyRequest); // party id? // i don't think sooo'
             //sub_read_byte
-            res.WriteByte(0); //Criminal name icon
+            res.WriteByte(_character.criminalState); //Criminal name icon
             //sub_494890
-            res.WriteByte(0); //Bool Beginner Protection
+            res.WriteByte((byte)_character.beginnerProtection); //Bool Beginner Protection
             //sub_4835E0
-            res.WriteInt32(0); //pose, 1 = sitting, 0 = standing
+            res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
             res.WriteInt32(0);
             //sub_483440
             res.WriteInt16(65);
             //sub_read_byte
-            res.WriteByte(255); //no change?
+            res.WriteByte(1); //no change?
             //sub_read_byte
-            res.WriteByte(255); //no change?
+            res.WriteByte(1); //no change?
             //sub_read_int_32
-            res.WriteInt32(1); //title; 0 - display title, 1 - no title
+            res.WriteInt32(0); //title; 0 - display title, 1 - no title
             //sub_483580
-            res.WriteInt32(244);
+            res.WriteInt32(1);
             //sub_483420
             res.WriteInt32(numStatusEffects); //Number of Status Effects to display 128 Max
             //sub_485A70

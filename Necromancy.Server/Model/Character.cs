@@ -121,41 +121,33 @@ namespace Necromancy.Server.Model
         [Flags]
         public enum CharacterState
         {
-            //                      // Binary  // Dec
-            SoulForm         = 0,        // 000000  0
-            BattlePose       = 1 << 0,   // 000001  1
-            BlockPose        = 1 << 1,   // 000010  2
-            StealthForm      = 1 << 2,   // 000100  4
-            eight              = 1 << 3,    // 001000  8
-            NormalForm =1<<4,           //0100000 16
-            //32 = invis
-            //64 = flashingInvuln
-            //4096 = GM
-            //8192 = Requesting to Join Party
-            //16384 = Recruiting Part Members
-            //32768 = tombStone
-            //65536 = Just a Head
-            //1048576 = MemberBonus
+            //state            //bitShift           // Binary                           Dec
+            SoulForm            = 0,                // 0000 0000 0000 0000 0000 0000    0
+            BattlePose          = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
+            BlockPose           = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
+            StealthForm         = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
+            NothingForm         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
+            NormalForm          = 1 << 4,           // 0000 0000 0000 0000 0001 0000    16
+            InvisibleForm       = 1 << 5,           // 0000 0000 0000 0000 0010 0000    32 
+            InvulnerableForm    = 1 << 6,           // 0000 0000 0000 0000 0100 0000    64 
+            GameMaster          = 1 << 12,          // 0000 0000 0001 0000 0000 0000    4096 
+            RequestPartyJoin    = 1 << 13,          // 0000 0000 0010 0000 0000 0000    8192 
+            RecruitPartyMember  = 1 << 14,          // 0000 0000 0100 0000 0000 0000    16384 
+            LostState           = 1 << 15,          // 0000 0000 1000 0000 0000 0000    32768
+            HeadState           = 1 << 16,          // 0000 0001 0000 0000 0000 0000    65536
+            MemberBonus         = 1 << 20,          // 0001 0000 0000 0000 0000 0000‬    1048576
 
-
-
-                                    //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 
-                                    //0bxxxxxx1x - 1 Battle Pose / 0 Normal
-                                    //0bxxxxx1xx - 1 Block Pose / 0 Normal | (for coming out of stealth while blocking)
-                                    //0bxxxx1xxx - 1 transparent / 0 solid  | (stealth in party partial visibility)
-                                    //0bxxx1xxxx -
-                                    //0bxx1xxxxx - 1 invisible / 0 visible  | (Stealth to enemies)
-                                    //0bx1xxxxxx - 1 blinking  / 0 solid    | (10  second invulnerability blinking)
-                                    //0b1xxxxxxx - 
         }
+        [Flags]
         public enum BodyState
         {
-            //                      // Binary  // Dec
-            SoulForm = 0,        // 000000  0
-            NormalDeadBody = 1 << 0,   // 000001  1
-            RuckSack = 1 << 1,   // 000010  2
-            CollectedBody = 1 << 2,   // 000100  4
-            //8 = RuckSack
+            //state            //bitShift            // Binary                           Dec
+            SoulForm             = 0,                // 0000 0000 0000 0000 0000 0000    0
+            NormalDeadBody       = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
+            RuckSack             = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
+            CollectedBody        = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
+            RuckSackAlso         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
+
         }
 
 
@@ -192,7 +184,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            _state = 0b00000000;
+            _state = (int)CharacterState.NormalForm;
             inventoryItems = new List<InventoryItem>();
             inventoryBags = new List<Bag>();
             Bag bag = new Bag();
