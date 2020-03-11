@@ -33,7 +33,6 @@ namespace Necromancy.Server.Packet.Area
 
             SendPartyNotifyInvite(client, targetInstanceId);
         }
-        int i = 0;
         private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
