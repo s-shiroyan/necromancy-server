@@ -46,7 +46,7 @@ namespace Necromancy.Server.Packet.Area
                          { x => x == 10000704 ,  () => ChangeMap(client, npcSpawn.NpcId) }, //set to Manaphes in slums for testing.
                          { x => x == 10000012 ,  () => defaultEvent(client, npcSpawn.NpcId) },
                          { x => x == 10000019 ,  () => Abdul(client, npcSpawn)  },
-                         { x => x == 74000022 ,  () => RecoverySpring(client, npcSpawn.NpcId) },
+                         { x => (x == 74000022) || (x == 74000024) || (x == 74000023) ,  () => RecoverySpring(client, npcSpawn.NpcId) },
                          { x => x == 74013071 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013161 ,  () => ChangeMap(client, npcSpawn.NpcId) },
                          { x => x == 74013271 ,  () => ChangeMap(client, npcSpawn.NpcId) },
