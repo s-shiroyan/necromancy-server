@@ -269,6 +269,7 @@ namespace Necromancy.Server.Model
         */
         public void UpdateHP(int modifier, NecServer server = null, bool verifyAgro = false, uint instanceId = 0)
         {
+            Hp.Modify(modifier);
             if (verifyAgro)
             {
                 if (server == null)

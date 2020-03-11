@@ -74,7 +74,7 @@ namespace Necromancy.Server.Packet.Area
                     }
                     break;
                 case MonsterSpawn monsterSpawn:
-                    client.Map.MonsterSpawns.TryGetValue(instanceId, out monsterSpawn);
+                    client.Map.MonsterSpawns.TryGetValue(monsterSpawn.InstanceId, out monsterSpawn);
                     {
                         double distanceToMonster = distance(monsterSpawn.X, monsterSpawn.Y, client.Character.X, client.Character.Y);
                         Logger.Debug($"monster name [{monsterSpawn.Name}] distanceToMonster [{distanceToMonster}] Radius [{monsterSpawn.Radius}] {monsterSpawn.Name}");
