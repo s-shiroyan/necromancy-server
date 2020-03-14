@@ -36,6 +36,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     character2 = character;
                 }
+                else if (instance is DeadBody deadbody)
+                {
+                    responses.Add(ChatResponse.CommandError(client, $"That's a dead body man. have some respect!"));
+                    character2 = new Character();
+                    character2.InstanceId = deadbody.InstanceId;
+                }
                 else
                 {
                     responses.Add(ChatResponse.CommandError(client, $"Please provide a character instance id"));
@@ -45,8 +51,18 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             if (!int.TryParse(command[2], out int y))
             {
-                responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
-                return;
+                try
+                {
+                    string binaryString = command[2];
+                    binaryString = binaryString.Replace("0b", "");
+                    Logger.Debug(binaryString);
+                    y = Convert.ToInt32(binaryString, 2);
+                }
+                catch
+                {
+                    responses.Add(ChatResponse.CommandError(client, $"Please provide a value to test"));
+                    return;
+                }
             }
 
 
@@ -55,7 +71,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "hp":
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(y);
-                    character2.currentHp = y;
+                    character2.Hp.setCurrent(y);
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res, ServerType.Area);
                     break;
 
@@ -131,20 +147,23 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_gimmick_data, res9, ServerType.Area);
                     break;
 
-                case "bodystate":
+                case "bodystate": ///State of your dead body
                     //recv_charabody_state_update_notify = 0x1A0F, 
                     IBuffer res10 = BufferProvider.Provide();
                     res10.WriteInt32(character2.InstanceId);
                     res10.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_state_update_notify, res10, ServerType.Area);
+                    responses.Add(ChatResponse.CommandError(client, $"setting bodyState to {y} for character {character2.Name}"));
+
                     break;
 
-                case "charastate":
+                case "charastate": //state of your regular body
                     //recv_chara_notify_stateflag = 0x23D3, 
                     IBuffer res11 = BufferProvider.Provide();
                     res11.WriteInt32(character2.InstanceId);
                     res11.WriteInt32(y);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
+                    responses.Add(ChatResponse.CommandError(client, $"setting charaState to {y} for character {character2.Name}"));
                     break;
 
                 case "spirit":
@@ -155,7 +174,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_spirit, res12, ServerType.Area);
                     break;
 
-                case "abyss":
+                case "abyss": //lil marker in soul form of where you died if you jump off the map
                     //recv_charabody_self_notify_abyss_stead_pos = 0x679B,
                     IBuffer res13 = BufferProvider.Provide();
                     res13.WriteFloat(character2.X);
@@ -171,8 +190,9 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                 case "charabodydata":
                     //recv_data_notify_charabody_data = 0x906A,
+                    DeadBody _deadBody = Server.Instances.GetInstance(character2.DeadBodyInstanceId) as DeadBody;
                     IBuffer res14 = BufferProvider.Provide();
-                    res14.WriteInt32(character2.InstanceId + 10000); //Instance ID of dead body
+                    res14.WriteInt32(character2.DeadBodyInstanceId); //Instance ID of dead body
                     res14.WriteInt32(character2.InstanceId); //Reference to actual player's instance ID
                     res14.WriteCString("soulname"); // Soul name 
                     res14.WriteCString($"{character2.Name}"); // Character name
@@ -180,56 +200,31 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res14.WriteFloat(character2.Y); // Y
                     res14.WriteFloat(character2.Z); // Z
                     res14.WriteByte(character2.Heading); // Heading
-                    res14.WriteInt32(0);
+                    res14.WriteInt32(character2.Level);//??level?
+
 
                     int numEntries = 19;
                     res14.WriteInt32(numEntries);//less than or equal to 19
-                    for (int i = 0; i < numEntries; i++)
-                    {
-                        res14.WriteInt32(0);
-                    }
+                                                 //Consolidated Frequently Used Code
+                    LoadEquip.SlotSetup(res14, character2, numEntries);
 
-                    numEntries = 19;
                     res14.WriteInt32(numEntries);
-                    for (int i = 0; i < numEntries; i++)
-                    {
-                        res14.WriteInt32(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteInt32(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
+                    //Consolidated Frequently Used Code
+                    LoadEquip.EquipItems(res14, character2, numEntries);
 
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);//bool
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                        res14.WriteByte(0);
-                    }
-
-                    numEntries = 19;
                     res14.WriteInt32(numEntries);
-                    for (int i = 0; i < numEntries; i++)
-                    {
-                        res14.WriteInt32(0);
-                    }
+                    //Consolidated Frequently Used Code
+                    LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
-                    res14.WriteInt32(0); //Race ID
-                    res14.WriteInt32(0); //Gender ID
-                    res14.WriteByte(0); //Hair style
-                    res14.WriteByte(0); //Hair color
-                    res14.WriteByte(0); //Face id
-                    res14.WriteInt32(1);// 0 = bag, 1 for dead? (Can't enter soul form if this isn't 0 or 1 i think).
-                    res14.WriteInt32(0);//4 = ash pile, not sure what this is.
-                    res14.WriteInt32(0);
-                    res14.WriteInt32(y); //death pose 0 = faced down, 1 = head chopped off, 2 = no arm, 3 = faced down, 4 = chopped in half, 5 = faced down, 6 = faced down, 7 and up "T-pose" the body (ONLY SEND 1 IF YOU ARE CALLING THIS FOR THE FIRST TIME)
-                    res14.WriteByte(0);//crim status (changes icon on the end also), 0 = white, 1 = yellow, 2 = red, 3 = red with crim icon, 
-                    res14.WriteByte(0);// (bool) Beginner protection
+                    //Consolidated Frequently Used Code
+                    LoadEquip.BasicTraits(res14, character2);
+
+                    res14.WriteInt32(_deadBody.ConnectionState);// 0 = bag, 1 for dead? (Can't enter soul form if this isn't 0 or 1 i think).
+                    res14.WriteInt32(_deadBody.ModelType);//4 = ash pile, not sure what this is.
+                    res14.WriteInt32(y);
+                    res14.WriteInt32(_deadBody.deathPose); //death pose 0 = faced down, 1 = head chopped off, 2 = no arm, 3 = faced down, 4 = chopped in half, 5 = faced down, 6 = faced down, 7 and up "T-pose" the body (ONLY SEND 1 IF YOU ARE CALLING THIS FOR THE FIRST TIME)
+                    res14.WriteByte(_deadBody.CriminalStatus);//crim status (changes icon on the end also), 0 = white, 1 = yellow, 2 = red, 3 = red with crim icon, 
+                    res14.WriteByte(_deadBody.BeginnerProtection);// (bool) Beginner protection
                     res14.WriteInt32(1);
                     Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_charabody_data, res14, ServerType.Area);
                     break;
@@ -371,10 +366,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "damage":
-                    int hp = character2.currentHp;
-                    client.Character.damage(hp, character2.InstanceId);
+                    int hp = character2.Hp.current;
+                    client.Character.Hp.Modify(-hp, character2.InstanceId);
                     IBuffer res35 = BufferProvider.Provide();
-                    res35.WriteInt32(hp);
+                    res35.WriteInt32(hp-hp);
                     Router.Send(client, (ushort)AreaPacketId.recv_chara_update_hp, res35, ServerType.Area);
                     break;
 

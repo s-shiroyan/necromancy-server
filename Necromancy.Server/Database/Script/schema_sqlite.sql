@@ -287,3 +287,50 @@ CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn` (
     `created`  DATETIME,
     `updated`  DATETIME
 );
+
+-- Table: nec_map_transition
+CREATE TABLE IF NOT EXISTS `nec_map_transition` (
+    `id`                    INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `map_id`                INTEGER  NOT NULL,
+    `transition_map_id`     INTEGER  NOT NULL,
+    `x`                     REAL  NOT NULL,
+    `y`                     REAL  NOT NULL,
+    `z`                     REAL  NOT NULL,
+    `maplink_heading`       INTEGER NOT NULL,
+    `maplink_color`         INTEGER NOT NULL,
+    `maplink_offset`        INTEGER NOT NULL,
+    `maplink_width`         INTEGER NOT NULL,
+    `distance`              INTEGER NOT NULL,
+    `left_x`                REAL  NOT NULL,
+    `left_y`                REAL  NOT NULL,
+    `left_z`                REAL  NOT NULL,
+    `right_x`               REAL  NOT NULL,
+    `right_y`               REAL  NOT NULL,
+    `right_z`               REAL  NOT NULL,
+    `invertedPos`           INTEGER NOT NULL,
+    `to_x`                  REAL  NOT NULL,
+    `to_y`                  REAL  NOT NULL,
+    `to_z`                  REAL  NOT NULL,
+    `to_heading`            INTEGER  NOT NULL,
+    `state`                 INTEGER  NOT NULL,
+    `created`               DATETIME,
+    `updated`               DATETIME
+);
+CREATE TABLE IF NOT EXISTS `nec_ggate_spawn` (
+  `id`         INTEGER PRIMARY KEY NOT NULL, 
+  `serial_id`     INTEGER             NOT NULL,
+  `interaction`     INTEGER             NOT NULL,
+  `name`       TEXT                NOT NULL,
+  `title`      TEXT                NOT NULL,
+  `map_id`     INTEGER             NOT NULL,
+  `x`          REAL                NOT NULL,
+  `y`          REAL                NOT NULL,
+  `z`          REAL                NOT NULL,
+  `heading`    INTEGER             NOT NULL,
+  `model_id`   INTEGER             NOT NULL,
+  `size`       INTEGER             NOT NULL,
+  `active`     INTEGER             NOT NULL,
+  `glow` INTEGER             NOT NULL,
+  `created`    DATETIME            NOT NULL,
+  `updated`    DATETIME            NOT NULL
+);

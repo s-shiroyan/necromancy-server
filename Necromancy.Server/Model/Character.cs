@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
@@ -43,9 +44,9 @@ namespace Necromancy.Server.Model
         public ushort piety { get; set; }
         public ushort luck { get; set; }
         public uint ClassId { get; set; }
-        public int maxHp { get; set; }
-        public uint maxMp { get; set; }
-        public uint maxOd { get; set; }
+        //public int maxHp { get; set; }
+        //public int maxMp { get; set; }
+        //public int maxOd { get; set; }
         public bool hadDied { get; set; }
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
@@ -65,6 +66,7 @@ namespace Necromancy.Server.Model
         public byte movementAnim { get; set; }
         public bool weaponEquipped { get; set; }
         public uint movementId { get; set; }
+        public bool mapChange { get; set; }
 
         //Normal Attack
         public int[] AttackIds { get; set; }
@@ -84,9 +86,12 @@ namespace Necromancy.Server.Model
         public uint eventSelectReadyCode { get; set; }
         public int eventSelectExecCode { get; set; }
         public int eventSelectExtraSelectionCode { get; set; }
-        private int _currentHp { get; set; }
-        private uint _currentMp { get; set; }
-        private uint _currentOd { get; set; }
+        //private int _currentHp { get; set; }
+        public BaseStat Hp;
+        public BaseStat Mp;
+        public BaseStat Od;
+        //private int _currentMp { get; set; }
+        //private int _currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
         public int shortcutBar1Id { get; set; }
         public int shortcutBar2Id { get; set; }
@@ -104,7 +109,7 @@ namespace Necromancy.Server.Model
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
         public uint killerInstanceId { get; private set; }
-        public bool playerDead { get; set; }
+        //public bool playerDead { get; set; }
         public uint partyId { get; set; }
         public int unionId { get; set; }
         public byte criminalState { get; set; }
@@ -116,6 +121,41 @@ namespace Necromancy.Server.Model
         //Task
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
+
+        //Flags  
+        [Flags]
+        public enum CharacterState
+        {
+            //state            //bitShift           // Binary                           Dec
+            SoulForm            = 0,                // 0000 0000 0000 0000 0000 0000    0
+            BattlePose          = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
+            BlockPose           = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
+            StealthForm         = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
+            NothingForm         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
+            NormalForm          = 1 << 4,           // 0000 0000 0000 0000 0001 0000    16
+            InvisibleForm       = 1 << 5,           // 0000 0000 0000 0000 0010 0000    32 
+            InvulnerableForm    = 1 << 6,           // 0000 0000 0000 0000 0100 0000    64 
+            GameMaster          = 1 << 12,          // 0000 0000 0001 0000 0000 0000    4096 
+            RequestPartyJoin    = 1 << 13,          // 0000 0000 0010 0000 0000 0000    8192 
+            RecruitPartyMember  = 1 << 14,          // 0000 0000 0100 0000 0000 0000    16384 
+            LostState           = 1 << 15,          // 0000 0000 1000 0000 0000 0000    32768
+            HeadState           = 1 << 16,          // 0000 0001 0000 0000 0000 0000    65536
+            MemberBonus         = 1 << 20,          // 0001 0000 0000 0000 0000 0000‬    1048576
+
+        }
+        [Flags]
+        public enum BodyState
+        {
+            //state            //bitShift            // Binary                           Dec
+            SoulForm             = 0,                // 0000 0000 0000 0000 0000 0000    0
+            NormalDeadBody       = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
+            RuckSack             = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
+            CollectedBody        = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
+            RuckSackAlso         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
+
+        }
+
+
         public Character()
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -134,12 +174,9 @@ namespace Necromancy.Server.Model
             WeaponType = 8;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;
-            maxHp = 1000;
-            maxMp = 500;
-            maxOd = 200;
-            _currentHp = 1000;
-            _currentMp = 450;
-            _currentOd = 150;
+            Hp = new BaseStat(1000, 1000);
+            Mp = new BaseStat(450, 500);
+            Od = new BaseStat(150, 200);
             shortcutBar0Id = -1;
             shortcutBar1Id = -1;
             shortcutBar2Id = -1;
@@ -149,7 +186,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            _state = 0b00000000;
+            _state = (int)CharacterState.NormalForm;
             inventoryItems = new List<InventoryItem>();
             inventoryBags = new List<Bag>();
             Bag bag = new Bag();
@@ -165,8 +202,7 @@ namespace Necromancy.Server.Model
             secondInnAccess = false;
             _characterActive = true;
             killerInstanceId = 0;
-            playerDead = false;
-           secondInnAccess = false;
+            secondInnAccess = false;
             partyId = 0;
             InstanceId = 0;
             Name = "";
@@ -174,54 +210,7 @@ namespace Necromancy.Server.Model
             unionId = 0;
             criminalState = 0;
             helperTextAbdul = true;
-        }
-
-        public int currentHp
-        {
-            get => _currentHp;
-            set
-            {
-                lock (HPLock)
-                {
-                    _currentHp = value;
-                }
-            }
-        }
-        public void damage(int amount, uint instanceId)
-        {
-            lock (DamageLock)
-            {
-                if (playerDead)
-                    return;
-                _currentHp -= amount;
-                if (_currentHp <= 0)
-                {
-                    playerDead = true;
-                    killerInstanceId = instanceId;
-                }
-            }
-        }
-        public uint currentMp
-        {
-            get => _currentMp;
-            set
-            {
-                lock (MPLock)
-                {
-                    _currentMp = value;
-                }
-            }
-        }
-        public uint currentOd
-        {
-            get => _currentOd;
-            set
-            {
-                lock (ODLock)
-                {
-                    _currentOd = value;
-                }
-            }
+            mapChange = false;
         }
         public bool characterActive
         {

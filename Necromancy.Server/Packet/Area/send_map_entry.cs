@@ -15,6 +15,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            client.Character.mapChange = false;
+
             int mapId = packet.Data.ReadInt32();
             Map map = Server.Maps.Get(mapId);
             if (map == null)

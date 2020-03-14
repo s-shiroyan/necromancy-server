@@ -137,8 +137,8 @@ namespace Necromancy.Server.Model.Skills
             int damage = Util.GetRandomNumber(70, 90);
             RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(_client.Character.InstanceId, monsterSpawn.InstanceId, effectId, _srcCoord, 2, 2);
             _server.Router.Send(_client.Map, eoTriggerData);
-            int monsterHP = monsterSpawn.GetHP();
-            float perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.MaxHp) * 100) : 0;
+            int monsterHP = monsterSpawn.Hp.current;
+            float perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.Hp.max) * 100) : 0;
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monsterSpawn.InstanceId, damage);
             RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(monsterSpawn.InstanceId, perHp);
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monsterSpawn.InstanceId);
@@ -158,7 +158,7 @@ namespace Necromancy.Server.Model.Skills
             {
                 monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
             }
-            _logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.GetHP()} HP left.");
+            _logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.Hp.current} HP left.");
         }
 
     }

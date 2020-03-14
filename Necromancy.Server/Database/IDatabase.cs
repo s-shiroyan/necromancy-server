@@ -110,5 +110,18 @@ namespace Necromancy.Server.Database
         List<Gimmick> SelectGimmicksByMapId(int mapId);
         bool UpdateGimmick(Gimmick gimmick);
         bool DeleteGimmick(int gimmickId);
+
+        // MapTransition Spawn
+        bool InsertMapTransition(MapTransition mapTran);
+        List<MapTransition> SelectMapTransitions();
+        List<MapTransition> SelectMapTransitionsByMapId(int mapId);
+        bool UpdateMapTransition(MapTransition mapTran);
+        bool DeleteMapTransition(int mapTranId);
+        // GGate Spawn
+        bool InsertGGateSpawn(GGateSpawn gGateSpawn);
+        List<GGateSpawn> SelectGGateSpawns();
+        List<GGateSpawn> SelectGGateSpawnsByMapId(int mapId);
+        bool UpdateGGateSpawn(GGateSpawn gGateSpawn);
+        bool DeleteGGateSpawn(int gGateSpawnId);
     }
 }

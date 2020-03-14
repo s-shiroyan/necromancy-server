@@ -22,7 +22,6 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort)AreaPacketId.send_loot_access_object;
-        private short i = 0;
         public override void Handle(NecClient client, NecPacket packet)
         {
             int instanceID = packet.Data.ReadInt32();

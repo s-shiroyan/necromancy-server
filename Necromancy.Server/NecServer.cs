@@ -157,6 +157,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new GGateCommand(this));
             Chat.CommandHandler.AddCommand(new GimmickCommand(this));
             Chat.CommandHandler.AddCommand(new ScriptCommand(this));
             Chat.CommandHandler.AddCommand(new UnionCommand(this));
@@ -215,6 +216,8 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
             Chat.CommandHandler.AddCommand(new ItemCommand(this));
             Chat.CommandHandler.AddCommand(new BagCommand(this));
+            Chat.CommandHandler.AddCommand(new TeleportCommand(this));
+            Chat.CommandHandler.AddCommand(new TeleportToCommand(this));
         }
 
         private void LoadSettingRepository()

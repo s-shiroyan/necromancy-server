@@ -142,7 +142,7 @@ namespace Necromancy.Server.Tasks
             int damage = Util.GetRandomNumber(70, 90);
             RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
             _server.Router.Send(_map, eoTriggerData);
-            float perHp = (((float)monster.GetHP() / (float)monster.MaxHp) * 100);
+            float perHp = (((float)monster.Hp.current / (float)monster.Hp.max) * 100);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(ownerInstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();

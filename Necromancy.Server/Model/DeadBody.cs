@@ -26,6 +26,8 @@ namespace Necromancy.Server.Model
         public byte CriminalStatus { get; set; }
         public byte BeginnerProtection { get; set; }
         public int deathPose { get; set; }
+        public int Level { get; set; }
+
 
 
         public DeadBody()
@@ -43,6 +45,7 @@ namespace Necromancy.Server.Model
             HairColor = CharacterId.HairColorId;
             FaceId = CharacterId.FaceId;
             */
+            Level = 0;
             ConnectionState = 1;//0 if disconnected, 1 if dead.
             ModelType = 1; //4 if they are an ash pile
             CriminalStatus = 0; //We need a criminal status value from original character

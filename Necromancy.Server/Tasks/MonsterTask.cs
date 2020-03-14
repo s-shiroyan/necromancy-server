@@ -327,7 +327,7 @@ namespace Necromancy.Server.Tasks
         {
             int damage = (int)Util.GetRandomNumber(8, 43);
             Character currentTarget = _monster.GetCurrentTarget();
-            currentTarget.damage(damage, _monster.InstanceId);
+            currentTarget.Hp.Modify(-damage, _monster.InstanceId);
 
             Logger.Debug($"Monster {_monster.InstanceId} is attacking {currentTarget.Name}");
             List<PacketResponse> brList = new List<PacketResponse>();
@@ -335,7 +335,7 @@ namespace Necromancy.Server.Tasks
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
             RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(currentTarget.InstanceId);
             RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(currentTarget.InstanceId, damage);
-            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.currentHp);
+            RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(currentTarget.Hp.current);
 
             brList.Add(brStart);
             brList.Add(brHit);
@@ -344,7 +344,7 @@ namespace Necromancy.Server.Tasks
             _server.Router.Send(Map, brList);
             _server.Router.Send(Map.ClientLookup.GetByCharacterInstanceId(currentTarget.InstanceId), cHpUpdate.ToPacket());
 
-            if (currentTarget.playerDead)
+            if (currentTarget.Hp.depleted)
             {
                 _monster.SetAgro(false);
                 _monster.MonsterAgroList.Remove(currentTarget.InstanceId);
@@ -485,7 +485,7 @@ namespace Necromancy.Server.Tasks
             _monster.Y = spawnCoords.destination.Y; 
             _monster.Z = spawnCoords.destination.Z; 
             _monster.Heading = (byte)GetHeading(_monster.monsterCoords.Find(x => x.CoordIdx == 1).destination);
-            _monster.SetHP(_monster.MaxHp);
+            _monster.Hp.toMax();
             respawnTime = _monster.RespawnTime;
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(_monster);
             _server.Router.Send(Map, monsterData);
@@ -497,7 +497,7 @@ namespace Necromancy.Server.Tasks
         public bool MonsterCheck()
         {
            // Logger.Debug($"Monster HP [{_monster.GetHP()}]");
-            if (_monster.GetHP() <= 0)
+            if (_monster.Hp.current <= 0)
             {
                 foreach (uint instanceId in _monster.GetAgroInstanceList())
                 {
@@ -656,7 +656,7 @@ namespace Necromancy.Server.Tasks
             Vector3 monster = new Vector3(_monster.X, _monster.Y, _monster.Z);
             foreach (NecClient client in mapsClients)
             {
-                if (client.Character.playerDead == false)
+                if (client.Character.Hp.depleted == false)
                 {
                     Vector3 character = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
                     float distanceChar = GetDistance(character, monster);

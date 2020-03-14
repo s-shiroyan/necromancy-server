@@ -60,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             monsterSpawn.Level = (byte)monsterSetting.Level;
 
             monsterSpawn.ModelId = modelSetting.Id;
-            monsterSpawn.Size = (short)modelSetting.Height;
+            monsterSpawn.Size = (short)(modelSetting.Height/2);
             monsterSpawn.Radius = (short)modelSetting.Radius;
 
             monsterSpawn.MapId = client.Character.MapId;
@@ -70,8 +70,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             monsterSpawn.Z = client.Character.Z;
             monsterSpawn.Heading = client.Character.Heading;
 
-            monsterSpawn.MaxHp = 100;
-            monsterSpawn.SetHP(100);
+            monsterSpawn.Hp.setMax(100);
+            monsterSpawn.Hp.setCurrent(100);
 
             if (!Server.Database.InsertMonsterSpawn(monsterSpawn))
             {

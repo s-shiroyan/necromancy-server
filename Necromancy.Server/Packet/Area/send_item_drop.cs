@@ -17,15 +17,16 @@ namespace Necromancy.Server.Packet.Area
         {
             byte storageType = packet.Data.ReadByte();
             byte bagId = packet.Data.ReadByte();
-            ushort bagSlot = packet.Data.ReadUInt16();
+            short bagSlot = packet.Data.ReadInt16();
             byte stackSize = packet.Data.ReadByte();
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_item_drop_r, res, ServerType.Area);
 
+            InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, bagSlot);
             res.SetPositionStart();
-            res.WriteInt64(10200101); //Item instance Id here
+            res.WriteInt64(invItem.InstanceId); //Item instance Id here
             Router.Send(client, (ushort)AreaPacketId.recv_item_remove, res, ServerType.Area);
         }
     }
