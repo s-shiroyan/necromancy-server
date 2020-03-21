@@ -37,7 +37,7 @@ namespace Necromancy.Server.Database
 
         private NecSqLiteDb PrepareSqlLiteDb(string sqLiteFolder)
         {
-            string sqLitePath = Path.Combine(sqLiteFolder, $"db.v{NecSqLiteDb.Version}.sqlite");
+            string sqLitePath = Path.Combine(sqLiteFolder, $"db.sqlite");
             NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
             if (db.CreateDatabase())
             {
