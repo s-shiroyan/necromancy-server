@@ -6,6 +6,12 @@ namespace Necromancy.Server.Database
 {
     public interface IDatabase
     {
+        long Version
+        {
+            get;
+            set;
+        }
+
         void Execute(string sql);
 
         /// <summary>

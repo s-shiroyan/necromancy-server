@@ -37,7 +37,7 @@ namespace Necromancy.Server.Database
 
         private NecSqLiteDb PrepareSqlLiteDb(string sqLiteFolder)
         {
-            string sqLitePath = Path.Combine(sqLiteFolder, $"db.v{NecSqLiteDb.Version}.sqlite");
+            string sqLitePath = Path.Combine(sqLiteFolder, $"db.sqlite");
             NecSqLiteDb db = new NecSqLiteDb(sqLitePath);
             if (db.CreateDatabase())
             {
@@ -52,9 +52,9 @@ namespace Necromancy.Server.Database
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_auction.sql"));
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_gimmick.sql"));
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_maptransition.sql"));
-
             }
 
+            new SqlMigrator(db).Migrate(Path.Combine(sqLiteFolder, "Script/Migrations/"));
             return db;
         }
     }
