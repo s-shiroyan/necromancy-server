@@ -35,6 +35,7 @@ namespace Necromancy.Server.Model.Skills
 
         public void StartCast()
         {
+            if (_targetInstanceId == 0) _targetInstanceId = _client.Character.InstanceId; 
             IInstance target = _server.Instances.GetInstance((uint)_targetInstanceId);
             switch (target)         // ToDO     Do a hositilty check to make sure this is allowed
             {
