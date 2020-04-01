@@ -30,8 +30,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Just attacked Target {client.Character.eventSelectReadyCode}");
 
 
-            if (instanceId == 0)
-                return;
+
 
             int damage = 0;
             float perHp = 100.0f;
@@ -42,6 +41,13 @@ namespace Necromancy.Server.Packet.Area
                 damage = Util.GetRandomNumber(16, 24);  // Normal hit
             else
                 damage = Util.GetRandomNumber(32, 48);  // Critical hit
+
+            //Testing some aoe damage stuff.......  Takes a long time to process.
+            AreaOfEffectCalculation(client, damage);
+
+            //stops the logic gate below if nothing is targeted.  This was because Rev 1 of battle logic only worked on targeted objects.  probably will go away with progress on 'area of affect' based melee
+            if (instanceId == 0)
+                return;
 
             IInstance instance = Server.Instances.GetInstance(instanceId);
             SendBattleAttackExecR(client);
@@ -158,47 +164,9 @@ namespace Necromancy.Server.Packet.Area
 
 
 
-            //SendReportAcctionAtackExec(client, instance);
-            //SendReportNotifyHitEffect(client, instance);
-            //SendReportDamageHP(client, instance, damage, perHp);
-            //SendBattleReportEndNotify(client, instance);
         }
 
-        private void SendBattleReportStartNotify(NecClient client, IInstance instance)
-        {
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(client.Character.InstanceId);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
-        }   
-
-        private void CheckMonsterStats(NecClient client, IInstance instance)
-        {
-            MonsterSpawn monster = (MonsterSpawn)instance;
-
-
-        }
-        private void SendReportNotifyHitEffect(NecClient client, IInstance instance)
-        {
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(instance.InstanceId);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_hit_effect, res4, ServerType.Area);
-        }
-
-        private void SendReportDamageHP(NecClient client, IInstance instance, int damage, float perHp)
-        {      
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(instance.InstanceId);
-            res.WriteInt32(damage);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_phy_damage_hp, res, ServerType.Area);            
-
-            if (perHp < 0) { perHp = 0; }
-
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(instance.InstanceId);
-            res4.WriteByte((byte)perHp); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_hp_per_update_notify, res4, ServerType.Area);
-        }
-
+        //What do the other _r  recvs do? 
         private void SendBattleAttackExecR(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
@@ -212,11 +180,66 @@ namespace Necromancy.Server.Packet.Area
             return Math.Sqrt(Math.Pow(objectX - targetX, 2) +
                           Math.Pow(objectY - targetY, 2) * 1.0);
         }
-        private void SendBattleReportEndNotify(NecClient client, IInstance instance)
+        private void AreaOfEffectCalculation(NecClient client, int damage)
         {
-            IBuffer res4 = BufferProvider.Provide();
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res4, ServerType.Area);
+            foreach (NecClient targetClient in client.Map.ClientLookup.GetAll())
+            {
+                if (targetClient == client) return;
+                Logger.Debug($"Hello {targetClient.Character.Name}");
+
+                float perHp = 100.0f;
+                double distanceToCharacter = distance(targetClient.Character.X, targetClient.Character.Y, client.Character.X, client.Character.Y);
+                Logger.Debug($"target Character name [{targetClient.Character.Name}] distanceToCharacter [{distanceToCharacter}] Radius {/*[{monsterSpawn.Radius}]*/"125"} {targetClient.Character.Name}");
+                if (distanceToCharacter > /*targetClient.Character.Radius +*/ 125)
+                {
+                    //SendBattleReportEndNotify(client, instance);
+                    return;
+                }
+                targetClient.Character.Hp.Modify(-damage, client.Character.InstanceId);
+                perHp = ((targetClient.Character.Hp.current / targetClient.Character.Hp.max) * 100);
+                Logger.Debug($"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
+                RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
+                _server.Router.Send(targetClient, cHpUpdate.ToPacket());
+
+                //logic to turn characters to criminals on criminal actions.  possibly should move to character task.
+                client.Character.criminalState += 1;
+                if (client.Character.criminalState == 1 | client.Character.criminalState == 2 | client.Character.criminalState == 3)
+                {
+                    IBuffer res40 = BufferProvider.Provide();
+                    res40.WriteInt32(client.Character.InstanceId);
+                    res40.WriteByte(client.Character.criminalState);
+
+                    Logger.Debug($"Setting crime level for Character {client.Character.Name} to {client.Character.criminalState}");
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_notify_crime_lv, res40, ServerType.Area);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_crime_lv, res40, ServerType.Area, client);
+                }
+                if (client.Character.criminalState > 255) { client.Character.criminalState = 255; }
+
+
+                List<PacketResponse> brTargetList = new List<PacketResponse>();
+                RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);
+                RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
+                RecvBattleReportActionAttackExec brAttack = new RecvBattleReportActionAttackExec((int)targetClient.Character.InstanceId);
+                RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(targetClient.Character.InstanceId);
+                RecvBattleReportPhyDamageHp brPhyHp = new RecvBattleReportPhyDamageHp(targetClient.Character.InstanceId, damage);
+                RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(targetClient.Character.InstanceId, damage);
+                RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(targetClient.Character.InstanceId, perHp);
+                RecvBattleReportNotifyKnockback brKnockBack = new RecvBattleReportNotifyKnockback(targetClient.Character.InstanceId, 001, 001);
+
+
+                brTargetList.Add(brStart);
+                brTargetList.Add(brAttack);
+                brTargetList.Add(brHit);
+                //brTargetList.Add(brPhyHp);
+                brTargetList.Add(brHp);
+                brTargetList.Add(oHpUpdate);
+                brTargetList.Add(brKnockBack);
+                brTargetList.Add(brEnd);
+                Router.Send(client.Map, brTargetList);
+            }
         }
+
+        //To be implemented for monsters
         private void SendBattleReportKnockBack(NecClient client, IInstance instance)
         {
             MonsterSpawn monster = (MonsterSpawn)instance;
@@ -227,61 +250,6 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_noact_notify_knockback, res, ServerType.Area);
         }
 
-        private void SendBattleAteckExecDirect(NecClient client, IInstance instance)
-        {
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(instance.InstanceId);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_attack_exec_direct_r, res4, ServerType.Area);            
-        }
-        private void SendReportAcctionAtackExec(NecClient client, IInstance instance)
-        {
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(instance.InstanceId);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_action_attack_exec, res4, ServerType.Area);
-
-
-        }
-        private void SendDataNotifyEoData(NecClient client, IInstance instance)
-        {
-            MonsterSpawn monster = (MonsterSpawn)instance;
-            IBuffer res2 = BufferProvider.Provide();
-            uint skillInstanceID = Server.Instances.CreateInstance<Skill>().InstanceId;
-            Logger.Debug($"Skill instance {skillInstanceID} was just cast. use /Takeover {skillInstanceID} to control");
-            res2.WriteInt32(skillInstanceID); // Unique Instance ID of Skill Cast
-            res2.WriteFloat(monster.X);//Effect Object X
-            res2.WriteFloat(monster.Y);//Effect Object y
-            res2.WriteFloat(monster.Z + 100);//Effect Object z
-
-            //orientation related
-            res2.WriteFloat(client.Character.X);//Rotation Along X Axis if above 0
-            res2.WriteFloat(client.Character.Y);//Rotation Along Y Axis if above 0
-            res2.WriteFloat(client.Character.Heading);//Rotation Along Z Axis if above 0
-
-            res2.WriteInt32(600021);// effect id
-            res2.WriteInt32(monster.InstanceId); //must be set to int32 contents. int myTargetID = packet.Data.ReadInt32();
-            res2.WriteInt32(0);//unknown
-
-            res2.WriteInt32(client.Character.Heading);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_eo_data, res2, ServerType.Area);
-
-            //makes Effect disappear after float seconds
-            IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt32(skillInstanceID);
-            res5.WriteFloat(10);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_notify_disappear_schedule, res5, ServerType.Area);
-
-            //makes effect have a sphere of collision???
-            IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt32(skillInstanceID);
-            res6.WriteFloat(10000);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_base_notify_sphere, res6, ServerType.Area);
-
-            //testing
-            IBuffer res8 = BufferProvider.Provide();
-            res8.WriteInt32(0);
-            res8.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_eo_update_state, res8, ServerType.Area);
-        }
 
     }
 }
