@@ -120,6 +120,7 @@ namespace Necromancy.Server.Database
         // MapTransition Spawn
         bool InsertMapTransition(MapTransition mapTran);
         List<MapTransition> SelectMapTransitions();
+        MapTransition SelectMapTransitionsById(int Id);
         List<MapTransition> SelectMapTransitionsByMapId(int mapId);
         bool UpdateMapTransition(MapTransition mapTran);
         bool DeleteMapTransition(int mapTranId);

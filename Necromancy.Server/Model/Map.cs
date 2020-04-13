@@ -257,6 +257,13 @@ namespace Necromancy.Server.Model
                     mapTran.Start(_server, this);
                 }
             }
+
+            //on successful map entry, update the client database position
+            if (!_server.Database.UpdateCharacter(client.Character))
+            {
+                _logger.Error("Could not update the database with current known player position");
+            }
+
         }
         public void Leave(NecClient client)
         {
