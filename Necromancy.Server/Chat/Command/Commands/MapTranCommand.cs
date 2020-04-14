@@ -7,6 +7,7 @@ using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Data.Setting;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -46,6 +47,20 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "spawn": //spawns a new object on the map at your position.  makes a sign above it.  and jumps over it
                     myMapTransition = Server.Instances.CreateInstance<MapTransition>();
+
+                    IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
+                    res1.WriteInt32(myMapTransition.InstanceId); // Unique ID
+                    res1.WriteFloat(client.Character.X); //x
+                    res1.WriteFloat(client.Character.Y); //y
+                    res1.WriteFloat(client.Character.Z + 2); //z
+                    res1.WriteByte(client.Character.Heading); // offset
+                    res1.WriteFloat(myMapTransition.MaplinkOffset); // Height
+                    res1.WriteFloat(myMapTransition.MaplinkWidth); // Width
+                    res1.WriteInt32(Util.GetRandomNumber(0, 6)); // Aura color 0=blue 1=gold 2=white 3=red 4=purple 5=black  0 to 5, crash above 5
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
+
+
+
                     myMapTransition.MapId = client.Character.MapId;
                     myMapTransition.TransitionMapId = x;
                     myMapTransition.ReferencePos.X = client.Character.X;
@@ -72,6 +87,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                     myMapTransition.Created = DateTime.Now;
                     myMapTransition.Updated = DateTime.Now;
 
+                    myMapTransition.MaplinkHeading = (byte)(client.Character.Heading + 90);
+                    myMapTransition.MaplinkHeading = (byte)(myMapTransition.MaplinkHeading % 180);
+                    if (myMapTransition.MaplinkHeading < 0)
+                    {
+                        myMapTransition.MaplinkHeading += 180;
+                    }
 
                     responses.Add(ChatResponse.CommandError(client, $"Spawned MapTransition {myMapTransition.InstanceId}"));
 
@@ -87,30 +108,16 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                     }
 
+                    //so you dont map transition immediatly
+                    client.Character.mapChange = true;
+                    Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith
+                        (t1 =>
+                            {
+                                myMapTransition.Start(Server, client.Map);
+                                client.Character.mapChange = false;
+                            }
+                        );
 
-                    IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
-                    res1.WriteInt32(myMapTransition.InstanceId); // Unique ID
-                    res1.WriteFloat(client.Character.X); //x
-                    res1.WriteFloat(client.Character.Y); //y
-                    res1.WriteFloat(client.Character.Z + 2); //z
-                    res1.WriteByte(client.Character.Heading); // offset
-                    res1.WriteFloat(myMapTransition.MaplinkOffset); // Height
-                    res1.WriteFloat(myMapTransition.MaplinkWidth); // Width
-                    res1.WriteInt32(3); // Aura color 0=blue 1=gold 2=white 3=red 4=purple 5=black  0 to 5, crash above 5
-                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_maplink, res1, ServerType.Area);
-
-
-                    //Jump back so you dont map transition immediatly
-                    res = BufferProvider.Provide();
-                    res.WriteInt32(client.Character.InstanceId);
-                    res.WriteFloat(client.Character.X-200);
-                    res.WriteFloat(client.Character.Y-400);
-                    res.WriteFloat(client.Character.Z +50);
-                    res.WriteByte(client.Character.Heading);
-                    res.WriteByte(client.Character.movementAnim);
-                    //Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
-
-                    myMapTransition.Start(Server, client.Map); 
 
                     client.Map.MapTransitions.Add(myMapTransition.InstanceId, myMapTransition);
 
