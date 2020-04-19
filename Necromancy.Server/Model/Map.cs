@@ -64,6 +64,14 @@ namespace Necromancy.Server.Model
             Orientation = (byte)(setting.Orientation / 2);   // Client uses 180 degree orientation
             Traps = new Dictionary<uint, TrapStack>();
 
+            List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
+            foreach (MapTransition mapTran in mapTransitions)
+            {
+                server.Instances.AssignInstance(mapTran);
+                mapTran.Start(_server, this);
+                MapTransitions.Add(mapTran.InstanceId, mapTran);
+            }
+
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
             List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
@@ -164,12 +172,7 @@ namespace Necromancy.Server.Model
                 }
 
             }
-            List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
-            foreach (MapTransition mapTran in mapTransitions)
-            {
-                server.Instances.AssignInstance(mapTran);
-                MapTransitions.Add(mapTran.InstanceId, mapTran);
-            }
+
         }
 
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
@@ -208,10 +211,12 @@ namespace Necromancy.Server.Model
                 client.Character.Z = this.Z;
                 client.Character.Heading = this.Orientation;
             }
-            ClientLookup.Add(client);
             client.Map = this;
             client.Character.MapId = Id;
             client.Character.mapChange = false;
+            ClientLookup.Add(client);
+            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  { this.Id} ");
+
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
             if (client.Union != null)
@@ -250,13 +255,7 @@ namespace Necromancy.Server.Model
                 }
             }
 
-            foreach (MapTransition mapTran in this.MapTransitions.Values)
-            {
-                if (mapTran.State == true)
-                {
-                    mapTran.Start(_server, this);
-                }
-            }
+
 
             //on successful map entry, update the client database position
             if (!_server.Database.UpdateCharacter(client.Character))
@@ -274,13 +273,6 @@ namespace Necromancy.Server.Model
                 _logger.Error("Could not update the database with last known player position");
             }
             client.Map = null;
-            foreach (MapTransition mapTran in this.MapTransitions.Values)
-            {
-                if (mapTran.State == true)
-                {
-                    mapTran.Stop();
-                }
-            }
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
             _server.Router.Send(this, objectDisappearData, client);
@@ -291,6 +283,8 @@ namespace Necromancy.Server.Model
                     monsterSpawn.SpawnActive = false;
                 }
             }
+            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  { this.Id} ");
+
         }
 
         public bool MonsterInRange(Vector3 position, int range)
