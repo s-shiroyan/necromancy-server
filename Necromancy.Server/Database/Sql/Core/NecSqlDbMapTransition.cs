@@ -9,16 +9,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertMapTransition =
-            "INSERT INTO `nec_map_transition` (`map_id`, `transition_map_id`, `x`,  `y`, `z`, `maplink_heading`, `maplink_color`, `maplink_offset`, `maplink_width`, `distance`, `left_x`, `left_y`, `left_z`, `right_x`, `right_y`, `right_z`, `invertedPos`, `to_x`, `to_y`, `to_z`, `to_heading`, `state`, `created`, `updated`) VALUES (@map_id, @x, @y, @z, @maplink_heading,@maplink_color,@maplink_offset,@maplink_width,@distance, @left_x, @left_y, @left_z, @right_x, @right_y, @right_z, @invertedPos, @to_x, @to_y, @to_z, @to_heading, @state, @created, @updated);";
+            "INSERT INTO `nec_map_transition` (`map_id`, `transition_map_id`, `x`,  `y`, `z`, `maplink_heading`, `maplink_color`, `maplink_offset`, `maplink_width`, `distance`, `left_x`, `left_y`, `left_z`, `right_x`, `right_y`, `right_z`, `invertedPos`, `to_x`, `to_y`, `to_z`, `to_heading`, `state`, `created`, `updated`) VALUES (@map_id,@transition_map_id, @x, @y, @z, @maplink_heading,@maplink_color,@maplink_offset,@maplink_width,@distance, @left_x, @left_y, @left_z, @right_x, @right_y, @right_z, @invertedPos, @to_x, @to_y, @to_z, @to_heading, @state, @created, @updated);";
 
         private const string SqlSelectMapTransitions =
             "SELECT `id`, `transition_map_id`, `map_id`, `x`,  `y`, `z`, `maplink_heading`, `maplink_color`, `maplink_offset`, `maplink_width`, `distance`, `left_x`, `left_y`, `left_z`, `right_x`, `right_y`, `right_z`, `invertedPos`, `to_x`, `to_y`, `to_z`, `to_heading`, `state`, `created`, `updated` FROM `nec_map_transition`;";
+
+        private const string SqlSelectMapTransitionsById =
+            "SELECT `id`, `transition_map_id`, `map_id`, `x`,  `y`, `z`, `maplink_heading`, `maplink_color`, `maplink_offset`, `maplink_width`, `distance`, `left_x`, `left_y`, `left_z`, `right_x`, `right_y`, `right_z`, `invertedPos`, `to_x`, `to_y`, `to_z`, `to_heading`, `state`, `created`, `updated` FROM `nec_map_transition` WHERE `id`=@id;";
 
         private const string SqlSelectMapTransitionsByMapId =
             "SELECT `id`, `transition_map_id`, `map_id`, `x`,  `y`, `z`, `maplink_heading`, `maplink_color`, `maplink_offset`, `maplink_width`, `distance`, `left_x`, `left_y`, `left_z`, `right_x`, `right_y`, `right_z`, `invertedPos`, `to_x`, `to_y`, `to_z`, `to_heading`, `state`, `created`, `updated` FROM `nec_map_transition` WHERE `map_id`=@map_id;";
 
         private const string SqlUpdateMapTransition =
-            "UPDATE `nec_map_transition` SET `id`=@id, `map_id`=@map_id, `transition_map_id`=@transition_map_id, `x`=@x,  `y`=@y, `z`=@z, `maplink_heading`=@maplink_heading, `maplink_color`=@maplink_color, `maplink_offset`=@maplink_offset, `maplink_width`=@maplink_width, `distance`=@distance, `left_x`=@left_x,  `left_y`=left_@y, `left_z`=left_@z, `right_x`=@right_x, `right_y`=@right_y, `right_z`=@right_z, `transition_heading`=@transition_heading, `invertedPos`=@invertedPos, `to_x`=@to_x, `to_y`=@to_y, `to_z`=@to_z,`to_heading`=@to_heading,`state`=@state,`created`=@created,`updated`=@updated WHERE `id`=@id;";
+            "UPDATE `nec_map_transition` SET `id`=@id, `map_id`=@map_id, `transition_map_id`=@transition_map_id, `x`=@x,  `y`=@y, `z`=@z, `maplink_heading`=@maplink_heading, `maplink_color`=@maplink_color, `maplink_offset`=@maplink_offset, `maplink_width`=@maplink_width, `distance`=@distance, `left_x`=@left_x,  `left_y`=@left_y, `left_z`=@left_z, `right_x`=@right_x, `right_y`=@right_y, `right_z`=@right_z, `invertedPos`=@invertedPos, `to_x`=@to_x, `to_y`=@to_y, `to_z`=@to_z,`to_heading`=@to_heading,`state`=@state,`created`=@created,`updated`=@updated WHERE `id`=@id;";
 
         private const string SqlDeleteMapTransition =
             "DELETE FROM `nec_map_transition` WHERE `id`=@id;";
@@ -75,7 +78,20 @@ namespace Necromancy.Server.Database.Sql.Core
             });
             return mapTrans;
         }
-
+        public MapTransition SelectMapTransitionsById(int Id)
+        {
+            MapTransition mapTrans = null;
+            ExecuteReader(SqlSelectMapTransitionsById,
+                command => { AddParameter(command, "@id", Id); },
+                reader =>
+                {
+                    if (reader.Read())
+                    {
+                        mapTrans = ReadMapTransition(reader);
+                    }
+                });
+            return mapTrans;
+        }
         public List<MapTransition> SelectMapTransitionsByMapId(int mapId)
         {
             List<MapTransition> mapTrans = new List<MapTransition>();
@@ -92,10 +108,13 @@ namespace Necromancy.Server.Database.Sql.Core
             return mapTrans;
         }
 
+
+
         public bool UpdateMapTransition(MapTransition mapTran)
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateMapTransition, command =>
             {
+                AddParameter(command, "@id", mapTran.Id);
                 AddParameter(command, "@map_id", mapTran.MapId);
                 AddParameter(command, "@transition_map_id", mapTran.TransitionMapId);
                 AddParameter(command, "@x", mapTran.ReferencePos.X);

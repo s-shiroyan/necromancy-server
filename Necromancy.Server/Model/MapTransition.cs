@@ -37,7 +37,7 @@ namespace Necromancy.Server.Model
         public void Start(NecServer server, Map map)
         {
             _server = server;
-            _transitionTask = new MapTransitionTask(_server, map, TransitionMapId, ReferencePos, RefDistance, LeftPos, RightPos, InstanceId, InvertedTransition, ToPos);
+            _transitionTask = new MapTransitionTask(_server, map, TransitionMapId, ReferencePos, RefDistance, LeftPos, RightPos, InstanceId, InvertedTransition, ToPos, Id);
             _transitionTask.Start();
         }
 

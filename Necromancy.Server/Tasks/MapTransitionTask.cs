@@ -31,8 +31,9 @@ namespace Necromancy.Server.Tasks
         private bool _invertedTransition;
         private int _tickTime;
         private int _transitionMapId;
+        private int _id;
         private readonly ILogger _logger;
-        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 referencePos, int refDistance, Vector3 transitionPos1, Vector3 transitionPos2, uint instanceId, bool invertedTransition, MapPosition toPos)
+        public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 referencePos, int refDistance, Vector3 transitionPos1, Vector3 transitionPos2, uint instanceId, bool invertedTransition, MapPosition toPos, int id)
         {
             _server = server;
             _map = map;
@@ -47,6 +48,7 @@ namespace Necromancy.Server.Tasks
             _invertedTransition = invertedTransition;
             _tickTime = 500;
             _logger = LogProvider.Logger(server);
+            _id = id;
 
         }
 
@@ -78,7 +80,7 @@ namespace Necromancy.Server.Tasks
                         client.Character.mapChange = true;
                         transitionMap.EnterForce(client, _toPos);
                     }
-                    _logger.Debug($"{character.Name} in range [transition] [{transition}].");
+                    _logger.Debug($"{character.Name} in range [transition] id {this._id} Instance {this._instanceId} to destination {this._transitionMapId}[{transition}].");
 
                 }
                 Thread.Sleep(_tickTime);

@@ -35,6 +35,7 @@ namespace Necromancy.Server.Model.Skills
 
         public void StartCast()
         {
+            if (_targetInstanceId == 0) _targetInstanceId = _client.Character.InstanceId; 
             IInstance target = _server.Instances.GetInstance((uint)_targetInstanceId);
             switch (target)         // ToDO     Do a hositilty check to make sure this is allowed
             {
@@ -77,6 +78,8 @@ namespace Necromancy.Server.Model.Skills
             NpcSpawn npcSpawn = null;
             MonsterSpawn monsterSpawn = null;
             Character character = null;
+            float perHp = 0;
+            int damage = Util.GetRandomNumber(70, 90);
             IInstance target = _server.Instances.GetInstance((uint)_targetInstanceId);
             switch (target)
             {
@@ -93,7 +96,16 @@ namespace Necromancy.Server.Model.Skills
                     trgCoord.X = monsterSpawn.X;
                     trgCoord.Y = monsterSpawn.Y;
                     trgCoord.Z = monsterSpawn.Z;
-
+                    int monsterHP = monsterSpawn.Hp.current;
+                    perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.Hp.max) * 100) : 0;
+                    if (monsterSpawn.GetAgroCharacter(_client.Character.InstanceId))
+                    {
+                        monsterSpawn.UpdateHP(-damage);
+                    }
+                    else
+                    {
+                        monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
+                    }
                     break;
                 case Character chara:
                     character = chara;
@@ -134,14 +146,12 @@ namespace Necromancy.Server.Model.Skills
             Recv8D92 effectMove = new Recv8D92(_srcCoord, trgCoord, InstanceId, _client.Character.skillStartCast, 3000, 2, 2);  // ToDo need real velocities
             _server.Router.Send(_client.Map, effectMove);
 
-            int damage = Util.GetRandomNumber(70, 90);
-            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(_client.Character.InstanceId, monsterSpawn.InstanceId, effectId, _srcCoord, 2, 2);
+            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(_client.Character.InstanceId, _targetInstanceId, effectId, _srcCoord, 2, 2);
             _server.Router.Send(_client.Map, eoTriggerData);
-            int monsterHP = monsterSpawn.Hp.current;
-            float perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.Hp.max) * 100) : 0;
-            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monsterSpawn.InstanceId, damage);
-            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(monsterSpawn.InstanceId, perHp);
-            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(monsterSpawn.InstanceId);
+
+            RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(_targetInstanceId, damage);
+            RecvObjectHpPerUpdateNotify oHpUpdate = new RecvObjectHpPerUpdateNotify(_targetInstanceId, perHp);
+            RecvBattleReportNotifyHitEffect brHit = new RecvBattleReportNotifyHitEffect(_targetInstanceId);
 
             brList.Add(brStart);
             brList.Add(brHp);
@@ -150,15 +160,8 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brEnd);
             brList.Add(oHpUpdate);
             _server.Router.Send(_client.Map, brList);
-            if (monsterSpawn.GetAgroCharacter(_client.Character.InstanceId))
-            {
-                monsterSpawn.UpdateHP(-damage);
-            }
-            else
-            {
-                monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
-            }
-            _logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.Hp.current} HP left.");
+           /* */
+            //_logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.Hp.current} HP left.");
         }
 
     }
