@@ -66,7 +66,7 @@ namespace Necromancy.Server
 
         public NecServer(NecSetting setting)
         {
-            _running = true;
+            _running = false;
             Setting = new NecSetting(setting);
 
             LogProvider.Configure<NecLogger>(Setting);
