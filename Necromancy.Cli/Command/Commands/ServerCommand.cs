@@ -9,10 +9,11 @@ namespace Necromancy.Cli.Command.Commands
 {
     public class ServerCommand : ConsoleCommand, ISwitchConsumer
     {
+        private const string SettingFile = "server_setting.json";
         private NecServer _server;
         private readonly LogWriter _logWriter;
         private bool _service;
-        
+
         public ServerCommand(LogWriter logWriter)
         {
             _service = false;
@@ -43,7 +44,13 @@ namespace Necromancy.Cli.Command.Commands
         {
             if (_server == null)
             {
-                NecSetting setting = new NecSetting();
+                SettingProvider settingProvider = new SettingProvider();
+                NecSetting setting = settingProvider.Load<NecSetting>(SettingFile);
+                if (setting == null)
+                {
+                    setting = new NecSetting();
+                    settingProvider.Save(setting, SettingFile);
+                }
                 _server = new NecServer(setting);
             }
 
