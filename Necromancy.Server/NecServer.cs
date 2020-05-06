@@ -53,6 +53,7 @@ namespace Necromancy.Server
         public ChatManager Chat { get; }
         public InstanceGenerator Instances { get; }
         public InstanceGenerator64 Instances64 { get; }
+        public bool Running => _running;
 
         private readonly NecQueueConsumer _authConsumer;
         private readonly NecQueueConsumer _msgConsumer;
@@ -61,9 +62,11 @@ namespace Necromancy.Server
         private readonly AsyncEventServer _msgServer;
         private readonly AsyncEventServer _areaServer;
         private readonly NecLogger _logger;
+        private volatile bool _running;
 
         public NecServer(NecSetting setting)
         {
+            _running = true;
             Setting = new NecSetting(setting);
 
             LogProvider.Configure<NecLogger>(Setting);
@@ -146,6 +149,7 @@ namespace Necromancy.Server
             _authServer.Start();
             _msgServer.Start();
             _areaServer.Start();
+            _running = true;
         }
 
         public void Stop()
@@ -153,6 +157,7 @@ namespace Necromancy.Server
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
+            _running = false;
         }
 
         private void LoadChatCommands()
@@ -232,11 +237,12 @@ namespace Necromancy.Server
 
         private void LoadCharacterRepository()
         {
-            foreach (Character character  in Database.SelectCharacters())
+            foreach (Character character in Database.SelectCharacters())
             {
                 Instances.AssignInstance(character);
                 Characters.Add(character);
-                _logger.Debug($"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
+                _logger.Debug(
+                    $"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
             }
         }
 
@@ -466,8 +472,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_refusallist_remove_user(this));
             _areaConsumer.AddHandler(new send_union_request_rename(this));
             _areaConsumer.AddHandler(new send_event_quest_report_list_end(this));
-            _areaConsumer.AddHandler(new send_event_quest_report_select(this));            
-
+            _areaConsumer.AddHandler(new send_event_quest_report_select(this));
         }
     }
 }

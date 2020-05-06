@@ -62,6 +62,7 @@ namespace Necromancy.Cli
         private readonly ILogger _logger;
         private readonly LogWriter _logWriter;
         private readonly SwitchCommand _switchCommand;
+        private readonly ServerCommand _serverCommand;
 
         private Program()
         {
@@ -72,6 +73,7 @@ namespace Necromancy.Cli
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleThread = new Thread(ReadConsoleThread);
             _logWriter = new LogWriter();
+            _serverCommand = new ServerCommand(_logWriter);
             _switchCommand = new SwitchCommand(_parameterConsumers);
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
         }
@@ -83,7 +85,7 @@ namespace Necromancy.Cli
             AddCommand(new PackCommand());
             AddCommand(new StripCommand());
             AddCommand(new ConvertCommand());
-            AddCommand(new ServerCommand(_logWriter));
+            AddCommand(_serverCommand);
             AddCommand(new HelpCommand(_commands));
             AddCommand(new ExitCommand());
             AddCommand(_switchCommand);
@@ -92,6 +94,7 @@ namespace Necromancy.Cli
         private void LoadGlobalParameterConsumer()
         {
             _parameterConsumers.Add(_logWriter);
+            _parameterConsumers.Add(_serverCommand);
         }
 
         private void RunArguments(string[] arguments)
@@ -106,10 +109,15 @@ namespace Necromancy.Cli
             LoadGlobalParameterConsumer();
             ShowCopyright();
             _logger.Info("Argument Mode");
+            
+            CommandResultType result = ProcessArguments(arguments);
+            if (result == CommandResultType.Exit)
+            {
+                ShutdownCommands();
+                return;
+            }
+
             _logger.Info("Press `e'-key to exit.");
-
-            ProcessArguments(arguments);
-
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             while (keyInfo.Key != ConsoleKey.E)
             {
