@@ -47,19 +47,21 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
+            foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
+            {
+                if (monsterSpawn.Active == false)
+                {
+                    RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                    Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
+                    Router.Send(monsterData, client);
+                }
+            }
+
             Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith
             (t1 =>
                 {
 
-                    foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
-                    {
-                        if (monsterSpawn.Active == false)
-                        {
-                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-                            Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
-                            Router.Send(monsterData, client);
-                        }
-                    }
+
                     foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
                     {
                         // This requires database changes to add the GGates to the Npc database!!!!!

@@ -162,6 +162,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new SummonCommand(this));
             Chat.CommandHandler.AddCommand(new PlayersCommand(this));
             Chat.CommandHandler.AddCommand(new MapTranCommand(this));
             Chat.CommandHandler.AddCommand(new GGateCommand(this));
