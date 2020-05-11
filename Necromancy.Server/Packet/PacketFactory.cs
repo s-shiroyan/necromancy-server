@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet
 
         public byte[] Write(NecPacket packet)
         {
-            //Thread.Sleep(200);
+            Thread.Sleep(400);
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
 
@@ -101,7 +101,6 @@ namespace Necromancy.Server.Packet
 
         public List<NecPacket> Read(byte[] data, ServerType serverType)
         {
-            //Thread.Sleep(200);
             List<NecPacket> packets = new List<NecPacket>();
             if (_buffer == null)
             {

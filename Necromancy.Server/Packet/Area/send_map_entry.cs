@@ -20,7 +20,6 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             client.Character.mapChange = false;
-
             int mapId = packet.Data.ReadInt32();
             Map map = Server.Maps.Get(mapId);
             if (map == null)
@@ -29,9 +28,7 @@ namespace Necromancy.Server.Packet.Area
                 client.Close();
                 return;
             }
-
             map.Enter(client);
-
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_map_entry_r, res, ServerType.Area);

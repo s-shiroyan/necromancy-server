@@ -16,29 +16,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
-            {
-                // This requires database changes to add the GGates to the Npc database!!!!!
-                if (npcSpawn.Name == "GGate")
-                {
-                    GGateSpawn gGate = new GGateSpawn();
-                    gGate.X = npcSpawn.X;
-                    gGate.Y = npcSpawn.Y;
-                    gGate.Z = npcSpawn.Z;
-                    gGate.Heading = npcSpawn.Heading;
-                    gGate.MapId = npcSpawn.MapId;
-                    gGate.Name = npcSpawn.Name;
-                    gGate.Title = npcSpawn.Title;
 
-                    RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
-                    //    Router.Send(gGateData, client);
-                }
-                else
-                {
-                    RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
-                    Router.Send(npcData, client);
-                }
-            }
             
             
             
