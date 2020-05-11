@@ -48,7 +48,7 @@ namespace Necromancy.Server.Packet.Area
                 {
                     RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                     Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
-                    Router.Send(monsterData, client);
+                  //  Router.Send(monsterData, client);
                 }
             }
 
@@ -67,7 +67,7 @@ namespace Necromancy.Server.Packet.Area
                     gGate.Title = npcSpawn.Title;
 
                     RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
-                    Router.Send(gGateData, client);
+                   // Router.Send(gGateData, client);
                 }
                 else
                 {
