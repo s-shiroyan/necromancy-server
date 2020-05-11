@@ -15,10 +15,10 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            string souldPassword = packet.Data.ReadCString();
+            string soulPassword = packet.Data.ReadCString();
 
             IBuffer res = BufferProvider.Provide();
-            if (client.Soul.Password != souldPassword)
+            if (Settings.RequirePin && client.Soul.Password != soulPassword)
             {
                 res.WriteInt32(1); //  Error: 0 - Success, other vales (maybe) error code   
                 res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0

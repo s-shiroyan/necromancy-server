@@ -26,9 +26,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Map.Id);
-            Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
+
 
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
             {
@@ -129,6 +127,11 @@ namespace Necromancy.Server.Packet.Area
             // ToDo this should be a database lookup
             RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
             _server.Router.Send(mapFragments, client);
+            
+            
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(client.Map.Id);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
         }
     }
 }
