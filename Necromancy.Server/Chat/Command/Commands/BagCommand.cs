@@ -1,8 +1,8 @@
-using Arrowgene.Services.Logging;
 using System.Collections.Generic;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
@@ -16,6 +16,7 @@ namespace Necromancy.Server.Chat.Command.Commands
     {
         private readonly NecLogger _logger;
         private readonly NecServer _server;
+
         public BagCommand(NecServer server) : base(server)
         {
             _server = server;
@@ -25,7 +26,6 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-
             int.TryParse(command[0], out int x);
             int.TryParse(command[1], out int y);
 
@@ -45,11 +45,12 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 res = BufferProvider.Provide();
                 res.WriteInt32(-207);
-                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
                 RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
                 _server.Router.Send(noSpace, client);
                 return null;
             }
+
             Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
             item.Id = 50100501;
@@ -60,7 +61,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res = BufferProvider.Provide();
 
             //res.WriteInt64(dropItem.Item.Id); //Item Object Instance ID 
-            res.WriteInt64(item.InstanceId); //Item Object Instance ID 
+            res.WriteUInt64(item.InstanceId); //Item Object Instance ID 
 
             res.WriteCString(item.Name); //Name
 
@@ -69,7 +70,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(0);
 
-            res.WriteByte((byte)1); //Number of items
+            res.WriteByte((byte) 1); //Number of items
 
             res.WriteInt32(0); //Item status 0 = identified  
 
@@ -100,7 +101,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
 
             //client.Character.inventoryItems.Add(invItem);
             return item;
@@ -114,11 +115,12 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 res = BufferProvider.Provide();
                 res.WriteInt32(-207);
-                Router.Send(client, (ushort)AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
                 RecvNormalSystemMessage noSpace = new RecvNormalSystemMessage("Inventory is full!!!!");
                 _server.Router.Send(noSpace, client);
                 return null;
             }
+
             Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
             item.Id = 50100501;
             item.IconType = 47;
@@ -126,9 +128,9 @@ namespace Necromancy.Server.Chat.Command.Commands
             invItem.StorageType = 0;
             Logger.Debug($"instanceId [{invItem.InstanceId}]");
             res = BufferProvider.Provide();
-            res.WriteInt64(item.InstanceId); //ItemID
+            res.WriteUInt64(item.InstanceId); //ItemID
             res.WriteInt32(2); // 0 does not display icon
-            res.WriteByte((byte)1); //Number of "items"
+            res.WriteByte((byte) 1); //Number of "items"
             res.WriteInt32(0); //Item status, in multiples of numbers, 8 = blessed/cursed/both 
             res.WriteFixedString("Wolfzen", 0x10);
             res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
@@ -137,7 +139,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(0); //Equip bitmask
             res.WriteInt32(item.Id); //Percentage stat, 9 max i think
             res.WriteByte(0);
-            res.WriteByte(0);  // Dest slot
+            res.WriteByte(0); // Dest slot
             res.WriteCString(item.Name); // find max size 
             res.WriteInt16(0);
             res.WriteInt16(0);
@@ -167,10 +169,9 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(0); //Guard protection toggle, 1 = on, everything else is off
             res.WriteInt16(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_instance, res, ServerType.Area);
 
             return item;
         }
     }
-
 }

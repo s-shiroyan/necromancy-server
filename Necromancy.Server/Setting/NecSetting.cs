@@ -1,7 +1,7 @@
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
-using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Arrowgene.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Common;
 
 namespace Necromancy.Server.Setting
@@ -61,7 +61,7 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 10)] public bool RequireRegistration { get; set; }
         [DataMember(Order = 11)] public bool RequirePin { get; set; }
-        
+
 
         [DataMember(Order = 20)] public int LogLevel { get; set; }
 

@@ -1,4 +1,4 @@
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Packet.Area.SendCmdExec
 {
@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Area.SendCmdExec
             string command = packet.Data.ReadCString();
 
             SendCmdExecRequest sendCmdExecRequest = new SendCmdExecRequest(command);
-            
+
             int startPosition = 49;
             int blockSize = 769;
             while (startPosition + blockSize < packet.Data.Size)

@@ -20,8 +20,8 @@
  * along with Necromancy.Server. If not, see <https://www.gnu.org/licenses/>.
  */
 
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Arrowgene.Logging;
+using Arrowgene.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;
 using Necromancy.Server.Chat.Command.Commands;
 using Necromancy.Server.Common.Instance;

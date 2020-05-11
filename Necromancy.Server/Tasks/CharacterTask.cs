@@ -1,18 +1,15 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
-using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
-using System;
-using System.Threading;
-using System.Collections.Generic;
 
 namespace Necromancy.Server.Tasks
 {
@@ -26,6 +23,7 @@ namespace Necromancy.Server.Tasks
         private DateTime _logoutTime;
         private byte _logoutType;
         private bool playerDied;
+
         public CharacterTask(NecServer server, NecClient client)
         {
             _logger = LogProvider.Logger<NecLogger>(server);
@@ -39,6 +37,7 @@ namespace Necromancy.Server.Tasks
         public override string Name { get; }
         public override TimeSpan TimeSpan { get; }
         protected override bool RunAtStart { get; }
+
         protected override void Execute()
         {
             while (_client.Character.characterActive)
@@ -50,6 +49,7 @@ namespace Necromancy.Server.Tasks
                         LogOutRequest();
                     }
                 }
+
                 if (_client.Character.Hp.depleted && !playerDied)
                     PlayerDead();
                 else if (!_client.Character.Hp.depleted && playerDied)
@@ -57,8 +57,10 @@ namespace Necromancy.Server.Tasks
 
                 Thread.Sleep(tickTime);
             }
+
             this.Stop();
         }
+
         private void PlayerDead()
         {
             playerDied = true;
@@ -77,7 +79,7 @@ namespace Necromancy.Server.Tasks
             brList[1] = cDead2;
             _server.Router.Send(_client, brList); // send death animaton to player 1
 
-            DeadBody deadBody = _server.Instances.GetInstance((uint)_client.Character.DeadBodyInstanceId) as DeadBody;
+            DeadBody deadBody = _server.Instances.GetInstance((uint) _client.Character.DeadBodyInstanceId) as DeadBody;
 
             deadBody.X = _client.Character.X;
             deadBody.Y = _client.Character.Y;
@@ -87,7 +89,7 @@ namespace Necromancy.Server.Tasks
 
             Thread.Sleep(5000);
             _client.Character.hadDied = false; // quick switch to living state so your dead body loads with your gear
-                                               //load your dead body on to the map for you to see in soul form. 
+            //load your dead body on to the map for you to see in soul form. 
             RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, _client);
             _server.Router.Send(_client, cBodyData.ToPacket());
 
@@ -107,6 +109,7 @@ namespace Necromancy.Server.Tasks
                 _logoutTime = logoutTime;
                 _logoutType = logoutType;
             }
+
             _logger.Debug($"logoutTime [{logoutTime}] _logoutType [{_logoutType}]");
         }
 
@@ -119,14 +122,13 @@ namespace Necromancy.Server.Tasks
             IBuffer res4 = BufferProvider.Provide();
             IBuffer res5 = BufferProvider.Provide();
             _logger.Debug($"_logoutType [{_logoutType}]");
-            if (_logoutType == 0x00)   // Return to Title   also   Exit Game
+            if (_logoutType == 0x00) // Return to Title   also   Exit Game
             {
-
                 res = null;
                 res = BufferProvider.Provide();
                 //res.WriteInt64(1);
                 //res.WriteInt16(1);
-                _server.Router.Send(_client, (ushort)AreaPacketId.recv_escape_start, res, ServerType.Area);
+                _server.Router.Send(_client, (ushort) AreaPacketId.recv_escape_start, res, ServerType.Area);
 
 
                 //IBuffer buffer = BufferProvider.Provide();
@@ -138,23 +140,23 @@ namespace Necromancy.Server.Tasks
 
             if (_logoutType == 0x01) // Return to Character Select
             {
-
                 res.WriteInt32(0);
-                _server.Router.Send(_client, (ushort)MsgPacketId.recv_chara_select_back_soul_select_r, res, ServerType.Msg);
-                
+                _server.Router.Send(_client, (ushort) MsgPacketId.recv_chara_select_back_soul_select_r, res,
+                    ServerType.Msg);
+
                 Thread.Sleep(4100);
 
                 res = null;
                 res = BufferProvider.Provide();
                 res.WriteInt32(0);
                 res.WriteByte(0);
-                _server.Router.Send(_client, (ushort)MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);
+                _server.Router.Send(_client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);
             }
 
             if (_logoutType == 0x02)
             {
                 res.WriteInt32(0);
-                _server.Router.Send(_client, (ushort)MsgPacketId.recv_chara_select_back_r, res, ServerType.Msg);
+                _server.Router.Send(_client, (ushort) MsgPacketId.recv_chara_select_back_r, res, ServerType.Msg);
             }
         }
     }

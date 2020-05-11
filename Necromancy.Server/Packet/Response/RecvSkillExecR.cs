@@ -1,5 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -23,7 +22,7 @@ namespace Necromancy.Server.Packet.Response
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_errorCode);//see sys_msg.csv
+            res.WriteInt32(_errorCode); //see sys_msg.csv
             /*
                 -1      Unable to use skill
                 -1322   Incorrect target
@@ -31,8 +30,8 @@ namespace Necromancy.Server.Packet.Response
                 1       Not enough distance
                 GENERIC Unable to use skill: < errcode >
             */
-            res.WriteFloat(_coolTime);  //Cool time   2   ./Skill_base.csv   Column J 
-            res.WriteFloat(_rigidityTime);  //Rigidity time 1 ./Skill_base.csv   Column L  
+            res.WriteFloat(_coolTime); //Cool time   2   ./Skill_base.csv   Column J 
+            res.WriteFloat(_rigidityTime); //Rigidity time 1 ./Skill_base.csv   Column L  
             return res;
         }
     }

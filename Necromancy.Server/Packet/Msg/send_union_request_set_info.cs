@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -13,7 +13,6 @@ namespace Necromancy.Server.Packet.Msg
 
         public override ushort Id => (ushort) MsgPacketId.send_union_request_set_info;
 
-        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -22,12 +21,12 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //error check.  0 for success.  See sys_msg.csv for all error check messages.
-                                /*
-                                        0	Union news changed
-                                    GENERIC	Failed to change the union news
-                                    -1709	You do not have permission to change the news
-                                    -1715	The news contained banned words
-                                */
+            /*
+                    0	Union news changed
+                GENERIC	Failed to change the union news
+                -1709	You do not have permission to change the news
+                -1715	The news contained banned words
+            */
 
             Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_info_r, res, ServerType.Msg);
 
@@ -41,10 +40,10 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res2 = BufferProvider.Provide();
 
             res2.WriteInt32(0); //Error check probably.  0 means success?
-            res2.WriteCString($"{unionNews}");//max size 0x196
+            res2.WriteCString($"{unionNews}"); //max size 0x196
 
-            Router.Send(client.Map /*myUnion.UnionMembers*/, (ushort)MsgPacketId.recv_union_notify_info, res2, ServerType.Msg);
-
+            Router.Send(client.Map /*myUnion.UnionMembers*/, (ushort) MsgPacketId.recv_union_notify_info, res2,
+                ServerType.Msg);
         }
     }
 }

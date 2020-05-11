@@ -1,5 +1,4 @@
 using System.IO;
-using Arrowgene.Services.Serialization;
 using Necromancy.Server.Common;
 
 namespace Necromancy.Server.Setting

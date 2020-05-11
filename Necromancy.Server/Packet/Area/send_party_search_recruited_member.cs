@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -32,10 +32,10 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries; i++)
             {
                 res.WriteInt32(i); //Party ID?
-                res.WriteInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
                 res.WriteFixedString(client.Soul.Name, 49);
                 res.WriteFixedString(client.Character.Name, 91);
-                res.WriteInt32(client.Character.ClassId); //Class
+                res.WriteUInt32(client.Character.ClassId); //Class
                 res.WriteByte((byte)(client.Character.Level+i)); //Level
                 res.WriteByte(2); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 

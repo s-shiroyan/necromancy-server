@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Msg
             character.SoulId = client.Soul.Id;
             character.Slot = character_slot_id;
             character.Name = character_name;
-            
+
             character.Raceid = race_id;
             character.Sexid = sex_id;
             character.HairId = hair_id;
@@ -85,6 +85,7 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
+
             CreateSkillTreeItems(client, character, class_id);
 
             client.Character = character;
@@ -110,7 +111,6 @@ namespace Necromancy.Server.Packet.Msg
             //-------------------------------------------------------------------------------
 
 
-
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(character.Id); //CharacterId
@@ -120,7 +120,7 @@ namespace Necromancy.Server.Packet.Msg
 
         private void CreateSkillTreeItems(NecClient client, Character character, uint class_id)
         {
-            if (class_id == 0)      // Fighter
+            if (class_id == 0) // Fighter
             {
                 for (int i = 0; i < fighterSkills.Length; i++)
                 {
@@ -136,7 +136,7 @@ namespace Necromancy.Server.Packet.Msg
                     }
                 }
             }
-            else if (class_id == 1)     // Thief
+            else if (class_id == 1) // Thief
             {
                 for (int i = 0; i < thiefSkills.Length; i++)
                 {
@@ -152,7 +152,7 @@ namespace Necromancy.Server.Packet.Msg
                     }
                 }
             }
-            else if (class_id == 2)       // Mage
+            else if (class_id == 2) // Mage
             {
                 for (int i = 0; i < mageSkills.Length; i++)
                 {
@@ -168,7 +168,7 @@ namespace Necromancy.Server.Packet.Msg
                     }
                 }
             }
-            else if (class_id == 3)         // Priest
+            else if (class_id == 3) // Priest
             {
                 for (int i = 0; i < priestSkills.Length; i++)
                 {
@@ -184,25 +184,25 @@ namespace Necromancy.Server.Packet.Msg
                     }
                 }
             }
-
         }
+
         // ToDo should we have separate claases for each class?  Fighter, Mage, Priest and Thief
-        int[] thiefSkills = new int[] { 14101, 14302, 14803 };
-        int[] fighterSkills = new int[] { 11101, 11201 };
-        int[] mageSkills = new int[] { 13101, 13404 };
-        int[] priestSkills = new int[] { 12501, 12601 };
+        int[] thiefSkills = new int[] {14101, 14302, 14803};
+        int[] fighterSkills = new int[] {11101, 11201};
+        int[] mageSkills = new int[] {13101, 13404};
+        int[] priestSkills = new int[] {12501, 12601};
 
         private void CreateShortcutBars(NecClient client, Character character, uint class_id)
         {
             ShortcutBar shortcutBar0 = new ShortcutBar();
-            if (class_id == 0)      // Fighter
+            if (class_id == 0) // Fighter
             {
                 shortcutBar0.Slot0 = 11101;
                 shortcutBar0.Action0 = 3;
                 shortcutBar0.Slot1 = 11201;
                 shortcutBar0.Action1 = 3;
             }
-            else if (class_id == 1)     // Thief
+            else if (class_id == 1) // Thief
             {
                 shortcutBar0.Slot0 = 14101;
                 shortcutBar0.Action0 = 3;
@@ -211,20 +211,21 @@ namespace Necromancy.Server.Packet.Msg
                 shortcutBar0.Slot2 = 14803;
                 shortcutBar0.Action2 = 3;
             }
-            else if (class_id == 2)       // Mage
+            else if (class_id == 2) // Mage
             {
                 shortcutBar0.Slot0 = 13101;
                 shortcutBar0.Action0 = 3;
                 shortcutBar0.Slot1 = 13404;
                 shortcutBar0.Action1 = 3;
             }
-            else if (class_id == 3)         // Priest
+            else if (class_id == 3) // Priest
             {
                 shortcutBar0.Slot0 = 12501;
                 shortcutBar0.Action0 = 3;
                 shortcutBar0.Slot1 = 12601;
                 shortcutBar0.Action1 = 3;
             }
+
             shortcutBar0.Slot4 = 11;
             shortcutBar0.Action4 = 4;
             shortcutBar0.Slot6 = 18;
@@ -240,6 +241,7 @@ namespace Necromancy.Server.Packet.Msg
                 character.shortcutBar0Id = -1;
                 return;
             }
+
             character.shortcutBar0Id = shortcutBar0.Id;
 
             ShortcutBar shortcutBar1 = new ShortcutBar();
@@ -270,6 +272,7 @@ namespace Necromancy.Server.Packet.Msg
                 character.shortcutBar1Id = -1;
                 return;
             }
+
             character.shortcutBar1Id = shortcutBar1.Id;
 
             ShortcutBar shortcutBar2 = new ShortcutBar();
@@ -280,6 +283,7 @@ namespace Necromancy.Server.Packet.Msg
                 character.shortcutBar2Id = -1;
                 return;
             }
+
             character.shortcutBar2Id = shortcutBar2.Id;
 
             ShortcutBar shortcutBar3 = new ShortcutBar();
@@ -290,6 +294,7 @@ namespace Necromancy.Server.Packet.Msg
                 character.shortcutBar3Id = -1;
                 return;
             }
+
             character.shortcutBar3Id = shortcutBar3.Id;
 
             ShortcutBar shortcutBar4 = new ShortcutBar();
@@ -300,6 +305,7 @@ namespace Necromancy.Server.Packet.Msg
                 character.shortcutBar4Id = -1;
                 return;
             }
+
             character.shortcutBar4Id = shortcutBar4.Id;
         }
     }

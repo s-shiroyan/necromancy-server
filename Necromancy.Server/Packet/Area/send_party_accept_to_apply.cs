@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"character {client.Character.Name} accepted Application to party from character Instance ID {applicantInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(applicantInstanceId);
+            res.WriteUInt32(applicantInstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_party_accept_to_apply_r, res, ServerType.Area);
 
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
@@ -43,12 +43,12 @@ namespace Necromancy.Server.Packet.Area
         private void SendPartyNotifyAddMember(NecClient client, Party myParty)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(myParty.InstanceId); //Most likely insanceId
-            res.WriteInt32(10976456);
-            res.WriteInt32(client.Character.InstanceId);
+            res.WriteUInt32(myParty.InstanceId); //Most likely insanceId
+            res.WriteUInt32(10976456);
+            res.WriteUInt32(client.Character.InstanceId);
             res.WriteFixedString($"{client.Soul.Name}", 0x31); //Soul name
             res.WriteFixedString($"{client.Character.Name}", 0x5B); //Character name
-            res.WriteInt32(client.Character.ClassId); //Class
+            res.WriteUInt32(client.Character.ClassId); //Class
             res.WriteByte(client.Soul.Level); //Soul rank
             res.WriteByte(client.Character.Level); //Character level
             res.WriteInt32(1);
@@ -75,9 +75,9 @@ namespace Necromancy.Server.Packet.Area
         private void SendCharaBodyNotifyPartyJoin(NecClient client, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId); //Chara Instance ID
-            res.WriteInt32(client.Character.InstanceId); //Party InstancID?
-            res.WriteInt32(client.Character.InstanceId); //Party Leader InstanceId?
+            res.WriteUInt32(client.Character.InstanceId); //Chara Instance ID
+            res.WriteUInt32(client.Character.InstanceId); //Party InstancID?
+            res.WriteUInt32(client.Character.InstanceId); //Party Leader InstanceId?
 
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }

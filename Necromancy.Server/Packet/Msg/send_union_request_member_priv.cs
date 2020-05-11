@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -13,14 +13,12 @@ namespace Necromancy.Server.Packet.Msg
 
         public override ushort Id => (ushort) MsgPacketId.send_union_request_member_priv;
 
-        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             uint targetMemberInstanceId = packet.Data.ReadUInt32();
             int newPermissionBitmask = packet.Data.ReadInt32();
             NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetMemberInstanceId);
-
 
 
             IBuffer res = BufferProvider.Provide();

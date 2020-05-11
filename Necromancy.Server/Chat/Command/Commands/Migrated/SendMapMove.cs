@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -25,15 +22,16 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     return;
                 }
+
                 int X = Convert.ToInt32(keyValue[0]);
                 int Y = Convert.ToInt32(keyValue[1]);
                 int Z = Convert.ToInt32(keyValue[2]);
                 int Orietation = Convert.ToInt32(keyValue[3]);
-                MapPosition mapPos = new MapPosition(X,Y,Z,(byte)Orietation);
+                MapPosition mapPos = new MapPosition(X, Y, Z, (byte) Orietation);
                 map.EnterForce(client, mapPos);
             }
         }
-        
+
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "MapMove";
     }

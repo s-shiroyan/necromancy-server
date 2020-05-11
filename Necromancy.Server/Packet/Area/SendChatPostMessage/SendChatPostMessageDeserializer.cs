@@ -1,5 +1,5 @@
 using System;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Server.Chat;
 
 namespace Necromancy.Server.Packet.Area.SendChatPostMessage

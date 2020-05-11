@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Response
             int numStatusEffects = 0x80; //Statuses effects. Max 128
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_character.InstanceId);
+            res.WriteUInt32(_character.InstanceId);
             res.WriteCString(_soulName);
             res.WriteCString(_character.Name);
             res.WriteFloat(_character.X);
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
             res.WriteInt32(_character.Level); //?????
-            res.WriteInt32(_character._state); 
+            res.WriteUInt32(_character._state);
             res.WriteInt16(100); //Character Size/Radius?
 
             res.WriteInt32(numEntries); // Number of equipment Slots
@@ -51,13 +51,13 @@ namespace Necromancy.Server.Packet.Response
             //sub_484660
             LoadEquip.BasicTraits(res, _character);
             //sub_483420
-            res.WriteInt32(_character.partyId); // party id?
+            res.WriteUInt32(_character.partyId); // party id?
             //sub_4837C0
-            res.WriteInt32(_character.partyRequest); // party id? // i don't think sooo'
+            res.WriteUInt32(_character.partyRequest); // party id? // i don't think sooo'
             //sub_read_byte
             res.WriteByte(_character.criminalState); //Criminal name icon
             //sub_494890
-            res.WriteByte((byte)_character.beginnerProtection); //Bool Beginner Protection
+            res.WriteByte((byte) _character.beginnerProtection); //Bool Beginner Protection
             //sub_4835E0
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
@@ -81,8 +81,9 @@ namespace Necromancy.Server.Packet.Response
                 res.WriteInt32(0);
                 res.WriteInt32(0);
             }
+
             //sub_481AA0
-            res.WriteCString(""/*_character.comment*/); //Comment string
+            res.WriteCString("" /*_character.comment*/); //Comment string
             return res;
         }
     }

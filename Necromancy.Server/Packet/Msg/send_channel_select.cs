@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -32,7 +32,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(map.Id); //MapSerialID
             res.WriteInt32(channelId); //channel??????
             res.WriteFixedString(Settings.DataAreaIpAddress, 0x41); //IP?
-            res.WriteInt16(Settings.AreaPort); //Port
+            res.WriteUInt16(Settings.AreaPort); //Port
 
             //sub_484420   //  does not impact map spawn coord (old Comment)
             res.WriteFloat(client.Character.X); //X Pos
@@ -47,16 +47,16 @@ namespace Necromancy.Server.Packet.Msg
             SendEventEnd(client);
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId);
+            res2.WriteUInt32(client.Character.InstanceId);
             res2.WriteCString("IsThisMyChannel?????"); //Length to be Found
-            Router.Send(Server.Clients.GetAll(), (ushort)AreaPacketId.recv_channel_notify, res2, ServerType.Area);
-
+            Router.Send(Server.Clients.GetAll(), (ushort) AreaPacketId.recv_channel_notify, res2, ServerType.Area);
         }
+
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_event_end, res, ServerType.Area);
         }
     }
 }

@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -13,6 +11,7 @@ namespace Necromancy.Server.Packet.Receive
         private readonly int _minAmount;
         private readonly int _maxAmount;
         private readonly int _initialAmount;
+
         public RecvEventRequestInt(string displayText, int minAmount, int maxAmount, int initialAmount)
             : base((ushort) AreaPacketId.recv_event_request_int, ServerType.Area)
         {

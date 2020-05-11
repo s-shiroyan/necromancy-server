@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
             Map map = Server.Maps.Get(mapId);
             if (map == null)
             {
-                Logger.Error($"MapId: {mapId} not found in map lookup", client);
+                Logger.Error(client, $"MapId: {mapId} not found in map lookup");
                 client.Close();
                 return;
             }

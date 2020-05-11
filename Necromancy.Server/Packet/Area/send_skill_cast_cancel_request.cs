@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"send_skill_cast_cancel_request");
             IBuffer res = BufferProvider.Provide();
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId);   
+            res2.WriteUInt32(client.Character.InstanceId);   
 
 
             Router.Send(client, (ushort)AreaPacketId.recv_skill_cast_cancel, res, ServerType.Area);

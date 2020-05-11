@@ -1,4 +1,4 @@
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;

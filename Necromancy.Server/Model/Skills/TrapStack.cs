@@ -1,12 +1,12 @@
-using Arrowgene.Services.Logging;
+using System.Collections.Generic;
+using System.Numerics;
+using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Tasks;
-using System.Numerics;
-using System.Collections.Generic;
 
 namespace Necromancy.Server.Model.Skills
 {
@@ -22,6 +22,7 @@ namespace Necromancy.Server.Model.Skills
         public TrapTask _trapTask;
         private Map _map;
         private Vector3 _trapPos;
+
         public TrapStack(NecServer server, NecClient client, Vector3 trapPos, int trapRadius)
         {
             _server = server;
@@ -35,9 +36,10 @@ namespace Necromancy.Server.Model.Skills
 
         public void StartCast(SkillBaseSetting skillBase)
         {
-            _logger.Debug($"Trap StartCast skillBase.Id [{skillBase.Id}] skillBase.CastingTime [{skillBase.CastingTime}]");
+            _logger.Debug(
+                $"Trap StartCast skillBase.Id [{skillBase.Id}] skillBase.CastingTime [{skillBase.CastingTime}]");
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(skillBase.Id, skillBase.CastingTime);
-            _server.Router.Send(startCast, _client) ;
+            _server.Router.Send(startCast, _client);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -47,7 +49,6 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brStartCast);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
-
         }
 
         public void SkillExec(Trap trap, bool isBaseTrap)
@@ -68,7 +69,8 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
             _logger.Debug($"SpearTrap effectId [{effectId}]");
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(trap.InstanceId, _client.Character.InstanceId, effectId, trgCoord, 2, 2);
+            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(trap.InstanceId, _client.Character.InstanceId,
+                effectId, trgCoord, 2, 2);
             _server.Router.Send(_map, eoData);
 
             if (isBaseTrap)

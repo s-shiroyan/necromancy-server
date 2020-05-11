@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -26,6 +26,7 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
+
             res.WriteInt32(0); //  Error: 0 - Success, other vales (maybe) error code
             res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
             Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);

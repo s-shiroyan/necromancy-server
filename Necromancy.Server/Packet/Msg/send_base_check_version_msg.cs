@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -22,11 +22,11 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(unknown);
-            res.WriteInt32(major);
-            res.WriteInt32(minor);
+            res.WriteUInt32(unknown);
+            res.WriteUInt32(major);
+            res.WriteUInt32(minor);
 
-            Router.Send(connection,  (ushort) MsgPacketId.recv_base_check_version_r, res);
+            Router.Send(connection, (ushort) MsgPacketId.recv_base_check_version_r, res);
         }
     }
 }

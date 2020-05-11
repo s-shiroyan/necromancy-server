@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
@@ -169,7 +169,7 @@ namespace Necromancy.Server.Packet.Area
                     res7.WriteFixedString($"Channel-{j}",
                         0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
                     res7.WriteByte(1); //bool 1 | 0
-                    res7.WriteInt16(0xFFFF); //Max players  -  Comment from other recv
+                    res7.WriteUInt16(0xFFFF); //Max players  -  Comment from other recv
                     res7.WriteInt16(7); //Current players  - Comment from other recv
                     res7.WriteByte(3);
                     res7.WriteByte(6); //channel Emoticon - 6 for a Happy Face
@@ -204,7 +204,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 IBuffer res = BufferProvider.Provide();
                 res.WriteCString(npcSpawn.Title); // Title at top of Window
-                res.WriteInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
+                res.WriteUInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
                 Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
@@ -221,7 +221,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res11 = BufferProvider.Provide();
                 res11.WriteCString("Pick a Button..  What are you waiting for"); // Window Heading / Name
-                res11.WriteInt32(npcSpawn.InstanceId);
+                res11.WriteUInt32(npcSpawn.InstanceId);
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11, ServerType.Area); // It's the windows that contain the multiple choice
             }
         }
@@ -257,7 +257,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteCString("Select area to travel to"); // It's the title dude
-                res1.WriteInt32(npcSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
+                res1.WriteUInt32(npcSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
                 Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res1, ServerType.Area);   // Actual map change is handled by send_event_select_exec_r, need to figure out how to handle this better
             }
         }
@@ -283,7 +283,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteCString(npcSpawn.Title); // Title at top of Window
-            res.WriteInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
+            res.WriteUInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
             Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
 
 
@@ -303,7 +303,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res11 = BufferProvider.Provide();
             res11.WriteCString("Effect: Recover 50% of maximum HP and MP"); // Window Heading / Name
-            res11.WriteInt32(npcSpawn.InstanceId);
+            res11.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res11, ServerType.Area); // It's the windows that contain the multiple choice
 
 
@@ -323,7 +323,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res11 = BufferProvider.Provide();
             res11.WriteCString("Which Admin function would you like to do?"); // Window Heading / Name
-            res11.WriteInt32(npcSpawn.InstanceId);
+            res11.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
                 ServerType.Area); // It's the windows that contain the multiple choice
             
@@ -455,7 +455,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
-            res9.WriteInt32(npcSpawn.InstanceId);
+            res9.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
             /*IBuffer res2 = BufferProvider.Provide();
@@ -505,7 +505,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
-            res9.WriteInt32(npcSpawn.InstanceId);
+            res9.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // It's the windows that contain the multiple choice
 
         }
@@ -570,7 +570,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0); // error check
-            res2.WriteInt32(client.Character.InstanceId); // ??
+            res2.WriteUInt32(client.Character.InstanceId); // ??
             //sub_494c50
             res2.WriteInt32(client.Character.MapId); //Stage ID from Stage.CSV
             res2.WriteInt32(client.Character.MapId); //Map ID. Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 

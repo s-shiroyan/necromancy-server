@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
-using Necromancy.Server.Common;
+using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
+
 namespace Necromancy.Server.Model
 {
     public class NpcModelUpdate : Event
@@ -15,7 +13,7 @@ namespace Necromancy.Server.Model
 
         public NpcModelUpdate()
         {
-            EventType = (ushort)AreaPacketId.recv_event_request_int;
+            EventType = (ushort) AreaPacketId.recv_event_request_int;
             _logger = LogProvider.Logger<NecLogger>(this);
         }
 

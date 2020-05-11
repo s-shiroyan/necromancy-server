@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -36,7 +36,7 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
-            
+
             if (!Settings.RequirePin)
             {
                 IBuffer res1 = BufferProvider.Provide();
@@ -56,7 +56,6 @@ namespace Necromancy.Server.Packet.Msg
             {
                 res.WriteByte(1); // bool - 0 = Set New Password | 1 = Enter Password
             }
-
 
 
             Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res, ServerType.Msg);

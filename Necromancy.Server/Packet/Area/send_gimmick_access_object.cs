@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_gimmick_access_object_r, res, ServerType.Area); //this sends out our packet to the first operand
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId); //this is probably for letting others know who accessed it (Instance Id)
+            res2.WriteUInt32(client.Character.InstanceId); //this is probably for letting others know who accessed it (Instance Id)
             res2.WriteInt32(targetInstanceId);
             res2.WriteInt32(unknown);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_gimmick_access_object_notify, res2, ServerType.Area);

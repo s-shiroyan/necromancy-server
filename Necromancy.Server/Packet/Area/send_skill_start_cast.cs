@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
@@ -212,7 +212,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendBattleReportStartNotify(NecClient client)
         {
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(client.Character.InstanceId);
+            res4.WriteUInt32(client.Character.InstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
         }
         private void SendBattleReportEndNotify(NecClient client)

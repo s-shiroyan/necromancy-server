@@ -1,6 +1,6 @@
 using System;
 using System.Data.Common;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Database.Sql.Core
@@ -24,6 +24,5 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             Logger.Exception(ex);
         }
-
     }
 }

@@ -1,21 +1,16 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
-using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Common;
-using Necromancy.Server.Logging;
-using Necromancy.Server.Data.Setting;
-using Necromancy.Server.Model.Skills;
-using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
-using System;
 using System.Collections.Generic;
-using Necromancy.Server.Packet.Response;
-using System.Threading.Tasks;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Common;
+using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Data.Setting;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Packet;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Model.Skills
 {
-   class Stealth : IInstance
+    class Stealth : IInstance
     {
         public uint InstanceId { get; set; }
 
@@ -35,7 +30,6 @@ namespace Necromancy.Server.Model.Skills
             {
                 _logger.Error($"Could not get SkillBaseSetting for skillId : {skillId}");
             }
-
         }
 
         public void StartCast()
@@ -52,7 +46,6 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brStartCast);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
-
         }
 
         public void SkillExec()
@@ -60,7 +53,8 @@ namespace Necromancy.Server.Model.Skills
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
+            RecvBattleReportActionSkillExec brExec =
+                new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
             brList.Add(brStart);
             brList.Add(brExec);
             brList.Add(brEnd);
@@ -68,19 +62,20 @@ namespace Necromancy.Server.Model.Skills
 
             IBuffer res11 = BufferProvider.Provide();
 
-            res11.WriteInt32(_client.Character.InstanceId);
+            res11.WriteUInt32(_client.Character.InstanceId);
 
             uint newState = 0;
             if (_client.Character.IsStealthed())
             {
                 newState = _client.Character.ClearStateBit(0x8);
-                res11.WriteInt32(newState);
+                res11.WriteUInt32(newState);
             }
             else
             {
                 newState = _client.Character.AddStateBit(0x8);
-                res11.WriteInt32(newState); 
+                res11.WriteUInt32(newState);
             }
+
             RecvCharaNotifyStateflag stateFlag = new RecvCharaNotifyStateflag(_client.Character.InstanceId, newState);
             _server.Router.Send(_client.Map, stateFlag);
 
@@ -92,8 +87,6 @@ namespace Necromancy.Server.Model.Skills
             //0bxx1xxxxx - 1 invisible / 0 visible  | (Stealth to enemies)
             //0bx1xxxxxx - 1 blinking  / 0 solid    | (10  second invulnerability blinking)
             //0b1xxxxxxx - 
-
         }
-
     }
 }

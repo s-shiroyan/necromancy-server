@@ -1,20 +1,18 @@
 using System;
 using System.Diagnostics;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
-using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Model
 {
     [DebuggerDisplay("{Identity,nq}")]
     public class NecClient
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecClient));
 
         public NecClient()
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Creation = DateTime.Now;
             Identity = "";
             Soul = new Soul();
@@ -47,7 +45,7 @@ namespace Necromancy.Server.Model
                     AuthConnection.Send(packet);
                     break;
                 default:
-                    _logger.Error(this, "Invalid ServerType");
+                    Logger.Error(this, "Invalid ServerType");
                     break;
             }
         }

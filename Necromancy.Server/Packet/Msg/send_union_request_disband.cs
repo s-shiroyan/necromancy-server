@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Union;
@@ -14,22 +14,23 @@ namespace Necromancy.Server.Packet.Msg
 
         public override ushort Id => (ushort) MsgPacketId.send_union_request_disband;
 
-        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-           
+
 
             Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, res, ServerType.Msg);
-            Union myUnion = Server.Instances.GetInstance((uint)client.Character.unionId) as Union;
+            Union myUnion = Server.Instances.GetInstance((uint) client.Character.unionId) as Union;
 
             if (!Server.Database.DeleteUnion(myUnion.Id))
             {
                 Logger.Error($"{myUnion.Name} could not be removed from the database");
                 return;
             }
-            Logger.Debug($"{myUnion.Name} with Id {myUnion.Id} and instanceId {myUnion.InstanceId} removed and disbanded");
+
+            Logger.Debug(
+                $"{myUnion.Name} with Id {myUnion.Id} and instanceId {myUnion.InstanceId} removed and disbanded");
             client.Union = null;
         }
     }

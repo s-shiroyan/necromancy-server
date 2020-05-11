@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -11,6 +9,7 @@ namespace Necromancy.Server.Packet.Receive
     {
         private readonly int _instanceId;
         private readonly MoveItem _moveItem;
+
         public RecvItemUpdatePlaceChange(int instanceId, MoveItem moveItem)
             : base((ushort) AreaPacketId.recv_item_update_place_change, ServerType.Area)
         {

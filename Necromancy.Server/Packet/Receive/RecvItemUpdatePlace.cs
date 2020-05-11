@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -13,6 +11,7 @@ namespace Necromancy.Server.Packet.Receive
         private readonly byte _toType;
         private readonly byte _toBagId;
         private readonly short _toSlot;
+
         public RecvItemUpdatePlace(ulong instanceId, byte toType, byte toBagId, short toSlot)
             : base((ushort) AreaPacketId.recv_item_update_place, ServerType.Area)
         {
@@ -25,7 +24,7 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(_instanceId);
+            res.WriteUInt64(_instanceId);
             res.WriteByte(_toType);
             res.WriteByte(_toBagId);
             res.WriteInt16(_toSlot);

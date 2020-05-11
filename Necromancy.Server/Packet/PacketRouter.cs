@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Chat;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;

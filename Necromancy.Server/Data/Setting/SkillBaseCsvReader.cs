@@ -1,5 +1,4 @@
-using Arrowgene.Services.Logging;
-using System.Collections.Generic;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {
@@ -29,7 +28,7 @@ namespace Necromancy.Server.Data.Setting
             int.TryParse(properties[4], out int castLogId);
 
             int.TryParse(properties[5], out int hitLogId);
-            
+
             int.TryParse(properties[7], out int occupationEffectType);
             float.TryParse(properties[8], out float castingTime);
             float.TryParse(properties[9], out float castingCooldown);
@@ -70,10 +69,10 @@ namespace Necromancy.Server.Data.Setting
             int unknown5 = 0;
             if (properties.Length >= 46)
             {
-                int.TryParse(properties[39], out  unknown2);
-                int.TryParse(properties[40], out  unknown3);
-                int.TryParse(properties[41], out  unknown4);
-                int.TryParse(properties[42], out  unknown5);
+                int.TryParse(properties[39], out unknown2);
+                int.TryParse(properties[40], out unknown3);
+                int.TryParse(properties[41], out unknown4);
+                int.TryParse(properties[42], out unknown5);
                 displayName = properties[43];
                 int.TryParse(properties[44], out effectTime);
             }
@@ -122,7 +121,6 @@ namespace Necromancy.Server.Data.Setting
                 Unknown2 = unknown2,
                 Unknown3 = unknown3,
                 EffectTime = effectTime
-
             };
         }
     }

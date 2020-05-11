@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -31,8 +31,8 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_484720 - combat/leveling info
             Logger.Debug($"Character ID Loading : {client.Character.Id}");
-            res.WriteInt32(client.Character.InstanceId); // InstanceId
-            res.WriteInt32(client.Character.ClassId); // class
+            res.WriteUInt32(client.Character.InstanceId); // InstanceId
+            res.WriteUInt32(client.Character.ClassId); // class
             res.WriteInt16(client.Character.Level); // current level //+50 Temporary client.Character.Level
             res.WriteInt64(91978348); // current exp
             res.WriteInt64(50); // soul exp
@@ -51,12 +51,12 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(200); // condition
 
             // total stat level includes bonus'?
-            res.WriteInt16(client.Character.Strength); // str
-            res.WriteInt16(client.Character.vitality); // vit
+            res.WriteUInt16(client.Character.Strength); // str
+            res.WriteUInt16(client.Character.vitality); // vit
             res.WriteInt16((short)(client.Character.dexterity+3)); // dex
-            res.WriteInt16(client.Character.agility); // agi
-            res.WriteInt16(client.Character.intelligence); // int
-            res.WriteInt16(client.Character.piety); // pie
+            res.WriteUInt16(client.Character.agility); // agi
+            res.WriteUInt16(client.Character.intelligence); // int
+            res.WriteUInt16(client.Character.piety); // pie
             res.WriteInt16((short)(client.Character.luck+4)); // luk
 
             // mag atk atrb
@@ -96,7 +96,7 @@ namespace Necromancy.Server.Packet.Area
 
             // gold and alignment?
             res.WriteInt64(client.Character.AdventureBagGold); // gold
-            res.WriteInt32(client.Character.Alignmentid); // AlignmentId
+            res.WriteUInt32(client.Character.Alignmentid); // AlignmentId
             res.WriteInt32(6000); // lawful
             res.WriteInt32(5000); // neutral
             res.WriteInt32(6100); // chaos
@@ -108,12 +108,12 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(1); // ac eval calculation?
 
             // characters stats
-            res.WriteInt16(client.Character.Strength); // str
-            res.WriteInt16(client.Character.vitality); // vit
+            res.WriteUInt16(client.Character.Strength); // str
+            res.WriteUInt16(client.Character.vitality); // vit
             res.WriteInt16((short)(client.Character.dexterity)); // dex
-            res.WriteInt16(client.Character.agility); // agi
-            res.WriteInt16(client.Character.intelligence); // int
-            res.WriteInt16(client.Character.piety); // pie
+            res.WriteUInt16(client.Character.agility); // agi
+            res.WriteUInt16(client.Character.intelligence); // int
+            res.WriteUInt16(client.Character.piety); // pie
             res.WriteInt16((short)(client.Character.luck)); // luk
 
             // nothing
@@ -157,7 +157,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(client.Character.MapId); //MapSerialID
             res.WriteInt32(client.Character.MapId); //MapID
             res.WriteFixedString(Settings.DataAreaIpAddress, 65); //IP
-            res.WriteInt16(Settings.AreaPort); //Port
+            res.WriteUInt16(Settings.AreaPort); //Port
 
             //sub_484420 // Map Spawn coord
             res.WriteFloat(client.Character.X); //X Pos

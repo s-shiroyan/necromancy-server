@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res2 = BufferProvider.Provide();
 
-                res2.WriteInt32(client.Character.movementId);//Character ID
+                res2.WriteUInt32(client.Character.movementId);//Character ID
                 res2.WriteFloat(client.Character.X);
                 res2.WriteFloat(client.Character.Y);
                 res2.WriteFloat(client.Character.Z);
@@ -127,7 +127,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res3 = BufferProvider.Provide();
 
 
-                res.WriteInt32(client.Character.eventSelectReadyCode);
+                res.WriteUInt32(client.Character.eventSelectReadyCode);
                 res.WriteFloat(client.Character.X);
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);

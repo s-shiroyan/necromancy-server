@@ -1,8 +1,7 @@
-﻿using Arrowgene.Services.Buffers;
+﻿using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -11,7 +10,7 @@ namespace Necromancy.Server.Packet.Area
         public send_wanted_jail_draw_point(NecServer server) : base(server)
         {
         }
-        
+
 
         public override ushort Id => (ushort) AreaPacketId.send_wanted_jail_draw_point;
 
@@ -20,9 +19,8 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // if 1 Message = Bail Paid
             res.WriteInt32(Util.GetRandomNumber(0, 150)); // Roll number you get when you roll
-            res.WriteByte(0);//bool
+            res.WriteByte(0); //bool
             Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_draw_point_r, res, ServerType.Area);
         }
-
     }
 }

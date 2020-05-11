@@ -1,6 +1,6 @@
 using System;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
+using Arrowgene.Logging;
+using Arrowgene.Networking.Tcp;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Setting;
@@ -11,17 +11,9 @@ namespace Necromancy.Server.Logging
     {
         private NecSetting _setting;
 
-        public NecLogger() : this(null)
+        public override void Initialize(string identity, string name, Action<Log> write, object configuration)
         {
-        }
-
-        public NecLogger(string identity, string zone = null) : base(identity, zone)
-        {
-        }
-
-        public override void Initialize(string identity, string zone, object configuration)
-        {
-            base.Initialize(identity, zone, configuration);
+            base.Initialize(identity, name, write, configuration);
             _setting = configuration as NecSetting;
             if (_setting == null)
             {
@@ -29,48 +21,55 @@ namespace Necromancy.Server.Logging
             }
         }
 
-        public void Info(NecClient client, string message, params object[] args)
+        public void Info(NecClient client, string message)
         {
-            Write(LogLevel.Info, null, $"{client.Identity} {message}", args);
+            Info($"{client.Identity} {message}");
         }
 
-        public void Info(NecConnection connection, string message, params object[] args)
+        public void Info(NecConnection connection, string message)
         {
             NecClient client = connection.Client;
             if (client != null)
             {
-                Info(client, message, args);
+                Info(client, message);
                 return;
             }
 
-            Write(LogLevel.Info, null, $"{connection.Identity} {message}", args);
+            Info($"{connection.Identity} {message}");
         }
 
-        public void Debug(NecClient client, string message, params object[] args)
+        public void Debug(NecClient client, string message)
         {
-            Write(LogLevel.Debug, null, $"{client.Identity} {message}", args);
+            Debug($"{client.Identity} {message}");
         }
 
-        public void Error(NecClient client, string message, params object[] args)
+        public void Error(NecClient client, string message)
         {
-            Write(LogLevel.Error, null, $"{client.Identity} {message}", args);
+            Error($"{client.Identity} {message}");
         }
 
-        public void Error(NecConnection connection, string message, params object[] args)
+        public void Error(NecConnection connection, string message)
         {
             NecClient client = connection.Client;
             if (client != null)
             {
-                Error(client, message, args);
+                Error(client, message);
                 return;
             }
 
-            Write(LogLevel.Error, null, $"{connection.Identity} {message}", args);
+            Error($"{connection.Identity} {message}");
         }
 
         public void Exception(NecClient client, Exception exception)
         {
-            Write(LogLevel.Error, null, $"{client.Identity} {exception}");
+            if (exception == null)
+            {
+                Write(LogLevel.Error, $"{client.Identity} Exception was null.", null);
+            }
+            else
+            {
+                Write(LogLevel.Error, $"{client.Identity} {exception}", exception);
+            }
         }
 
         public void Exception(NecConnection connection, Exception exception)
@@ -82,27 +81,41 @@ namespace Necromancy.Server.Logging
                 return;
             }
 
-            Write(LogLevel.Error, null, $"{connection.Identity} {exception}");
+            if (exception == null)
+            {
+                Write(LogLevel.Error, $"{connection.Identity} Exception was null.", null);
+            }
+            else
+            {
+                Write(LogLevel.Error, $"{connection.Identity} {exception}", exception);
+            }
         }
 
-        public void Info(ITcpSocket socket, string message, params object[] args)
+        public void Info(ITcpSocket socket, string message)
         {
-            Write(LogLevel.Info, null, $"[{socket.Identity}] {message}", args);
+            Info($"[{socket.Identity}] {message}");
         }
 
-        public void Debug(ITcpSocket socket, string message, params object[] args)
+        public void Debug(ITcpSocket socket, string message)
         {
-            Write(LogLevel.Debug, null, $"[{socket.Identity}] {message}", args);
+            Debug($"[{socket.Identity}] {message}");
         }
 
-        public void Error(ITcpSocket socket, string message, params object[] args)
+        public void Error(ITcpSocket socket, string message)
         {
-            Write(LogLevel.Error, null, $"[{socket.Identity}] {message}", args);
+            Error($"[{socket.Identity}] {message}");
         }
 
         public void Exception(ITcpSocket socket, Exception exception)
         {
-            Write(LogLevel.Error, null, $"[{socket.Identity}] {exception}");
+            if (exception == null)
+            {
+                Write(LogLevel.Error, $"{socket.Identity} Exception was null.", null);
+            }
+            else
+            {
+                Write(LogLevel.Error, $"{socket.Identity} {exception}", exception);
+            }
         }
 
         public void LogIncomingPacket(NecClient client, NecPacket packet, ServerType serverType)
@@ -136,7 +149,8 @@ namespace Necromancy.Server.Logging
         {
             if (_setting.LogUnknownIncomingPackets)
             {
-                NecLogPacket logPacket = new NecLogPacket(client.Identity, packet, NecLogType.PacketUnhandled, serverType);
+                NecLogPacket logPacket =
+                    new NecLogPacket(client.Identity, packet, NecLogType.PacketUnhandled, serverType);
                 WritePacket(logPacket);
             }
         }
@@ -155,7 +169,8 @@ namespace Necromancy.Server.Logging
                 return;
             }
 
-            NecLogPacket logPacket = new NecLogPacket(connection.Identity, packet, NecLogType.PacketUnhandled, serverType);
+            NecLogPacket logPacket =
+                new NecLogPacket(connection.Identity, packet, NecLogType.PacketUnhandled, serverType);
             WritePacket(logPacket);
         }
 
@@ -188,7 +203,7 @@ namespace Necromancy.Server.Logging
 
         private void WritePacket(NecLogPacket packet)
         {
-            Write(LogLevel.Info, packet, packet.ToLogText());
+            Write(LogLevel.Info, packet.ToLogText(), packet);
         }
     }
 }

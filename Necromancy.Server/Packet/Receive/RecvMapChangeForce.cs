@@ -1,5 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -27,21 +26,22 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteInt32(_map.Id); //MapSerialID
             res.WriteInt32(_map.Id); //MapID
             res.WriteFixedString(_setting.DataAreaIpAddress, 65); //IP
-            res.WriteInt16(_setting.AreaPort); //Port
+            res.WriteUInt16(_setting.AreaPort); //Port
             if (_mapPosition == null)
             {
                 res.WriteFloat(_map.X); //X Pos
                 res.WriteFloat(_map.Y); //Y Pos
                 res.WriteFloat(_map.Z); //Z Pos
-                res.WriteByte((byte)(_map.Orientation)); //View offset
+                res.WriteByte((byte) (_map.Orientation)); //View offset
             }
             else
             {
                 res.WriteFloat(_mapPosition.X); //X Pos
                 res.WriteFloat(_mapPosition.Y); //Y Pos
                 res.WriteFloat(_mapPosition.Z); //Z Pos
-                res.WriteByte((byte)_mapPosition.Heading); //View offset
+                res.WriteByte((byte) _mapPosition.Heading); //View offset
             }
+
             return res;
         }
     }

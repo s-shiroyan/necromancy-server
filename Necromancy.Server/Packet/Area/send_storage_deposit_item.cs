@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -36,10 +36,10 @@ namespace Necromancy.Server.Packet.Area
         {
             ulong instanceId = client.Character.GetInventoryItem(toStoreType, toBagId, (short)toStorageSlot).InstanceId;
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(instanceId); // item id
+            res.WriteUInt64(instanceId); // item id
             res.WriteByte(toStoreType); // 0 = adventure bag. 1 = character equipment, 2 = royal bag, 3 = warehouse
             res.WriteByte(toBagId); // position 2	cause crash if you change the 0	]	} im assumming these are x/y row, and page
-            res.WriteInt16(toStorageSlot); // bag index 0 to 24
+            res.WriteUInt16(toStorageSlot); // bag index 0 to 24
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
         }
     }

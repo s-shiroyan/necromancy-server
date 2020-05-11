@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
+using Arrowgene.Logging;
+using Arrowgene.Networking.Tcp;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 

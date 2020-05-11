@@ -1,4 +1,4 @@
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Common.Middleware
 {

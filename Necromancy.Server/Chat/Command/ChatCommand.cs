@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 

@@ -1,11 +1,14 @@
 using System;
 using System.Text;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 
 namespace Necromancy.Cli.Command.Commands
 {
     public class ShowCommand : ConsoleCommand
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(ShowCommand));
+
         public override CommandResultType Handle(ConsoleParameter parameter)
         {
             if (parameter.Arguments.Contains("w"))

@@ -1,5 +1,4 @@
-using Arrowgene.Services.Logging;
-using System.Collections.Generic;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {
@@ -43,9 +42,9 @@ namespace Necromancy.Server.Data.Setting
                 OnlyOwner = onlyOwner,
                 ShowActivationTime = showActivationTime,
                 ShowName = showName,
-                damageShape= properties[10],
+                damageShape = properties[10],
                 EffectRadius = effectRadius
-             };
+            };
         }
     }
 }

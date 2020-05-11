@@ -1,8 +1,8 @@
-using Arrowgene.Services.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using System.Collections.Generic;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Model
 {
@@ -33,7 +33,7 @@ namespace Necromancy.Server.Model
             item3.Rarity = 3;
             item3.MinItems = 1;
             item3.Maxitems = 1;
-            
+
             beetle.AddItem(item1);
             beetle.AddItem(item2);
             beetle.AddItem(item3);
@@ -58,6 +58,7 @@ namespace Necromancy.Server.Model
                         _logger.Error($"Could not retrieve ItemSettings for ItemId [{ItemDrop[0].ItemId}]");
                         return null;
                     }
+
                     _logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
                     if (itemSetting.Id == 10200101)
                     {
@@ -67,7 +68,9 @@ namespace Necromancy.Server.Model
                     {
                         itemSetting.IconType = 55;
                     }
-                    Item item = _server.Instances64.CreateInstance<Item>(); //  Need to get fully populated Item repository
+
+                    Item item = _server.Instances64
+                        .CreateInstance<Item>(); //  Need to get fully populated Item repository
                     item.AddItemSetting(itemSetting);
                     int numItems = GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems + 1);
                     dropItem = new DropItem(numItems, item);
@@ -80,13 +83,16 @@ namespace Necromancy.Server.Model
                     _logger.Error($"Could not retrieve ItemSettings for default Item Camp");
                     return null;
                 }
-                Item item = new Item();    //  Need to get fully populated Item repository
+
+                Item item = new Item(); //  Need to get fully populated Item repository
                 item.IconType = 45;
                 item.ItemType = 1;
                 dropItem = new DropItem(1, item);
             }
+
             return dropItem;
         }
+
         private int LootRoll()
         {
             int lootRoll = Util.GetRandomNumber(1, 1001);
@@ -107,17 +113,22 @@ namespace Necromancy.Server.Model
             {
                 return 4;
             }
+
             return 5;
         }
+
         public int GetNumberItems(int min, int max)
         {
-            return Util.GetRandomNumber(min, max); ;
+            return Util.GetRandomNumber(min, max);
+            ;
         }
     }
+
     public class DropTable
     {
         public int MonsterId { get; }
         public List<DropTableItem> DropTableItems { get; }
+
         public DropTable(int monsterId)
         {
             MonsterId = monsterId;
@@ -128,11 +139,13 @@ namespace Necromancy.Server.Model
         {
             DropTableItems.Add(item);
         }
+
         public List<DropTableItem> FindAll(int rarity)
         {
-             return DropTableItems.FindAll(x => x.Rarity == rarity);
+            return DropTableItems.FindAll(x => x.Rarity == rarity);
         }
     }
+
     public class DropTableItem
     {
         public int Rarity;
@@ -140,11 +153,13 @@ namespace Necromancy.Server.Model
         public int MinItems;
         public int Maxitems;
     }
+
     public class DropItem
     {
         public Item Item;
         public int NumItems;
-        public DropItem (int numItems, Item item)
+
+        public DropItem(int numItems, Item item)
         {
             Item = item;
             NumItems = numItems;

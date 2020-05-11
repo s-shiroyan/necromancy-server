@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -27,7 +27,7 @@ namespace Necromancy.Server.Packet.Auth
                 res.WriteInt16(0); //Current Player
             }
 
-            res.WriteByte(1);//cmp with worldID
+            res.WriteByte(1); //cmp with worldID
             res.WriteByte(7);
             res.WriteByte(8);
             res.WriteByte(9);

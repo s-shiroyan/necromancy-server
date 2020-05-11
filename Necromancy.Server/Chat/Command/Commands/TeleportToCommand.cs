@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using Necromancy.Server.Model;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
-using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Common.Instance;
-using System.Threading;
-using System;
+using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -40,13 +38,14 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     gimmick2 = gimmick;
                 }
-                else if(instance is MonsterSpawn monsterSpawn)
+                else if (instance is MonsterSpawn monsterSpawn)
                 {
                     monsterSpawn2 = monsterSpawn;
                 }
                 else
                 {
-                    responses.Add(ChatResponse.CommandError(client, $"Please provide a character/npc/gimmick instance id"));
+                    responses.Add(ChatResponse.CommandError(client,
+                        $"Please provide a character/npc/gimmick instance id"));
                     return;
                 }
             }
@@ -54,35 +53,34 @@ namespace Necromancy.Server.Chat.Command.Commands
             IBuffer res = BufferProvider.Provide();
             if (character2 != null)
             {
-                
-                res.WriteInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
                 res.WriteFloat(character2.X);
                 res.WriteFloat(character2.Y);
                 res.WriteFloat(character2.Z);
                 res.WriteByte(client.Character.Heading);
                 res.WriteByte(client.Character.movementAnim);
             }
-            else if( npc2 != null)
+            else if (npc2 != null)
             {
-                res.WriteInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
                 res.WriteFloat(npc2.X);
                 res.WriteFloat(npc2.Y);
                 res.WriteFloat(npc2.Z);
                 res.WriteByte(client.Character.Heading);
                 res.WriteByte(client.Character.movementAnim);
             }
-            else if(gimmick2 != null)
+            else if (gimmick2 != null)
             {
-                res.WriteInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
                 res.WriteFloat(gimmick2.X);
                 res.WriteFloat(gimmick2.Y);
                 res.WriteFloat(gimmick2.Z);
                 res.WriteByte(client.Character.Heading);
                 res.WriteByte(client.Character.movementAnim);
             }
-            else if(monsterSpawn2 != null)
+            else if (monsterSpawn2 != null)
             {
-                res.WriteInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
                 res.WriteFloat(monsterSpawn2.X);
                 res.WriteFloat(monsterSpawn2.Y);
                 res.WriteFloat(monsterSpawn2.Z);
@@ -90,8 +88,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteByte(client.Character.movementAnim);
             }
 
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
-
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

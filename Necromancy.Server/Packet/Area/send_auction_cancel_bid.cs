@@ -1,8 +1,7 @@
-﻿using Arrowgene.Services.Buffers;
+﻿using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -21,6 +20,5 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_cancel_bid_r, res, ServerType.Area);
         }
-
     }
 }

@@ -1,6 +1,4 @@
-using Arrowgene.Services.Buffers;
 using Necromancy.Server.Common;
-using Arrowgene.Services.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
@@ -9,10 +7,11 @@ using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Packet;
 using System.Collections.Generic;
 using System.Numerics;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Model.Skills
 {
-   class ThiefSkill : IInstance
+    class ThiefSkill : IInstance
     {
         public uint InstanceId { get; set; }
 
@@ -34,10 +33,11 @@ namespace Necromancy.Server.Model.Skills
         public void StartCast()
         {
             IInstance target = _server.Instances.GetInstance(_targetInstanceId);
-            switch (target)         // ToDO     Do a hositilty check to make sure this is allowed
+            switch (target) // ToDO     Do a hositilty check to make sure this is allowed
             {
                 case NpcSpawn npcSpawn:
-                    _logger.Debug($"Start casting Skill [{_skillId}] on NPCId: {npcSpawn.InstanceId} SerialId: {npcSpawn.NpcId}");
+                    _logger.Debug(
+                        $"Start casting Skill [{_skillId}] on NPCId: {npcSpawn.InstanceId} SerialId: {npcSpawn.NpcId}");
                     break;
                 case MonsterSpawn monsterSpawn:
                     _logger.Debug($"Start casting Skill [{_skillId}] on MonsterId: {monsterSpawn.InstanceId}");
@@ -46,9 +46,11 @@ namespace Necromancy.Server.Model.Skills
                     _logger.Debug($"Start casting Skill [{_skillId}] on CharacterId: {character.InstanceId}");
                     break;
                 default:
-                    _logger.Error($"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
+                    _logger.Error(
+                        $"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
+
             if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
             {
                 _logger.Error($"Could not get SkillBaseSetting for skillId : {_skillId}");
@@ -80,14 +82,16 @@ namespace Necromancy.Server.Model.Skills
             {
                 case NpcSpawn npc:
                     npcSpawn = npc;
-                    _logger.Debug($"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
+                    _logger.Debug(
+                        $"NPCId: {npcSpawn.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
                     trgCoord.X = npcSpawn.X;
                     trgCoord.Y = npcSpawn.Y;
                     trgCoord.Z = npcSpawn.Z;
                     break;
                 case MonsterSpawn monster:
                     monsterSpawn = monster;
-                    _logger.Debug($"MonsterId: {monsterSpawn.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
+                    _logger.Debug(
+                        $"MonsterId: {monsterSpawn.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
                     trgCoord.X = monsterSpawn.X;
                     trgCoord.Y = monsterSpawn.Y;
                     trgCoord.Z = monsterSpawn.Z;
@@ -95,28 +99,34 @@ namespace Necromancy.Server.Model.Skills
                     break;
                 case Character chara:
                     character = chara;
-                    _logger.Debug($"CharacterId: {character.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
+                    _logger.Debug(
+                        $"CharacterId: {character.InstanceId} is gettin blasted by Skill Effect {_client.Character.skillStartCast}");
                     trgCoord.X = character.X;
                     trgCoord.Y = character.Y;
                     trgCoord.Z = character.Z;
                     break;
                 default:
-                    _logger.Error($"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
+                    _logger.Error(
+                        $"Instance with InstanceId: {_targetInstanceId} does not exist.  the ground is gettin blasted");
                     break;
             }
+
             if (!_server.SettingRepository.SkillBase.TryGetValue(_skillId, out SkillBaseSetting skillBaseSetting))
             {
                 _logger.Error($"Could not get SkillBaseSetting for skillId : {_skillId}");
                 return;
             }
+
             if (!int.TryParse($"{_skillId}".Substring(1, 6) + 1, out int effectId))
             {
                 _logger.Error($"Creating effectId from skillid [{_skillId}]");
             }
+
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
-            RecvBattleReportActionSkillExec brExec = new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
+            RecvBattleReportActionSkillExec brExec =
+                new RecvBattleReportActionSkillExec(_client.Character.skillStartCast);
             RecvBattleReportActionEffectOnHit brEof = new RecvBattleReportActionEffectOnHit(600021);
             brList.Add(brStart);
             brList.Add(brExec);
@@ -127,11 +137,12 @@ namespace Necromancy.Server.Model.Skills
             trgCoord.Z += 10;
             _logger.Debug($"skillid [{_skillId}] effectId [{effectId}]");
 
-            RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(InstanceId, _targetInstanceId, effectId, trgCoord, 2, 2);
+            RecvDataNotifyEoData eoData =
+                new RecvDataNotifyEoData(InstanceId, _targetInstanceId, effectId, trgCoord, 2, 2);
             //_server.Router.Send(_client.Map, eoData);
             RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule(InstanceId, 2.0F);
             //_server.Router.Send(_client.Map, eoDisappear);
-            
+
             //Vector3 _srcCoord  = new Vector3(_client.Character.X, _client.Character.Y, _client.Character.Z);
             //Recv8D92 effectMove = new Recv8D92(_srcCoord, trgCoord, InstanceId, _client.Character.skillStartCast, 3000, 2, 2);  // ToDo need real velocities
             //_server.Router.Send(_client.Map, effectMove);
@@ -141,7 +152,7 @@ namespace Necromancy.Server.Model.Skills
             //_server.Router.Send(_client.Map, eoTriggerData);
             int monsterHP = monsterSpawn.Hp.current;
             List<PacketResponse> brList2 = new List<PacketResponse>();
-            float perHp = monsterHP > 0 ? (((float)monsterHP / (float)monsterSpawn.Hp.max) * 100) : 0;
+            float perHp = monsterHP > 0 ? (((float) monsterHP / (float) monsterSpawn.Hp.max) * 100) : 0;
             RecvBattleReportStartNotify brStart1 = new RecvBattleReportStartNotify(_client.Character.InstanceId);
             RecvBattleReportEndNotify brEnd1 = new RecvBattleReportEndNotify();
             //RecvBattleReportDamageHp brHp = new RecvBattleReportDamageHp(monsterSpawn.InstanceId, damage);
@@ -159,14 +170,13 @@ namespace Necromancy.Server.Model.Skills
             _server.Router.Send(_client.Map, brList2);
             //if (monsterSpawn.GetAgroCharacter(_client.Character.InstanceId))
             //{
-               // monsterSpawn.UpdateHP(-damage);
+            // monsterSpawn.UpdateHP(-damage);
             //}
             //else
             //{
-                //monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
+            //monsterSpawn.UpdateHP(-damage, _server, true, _client.Character.InstanceId);
             //}
             _logger.Debug($"{monsterSpawn.Name} has {monsterSpawn.Hp.current} HP left.");
         }
-
     }
 }

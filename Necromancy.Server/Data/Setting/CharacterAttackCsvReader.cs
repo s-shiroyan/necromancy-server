@@ -1,5 +1,4 @@
-using Arrowgene.Services.Logging;
-using System.Collections.Generic;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {

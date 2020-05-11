@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -75,13 +75,13 @@ namespace Necromancy.Server.Packet
                     {
                         packetType = PacketType.UInt16;
                         buffer.WriteByte((byte) packetType);
-                        buffer.WriteInt16((ushort) dataSize);
+                        buffer.WriteUInt16((ushort) dataSize);
                     }
                     else if (dataSize < uint.MaxValue)
                     {
                         packetType = PacketType.UInt32;
                         buffer.WriteByte((byte) packetType);
-                        buffer.WriteInt32((uint) dataSize);
+                        buffer.WriteUInt32((uint) dataSize);
                     }
                     else
                     {
@@ -89,7 +89,7 @@ namespace Necromancy.Server.Packet
                         return null;
                     }
 
-                    buffer.WriteInt16(packet.Id);
+                    buffer.WriteUInt16(packet.Id);
                     buffer.WriteBytes(data);
                     break;
             }
@@ -186,7 +186,7 @@ namespace Necromancy.Server.Packet
                         case PacketType.Disconnect:
                         {
                             _dataSize = DisconnectPacketBodySize;
-                            _id = (ushort)CustomPacketId.SendDisconnect;
+                            _id = (ushort) CustomPacketId.SendDisconnect;
                             _readHeader = true;
                             break;
                         }

@@ -1,9 +1,6 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -13,8 +10,9 @@ namespace Necromancy.Server.Packet.Receive
         private readonly uint _value;
         private readonly ushort _opCode;
         private readonly uint _type;
-        public RecvItemTest(ulong instanceId, ushort opCode, uint value,  uint type)
-            : base((ushort)opCode, ServerType.Area)
+
+        public RecvItemTest(ulong instanceId, ushort opCode, uint value, uint type)
+            : base((ushort) opCode, ServerType.Area)
         {
             _instanceId = instanceId;
             _value = value;
@@ -25,21 +23,22 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(_instanceId);
+            res.WriteUInt64(_instanceId);
             switch (_type)
             {
                 case 0:
-                    res.WriteByte((byte)_value);
+                    res.WriteByte((byte) _value);
                     break;
                 case 1:
-                    res.WriteInt16((ushort)_value);
+                    res.WriteUInt16((ushort) _value);
                     break;
                 case 2:
-                    res.WriteInt32((uint)_value);
+                    res.WriteUInt32((uint) _value);
                     break;
                 default:
                     break;
             }
+
             return res;
         }
     }

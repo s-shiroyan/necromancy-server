@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
             SendEventEnd(client);
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(client.Character.InstanceId);
+            res2.WriteUInt32(client.Character.InstanceId);
             res2.WriteCString("IsThisMyChannel?????"); //Length to be Found
             Router.Send(Server.Clients.GetAll(), (ushort)AreaPacketId.recv_channel_notify, res2, ServerType.Area);
         }

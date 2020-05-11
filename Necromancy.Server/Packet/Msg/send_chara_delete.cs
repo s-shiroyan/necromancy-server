@@ -1,5 +1,5 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -11,6 +11,7 @@ namespace Necromancy.Server.Packet.Msg
     {
         private readonly NecLogger _logger;
         private readonly NecServer _server;
+
         public send_chara_delete(NecServer server) : base(server)
         {
             _logger = LogProvider.Logger<NecLogger>(this);
@@ -19,7 +20,6 @@ namespace Necromancy.Server.Packet.Msg
 
         public override ushort Id => (ushort) MsgPacketId.send_chara_delete;
 
-        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -29,11 +29,9 @@ namespace Necromancy.Server.Packet.Msg
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(0);
-           
+
 
             Router.Send(client, (ushort) MsgPacketId.recv_chara_delete_r, res, ServerType.Msg);
-
-
         }
     }
 }

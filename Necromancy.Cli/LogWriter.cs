@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Threading;
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -13,19 +13,19 @@ namespace Necromancy.Cli
 {
     public class LogWriter : ISwitchConsumer
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(LogWriter));
+
         private readonly object _consoleLock;
         private readonly Dictionary<ServerType, HashSet<ushort>> _serverTypeBlacklist;
         private readonly Dictionary<ServerType, HashSet<ushort>> _serverTypeWhitelist;
         private readonly HashSet<ushort> _packetIdWhitelist;
         private readonly HashSet<ushort> _packetIdBlacklist;
-        private readonly ILogger _logger;
         private readonly Queue<Log> _logQueue;
         private bool _paused;
-        private bool _continueing;
+        private bool _continue;
 
         public LogWriter()
         {
-            _logger = LogProvider.Logger(this);
             _serverTypeBlacklist = new Dictionary<ServerType, HashSet<ushort>>();
             _serverTypeWhitelist = new Dictionary<ServerType, HashSet<ushort>>();
             _packetIdWhitelist = new HashSet<ushort>();
@@ -34,10 +34,10 @@ namespace Necromancy.Cli
             _consoleLock = new object();
             Switches = new List<ISwitchProperty>();
             _paused = false;
-            _continueing = false;
+            _continue = false;
             Reset();
             LoadSwitches();
-            LogProvider.GlobalLogWrite += LogProviderOnGlobalLogWrite;
+            LogProvider.OnLogWrite += LogProviderOnGlobalLogWrite;
         }
 
         public List<ISwitchProperty> Switches { get; }
@@ -72,7 +72,7 @@ namespace Necromancy.Cli
         {
             if (_packetIdWhitelist.Contains(packetId))
             {
-                _logger.Error($"PacketId:{packetId} is already whitelisted");
+                Logger.Error($"PacketId:{packetId} is already whitelisted");
                 return;
             }
 
@@ -83,7 +83,7 @@ namespace Necromancy.Cli
         {
             if (_packetIdBlacklist.Contains(packetId))
             {
-                _logger.Error($"PacketId:{packetId} is already blacklisted");
+                Logger.Error($"PacketId:{packetId} is already blacklisted");
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace Necromancy.Cli
         {
             if (!AddToServerTypeList(_serverTypeWhitelist, serverType, packetId))
             {
-                _logger.Error($"WhitelistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
+                Logger.Error($"WhitelistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
             }
         }
 
@@ -102,7 +102,7 @@ namespace Necromancy.Cli
         {
             if (!AddToServerTypeList(_serverTypeBlacklist, serverType, packetId))
             {
-                _logger.Error($"BlacklistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
+                Logger.Error($"BlacklistPacket: ServerType:{serverType} PacketId:{packetId} is already added");
             }
         }
 
@@ -113,14 +113,14 @@ namespace Necromancy.Cli
 
         public void Continue()
         {
-            _continueing = true;
+            _continue = true;
             while (_logQueue.TryDequeue(out Log log))
             {
                 WriteLog(log);
             }
 
             _paused = false;
-            _continueing = false;
+            _continue = false;
         }
 
         private void LoadSwitches()
@@ -304,7 +304,7 @@ namespace Necromancy.Cli
 
         private void LogProviderOnGlobalLogWrite(object sender, LogWriteEventArgs logWriteEventArgs)
         {
-            while (_continueing)
+            while (_continue)
             {
                 Thread.Sleep(10000);
             }
@@ -452,11 +452,11 @@ namespace Necromancy.Cli
 
                 sb.Append("ASCII:");
                 sb.Append(Environment.NewLine);
-                sb.Append(data.ToAsciiString(true));
+                sb.Append(data.ToAsciiString("  "));
                 sb.Append(Environment.NewLine);
                 sb.Append("HEX:");
                 sb.Append(Environment.NewLine);
-                sb.Append(data.ToHexString('-'));
+                sb.Append(data.ToHexString(" "));
                 sb.Append(Environment.NewLine);
             }
 

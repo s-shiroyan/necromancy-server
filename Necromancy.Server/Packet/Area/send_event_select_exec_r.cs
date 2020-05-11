@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
@@ -330,38 +330,38 @@ namespace Necromancy.Server.Packet.Area
                         else
                         {
                             res9.WriteCString("Effect: Recover all HP, all MP, and 150 Condition"); // 
-                            res9.WriteInt32(client.Character.InstanceId);
+                            res9.WriteUInt32(client.Character.InstanceId);
                             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
                             client.Character.eventSelectExtraSelectionCode = 0;
                             break;
                         }
                     case 1:                
                         res9.WriteCString("Effect: Recover all HP, all MP, and 50 Condition"); //
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 1;
                         break;
                     case 2:                
                         res9.WriteCString("Effect: Recover half HP, half MP, and 100 Condition"); //
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 2;
                         break;
                     case 3:                
                         res9.WriteCString("Effect: Recover all HP, all MP, and 110 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 3;
                         break;
                     case 4:                
                         res9.WriteCString("Effect: Recover all HP, all MP, and 120 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
                         client.Character.eventSelectExtraSelectionCode = 4;
                         break;
                     case 5:                
                         res9.WriteCString("Effect: Recover all HP, all MP, and 160 Condition"); //
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
                         client.Character.eventSelectExtraSelectionCode = 5;
                         break;
@@ -404,32 +404,32 @@ namespace Necromancy.Server.Packet.Area
                         else
                         {
                             res9.WriteCString("Effect: Recover full HP, full MP, and 150 Condition"); // 
-                            res9.WriteInt32(client.Character.InstanceId);
+                            res9.WriteUInt32(client.Character.InstanceId);
                             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                             client.Character.eventSelectExtraSelectionCode = 6;
                             break;
                         }
                     case 1:
                         res9.WriteCString("Effect: Recover half HP, half MP, and 50 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); //
                         client.Character.eventSelectExtraSelectionCode = 7;
                         break;
                     case 2:
                         res9.WriteCString("Effect: Recover 80% HP, 80% MP, and 80 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 8;
                         break;
                     case 3:
                         res9.WriteCString("Effect: Recover full HP, full MP, and 100 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 9;
                         break;
                     case 4:
                         res9.WriteCString("Effect: Recover full HP, full MP, and 120 Condition"); // 
-                        res9.WriteInt32(client.Character.InstanceId);
+                        res9.WriteUInt32(client.Character.InstanceId);
                         Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9, ServerType.Area); // 
                         client.Character.eventSelectExtraSelectionCode = 10;
                         break;

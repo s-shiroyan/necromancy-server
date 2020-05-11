@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Tasks;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
@@ -17,7 +15,7 @@ namespace Necromancy.Server.Model
     {
         private readonly object TrapLock = new object();
 
-        public const int NewCharacterMapId = 1001902;   //2006000
+        public const int NewCharacterMapId = 1001902; //2006000
 
         private readonly NecLogger _logger;
         private readonly NecServer _server;
@@ -31,7 +29,9 @@ namespace Necromancy.Server.Model
         public byte Orientation { get; }
         public string FullName => $"{Country}/{Area}/{Place}";
         public ClientLookup ClientLookup { get; }
+
         public Dictionary<uint, NpcSpawn> NpcSpawns { get; }
+
         // public Dictionary<int, TrapTransition> Trap { get; }
         public Dictionary<uint, MonsterSpawn> MonsterSpawns { get; }
         public Dictionary<uint, Gimmick> GimmickSpawns { get; }
@@ -61,7 +61,7 @@ namespace Necromancy.Server.Model
             Country = setting.Country;
             Area = setting.Area;
             Place = setting.Place;
-            Orientation = (byte)(setting.Orientation / 2);   // Client uses 180 degree orientation
+            Orientation = (byte) (setting.Orientation / 2); // Client uses 180 degree orientation
             Traps = new Dictionary<uint, TrapStack>();
 
             List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
@@ -87,6 +87,7 @@ namespace Necromancy.Server.Model
                 server.Instances.AssignInstance(gimmickSpawn);
                 GimmickSpawns.Add(gimmickSpawn.InstanceId, gimmickSpawn);
             }
+
             List<GGateSpawn> gGateSpawns = server.Database.SelectGGateSpawnsByMapId(setting.Id);
             foreach (GGateSpawn gGateSpawn in gGateSpawns)
             {
@@ -100,23 +101,27 @@ namespace Necromancy.Server.Model
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
                 server.Instances.AssignInstance(monsterSpawn);
-                if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId, out ModelCommonSetting modelSetting))
+                if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId,
+                    out ModelCommonSetting modelSetting))
                 {
                     _logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
                     continue;
                 }
-                if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId, out MonsterSetting monsterSetting))
+
+                if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId,
+                    out MonsterSetting monsterSetting))
                 {
                     _logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
                     continue;
                 }
+
                 monsterSpawn.ModelId = modelSetting.Id;
-                monsterSpawn.Size = (short)(modelSetting.Height / 2);
-                monsterSpawn.Radius = (short)modelSetting.Radius;
+                monsterSpawn.Size = (short) (modelSetting.Height / 2);
+                monsterSpawn.Radius = (short) modelSetting.Radius;
                 monsterSpawn.Hp.setMax(300);
                 monsterSpawn.Hp.setCurrent(300);
                 monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
-                monsterSpawn.Level = (byte)monsterSetting.Level;
+                monsterSpawn.Level = (byte) monsterSetting.Level;
                 monsterSpawn.CombatMode = monsterSetting.CombatMode;
                 monsterSpawn.CatalogId = monsterSetting.CatalogId;
                 monsterSpawn.TextureType = monsterSetting.TextureType;
@@ -136,43 +141,41 @@ namespace Necromancy.Server.Model
                 }
                 else
                 {
-
                     //home coordinate set to monster X,Y,Z from database
                     Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
                     MonsterCoord homeCoord = new MonsterCoord();
                     homeCoord.Id = monsterSpawn.Id;
-                    homeCoord.MonsterId = (uint)monsterSpawn.MonsterId;
-                    homeCoord.MapId = (uint)monsterSpawn.MapId;
+                    homeCoord.MonsterId = (uint) monsterSpawn.MonsterId;
+                    homeCoord.MapId = (uint) monsterSpawn.MapId;
                     homeCoord.CoordIdx = 0;
                     homeCoord.destination = homeVector3;
                     monsterSpawn.monsterCoords.Add(homeCoord);
 
                     //default path part 2
-                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150),
+                        monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
-                    defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
-                    defaultCoord.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord.MonsterId = (uint) monsterSpawn.MonsterId;
+                    defaultCoord.MapId = (uint) monsterSpawn.MapId;
                     defaultCoord.CoordIdx = 1;
                     defaultCoord.destination = defaultVector3;
 
                     monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
-                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150), monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150),
+                        monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
-                    defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
-                    defaultCoord2.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord2.MonsterId = (uint) monsterSpawn.MonsterId;
+                    defaultCoord2.MapId = (uint) monsterSpawn.MapId;
                     defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
                     defaultCoord2.destination = defaultVector32;
 
                     monsterSpawn.monsterCoords.Add(defaultCoord2);
-
                 }
-
             }
-
         }
 
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
@@ -194,7 +197,7 @@ namespace Necromancy.Server.Model
                 client.Map.Leave(client);
             }
 
-            _logger.Info(client, $"Entering Map: {Id}:{FullName}", client);
+            _logger.Info(client, $"Entering Map: {Id}:{FullName}");
             // If position is passed in use it and set character position, if null then use map default coords
             // If this isn't set here, the wrong coords are in character until send_movement_info updates it. 
             if (mapPosition != null)
@@ -211,11 +214,12 @@ namespace Necromancy.Server.Model
                 client.Character.Z = this.Z;
                 client.Character.Heading = this.Orientation;
             }
+
             client.Map = this;
             client.Character.MapId = Id;
             client.Character.mapChange = false;
             ClientLookup.Add(client);
-            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  { this.Id} ");
+            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
@@ -248,7 +252,8 @@ namespace Necromancy.Server.Model
                             _server.Router.Send(monsterData, client);
                             if (!monsterSpawn.GetAgro())
                             {
-                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte)2, (byte)0);
+                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte) 2,
+                                    (byte) 0);
                             }
                         }
                     }
@@ -256,22 +261,22 @@ namespace Necromancy.Server.Model
             }
 
 
-
             //on successful map entry, update the client database position
             if (!_server.Database.UpdateCharacter(client.Character))
             {
                 _logger.Error("Could not update the database with current known player position");
             }
-
         }
+
         public void Leave(NecClient client)
         {
-            _logger.Info(client, $"Leaving Map: {Id}:{FullName}", client);
+            _logger.Info(client, $"Leaving Map: {Id}:{FullName}");
             ClientLookup.Remove(client);
             if (!_server.Database.UpdateCharacter(client.Character))
             {
                 _logger.Error("Could not update the database with last known player position");
             }
+
             client.Map = null;
 
             RecvObjectDisappearNotify objectDisappearData = new RecvObjectDisappearNotify(client.Character.InstanceId);
@@ -283,8 +288,8 @@ namespace Necromancy.Server.Model
                     monsterSpawn.SpawnActive = false;
                 }
             }
-            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  { this.Id} ");
 
+            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
         }
 
         public bool MonsterInRange(Vector3 position, int range)
@@ -297,6 +302,7 @@ namespace Necromancy.Server.Model
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -309,6 +315,7 @@ namespace Necromancy.Server.Model
                     return monster;
                 }
             }
+
             return null;
         }
 
@@ -324,6 +331,7 @@ namespace Necromancy.Server.Model
                     monsters.Add(monster);
                 }
             }
+
             return monsters;
         }
 
@@ -340,6 +348,7 @@ namespace Necromancy.Server.Model
                     characters.Add(character);
                 }
             }
+
             return characters;
         }
 
@@ -353,8 +362,10 @@ namespace Necromancy.Server.Model
                     traps.Add(trap);
                 }
             }
+
             return traps;
         }
+
         public List<TrapStack> GetTrapsCharacter(uint characterInstanceId)
         {
             List<TrapStack> traps = new List<TrapStack>();
@@ -368,8 +379,10 @@ namespace Necromancy.Server.Model
                     }
                 }
             }
+
             return traps;
         }
+
         public bool GetTrapsCharacterRange(uint characterInstanceId, int range, Vector3 position)
         {
             bool inRange = false;
@@ -385,8 +398,10 @@ namespace Necromancy.Server.Model
                     }
                 }
             }
+
             return inRange;
         }
+
         public TrapStack GetTrapCharacterRange(uint characterInstanceId, int range, Vector3 position)
         {
             lock (TrapLock)
@@ -401,8 +416,10 @@ namespace Necromancy.Server.Model
                     }
                 }
             }
+
             return null;
         }
+
         public void AddTrap(uint instanceId, TrapStack trap)
         {
             lock (TrapLock)
@@ -428,6 +445,7 @@ namespace Necromancy.Server.Model
                     return monster;
                 }
             }
+
             return null;
         }
     }

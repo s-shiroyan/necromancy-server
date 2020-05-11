@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"character {client.Character.Name} accepted invite to party ID {partyInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(partyInstanceId);
+            res.WriteUInt32(partyInstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_party_accept_to_invite_r, res, ServerType.Area);
 
             Party myParty = Server.Instances.GetInstance(partyInstanceId) as Party;
@@ -52,11 +52,11 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(1); //Party Add Reason?
-            res.WriteInt32(thisClient.Character.InstanceId); //Object ID?
-            res.WriteInt32(thisClient.Character.InstanceId);
+            res.WriteUInt32(thisClient.Character.InstanceId); //Object ID?
+            res.WriteUInt32(thisClient.Character.InstanceId);
             res.WriteFixedString($"{thisClient.Soul.Name}", 0x31); //Soul name
             res.WriteFixedString($"{thisClient.Character.Name}", 0x5B); //Character name
-            res.WriteInt32(thisClient.Character.ClassId); //Class
+            res.WriteUInt32(thisClient.Character.ClassId); //Class
             res.WriteByte(thisClient.Soul.Level); //Soul rank
             res.WriteByte(thisClient.Character.Level); //Character level
             res.WriteInt32(Util.GetRandomNumber(1,10));
@@ -88,18 +88,18 @@ namespace Necromancy.Server.Packet.Area
         private void SendCharaBodyNotifyPartyJoin(NecClient client, Party myParty)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId); //Chara Instance ID
-            res.WriteInt32(client.Character.InstanceId); //Party InstancID?
-            res.WriteInt32(myParty.InstanceId); //Party Leader InstanceId?
+            res.WriteUInt32(client.Character.InstanceId); //Chara Instance ID
+            res.WriteUInt32(client.Character.InstanceId); //Party InstancID?
+            res.WriteUInt32(myParty.InstanceId); //Party Leader InstanceId?
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_notify_party_join, res, ServerType.Area);
         }
 
         private void SendCharaNotifyPartyJoin(NecClient client, Party myParty)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId); //object ID
-            res.WriteInt32(client.Character.InstanceId); //party ID
-            res.WriteInt32(myParty.InstanceId); //Party Leader InstanceId?
+            res.WriteUInt32(client.Character.InstanceId); //object ID
+            res.WriteUInt32(client.Character.InstanceId); //party ID
+            res.WriteUInt32(myParty.InstanceId); //Party Leader InstanceId?
             Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_notify_party_join, res, ServerType.Area);
         }
 
@@ -114,18 +114,18 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.partyId);//Party Instance ID
+            res.WriteUInt32(client.Character.partyId);//Party Instance ID
             res.WriteInt32(myParty.PartyType);//Party type; 0 = closed, 1 = open.
             res.WriteInt32(myParty.NormalItemDist);//Normal item distribution; 0 = do not distribute, 1 = random.
             res.WriteInt32(myParty.RareItemDist);//Rare item distribution; 0 = do not distribute, 1 = Draw.
-            res.WriteInt32(client.Character.InstanceId);
-            res.WriteInt32(myParty.PartyLeaderId);//From player instance ID (but doesn't work?)
+            res.WriteUInt32(client.Character.InstanceId);
+            res.WriteUInt32(myParty.PartyLeaderId);//From player instance ID (but doesn't work?)
             {
                 res.WriteInt32(1);
-                res.WriteInt32(client.Character.InstanceId); //Instance Id?
+                res.WriteUInt32(client.Character.InstanceId); //Instance Id?
                 res.WriteFixedString($"{client.Soul.Name}", 0x31); //Soul name
                 res.WriteFixedString($"{client.Character.Name}", 0x5B); //Chara name
-                res.WriteInt32(client.Character.ClassId); //Class
+                res.WriteUInt32(client.Character.ClassId); //Class
                 res.WriteByte(client.Character.Level); //Level
                 res.WriteByte(2); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
@@ -134,10 +134,10 @@ namespace Necromancy.Server.Packet.Area
             }
             {
                 res.WriteInt32(2);
-                res.WriteInt32(partyClient1.Character.InstanceId); //Instance Id?
+                res.WriteUInt32(partyClient1.Character.InstanceId); //Instance Id?
                 res.WriteFixedString($"{partyClient1.Soul.Name}", 0x31); //Soul name
                 res.WriteFixedString($"{partyClient1.Character.Name}", 0x5B); //Chara name
-                res.WriteInt32(partyClient1.Character.ClassId); //Class
+                res.WriteUInt32(partyClient1.Character.ClassId); //Class
                 res.WriteByte(partyClient1.Character.Level); //Level
                 res.WriteByte(2); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
@@ -146,10 +146,10 @@ namespace Necromancy.Server.Packet.Area
             }
             {
                 res.WriteInt32(3);
-                res.WriteInt32(partyClient2.Character.InstanceId); //Instance Id?
+                res.WriteUInt32(partyClient2.Character.InstanceId); //Instance Id?
                 res.WriteFixedString($"{partyClient2.Soul.Name}", 0x31); //Soul name
                 res.WriteFixedString($"{partyClient2.Character.Name}", 0x5B); //Chara name
-                res.WriteInt32(partyClient2.Character.ClassId); //Class
+                res.WriteUInt32(partyClient2.Character.ClassId); //Class
                 res.WriteByte(partyClient2.Character.Level); //Level
                 res.WriteByte(2); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 
@@ -158,10 +158,10 @@ namespace Necromancy.Server.Packet.Area
             }
             {
                 res.WriteInt32(4);
-                res.WriteInt32(partyClient3.Character.InstanceId); //Instance Id?
+                res.WriteUInt32(partyClient3.Character.InstanceId); //Instance Id?
                 res.WriteFixedString($"{partyClient3.Soul.Name}", 0x31); //Soul name
                 res.WriteFixedString($"{partyClient3.Character.Name}", 0x5B); //Chara name
-                res.WriteInt32(partyClient3.Character.ClassId); //Class
+                res.WriteUInt32(partyClient3.Character.ClassId); //Class
                 res.WriteByte(partyClient3.Character.Level); //Level
                 res.WriteByte(2); //Criminal Status
                 res.WriteByte(1); //Beginner Protection (bool) 

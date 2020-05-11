@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Chat;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;

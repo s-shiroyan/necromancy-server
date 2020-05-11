@@ -1,16 +1,15 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
     public class RecvSelfBuffNotify : PacketResponse
     {
-        private readonly Buff [] _buffArr;
-        public RecvSelfBuffNotify(Buff [] buffArr)
+        private readonly Buff[] _buffArr;
+
+        public RecvSelfBuffNotify(Buff[] buffArr)
             : base((ushort) AreaPacketId.recv_self_buff_notify, ServerType.Area)
         {
             _buffArr = buffArr;
@@ -22,7 +21,7 @@ namespace Necromancy.Server.Packet.Receive
             //            res.WriteInt32(_buffId);
             int numEntries = _buffArr.Length;
 //            int numEmptyBuffs = numEntries - _buffArr.Length;
-            res.WriteInt32(numEntries);//less than or equal to 0x80
+            res.WriteInt32(numEntries); //less than or equal to 0x80
             for (int i = 0; i < _buffArr.Length; i++)
             {
                 res.WriteInt32(_buffArr[i].buffId);

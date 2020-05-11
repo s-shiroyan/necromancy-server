@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Database.Sql
 {
@@ -50,15 +50,17 @@ namespace Necromancy.Server.Database.Sql
                         "Failed to detect DB version for migration file: {0}. File name should begin with a database version number.",
                         f)));
                 }
+
                 /* Ignore 0-version, this is an example. Adding the same version twice will throw
                    an ArgumentException. */
                 if (versionNumber > initialVersion)
                     versionFileDict.Add(versionNumber, f);
             }
+
             ApplyMigrations(versionFileDict);
             if ((versionNumber = Database.Version) > initialVersion)
             {
-                _logger.Debug("Database db.sqlite version is updated to {0}.", versionNumber);
+                _logger.Debug($"Database db.sqlite version is updated to {versionNumber}.");
             }
         }
 
@@ -83,6 +85,7 @@ namespace Necromancy.Server.Database.Sql
                     LogException(new ArgumentException(
                         "A sorted list's keys are out of order, and expected to be in-order."));
                 }
+
                 scriptRunner.Run(kvp.Value);
                 Database.Version = versionNumber = kvp.Key;
             }

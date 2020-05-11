@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -46,7 +46,7 @@ namespace Necromancy.Server.Packet.Area
                 //res.WriteByte(1);
                 res.WriteFixedString("quest1", 16); //Item name?
                 res.WriteInt16(0); //Quantity
-                res.WriteInt32(odd); //Status
+                res.WriteUInt32(odd); //Status
                 bitShift = bitShift << 1;
                 odd += 2;
             }
@@ -60,7 +60,7 @@ namespace Necromancy.Server.Packet.Area
                 //res.WriteByte(1);
                 res.WriteFixedString("quest2", 16); //Item name?
                 res.WriteInt16(1); //Quantity
-                res.WriteInt32(odd); //Status
+                res.WriteUInt32(odd); //Status
                 bitShift = bitShift << 1;
                 odd += 2;
             }

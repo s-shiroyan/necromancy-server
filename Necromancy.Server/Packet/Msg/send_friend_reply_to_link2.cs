@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -11,8 +11,7 @@ namespace Necromancy.Server.Packet.Msg
         {
         }
 
-        public override ushort Id => (ushort)MsgPacketId.send_friend_reply_to_link2;
-
+        public override ushort Id => (ushort) MsgPacketId.send_friend_reply_to_link2;
 
 
         public override void Handle(NecClient client, NecPacket packet)
@@ -21,7 +20,7 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteInt32(0); // 0  = msg friend added
 
-            Router.Send(client, (ushort)MsgPacketId.recv_friend_result_reply_link2, res, ServerType.Msg);
+            Router.Send(client, (ushort) MsgPacketId.recv_friend_result_reply_link2, res, ServerType.Msg);
             /* Logic for all the possibilities below goes above here.
             FRIEND_REGIST	10	Sent Friend Request to %s
             FRIEND_REGIST	20	Denied the Friend Request
