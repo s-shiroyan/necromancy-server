@@ -3,6 +3,7 @@ using Necromancy.Server.Chat;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Setting;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -10,12 +11,14 @@ namespace Necromancy.Server.Packet.Receive
     {
         private readonly Map _map;
         private readonly MapPosition _mapPosition;
+        private readonly NecSetting _setting;
 
-        public RecvMapChangeForce(Map map, MapPosition mapPosition)
+        public RecvMapChangeForce(Map map, MapPosition mapPosition, NecSetting setting)
             : base((ushort) AreaPacketId.recv_map_change_force, ServerType.Area)
         {
             _map = map;
             _mapPosition = mapPosition;
+            _setting = setting;
         }
 
         protected override IBuffer ToBuffer()
@@ -23,8 +26,8 @@ namespace Necromancy.Server.Packet.Receive
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(_map.Id); //MapSerialID
             res.WriteInt32(_map.Id); //MapID
-            res.WriteFixedString("127.0.0.1", 65); //IP
-            res.WriteInt16(60002); //Port
+            res.WriteFixedString(_setting.DataAreaIpAddress, 65); //IP
+            res.WriteInt16(_setting.AreaPort); //Port
             if (_mapPosition == null)
             {
                 res.WriteFloat(_map.X); //X Pos

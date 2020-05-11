@@ -156,8 +156,8 @@ namespace Necromancy.Server.Packet.Area
             //sub_484B00 map ip and connection
             res.WriteInt32(client.Character.MapId); //MapSerialID
             res.WriteInt32(client.Character.MapId); //MapID
-            res.WriteFixedString("127.0.0.1", 65); //IP
-            res.WriteInt16(60002); //Port
+            res.WriteFixedString(Settings.DataAreaIpAddress, 65); //IP
+            res.WriteInt16(Settings.AreaPort); //Port
 
             //sub_484420 // Map Spawn coord
             res.WriteFloat(client.Character.X); //X Pos

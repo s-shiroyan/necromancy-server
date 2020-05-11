@@ -20,7 +20,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             Server.Maps.TryGet(character.MapId, out Map map);
             MapPosition mapPos = new MapPosition(character.X, character.Y, character.Z, character.Heading);
             map.Enter(client, mapPos);
-            Server.Router.Send(new RecvMapChangeForce(map, mapPos), client);
+            Server.Router.Send(new RecvMapChangeForce(map, mapPos, Server.Setting), client);
         }
         
         public override AccountStateType AccountState => AccountStateType.User;

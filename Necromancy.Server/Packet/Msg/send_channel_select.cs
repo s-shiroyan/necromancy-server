@@ -31,8 +31,8 @@ namespace Necromancy.Server.Packet.Msg
             //sub_4E4210_2341  // impacts map spawn ID (old Comment)
             res.WriteInt32(map.Id); //MapSerialID
             res.WriteInt32(channelId); //channel??????
-            res.WriteFixedString("127.0.0.1", 0x41); //IP?
-            res.WriteInt16(60002); //Port
+            res.WriteFixedString(Settings.DataAreaIpAddress, 0x41); //IP?
+            res.WriteInt16(Settings.AreaPort); //Port
 
             //sub_484420   //  does not impact map spawn coord (old Comment)
             res.WriteFloat(client.Character.X); //X Pos

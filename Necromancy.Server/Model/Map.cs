@@ -178,7 +178,7 @@ namespace Necromancy.Server.Model
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
             Enter(client, mapPosition);
-            _server.Router.Send(new RecvMapChangeForce(this, mapPosition), client);
+            _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
             EnterSyncOk(client);
         }
 
