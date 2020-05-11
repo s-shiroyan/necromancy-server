@@ -40,7 +40,6 @@ namespace Necromancy.Server.Packet
 
         public byte[] Write(NecPacket packet)
         {
-            //Thread.Sleep(400);
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
 

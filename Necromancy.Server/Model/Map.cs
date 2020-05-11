@@ -183,7 +183,7 @@ namespace Necromancy.Server.Model
         {
             Enter(client, mapPosition);
             _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
-           // EnterSyncOk(client);
+            // EnterSyncOk(client);
         }
 
         public void EnterSyncOk(NecClient client)
@@ -224,42 +224,42 @@ namespace Necromancy.Server.Model
 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
-       //     if (client.Union != null)
-       //     {
-       //         RecvDataNotifyUnionData myUnionData = new RecvDataNotifyUnionData(client.Character, client.Union.Name);
-       //         _server.Router.Send(this, myUnionData, client);
-       //     }
+            if (client.Union != null)
+            {
+                RecvDataNotifyUnionData myUnionData = new RecvDataNotifyUnionData(client.Character, client.Union.Name);
+                _server.Router.Send(this, myUnionData, client);
+            }
 
-       //  foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
-       //  {
-       //      if (monsterSpawn.Active == true)
-       //      {
-       //          monsterSpawn.SpawnActive = true;
-       //          if (!monsterSpawn.TaskActive)
-       //          {
-       //              MonsterTask monsterTask = new MonsterTask(_server, monsterSpawn);
-       //              if (monsterSpawn.defaultCoords)
-       //                  monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
-       //              else
-       //                  monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
-       //              monsterTask.Start();
-       //          }
-       //          else
-       //          {
-       //              if (monsterSpawn.MonsterVisible)
-       //              {
-       //                  Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
-       //                  RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
-       //                  _server.Router.Send(monsterData, client);
-       //                  if (!monsterSpawn.GetAgro())
-       //                  {
-       //                      monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte) 2,
-       //                          (byte) 0);
-       //                  }
-       //              }
-       //          }
-       //      }
-       //  }
+            foreach (MonsterSpawn monsterSpawn in this.MonsterSpawns.Values)
+            {
+                if (monsterSpawn.Active == true)
+                {
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
+                    {
+                        MonsterTask monsterTask = new MonsterTask(_server, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+                    else
+                    {
+                        if (monsterSpawn.MonsterVisible)
+                        {
+                            Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                            RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
+                            _server.Router.Send(monsterData, client);
+                            if (!monsterSpawn.GetAgro())
+                            {
+                                monsterSpawn.MonsterMove(_server, client, monsterSpawn.MonsterWalkVelocity, (byte) 2,
+                                    (byte) 0);
+                            }
+                        }
+                    }
+                }
+            }
 
 
             //on successful map entry, update the client database position
