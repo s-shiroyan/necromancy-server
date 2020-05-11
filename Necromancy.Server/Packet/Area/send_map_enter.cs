@@ -19,9 +19,6 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0); //error check. must be 0
             res.WriteByte(0); //Bool - play cutscene. 1 yes, 0 no?
             Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res, ServerType.Area);
-            
-           
-            
         }
 
         private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
@@ -33,10 +30,7 @@ namespace Necromancy.Server.Packet.Area
         private void SendMapBGM(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
-
             res.WriteInt32(100401);
-
-
             Router.Send(client.Map, (ushort) AreaPacketId.recv_map_update_bgm, res, ServerType.Area, client);
         }
     }

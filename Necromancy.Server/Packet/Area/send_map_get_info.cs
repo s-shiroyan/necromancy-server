@@ -78,7 +78,7 @@ namespace Necromancy.Server.Packet.Area
                 else
                 {
                     RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
-                   // Router.Send(npcData, client);
+                    Router.Send(npcData, client);
                 }
             }
 
