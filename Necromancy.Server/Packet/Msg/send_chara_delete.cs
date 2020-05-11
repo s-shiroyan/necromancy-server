@@ -9,12 +9,12 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_delete : ClientHandler
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_delete));
+
         private readonly NecServer _server;
 
         public send_chara_delete(NecServer server) : base(server)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             _server = server;
         }
 
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             int characterId = packet.Data.ReadInt32();
-            _logger.Debug($"CharacterId [{characterId}] deleted from Soul [{client.Soul.Name}]");
+            Logger.Debug($"CharacterId [{characterId}] deleted from Soul [{client.Soul.Name}]");
             _server.Database.DeleteCharacter(characterId);
             IBuffer res = BufferProvider.Provide();
 

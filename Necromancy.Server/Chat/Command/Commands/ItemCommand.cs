@@ -14,26 +14,26 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class ItemCommand : ServerChatCommand
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(ItemCommand));
+        
         private readonly NecServer _server;
         InventoryItem invItem;
 
         public ItemCommand(NecServer server) : base(server)
         {
             _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
         }
 
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            _logger.Debug($"Entering");
+            Logger.Debug($"Entering");
             if (command[0] == null)
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid argument: {command[0]}"));
             }
 
-            _logger.Debug($"command [0]");
+            Logger.Debug($"command [0]");
 
             int.TryParse(command[1], out int x);
             int.TryParse(command[2], out int y);
@@ -57,7 +57,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                     if (item == null)
                         return;
-                    _logger.Debug($"dagger instanceId [{item.InstanceId}]");
+                    Logger.Debug($"dagger instanceId [{item.InstanceId}]");
                     break;
                 case "healpot":
                     Item healItem = null;
@@ -70,7 +70,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         //healItem = SendItemInstance(client, "Test");
                     }
 
-                    _logger.Debug($"dagger instanceId [{healItem.InstanceId}]");
+                    Logger.Debug($"dagger instanceId [{healItem.InstanceId}]");
                     break;
                 case "create":
                     Item createItem = null;
@@ -83,7 +83,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         //createItem = SendItemInstance(client, "Test");
                     }
 
-                    _logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
+                    Logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
                     break;
                 case "draw":
                     RecvPartyNotifyAddDrawItem itemMsg = new RecvPartyNotifyAddDrawItem((ulong) x, 30.0F, 0);
@@ -164,7 +164,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                     if (item == null)
                         return;
-                    _logger.Debug($"dagger instanceId [{item.InstanceId}]");
+                    Logger.Debug($"dagger instanceId [{item.InstanceId}]");
                     break;
                 case "rottenleathermail":
                 case "rlm":
@@ -179,7 +179,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                     if (item == null)
                         return;
-                    _logger.Debug($"dagger instanceId [{item.InstanceId}]");
+                    Logger.Debug($"dagger instanceId [{item.InstanceId}]");
                     break;
                 case "buff":
                     Buff[] selfBuffs = new Buff[1];

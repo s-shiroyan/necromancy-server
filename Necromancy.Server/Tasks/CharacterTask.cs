@@ -14,9 +14,11 @@ using Necromancy.Server.Packet.Response;
 namespace Necromancy.Server.Tasks
 {
     public class CharacterTask : PeriodicTask
+
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(CharacterTask));
+
         private readonly object LogoutLock = new object();
-        private readonly NecLogger _logger;
         private NecServer _server;
         private NecClient _client;
         private int tickTime;
@@ -26,7 +28,6 @@ namespace Necromancy.Server.Tasks
 
         public CharacterTask(NecServer server, NecClient client)
         {
-            _logger = LogProvider.Logger<NecLogger>(server);
             _server = server;
             _client = client;
             tickTime = 500;
@@ -110,7 +111,7 @@ namespace Necromancy.Server.Tasks
                 _logoutType = logoutType;
             }
 
-            _logger.Debug($"logoutTime [{logoutTime}] _logoutType [{_logoutType}]");
+            Logger.Debug($"logoutTime [{logoutTime}] _logoutType [{_logoutType}]");
         }
 
         private void LogOutRequest()
@@ -121,7 +122,7 @@ namespace Necromancy.Server.Tasks
             IBuffer res3 = BufferProvider.Provide();
             IBuffer res4 = BufferProvider.Provide();
             IBuffer res5 = BufferProvider.Provide();
-            _logger.Debug($"_logoutType [{_logoutType}]");
+            Logger.Debug($"_logoutType [{_logoutType}]");
             if (_logoutType == 0x00) // Return to Title   also   Exit Game
             {
                 res = null;

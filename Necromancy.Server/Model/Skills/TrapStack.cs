@@ -12,10 +12,11 @@ namespace Necromancy.Server.Model.Skills
 {
     public class TrapStack : IInstance
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(TrapStack));
+        
         public uint InstanceId { get; set; }
 
         private NecClient _client;
-        private readonly NecLogger _logger;
         private readonly NecServer _server;
         private uint _ownerInstanceId;
         public int _trapRadius { get; }
@@ -30,13 +31,12 @@ namespace Necromancy.Server.Model.Skills
             _map = _client.Map;
             _ownerInstanceId = client.Character.InstanceId;
             _trapPos = trapPos;
-            _logger = LogProvider.Logger<NecLogger>(this);
             _trapRadius = trapRadius;
         }
 
         public void StartCast(SkillBaseSetting skillBase)
         {
-            _logger.Debug(
+            Logger.Debug(
                 $"Trap StartCast skillBase.Id [{skillBase.Id}] skillBase.CastingTime [{skillBase.CastingTime}]");
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(skillBase.Id, skillBase.CastingTime);
             _server.Router.Send(startCast, _client);
@@ -56,7 +56,7 @@ namespace Necromancy.Server.Model.Skills
             Vector3 trgCoord = new Vector3(_client.Character.X, _client.Character.Y, _client.Character.Z);
             if (!int.TryParse($"{trap._skillId}".Substring(1, 6) + 1, out int effectId))
             {
-                _logger.Error($"Creating effectId from skillid [{trap._skillId}]");
+                Logger.Error($"Creating effectId from skillid [{trap._skillId}]");
             }
 
             List<PacketResponse> brList = new List<PacketResponse>();
@@ -68,7 +68,7 @@ namespace Necromancy.Server.Model.Skills
             brList.Add(brExec);
             brList.Add(brEnd);
             _server.Router.Send(_client.Map, brList);
-            _logger.Debug($"SpearTrap effectId [{effectId}]");
+            Logger.Debug($"SpearTrap effectId [{effectId}]");
             RecvDataNotifyEoData eoData = new RecvDataNotifyEoData(trap.InstanceId, _client.Character.InstanceId,
                 effectId, trgCoord, 2, 2);
             _server.Router.Send(_map, eoData);

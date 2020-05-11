@@ -1,21 +1,22 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
-using System.Collections.Generic;
 
 namespace Necromancy.Server.Packet.Area
 {
     public class send_movement_info : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_movement_info));
+
         public send_movement_info(NecServer server) : base(server)
         {
-
         }
 
-        public override ushort Id => (ushort)AreaPacketId.send_movement_info;
-
+        public override ushort Id => (ushort) AreaPacketId.send_movement_info;
 
 
         public override void Handle(NecClient client, NecPacket packet)
@@ -25,71 +26,71 @@ namespace Necromancy.Server.Packet.Area
             {
                 return;
             }
-                
-                client.Character.X = packet.Data.ReadFloat();
-                client.Character.Y = packet.Data.ReadFloat();
-                client.Character.Z = packet.Data.ReadFloat();
 
-                float percentMovementIsX = packet.Data.ReadFloat();
-                float percentMovementIsY = packet.Data.ReadFloat();
-                float verticalMovementSpeedMultiplier = packet.Data.ReadFloat(); //  Confirm by climbing ladder at 1 up or -1 down. or Jumping
+            client.Character.X = packet.Data.ReadFloat();
+            client.Character.Y = packet.Data.ReadFloat();
+            client.Character.Z = packet.Data.ReadFloat();
 
-                float movementSpeed = packet.Data.ReadFloat();
+            float percentMovementIsX = packet.Data.ReadFloat();
+            float percentMovementIsY = packet.Data.ReadFloat();
+            float verticalMovementSpeedMultiplier =
+                packet.Data.ReadFloat(); //  Confirm by climbing ladder at 1 up or -1 down. or Jumping
 
-                float horizontalMovementSpeedMultiplier = packet.Data.ReadFloat(); //always 1 when moving.  Confirm by Coliding with an  object and watching it Dip.
+            float movementSpeed = packet.Data.ReadFloat();
 
-                client.Character.movementPose = packet.Data.ReadByte(); //Character Movement Type: Type 8 Falling / Jumping. Type 3 normal:  Type 9  climbing
+            float horizontalMovementSpeedMultiplier =
+                packet.Data
+                    .ReadFloat(); //always 1 when moving.  Confirm by Coliding with an  object and watching it Dip.
 
-                client.Character.movementAnim = packet.Data.ReadByte(); //Action Modifier Byte
-                                                                        //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
-                                                                        //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
-                                                                        //81  jumping up,                //84  jumping down       //85 landing
+            client.Character.movementPose =
+                packet.Data.ReadByte(); //Character Movement Type: Type 8 Falling / Jumping. Type 3 normal:  Type 9  climbing
 
-
-                //Battle Logic until we find out how to write battle byte requrements in 'send_data_get_Self_chara_data_request' so the client can send the right info
-                if (client.Character.battleAnim !=0)
-                {
-                client.Character.movementPose = 8 /*client.Character.battlePose*/;  //Setting the pose byte to the 2nd and 3rd digits of our equipped weapon ID. For battle!!
-                client.Character.movementAnim = client.Character.battleAnim; //Setting the animation byte to an animation from C:\WO\Chara\chara\00\041\anim. 231, 232, 233, and 244 are attack animations
-                }
+            client.Character.movementAnim = packet.Data.ReadByte(); //Action Modifier Byte
+            //146 :ladder left Foot Up.      //147 Ladder right Foot Up. 
+            //151 Left Foot Down,            //150 Right Root Down .. //155 falling off ladder
+            //81  jumping up,                //84  jumping down       //85 landing
 
 
+            //Battle Logic until we find out how to write battle byte requrements in 'send_data_get_Self_chara_data_request' so the client can send the right info
+            if (client.Character.battleAnim != 0)
+            {
+                client.Character.movementPose = 8 /*client.Character.battlePose*/
+                    ; //Setting the pose byte to the 2nd and 3rd digits of our equipped weapon ID. For battle!!
+                client.Character.movementAnim =
+                    client.Character
+                        .battleAnim; //Setting the animation byte to an animation from C:\WO\Chara\chara\00\041\anim. 231, 232, 233, and 244 are attack animations
+            }
 
 
+            IBuffer res2 = BufferProvider.Provide();
 
-                IBuffer res2 = BufferProvider.Provide();
+            res2.WriteUInt32(client.Character.movementId); //Character ID
+            res2.WriteFloat(client.Character.X);
+            res2.WriteFloat(client.Character.Y);
+            res2.WriteFloat(client.Character.Z);
 
-                res2.WriteUInt32(client.Character.movementId);//Character ID
-                res2.WriteFloat(client.Character.X);
-                res2.WriteFloat(client.Character.Y);
-                res2.WriteFloat(client.Character.Z);
-                                               
-                res2.WriteFloat(percentMovementIsX);
-                res2.WriteFloat(percentMovementIsY);
-                res2.WriteFloat(verticalMovementSpeedMultiplier);
-               
-                res2.WriteFloat(movementSpeed);
+            res2.WriteFloat(percentMovementIsX);
+            res2.WriteFloat(percentMovementIsY);
+            res2.WriteFloat(verticalMovementSpeedMultiplier);
 
-                res2.WriteFloat(horizontalMovementSpeedMultiplier);
+            res2.WriteFloat(movementSpeed);
 
-                res2.WriteByte(client.Character.movementPose); //MOVEMENT ANIM
-                res2.WriteByte(client.Character.movementAnim);//JUMP & FALLING ANIM
+            res2.WriteFloat(horizontalMovementSpeedMultiplier);
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_0x8D92, res2, ServerType.Area, client);
+            res2.WriteByte(client.Character.movementPose); //MOVEMENT ANIM
+            res2.WriteByte(client.Character.movementAnim); //JUMP & FALLING ANIM
 
-                client.Character.battleAnim = 0; //re-setting the byte to 0 at the end of every iteration to allow for normal movements.
-                if (client.Character.castingSkill)
-                {
-                    RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
-                    Router.Send(client.Map, cancelCast.ToPacket());
-                    client.Character.activeSkillInstance = 0;
-                    client.Character.castingSkill = false;
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_0x8D92, res2, ServerType.Area, client);
 
-                }
-
-
-
-
+            client.Character.battleAnim =
+                0; //re-setting the byte to 0 at the end of every iteration to allow for normal movements.
+            if (client.Character.castingSkill)
+            {
+                RecvSkillCastCancel cancelCast = new RecvSkillCastCancel();
+                Router.Send(client.Map, cancelCast.ToPacket());
+                client.Character.activeSkillInstance = 0;
+                client.Character.castingSkill = false;
+            }
 
 
             //Uncomment for debugging movement. causes heavy console output. recommend commenting out "Packet" method in NecLogger.CS when debugging movement
@@ -118,8 +119,6 @@ namespace Necromancy.Server.Packet.Area
             ///////////
 
 
-
-
             if (client.Character.takeover == true)
             {
                 Logger.Debug($"Moving object ID {client.Character.eventSelectReadyCode}.");
@@ -132,15 +131,13 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteFloat(client.Character.Y);
                 res.WriteFloat(client.Character.Z);
                 res.WriteByte(client.Character.Heading); //Heading
-                res.WriteByte(client.Character.movementAnim);//state
-                
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
-                Router.Send(client, (ushort)AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
+                res.WriteByte(client.Character.movementAnim); //state
 
-
+                Router.Send(client.Map, (ushort) AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
             }
-            //CheckMapChange(client);
 
+            //CheckMapChange(client);
         }
 
         private void CheckMapChange(NecClient client)
@@ -176,6 +173,7 @@ namespace Necromancy.Server.Packet.Area
                         mapPos.Heading = 132;
                         map.EnterForce(client, mapPos);
                     }
+
                     break;
                 case 1001002:
                 case 1001902:
@@ -197,6 +195,7 @@ namespace Necromancy.Server.Packet.Area
                         mapPos.Heading = 0;
                         map.EnterForce(client, mapPos);
                     }
+
                     break;
                 case 1001003:
                     if ((client.Character.X < 3926 && client.Character.X > 3518) && client.Character.Y < -7511)
@@ -208,6 +207,7 @@ namespace Necromancy.Server.Packet.Area
                         mapPos.Heading = 87;
                         map.EnterForce(client, mapPos);
                     }
+
                     break;
                 case 1001004:
                     if ((client.Character.X < 1046 && client.Character.X > -1062) && client.Character.Y > 5300)
@@ -228,6 +228,7 @@ namespace Necromancy.Server.Packet.Area
                         mapPos.Heading = 67;
                         map.EnterForce(client, mapPos);
                     }
+
                     break;
                 case 1001005:
                     break;
@@ -243,6 +244,7 @@ namespace Necromancy.Server.Packet.Area
                         mapPos.Heading = 46;
                         map.EnterForce(client, mapPos);
                     }
+
                     break;
                 case 1001008:
                     break;

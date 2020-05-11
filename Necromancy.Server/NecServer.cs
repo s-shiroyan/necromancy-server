@@ -43,6 +43,8 @@ namespace Necromancy.Server
 {
     public class NecServer
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecServer));
+        
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
@@ -61,7 +63,6 @@ namespace Necromancy.Server
         private readonly AsyncEventServer _authServer;
         private readonly AsyncEventServer _msgServer;
         private readonly AsyncEventServer _areaServer;
-        private readonly NecLogger _logger;
         private volatile bool _running;
 
         public NecServer(NecSetting setting)
@@ -70,7 +71,6 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
 
             LogProvider.Configure<NecLogger>(Setting);
-            _logger = LogProvider.Logger<NecLogger>(this);
 
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();
@@ -243,7 +243,7 @@ namespace Necromancy.Server
             {
                 Instances.AssignInstance(character);
                 Characters.Add(character);
-                _logger.Debug(
+                Logger.Debug(
                     $"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
             }
         }

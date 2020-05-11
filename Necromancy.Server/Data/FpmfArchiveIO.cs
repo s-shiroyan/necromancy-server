@@ -20,12 +20,6 @@ namespace Necromancy.Server.Data
 
         private static byte[] MagicBytes = {0x46, 0x50, 0x4D, 0x46};
         private static byte[] MagicBytes_WOITM = {0x57, 0x4F, 0x49, 0x54, 0x4D};
-        private ILogger _logger;
-
-        public FpmfArchiveIO()
-        {
-            _logger = LogProvider.Logger(this);
-        }
 
         public FpmfArchive Open(string hedFilePath, string outPath = "")
         {
@@ -104,7 +98,7 @@ namespace Necromancy.Server.Data
                     $"Could not determinate root path. (Rel:{relativeArchiveDir} Hed:{hedPath}  Root:{rootPath}");
             }
 
-            _logger.Info($"Using Root:{rootPath}");
+            Logger.Info($"Using Root:{rootPath}");
             Dictionary<uint, IBuffer> datBufferPool = new Dictionary<uint, IBuffer>();
             for (int i = 0; i < numFiles; i++)
             {
@@ -121,7 +115,7 @@ namespace Necromancy.Server.Data
 
                 uint unknown15 = addFileName(archiveFile.FilePath);
                 uint unknown16 = addFileName(archiveFile.DirectoryPath);
-                _logger.Info($"Processing: {archiveFile.FilePath}");
+                Logger.Info($"Processing: {archiveFile.FilePath}");
 
                 IBuffer datBuffer;
                 if (datBufferPool.ContainsKey(archiveFile.DatNumber))
@@ -518,7 +512,7 @@ namespace Necromancy.Server.Data
                                 */
             }
 
-            _logger.Info("done");
+            Logger.Info("done");
         }
 
         public uint addFileName(string path)
@@ -586,11 +580,11 @@ namespace Necromancy.Server.Data
                 if (str.Contains(","))
                 {
                     str.Add(test);
-                    _logger.Info(test);
+                    Logger.Info(test);
                 }
             }
 
-            _logger.Info("done");
+            Logger.Info("done");
             return itemRet;
         }
 

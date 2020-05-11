@@ -1,6 +1,6 @@
-using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
@@ -11,7 +11,8 @@ namespace Necromancy.Server.Model
 {
     public class Character : IInstance
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Character));
+
         private readonly object StateLock = new object();
         private readonly object HPLock = new object();
         private readonly object DamageLock = new object();
@@ -163,7 +164,6 @@ namespace Necromancy.Server.Model
 
         public Character()
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Id = -1;
             AccountId = -1;
             SoulId = -1;

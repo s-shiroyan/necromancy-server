@@ -1,5 +1,3 @@
-using Arrowgene.Logging;
-using Necromancy.Server.Logging;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -7,8 +5,6 @@ namespace Necromancy.Server.Model
 {
     public class MoveItem : Event
     {
-        private readonly NecLogger _logger;
-
         public byte
             toStoreType; // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
 
@@ -23,7 +19,6 @@ namespace Necromancy.Server.Model
         public MoveItem()
         {
             EventType = (ushort) AreaPacketId.recv_event_request_int;
-            _logger = LogProvider.Logger<NecLogger>(this);
         }
 
         public void Move(NecServer server, NecClient client)

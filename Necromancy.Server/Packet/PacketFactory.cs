@@ -12,12 +12,13 @@ namespace Necromancy.Server.Packet
 {
     public class PacketFactory
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(PacketFactory));
+
         public const int PacketIdSize = 2;
         public const int PacketLengthTypeSize = 1;
         public const int HeartbeatPacketBodySize = 8;
         public const int Unknown1PacketBodySize = 8;
         public const int DisconnectPacketBodySize = 4;
-
 
         private bool _readHeader;
         private bool _readPacketLengthType;
@@ -25,7 +26,6 @@ namespace Necromancy.Server.Packet
         private ushort _id;
         private int _position;
         private IBuffer _buffer;
-        private readonly NecLogger _logger;
         private readonly NecSetting _setting;
         private byte[] _header;
         private PacketType _packetType;
@@ -33,7 +33,6 @@ namespace Necromancy.Server.Packet
 
         public PacketFactory(NecSetting setting)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             _setting = setting;
             Reset();
         }
@@ -85,7 +84,7 @@ namespace Necromancy.Server.Packet
                     }
                     else
                     {
-                        _logger.Error($"{dataSize} to big");
+                        Logger.Error($"{dataSize} to big");
                         return null;
                     }
 
@@ -126,7 +125,7 @@ namespace Necromancy.Server.Packet
                     byte lengthType = _buffer.ReadByte();
                     if (!Enum.IsDefined(typeof(PacketType), lengthType))
                     {
-                        _logger.Error($"PacketType: '{lengthType}' not found");
+                        Logger.Error($"PacketType: '{lengthType}' not found");
                         Reset();
                         return packets;
                     }
@@ -192,8 +191,8 @@ namespace Necromancy.Server.Packet
                         }
                         default:
                         {
-                            // TODO update arrowgene service to read uint24 && int24
-                            _logger.Error($"PacketType: '{_packetType}' not supported");
+                            // TODO update arrowgene buffer to read uint24 && int24
+                            Logger.Error($"PacketType: '{_packetType}' not supported");
                             Reset();
                             return packets;
                         }

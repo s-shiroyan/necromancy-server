@@ -1,5 +1,7 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,9 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_data_get_self_chara_data_request : ClientHandler
     {
+        private static readonly NecLogger Logger =
+            LogProvider.Logger<NecLogger>(typeof(send_data_get_self_chara_data_request));
+
         public send_data_get_self_chara_data_request(NecServer server) : base(server)
         {
         }
@@ -53,11 +58,11 @@ namespace Necromancy.Server.Packet.Area
             // total stat level includes bonus'?
             res.WriteUInt16(client.Character.Strength); // str
             res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short)(client.Character.dexterity+3)); // dex
+            res.WriteInt16((short) (client.Character.dexterity + 3)); // dex
             res.WriteUInt16(client.Character.agility); // agi
             res.WriteUInt16(client.Character.intelligence); // int
             res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short)(client.Character.luck+4)); // luk
+            res.WriteInt16((short) (client.Character.luck + 4)); // luk
 
             // mag atk atrb
             res.WriteInt16(5); // fire
@@ -110,47 +115,47 @@ namespace Necromancy.Server.Packet.Area
             // characters stats
             res.WriteUInt16(client.Character.Strength); // str
             res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short)(client.Character.dexterity)); // dex
+            res.WriteInt16((short) (client.Character.dexterity)); // dex
             res.WriteUInt16(client.Character.agility); // agi
             res.WriteUInt16(client.Character.intelligence); // int
             res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short)(client.Character.luck)); // luk
+            res.WriteInt16((short) (client.Character.luck)); // luk
 
             // nothing
             res.WriteInt16(1);
             res.WriteInt16(2);
             res.WriteInt16(3);
             res.WriteInt16(4);
-            res.WriteInt16(5); 
-            res.WriteInt16(6); 
-            res.WriteInt16(7); 
-            res.WriteInt16(8); 
-            res.WriteInt16(9); 
+            res.WriteInt16(5);
+            res.WriteInt16(6);
+            res.WriteInt16(7);
+            res.WriteInt16(8);
+            res.WriteInt16(9);
 
 
             // nothing
-            res.WriteInt16(1); 
-            res.WriteInt16(2); 
-            res.WriteInt16(3); 
-            res.WriteInt16(4); 
-            res.WriteInt16(5); 
-            res.WriteInt16(6); 
-            res.WriteInt16(7); 
-            res.WriteInt16(8); 
-            res.WriteInt16(9); 
+            res.WriteInt16(1);
+            res.WriteInt16(2);
+            res.WriteInt16(3);
+            res.WriteInt16(4);
+            res.WriteInt16(5);
+            res.WriteInt16(6);
+            res.WriteInt16(7);
+            res.WriteInt16(8);
+            res.WriteInt16(9);
 
             // nothing
-            res.WriteInt16(1); 
-            res.WriteInt16(2); 
-            res.WriteInt16(3); 
-            res.WriteInt16(4); 
-            res.WriteInt16(5); 
-            res.WriteInt16(6); 
-            res.WriteInt16(7); 
-            res.WriteInt16(8); 
-            res.WriteInt16(9); 
-            res.WriteInt16(10); 
-            res.WriteInt16(11); 
+            res.WriteInt16(1);
+            res.WriteInt16(2);
+            res.WriteInt16(3);
+            res.WriteInt16(4);
+            res.WriteInt16(5);
+            res.WriteInt16(6);
+            res.WriteInt16(7);
+            res.WriteInt16(8);
+            res.WriteInt16(9);
+            res.WriteInt16(10);
+            res.WriteInt16(11);
 
 
             //sub_484B00 map ip and connection
@@ -179,9 +184,9 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0); // 0 is white,1 yellow 2 red 3+ skull
             res.WriteByte(0); //Beginner protection (bool)
             res.WriteByte(50); //Level cap
-            res.WriteByte(0); 
-            res.WriteByte(0); 
-            res.WriteByte(0); 
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
 
             //sub_read_3-int16 unknown
             res.WriteInt16(50); // HP Consumption Rate?
@@ -189,10 +194,10 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(50); // OD Consumption Rate (if greater than currentOD, Can not sprint)
 
             //sub_4833D0
-            res.WriteInt64(0); 
+            res.WriteInt64(0);
 
             //sub_4833D0
-            res.WriteInt64(0); 
+            res.WriteInt64(0);
 
             //sub_4834A0
             res.WriteFixedString($"{client.Soul.Name} Shop", 97); //Shopname
@@ -214,7 +219,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries); //has to be less than 19(defines how many int32s to read?)
 
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, client.Character ,numEntries);
+            LoadEquip.SlotSetup(res, client.Character, numEntries);
 
 
             //sub_483420

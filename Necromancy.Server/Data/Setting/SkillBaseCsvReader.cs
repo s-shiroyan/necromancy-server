@@ -4,12 +4,7 @@ namespace Necromancy.Server.Data.Setting
 {
     public class SkillBaseCsvReader : CsvReader<SkillBaseSetting>
     {
-        private readonly ILogger _logger;
-
-        public SkillBaseCsvReader()
-        {
-            _logger = LogProvider.Logger(this);
-        }
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(SkillBaseCsvReader));
 
         protected override int NumExpectedItems => 40;
 
@@ -17,7 +12,7 @@ namespace Necromancy.Server.Data.Setting
         {
             if (!int.TryParse(properties[0], out int id))
             {
-                _logger.Debug($"First entry empty!!");
+                Logger.Debug("First entry empty!!");
                 return null;
             }
 

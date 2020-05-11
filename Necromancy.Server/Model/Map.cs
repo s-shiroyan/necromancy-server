@@ -12,12 +12,14 @@ using Necromancy.Server.Tasks;
 namespace Necromancy.Server.Model
 {
     public class Map
+
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Map));
+
         private readonly object TrapLock = new object();
 
         public const int NewCharacterMapId = 1001902; //2006000
 
-        private readonly NecLogger _logger;
         private readonly NecServer _server;
         public int Id { get; set; }
         public float X { get; }
@@ -44,7 +46,6 @@ namespace Necromancy.Server.Model
         public Map(MapSetting setting, NecServer server)
         {
             _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
             ClientLookup = new ClientLookup();
             NpcSpawns = new Dictionary<uint, NpcSpawn>();
             MonsterSpawns = new Dictionary<uint, MonsterSpawn>();
@@ -104,14 +105,14 @@ namespace Necromancy.Server.Model
                 if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId,
                     out ModelCommonSetting modelSetting))
                 {
-                    _logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
+                    Logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
                     continue;
                 }
 
                 if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId,
                     out MonsterSetting monsterSetting))
                 {
-                    _logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
+                    Logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
                     continue;
                 }
 
@@ -197,7 +198,7 @@ namespace Necromancy.Server.Model
                 client.Map.Leave(client);
             }
 
-            _logger.Info(client, $"Entering Map: {Id}:{FullName}");
+            Logger.Info(client, $"Entering Map: {Id}:{FullName}");
             // If position is passed in use it and set character position, if null then use map default coords
             // If this isn't set here, the wrong coords are in character until send_movement_info updates it. 
             if (mapPosition != null)
@@ -219,7 +220,7 @@ namespace Necromancy.Server.Model
             client.Character.MapId = Id;
             client.Character.mapChange = false;
             ClientLookup.Add(client);
-            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
+            Logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
 
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
@@ -247,7 +248,7 @@ namespace Necromancy.Server.Model
                     {
                         if (monsterSpawn.MonsterVisible)
                         {
-                            _logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
+                            Logger.Debug($"MonsterTask already running for [{monsterSpawn.Name}]");
                             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                             _server.Router.Send(monsterData, client);
                             if (!monsterSpawn.GetAgro())
@@ -264,17 +265,17 @@ namespace Necromancy.Server.Model
             //on successful map entry, update the client database position
             if (!_server.Database.UpdateCharacter(client.Character))
             {
-                _logger.Error("Could not update the database with current known player position");
+                Logger.Error("Could not update the database with current known player position");
             }
         }
 
         public void Leave(NecClient client)
         {
-            _logger.Info(client, $"Leaving Map: {Id}:{FullName}");
+            Logger.Info(client, $"Leaving Map: {Id}:{FullName}");
             ClientLookup.Remove(client);
             if (!_server.Database.UpdateCharacter(client.Character))
             {
-                _logger.Error("Could not update the database with last known player position");
+                Logger.Error("Could not update the database with last known player position");
             }
 
             client.Map = null;
@@ -289,7 +290,7 @@ namespace Necromancy.Server.Model
                 }
             }
 
-            _logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
+            Logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
         }
 
         public bool MonsterInRange(Vector3 position, int range)

@@ -1,21 +1,21 @@
+using System.Collections.Generic;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
-using System.Collections.Generic;
-using Arrowgene.Logging;
 
 namespace Necromancy.Server.Model
 {
     public class DropTables
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(DropTables));
+
         private readonly NecServer _server;
         private List<DropTable> dropTables;
 
         public DropTables(NecServer server)
         {
             _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
             dropTables = new List<DropTable>();
             DropTable beetle = new DropTable(40101);
             DropTableItem item1 = new DropTableItem();
@@ -52,14 +52,14 @@ namespace Necromancy.Server.Model
                 List<DropTableItem> ItemDrop = monsterDrop.FindAll(roll);
                 if (ItemDrop.Count == 1)
                 {
-                    _logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
+                    Logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
                     if (!_server.SettingRepository.Items.TryGetValue(ItemDrop[0].ItemId, out ItemSetting itemSetting))
                     {
-                        _logger.Error($"Could not retrieve ItemSettings for ItemId [{ItemDrop[0].ItemId}]");
+                        Logger.Error($"Could not retrieve ItemSettings for ItemId [{ItemDrop[0].ItemId}]");
                         return null;
                     }
 
-                    _logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
+                    Logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
                     if (itemSetting.Id == 10200101)
                     {
                         itemSetting.IconType = 2;
@@ -80,7 +80,7 @@ namespace Necromancy.Server.Model
             {
                 if (!_server.SettingRepository.Items.TryGetValue(50100301, out ItemSetting itemSetting))
                 {
-                    _logger.Error($"Could not retrieve ItemSettings for default Item Camp");
+                    Logger.Error($"Could not retrieve ItemSettings for default Item Camp");
                     return null;
                 }
 

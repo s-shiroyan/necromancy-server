@@ -1,5 +1,7 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,8 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_refusallist_add_user : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_refusallist_add_user));
+
         public send_refusallist_add_user(NecServer server) : base(server)
         {
         }
@@ -20,20 +24,20 @@ namespace Necromancy.Server.Packet.Area
             int targetSoulId;
             int result;
 
-            try 
+            try
             {
                 Soul blockSoul = Server.Database.SelectSoulByName(targetSoulName);
                 targetSoulId = blockSoul.Id;
                 result = 0;
                 Logger.Debug($"target Soul Id is {targetSoulId}");
-            }         
+            }
             catch //(System.NullReferenceException NRE)
             {
                 targetSoulId = 0;
                 result = -20;
                 Logger.Debug($"Database Lookup for soul name {targetSoulName} returned null. Result {result}");
             }
-            
+
             /*
             REFUSAL_LIST	0	%s is added to your Block List
             REFUSAL_LIST	1	%s is removed from your Block List

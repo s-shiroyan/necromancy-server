@@ -14,12 +14,13 @@ namespace Necromancy.Server.Model
 {
     public class MonsterSpawn : IInstance
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MonsterSpawn));
+
         private readonly object AgroLock = new object();
         private readonly object TargetLock = new object();
         private readonly object AgroListLock = new object();
         private readonly object GotoLock = new object();
 
-        private readonly NecLogger _logger;
         public uint InstanceId { get; set; }
         public int Id { get; set; }
         public int MonsterId { get; set; }
@@ -67,7 +68,6 @@ namespace Necromancy.Server.Model
 
         public MonsterSpawn()
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Hp = new BaseStat(300, 300);
             RespawnTime = 10000;
             GotoDistance = 10;
@@ -287,7 +287,7 @@ namespace Necromancy.Server.Model
             {
                 if (server == null)
                 {
-                    _logger.Error($"NecServer is null!");
+                    Logger.Error($"NecServer is null!");
                     return;
                 }
 

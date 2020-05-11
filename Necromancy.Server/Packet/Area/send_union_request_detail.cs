@@ -1,14 +1,18 @@
+using System;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet.Id;
-using System;
-using Arrowgene.Buffers;
 
 namespace Necromancy.Server.Packet.Msg
 {
     public class send_union_request_detail : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_union_request_detail));
+
         public send_union_request_detail(NecServer server) : base(server)
         {
         }

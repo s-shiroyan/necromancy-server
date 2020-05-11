@@ -1,32 +1,34 @@
+using System;
+using System.Threading.Tasks;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
-using Necromancy.Server.Data.Setting;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Tasks;
-using System;
-using System.Numerics;
-using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
     public class send_map_get_info : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_map_get_info));
+
         private readonly NecServer _server;
+
         public send_map_get_info(NecServer server) : base(server)
         {
             _server = server;
         }
 
-        public override ushort Id => (ushort)AreaPacketId.send_map_get_info;
+        public override ushort Id => (ushort) AreaPacketId.send_map_get_info;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(client.Map.Id);
-            Router.Send(client, (ushort)AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_map_get_info_r, res, ServerType.Area);
 
             foreach (NecClient otherClient in client.Map.ClientLookup.GetAll())
             {
@@ -42,7 +44,8 @@ namespace Necromancy.Server.Packet.Area
 
                 if (otherClient.Union != null)
                 {
-                    RecvDataNotifyUnionData otherUnionData = new RecvDataNotifyUnionData(otherClient.Character, otherClient.Union.Name);
+                    RecvDataNotifyUnionData otherUnionData =
+                        new RecvDataNotifyUnionData(otherClient.Character, otherClient.Union.Name);
                     Router.Send(otherUnionData, client);
                 }
             }
@@ -60,8 +63,6 @@ namespace Necromancy.Server.Packet.Area
             Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith
             (t1 =>
                 {
-
-
                     foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
                     {
                         // This requires database changes to add the GGates to the Npc database!!!!!
@@ -115,24 +116,24 @@ namespace Necromancy.Server.Packet.Area
 
                     foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
                     {
-                        RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody,client);
+                        RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
                         Router.Send(deadBodyData, client);
                     }
 
                     foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
                     {
-                        MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y, mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
-                        RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
+                        MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
+                            mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
+                        RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
+                            mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
                         _server.Router.Send(mapLink, client);
                     }
+
                     // ToDo this should be a database lookup
                     RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
                     _server.Router.Send(mapFragments, client);
-
                 }
             ); //End of Task Delay
-
         }
-
     }
 }

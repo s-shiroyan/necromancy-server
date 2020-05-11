@@ -7,12 +7,12 @@ namespace Necromancy.Server.Database.Sql
 {
     public class ScriptRunner
     {
-        private const string DEFAULT_DELIMITER = ";";
+        private const string Delimiter = ";";
+        private const bool FullLineDelimiter = false;
 
-        private readonly ILogger _logger;
-        private IDatabase _database;
-        private string delimiter = DEFAULT_DELIMITER;
-        private bool fullLineDelimiter = false;
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(ScriptRunner));
+
+        private readonly IDatabase _database;
 
         /**
          * Default constructor
@@ -20,7 +20,6 @@ namespace Necromancy.Server.Database.Sql
         public ScriptRunner(IDatabase database)
         {
             _database = database;
-            _logger = LogProvider.Logger(this);
         }
 
         public void Run(string path)
@@ -48,11 +47,11 @@ namespace Necromancy.Server.Database.Sql
                     {
                         // Print comment
                     }
-                    else if (!fullLineDelimiter && trimmedLine.EndsWith(delimiter)
-                             || fullLineDelimiter && trimmedLine == delimiter)
+                    else if (!FullLineDelimiter && trimmedLine.EndsWith(Delimiter)
+                             || FullLineDelimiter && trimmedLine == Delimiter)
                     {
                         command.Append(
-                            line.Substring(0, line.LastIndexOf(delimiter, StringComparison.InvariantCulture)));
+                            line.Substring(0, line.LastIndexOf(Delimiter, StringComparison.InvariantCulture)));
                         command.Append(" ");
                         _database.Execute(command.ToString());
                         command = null;
@@ -79,8 +78,8 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception exception)
             {
-                _logger.Error($"Sql error at Line: {index}");
-                _logger.Exception(exception);
+                Logger.Error($"Sql error at Line: {index}");
+                Logger.Exception(exception);
             }
         }
     }

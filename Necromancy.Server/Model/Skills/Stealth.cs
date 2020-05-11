@@ -10,12 +10,13 @@ using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Model.Skills
 {
-    class Stealth : IInstance
+    public class Stealth : IInstance
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Stealth));
+
         public uint InstanceId { get; set; }
 
         private NecClient _client;
-        private readonly NecLogger _logger;
         private readonly NecServer _server;
         private int _skillid;
         private SkillBaseSetting _skillSetting;
@@ -25,16 +26,15 @@ namespace Necromancy.Server.Model.Skills
             _server = server;
             _client = client;
             _skillid = skillId;
-            _logger = LogProvider.Logger<NecLogger>(this);
             if (!_server.SettingRepository.SkillBase.TryGetValue(skillId, out _skillSetting))
             {
-                _logger.Error($"Could not get SkillBaseSetting for skillId : {skillId}");
+                Logger.Error($"Could not get SkillBaseSetting for skillId : {skillId}");
             }
         }
 
         public void StartCast()
         {
-            _logger.Debug($"CastingTime : {_skillSetting.CastingTime}");
+            Logger.Debug($"CastingTime : {_skillSetting.CastingTime}");
             RecvSkillStartCastSelf startCast = new RecvSkillStartCastSelf(_skillid, _skillSetting.CastingTime);
             _server.Router.Send(_client.Map, startCast);
             List<PacketResponse> brList = new List<PacketResponse>();

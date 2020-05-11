@@ -1,14 +1,16 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
-using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
     public class send_party_invite : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_party_invite));
+
         public send_party_invite(NecServer server) : base(server)
         {
         }
@@ -24,8 +26,13 @@ namespace Necromancy.Server.Packet.Area
             NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetInstanceId);
             targetClient.Character.partyRequest = client.Character.InstanceId;
 
-            if (targetInstanceId == 0) { targetInstanceId = client.Character.InstanceId; } //band-aid for null reference errors while testing. to-do Delete this line.
-            Logger.Debug($"ID {client.Character.InstanceId} {client.Character.Name} sent a party invite to {targetClient.Character.Name} with instance ID {targetInstanceId}");
+            if (targetInstanceId == 0)
+            {
+                targetInstanceId = client.Character.InstanceId;
+            } //band-aid for null reference errors while testing. to-do Delete this line.
+
+            Logger.Debug(
+                $"ID {client.Character.InstanceId} {client.Character.Name} sent a party invite to {targetClient.Character.Name} with instance ID {targetInstanceId}");
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(targetInstanceId);
@@ -33,28 +40,43 @@ namespace Necromancy.Server.Packet.Area
 
             SendPartyNotifyInvite(client, targetInstanceId);
         }
+
         private void SendPartyNotifyInvite(NecClient client, uint targetInstanceId)
         {
             Party myParty = Server.Instances.GetInstance(client.Character.partyId) as Party;
             //Sanity check.  Who is in the party List at the time of sending the invite?
-            foreach (NecClient necClient in myParty.PartyMembers) { Logger.Debug($"my party with instance ID {myParty.InstanceId} contains members {necClient.Character.Name}"); }
+            foreach (NecClient necClient in myParty.PartyMembers)
+            {
+                Logger.Debug(
+                    $"my party with instance ID {myParty.InstanceId} contains members {necClient.Character.Name}");
+            }
 
             NecClient partyClient1 = new NecClient(),
-                      partyClient2 = new NecClient(), 
-                      partyClient3 = new NecClient();
-            if (myParty.PartyMembers.Count >= 2) { partyClient1 = myParty.PartyMembers[1]; }
-            if (myParty.PartyMembers.Count >= 3) { partyClient2 = myParty.PartyMembers[2]; }
-            if (myParty.PartyMembers.Count >= 4) { partyClient3 = myParty.PartyMembers[3]; }
+                partyClient2 = new NecClient(),
+                partyClient3 = new NecClient();
+            if (myParty.PartyMembers.Count >= 2)
+            {
+                partyClient1 = myParty.PartyMembers[1];
+            }
 
+            if (myParty.PartyMembers.Count >= 3)
+            {
+                partyClient2 = myParty.PartyMembers[2];
+            }
+
+            if (myParty.PartyMembers.Count >= 4)
+            {
+                partyClient3 = myParty.PartyMembers[3];
+            }
 
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt32(client.Character.partyId);//Party Instance ID
-            res.WriteInt32(myParty.PartyType);//Party type; 0 = closed, 1 = open.
-            res.WriteInt32(myParty.NormalItemDist);//Normal item distribution; 0 = do not distribute, 1 = random.
-            res.WriteInt32(myParty.RareItemDist);//Rare item distribution; 0 = do not distribute, 1 = Draw.
+            res.WriteUInt32(client.Character.partyId); //Party Instance ID
+            res.WriteInt32(myParty.PartyType); //Party type; 0 = closed, 1 = open.
+            res.WriteInt32(myParty.NormalItemDist); //Normal item distribution; 0 = do not distribute, 1 = random.
+            res.WriteInt32(myParty.RareItemDist); //Rare item distribution; 0 = do not distribute, 1 = Draw.
             res.WriteUInt32(client.Character.InstanceId);
-            res.WriteUInt32(myParty.PartyLeaderId);//From player instance ID (but doesn't work?)
+            res.WriteUInt32(myParty.PartyLeaderId); //From player instance ID (but doesn't work?)
             {
                 res.WriteInt32(1);
                 res.WriteUInt32(client.Character.InstanceId); //Instance Id?
@@ -103,10 +125,12 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteByte(1); //Membership Status
                 res.WriteByte(1);
             }
-            res.WriteByte((byte)myParty.PartyMembers.Count); // number of above party member entries to display in invite
+            res.WriteByte((byte) myParty.PartyMembers
+                .Count); // number of above party member entries to display in invite
             res.WriteFixedString($"This is a Comment Box for Parties", 0xB5); //size is 0xB5
 
-            Router.Send(Server.Clients.GetByCharacterInstanceId(targetInstanceId), (ushort)MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
+            Router.Send(Server.Clients.GetByCharacterInstanceId(targetInstanceId),
+                (ushort) MsgPacketId.recv_party_notify_invite, res, ServerType.Msg);
         }
     }
 }

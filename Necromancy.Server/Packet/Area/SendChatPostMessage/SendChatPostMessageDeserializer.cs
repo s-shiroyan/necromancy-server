@@ -1,16 +1,16 @@
 using System;
 using Arrowgene.Logging;
 using Necromancy.Server.Chat;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Packet.Area.SendChatPostMessage
 {
     public class SendChatPostMessageDeserializer : IPacketDeserializer<ChatMessage>
     {
-        private ILogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(SendChatPostMessageDeserializer));
 
         public SendChatPostMessageDeserializer()
         {
-            _logger = LogProvider.Logger(this);
         }
 
         public ChatMessage Deserialize(NecPacket packet)
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area.SendChatPostMessage
             int messageTypeValue = packet.Data.ReadInt32();
             if (!Enum.IsDefined(typeof(ChatMessageType), messageTypeValue))
             {
-                _logger.Error($"ChatMessageType: {messageTypeValue} not defined");
+                Logger.Error($"ChatMessageType: {messageTypeValue} not defined");
                 return null;
             }
 

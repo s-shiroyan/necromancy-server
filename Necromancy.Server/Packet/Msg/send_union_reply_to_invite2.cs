@@ -1,6 +1,8 @@
 using System;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet.Id;
@@ -9,6 +11,8 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_union_reply_to_invite2 : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_union_reply_to_invite2));
+
         public send_union_reply_to_invite2(NecServer server) : base(server)
         {
         }

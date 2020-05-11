@@ -14,13 +14,13 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class BagCommand : ServerChatCommand
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(BagCommand));
+        
         private readonly NecServer _server;
 
         public BagCommand(NecServer server) : base(server)
         {
             _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
         }
 
         public override void Execute(string[] command, NecClient client, ChatMessage message,

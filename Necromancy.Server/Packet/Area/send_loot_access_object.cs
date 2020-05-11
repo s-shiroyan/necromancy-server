@@ -10,12 +10,12 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_loot_access_object : ClientHandler
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_loot_access_object));
+
         private readonly NecServer _server;
 
         public send_loot_access_object(NecServer server) : base(server)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             _server = server;
         }
 
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int instanceID = packet.Data.ReadInt32();
-            _logger.Debug($"{client.Character.Name} is {client.Character.Alignmentid}");
+            Logger.Debug($"{client.Character.Name} is {client.Character.Alignmentid}");
 
 
             IBuffer res = null;
@@ -57,7 +57,7 @@ namespace Necromancy.Server.Packet.Area
             }
 
             string lootMsg = $"Looted {dropItem.NumItems} {dropItem.Item.Name} from {monster.Name}.";
-            _logger.Debug($"Loot is {dropItem.NumItems} of {dropItem.Item.Id}");
+            Logger.Debug($"Loot is {dropItem.NumItems} of {dropItem.Item.Id}");
 
             if (dropItem.Item.Id == 1)
             {

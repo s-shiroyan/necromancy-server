@@ -9,14 +9,14 @@ namespace Necromancy.Server.Chat
 {
     public class ChatManager
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(ChatManager));
+        
         private readonly List<IChatHandler> _handler;
-        private readonly NecLogger _logger;
         private readonly NecServer _server;
 
         public ChatManager(NecServer server)
         {
             _server = server;
-            _logger = LogProvider.Logger<NecLogger>(this);
             _handler = new List<IChatHandler>();
             CommandHandler = new ChatCommandHandler(server);
             AddHandler(CommandHandler);
@@ -33,13 +33,13 @@ namespace Necromancy.Server.Chat
         {
             if (client == null)
             {
-                _logger.Debug("Client is Null");
+                Logger.Debug("Client is Null");
                 return;
             }
 
             if (message == null)
             {
-                _logger.Debug(client, "Chat Message is Null");
+                Logger.Debug(client, "Chat Message is Null");
                 return;
             }
 
@@ -87,7 +87,7 @@ namespace Necromancy.Server.Chat
                     NecClient recipient = _server.Clients.GetBySoulName(chatResponse.RecipientSoulName);
                     if (recipient == null)
                     {
-                        _logger.Error($"SoulName: {chatResponse.RecipientSoulName} not found");
+                        Logger.Error($"SoulName: {chatResponse.RecipientSoulName} not found");
                         return;
                     }
 

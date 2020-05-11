@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Tasks
@@ -13,8 +14,9 @@ namespace Necromancy.Server.Tasks
     // The transition is reversed on some maps - _invertedTransition
     // Once triggered set character.mapChange = true    this prevents updating character.X,Y and Z until transition is complete.
 
-    class MapTransitionTask : PeriodicTask
+    public class MapTransitionTask : PeriodicTask
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MapTransitionTask));
         private NecServer _server { get; }
         private Vector3 _transitionPos1;
         private Vector3 _transitionPos2;
@@ -29,7 +31,6 @@ namespace Necromancy.Server.Tasks
         private int _tickTime;
         private int _transitionMapId;
         private int _id;
-        private readonly ILogger _logger;
 
         public MapTransitionTask(NecServer server, Map map, int transitionMapId, Vector3 referencePos, int refDistance,
             Vector3 transitionPos1, Vector3 transitionPos2, uint instanceId, bool invertedTransition, MapPosition toPos,
@@ -47,7 +48,6 @@ namespace Necromancy.Server.Tasks
             _taskActive = false;
             _invertedTransition = invertedTransition;
             _tickTime = 500;
-            _logger = LogProvider.Logger(server);
             _id = id;
         }
 
@@ -83,7 +83,7 @@ namespace Necromancy.Server.Tasks
                         transitionMap.EnterForce(client, _toPos);
                     }
 
-                    _logger.Debug(
+                    Logger.Debug(
                         $"{character.Name} in range [transition] id {this._id} Instance {this._instanceId} to destination {this._transitionMapId}[{transition}].");
                 }
 

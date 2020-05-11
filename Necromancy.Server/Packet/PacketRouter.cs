@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using Arrowgene.Buffers;
-using Arrowgene.Logging;
 using Necromancy.Server.Chat;
-using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Response;
 
@@ -10,14 +8,8 @@ namespace Necromancy.Server.Packet
 {
     public class PacketRouter
     {
-        private readonly NecLogger _logger;
         private readonly object AreaLock = new object();
         private readonly object ClientLock = new object();
-
-        public PacketRouter()
-        {
-            _logger = LogProvider.Logger<NecLogger>(this);
-        }
 
         /// <summary>
         /// Send a packet to a client.

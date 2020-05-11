@@ -9,13 +9,8 @@ namespace Necromancy.Server.Database
 {
     public class NecDatabaseBuilder
     {
-        private readonly ILogger _logger;
-
-        public NecDatabaseBuilder()
-        {
-            _logger = LogProvider.Logger(this);
-        }
-
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(NecDatabaseBuilder));
+        
         public IDatabase Build(DatabaseSettings settings)
         {
             IDatabase database = null;
@@ -28,7 +23,7 @@ namespace Necromancy.Server.Database
 
             if (database == null)
             {
-                _logger.Error("Database could not be created, exiting...");
+                Logger.Error("Database could not be created, exiting...");
                 Environment.Exit(1);
             }
 

@@ -1,5 +1,7 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,9 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_event_select_map_and_channel_r : ClientHandler
     {
+        private static readonly NecLogger Logger =
+            LogProvider.Logger<NecLogger>(typeof(send_event_select_map_and_channel_r));
+
         public send_event_select_map_and_channel_r(NecServer server) : base(server)
         {
         }
@@ -21,7 +26,8 @@ namespace Necromancy.Server.Packet.Area
 
             if (mapId == -2147483648)
             {
-                Logger.Debug("Escape button was selected to close dungeun select. MapID code  == -2147483648 => SendEventEnd");
+                Logger.Debug(
+                    "Escape button was selected to close dungeun select. MapID code  == -2147483648 => SendEventEnd");
                 SendEventEnd(client);
                 return;
             }
@@ -31,6 +37,7 @@ namespace Necromancy.Server.Packet.Area
                 Logger.Error($"MapId: {mapId} does not exist");
                 return;
             }
+
             client.Character.Channel = channelId;
             map.EnterForce(client);
             SendEventEnd(client);
