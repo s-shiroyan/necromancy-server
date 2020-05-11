@@ -82,51 +82,51 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
-            foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
-            {
-                RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
-                Router.Send(gimmickData, client);
-                GGateSpawn gGateSpawn = new GGateSpawn();
-                Server.Instances.AssignInstance(gGateSpawn);
-                gGateSpawn.X = gimmickSpawn.X;
-                gGateSpawn.Y = gimmickSpawn.Y;
-                gGateSpawn.Z = gimmickSpawn.Z + 300;
-                gGateSpawn.Heading = gimmickSpawn.Heading;
-                gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
-                gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
-                gGateSpawn.MapId = gimmickSpawn.MapId;
-                gGateSpawn.ModelId = 1900001;
-                gGateSpawn.Active = 0;
-                gGateSpawn.SerialId = 1900001;
+         // foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
+         // {
+         //     RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
+         //     Router.Send(gimmickData, client);
+         //     GGateSpawn gGateSpawn = new GGateSpawn();
+         //     Server.Instances.AssignInstance(gGateSpawn);
+         //     gGateSpawn.X = gimmickSpawn.X;
+         //     gGateSpawn.Y = gimmickSpawn.Y;
+         //     gGateSpawn.Z = gimmickSpawn.Z + 300;
+         //     gGateSpawn.Heading = gimmickSpawn.Heading;
+         //     gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
+         //     gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
+         //     gGateSpawn.MapId = gimmickSpawn.MapId;
+         //     gGateSpawn.ModelId = 1900001;
+         //     gGateSpawn.Active = 0;
+         //     gGateSpawn.SerialId = 1900001;
 
-                RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
-                Router.Send(gGateData, client);
-            }
+         //     RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
+         //     Router.Send(gGateData, client);
+         // }
 
-            foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
-            {
-                RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
-                Router.Send(gGateSpawnData, client);
-            }
+         // foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
+         // {
+         //     RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
+         //     Router.Send(gGateSpawnData, client);
+         // }
 
-            foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
-            {
-                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
-                Router.Send(deadBodyData, client);
-            }
+         // foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
+         // {
+         //     RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+         //     Router.Send(deadBodyData, client);
+         // }
 
-            foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
-            {
-                MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
-                    mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
-                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
-                    mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
-                _server.Router.Send(mapLink, client);
-            }
+         // foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
+         // {
+         //     MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
+         //         mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
+         //     RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
+         //         mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
+         //     _server.Router.Send(mapLink, client);
+         // }
 
-            // ToDo this should be a database lookup
-            RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
-            _server.Router.Send(mapFragments, client);
+         //   // ToDo this should be a database lookup
+         //   RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
+         //   _server.Router.Send(mapFragments, client);
             
             
             IBuffer res = BufferProvider.Provide();
