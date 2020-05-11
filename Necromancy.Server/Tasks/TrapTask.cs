@@ -1,18 +1,23 @@
-using Necromancy.Server.Common;
-using Necromancy.Server.Model;
-using Necromancy.Server.Model.Skills;
-using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Receive;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
+using Arrowgene.Logging;
+using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
+using Necromancy.Server.Model.Skills;
+using Necromancy.Server.Packet;
+using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks
 {
     public class TrapTask : PeriodicTask
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(TrapTask));
+
         private readonly object TrapLock = new object();
         protected NecServer _server { get; }
         private List<Trap> TrapList;
@@ -49,9 +54,10 @@ namespace Necromancy.Server.Tasks
             Logger.Debug($"trap._trapTime [{trap._trapTime}]");
         }
 
-        public override string Name { get; }
-        public override TimeSpan TimeSpan { get; }
-        protected override bool RunAtStart { get; }
+        public override string TaskName => "TrapTask";
+        public override TimeSpan TaskTimeSpan { get; }
+        protected override bool TaskRunAtStart => false;
+
 
         protected override void Execute()
         {

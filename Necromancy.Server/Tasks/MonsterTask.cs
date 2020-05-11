@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Threading;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks
 {
@@ -17,8 +20,10 @@ namespace Necromancy.Server.Tasks
     //Thread workerThread2 = new Thread(monsterThread.InstanceMethod);
     //workerThread2.Start();
 
-    class MonsterTask : PeriodicTask
+    public class MonsterTask : PeriodicTask
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MonsterTask));
+
         protected NecServer _server { get; }
         public MonsterSpawn _monster { get; set; }
         public bool monsterFreeze { get; set; }
@@ -81,8 +86,6 @@ namespace Necromancy.Server.Tasks
             agroCheckTime = -1;
             agroDetectAngle = (float) Math.Cos(Math.PI / 1.9);
             agroMoveAngle = (float) Math.Cos(Math.PI / 4);
-            RunAtStart = false;
-            Name = monster.Name;
             CastState = 0;
             respawnTime = 10000;
             currentSkill = 0;
@@ -91,9 +94,10 @@ namespace Necromancy.Server.Tasks
             currentDest = new Vector3();
         }
 
-        public override string Name { get; }
-        public override TimeSpan TimeSpan { get; }
-        protected override bool RunAtStart { get; }
+        public override string TaskName => "MonsterTask";
+        public override TimeSpan TaskTimeSpan { get; }
+        protected override bool TaskRunAtStart => false;
+
 
         protected override void Execute()
         {

@@ -9,11 +9,11 @@ namespace Necromancy.Server.Data.Setting
     public abstract class CsvReader<T>
     {
         private const int BufferSize = 128;
-        protected readonly ILogger Logger;
+
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(CsvReader<T>));
 
         public CsvReader()
         {
-            Logger = LogProvider.Logger(this);
         }
 
         public List<T> Read(string path)

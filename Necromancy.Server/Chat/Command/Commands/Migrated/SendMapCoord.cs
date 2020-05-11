@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
     public class SendMapCoord : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(SendMapCoord));
+
         public SendMapCoord(NecServer server) : base(server)
         {
         }

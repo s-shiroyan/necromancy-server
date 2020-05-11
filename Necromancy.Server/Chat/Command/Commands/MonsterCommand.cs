@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Arrowgene.Logging;
 using Necromancy.Server.Data.Setting;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Response;
 
@@ -10,6 +12,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class MonsterCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MonsterCommand));
+
         //protected NecServer server { get; }
         public MonsterCommand(NecServer server) : base(server)
         {

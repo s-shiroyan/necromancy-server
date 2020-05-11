@@ -12,14 +12,8 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCon : DbConnection
         where TCom : DbCommand
     {
-        protected readonly NecLogger Logger;
-
-
-        public NecSqlDb()
-        {
-            Logger = LogProvider.Logger<NecLogger>(this);
-        }
-
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecSqlDb<TCon, TCom>));
+        
         protected override void Exception(Exception ex)
         {
             Logger.Exception(ex);

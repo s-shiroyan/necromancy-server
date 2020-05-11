@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Necromancy.Server.Tasks
+namespace Necromancy.Server.Tasks.Core
 {
     public class TaskManager
     {

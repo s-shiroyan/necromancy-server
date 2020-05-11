@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -11,6 +13,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class ScriptCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(ScriptCommand));
+
         public ScriptCommand(NecServer server) : base(server)
         {
         }

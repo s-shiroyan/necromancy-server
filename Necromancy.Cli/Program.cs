@@ -74,7 +74,7 @@ namespace Necromancy.Cli
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleThread = new Thread(ReadConsoleThread);
             _logWriter = new LogWriter();
-            _serverCommand = new ServerCommand(_logWriter);
+            _serverCommand = new ServerCommand();
             _switchCommand = new SwitchCommand(_parameterConsumers);
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
         }

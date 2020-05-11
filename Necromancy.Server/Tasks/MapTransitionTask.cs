@@ -5,6 +5,7 @@ using System.Threading;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks
 {
@@ -51,9 +52,10 @@ namespace Necromancy.Server.Tasks
             _id = id;
         }
 
-        public override string Name { get; }
-        public override TimeSpan TimeSpan { get; }
-        protected override bool RunAtStart { get; }
+        public override string TaskName => "MapTransitionTask";
+        public override TimeSpan TaskTimeSpan { get; }
+        protected override bool TaskRunAtStart =>  false;
+
 
         protected override void Execute()
         {

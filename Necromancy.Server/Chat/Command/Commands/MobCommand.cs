@@ -1,9 +1,11 @@
 using System.Collections.Generic;
-using Necromancy.Server.Model;
-using Necromancy.Server.Common;
-using Necromancy.Server.Packet.Id;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -12,6 +14,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class MobCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MobCommand));
+
         public MobCommand(NecServer server) : base(server)
         {
         }

@@ -10,6 +10,7 @@ using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks
 {
@@ -35,9 +36,9 @@ namespace Necromancy.Server.Tasks
             playerDied = false;
         }
 
-        public override string Name { get; }
-        public override TimeSpan TimeSpan { get; }
-        protected override bool RunAtStart { get; }
+        public override string TaskName => "CharacterTask";
+        public override TimeSpan TaskTimeSpan { get; }
+        protected override bool TaskRunAtStart => false;
 
         protected override void Execute()
         {

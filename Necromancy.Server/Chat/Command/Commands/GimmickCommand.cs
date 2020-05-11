@@ -1,9 +1,11 @@
-using System.Collections.Generic;
-using Necromancy.Server.Model;
-using Necromancy.Server.Common;
-using Necromancy.Server.Packet.Id;
 using System;
+using System.Collections.Generic;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -12,6 +14,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class GimmickCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(GimmickCommand));
+
         public GimmickCommand(NecServer server) : base(server)
         {
         }

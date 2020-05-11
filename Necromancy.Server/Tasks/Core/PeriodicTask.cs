@@ -3,32 +3,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using Arrowgene.Logging;
 
-namespace Necromancy.Server.Tasks
+namespace Necromancy.Server.Tasks.Core
 {
     public abstract class PeriodicTask
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(PeriodicTask));
+
         private CancellationTokenSource _cancellationTokenSource;
         private Task _task;
 
-        protected readonly ILogger Logger;
-
-
-        public PeriodicTask()
-        {
-            Logger = LogProvider.Logger(this);
-        }
-
-        public abstract string Name { get; }
-        public abstract TimeSpan TimeSpan { get; }
+        public abstract string TaskName { get; }
+        public abstract TimeSpan TaskTimeSpan { get; }
 
         protected abstract void Execute();
-        protected abstract bool RunAtStart { get; }
+        protected abstract bool TaskRunAtStart { get; }
 
         public void Start()
         {
             if (_task != null)
             {
-                Logger.Error($"Task {Name} already started");
+                Logger.Error($"Task {TaskName} already started");
                 return;
             }
 
@@ -42,7 +36,7 @@ namespace Necromancy.Server.Tasks
         {
             if (_task == null)
             {
-                Logger.Error($"Task {Name} already stopped");
+                Logger.Error($"Task {TaskName} already stopped");
                 return;
             }
 
@@ -52,34 +46,34 @@ namespace Necromancy.Server.Tasks
 
         private async void Run()
         {
-            Logger.Debug($"Task {Name} started");
-            if (RunAtStart)
+            Logger.Debug($"Task {TaskName} started");
+            if (TaskRunAtStart)
             {
-                Logger.Trace($"Task {Name} run");
+                Logger.Trace($"Task {TaskName} run");
                 Execute();
-                Logger.Trace($"Task {Name} completed");
+                Logger.Trace($"Task {TaskName} completed");
             }
 
             while (!_cancellationTokenSource.Token.IsCancellationRequested)
             {
                 try
                 {
-                    await Task.Delay(TimeSpan, _cancellationTokenSource.Token);
+                    await Task.Delay(TaskTimeSpan, _cancellationTokenSource.Token);
                 }
                 catch (OperationCanceledException)
                 {
-                    Logger.Debug($"Task {Name} canceled");
+                    Logger.Debug($"Task {TaskName} canceled");
                 }
 
                 if (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
-                    Logger.Trace($"Task {Name} run");
+                    Logger.Trace($"Task {TaskName} run");
                     Execute();
-                    Logger.Trace($"Task {Name} completed");
+                    Logger.Trace($"Task {TaskName} completed");
                 }
             }
 
-            Logger.Debug($"Task {Name} ended");
+            Logger.Debug($"Task {TaskName} ended");
         }
     }
 }

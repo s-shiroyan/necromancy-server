@@ -70,7 +70,7 @@ namespace Necromancy.Server
             _running = false;
             Setting = new NecSetting(setting);
 
-            LogProvider.Configure<NecLogger>(Setting);
+
 
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();

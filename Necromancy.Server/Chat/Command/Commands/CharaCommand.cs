@@ -7,6 +7,8 @@ using System;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Packet.Response;
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -15,6 +17,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class CharaCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(CharaCommand));
+
         public CharaCommand(NecServer server) : base(server)
         {
         }
