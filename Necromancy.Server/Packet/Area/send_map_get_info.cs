@@ -60,80 +60,75 @@ namespace Necromancy.Server.Packet.Area
                 }
             }
 
-            Task.Delay(TimeSpan.FromSeconds(5)).ContinueWith
-            (t1 =>
+            foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
+            {
+                // This requires database changes to add the GGates to the Npc database!!!!!
+                if (npcSpawn.Name == "GGate")
                 {
-                    foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
-                    {
-                        // This requires database changes to add the GGates to the Npc database!!!!!
-                        if (npcSpawn.Name == "GGate")
-                        {
-                            GGateSpawn gGate = new GGateSpawn();
-                            gGate.X = npcSpawn.X;
-                            gGate.Y = npcSpawn.Y;
-                            gGate.Z = npcSpawn.Z;
-                            gGate.Heading = npcSpawn.Heading;
-                            gGate.MapId = npcSpawn.MapId;
-                            gGate.Name = npcSpawn.Name;
-                            gGate.Title = npcSpawn.Title;
+                    GGateSpawn gGate = new GGateSpawn();
+                    gGate.X = npcSpawn.X;
+                    gGate.Y = npcSpawn.Y;
+                    gGate.Z = npcSpawn.Z;
+                    gGate.Heading = npcSpawn.Heading;
+                    gGate.MapId = npcSpawn.MapId;
+                    gGate.Name = npcSpawn.Name;
+                    gGate.Title = npcSpawn.Title;
 
-                            RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
-                            Router.Send(gGateData, client);
-                        }
-                        else
-                        {
-                            RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
-                            Router.Send(npcData, client);
-                        }
-                    }
-
-                    foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
-                    {
-                        RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
-                        Router.Send(gimmickData, client);
-                        GGateSpawn gGateSpawn = new GGateSpawn();
-                        Server.Instances.AssignInstance(gGateSpawn);
-                        gGateSpawn.X = gimmickSpawn.X;
-                        gGateSpawn.Y = gimmickSpawn.Y;
-                        gGateSpawn.Z = gimmickSpawn.Z + 300;
-                        gGateSpawn.Heading = gimmickSpawn.Heading;
-                        gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
-                        gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
-                        gGateSpawn.MapId = gimmickSpawn.MapId;
-                        gGateSpawn.ModelId = 1900001;
-                        gGateSpawn.Active = 0;
-                        gGateSpawn.SerialId = 1900001;
-
-                        RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
-                        Router.Send(gGateData, client);
-                    }
-
-                    foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
-                    {
-                        RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
-                        Router.Send(gGateSpawnData, client);
-                    }
-
-                    foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
-                    {
-                        RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
-                        Router.Send(deadBodyData, client);
-                    }
-
-                    foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
-                    {
-                        MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
-                            mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
-                        RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
-                            mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
-                        _server.Router.Send(mapLink, client);
-                    }
-
-                    // ToDo this should be a database lookup
-                    RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
-                    _server.Router.Send(mapFragments, client);
+                    RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
+                    Router.Send(gGateData, client);
                 }
-            ); //End of Task Delay
+                else
+                {
+                    RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
+                    Router.Send(npcData, client);
+                }
+            }
+
+            foreach (Gimmick gimmickSpawn in client.Map.GimmickSpawns.Values)
+            {
+                RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
+                Router.Send(gimmickData, client);
+                GGateSpawn gGateSpawn = new GGateSpawn();
+                Server.Instances.AssignInstance(gGateSpawn);
+                gGateSpawn.X = gimmickSpawn.X;
+                gGateSpawn.Y = gimmickSpawn.Y;
+                gGateSpawn.Z = gimmickSpawn.Z + 300;
+                gGateSpawn.Heading = gimmickSpawn.Heading;
+                gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
+                gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
+                gGateSpawn.MapId = gimmickSpawn.MapId;
+                gGateSpawn.ModelId = 1900001;
+                gGateSpawn.Active = 0;
+                gGateSpawn.SerialId = 1900001;
+
+                RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateData, client);
+            }
+
+            foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
+            {
+                RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateSpawnData, client);
+            }
+
+            foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
+            {
+                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+                Router.Send(deadBodyData, client);
+            }
+
+            foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
+            {
+                MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
+                    mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
+                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
+                    mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
+                _server.Router.Send(mapLink, client);
+            }
+
+            // ToDo this should be a database lookup
+            RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
+            _server.Router.Send(mapFragments, client);
         }
     }
 }
