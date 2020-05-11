@@ -73,7 +73,6 @@ namespace Necromancy.Server.Packet.Area
                 {
                     RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
                     Router.Send(npcData, client);
-                    Thread.Sleep(100);
                 }
             }
 
@@ -95,19 +94,19 @@ namespace Necromancy.Server.Packet.Area
                 gGateSpawn.SerialId = 1900001;
 
                 RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
-                Router.Send(gGateData, client);
+           //     Router.Send(gGateData, client);
             }
 
             foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
             {
                 RecvDataNotifyGGateData gGateSpawnData = new RecvDataNotifyGGateData(gGateSpawn);
-                Router.Send(gGateSpawnData, client);
+             //   Router.Send(gGateSpawnData, client);
             }
 
             foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
             {
                 RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
-                Router.Send(deadBodyData, client);
+        //        Router.Send(deadBodyData, client);
             }
 
             foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
@@ -116,18 +115,18 @@ namespace Necromancy.Server.Packet.Area
                     mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
                 RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
                     mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
-                Router.Send(mapLink, client);
+            //    Router.Send(mapLink, client);
             }
 
             // ToDo this should be a database lookup
             RecvMapFragmentFlag mapFragments = new RecvMapFragmentFlag(client.Map.Id, 0xff);
-            Router.Send(mapFragments, client);
+         //   Router.Send(mapFragments, client);
 
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //error check. must be 0
             res.WriteByte(0); //Bool - play cutscene. 1 yes, 0 no?
-            Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res, ServerType.Area);
+          //  Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res, ServerType.Area);
         }
 
         private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
