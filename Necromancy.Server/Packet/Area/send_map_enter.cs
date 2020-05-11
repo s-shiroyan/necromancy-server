@@ -1,3 +1,4 @@
+using System.Threading;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
@@ -72,6 +73,7 @@ namespace Necromancy.Server.Packet.Area
                 {
                     RecvDataNotifyNpcData npcData = new RecvDataNotifyNpcData(npcSpawn);
                     Router.Send(npcData, client);
+                    Thread.Sleep(100);
                 }
             }
 
