@@ -1,16 +1,10 @@
-using Arrowgene.Services.Logging;
-using System.Collections.Generic;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {
     public class EoBaseCsvReader : CsvReader<EoBaseSetting>
     {
-        private readonly ILogger _logger;
-
-        public EoBaseCsvReader()
-        {
-            _logger = LogProvider.Logger(this);
-        }
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(EoBaseCsvReader));
 
         protected override int NumExpectedItems => 9;
 
@@ -18,16 +12,10 @@ namespace Necromancy.Server.Data.Setting
         {
             if (!int.TryParse(properties[0], out int id))
             {
-                _logger.Debug($"First entry empty!!");
+                Logger.Debug("First entry empty!!");
                 return null;
             }
 
-            /*if (id == 1430211)
-            {
-                _logger.Debug($"properties[9] [{properties[9]}]");
-                _logger.Debug($"properties[10] [{properties[10]}]");
-                _logger.Debug($"properties[11] [{properties[11]}]");
-            }*/
             int.TryParse(properties[2], out int logId);
             bool.TryParse(properties[4], out bool onlyOwner);
             bool.TryParse(properties[5], out bool showActivationTime);
@@ -43,9 +31,9 @@ namespace Necromancy.Server.Data.Setting
                 OnlyOwner = onlyOwner,
                 ShowActivationTime = showActivationTime,
                 ShowName = showName,
-                damageShape= properties[10],
+                damageShape = properties[10],
                 EffectRadius = effectRadius
-             };
+            };
         }
     }
 }

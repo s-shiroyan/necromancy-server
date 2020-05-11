@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             foreach (NecClient partyClient in myParty.PartyMembers)
             {
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(partyClient.Character.InstanceId);
+                res3.WriteUInt32(partyClient.Character.InstanceId);
                 Router.Send(partyClient.Map, (ushort)AreaPacketId.recv_charabody_notify_party_leave, res3, ServerType.Area);
                 Router.Send(partyClient, (ushort)AreaPacketId.recv_party_leave_r, res3, ServerType.Area);
             }

@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 
 namespace Necromancy.Cli.Command.Commands
 {
     public class SwitchCommand : ConsoleCommand
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(SwitchCommand));
+
         private readonly List<ISwitchConsumer> _parameterConsumers;
 
         public SwitchCommand(List<ISwitchConsumer> parameterConsumers)
@@ -35,7 +38,7 @@ namespace Necromancy.Cli.Command.Commands
                     Logger.Info($"Applied {key}={value}");
                 }
             }
-            
+
             foreach (string booleanSwitch in parameter.Switches)
             {
                 ISwitchProperty property = FindSwitch(booleanSwitch);
@@ -44,6 +47,7 @@ namespace Necromancy.Cli.Command.Commands
                     Logger.Error($"Switch '{booleanSwitch}' not found");
                     continue;
                 }
+
                 if (!property.Assign(bool.TrueString))
                 {
                     Logger.Error($"Switch '{booleanSwitch}' failed, value: '{bool.TrueString}' is invalid");

@@ -19,8 +19,8 @@ namespace Necromancy.Server.Logging
         public string ClientIdentity { get; }
         public NecLogType LogType { get; }
         public DateTime TimeStamp { get; }
-        public string Hex => Data.ToHexString('-');
-        public string Ascii => Data.ToAsciiString(true);
+        public string Hex => Data.ToHexString(" ");
+        public string Ascii => Data.ToAsciiString("  ");
         public string HeaderHex => Util.ToHexString(Header, '-');
 
         public string ToLogText()

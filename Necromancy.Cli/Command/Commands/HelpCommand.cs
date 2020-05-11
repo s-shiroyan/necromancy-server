@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 
 namespace Necromancy.Cli.Command.Commands
 {
     public class HelpCommand : ConsoleCommand
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(HelpCommand));
+
         private readonly Dictionary<string, IConsoleCommand> _commands;
 
         public HelpCommand(Dictionary<string, IConsoleCommand> commands)

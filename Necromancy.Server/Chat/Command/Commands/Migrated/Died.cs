@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
@@ -24,12 +24,13 @@ namespace Necromancy.Server.Chat.Command.Commands
             if (client.Character.hadDied == true)
             {
                 IBuffer res4 = BufferProvider.Provide();
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_self_lost_notify, res4, ServerType.Area);
+                Router.Send(client.Map, (ushort) AreaPacketId.recv_self_lost_notify, res4, ServerType.Area);
             }
 
             if (client.Character.hadDied == false)
             {
-                client.Character.hadDied = true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
+                client.Character.hadDied =
+                    true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
                 client.Character.Hp.Modify(-client.Character.Hp.current);
                 client.Character.state = 0b00000001;
                 List<PacketResponse> brList = new List<PacketResponse>();
@@ -47,7 +48,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 brList[1] = cDead2;
                 Router.Send(client, brList); // send death animaton to player 1
 
-                DeadBody deadBody = Server.Instances.GetInstance((uint)client.Character.DeadBodyInstanceId) as DeadBody;
+                DeadBody deadBody =
+                    Server.Instances.GetInstance((uint) client.Character.DeadBodyInstanceId) as DeadBody;
 
                 deadBody.X = client.Character.X;
                 deadBody.Y = client.Character.Y;
@@ -55,11 +57,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                 deadBody.Heading = client.Character.Heading;
                 client.Character.movementId = client.Character.DeadBodyInstanceId;
 
-                Task.Delay(TimeSpan.FromMilliseconds((int)(5 * 1000))).ContinueWith
+                Task.Delay(TimeSpan.FromMilliseconds((int) (5 * 1000))).ContinueWith
                 (t1 =>
                     {
-                        client.Character.hadDied = false; // quick switch to living state so your dead body loads with your gear
-                                                          //load your dead body on to the map for you to see in soul form. 
+                        client.Character.hadDied =
+                            false; // quick switch to living state so your dead body loads with your gear
+                        //load your dead body on to the map for you to see in soul form. 
                         RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
                         Server.Router.Send(client, cBodyData.ToPacket());
 
@@ -67,7 +70,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
                 );
 
-                Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith
+                Task.Delay(TimeSpan.FromMilliseconds((int) (15 * 1000))).ContinueWith
                 (t1 =>
                     {
                         //reload your living body with no gear
@@ -75,11 +78,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         Server.Router.Send(client, cData.ToPacket());
                     }
                 );
-
-
             }
-
-
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

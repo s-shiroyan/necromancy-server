@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading;
-using Arrowgene.Services;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
-using Arrowgene.Services.Networking.Tcp.Consumer;
-using Arrowgene.Services.Networking.Tcp.Consumer.BlockingQueueConsumption;
-using Arrowgene.Services.Networking.Tcp.Server.AsyncEvent;
+using Arrowgene.Logging;
+using Arrowgene.Networking.Tcp;
+using Arrowgene.Networking.Tcp.Consumer.BlockingQueueConsumption;
+using Arrowgene.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
@@ -15,45 +11,34 @@ using Necromancy.Server.Setting;
 
 namespace Necromancy.Server
 {
-    public class NecQueueConsumer : IConsumer
+    public class NecQueueConsumer : ThreadedBlockingQueueConsumer
     {
         public const int NoExpectedSize = -1;
 
-        private readonly BlockingCollection<ClientEvent>[] _queues;
-        private readonly Thread[] _threads;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecQueueConsumer));
+
         private readonly Dictionary<int, IClientHandler> _clientHandlers;
         private readonly Dictionary<int, IConnectionHandler> _connectionHandlers;
         private readonly Dictionary<ITcpSocket, NecConnection> _connections;
-        private readonly NecLogger _logger;
         private readonly object _lock;
-        private readonly int _maxUnitOfOrder;
+
         private ServerType _serverType;
         private NecSetting _setting;
-        private volatile bool _isRunning;
 
-        private CancellationTokenSource _cancellationTokenSource;
-
-        public int HandlersCount => _clientHandlers.Count;
-
-        public Action<NecConnection> ClientDisconnected;
-        public Action<NecConnection> ClientConnected;
-        public Action Started;
-        public Action Stopped;
-
-        public NecQueueConsumer(ServerType serverType, NecSetting setting, AsyncEventSettings socketSetting)
+        public NecQueueConsumer(ServerType serverType, NecSetting setting, AsyncEventSettings socketSetting) : base(
+            socketSetting, serverType.ToString())
         {
+            _serverType = serverType;
             _setting = setting;
-            _logger = LogProvider.Logger<NecLogger>(this);
-            _maxUnitOfOrder = socketSetting.MaxUnitOfOrder;
-            _queues = new BlockingCollection<ClientEvent>[_maxUnitOfOrder];
-            _threads = new Thread[_maxUnitOfOrder];
             _lock = new object();
             _clientHandlers = new Dictionary<int, IClientHandler>();
             _connectionHandlers = new Dictionary<int, IConnectionHandler>();
             _connections = new Dictionary<ITcpSocket, NecConnection>();
-            _serverType = serverType;
         }
 
+        public Action<NecConnection> ClientDisconnected;
+        public Action<NecConnection> ClientConnected;
+        
         public void Clear()
         {
             _clientHandlers.Clear();
@@ -78,7 +63,7 @@ namespace Necromancy.Server
 
             if (_clientHandlers.ContainsKey(clientHandler.Id))
             {
-                _logger.Error($"[{_serverType}] ClientHandlerId: {clientHandler.Id} already exists");
+                Logger.Error($"[{_serverType}] ClientHandlerId: {clientHandler.Id} already exists");
             }
             else
             {
@@ -104,7 +89,7 @@ namespace Necromancy.Server
 
             if (_connectionHandlers.ContainsKey(connectionHandler.Id))
             {
-                _logger.Error($"[{_serverType}] ConnectionHandlerId: {connectionHandler.Id} already exists");
+                Logger.Error($"[{_serverType}] ConnectionHandlerId: {connectionHandler.Id} already exists");
             }
             else
             {
@@ -112,7 +97,7 @@ namespace Necromancy.Server
             }
         }
 
-        private void HandleReceived(ITcpSocket socket, byte[] data)
+        protected override void HandleReceived(ITcpSocket socket, byte[] data)
         {
             if (!socket.IsAlive)
             {
@@ -124,7 +109,7 @@ namespace Necromancy.Server
             {
                 if (!_connections.ContainsKey(socket))
                 {
-                    _logger.Error(socket, $"[{_serverType}] Client does not exist in lookup");
+                    Logger.Error(socket, $"[{_serverType}] Client does not exist in lookup");
                     return;
                 }
 
@@ -150,19 +135,19 @@ namespace Necromancy.Server
         {
             if (!_connectionHandlers.ContainsKey(packet.Id))
             {
-                _logger.LogUnknownIncomingPacket(connection, packet, _serverType);
+                Logger.LogUnknownIncomingPacket(connection, packet, _serverType);
                 return;
             }
 
             IConnectionHandler connectionHandler = _connectionHandlers[packet.Id];
             if (connectionHandler.ExpectedSize != NoExpectedSize && packet.Data.Size < connectionHandler.ExpectedSize)
             {
-                _logger.Error(connection,
+                Logger.Error(connection,
                     $"[{_serverType}] Ignoring Packed (Id:{packet.Id}) is smaller ({packet.Data.Size}) than expected ({connectionHandler.ExpectedSize})");
                 return;
             }
 
-            _logger.LogIncomingPacket(connection, packet, _serverType);
+            Logger.LogIncomingPacket(connection, packet, _serverType);
             packet.Data.SetPositionStart();
             try
             {
@@ -170,7 +155,7 @@ namespace Necromancy.Server
             }
             catch (Exception ex)
             {
-                _logger.Exception(connection, ex);
+                Logger.Exception(connection, ex);
             }
         }
 
@@ -178,19 +163,19 @@ namespace Necromancy.Server
         {
             if (!_clientHandlers.ContainsKey(packet.Id))
             {
-                _logger.LogUnknownIncomingPacket(client, packet, _serverType);
+                Logger.LogUnknownIncomingPacket(client, packet, _serverType);
                 return;
             }
 
             IClientHandler clientHandler = _clientHandlers[packet.Id];
             if (clientHandler.ExpectedSize != NoExpectedSize && packet.Data.Size < clientHandler.ExpectedSize)
             {
-                _logger.Error(client,
+                Logger.Error(client,
                     $"[{_serverType}] Ignoring Packed (Id:{packet.Id}) is smaller ({packet.Data.Size}) than expected ({clientHandler.ExpectedSize})");
                 return;
             }
 
-            _logger.LogIncomingPacket(client, packet, _serverType);
+            Logger.LogIncomingPacket(client, packet, _serverType);
             packet.Data.SetPositionStart();
             try
             {
@@ -198,25 +183,27 @@ namespace Necromancy.Server
             }
             catch (Exception ex)
             {
-                _logger.Exception(client, ex);
+                Logger.Exception(client, ex);
             }
         }
 
-        private void HandleDisconnected(ITcpSocket socket)
+
+        protected override void HandleDisconnected(ITcpSocket socket)
         {
             NecConnection connection;
             lock (_lock)
             {
                 if (!_connections.ContainsKey(socket))
                 {
-                    _logger.Error(socket, $"[{_serverType}] Disconnected client does not exist in lookup");
+                    Logger.Error(socket, $"[{_serverType}] Disconnected client does not exist in lookup");
                     return;
                 }
 
                 connection = _connections[socket];
                 _connections.Remove(socket);
-                _logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
+                Logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
             }
+
             if (connection.Client?.Character != null)
                 connection.Client.Character.characterActive = false;
             Action<NecConnection> onClientDisconnected = ClientDisconnected;
@@ -228,20 +215,20 @@ namespace Necromancy.Server
                 }
                 catch (Exception ex)
                 {
-                    _logger.Exception(connection, ex);
+                    Logger.Exception(connection, ex);
                 }
             }
 
-            _logger.Info(connection, $"[{_serverType}] Client disconnected");
+            Logger.Info(connection, $"[{_serverType}] Client disconnected");
         }
 
-        private void HandleConnected(ITcpSocket socket)
+        protected override void HandleConnected(ITcpSocket socket)
         {
             NecConnection connection = new NecConnection(socket, new PacketFactory(_setting), _serverType);
             lock (_lock)
             {
                 _connections.Add(socket, connection);
-                _logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
+                Logger.Debug($"[{_serverType}] Clients Count: {_connections.Count}");
             }
 
             Action<NecConnection> onClientConnected = ClientConnected;
@@ -253,114 +240,11 @@ namespace Necromancy.Server
                 }
                 catch (Exception ex)
                 {
-                    _logger.Exception(connection, ex);
+                    Logger.Exception(connection, ex);
                 }
             }
 
-            _logger.Info(connection, $"[{_serverType}] Client connected");
-        }
-
-        private void Consume(int unitOfOrder)
-        {
-            while (_isRunning)
-            {
-                ClientEvent clientEvent;
-                try
-                {
-                    clientEvent = _queues[unitOfOrder].Take(_cancellationTokenSource.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                    return;
-                }
-
-                switch (clientEvent.ClientEventType)
-                {
-                    case ClientEventType.ReceivedData:
-                        HandleReceived(clientEvent.Socket, clientEvent.Data);
-                        break;
-                    case ClientEventType.Connected:
-                        HandleConnected(clientEvent.Socket);
-                        break;
-                    case ClientEventType.Disconnected:
-                        HandleDisconnected(clientEvent.Socket);
-                        break;
-                }
-            }
-        }
-
-        void IConsumer.OnStart()
-        {
-            if (_isRunning)
-            {
-                _logger.Error($" [{_serverType}] Consumer already running.");
-                return;
-            }
-
-            _cancellationTokenSource = new CancellationTokenSource();
-            _isRunning = true;
-            for (int i = 0; i < _maxUnitOfOrder; i++)
-            {
-                int uuo = i;
-                _queues[i] = new BlockingCollection<ClientEvent>();
-                _threads[i] = new Thread(() => Consume(uuo));
-                _threads[i].Name = $"[{_serverType}] Consumer: {i}";
-                _logger.Info($"[{_serverType}] Starting Consumer: {i}");
-                _threads[i].Start();
-            }
-        }
-
-        public void OnStarted()
-        {
-            Action started = Started;
-            if (started != null)
-            {
-                started.Invoke();
-            }
-        }
-
-        void IConsumer.OnReceivedData(ITcpSocket socket, byte[] data)
-        {
-            _queues[socket.UnitOfOrder].Add(new ClientEvent(socket, ClientEventType.ReceivedData, data));
-        }
-
-        void IConsumer.OnClientDisconnected(ITcpSocket socket)
-        {
-            _queues[socket.UnitOfOrder].Add(new ClientEvent(socket, ClientEventType.Disconnected));
-        }
-
-        void IConsumer.OnClientConnected(ITcpSocket socket)
-        {
-            _queues[socket.UnitOfOrder].Add(new ClientEvent(socket, ClientEventType.Connected));
-        }
-
-        void IConsumer.OnStop()
-        {
-            if (!_isRunning)
-            {
-                _logger.Error($" [{_serverType}] Consumer already stopped.");
-                return;
-            }
-
-            _isRunning = false;
-            _cancellationTokenSource.Cancel();
-            for (int i = 0; i < _maxUnitOfOrder; i++)
-            {
-                Thread consumerThread = _threads[i];
-                _logger.Info($"[{_serverType}] Shutting Consumer: {i} down...");
-                Service.JoinThread(consumerThread, 10000, _logger);
-                _logger.Info($"[{_serverType}] Consumer: {i} ended.");
-                _threads[i] = null;
-            }
-        }
-
-        public void OnStopped()
-        {
-            Action stopped = Stopped;
-            if (stopped != null)
-            {
-                stopped.Invoke();
-            }
+            Logger.Info(connection, $"[{_serverType}] Client connected");
         }
     }
 }

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -33,7 +32,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             //recv_0xE8B9 = 0xE8B9,
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(client.Character.InstanceId);
+            res.WriteUInt32(client.Character.InstanceId);
             res.WriteFloat(4);
             Router.Send(client, 0xE8B9, res, ServerType.Area);
 

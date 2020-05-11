@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.InstanceId); //Character ID
+            res.WriteUInt32(client.Character.InstanceId); //Character ID
             res.WriteInt32(emote); //Emote ID
             
             Router.Send(client.Map, (ushort) AreaPacketId.recv_emotion_notify_type, res, ServerType.Area, client);

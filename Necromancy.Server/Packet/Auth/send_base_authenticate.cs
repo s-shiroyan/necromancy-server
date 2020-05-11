@@ -1,5 +1,8 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
+using Necromancy.Server.Chat;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Setting;
@@ -8,6 +11,8 @@ namespace Necromancy.Server.Packet.Auth
 {
     public class send_base_authenticate : ConnectionHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_base_authenticate));
+
         public send_base_authenticate(NecServer server) : base(server)
         {
         }
@@ -25,7 +30,7 @@ namespace Necromancy.Server.Packet.Auth
             Account account = Database.SelectAccountByName(accountName);
             if (account == null)
             {
-                if (Settings.NeedRegistration)
+                if (Settings.RequireRegistration)
                 {
                     Logger.Error(connection, $"AccountName: {accountName} doesn't exist");
                     SendResponse(connection, null);

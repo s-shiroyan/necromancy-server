@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //recv_stall_update_feature_item = 0xB195,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.InstanceId);
+            res.WriteUInt32(client.Character.InstanceId);
 
             res.WriteInt32(10200101);
             res.WriteByte(2);

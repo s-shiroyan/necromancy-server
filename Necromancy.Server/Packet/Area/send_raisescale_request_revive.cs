@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -25,18 +25,18 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, cHpUpdate.ToPacket());
 
             IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt32(client.Character.InstanceId);
+            res4.WriteUInt32(client.Character.InstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_start_notify, res4, ServerType.Area);
 
             IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt32(client.Character.InstanceId);
+            res5.WriteUInt32(client.Character.InstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_notify_raise, res5, ServerType.Area);
 
             IBuffer res6 = BufferProvider.Provide();
             Router.Send(client.Map, (ushort)AreaPacketId.recv_battle_report_end_notify, res6, ServerType.Area);
 
             IBuffer res3 = BufferProvider.Provide();
-            res3.WriteInt32(client.Character.DeadBodyInstanceId);
+            res3.WriteUInt32(client.Character.DeadBodyInstanceId);
             Router.Send(client.Map, (ushort)AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
             client.Character.hadDied = false;

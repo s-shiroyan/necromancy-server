@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             if (client.Character.eventSelectExecCode != -1)
             {
                 IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(client.Character.Raceid); // race
+                res.WriteUInt32(client.Character.Raceid); // race
                 res.WriteInt32(client.Character.eventSelectExecCode); // gender 0 = female, 1 = male
                 res.WriteByte(client.Character.HairId); //hair
                 res.WriteByte(client.Character.HairColorId); //color

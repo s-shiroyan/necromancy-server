@@ -1,7 +1,9 @@
 using System;
 using System.Data.SQLite;
 using System.IO;
+using Arrowgene.Logging;
 using Necromancy.Server.Database.Sql.Core;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Database.Sql
 {
@@ -11,14 +13,13 @@ namespace Necromancy.Server.Database.Sql
     public class NecSqLiteDb : NecSqlDb<SQLiteConnection, SQLiteCommand>, IDatabase
     {
         public const string MemoryDatabasePath = ":memory:";
+
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecSqLiteDb));
+
         public long Version
         {
-            get {
-                return (long)Command("PRAGMA user_version;", Connection()).ExecuteScalar();
-            }
-            set {
-                Command(String.Format("PRAGMA user_version = {0};", value), Connection()).ExecuteNonQuery();
-            }
+            get { return (long) Command("PRAGMA user_version;", Connection()).ExecuteScalar(); }
+            set { Command(String.Format("PRAGMA user_version = {0};", value), Connection()).ExecuteNonQuery(); }
         }
 
         private const string SelectAutoIncrement = "SELECT last_insert_rowid()";

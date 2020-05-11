@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -11,6 +9,7 @@ namespace Necromancy.Server.Packet.Receive
     {
         private readonly uint _type;
         private readonly byte _unknown;
+
         public RecvEventStart(uint type, byte unknown)
             : base((ushort) AreaPacketId.recv_event_start, ServerType.Area)
         {
@@ -21,7 +20,7 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_type); // 0 = normal 1 = cinematic
+            res.WriteUInt32(_type); // 0 = normal 1 = cinematic
             res.WriteByte(_unknown);
 
             return res;

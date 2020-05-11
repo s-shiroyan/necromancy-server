@@ -1,5 +1,6 @@
-using System;
 using System.Collections.Generic;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Chat.Command.Commands
@@ -9,6 +10,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class SendMapChangeForce : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(SendMapChangeForce));
+
         public SendMapChangeForce(NecServer server) : base(server)
         {
         }
@@ -17,7 +20,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             List<ChatResponse> responses)
         {
             if (command[0].Length == 0)
-            { 
+            {
                 Logger.Debug("Re-entering current map");
                 command[0] = $"{client.Character.MapId}";
             }

@@ -1,15 +1,14 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
     public class RecvItemInstanceUnidentified : PacketResponse
     {
         private readonly InventoryItem _invItem;
+
         public RecvItemInstanceUnidentified(InventoryItem invItem)
             : base((ushort) AreaPacketId.recv_item_instance_unidentified, ServerType.Area)
         {
@@ -21,7 +20,7 @@ namespace Necromancy.Server.Packet.Receive
             IBuffer res = BufferProvider.Provide();
 
             //res.WriteInt64(dropItem.Item.Id); //Item Object Instance ID 
-            res.WriteInt64(_invItem.InstanceId); //Item Object Instance ID 
+            res.WriteUInt64(_invItem.InstanceId); //Item Object Instance ID 
 
             res.WriteCString(_invItem.StorageItem.Name); //Name
 

@@ -1,14 +1,9 @@
-using Arrowgene.Services.Logging;
-
 namespace Necromancy.Server.Packet.Area.SendCmdExec
 {
     public class SendCmdExecDeserializer : IPacketDeserializer<SendCmdExecRequest>
     {
-        private ILogger _logger;
-
         public SendCmdExecDeserializer()
         {
-            _logger = LogProvider.Logger(this);
         }
 
         public SendCmdExecRequest Deserialize(NecPacket packet)
@@ -16,7 +11,7 @@ namespace Necromancy.Server.Packet.Area.SendCmdExec
             string command = packet.Data.ReadCString();
 
             SendCmdExecRequest sendCmdExecRequest = new SendCmdExecRequest(command);
-            
+
             int startPosition = 49;
             int blockSize = 769;
             while (startPosition + blockSize < packet.Data.Size)

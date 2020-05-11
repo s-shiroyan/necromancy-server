@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
 
             InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, bagSlot);
             res.SetPositionStart();
-            res.WriteInt64(invItem.InstanceId); //Item instance Id here
+            res.WriteUInt64(invItem.InstanceId); //Item instance Id here
             Router.Send(client, (ushort)AreaPacketId.recv_item_remove, res, ServerType.Area);
         }
     }

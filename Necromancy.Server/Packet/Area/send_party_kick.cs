@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(targetClient, (ushort)MsgPacketId.recv_party_notify_kick, BufferProvider.Provide(), ServerType.Msg);
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(targetClient.Character.InstanceId);
+            res2.WriteUInt32(targetClient.Character.InstanceId);
             Router.Send(targetClient.Map, (ushort)AreaPacketId.recv_charabody_notify_party_leave, res2, ServerType.Area);
 
 
@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteInt32(1); //Remove Reason
-            res3.WriteInt32(targetClient.Character.InstanceId); //Instance ID
+            res3.WriteUInt32(targetClient.Character.InstanceId); //Instance ID
             Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_remove_member, res3, ServerType.Msg);
 
             /*

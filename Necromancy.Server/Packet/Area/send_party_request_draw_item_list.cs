@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -20,8 +20,8 @@ namespace Necromancy.Server.Packet.Area
             
             res.WriteInt32(0);//Error?
             res.WriteInt32(0);//Map ID?
-            res.WriteFixedString("127.0.0.1", 65);
-            res.WriteInt16(60002);
+            res.WriteFixedString(Settings.DataAreaIpAddress, 65);
+            res.WriteUInt16(Settings.AreaPort);
 
             //sub_484420
             res.WriteFloat(1);

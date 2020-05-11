@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -10,6 +10,7 @@ namespace Necromancy.Server.Chat.Command.Commands
     public class SendItemInstance : ServerChatCommand
     {
         private readonly NecServer _server;
+
         public SendItemInstance(NecServer server) : base(server)
         {
             _server = server;
@@ -22,7 +23,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //recv_item_instance = 0x86EA,
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt64(item.InstanceId); //InstanceID
+            res.WriteUInt64(item.InstanceId); //InstanceID
             res.WriteInt32(100101); //Icon serial id
             res.WriteByte(1); //Number of "items"
             res.WriteInt32(9); //Item status, in multiples of numbers, 1/3 = unidentified, 4/6 = broken, 5/7 = broken unidentified, 8 = cursed, loops after a while, only odd numbers are correct i think

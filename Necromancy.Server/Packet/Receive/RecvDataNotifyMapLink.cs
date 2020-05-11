@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -14,7 +12,9 @@ namespace Necromancy.Server.Packet.Receive
         private readonly int _offset;
         private readonly int _width;
         private readonly int _color;
-        public RecvDataNotifyMapLink(NecClient client, int mapId, MapPosition mapPos, int offset, int width, int color = 2)
+
+        public RecvDataNotifyMapLink(NecClient client, int mapId, MapPosition mapPos, int offset, int width,
+            int color = 2)
             : base((ushort) AreaPacketId.recv_data_notify_maplink, ServerType.Area)
         {
             _mapId = mapId;

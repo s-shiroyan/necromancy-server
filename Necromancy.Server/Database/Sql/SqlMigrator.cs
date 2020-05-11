@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Database.Sql
 {
@@ -12,16 +12,15 @@ namespace Necromancy.Server.Database.Sql
     /// </summary>
     public class SqlMigrator
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(SqlMigrator));
+
         /// <summary>The SQL database to apply migrations to.</summary>
-        public IDatabase Database { get; set; }
-
-        private readonly ILogger _logger;
-
+        private readonly IDatabase _database;
+        
         /// <param name="database">The SQL database to apply migrations to.</param>
         public SqlMigrator(IDatabase database)
         {
-            Database = database;
-            _logger = LogProvider.Logger(this);
+            _database = database;
         }
 
         /// <summary>
@@ -37,7 +36,7 @@ namespace Necromancy.Server.Database.Sql
         /// </remarks>
         public void Migrate(string migrationsFolder)
         {
-            long initialVersion = Database.Version, versionNumber = 0;
+            long initialVersion = _database.Version, versionNumber = 0;
             var versionFileDict = new SortedList<long, string>();
             /* Prepare migration files, ordered by version number. */
             foreach (var f in Directory.GetFiles(migrationsFolder, "*.sql"))
@@ -50,15 +49,17 @@ namespace Necromancy.Server.Database.Sql
                         "Failed to detect DB version for migration file: {0}. File name should begin with a database version number.",
                         f)));
                 }
+
                 /* Ignore 0-version, this is an example. Adding the same version twice will throw
                    an ArgumentException. */
                 if (versionNumber > initialVersion)
                     versionFileDict.Add(versionNumber, f);
             }
+
             ApplyMigrations(versionFileDict);
-            if ((versionNumber = Database.Version) > initialVersion)
+            if ((versionNumber = _database.Version) > initialVersion)
             {
-                _logger.Debug("Database db.sqlite version is updated to {0}.", versionNumber);
+                Logger.Debug($"Database db.sqlite version is updated to {versionNumber}.");
             }
         }
 
@@ -72,8 +73,8 @@ namespace Necromancy.Server.Database.Sql
         /// </remarks>
         private void ApplyMigrations(IDictionary<long, string> versionFileDict)
         {
-            long initialVersion = Database.Version, versionNumber = 0;
-            ScriptRunner scriptRunner = new ScriptRunner(Database);
+            long initialVersion = _database.Version, versionNumber = 0;
+            ScriptRunner scriptRunner = new ScriptRunner(_database);
             /* Assert: All entries' version is above current DB version. */
             foreach (KeyValuePair<long, string> kvp in versionFileDict)
             {
@@ -83,8 +84,9 @@ namespace Necromancy.Server.Database.Sql
                     LogException(new ArgumentException(
                         "A sorted list's keys are out of order, and expected to be in-order."));
                 }
+
                 scriptRunner.Run(kvp.Value);
-                Database.Version = versionNumber = kvp.Key;
+                _database.Version = versionNumber = kvp.Key;
             }
         }
 
@@ -93,8 +95,8 @@ namespace Necromancy.Server.Database.Sql
         /// </summary>
         private void LogException(Exception exception)
         {
-            _logger.Error(exception.Message);
-            _logger.Exception(exception);
+            Logger.Error(exception.Message);
+            Logger.Exception(exception);
             throw exception;
         }
     }

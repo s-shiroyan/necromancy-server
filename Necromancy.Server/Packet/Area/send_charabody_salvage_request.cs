@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_charabody_salvage_request_r, res, ServerType.Area);
 
             IBuffer res2 = BufferProvider.Provide();
-	        res2.WriteInt32(targetId);
+	        res2.WriteUInt32(targetId);
             res2.WriteCString("soul"); // find max size
             res2.WriteCString("char"); // find max size
             Router.Send(client.Map, (ushort)AreaPacketId.recv_charabody_salvage_notify_body, res2, ServerType.Area);

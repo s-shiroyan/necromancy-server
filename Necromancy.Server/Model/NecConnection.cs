@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Networking.Tcp;
+using Arrowgene.Logging;
+using Arrowgene.Networking.Tcp;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 
@@ -9,11 +9,10 @@ namespace Necromancy.Server.Model
 {
     public class NecConnection
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecConnection));
 
         public NecConnection(ITcpSocket clientSocket, PacketFactory packetFactory, ServerType serverType)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Socket = clientSocket;
             PacketFactory = packetFactory;
             ServerType = serverType;
@@ -35,7 +34,7 @@ namespace Necromancy.Server.Model
             }
             catch (Exception ex)
             {
-                _logger.Exception(this, ex);
+                Logger.Exception(this, ex);
                 packets = new List<NecPacket>();
             }
 
@@ -51,11 +50,11 @@ namespace Necromancy.Server.Model
             }
             catch (Exception ex)
             {
-                _logger.Exception(this, ex);
+                Logger.Exception(this, ex);
                 return;
             }
 
-            _logger.LogOutgoingPacket(this, packet, ServerType);
+            Logger.LogOutgoingPacket(this, packet, ServerType);
             Socket.Send(data);
         }
     }

@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -12,6 +10,7 @@ namespace Necromancy.Server.Packet.Receive
         private readonly uint _instanceId;
         private readonly int _unknown1;
         private readonly int _unknown2;
+
         public RecvCharaUpdateNotifyItemForth(uint instanceId, int unknown1, int unknown2)
             : base((ushort) AreaPacketId.recv_chara_update_notify_item_forth, ServerType.Area)
         {
@@ -23,8 +22,8 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_instanceId); // Unique Instance ID
-            res.WriteInt32(_unknown1);//unknown
+            res.WriteUInt32(_instanceId); // Unique Instance ID
+            res.WriteInt32(_unknown1); //unknown
             res.WriteInt32(_unknown2);
             return res;
         }

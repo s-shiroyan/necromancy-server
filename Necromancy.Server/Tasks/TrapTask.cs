@@ -1,25 +1,23 @@
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
-using Arrowgene.Services.Tasks;
-using Necromancy.Server.Common;
-using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Model;
-using Necromancy.Server.Model.Skills;
-using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
+using Arrowgene.Logging;
+using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
+using Necromancy.Server.Model;
+using Necromancy.Server.Model.Skills;
+using Necromancy.Server.Packet;
+using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks
 {
     public class TrapTask : PeriodicTask
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(TrapTask));
+
         private readonly object TrapLock = new object();
         protected NecServer _server { get; }
         private List<Trap> TrapList;
@@ -35,13 +33,14 @@ namespace Necromancy.Server.Tasks
         private int tickTime;
         private bool triggered;
         private bool trapActive;
+
         public TrapTask(NecServer server, Map map, Vector3 trapPos, uint instanceId, Trap trap, uint stackId)
         {
             _server = server;
             TrapList = new List<Trap>();
             MonsterList = new List<MonsterSpawn>();
             TrapPos = trapPos;
-            TimeSpan activeTime = new TimeSpan(0, 0, 0, 0, (int)trap._trapTime*1000);
+            TimeSpan activeTime = new TimeSpan(0, 0, 0, 0, (int) trap._trapTime * 1000);
             expireTime = DateTime.Now + activeTime;
             _map = map;
             triggerRadius = trap._triggerRadius;
@@ -55,9 +54,11 @@ namespace Necromancy.Server.Tasks
             Logger.Debug($"trap._trapTime [{trap._trapTime}]");
         }
 
-        public override string Name { get; }
-        public override TimeSpan TimeSpan { get; }
-        protected override bool RunAtStart { get; }
+        public override string TaskName => "TrapTask";
+        public override TimeSpan TaskTimeSpan { get; }
+        protected override bool TaskRunAtStart => false;
+
+
         protected override void Execute()
         {
             while (expireTime > DateTime.Now && trapActive)
@@ -69,12 +70,14 @@ namespace Necromancy.Server.Tasks
                     foreach (MonsterSpawn monster in monsters)
                     {
                         Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
-                         Logger.Debug($"Enhancement monster.InstanceId [{monster.InstanceId}] trap._name [{trap._name}] trap._effectRadius [{trap._effectRadius}]");
+                        Logger.Debug(
+                            $"Enhancement monster.InstanceId [{monster.InstanceId}] trap._name [{trap._name}] trap._effectRadius [{trap._effectRadius}]");
                         if (Vector3.Distance(monsterPos, TrapPos) <= trap._effectRadius)
                         {
                             TriggerTrap(trap, monster);
                         }
                     }
+
                     TrapList.Remove(trap);
                     if (TrapList.Count == 0)
                         trapActive = false;
@@ -84,12 +87,14 @@ namespace Necromancy.Server.Tasks
                     foreach (MonsterSpawn monster in monsters)
                     {
                         Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
-                        if ((Vector3.Distance(monsterPos, TrapPos) <= triggerRadius) && (monsterPos.Z - TrapPos.Z <= detectHeight))
+                        if ((Vector3.Distance(monsterPos, TrapPos) <= triggerRadius) &&
+                            (monsterPos.Z - TrapPos.Z <= detectHeight))
                         {
                             triggered = true;
                             break;
                         }
                     }
+
                     if (!triggered)
                         tickTime = 50;
                     else
@@ -99,17 +104,18 @@ namespace Necromancy.Server.Tasks
                         foreach (MonsterSpawn monster in monsters)
                         {
                             Vector3 monsterPos = new Vector3(monster.X, monster.Y, monster.Z);
-                            Logger.Debug($"Base trap monster.InstanceId [{monster.InstanceId}] trap._name [{trap._name}] trap._effectRadius [{trap._effectRadius}]");
+                            Logger.Debug(
+                                $"Base trap monster.InstanceId [{monster.InstanceId}] trap._name [{trap._name}] trap._effectRadius [{trap._effectRadius}]");
                             if (Vector3.Distance(monsterPos, TrapPos) <= trap._effectRadius)
                             {
                                 MonsterList.Add(monster);
                                 TriggerTrap(trap, monster);
                             }
                         }
+
                         TrapList.Remove(trap);
                         if (TrapList.Count == 0)
                             trapActive = false;
-
                     }
                 }
                 else
@@ -117,13 +123,16 @@ namespace Necromancy.Server.Tasks
 
                 Thread.Sleep(tickTime);
             }
+
             foreach (Trap trap in TrapList)
             {
-                RecvDataNotifyEoData eoDestroyData = new RecvDataNotifyEoData(trap.InstanceId, trap.InstanceId, 0, TrapPos, 0, 0);
+                RecvDataNotifyEoData eoDestroyData =
+                    new RecvDataNotifyEoData(trap.InstanceId, trap.InstanceId, 0, TrapPos, 0, 0);
                 _server.Router.Send(_map, eoDestroyData);
                 RecvEoNotifyDisappearSchedule eoDisappear = new RecvEoNotifyDisappearSchedule(trap.InstanceId, 0.0F);
                 _server.Router.Send(_map, eoDisappear);
             }
+
             TrapList.Clear();
             _map.RemoveTrap(stackInstanceId);
             this.Stop();
@@ -131,18 +140,22 @@ namespace Necromancy.Server.Tasks
 
         public void TriggerTrap(Trap trap, MonsterSpawn monster)
         {
-            Logger.Debug($"trap._name [{trap._name}] trap.InstanceId [{trap.InstanceId}] trap._skillEffectId [{trap._skillEffectId}] trap._triggerEffectId [{trap._triggerEffectId}]");
+            Logger.Debug(
+                $"trap._name [{trap._name}] trap.InstanceId [{trap.InstanceId}] trap._skillEffectId [{trap._skillEffectId}] trap._triggerEffectId [{trap._triggerEffectId}]");
             NecClient client = _map.ClientLookup.GetByCharacterInstanceId(ownerInstanceId);
             if (client.Character.IsStealthed())
             {
                 uint newState = client.Character.ClearStateBit(0x8);
-                RecvCharaNotifyStateflag charState = new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                RecvCharaNotifyStateflag charState =
+                    new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
                 _server.Router.Send(client.Map, charState);
             }
+
             int damage = Util.GetRandomNumber(70, 90);
-            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId, trap._triggerEffectId, TrapPos, 2, 2);
+            RecvDataNotifyEoData eoTriggerData = new RecvDataNotifyEoData(trap.InstanceId, monster.InstanceId,
+                trap._triggerEffectId, TrapPos, 2, 2);
             _server.Router.Send(_map, eoTriggerData);
-            float perHp = (((float)monster.Hp.current / (float)monster.Hp.max) * 100);
+            float perHp = (((float) monster.Hp.current / (float) monster.Hp.max) * 100);
             List<PacketResponse> brList = new List<PacketResponse>();
             RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(ownerInstanceId);
             RecvBattleReportEndNotify brEnd = new RecvBattleReportEndNotify();
@@ -169,6 +182,7 @@ namespace Necromancy.Server.Tasks
                 monster.UpdateHP(-damage, _server, true, ownerInstanceId);
             }
         }
+
         public void AddTrap(Trap trap)
         {
             lock (TrapLock)
@@ -176,6 +190,7 @@ namespace Necromancy.Server.Tasks
                 TrapList.Add(trap);
             }
         }
+
         public void UpdateTrapTime(int activeTimeMs)
         {
             lock (TrapLock)
@@ -184,6 +199,7 @@ namespace Necromancy.Server.Tasks
                 expireTime = DateTime.Now + activeTime;
             }
         }
+
         private double ConvertToRadians(double angle, bool adjust)
         {
             angle = angle * 2;
@@ -198,8 +214,7 @@ namespace Necromancy.Server.Tasks
             return baseTraps.Contains(skillId);
         }
 
-        private static int[] baseTraps = { 14301, 14302 };
-        private static int[] trapEnhancements = {  };
+        private static int[] baseTraps = {14301, 14302};
+        private static int[] trapEnhancements = { };
     }
-
 }

@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             uint errorOrSuccessCode = packet.Data.ReadUInt32(); //error code?
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(errorOrSuccessCode);
+            res.WriteUInt32(errorOrSuccessCode);
             Router.Send(client, (ushort) AreaPacketId.recv_party_decline_to_apply_r, res, ServerType.Area);
 
             NecClient myPartyDeclinedClient = Server.Clients.GetByCharacterInstanceId(applicantInstanceId);

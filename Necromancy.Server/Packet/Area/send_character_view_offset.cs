@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
             //This is all Position and Orientation Related.
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.movementId);//Character ID
+            res.WriteUInt32(client.Character.movementId);//Character ID
             res.WriteFloat(client.Character.X); //might need to change to Target X Y Z
             res.WriteFloat(client.Character.Y);
             res.WriteFloat(client.Character.Z);

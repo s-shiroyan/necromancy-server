@@ -1,9 +1,7 @@
-using Arrowgene.Services.Logging;
-using System.Linq;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
+using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.Stats;
@@ -13,7 +11,8 @@ namespace Necromancy.Server.Model
 {
     public class Character : IInstance
     {
-        private readonly NecLogger _logger;
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Character));
+
         private readonly object StateLock = new object();
         private readonly object HPLock = new object();
         private readonly object DamageLock = new object();
@@ -43,7 +42,9 @@ namespace Necromancy.Server.Model
         public ushort intelligence { get; set; }
         public ushort piety { get; set; }
         public ushort luck { get; set; }
+
         public uint ClassId { get; set; }
+
         //public int maxHp { get; set; }
         //public int maxMp { get; set; }
         //public int maxOd { get; set; }
@@ -85,11 +86,15 @@ namespace Necromancy.Server.Model
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
         public int eventSelectExecCode { get; set; }
+
         public int eventSelectExtraSelectionCode { get; set; }
+
         //private int _currentHp { get; set; }
         public BaseStat Hp;
         public BaseStat Mp;
+
         public BaseStat Od;
+
         //private int _currentMp { get; set; }
         //private int _currentOd { get; set; }
         public int shortcutBar0Id { get; set; }
@@ -108,7 +113,9 @@ namespace Necromancy.Server.Model
         public bool helperTextAbdul { get; set; }
         public Event currentEvent { get; set; }
         public bool secondInnAccess { get; set; }
+
         public uint killerInstanceId { get; private set; }
+
         //public bool playerDead { get; set; }
         public uint partyId { get; set; }
         public int unionId { get; set; }
@@ -127,38 +134,36 @@ namespace Necromancy.Server.Model
         public enum CharacterState
         {
             //state            //bitShift           // Binary                           Dec
-            SoulForm            = 0,                // 0000 0000 0000 0000 0000 0000    0
-            BattlePose          = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
-            BlockPose           = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
-            StealthForm         = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
-            NothingForm         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
-            NormalForm          = 1 << 4,           // 0000 0000 0000 0000 0001 0000    16
-            InvisibleForm       = 1 << 5,           // 0000 0000 0000 0000 0010 0000    32 
-            InvulnerableForm    = 1 << 6,           // 0000 0000 0000 0000 0100 0000    64 
-            GameMaster          = 1 << 12,          // 0000 0000 0001 0000 0000 0000    4096 
-            RequestPartyJoin    = 1 << 13,          // 0000 0000 0010 0000 0000 0000    8192 
-            RecruitPartyMember  = 1 << 14,          // 0000 0000 0100 0000 0000 0000    16384 
-            LostState           = 1 << 15,          // 0000 0000 1000 0000 0000 0000    32768
-            HeadState           = 1 << 16,          // 0000 0001 0000 0000 0000 0000    65536
-            MemberBonus         = 1 << 20,          // 0001 0000 0000 0000 0000 0000‬    1048576
-
+            SoulForm = 0, // 0000 0000 0000 0000 0000 0000    0
+            BattlePose = 1 << 0, // 0000 0000 0000 0000 0000 0001    1
+            BlockPose = 1 << 1, // 0000 0000 0000 0000 0000 0010    2
+            StealthForm = 1 << 2, // 0000 0000 0000 0000 0000 0100    4
+            NothingForm = 1 << 3, // 0000 0000 0000 0000 0000 1000    8
+            NormalForm = 1 << 4, // 0000 0000 0000 0000 0001 0000    16
+            InvisibleForm = 1 << 5, // 0000 0000 0000 0000 0010 0000    32 
+            InvulnerableForm = 1 << 6, // 0000 0000 0000 0000 0100 0000    64 
+            GameMaster = 1 << 12, // 0000 0000 0001 0000 0000 0000    4096 
+            RequestPartyJoin = 1 << 13, // 0000 0000 0010 0000 0000 0000    8192 
+            RecruitPartyMember = 1 << 14, // 0000 0000 0100 0000 0000 0000    16384 
+            LostState = 1 << 15, // 0000 0000 1000 0000 0000 0000    32768
+            HeadState = 1 << 16, // 0000 0001 0000 0000 0000 0000    65536
+            MemberBonus = 1 << 20, // 0001 0000 0000 0000 0000 0000‬    1048576
         }
+
         [Flags]
         public enum BodyState
         {
             //state            //bitShift            // Binary                           Dec
-            SoulForm             = 0,                // 0000 0000 0000 0000 0000 0000    0
-            NormalDeadBody       = 1 << 0,           // 0000 0000 0000 0000 0000 0001    1
-            RuckSack             = 1 << 1,           // 0000 0000 0000 0000 0000 0010    2
-            CollectedBody        = 1 << 2,           // 0000 0000 0000 0000 0000 0100    4
-            RuckSackAlso         = 1 << 3,           // 0000 0000 0000 0000 0000 1000    8
-
+            SoulForm = 0, // 0000 0000 0000 0000 0000 0000    0
+            NormalDeadBody = 1 << 0, // 0000 0000 0000 0000 0000 0001    1
+            RuckSack = 1 << 1, // 0000 0000 0000 0000 0000 0010    2
+            CollectedBody = 1 << 2, // 0000 0000 0000 0000 0000 0100    4
+            RuckSackAlso = 1 << 3, // 0000 0000 0000 0000 0000 1000    8
         }
 
 
         public Character()
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             Id = -1;
             AccountId = -1;
             SoulId = -1;
@@ -186,7 +191,7 @@ namespace Necromancy.Server.Model
             skillStartCast = 0;
             battleAnim = 0;
             hadDied = false;
-            _state = (int)CharacterState.NormalForm;
+            _state = (int) CharacterState.NormalForm;
             inventoryItems = new List<InventoryItem>();
             inventoryBags = new List<Bag>();
             Bag bag = new Bag();
@@ -212,19 +217,19 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
         }
+
         public bool characterActive
         {
             get => _characterActive;
-            set
-            {
-                _characterActive = value;
-            }
+            set { _characterActive = value; }
         }
+
         public void CreateTask(NecServer server, NecClient client)
         {
             characterTask = new CharacterTask(server, client);
             characterTask.Start();
         }
+
         public uint state
         {
             get => _state;
@@ -236,6 +241,7 @@ namespace Necromancy.Server.Model
                 }
             }
         }
+
         public uint AddStateBit(uint stateBit)
         {
             uint newState = 0;
@@ -244,8 +250,10 @@ namespace Necromancy.Server.Model
                 _state |= stateBit;
                 newState = _state;
             }
+
             return newState;
         }
+
         public uint ClearStateBit(uint stateBit)
         {
             uint newState = 0;
@@ -254,8 +262,10 @@ namespace Necromancy.Server.Model
                 _state &= ~stateBit;
                 newState = _state;
             }
+
             return newState;
         }
+
         public bool IsStealthed()
         {
             bool isStealthed = false;
@@ -264,12 +274,14 @@ namespace Necromancy.Server.Model
                 if ((state & 0x8) == 0x8)
                     isStealthed = true;
             }
+
             return isStealthed;
         }
 
         public InventoryItem GetInventoryItem(byte storageType, byte storageId, short storageSlot)
         {
-            InventoryItem invItem = inventoryItems.Find(x => x.StorageType == storageType && x.StorageId == storageId && x.StorageSlot == storageSlot);
+            InventoryItem invItem = inventoryItems.Find(x =>
+                x.StorageType == storageType && x.StorageId == storageId && x.StorageSlot == storageSlot);
             return invItem;
         }
 
@@ -279,11 +291,16 @@ namespace Necromancy.Server.Model
             return invItem;
         }
 
-        public InventoryItem GetInventoryItem(Item item, byte canHold = 0) // If just need to get the item only pass item, if looking for a stack to add looted/traded items use canHold
+        public InventoryItem
+            GetInventoryItem(Item item,
+                byte canHold =
+                    0) // If just need to get the item only pass item, if looking for a stack to add looted/traded items use canHold
         {
-            InventoryItem invItem = inventoryItems.Find(x => (x.StorageItem == item) && (x.StorageCount + canHold <= 255));
+            InventoryItem invItem =
+                inventoryItems.Find(x => (x.StorageItem == item) && (x.StorageCount + canHold <= 255));
             return invItem;
         }
+
         public void UpdateInventoryItem(InventoryItem invItem)
         {
             InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
@@ -292,11 +309,13 @@ namespace Necromancy.Server.Model
             invItm.StorageSlot = invItem.StorageSlot;
             invItm.StorageType = invItem.StorageType;
         }
+
         public void RemoveInventoryItem(InventoryItem invItem)
         {
             InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
             inventoryItems.Remove(invItm);
         }
+
         public InventoryItem GetNextInventoryItem(NecServer server, byte desiredCount = 1, Item item = null)
         {
             InventoryItem invItem = null;
@@ -306,6 +325,7 @@ namespace Necromancy.Server.Model
                 if (invItem != null)
                     return invItem;
             }
+
             byte bagId = 0;
             short slotId = -1;
             foreach (Bag bag in inventoryBags)
@@ -319,8 +339,10 @@ namespace Necromancy.Server.Model
                     slotId = 0;
                     break;
                 }
+
                 bagId = bag.StorageId;
-                short[] slots = invItems.Select(invItems => invItems.StorageSlot).OrderBy(StorageSlot => StorageSlot).ToArray();   // Get a sorted list of occupied slots
+                short[] slots = invItems.Select(invItems => invItems.StorageSlot).OrderBy(StorageSlot => StorageSlot)
+                    .ToArray(); // Get a sorted list of occupied slots
                 short i = 0;
                 foreach (short slot in slots)
                 {
@@ -329,13 +351,16 @@ namespace Necromancy.Server.Model
                         slotId = i;
                         break;
                     }
+
                     i++;
                 }
+
                 if (slotId == -1 && i < bag.NumSlots)
                 {
                     slotId = i;
                 }
             }
+
             if (slotId != -1)
             {
                 invItem = server.Instances64.CreateInstance<InventoryItem>();
@@ -343,7 +368,8 @@ namespace Necromancy.Server.Model
                 invItem.StorageSlot = slotId;
                 inventoryItems.Add(invItem);
             }
+
             return invItem;
-         }
+        }
     }
 }

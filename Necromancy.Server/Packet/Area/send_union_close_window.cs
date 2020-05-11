@@ -1,8 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -11,7 +10,7 @@ namespace Necromancy.Server.Packet.Area
         public send_union_close_window(NecServer server) : base(server)
         {
         }
-        
+
 
         public override ushort Id => (ushort) AreaPacketId.send_union_close_window;
 
@@ -20,12 +19,10 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_union_close_window_r, res, ServerType.Area);
-            
+
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteByte(0);
-            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res2, ServerType.Area);
-
+            Router.Send(client, (ushort) AreaPacketId.recv_event_end, res2, ServerType.Area);
         }
-
     }
 }

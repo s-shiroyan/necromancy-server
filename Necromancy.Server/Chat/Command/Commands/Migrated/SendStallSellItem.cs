@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -25,7 +25,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteInt16(16);
-            res.WriteInt32(client.Character.InstanceId); //Item id
+            res.WriteUInt32(client.Character.InstanceId); //Item id
 
             Router.Send(client, (ushort) AreaPacketId.recv_stall_sell_item, res, ServerType.Area);
         }

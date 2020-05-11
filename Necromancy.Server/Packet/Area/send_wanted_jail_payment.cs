@@ -1,8 +1,7 @@
-﻿using Arrowgene.Services.Buffers;
+﻿using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -11,7 +10,7 @@ namespace Necromancy.Server.Packet.Area
         public send_wanted_jail_payment(NecServer server) : base(server)
         {
         }
-        
+
 
         public override ushort Id => (ushort) AreaPacketId.send_wanted_jail_payment;
 
@@ -21,6 +20,5 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_wanted_jail_payment_r, res, ServerType.Area);
         }
-
     }
 }

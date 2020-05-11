@@ -25,7 +25,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 using Necromancy.Cli.Command;
 using Necromancy.Cli.Command.Commands;
@@ -38,9 +38,12 @@ namespace Necromancy.Cli
         public const char CliSeparator = ' ';
         public const char CliValueSeparator = '=';
 
+        public static ILogger Logger = LogProvider.Logger(typeof(Program));
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Program started");
+            LogProvider.Start();
             Program program = new Program();
             if (args.Length > 0)
             {
@@ -50,7 +53,7 @@ namespace Necromancy.Cli
             {
                 program.RunInteractive();
             }
-
+            LogProvider.Stop();
             Console.WriteLine("Program ended");
         }
 
@@ -59,21 +62,19 @@ namespace Necromancy.Cli
         private readonly Thread _consoleThread;
         private readonly Dictionary<string, IConsoleCommand> _commands;
         private readonly List<ISwitchConsumer> _parameterConsumers;
-        private readonly ILogger _logger;
         private readonly LogWriter _logWriter;
         private readonly SwitchCommand _switchCommand;
         private readonly ServerCommand _serverCommand;
 
         private Program()
         {
-            _logger = LogProvider.Logger(this);
             _commands = new Dictionary<string, IConsoleCommand>();
             _inputQueue = new BlockingCollection<string>();
             _parameterConsumers = new List<ISwitchConsumer>();
             _cancellationTokenSource = new CancellationTokenSource();
             _consoleThread = new Thread(ReadConsoleThread);
             _logWriter = new LogWriter();
-            _serverCommand = new ServerCommand(_logWriter);
+            _serverCommand = new ServerCommand();
             _switchCommand = new SwitchCommand(_parameterConsumers);
             Console.CancelKeyPress += ConsoleOnCancelKeyPress;
         }
@@ -101,15 +102,15 @@ namespace Necromancy.Cli
         {
             if (arguments.Length <= 0)
             {
-                _logger.Error("Invalid input");
+                Logger.Error("Invalid input");
                 return;
             }
 
             LoadCommands();
             LoadGlobalParameterConsumer();
             ShowCopyright();
-            _logger.Info("Argument Mode");
-            
+            Logger.Info("Argument Mode");
+
             CommandResultType result = ProcessArguments(arguments);
             if (result == CommandResultType.Exit)
             {
@@ -117,7 +118,7 @@ namespace Necromancy.Cli
                 return;
             }
 
-            _logger.Info("Press `e'-key to exit.");
+            Logger.Info("Press `e'-key to exit.");
             ConsoleKeyInfo keyInfo = Console.ReadKey();
             while (keyInfo.Key != ConsoleKey.E)
             {
@@ -133,7 +134,7 @@ namespace Necromancy.Cli
             LoadGlobalParameterConsumer();
             ShowCopyright();
 
-            _logger.Info("Interactive Mode");
+            Logger.Info("Interactive Mode");
 
             _consoleThread.IsBackground = true;
             _consoleThread.Name = "Console Thread";
@@ -160,7 +161,7 @@ namespace Necromancy.Cli
                 string[] arguments = Util.ParseTextArguments(line, CliSeparator, '"');
                 if (arguments.Length <= 0)
                 {
-                    _logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
+                    Logger.Error($"Invalid input: '{line}'. Type 'help' for a list of available commands.");
                     continue;
                 }
 
@@ -177,7 +178,7 @@ namespace Necromancy.Cli
 
                 if (result == CommandResultType.Completed)
                 {
-                    _logger.Info("Command Completed");
+                    Logger.Info("Command Completed");
                     continue;
                 }
             }
@@ -192,7 +193,7 @@ namespace Necromancy.Cli
 
             if (!_commands.ContainsKey(parameter.Key))
             {
-                _logger.Error(
+                Logger.Error(
                     $"Command: '{parameter.Key}' not available. Type `help' for a list of available commands.");
                 return CommandResultType.Continue;
             }
@@ -213,7 +214,7 @@ namespace Necromancy.Cli
         {
             if (args.Length <= 0)
             {
-                _logger.Error("Invalid input. Type 'help' for a list of available commands.");
+                Logger.Error("Invalid input. Type 'help' for a list of available commands.");
                 return null;
             }
 
@@ -242,7 +243,7 @@ namespace Necromancy.Cli
                         {
                             if (key.Length <= 2 || parameter.SwitchMap.ContainsKey(key))
                             {
-                                _logger.Error($"Invalid switch key: '{key}' is empty or duplicated.");
+                                Logger.Error($"Invalid switch key: '{key}' is empty or duplicated.");
                                 continue;
                             }
 
@@ -252,7 +253,7 @@ namespace Necromancy.Cli
 
                         if (key.Length <= 0 || parameter.ArgumentMap.ContainsKey(key))
                         {
-                            _logger.Error($"Invalid argument key: '{key}' is empty or duplicated.");
+                            Logger.Error($"Invalid argument key: '{key}' is empty or duplicated.");
                             continue;
                         }
 
@@ -266,7 +267,7 @@ namespace Necromancy.Cli
                     string switchStr = arg;
                     if (switchStr.Length <= 2 || parameter.Switches.Contains(switchStr))
                     {
-                        _logger.Error($"Invalid switch: '{switchStr}' is empty or duplicated.");
+                        Logger.Error($"Invalid switch: '{switchStr}' is empty or duplicated.");
                         continue;
                     }
 
@@ -276,7 +277,7 @@ namespace Necromancy.Cli
 
                 if (arg.Length <= 0 || parameter.Switches.Contains(arg))
                 {
-                    _logger.Error($"Invalid argument: '{arg}' is empty or duplicated.");
+                    Logger.Error($"Invalid argument: '{arg}' is empty or duplicated.");
                     continue;
                 }
 
@@ -388,7 +389,7 @@ namespace Necromancy.Cli
             sb.Append("under certain conditions; type `show c' for details.");
             sb.Append(Environment.NewLine);
             sb.Append(Environment.NewLine);
-            _logger.Info(sb.ToString());
+            Logger.Info(sb.ToString());
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet
                 CustomPacketId customPacketId = (CustomPacketId) id;
                 return customPacketId.ToString();
             }
-            
+
             return null;
         }
 

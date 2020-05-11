@@ -1,9 +1,8 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using System.Numerics;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -16,7 +15,9 @@ namespace Necromancy.Server.Packet.Receive
         private readonly byte _animation;
         private readonly Vector3 _srcCoord;
         private readonly Vector3 _trgCoord;
-        public Recv8D92(Vector3 srcCoord, Vector3 trgCoord, uint instanceId, int skillId, int castVelocity, byte pose, byte animation)
+
+        public Recv8D92(Vector3 srcCoord, Vector3 trgCoord, uint instanceId, int skillId, int castVelocity, byte pose,
+            byte animation)
             : base((ushort) AreaPacketId.recv_0x8D92, ServerType.Area)
         {
             _instanceId = instanceId;
@@ -35,19 +36,19 @@ namespace Necromancy.Server.Packet.Receive
             float travelTime = distance / _castVelocity;
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_instanceId);//Monster ID
+            res.WriteUInt32(_instanceId); //Monster ID
             res.WriteFloat(_srcCoord.X);
             res.WriteFloat(_srcCoord.Y);
             res.WriteFloat(_srcCoord.Z + 75);
-            res.WriteFloat(moveTo.X);       //X per tick
-            res.WriteFloat(moveTo.Y);       //Y Per tick
-            res.WriteFloat(moveTo.Z);              //verticalMovementSpeedMultiplier
+            res.WriteFloat(moveTo.X); //X per tick
+            res.WriteFloat(moveTo.Y); //Y Per tick
+            res.WriteFloat(moveTo.Z); //verticalMovementSpeedMultiplier
 
-            res.WriteFloat((float)1 / travelTime);              //movementMultiplier
-            res.WriteFloat((float)travelTime);              //Seconds to move
+            res.WriteFloat((float) 1 / travelTime); //movementMultiplier
+            res.WriteFloat((float) travelTime); //Seconds to move
 
             res.WriteByte(_pose); //MOVEMENT ANIM
-            res.WriteByte(_animation);//JUMP & FALLING ANIM
+            res.WriteByte(_animation); //JUMP & FALLING ANIM
             return res;
         }
     }

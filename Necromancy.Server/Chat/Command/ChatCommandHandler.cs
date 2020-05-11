@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 
 namespace Necromancy.Server.Chat.Command
@@ -8,6 +10,8 @@ namespace Necromancy.Server.Chat.Command
     {
         public const char ChatCommandStart = '/';
         public const char ChatCommandSeparator = ' ';
+
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(ChatCommandHandler));
 
         private readonly Dictionary<string, ChatCommand> _commands;
         private readonly NecServer _server;

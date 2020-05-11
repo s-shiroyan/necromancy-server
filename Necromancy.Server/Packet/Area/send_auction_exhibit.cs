@@ -1,8 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -11,7 +10,7 @@ namespace Necromancy.Server.Packet.Area
         public send_auction_exhibit(NecServer server) : base(server)
         {
         }
-        
+
 
         public override ushort Id => (ushort) AreaPacketId.send_auction_exhibit;
 
@@ -21,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
             short unknown = packet.Data.ReadInt16(); // not sure 00-00
             short unknown2 = packet.Data.ReadInt16(); // not sure 03-00
 
-            byte itemCount = packet.Data.ReadByte();//count of items in auction slot
+            byte itemCount = packet.Data.ReadByte(); //count of items in auction slot
 
             int auctionTime = packet.Data.ReadInt32(); //0:4hours 1:8 hours 2:16 hours 3:24 hours
 
@@ -35,6 +34,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt64(10200101);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_exhibit_r, res, ServerType.Area);
         }
+
         /*
         AUCTION	1	This item may not be listed
         AUCTION	2	You may not list the equipped items
@@ -58,6 +58,5 @@ namespace Necromancy.Server.Packet.Area
         AUCTION	-212	This item may not be listed
         AUCTION GENERIC Auction error
         */
-
     }
 }

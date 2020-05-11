@@ -1,5 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -20,7 +19,7 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_instanceId);
+            res.WriteUInt32(_instanceId);
             res.WriteInt32(_damage);
             return res;
         }

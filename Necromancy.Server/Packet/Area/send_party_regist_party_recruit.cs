@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(objectiveID);
             res.WriteInt32(detailsID);
-            res.WriteInt32(targetID);
+            res.WriteUInt32(targetID);
             res.WriteInt32(otherID);
 
             if (targetID != 0)

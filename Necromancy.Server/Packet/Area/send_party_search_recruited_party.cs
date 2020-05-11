@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(client.Character.InstanceId);
+            res.WriteUInt32(client.Character.InstanceId);
             res.WriteInt32(0x14); // cmp to 0x14
 
             int numEntries = 0x14;
@@ -34,17 +34,17 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(1);//Party type; 0 = closed, 1 = open.
                 res.WriteInt32(1);//Normal item distribution; 0 = do not distribute, 1 = random.
                 res.WriteInt32(1);//Rare item distribution; 0 = do not distribute, 1 = Draw.
-                res.WriteInt32(client.Character.InstanceId); //Target playyer?
-                res.WriteInt32(client.Character.InstanceId);//From player instance ID (but doesn't work?)
+                res.WriteUInt32(client.Character.InstanceId); //Target playyer?
+                res.WriteUInt32(client.Character.InstanceId);//From player instance ID (but doesn't work?)
 
                 int numEntries2 = 0x4;
                 for (int j = 0; j < numEntries2; j++)
                 {
                     res.WriteInt32(0); //?
-                    res.WriteInt32(client.Character.InstanceId);
+                    res.WriteUInt32(client.Character.InstanceId);
                     res.WriteFixedString($"{client.Soul.Name}{j}", 0x31);
                     res.WriteFixedString($"{client.Character.Name}{j}", 0x5B);
-                    res.WriteInt32(client.Character.ClassId);
+                    res.WriteUInt32(client.Character.ClassId);
                     res.WriteByte(client.Character.Level);
                     res.WriteByte(2); //Criminal Status
                     res.WriteByte(1); //Beginner Protection (bool) 
@@ -54,7 +54,7 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteByte(3); //party member count per listed party
 
-                res.WriteInt32(Objective); //objective per listed party
+                res.WriteUInt32(Objective); //objective per listed party
                 res.WriteInt32(Details);
                 res.WriteInt32(Unknown);
                 res.WriteByte(0); //party match requirements. 1 for no match error

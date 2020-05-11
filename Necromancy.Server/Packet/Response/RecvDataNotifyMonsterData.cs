@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -21,11 +21,14 @@ namespace Necromancy.Server.Packet.Response
         {
             int numEntries = 02; //Max of 16 Equipment Slots for Monster.  cmp to 0x10
             int numStatusEffects = 0x80; //Statuses effects. Max 128
-            
-            if (_monsterSpawn.ModelId > 52000/*CharacterModelUpperLimit*/) { numEntries = 0;} //ToDo find any videos with monsters holding weapons.
+
+            if (_monsterSpawn.ModelId > 52000 /*CharacterModelUpperLimit*/)
+            {
+                numEntries = 0;
+            } //ToDo find any videos with monsters holding weapons.
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_monsterSpawn.InstanceId);
+            res.WriteUInt32(_monsterSpawn.InstanceId);
             res.WriteCString(_monsterSpawn.Name);
             res.WriteCString(_monsterSpawn.Title);
             res.WriteFloat(_monsterSpawn.X);
@@ -49,18 +52,18 @@ namespace Necromancy.Server.Packet.Response
             res.WriteInt32(numEntries); // cmp to 0x10 = 16
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt64(2^i);
+                res.WriteInt64(2 ^ i);
             }
 
             res.WriteInt32(0b10000000); //BITMASK for Monster State
-                                        //0bxxxxxxx1 - 1 Dead / 0 Alive  | 
-                                        //0bxxxxxx1x - 1 crouching / 0 standing
-                                        //0bxxxxx1xx - 
-                                        //0bxxxx1xxx - 1 crouching / 0 standing
-                                        //0bxxx1xxxx -
-                                        //0bxx1xxxxx - 
-                                        //0bx1xxxxxx - 1 Aggro Battle  / 0 Normal    | (for when you join a map and the monster is in battle)
-                                        //0b1xxxxxxx - 
+            //0bxxxxxxx1 - 1 Dead / 0 Alive  | 
+            //0bxxxxxx1x - 1 crouching / 0 standing
+            //0bxxxxx1xx - 
+            //0bxxxx1xxx - 1 crouching / 0 standing
+            //0bxxx1xxxx -
+            //0bxx1xxxxx - 
+            //0bx1xxxxxx - 1 Aggro Battle  / 0 Normal    | (for when you join a map and the monster is in battle)
+            //0b1xxxxxxx - 
             res.WriteInt64(1); // item Id ?
             res.WriteInt64(1); // item Id ?
             res.WriteInt64(1); // item Id ?
@@ -78,6 +81,5 @@ namespace Necromancy.Server.Packet.Response
 
             return res;
         }
-
     }
 }

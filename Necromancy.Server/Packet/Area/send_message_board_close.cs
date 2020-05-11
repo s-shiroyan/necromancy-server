@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res1 = BufferProvider.Provide();
             //recv_message_board_close_r = 0x6001,
-            res1.WriteInt32(client.Character.InstanceId);
+            res1.WriteUInt32(client.Character.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_message_board_close_r, res1, ServerType.Area);
 
             IBuffer res = BufferProvider.Provide();

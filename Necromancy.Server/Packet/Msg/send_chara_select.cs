@@ -1,5 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,8 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_select : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_select));
+
         public send_chara_select(NecServer server) : base(server)
         {
         }
@@ -35,19 +39,19 @@ namespace Necromancy.Server.Packet.Msg
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteInt32(0); //ERR-CHARSELECT error check
-            res3.WriteInt32(client.Character.InstanceId);
+            res3.WriteUInt32(client.Character.InstanceId);
 
             //sub_4E4210_2341  // 
             res3.WriteInt32(client.Character.MapId); //MapSerialID //passeed to Send_Map_Entry
             res3.WriteInt32(client.Character.MapId); //MapID
-            res3.WriteFixedString("127.0.0.1", 0x41); //IP
-            res3.WriteInt16(60002); //Port
+            res3.WriteFixedString(Settings.DataAreaIpAddress, 0x41); //IP
+            res3.WriteUInt16(Settings.AreaPort); //Port
 
             res3.WriteFloat(client.Character.X);
             res3.WriteFloat(client.Character.Y);
             res3.WriteFloat(client.Character.Z);
             res3.WriteByte(client.Character.Heading);
-            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_r, res3, ServerType.Msg);
+            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_r, res3, ServerType.Msg);
 
             /*
              ERR_CHARSELECT	GENERIC	Failed to select a character (CODE:<errcode>)
@@ -62,7 +66,8 @@ namespace Necromancy.Server.Packet.Msg
             character.DeadBodyInstanceId = deadBody.InstanceId;
             deadBody.CharacterInstanceId = character.InstanceId;
             character.movementId = character.InstanceId;
-            Logger.Debug($"Dead Body Instance ID {deadBody.InstanceId}   |  Character Instance ID {character.InstanceId}");
+            Logger.Debug(
+                $"Dead Body Instance ID {deadBody.InstanceId}   |  Character Instance ID {character.InstanceId}");
             deadBody.CharaName = character.Name;
             deadBody.MapId = character.MapId;
             deadBody.X = character.X;
@@ -75,6 +80,5 @@ namespace Necromancy.Server.Packet.Msg
             deadBody.HairColor = character.HairColorId;
             deadBody.FaceId = character.FaceId;
         }
-
     }
 }

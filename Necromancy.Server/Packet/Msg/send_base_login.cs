@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -9,6 +11,8 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_base_login : ConnectionHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_base_login));
+
         public send_base_login(NecServer server) : base(server)
         {
         }
@@ -31,11 +35,12 @@ namespace Necromancy.Server.Packet.Msg
                 connection.Socket.Close();
                 return;
             }
+
             client.MsgConnection = connection;
             connection.Client = client;
             SendResponse(connection, client);
         }
-        
+
         private void SendResponse(NecConnection connection, NecClient client)
         {
             List<Soul> souls = Database.SelectSoulsByAccountId(client.Account.Id);
@@ -56,7 +61,7 @@ namespace Necromancy.Server.Packet.Msg
                 Router.Send(client, (ushort) MsgPacketId.recv_base_login_r, resq, ServerType.Msg);
                 return;
             }
-            
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
             for (int i = 0; i < SoulCount; i++)

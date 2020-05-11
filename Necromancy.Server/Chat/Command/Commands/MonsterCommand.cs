@@ -1,14 +1,9 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Common;
+using Arrowgene.Logging;
 using Necromancy.Server.Data.Setting;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
-using Necromancy.Server.Tasks;
-using System;
-using System.Numerics;
-using System.Threading;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -17,6 +12,8 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class MonsterCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(MonsterCommand));
+
         //protected NecServer server { get; }
         public MonsterCommand(NecServer server) : base(server)
         {
@@ -46,22 +43,21 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
 
 
-            
-
             if (!Server.SettingRepository.ModelCommon.TryGetValue(modelId, out ModelCommonSetting modelSetting))
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid ModelId: {modelId}"));
                 return;
             }
+
             Logger.Debug($"modelSetting.Radius [{modelSetting.Radius}]");
             monsterSpawn.MonsterId = monsterSetting.Id;
             monsterSpawn.Name = monsterSetting.Name;
             monsterSpawn.Title = monsterSetting.Title;
-            monsterSpawn.Level = (byte)monsterSetting.Level;
+            monsterSpawn.Level = (byte) monsterSetting.Level;
 
             monsterSpawn.ModelId = modelSetting.Id;
-            monsterSpawn.Size = (short)(modelSetting.Height/2);
-            monsterSpawn.Radius = (short)modelSetting.Radius;
+            monsterSpawn.Size = (short) (modelSetting.Height / 2);
+            monsterSpawn.Radius = (short) modelSetting.Radius;
 
             monsterSpawn.MapId = client.Character.MapId;
 
@@ -77,16 +73,15 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 responses.Add(ChatResponse.CommandError(client, "MonsterSpawn could not be saved to database"));
                 return;
-            }   
+            }
+
             RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
             Router.Send(client.Map, monsterData);
         }
 
 
-
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "mon";
         public override string HelpText => "usage: `/mon [monsterId] [modelId]` - Spawns a Monster";
-
     }
 }

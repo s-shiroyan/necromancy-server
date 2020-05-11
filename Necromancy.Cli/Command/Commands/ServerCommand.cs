@@ -1,22 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using Arrowgene.Logging;
 using Necromancy.Cli.Argument;
 using Necromancy.Server;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Setting;
 
 namespace Necromancy.Cli.Command.Commands
 {
     public class ServerCommand : ConsoleCommand, ISwitchConsumer
     {
+        private const string SettingFile = "server_setting.json";
         private NecServer _server;
-        private readonly LogWriter _logWriter;
         private bool _service;
-        
-        public ServerCommand(LogWriter logWriter)
+
+        public ServerCommand()
         {
             _service = false;
-            _logWriter = logWriter;
             Switches = new List<ISwitchProperty>();
             Switches.Add(
                 new SwitchProperty<bool>(
@@ -43,7 +44,15 @@ namespace Necromancy.Cli.Command.Commands
         {
             if (_server == null)
             {
-                NecSetting setting = new NecSetting();
+                SettingProvider settingProvider = new SettingProvider();
+                NecSetting setting = settingProvider.Load<NecSetting>(SettingFile);
+                if (setting == null)
+                {
+                    setting = new NecSetting();
+                    settingProvider.Save(setting, SettingFile);
+                }
+
+                LogProvider.Configure<NecLogger>(setting);
                 _server = new NecServer(setting);
             }
 

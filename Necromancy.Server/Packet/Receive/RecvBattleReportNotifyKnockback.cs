@@ -1,5 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -11,7 +10,9 @@ namespace Necromancy.Server.Packet.Receive
         private readonly uint _instanceId;
         private readonly float _targetFreezeDuration;
         private readonly float _targetKnockbackAnimationDuration;
-        public RecvBattleReportNotifyKnockback(uint instanceId, float targetFreezeDuration, float targetKnockbackAnimationDuration)
+
+        public RecvBattleReportNotifyKnockback(uint instanceId, float targetFreezeDuration,
+            float targetKnockbackAnimationDuration)
             : base((ushort) AreaPacketId.recv_battle_report_noact_notify_knockback, ServerType.Area)
         {
             _instanceId = instanceId;
@@ -22,9 +23,9 @@ namespace Necromancy.Server.Packet.Receive
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(_instanceId);
+            res.WriteUInt32(_instanceId);
             res.WriteFloat(_targetFreezeDuration);
-            res.WriteFloat(_targetKnockbackAnimationDuration);   // delay in seconds
+            res.WriteFloat(_targetKnockbackAnimationDuration); // delay in seconds
             return res;
         }
     }

@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using System.IO;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {
     public class SettingRepository
     {
-        private DirectoryInfo _directory;
-        private readonly ILogger _logger;
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(SettingRepository));
+
+        private readonly DirectoryInfo _directory;
 
         public SettingRepository(string folder)
         {
-            _logger = LogProvider.Logger(this);
             _directory = new DirectoryInfo(folder);
             if (!_directory.Exists)
             {
-                _logger.Error($"Could not initialize repository, '{folder}' does not exist");
+                Logger.Error($"Could not initialize repository, '{folder}' does not exist");
                 return;
             }
 
@@ -75,7 +75,7 @@ namespace Necromancy.Server.Data.Setting
             FileInfo file = new FileInfo(path);
             if (!file.Exists)
             {
-                _logger.Error($"Could not load '{fileName}', file does not exist");
+                Logger.Error($"Could not load '{fileName}', file does not exist");
             }
 
             list.AddRange(reader.Read(file.FullName));

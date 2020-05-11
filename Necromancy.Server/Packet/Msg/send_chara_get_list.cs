@@ -1,6 +1,8 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -8,6 +10,8 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_get_list : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_get_list));
+
         public send_chara_get_list(NecServer server) : base(server)
         {
         }
@@ -19,7 +23,7 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteInt32(0xFFFFFFFF);
+            res.WriteUInt32(0xFFFFFFFF);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_get_list_r, res, ServerType.Msg);
             SendNotifyData(client);
             SendNotifyDataComplete(client);
@@ -29,12 +33,12 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteByte(0xFF);
-            res2.WriteInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0xFFFFFFFF);
             res2.WriteInt32(0xFFF);
-            res2.WriteInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0xFFFFFFFF);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2, ServerType.Msg);
         }
-        
+
         private void SendNotifyData(NecClient client)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
@@ -55,14 +59,14 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(character.Level); //character level stat
                 res.WriteInt32(1); //todo (unknown)
-                res.WriteInt32(character.ClassId); //class stat 
+                res.WriteUInt32(character.ClassId); //class stat 
 
                 //Consolidated Frequently Used Code
                 LoadEquip.BasicTraits(res, character);
                 LoadEquip.SlotSetup(res, character, 19);
                 LoadEquip.EquipItems(res, character, 19);
                 LoadEquip.EquipSlotBitMask(res, character, 19);
-                
+
                 //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
                 res.WriteInt32(10); //Right Hand    //1 for weapon
                 res.WriteInt32(10); //Left Hand     //2 for Shield

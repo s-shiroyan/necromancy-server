@@ -1,9 +1,7 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using System.Numerics;
 
 namespace Necromancy.Server.Packet.Receive
 {
@@ -11,6 +9,7 @@ namespace Necromancy.Server.Packet.Receive
     {
         private readonly uint _instanceId;
         private readonly uint _targetInstanceId;
+
         public RecvTest(uint instanceId, uint targetInstanceId)
             : base((ushort) AreaPacketId.recv_0x1489, ServerType.Area)
         {
@@ -22,8 +21,8 @@ namespace Necromancy.Server.Packet.Receive
         {
             IBuffer res = BufferProvider.Provide();
             //No String - push wizardryonline_patched.4D6044
-            res.WriteInt32(_instanceId);
-            res.WriteInt32(_targetInstanceId);
+            res.WriteUInt32(_instanceId);
+            res.WriteUInt32(_targetInstanceId);
 
             return res;
         }

@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_party_change_leader_r, res, ServerType.Area);
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(newLeaderInstanceId); //must be newLeaderInstanceId
+            res2.WriteUInt32(newLeaderInstanceId); //must be newLeaderInstanceId
             Router.Send(myParty.PartyMembers, (ushort)MsgPacketId.recv_party_notify_change_leader, res2, ServerType.Msg);
 
             myParty.PartyLeaderId = newLeaderInstanceId;

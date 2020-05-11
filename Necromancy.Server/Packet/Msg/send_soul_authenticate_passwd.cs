@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -15,20 +15,18 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            string souldPassword = packet.Data.ReadCString();
+            string soulPassword = packet.Data.ReadCString();
 
             IBuffer res = BufferProvider.Provide();
-            //Comment Out If Statement Below to Disable PIN Authentication
-            /*
-            if (client.Soul.Password != souldPassword)
+            if (Settings.RequirePin && client.Soul.Password != soulPassword)
             {
                 res.WriteInt32(1); //  Error: 0 - Success, other vales (maybe) error code   
                 res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
                 Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);
-                client.Socket.Close();
+                client.Close();
                 return;
             }
-            */
+
             res.WriteInt32(0); //  Error: 0 - Success, other vales (maybe) error code
             res.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
             Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res, ServerType.Msg);

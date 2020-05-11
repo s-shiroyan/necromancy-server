@@ -1,9 +1,5 @@
-//using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -18,7 +14,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             Server.Database.UpdateCharacter(client.Character);
         }
-        
+
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "charsave";
     }

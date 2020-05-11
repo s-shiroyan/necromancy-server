@@ -1,5 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,8 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_skill_request_gain : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_skill_request_gain));
+
         public send_skill_request_gain(NecServer server) : base(server)
         {
         }
@@ -16,7 +20,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int skillID = packet.Data.ReadInt32(),
-                 skillLevel = packet.Data.ReadInt32();
+                skillLevel = packet.Data.ReadInt32();
             //ToDo Add prerequisite checking for new skills
             //ToDo Add passive class specialty skills
             SkillTreeItem skillTreeItem = null;
@@ -41,11 +45,12 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Error($"Adding SkillTreeItem for Character ID [{client.Character.Id}]");
                 }
             }
+
             SendSkillTreeGain(client, skillID, skillLevel);
             //uint skillID = packet.Data.ReadUInt32();
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);//1 = failed to aquire skill, 0 = success? but no skill aquired 
-            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res, ServerType.Area);            
+            res.WriteInt32(0); //1 = failed to aquire skill, 0 = success? but no skill aquired 
+            Router.Send(client, (ushort) AreaPacketId.recv_skill_request_gain_r, res, ServerType.Area);
         }
 
         private void SendSkillTreeGain(NecClient client, int skillID, int skillLevel)
@@ -53,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(skillID);
-            res.WriteInt32(skillLevel);//Level of skill (1-7)
+            res.WriteInt32(skillLevel); //Level of skill (1-7)
             res.WriteByte(1); //Bool
             res.WriteByte(2); //Bool
 

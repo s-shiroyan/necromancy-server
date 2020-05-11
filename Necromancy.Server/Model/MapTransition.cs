@@ -1,9 +1,7 @@
-using Arrowgene.Services.Logging;
-using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Logging;
-using Necromancy.Server.Tasks;
 using System;
 using System.Numerics;
+using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
 {
@@ -29,6 +27,7 @@ namespace Necromancy.Server.Model
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public bool InvertedTransition;
+
         public MapTransition()
         {
             ToPos = new MapPosition();
@@ -37,7 +36,8 @@ namespace Necromancy.Server.Model
         public void Start(NecServer server, Map map)
         {
             _server = server;
-            _transitionTask = new MapTransitionTask(_server, map, TransitionMapId, ReferencePos, RefDistance, LeftPos, RightPos, InstanceId, InvertedTransition, ToPos, Id);
+            _transitionTask = new MapTransitionTask(_server, map, TransitionMapId, ReferencePos, RefDistance, LeftPos,
+                RightPos, InstanceId, InvertedTransition, ToPos, Id);
             _transitionTask.Start();
         }
 

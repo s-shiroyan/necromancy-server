@@ -1,5 +1,4 @@
-using Arrowgene.Services.Buffers;
-using Necromancy.Server.Chat;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -9,6 +8,7 @@ namespace Necromancy.Server.Packet.Receive
     public class RecvBattleReportActionEffectOnHit : PacketResponse
     {
         private readonly int _effectId;
+
         public RecvBattleReportActionEffectOnHit(int effectId)
             : base((ushort) AreaPacketId.recv_battle_report_action_effect_onhit, ServerType.Area)
         {

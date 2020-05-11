@@ -1,5 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,8 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_base_enter : ConnectionHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(ConnectionHandler));
+
         public send_base_enter(NecServer server) : base(server)
         {
         }
@@ -30,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
 
             client.AreaConnection = connection;
             connection.Client = client;
-            
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //  Error
             Router.Send(connection, (ushort) AreaPacketId.recv_base_enter_r, res);

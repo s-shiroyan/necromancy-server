@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Union;
@@ -14,11 +14,11 @@ namespace Necromancy.Server.Packet.Msg
 
         public override ushort Id => (ushort) MsgPacketId.send_union_request_change_role;
 
-        
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            uint previousLeaderCharacterInstanceId = packet.Data.ReadUInt32();//Old Leader Instance ID if changing leader. otherwise 0
+            uint previousLeaderCharacterInstanceId =
+                packet.Data.ReadUInt32(); //Old Leader Instance ID if changing leader. otherwise 0
             uint targetInstanceId = packet.Data.ReadUInt32();
             uint targetRole = packet.Data.ReadUInt32(); //3 beginer, 2 member, 1 sub-leader, 0 leader
 
@@ -35,25 +35,28 @@ namespace Necromancy.Server.Packet.Msg
 
 
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteInt32(targetInstanceId);
-            res2.WriteInt32(previousLeaderCharacterInstanceId);
-            res2.WriteInt32(targetRole);
-            if (targetClient != null) Router.Send(targetClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res2, ServerType.Msg);
+            res2.WriteUInt32(targetInstanceId);
+            res2.WriteUInt32(previousLeaderCharacterInstanceId);
+            res2.WriteUInt32(targetRole);
+            if (targetClient != null)
+                Router.Send(targetClient, (ushort) MsgPacketId.recv_union_notify_changed_role, res2, ServerType.Msg);
 
             if (previousLeaderCharacterInstanceId > 0)
             {
                 NecClient oldLeaderClient = Server.Clients.GetByCharacterInstanceId(previousLeaderCharacterInstanceId);
-                Character oldLeaderCharacter = Server.Characters.GetByCharacterInstanceId(previousLeaderCharacterInstanceId);
+                Character oldLeaderCharacter =
+                    Server.Characters.GetByCharacterInstanceId(previousLeaderCharacterInstanceId);
                 UnionMember oldLeaderMember = Server.Database.SelectUnionMemberByCharacterId(oldLeaderCharacter.Id);
                 oldLeaderMember.Rank = previousRank;
                 Server.Database.UpdateUnionMember(oldLeaderMember);
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteInt32(targetInstanceId);
-                res3.WriteInt32(previousLeaderCharacterInstanceId);
-                res3.WriteInt32(targetRole);
-                if (oldLeaderClient!= null) Router.Send(oldLeaderClient, (ushort)MsgPacketId.recv_union_notify_changed_role, res3, ServerType.Msg);
+                res3.WriteUInt32(targetInstanceId);
+                res3.WriteUInt32(previousLeaderCharacterInstanceId);
+                res3.WriteUInt32(targetRole);
+                if (oldLeaderClient != null)
+                    Router.Send(oldLeaderClient, (ushort) MsgPacketId.recv_union_notify_changed_role, res3,
+                        ServerType.Msg);
             }
-
         }
     }
 }

@@ -1,18 +1,19 @@
 using System.Collections.Generic;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Model
 {
     public class MapLookup
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(MapLookup));
+
         private readonly Dictionary<int, Map> _maps;
 
         private readonly object _lock = new object();
-        private readonly ILogger _logger;
+
 
         public MapLookup()
         {
-            _logger = LogProvider.Logger(this);
             _maps = new Dictionary<int, Map>();
         }
 
@@ -36,7 +37,7 @@ namespace Necromancy.Server.Model
             {
                 if (!_maps.ContainsKey(mapId))
                 {
-                    _logger.Error($"MapId: {mapId} not found");
+                    Logger.Error($"MapId: {mapId} not found");
                     return null;
                 }
 
@@ -53,7 +54,7 @@ namespace Necromancy.Server.Model
             {
                 if (!_maps.ContainsKey(mapId))
                 {
-                    _logger.Error($"MapId: {mapId} not found");
+                    Logger.Error($"MapId: {mapId} not found");
                     map = null;
                     return false;
                 }

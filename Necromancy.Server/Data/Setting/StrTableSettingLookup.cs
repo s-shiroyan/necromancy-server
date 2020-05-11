@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Arrowgene.Services.Logging;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Data.Setting
 {
     public class StrTableSettingLookup
     {
         private const string RegexStringIdPattern = @"<str ([0-9]+) ([0-9]+) ([0-9]+)>";
-        private readonly ILogger _logger;
-        private Dictionary<string, StrTableSetting> _table;
+        
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(StrTableSettingLookup));
+        
+        private readonly Dictionary<string, StrTableSetting> _table;
 
         public StrTableSettingLookup()
         {
-            _logger = LogProvider.Logger(this);
             _table = new Dictionary<string, StrTableSetting>();
         }
 
@@ -21,7 +22,7 @@ namespace Necromancy.Server.Data.Setting
             string key = GenerateKey(setting);
             if (_table.ContainsKey(key))
             {
-                _logger.Error($"Key '{key}' already exists");
+                Logger.Error($"Key '{key}' already exists");
                 return;
             }
 

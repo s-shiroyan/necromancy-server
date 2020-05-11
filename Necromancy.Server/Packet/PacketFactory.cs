@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Arrowgene.Services.Buffers;
-using Arrowgene.Services.Logging;
+using System.Threading;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
@@ -12,12 +13,13 @@ namespace Necromancy.Server.Packet
 {
     public class PacketFactory
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(PacketFactory));
+
         public const int PacketIdSize = 2;
         public const int PacketLengthTypeSize = 1;
         public const int HeartbeatPacketBodySize = 8;
         public const int Unknown1PacketBodySize = 8;
         public const int DisconnectPacketBodySize = 4;
-
 
         private bool _readHeader;
         private bool _readPacketLengthType;
@@ -25,7 +27,6 @@ namespace Necromancy.Server.Packet
         private ushort _id;
         private int _position;
         private IBuffer _buffer;
-        private readonly NecLogger _logger;
         private readonly NecSetting _setting;
         private byte[] _header;
         private PacketType _packetType;
@@ -33,15 +34,12 @@ namespace Necromancy.Server.Packet
 
         public PacketFactory(NecSetting setting)
         {
-            _logger = LogProvider.Logger<NecLogger>(this);
             _setting = setting;
             Reset();
         }
 
         public byte[] Write(NecPacket packet)
         {
-            // TODO update arrowgene service to write uint*
-
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
 
@@ -75,21 +73,21 @@ namespace Necromancy.Server.Packet
                     {
                         packetType = PacketType.UInt16;
                         buffer.WriteByte((byte) packetType);
-                        buffer.WriteInt16((ushort) dataSize);
+                        buffer.WriteUInt16((ushort) dataSize);
                     }
                     else if (dataSize < uint.MaxValue)
                     {
                         packetType = PacketType.UInt32;
                         buffer.WriteByte((byte) packetType);
-                        buffer.WriteInt32((uint) dataSize);
+                        buffer.WriteUInt32((uint) dataSize);
                     }
                     else
                     {
-                        _logger.Error($"{dataSize} to big");
+                        Logger.Error($"{dataSize} to big");
                         return null;
                     }
 
-                    buffer.WriteInt16(packet.Id);
+                    buffer.WriteUInt16(packet.Id);
                     buffer.WriteBytes(data);
                     break;
             }
@@ -126,7 +124,7 @@ namespace Necromancy.Server.Packet
                     byte lengthType = _buffer.ReadByte();
                     if (!Enum.IsDefined(typeof(PacketType), lengthType))
                     {
-                        _logger.Error($"PacketType: '{lengthType}' not found");
+                        Logger.Error($"PacketType: '{lengthType}' not found");
                         Reset();
                         return packets;
                     }
@@ -186,14 +184,14 @@ namespace Necromancy.Server.Packet
                         case PacketType.Disconnect:
                         {
                             _dataSize = DisconnectPacketBodySize;
-                            _id = (ushort)CustomPacketId.SendDisconnect;
+                            _id = (ushort) CustomPacketId.SendDisconnect;
                             _readHeader = true;
                             break;
                         }
                         default:
                         {
-                            // TODO update arrowgene service to read uint24 && int24
-                            _logger.Error($"PacketType: '{_packetType}' not supported");
+                            // TODO update arrowgene buffer to read uint24 && int24
+                            Logger.Error($"PacketType: '{_packetType}' not supported");
                             Reset();
                             return packets;
                         }

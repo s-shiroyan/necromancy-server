@@ -1,4 +1,4 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -12,7 +12,7 @@ namespace Necromancy.Server.Packet.Area
         }
 
 
-        public override ushort Id => (ushort)AreaPacketId.send_auction_receive_gold;
+        public override ushort Id => (ushort) AreaPacketId.send_auction_receive_gold;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -26,7 +26,7 @@ namespace Necromancy.Server.Packet.Area
             1 The item may be listed
 
             */
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_auction_receive_gold_r, res, ServerType.Area);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_receive_gold_r, res, ServerType.Area);
         }
     }
 }

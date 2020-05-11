@@ -1,5 +1,7 @@
-using Arrowgene.Services.Buffers;
+using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -7,6 +9,8 @@ namespace Necromancy.Server.Packet.Auth
 {
     public class send_base_select_world : ClientHandler
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_base_select_world));
+
         public send_base_select_world(NecServer server) : base(server)
         {
         }
@@ -22,8 +26,8 @@ namespace Necromancy.Server.Packet.Auth
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteCString("127.0.0.1"); //Message Server IP
-            res.WriteInt32(60001); //Message Server Port
+            res.WriteCString(Settings.DataMsgIpAddress);
+            res.WriteInt32(Settings.MsgPort);
             Router.Send(client, (ushort) AuthPacketId.recv_base_select_world_r, res, ServerType.Auth);
         }
     }
