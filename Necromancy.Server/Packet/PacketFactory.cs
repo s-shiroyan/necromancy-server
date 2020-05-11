@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
@@ -39,8 +40,7 @@ namespace Necromancy.Server.Packet
 
         public byte[] Write(NecPacket packet)
         {
-            // TODO update arrowgene service to write uint*
-
+            //Thread.Sleep(200);
             byte[] data = packet.Data.GetAllBytes();
             IBuffer buffer = BufferProvider.Provide();
 
@@ -101,6 +101,7 @@ namespace Necromancy.Server.Packet
 
         public List<NecPacket> Read(byte[] data, ServerType serverType)
         {
+            //Thread.Sleep(200);
             List<NecPacket> packets = new List<NecPacket>();
             if (_buffer == null)
             {

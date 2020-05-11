@@ -73,7 +73,7 @@ namespace Necromancy.Server.Packet.Area
                     gGate.Title = npcSpawn.Title;
 
                     RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGate);
-                    Router.Send(gGateData, client);
+                //    Router.Send(gGateData, client);
                 }
                 else
                 {
