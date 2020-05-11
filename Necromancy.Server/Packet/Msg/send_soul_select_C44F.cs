@@ -36,6 +36,15 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
+            
+            if (!Settings.RequirePin)
+            {
+                IBuffer res1 = BufferProvider.Provide();
+                res1.WriteInt32(0); //  Error: 0 - Success, other vales (maybe) error code
+                res1.WriteByte(0); // 0 = OK | 1 = need to change soul name (bool type) true = other values, false - 0
+                Router.Send(client, (ushort) MsgPacketId.recv_soul_authenticate_passwd_r, res1, ServerType.Msg);
+                return;
+            }
 
             res.WriteInt32(0); // 0 = OK | 1 = Failed to return to soul selection
             if (client.Soul.Password == null)
@@ -47,6 +56,8 @@ namespace Necromancy.Server.Packet.Msg
             {
                 res.WriteByte(1); // bool - 0 = Set New Password | 1 = Enter Password
             }
+
+
 
             Router.Send(client, (ushort) MsgPacketId.recv_soul_select_r, res, ServerType.Msg);
         }

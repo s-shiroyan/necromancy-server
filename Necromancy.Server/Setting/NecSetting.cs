@@ -59,7 +59,9 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 6)] public ushort AreaPort { get; set; }
 
-        [DataMember(Order = 10)] public bool NeedRegistration { get; set; }
+        [DataMember(Order = 10)] public bool RequireRegistration { get; set; }
+        [DataMember(Order = 11)] public bool RequirePin { get; set; }
+        
 
         [DataMember(Order = 20)] public int LogLevel { get; set; }
 
@@ -87,7 +89,8 @@ namespace Necromancy.Server.Setting
             MsgPort = 60001;
             AreaIpAddress = IPAddress.Loopback;
             AreaPort = 60002;
-            NeedRegistration = false;
+            RequireRegistration = false;
+            RequirePin = false;
             LogLevel = 0;
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
@@ -111,7 +114,8 @@ namespace Necromancy.Server.Setting
             MsgPort = setting.MsgPort;
             AreaIpAddress = setting.AreaIpAddress;
             AreaPort = setting.AreaPort;
-            NeedRegistration = setting.NeedRegistration;
+            RequireRegistration = setting.RequireRegistration;
+            RequirePin = setting.RequirePin;
             LogLevel = setting.LogLevel;
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;

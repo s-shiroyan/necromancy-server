@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Auth
             Account account = Database.SelectAccountByName(accountName);
             if (account == null)
             {
-                if (Settings.NeedRegistration)
+                if (Settings.RequireRegistration)
                 {
                     Logger.Error(connection, $"AccountName: {accountName} doesn't exist");
                     SendResponse(connection, null);
