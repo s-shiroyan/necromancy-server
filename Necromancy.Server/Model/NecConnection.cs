@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using Arrowgene.Logging;
 using Arrowgene.Networking.Tcp;
-using Arrowgene.Networking.Tcp.Server.AsyncEvent;
-using Necromancy.Server.Chat.Command.Commands;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Packet;
 
@@ -20,16 +17,6 @@ namespace Necromancy.Server.Model
             PacketFactory = packetFactory;
             ServerType = serverType;
             Client = null;
-
-            if (clientSocket is AsyncEventClient aeClient)
-            {
-                aeClient.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
-                
-                // Disable TCP Delayed Acknowledgement on a socket
-                //int SIO_TCP_SET_ACK_FREQUENCY = unchecked((int)0x98000017);
-                //var outputArray = new byte[128];
-                //var bytesInOutputArray = aeClient.Socket.IOControl(SIO_TCP_SET_ACK_FREQUENCY,BitConverter.GetBytes(1), outputArray);
-            }
         }
 
         public string Identity => Socket.Identity;
