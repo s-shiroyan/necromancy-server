@@ -26,9 +26,9 @@ namespace Necromancy.Server.Model
                 aeClient.Socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, true);
                 
                 // Disable TCP Delayed Acknowledgement on a socket
-                int SIO_TCP_SET_ACK_FREQUENCY = unchecked((int)0x98000017);
-                var outputArray = new byte[128];
-                var bytesInOutputArray = aeClient.Socket.IOControl(SIO_TCP_SET_ACK_FREQUENCY,BitConverter.GetBytes(1), outputArray);
+                //int SIO_TCP_SET_ACK_FREQUENCY = unchecked((int)0x98000017);
+                //var outputArray = new byte[128];
+                //var bytesInOutputArray = aeClient.Socket.IOControl(SIO_TCP_SET_ACK_FREQUENCY,BitConverter.GetBytes(1), outputArray);
             }
         }
 
