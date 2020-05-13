@@ -183,11 +183,8 @@ namespace Necromancy.Server.Model
         {
             Enter(client, mapPosition);
             _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
-            // EnterSyncOk(client);
-        }
 
-        public void EnterSyncOk(NecClient client)
-        {
+            // currently required to prevent disconnect by force changing
             _server.Router.Send(new RecvMapChangeSyncOk(), client);
         }
 
@@ -260,7 +257,6 @@ namespace Necromancy.Server.Model
                     }
                 }
             }
-
 
             //on successful map entry, update the client database position
             if (!_server.Database.UpdateCharacter(client.Character))
