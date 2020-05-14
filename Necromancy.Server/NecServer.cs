@@ -142,6 +142,9 @@ namespace Necromancy.Server
             {
                 union.Leave(client);
             }
+
+            //Remove the client from the list of server clients on disconnect
+            this.Clients.Remove(client);
         }
 
         public void Start()
