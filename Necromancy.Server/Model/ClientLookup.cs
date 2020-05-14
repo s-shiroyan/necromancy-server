@@ -13,6 +13,14 @@ namespace Necromancy.Server.Model
             _clients = new List<NecClient>();
         }
 
+        public int GetCount()
+        {
+            lock (_lock)
+            {
+                return _clients.Count;
+            }
+        }
+
         /// <summary>
         /// Returns all Clients.
         /// </summary>
@@ -50,7 +58,7 @@ namespace Necromancy.Server.Model
                 _clients.Remove(client);
             }
         }
-        
+
         /// <summary>
         /// Returns a Client by Soul name if it exists.
         /// </summary>

@@ -12,6 +12,7 @@ namespace Necromancy.Cli.Command.Commands
     public class ServerCommand : ConsoleCommand, ISwitchConsumer
     {
         private const string SettingFile = "server_setting.json";
+        private const string SecretFile = "server_secret.json";
         private NecServer _server;
         private bool _service;
 
@@ -51,6 +52,17 @@ namespace Necromancy.Cli.Command.Commands
                     setting = new NecSetting();
                     settingProvider.Save(setting, SettingFile);
                 }
+
+                SettingProvider secretsProvider = new SettingProvider(setting.SecretsFolder);
+                NecSecret secret = secretsProvider.Load<NecSecret>(SecretFile);
+                if (secret == null)
+                {
+                    secret = new NecSecret();
+                    secretsProvider.Save(secret, SecretFile);
+                }
+
+                setting.DiscordBotToken = secret.DiscordBotToken;
+                setting.DatabaseSettings.Password = secret.DatabasePassword;
 
                 LogProvider.Configure<NecLogger>(setting);
                 _server = new NecServer(setting);

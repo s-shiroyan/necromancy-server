@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
@@ -17,6 +18,7 @@ namespace Necromancy.Server.Setting
         /// </summary>
         public const int BCryptWorkFactor = 10;
 
+        // Connection Info
         [IgnoreDataMember] public IPAddress ListenIpAddress { get; set; }
 
         [DataMember(Name = "ListenIpAddress", Order = 0)]
@@ -36,7 +38,6 @@ namespace Necromancy.Server.Setting
         }
 
         [DataMember(Order = 2)] public ushort AuthPort { get; set; }
-
         [IgnoreDataMember] public IPAddress MsgIpAddress { get; set; }
 
         [DataMember(Name = "MsgIpAddress", Order = 3)]
@@ -47,7 +48,6 @@ namespace Necromancy.Server.Setting
         }
 
         [DataMember(Order = 4)] public ushort MsgPort { get; set; }
-
         [IgnoreDataMember] public IPAddress AreaIpAddress { get; set; }
 
         [DataMember(Name = "AreaIpAddress", Order = 5)]
@@ -59,25 +59,31 @@ namespace Necromancy.Server.Setting
 
         [DataMember(Order = 6)] public ushort AreaPort { get; set; }
 
+        // Server Config
         [DataMember(Order = 10)] public bool RequireRegistration { get; set; }
         [DataMember(Order = 11)] public bool RequirePin { get; set; }
 
-
+        // Logging
         [DataMember(Order = 20)] public int LogLevel { get; set; }
-
         [DataMember(Order = 21)] public bool LogUnknownIncomingPackets { get; set; }
-
         [DataMember(Order = 22)] public bool LogOutgoingPackets { get; set; }
-
         [DataMember(Order = 23)] public bool LogIncomingPackets { get; set; }
 
+        // Discord
+        [DataMember(Order = 30)] public string DiscordBotToken { get; set; }
+        [DataMember(Order = 31)] public ulong DiscordGuild { get; set; }
+        [DataMember(Order = 32)] public ulong DiscordBotChannel_ServerStatus { get; set; }
+
+        // Folder
         [DataMember(Order = 60)] public string RepositoryFolder { get; set; }
+        [DataMember(Order = 61)] public string SecretsFolder { get; set; }
+
+        // Database
         [DataMember(Order = 70)] public DatabaseSettings DatabaseSettings { get; set; }
 
+        // Socket
         [DataMember(Order = 100)] public AsyncEventSettings AuthSocketSettings { get; set; }
-
         [DataMember(Order = 101)] public AsyncEventSettings MsgSocketSettings { get; set; }
-
         [DataMember(Order = 102)] public AsyncEventSettings AreaSocketSettings { get; set; }
 
         public NecSetting()
@@ -95,7 +101,11 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
             LogIncomingPackets = true;
+            DiscordBotToken = "";
+            DiscordGuild = 541789394873352203;
+            DiscordBotChannel_ServerStatus = 710367511824171019;
             RepositoryFolder = Path.Combine(Util.RelativeExecutingDirectory(), "Client/Data/Settings");
+            SecretsFolder = Path.Combine(Util.RelativeExecutingDirectory(), "Client/Data/Secrets");
             DatabaseSettings = new DatabaseSettings();
             AuthSocketSettings = new AsyncEventSettings();
             AuthSocketSettings.MaxUnitOfOrder = 2;
@@ -120,7 +130,11 @@ namespace Necromancy.Server.Setting
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;
             LogIncomingPackets = setting.LogIncomingPackets;
+            DiscordBotToken = setting.DiscordBotToken;
+            DiscordGuild = setting.DiscordGuild;
+            DiscordBotChannel_ServerStatus = setting.DiscordBotChannel_ServerStatus;
             RepositoryFolder = setting.RepositoryFolder;
+            SecretsFolder = setting.SecretsFolder;
             DatabaseSettings = new DatabaseSettings(setting.DatabaseSettings);
             AuthSocketSettings = new AsyncEventSettings(setting.AuthSocketSettings);
             MsgSocketSettings = new AsyncEventSettings(setting.MsgSocketSettings);
