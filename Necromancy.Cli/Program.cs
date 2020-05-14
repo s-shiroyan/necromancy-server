@@ -38,7 +38,7 @@ namespace Necromancy.Cli
         public const char CliSeparator = ' ';
         public const char CliValueSeparator = '=';
 
-        public static ILogger Logger = LogProvider.Logger(typeof(Program));
+        public static readonly ILogger Logger = LogProvider.Logger(typeof(Program));
 
         private static void Main(string[] args)
         {
