@@ -50,7 +50,7 @@ namespace Necromancy.Server.Tasks.Core
             if (TaskRunAtStart)
             {
                 Logger.Trace($"Task {TaskName} run");
-                Execute();
+                ExecuteUserCode();
                 Logger.Trace($"Task {TaskName} completed");
             }
 
@@ -68,12 +68,25 @@ namespace Necromancy.Server.Tasks.Core
                 if (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     Logger.Trace($"Task {TaskName} run");
-                    Execute();
+                    ExecuteUserCode();
                     Logger.Trace($"Task {TaskName} completed");
                 }
             }
 
             Logger.Debug($"Task {TaskName} ended");
+        }
+
+        private void ExecuteUserCode()
+        {
+            try
+            {
+                Execute();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Task {TaskName} crashed");
+                Logger.Exception(ex);
+            }
         }
     }
 }
