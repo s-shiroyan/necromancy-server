@@ -18,7 +18,7 @@ namespace Necromancy.Server.Model
 
         private readonly object TrapLock = new object();
 
-        public const int NewCharacterMapId = 1001902; //2006000
+        public const int NewCharacterMapId = 1001002; //2006000
 
         private readonly NecServer _server;
         public int Id { get; set; }

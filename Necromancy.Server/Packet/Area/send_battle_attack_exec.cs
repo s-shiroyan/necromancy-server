@@ -91,7 +91,7 @@ namespace Necromancy.Server.Packet.Area
                 }
 
                 targetClient.Character.Hp.Modify(-damage, client.Character.InstanceId);
-                perHp = ((targetClient.Character.Hp.current / targetClient.Character.Hp.max) * 100);
+                perHp = (float)targetClient.Character.Hp.current/targetClient.Character.Hp.max * 100;
                 Logger.Debug(
                     $"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
                 RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
@@ -141,7 +141,7 @@ namespace Necromancy.Server.Packet.Area
                 }
 
                 monsterSpawn.Hp.Modify(-damage, client.Character.InstanceId);
-                perHp = ((monsterSpawn.Hp.current / monsterSpawn.Hp.max) * 100);
+                perHp = (float)monsterSpawn.Hp.current / monsterSpawn.Hp.max * 100;
                 Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{monsterSpawn.Hp.max}] perHp[{perHp}]");
 
                 DamageTheObject(client, monsterSpawn.InstanceId, damage, perHp);
@@ -277,7 +277,7 @@ namespace Necromancy.Server.Packet.Area
                         _server.Router.Send(client.Map, charState);
                     }
 
-                    perHp = (((float) monsterSpawn.Hp.current / (float) monsterSpawn.Hp.max) * 100);
+                    perHp = (float)monsterSpawn.Hp.current/monsterSpawn.Hp.max * 100;
                     Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{monsterSpawn.Hp.max}] perHp[{perHp}]");
                 }
                     break;
@@ -294,7 +294,7 @@ namespace Necromancy.Server.Packet.Area
                     }
 
                     targetClient.Character.Hp.Modify(-damage, character.InstanceId);
-                    perHp = ((targetClient.Character.Hp.current / targetClient.Character.Hp.max) * 100);
+                    perHp = (float)targetClient.Character.Hp.current/targetClient.Character.Hp.max * 100;
                     Logger.Debug(
                         $"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
                     RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
