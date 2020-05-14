@@ -32,8 +32,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "map": //tells you all the people on the Map you're on
                     foreach (NecClient theirClient in client.Map.ClientLookup.GetAll())
                     {
-                        responses.Add(ChatResponse.CommandError(client,
-                            $"{theirClient.Character.Name} {theirClient.Character.SoulName} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
+                        if(theirClient.Map.Id != -1 && theirClient.Character.InstanceId != 0)
+                            responses.Add(ChatResponse.CommandError(client,
+                                $"{theirClient.Character.Name} {theirClient.Soul.Name} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
                     }
 
                     break;
@@ -41,8 +42,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "world": //tells you all the people in the world
                     foreach (NecClient theirClient in Server.Clients.GetAll())
                     {
-                        responses.Add(ChatResponse.CommandError(client,
-                            $"{theirClient.Character.Name} {theirClient.Character.SoulName} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
+                        if (theirClient.Map.Id != -1 && theirClient.Character.InstanceId != 0)
+                            responses.Add(ChatResponse.CommandError(client,
+                                $"{theirClient.Character.Name} {theirClient.Soul.Name} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
                     }
 
                     break;
