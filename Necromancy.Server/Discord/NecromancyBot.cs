@@ -29,15 +29,20 @@ namespace Necromancy.Server.Discord
         public NecromancyBot(NecSetting setting)
         {
             _ready = false;
-            _setting = setting;            
+            _setting = setting;
             _cancellationTokenSource = new CancellationTokenSource();
-            _assemblies = new List<Assembly>(); 
-            _assemblies.Add(Assembly.GetAssembly(typeof(NecServer)));            
+            _assemblies = new List<Assembly>();
             _collection = new ServiceCollection();
             _collection
                 .AddSingleton<CommandService>()
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton<CommandHandlingService>();
+        }
+
+        public void AddSingleton<T>(T singleton)
+        {
+            _collection.AddSingleton(typeof(T), singleton);
+            _assemblies.Add(Assembly.GetAssembly(typeof(T)));
         }
 
         public void Start()

@@ -74,6 +74,7 @@ namespace Necromancy.Server
             Setting = new NecSetting(setting);
 
             NecromancyBot = new NecromancyBot(setting);
+            NecromancyBot.AddSingleton(this);
 
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();
