@@ -31,8 +31,8 @@ namespace Necromancy.Server.Discord
             _ready = false;
             _setting = setting;            
             _cancellationTokenSource = new CancellationTokenSource();
-            _assemblies = new List<Assembly>();
-            _assemblies.Add(Assembly.GetAssembly(typeof(NecromancyBot)));            
+            _assemblies = new List<Assembly>(); 
+            _assemblies.Add(Assembly.GetAssembly(typeof(NecServer)));            
             _collection = new ServiceCollection();
             _collection
                 .AddSingleton<CommandService>()
