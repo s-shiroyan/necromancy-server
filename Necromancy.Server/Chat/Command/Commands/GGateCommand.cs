@@ -120,7 +120,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res.WriteByte(client.Character.movementAnim);
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
 
-                    responses.Add(ChatResponse.CommandError(client, $"Spawned GGateSpawn {myGGateSpawn.ModelId}"));
+                    responses.Add(ChatResponse.CommandError(client, $"Spawned GGateSpawn {myGGateSpawn.ModelId} with instance id {myGGateSpawn.InstanceId}"));
 
                     if (command[2] == "add"
                     ) //if you want to send your GGateSpawn straight to the DB.  type Add at the end of the spawn command. 
