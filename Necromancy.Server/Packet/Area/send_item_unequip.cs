@@ -13,6 +13,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override ushort Id => (ushort) AreaPacketId.send_item_unequip;
         int x;
+        int y;
         public override void Handle(NecClient client, NecPacket packet)
         {
             int slotNum = packet.Data.ReadInt32();
@@ -31,6 +32,8 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
             SendCharaUnequipped(client);
+            EQMask(client, y);
+            y++;
         }
 
         private void SendCharaUnequipped(NecClient client)
@@ -38,9 +41,9 @@ namespace Necromancy.Server.Packet.Area
             x = 1;
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteInt32(itemIDs[x]);
+            res.WriteInt32(-1);//itemIDs[x]);
 
-            res.WriteInt32(itemIDs[x]);
+            res.WriteInt32(-1);// itemIDs[x]);
             Router.Send(client, (ushort)AreaPacketId.recv_dbg_chara_unequipped, res, ServerType.Area);
         }
 
@@ -62,6 +65,41 @@ namespace Necromancy.Server.Packet.Area
             {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
 
         int[] EquipStatus = new int[] { 0, 1, 2, 4, 8, 16 };
+        void EQMask(NecClient client, int x)
+        {
+            IBuffer res13 = BufferProvider.Provide();
+            //95 torso ?
+            //55 full armor too ?
+            //93 full armor ?
+            // 27 full armor ?
+            //11 under ?
+            // 38 = boots and cape
+            //byte y = unchecked((byte)110111);
+            //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
+
+            res13.WriteInt64(10200101);
+            res13.WriteInt32(0); // Bitmask for location (0 to unequip)
+
+            res13.WriteInt32(0); // List of items that gonna be equip on the chara
+            res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+            res13.WriteByte(0);
+            res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
+
+            res13.WriteInt32(0); //previously 1
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0); //bool
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0); // 1 = body pink texture
+            res13.WriteByte(0);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
+        }
 
     }
 }
