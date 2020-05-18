@@ -357,18 +357,22 @@ namespace Necromancy.Server.Packet.Area
                 "Hey there good lookin. that's a nice hat you have there!",
                 "i heard there's a secret green door in white town",
                 "there might be some beetles in caligrase",
-                $"{client.Soul.Name}.... were you born with that name?"
+                $"{client.Soul.Name}.... were you born with that name?",
+                "ありがとうございます", //game client can't render japanese text
+                "мы ценим вас"                
             };
             String[] Text2 = new string[]
             {
                 $"This NPC is still under development",
-                "  ",
+                "  ..no seriously, go away!",
                 "Be a shame if somebody..... Took it!",
                 "see if you can find it",
                 "go kill those beetles!",
-                "or did you choose it?  "
+                "or did you choose it?  ",
+                " 参加していただきありがとうございます",
+                "Спасибо, что присоединились"
             };
-            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length);
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length-1);
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteCString($"{npcSpawn.Name}"); //Name
