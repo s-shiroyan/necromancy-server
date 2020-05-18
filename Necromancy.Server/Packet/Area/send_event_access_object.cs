@@ -94,7 +94,7 @@ namespace Necromancy.Server.Packet.Area
                             x => x < 1000000,
                             () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")
                         },
-                        {x => x < 900000100, () => UpdateNPC(client, npcSpawn)}
+                        {x => x < 900000100, () => WorkInProgress(client, npcSpawn)}
                     };
 
                     eventSwitchPerObjectID.First(sw => sw.Key((int) npcSpawn.NpcId)).Value();
@@ -217,9 +217,9 @@ namespace Necromancy.Server.Packet.Area
 
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
-                res2.WriteCString("I used to drive a cab."); //need to find max size; Text block
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res2.WriteCString("I used to drive a cab."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -348,6 +348,45 @@ namespace Necromancy.Server.Packet.Area
                 ServerType.Area); // It's the windows that contain the multiple choice
         }
 
+        private void WorkInProgress(NecClient client, NpcSpawn npcSpawn)
+        {
+            String[] Text1 = new string[]
+            {
+                $"Welcome to the test server for Wizardry Online {client.Character.Name}!",
+                "Go Away!",
+                "Hey there good lookin. that's a nice hat you have there!",
+                "i heard there's a secret green door in white town",
+                "there might be some beetles in caligrase",
+                $"{client.Soul.Name}.... were you born with that name?"
+            };
+            String[] Text2 = new string[]
+            {
+                $"This NPC is still under development",
+                "  ",
+                "Be a shame if somebody..... Took it!",
+                "see if you can find it",
+                "go kill those beetles!",
+                "or did you choose it?  "
+            };
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}"); //Name
+            res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res2.WriteCString(Text1[randomTextChoice]); 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteCString($"{npcSpawn.Name}"); //Name
+            res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res3.WriteCString(Text2[randomTextChoice]);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+            IBuffer res6 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+        }
+
+        //Use this as a default event if we ever need to do some serious NPC model updating and heading setting again.
         private void UpdateNPC(NecClient client, NpcSpawn npcSpawn)
         {
             IBuffer res3 = BufferProvider.Provide();
@@ -372,16 +411,16 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextBlacksmith)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //need to find max size; Text block
+                    "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res3.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
-                res3.WriteCString("sometimes the process fails."); //need to find max size; Text block
+                res3.WriteCString($"{npcSpawn.Name}"); //Name
+                res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res3.WriteCString("sometimes the process fails."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -411,10 +450,10 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextDonkey)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //need to find max size; Text block
+                    "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -444,10 +483,10 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextCloakRoom)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "Welcome! We take care of your belongings and money."); //need to find max size; Text block
+                    "Welcome! We take care of your belongings and money."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -501,9 +540,9 @@ namespace Necromancy.Server.Packet.Area
                 ServerType.Area); // It's the windows that contain the multiple choice
 
             /*IBuffer res2 = BufferProvider.Provide();
-            res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
-            res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
-            res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//need to find max size; Text block
+            res2.WriteCString($"{npcSpawn.Name}");//Name
+            res2.WriteCString($"{npcSpawn.Title}");//Title (inside chat box)
+            res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//Text block
             Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
             //IBuffer res6 = BufferProvider.Provide();
