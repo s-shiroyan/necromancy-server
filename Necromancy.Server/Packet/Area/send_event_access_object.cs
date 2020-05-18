@@ -122,7 +122,7 @@ namespace Necromancy.Server.Packet.Area
                         {x => x == 74013161, () => SendGetWarpTarget(client, ggateSpawn)},
                         {x => x == 74013271, () => SendGetWarpTarget(client, ggateSpawn)},
 
-                        {x => x < 900000100, () => Logger.Error("No Such GGate.  Work in Progress") }
+                        {x => x < 900000100, () => WorkInProgressGGate(client, ggateSpawn) }
                     };
 
                     eventSwitchPerObjectID2.First(sw => sw.Key((int)ggateSpawn.SerialId)).Value();
@@ -404,6 +404,32 @@ namespace Necromancy.Server.Packet.Area
             res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
             res3.WriteCString(Text2[randomTextChoice]);
             Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+            IBuffer res6 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+        }
+
+        private void WorkInProgressGGate(NecClient client, GGateSpawn npcSpawn)
+        {
+            String[] Text1 = new string[]
+            {
+                $"Here lies {client.Character.Name}!",
+                "Go Away!",
+                "I am an inanimate Object!",
+                "Sorry, device is broke",
+                "$5.99 early access special *thwack*...",
+                $"{client.Soul.Name}.... please help us?",
+                "ありがとうございます", //game client can't render japanese text
+                "мы ценим вас"
+            };
+
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length - 1);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}"); //Name
+            res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res2.WriteCString(Text1[randomTextChoice]);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
             IBuffer res6 = BufferProvider.Provide();
             Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
