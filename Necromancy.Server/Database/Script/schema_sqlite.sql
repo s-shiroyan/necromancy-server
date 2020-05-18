@@ -152,10 +152,28 @@ CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
   `created`    DATETIME            NOT NULL,
   `updated`    DATETIME            NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS `nec_item` (
-  `id`   INTEGER PRIMARY KEY NOT NULL, 
-  `name` TEXT                NOT NULL
+ 
+CREATE TABLE IF NOT EXISTS "nec_item" (
+	"rowId"	            INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"name"	            TEXT        NOT NULL,
+	"type"	            INTEGER     NOT NULL,
+	"bitmask"	        INTEGER     NOT NULL,
+	"count"	            INTEGER     NOT NULL,
+	"state"	            INTEGER     NOT NULL,
+	"icon1"	            INTEGER     NOT NULL,
+	"icon2"	            INTEGER     NOT NULL,
+	"hairOverride"	    INTEGER     NOT NULL,
+	"faceOverride"	    INTEGER     NOT NULL,
+	"durability"	    INTEGER     NOT NULL,
+	"maxDurability"	    INTEGER     NOT NULL,
+	"weight"	        INTEGER     NOT NULL,
+	"physics"	        INTEGER     NOT NULL,
+	"magic"	            INTEGER     NOT NULL,
+	"enchatId"	        INTEGER     NOT NULL,
+	"ac"	            INTEGER     NOT NULL,
+	"dateEndProtect"	INTEGER     NOT NULL,
+	"hardness"	        INTEGER     NOT NULL,
+    "level"             INTEGER     NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_block_list` (

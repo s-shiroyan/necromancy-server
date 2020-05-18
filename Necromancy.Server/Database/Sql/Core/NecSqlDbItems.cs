@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data.Common;
 using Necromancy.Server.Model;
 
@@ -9,78 +9,89 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateItems =
-            "INSERT INTO `Items` (`id`, `ItemName`, `ItemType`, `Physics`, `Magic`, `EnchantID`, `Durab`, `Hardness`, `MaxDur`, `Numbers`, `Level`, `Splevel`, `Weight`, `State`) VALUES (@id, @ItemName, @ItemType, @Physics, @Magic, @EnchantID, @Durab, @Hardness, @MaxDur, @Numbers, @Level, @Splevel, @Weight, @State);";
+            "INSERT INTO `nec_item` (`name`,`type`,`bitmask`,`count`,`status`,`icon1`,`icon2`,`hairOverride`,`faceOverride`,`durability`,`maxDurability`,`weight`,`physics`,`magic`,`enchatId`,`ac`,`dateEndProtect`,`hardness`,`level`) VALUES (@name,@type,@bitmask,@count,@status,@icon1,@icon2,@hairOverride,@faceOverride,@durability,@maxDurability,@weight,@physics,@magic,@enchatId,@ac,@dateEndProtect,@hardness,@level);";
 
         private const string SqlSelectItemsById =
-            "SELECT `id`, `ItemName`, `ItemType`, `Physics`, `Magic`, `EnchantID`, `Durab`, `Hardness`, `MaxDur`, `Numbers`, `Level`, `Splevel`, `Weight`, `State` FROM `Items` WHERE `id`=@id; ";
+            "SELECT `rowId`, `name`, `type`, `bitmask`, `count`, `status`, `icon1`, `icon2`, `hairOverride`, `faceOverride`, `durability`, `maxDurability`, `weight`, `physics`, `magic`, `enchatId`, `ac`, `dateEndProtect`, `hardness`, `level` FROM `Items` WHERE `rowId`=@rowId; ";
 
         private const string SqlUpdateItems =
-            "UPDATE `Items` SET `id`=@id, `ItemName`=@ItemName, `ItemType`=@ItemType,  `Physics`=@Physics, `Magic`=@Magic, `EnchantID`=@EnchantID, `Durab`=@Durab, `Hardness`=@Hardness, `MaxDur`=@MaxDur, `Numbers`=@Numbers, `Level`=@Level, `Splevel`=@Splevel, `Weight`=@Weight, `State`=@State WHERE `id`=@id;";
+            "UPDATE `Items` SET `rowId`=@rowId, `name`=@name, `type`=@type, `bitmask`=@bitmask, `count`=@count, `status`=@status, `icon1`=@icon1, `icon2`=@icon2, `hairOverride`=@hairOverride, `faceOverride`=@faceOverride, `durability`=@durability, `maxDurability`=@maxDurability, `weight`=@weight, `physics`=@physics, `magic`=@magic, `enchantId`=@enchatId, `ac`=@ac, `dateEndProtect`=@dateEndProtect, `hardness`=@hardness, `level`=@level WHERE `rowId`=@rowId;";
 
         private const string SqlDeleteItems =
-            "DELETE FROM `Items` WHERE `id`=@id;";
+            "DELETE FROM `Items` WHERE `rowId`=@rowId;";
 
-        public bool InsertItems(Items items)
+        public bool InsertItems(Item item)
         {
             int rowsAffected = ExecuteNonQuery(SqlCreateItems, command =>
             {
-                AddParameter(command, "@id", items.id);
-                AddParameter(command, "@ItemName", items.ItemName);
-                AddParameter(command, "@ItemType", items.ItemType);
-                AddParameter(command, "@Physics", items.Physics);
-                AddParameter(command, "@Magic", items.Magic);
-                AddParameter(command, "@EnchantID", items.EnchantID);
-                AddParameter(command, "@Durab", items.Durab);
-                AddParameter(command, "@Hardness", items.Hardness);
-                AddParameter(command, "@MaxDur", items.MaxDur);
-                AddParameter(command, "@Numbers", items.Numbers);
-                AddParameter(command, "@Level", items.Level);
-                AddParameter(command, "@Splevel", items.Splevel);
-                AddParameter(command, "@Weight", items.Weight);
-                AddParameter(command, "@State", items.State);
+                //AddParameter(command, "@rowId", item.instanceId);
+                AddParameter(command, "@name", item.name);
+                AddParameter(command, "@type", item.type);
+                AddParameter(command, "@bitmask", item.bitmask);
+                AddParameter(command, "@count", item.count);
+                AddParameter(command, "@state", item.state);
+                AddParameter(command, "@icon1", item.icon1);
+                AddParameter(command, "@icon2", item.icon2);
+                AddParameter(command, "@hairOverride", item.hairOverride);
+                AddParameter(command, "@faceOverride", item.faceOverride);
+                AddParameter(command, "@durability", item.durability);
+                AddParameter(command, "@maxDurability", item.maxDurability);
+                AddParameter(command, "@weight", item.weight);
+                AddParameter(command, "@physics", item.physics);
+                AddParameter(command, "@magic", item.magic);
+                AddParameter(command, "@enchatId", item.enchatId);
+                AddParameter(command, "@ac", item.ac);
+                AddParameter(command, "@dateEndProtect", item.dateEndProtect);
+                AddParameter(command, "@hardness", item.hardness);
+                AddParameter(command, "@level", item.level);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
                 return false;
             }
 
-            items.id = (int)autoIncrement;
+            item.rowId = autoIncrement;
             return true;
         }
 
 
-        public Items SelectitemsById(int itemsId)
+        public Item SelectitemsById(int itemsId)
         {
-            Items items = null;
+            Item item = null;
             ExecuteReader(SqlSelectItemsById,
-                command => { AddParameter(command, "@id", itemsId); }, reader =>
+                command => { AddParameter(command, "@rowId", itemsId); }, reader =>
                 {
                     if (reader.Read())
                     {
-                        items = ReadItems(reader);
+                        item = ReadItems(reader);
                     }
                 });
-            return items;
+            return item;
         }
 
-        public bool UpdateItems(Items items)
+        public bool UpdateItems(Item item)
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateItems, command =>
             {
-                AddParameter(command, "@id", items.id);
-                AddParameter(command, "@ItemName", items.ItemName);
-                AddParameter(command, "@ItemType", items.ItemType);
-                AddParameter(command, "@Physics", items.Physics);
-                AddParameter(command, "@Magic", items.Magic);
-                AddParameter(command, "@EnchantID", items.EnchantID);
-                AddParameter(command, "@Durab", items.Durab);
-                AddParameter(command, "@Hardness", items.Hardness);
-                AddParameter(command, "@MaxDur", items.MaxDur);
-                AddParameter(command, "@Numbers", items.Numbers);
-                AddParameter(command, "@Level", items.Level);
-                AddParameter(command, "@Splevel", items.Splevel);
-                AddParameter(command, "@Weight", items.Weight);
-                AddParameter(command, "@State", items.State);
+                AddParameter(command, "@name", item.name);
+                AddParameter(command, "@type", item.type);
+                AddParameter(command, "@bitmask", item.bitmask);
+                AddParameter(command, "@count", item.count);
+                AddParameter(command, "@state", item.state);
+                AddParameter(command, "@icon1", item.icon1);
+                AddParameter(command, "@icon2", item.icon2);
+                AddParameter(command, "@hairOverride", item.hairOverride);
+                AddParameter(command, "@faceOverride", item.faceOverride);
+                AddParameter(command, "@durability", item.durability);
+                AddParameter(command, "@maxDurability", item.maxDurability);
+                AddParameter(command, "@weight", item.weight);
+                AddParameter(command, "@physics", item.physics);
+                AddParameter(command, "@magic", item.magic);
+                AddParameter(command, "@enchatId", item.enchatId);
+                AddParameter(command, "@ac", item.ac);
+                AddParameter(command, "@dateEndProtect", item.dateEndProtect);
+                AddParameter(command, "@hardness", item.hardness);
+                AddParameter(command, "@level", item.level);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -88,28 +99,35 @@ namespace Necromancy.Server.Database.Sql.Core
         public bool DeleteItems(int itemsId)
         {
             int rowsAffected = ExecuteNonQuery(SqlDeleteItems,
-                command => { AddParameter(command, "@id", itemsId); });
+                command => { AddParameter(command, "@rowId", itemsId); });
             return rowsAffected > NoRowsAffected;
         }
 
-        private Items ReadItems(DbDataReader reader)
+        private Item ReadItems(DbDataReader reader)
         {
-            Items items = new Items();
-            items.id = GetInt32(reader, "id");
-            items.ItemName = GetString(reader, "ItemName");
-            items.ItemType = GetInt32(reader, "ItemType");
-            items.Physics = (byte)GetInt32(reader, "Physics");
-            items.Magic = (byte)GetInt32(reader, "Magic");
-            items.EnchantID = GetInt32(reader, "EnchantID");
-            items.Durab = (byte)GetInt32(reader, "Durab");
-            items.Hardness = (byte)GetInt32(reader, "Hardness");
-            items.MaxDur = (byte)GetInt32(reader, "MaxDur");
-            items.Numbers = (byte)GetInt32(reader, "Numbers");
-            items.Level = (byte)GetInt32(reader, "Level");
-            items.Splevel = (byte)GetInt32(reader, "Splevel");
-            items.Weight = (byte)GetInt32(reader, "Weight");
-            items.State = (byte)GetInt32(reader, "State");
-            return items;
+            Item item = new Item();
+            item.rowId = GetInt32(reader, "rowId");
+            item.name = GetString(reader, "name");
+            item.type = GetInt32(reader, "type");
+            item.bitmask = (byte)GetInt32(reader, "bitmask");
+            item.count = (byte)GetInt32(reader, "count");
+            item.state = GetInt32(reader, "state");
+            item.icon1 = (byte)GetInt32(reader, "icon1");
+            item.icon2 = (byte)GetInt32(reader, "icon2");
+            item.hairOverride = (byte)GetInt32(reader, "hairOverride");
+            item.faceOverride = (byte)GetInt32(reader, "faceOverride");
+            item.durability = (byte)GetInt32(reader, "durability");
+            item.maxDurability = (byte)GetInt32(reader, "maxDurability");
+            item.weight = (byte)GetInt32(reader, "weight");
+            item.physics = (byte)GetInt32(reader, "physics");
+            item.magic = (byte)GetInt32(reader, "magic");
+            item.enchatId = (byte)GetInt32(reader, "enchatId");
+            item.ac = (byte)GetInt32(reader, "ac");
+            item.dateEndProtect = (byte)GetInt32(reader, "dateEndProtect");
+            item.hardness = (byte)GetInt32(reader, "hardness");
+            item.level = (byte)GetInt32(reader, "level");
+
+            return item;
         }
     }
 }

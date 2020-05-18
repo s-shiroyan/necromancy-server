@@ -51,9 +51,9 @@ namespace Necromancy.Server.Packet.Area
             //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
 
             res13.WriteInt64(10200101);
-            res13.WriteInt32(1); // Permit to get the armor on the chara
+            res13.WriteInt32(8); // Permit to get the armor on the chara
 
-            res13.WriteInt32(11100301); // List of items that gonna be equip on the chara
+            res13.WriteInt32(180202); // List of items that gonna be equip on the chara
             res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
             res13.WriteByte(0);
             res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
