@@ -71,7 +71,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_read_int_32
             res.WriteInt32(0); //title; 0 - display title, 1 - no title
             //sub_483580
-            res.WriteInt32(1);
+            res.WriteUInt32(_character.ClassId); //Signifies character class
             //sub_483420
             res.WriteInt32(numStatusEffects); //Number of Status Effects to display 128 Max
             //sub_485A70
