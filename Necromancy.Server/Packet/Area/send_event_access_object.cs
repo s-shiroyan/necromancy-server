@@ -107,7 +107,7 @@ namespace Necromancy.Server.Packet.Area
                     break;
 
                 case GGateSpawn ggateSpawn:
-                    client.Map.GGateSpawns.TryGetValue(ggateSpawn.InstanceId, out ggateSpawn);
+                    //client.Map.GGateSpawns.TryGetValue(ggateSpawn.InstanceId, out ggateSpawn);
                     Logger.Debug(
                         $"instanceId : {ggateSpawn.InstanceId} |  ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId}");
                     IBuffer res3 = BufferProvider.Provide();
