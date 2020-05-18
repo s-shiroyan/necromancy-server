@@ -58,9 +58,6 @@ namespace Necromancy.Server.Packet.Area
                             x => (x == 74000022) || (x == 74000024) || (x == 74000023),
                             () => RecoverySpring(client, npcSpawn)
                         },
-                        {x => x == 74013071, () => SendGetWarpTarget(client, npcSpawn)},
-                        {x => x == 74013161, () => SendGetWarpTarget(client, npcSpawn)},
-                        {x => x == 74013271, () => SendGetWarpTarget(client, npcSpawn)},
                         {
                             x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) ||
                                  (x == 10000702),
@@ -108,8 +105,30 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res2, ServerType.Area);
 
                     break;
+
+                case GGateSpawn ggateSpawn:
+                    client.Map.GGateSpawns.TryGetValue(ggateSpawn.InstanceId, out ggateSpawn);
+                    Logger.Debug(
+                        $"instanceId : {ggateSpawn.InstanceId} |  ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId}");
+                    IBuffer res3 = BufferProvider.Provide();
+                    res3.WriteInt32(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res3, ServerType.Area);
+
+                    //logic to execute different actions based on the event that triggered this select execution.
+                    var eventSwitchPerObjectID2 = new Dictionary<Func<int, bool>, Action>
+                    {
+
+                        {x => x == 74013071, () => SendGetWarpTarget(client, ggateSpawn)},
+                        {x => x == 74013161, () => SendGetWarpTarget(client, ggateSpawn)},
+                        {x => x == 74013271, () => SendGetWarpTarget(client, ggateSpawn)},
+
+                        {x => x < 900000100, () => Logger.Error("No Such GGate.  Work in Progress") }
+                    };
+
+                    eventSwitchPerObjectID2.First(sw => sw.Key((int)ggateSpawn.SerialId)).Value();
+                    break;
                 default:
-                    Logger.Error($"Instance with InstanceId: {instanceId} does not exist");
+                    Logger.Error($"Event Access logic for InstanceId: {instanceId} does not exist");
                     SendEventEnd(client);
                     break;
             }
@@ -258,11 +277,11 @@ namespace Necromancy.Server.Packet.Area
         }
 
         // I added these to Npc database for now, should it be handled differently?????
-        private void SendGetWarpTarget(NecClient client, NpcSpawn npcSpawn)
+        private void SendGetWarpTarget(NecClient client, GGateSpawn ggateSpawn)
         {
             client.Character.eventSelectExecCode = -1;
             Logger.Debug(
-                $"npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId} client.Character.eventSelectExecCode: {client.Character.eventSelectExecCode}");
+                $"ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId} client.Character.eventSelectExecCode: {client.Character.eventSelectExecCode}");
             if (client.Character.eventSelectExecCode == -1)
             {
                 IBuffer res3 = BufferProvider.Provide();
@@ -294,7 +313,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteCString("Select area to travel to"); // It's the title dude
-                res1.WriteUInt32(npcSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
+                res1.WriteUInt32(ggateSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
                 Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res1,
                     ServerType.Area); // Actual map change is handled by send_event_select_exec_r, need to figure out how to handle this better
             }
