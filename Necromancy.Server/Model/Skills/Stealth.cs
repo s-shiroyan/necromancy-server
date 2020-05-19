@@ -77,7 +77,7 @@ namespace Necromancy.Server.Model.Skills
             }
 
             RecvCharaNotifyStateflag stateFlag = new RecvCharaNotifyStateflag(_client.Character.InstanceId, newState);
-            _server.Router.Send(_client.Map, stateFlag);
+            //_server.Router.Send(_client.Map, stateFlag);   //fix stealth bug bby disabling stealth for now
 
             //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 
             //0bxxxxxx1x - 1 Battle Pose / 0 Normal

@@ -110,6 +110,10 @@ but will eventually be merged back into develop (to definitely add the new featu
 | Delegate name             | PascalCase  | [A-z]              | No          |
 | Enum type name            | PascalCase  | [A-z]              | No          |
 
+## Sql Style Guidelines and Best Practise
+1) Only crate one .cs file per table to manage so code stays separate. 
+2) Table, column, and indices names are all lower case with underscore ( _ ) separating the names
+
 # Attribution
 ## Contributors
 - Unknownone69 [@Unknownone69](https://github.com/Unknownone69) 

@@ -30,9 +30,9 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Y);
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
-            res.WriteInt32(_character.Level); //?????
+            res.WriteInt32(_character.Level); //Player level (main gui)
             res.WriteUInt32(_character._state);
-            res.WriteInt16(100); //Character Size/Radius?
+            res.WriteInt16((short)_character.Hp.max); //Player max hp (main gui)
 
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
@@ -63,7 +63,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_483920
             res.WriteInt32(0);
             //sub_483440
-            res.WriteInt16(65);
+            res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
             res.WriteByte(1); //no change?
             //sub_read_byte

@@ -47,6 +47,7 @@ namespace Necromancy.Server.Database
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_auction.sql"));
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_gimmick.sql"));
                 scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_maptransition.sql"));
+                scriptRunner.Run(Path.Combine(sqLiteFolder, "Script/data_ggate.sql"));
             }
 
             new SqlMigrator(db).Migrate(Path.Combine(sqLiteFolder, "Script/Migrations/"));

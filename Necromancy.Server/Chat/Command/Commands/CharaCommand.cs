@@ -477,6 +477,40 @@ namespace Necromancy.Server.Chat.Command.Commands
                 }
                     break;
 
+                case "unequip":
+                    //recv_item_unequip_r = 0x9A79,
+                    IBuffer res42 = BufferProvider.Provide();
+                    res42.WriteInt32(y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_unequip_r, res42, ServerType.Area);
+                    break;
+                case "seqmask":
+                    IBuffer res43 = BufferProvider.Provide();
+                    //95 torso ?
+                    //55 full armor too ?
+                    //93 full armor ?
+                    // 27 full armor ?
+                    //11 under ?
+                    // 38 = boots and cape
+                    //byte y = unchecked((byte)110111);
+                    //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
+
+
+                    /*int[] EquipBitMask = new int[]
+                    {
+                        1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288,
+                        1048576, 2097152
+                    };*/
+                    res43.WriteInt64(180201);
+                    res43.WriteInt32(y);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_spirit_eqmask, res43, ServerType.Area);
+                    break;
+                case "istate":
+                    IBuffer res44 = BufferProvider.Provide();
+                    //recv_item_update_state = 0x3247, 
+                    res44.WriteInt64(10200101); //item instance id
+                    res44.WriteInt32(y); //item state flag, same as inside SendItemInstance and SendItemInstanceUnidentified
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res44, ServerType.Area);
+                    break;
                 default:
                     Logger.Error($"There is no recv of type : {command[0]} ");
                     break;
