@@ -234,6 +234,8 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             if (itemId > 10100100 && itemId < 11700302)
                 item.type = (byte)(itemId / 100000 % 100);
+            else
+                item.type = itemId;
 
             item.Id = itemId;
             item.icon = itemId;

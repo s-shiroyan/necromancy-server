@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                item = Server.Instances64.GetInstance(3) as Item;
+                item = Server.Instances64.GetInstance(7) as Item;
             }
             IBuffer res = BufferProvider.Provide();
 
@@ -63,6 +63,9 @@ namespace Necromancy.Server.Packet.Area
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152
             };
 
+            int[] EquipItemType = new int[]
+            {9, 20, 23, 28, 31, 32, 36, 40, 41, 44, 43, 45, 42, 54, 61, 61, 61, 61, 61, 61, 0, 0};
+
             /*for(int i = 0; i < 19; i++)
             {
                 if()
@@ -70,7 +73,7 @@ namespace Necromancy.Server.Packet.Area
             //item = Server.Instances64.GetInstance(3) as Item;
             IBuffer res13 = BufferProvider.Provide();
             res13.WriteUInt64(item.InstanceId);
-            res13.WriteInt32(2); // Bitmask for location
+            res13.WriteInt32(1); // Bitmask for location
 
             res13.WriteInt32(item.icon); // List of items that gonna be equip on the chara
             res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
