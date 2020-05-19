@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             */
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
-            EQMask(client, i);
+            EQMask(client, slotNum);
         }
 
         void EQMask(NecClient client, int instanceId)
