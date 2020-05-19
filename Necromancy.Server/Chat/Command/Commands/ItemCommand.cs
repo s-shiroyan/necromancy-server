@@ -74,16 +74,19 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
                 case "create":
                     Item createItem = null;
-                    if (y == 0)
+                    createItem = SendItemInstanceUnidentified(client, x, 1, y, "createItem");
+
+                    if(!Server.Database.InsertItem(createItem))
                     {
-                        createItem = SendItemInstanceUnidentified(client, x, 1, y, "");
+                        responses.Add(ChatResponse.CommandError(client,
+                            $"Item could not be added to the database"));
                     }
                     else
                     {
-                        //createItem = SendItemInstance(client, "Test");
+                        responses.Add(ChatResponse.CommandError(client,
+                            $"Item added to the database"));
                     }
-
-                    Logger.Debug($"dagger instanceId [{createItem.InstanceId}]");
+                    Logger.Debug($"weapon instanceId [{createItem.InstanceId}]");
                     break;
                 case "draw":
                     RecvPartyNotifyAddDrawItem itemMsg = new RecvPartyNotifyAddDrawItem((ulong) x, 30.0F, 0);
@@ -228,49 +231,55 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
+
+            if (itemId > 10100100 && itemId < 11700302)
+                item.type = (byte)(itemId / 100000 % 100);
+
             item.Id = itemId;
+            item.icon = itemId;
             item.IconType = itemType;
             item.Name = name;
+            item.name = name;
             invItem.StorageType = 0;
             invItem.StorageCount = (byte) count;
+            item.count = invItem.StorageCount;
             res = null;
             res = BufferProvider.Provide();
-
-            //res.WriteInt64(dropItem.Item.Id); //Item Object Instance ID 
+ 
             res.WriteUInt64(invItem.InstanceId); //Item Object Instance ID 
 
             res.WriteCString(name); //Name
 
-            //res.WriteInt32(dropItem.Item.IconType); 
-            res.WriteInt32(item.IconType); //item type
+            res.WriteInt32(item.type); //item type
 
-            res.WriteInt32(1);
+            res.WriteInt32(1); //Bit mask designation
 
             res.WriteByte(invItem.StorageCount); //Number of items
 
             res.WriteInt32(0); //Item status 0 = identified  
 
-            res.WriteInt32(item.Id); //Item icon 50100301 = camp
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteInt32(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
+            res.WriteInt32(item.icon); //Item icon 50100301 = camp
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(item.icon);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
 
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1); // bool
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0); // bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
             res.WriteByte(0);
 
             res.WriteByte(invItem.StorageType); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(invItem.StorageId); // 0~2
             res.WriteInt16(invItem.StorageSlot); // bag index
+            
             res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
             res.WriteInt64(0);
@@ -278,7 +287,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(0);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
-            ConfigureItem(client, invItem.InstanceId);
+            //ConfigureItem(client, invItem.InstanceId, item);
 
             //client.Character.inventoryItems.Add(invItem);
             //client.Character.EquipId[0] = 10200101;
@@ -385,15 +394,27 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res, ServerType.Area);
         }
 
-        public void ConfigureItem(NecClient client, ulong instanceId)
+        public void ConfigureItem(NecClient client, ulong instanceId, Item item)
         {
+            item.ac = (short)Util.GetRandomNumber(0, 100000);
+            item.durability = Util.GetRandomNumber(1, 200);
+            item.maxDurability = Util.GetRandomNumber(199, 200);
+            item.level = (byte)Util.GetRandomNumber(0, 5);
+            item.weight = Util.GetRandomNumber(800, 10000);
+            item.physics = (short)Util.GetRandomNumber(5, 500);
+            item.magic = (short)Util.GetRandomNumber(5, 500);
+            item.enchatId = Util.GetRandomNumber(1, 10);
+            item.dateEndProtect = Util.GetRandomNumber(1, 50);
+            item.hardness = (byte)Util.GetRandomNumber(0, 100);
+            item.state = 0;
+
             IBuffer res = BufferProvider.Provide();
 
             res = BufferProvider.Provide();
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteByte(0);
+            res.WriteByte(item.level);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_level, res, ServerType.Area);
 
             res = null;
@@ -401,7 +422,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt32(900);
+            res.WriteInt32(item.weight);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res, ServerType.Area);
 
             res = null;
@@ -409,7 +430,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt16((short) 8); // Defense and attack points
+            res.WriteInt16(item.physics); // Defense and attack points
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res, ServerType.Area);
 
             res = null;
@@ -417,7 +438,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt32(0);
+            res.WriteInt32(item.enchatId);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res, ServerType.Area);
 
             res = null;
@@ -425,7 +446,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteByte(2);
+            res.WriteByte(item.hardness);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res, ServerType.Area);
 
             res = null;
@@ -433,7 +454,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt32(35);
+            res.WriteInt32(item.maxDurability);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res, ServerType.Area);
 
             res = null;
@@ -441,7 +462,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt32(35);
+            res.WriteInt32(item.durability);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res, ServerType.Area);
 
             res = null;
@@ -449,7 +470,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt16(0);
+            res.WriteInt16(item.magic);
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res, ServerType.Area);
 
 
@@ -458,8 +479,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteInt32(instanceId);
             //res.WriteInt32(10800405);
             res.WriteUInt64(instanceId); //Item Object ID 
-            res.WriteInt16((short) 10000);
-            //Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
+            res.WriteInt16(item.ac);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
 
             res = null;
             res = BufferProvider.Provide();

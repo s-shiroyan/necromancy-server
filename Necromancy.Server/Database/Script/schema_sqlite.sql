@@ -41,27 +41,27 @@ CREATE TABLE IF NOT EXISTS `nec_skilltree_item` (
 );
 
 CREATE TABLE IF NOT EXISTS `nec_shortcut_bar` (
-  `id`    INTEGER PRIMARY KEY AUTOINCREMENT     NOT NULL,
-  `slot0` INTEGER                               NOT NULL,
-  `slot1` INTEGER                               NOT NULL,
-  `slot2` INTEGER                               NOT NULL,
-  `slot3` INTEGER                               NOT NULL,
-  `slot4` INTEGER                               NOT NULL,
-  `slot5` INTEGER                               NOT NULL,
-  `slot6` INTEGER                               NOT NULL,
-  `slot7` INTEGER                               NOT NULL,
-  `slot8` INTEGER                               NOT NULL,
-  `slot9` INTEGER                               NOT NULL,
-  `action0` INTEGER                             NOT NULL,
-  `action1` INTEGER                             NOT NULL,
-  `action2` INTEGER                             NOT NULL,
-  `action3` INTEGER                             NOT NULL,
-  `action4` INTEGER                             NOT NULL,
-  `action5` INTEGER                             NOT NULL,
-  `action6` INTEGER                             NOT NULL,
-  `action7` INTEGER                             NOT NULL,
-  `action8` INTEGER                             NOT NULL,
-  `action9` INTEGER                             NOT NULL
+  `id`      INTEGER PRIMARY KEY AUTOINCREMENT       NOT NULL,
+  `slot0`   INTEGER                                 NOT NULL,
+  `slot1`   INTEGER                                 NOT NULL,
+  `slot2`   INTEGER                                 NOT NULL,
+  `slot3`   INTEGER                                 NOT NULL,
+  `slot4`   INTEGER                                 NOT NULL,
+  `slot5`   INTEGER                                 NOT NULL,
+  `slot6`   INTEGER                                 NOT NULL,
+  `slot7`   INTEGER                                 NOT NULL,
+  `slot8`   INTEGER                                 NOT NULL,
+  `slot9`   INTEGER                                 NOT NULL,
+  `action0` INTEGER                                 NOT NULL,
+  `action1` INTEGER                                 NOT NULL,
+  `action2` INTEGER                                 NOT NULL,
+  `action3` INTEGER                                 NOT NULL,
+  `action4` INTEGER                                 NOT NULL,
+  `action5` INTEGER                                 NOT NULL,
+  `action6` INTEGER                                 NOT NULL,
+  `action7` INTEGER                                 NOT NULL,
+  `action8` INTEGER                                 NOT NULL,
+  `action9` INTEGER                                 NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_character` (
@@ -154,24 +154,23 @@ CREATE TABLE IF NOT EXISTS `nec_monster_spawn` (
 );
  
 CREATE TABLE IF NOT EXISTS "nec_item" (
-	"rowId"	            INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"row_id"	        INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"name"	            TEXT        NOT NULL,
 	"type"	            INTEGER     NOT NULL,
 	"bitmask"	        INTEGER     NOT NULL,
 	"count"	            INTEGER     NOT NULL,
 	"state"	            INTEGER     NOT NULL,
-	"icon1"	            INTEGER     NOT NULL,
-	"icon2"	            INTEGER     NOT NULL,
-	"hairOverride"	    INTEGER     NOT NULL,
-	"faceOverride"	    INTEGER     NOT NULL,
+	"icon"	            INTEGER     NOT NULL,
+	"hair_override"	    INTEGER     NOT NULL,
+	"face_override"	    INTEGER     NOT NULL,
 	"durability"	    INTEGER     NOT NULL,
-	"maxDurability"	    INTEGER     NOT NULL,
+	"max_durability"	INTEGER     NOT NULL,
 	"weight"	        INTEGER     NOT NULL,
 	"physics"	        INTEGER     NOT NULL,
 	"magic"	            INTEGER     NOT NULL,
-	"enchatId"	        INTEGER     NOT NULL,
+	"enchant_id"	    INTEGER     NOT NULL,
 	"ac"	            INTEGER     NOT NULL,
-	"dateEndProtect"	INTEGER     NOT NULL,
+	"date_end_protect"	INTEGER     NOT NULL,
 	"hardness"	        INTEGER     NOT NULL,
     "level"             INTEGER     NOT NULL
 );
@@ -201,12 +200,12 @@ CREATE TABLE IF NOT EXISTS `nec_union` (
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_member` (
-	`id`	                    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`union_id`	                INTEGER NOT NULL,
-	`character_id`	            INTEGER NOT NULL,
-	`member_priviledge_bitmask`	INTEGER NOT NULL,
-	`rank`	                    INTEGER NOT NULL,
-	`joined`	                DATETIME NOT NULL
+	`id`	                    INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`union_id`	                INTEGER     NOT NULL,
+	`character_id`	            INTEGER     NOT NULL,
+	`member_priviledge_bitmask`	INTEGER     NOT NULL,
+	`rank`	                    INTEGER     NOT NULL,
+	`joined`	                DATETIME    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_news` (
@@ -237,118 +236,118 @@ CREATE TABLE IF NOT EXISTS `nec_friend_list` (
 
 
 
-CREATE TABLE IF NOT EXISTS `Inventory`(
-   `BagID`  INTEGER,
-   `Gold`   INTEGER,
-   PRIMARY KEY(`BagID`)
+CREATE TABLE IF NOT EXISTS `inventory`(
+   `bag_id`     INTEGER,
+   `gold`       INTEGER,
+   PRIMARY KEY(`bag_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `SlotsNumbers`(
-   `BagID`      INTEGER,
-   `BagIndex`   INTEGER,
-   PRIMARY KEY(`BagID`, `BagIndex`),
-   FOREIGN KEY(`BagID`) REFERENCES `Inventory`(`BagID`)
+CREATE TABLE IF NOT EXISTS `slots_numbers`(
+   `bag_id`      INTEGER,
+   `bag_index`   INTEGER,
+   PRIMARY KEY(`bag_id`, `bag_index`),
+   FOREIGN KEY(`bag_id`) REFERENCES `Inventory`(`bag_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `Items`(
-   `ItemsID`    BIGINT,
-   `ItemName`   TEXT        NOT NULL,
-   `ItemType`   INT,
-   `Physics`    SMALLINT,
-   `Magic`      SMALLINT,
-   `EnchantID`  INT,
-   `Durab`      INT,
-   `Hardness`   TINYINT,
-   `MaxDur`     INT,
-   `Numbers`    TINYINT,
-   `Level`      TINYINT,
-   `Splevel`    TINYINT,
-   `Weight`     INT,
-   `State`      INT,
-   PRIMARY KEY(`ItemsID`)
+CREATE TABLE IF NOT EXISTS `items`(
+   `items_id`       BIGINT,
+   `item_name`      TEXT        NOT NULL,
+   `item_type`      INT,
+   `physics`        SMALLINT,
+   `magic`          SMALLINT,
+   `enchant_id`     INT,
+   `durab`          INT,
+   `hardness`       TINYINT,
+   `max_dur`        INT,
+   `numbers`        TINYINT,
+   `level`          TINYINT,
+   `sp_level`       TINYINT,
+   `weight`         INT,
+   `state`          INT,
+   PRIMARY KEY(`items_id`)
 );
 
 
-CREATE TABLE IF NOT EXISTS `ItemsInSlot`(
-   `BagID`      INT,
-   `BagIndex`   INT,
-   `ItemsID`    INT,
-   PRIMARY KEY(`BagID`, `BagIndex`, `ItemsID`),
-   FOREIGN KEY(`BagID`, `BagIndex`) REFERENCES `SlotsNumbers`(`BagID`, `BagIndex`),
-   FOREIGN KEY(`ItemsID`) REFERENCES Items(`ItemsID`)
+CREATE TABLE IF NOT EXISTS `items_in_slot`(
+   `bag_id`      INT,
+   `bag_index`   INT,
+   `items_id`    INT,
+   PRIMARY KEY(`bag_id`, `bag_index`, `items_id`),
+   FOREIGN KEY(`bag_id`, `bag_index`) REFERENCES `SlotsNumbers`(`bag_id`, `bag_index`),
+   FOREIGN KEY(`items_id`) REFERENCES Items(`items_id`)
 );
 
- CREATE TABLE IF NOT EXISTS QuestRequest(
-   QuestID              INT,
-   SoulLevelMission     BYTE,
-   QuestName            CHAR(50),
-   QuestLevel           INT,
-   TimeLimit            INT,
-   QuestGiverName       CHAR(50),
-   RewardEXP            INT,
-   RewardGold           INT,
-   NumbersOfItems       SMALLINT,
-   ItemsType            INT,
-   PRIMARY KEY(QuestID)
+ CREATE TABLE IF NOT EXISTS quest_request(
+   quest_id                 INT,
+   soul_level_mission       BYTE,
+   quest_name               CHAR(50),
+   quest_level              INT,
+   time_limit               INT,
+   quest_giver_name         CHAR(50),
+   reward_exp               INT,
+   reward_gold              INT,
+   numbers_of_items         SMALLINT,
+   items_type               INT,
+   PRIMARY KEY(quest_id)
 );
 
 -- Table: nec_gimmick
 CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn` (
-    `id`       INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `map_id`   INTEGER  NOT NULL,
-    `x`        INTEGER  NOT NULL,
-    `y`        INTEGER  NOT NULL,
-    `z`        INTEGER  NOT NULL,
-    `heading`  INTEGER  NOT NULL,
-    `model_id` INTEGER  NOT NULL,
-    `state`    INTEGER  NOT NULL,
+    `id`       INTEGER      NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `map_id`   INTEGER      NOT NULL,
+    `x`        INTEGER      NOT NULL,
+    `y`        INTEGER      NOT NULL,
+    `z`        INTEGER      NOT NULL,
+    `heading`  INTEGER      NOT NULL,
+    `model_id` INTEGER      NOT NULL,
+    `state`    INTEGER      NOT NULL,
     `created`  DATETIME,
     `updated`  DATETIME
 );
 
 -- Table: nec_map_transition
 CREATE TABLE IF NOT EXISTS `nec_map_transition` (
-    `id`                    INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `map_id`                INTEGER  NOT NULL,
-    `transition_map_id`     INTEGER  NOT NULL,
-    `x`                     REAL  NOT NULL,
-    `y`                     REAL  NOT NULL,
-    `z`                     REAL  NOT NULL,
-    `maplink_heading`       INTEGER NOT NULL,
-    `maplink_color`         INTEGER NOT NULL,
-    `maplink_offset`        INTEGER NOT NULL,
-    `maplink_width`         INTEGER NOT NULL,
-    `distance`              INTEGER NOT NULL,
-    `left_x`                REAL  NOT NULL,
-    `left_y`                REAL  NOT NULL,
-    `left_z`                REAL  NOT NULL,
-    `right_x`               REAL  NOT NULL,
-    `right_y`               REAL  NOT NULL,
-    `right_z`               REAL  NOT NULL,
-    `invertedPos`           INTEGER NOT NULL,
-    `to_x`                  REAL  NOT NULL,
-    `to_y`                  REAL  NOT NULL,
-    `to_z`                  REAL  NOT NULL,
-    `to_heading`            INTEGER  NOT NULL,
-    `state`                 INTEGER  NOT NULL,
+    `id`                    INTEGER     NOT NULL PRIMARY KEY AUTOINCREMENT,
+    `map_id`                INTEGER     NOT NULL,
+    `transition_map_id`     INTEGER     NOT NULL,
+    `x`                     REAL        NOT NULL,
+    `y`                     REAL        NOT NULL,
+    `z`                     REAL        NOT NULL,
+    `maplink_heading`       INTEGER     NOT NULL,
+    `maplink_color`         INTEGER     NOT NULL,
+    `maplink_offset`        INTEGER     NOT NULL,
+    `maplink_width`         INTEGER     NOT NULL,
+    `distance`              INTEGER     NOT NULL,
+    `left_x`                REAL        NOT NULL,
+    `left_y`                REAL        NOT NULL,
+    `left_z`                REAL        NOT NULL,
+    `right_x`               REAL        NOT NULL,
+    `right_y`               REAL        NOT NULL,
+    `right_z`               REAL        NOT NULL,
+    `invertedPos`           INTEGER     NOT NULL,
+    `to_x`                  REAL        NOT NULL,
+    `to_y`                  REAL        NOT NULL,
+    `to_z`                  REAL        NOT NULL,
+    `to_heading`            INTEGER     NOT NULL,
+    `state`                 INTEGER     NOT NULL,
     `created`               DATETIME,
     `updated`               DATETIME
 );
 CREATE TABLE IF NOT EXISTS `nec_ggate_spawn` (
-  `id`         INTEGER PRIMARY KEY NOT NULL, 
-  `serial_id`     INTEGER             NOT NULL,
-  `interaction`     INTEGER             NOT NULL,
-  `name`       TEXT                NOT NULL,
-  `title`      TEXT                NOT NULL,
-  `map_id`     INTEGER             NOT NULL,
-  `x`          REAL                NOT NULL,
-  `y`          REAL                NOT NULL,
-  `z`          REAL                NOT NULL,
-  `heading`    INTEGER             NOT NULL,
-  `model_id`   INTEGER             NOT NULL,
-  `size`       INTEGER             NOT NULL,
-  `active`     INTEGER             NOT NULL,
-  `glow` INTEGER             NOT NULL,
-  `created`    DATETIME            NOT NULL,
-  `updated`    DATETIME            NOT NULL
+  `id`          INTEGER PRIMARY KEY NOT NULL, 
+  `serial_id`   INTEGER             NOT NULL,
+  `interaction` INTEGER             NOT NULL,
+  `name`        TEXT                NOT NULL,
+  `title`       TEXT                NOT NULL,
+  `map_id`      INTEGER             NOT NULL,
+  `x`           REAL                NOT NULL,
+  `y`           REAL                NOT NULL,
+  `z`           REAL                NOT NULL,
+  `heading`     INTEGER             NOT NULL,
+  `model_id`    INTEGER             NOT NULL,
+  `size`        INTEGER             NOT NULL,
+  `active`      INTEGER             NOT NULL,
+  `glow`        INTEGER             NOT NULL,
+  `created`     DATETIME            NOT NULL,
+  `updated`     DATETIME            NOT NULL
 );

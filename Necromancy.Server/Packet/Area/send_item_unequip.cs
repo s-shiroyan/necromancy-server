@@ -77,7 +77,7 @@ namespace Necromancy.Server.Packet.Area
             //byte y = unchecked((byte)110111);
             //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
 
-            res13.WriteInt64(10200101);
+            res13.WriteInt64(1);
             res13.WriteInt32(0); // Bitmask for location (0 to unequip)
 
             res13.WriteInt32(0); // List of items that gonna be equip on the chara

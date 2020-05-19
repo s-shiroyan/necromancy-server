@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data.Common;
 using Necromancy.Server.Model;
 
@@ -9,31 +9,31 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateQuest =
-            "INSERT INTO `QuestRequest` (`QuestID `, `SoulLevelMission `, `QuestName `, `QuestLevel `, `TimeLimit `, `QuestGiverName `, `RewardEXP `, `RewardGold `, `NumbersOfItems `, `ItemsType`) VALUES (@QuestID, @SoulLevelMission, @QuestName, @QuestLevel, @TimeLimit, @QuestGiverName, @RewardEXP, @RewardGold, @NumbersOfItems, @ItemsType);";
+            "INSERT INTO `QuestRequest` (`quest_id `, `soul_level_mission `, `quest_name `, `quest_level `, `time_limit `, `quest_giver_name `, `reward_exp `, `reward_gold `, `numbers_of_items `, `items_type`) VALUES (@quest_id, @soul_level_mission, @quest_name, @quest_level, @time_limit, @quest_giver_name, @reward_exp, @reward_gold, @numbers_of_items, @items_type);";
 
         private const string SqlSelectQuestById =
-            "SELECT `QuestID `, `SoulLevelMission `, `QuestName `, `QuestLevel `, `TimeLimit `, `QuestGiverName `, `RewardEXP `, `RewardGold `, `NumbersOfItems `, `ItemsType` FROM `QuestRequest` WHERE `QuestID`=@QuestID; ";
+            "SELECT `quest_id `, `soul_level_mission `, `quest_name `, `quest_level `, `time_limit `, `quest_giver_name `, `reward_exp `, `reward_gold `, `numbers_of_items `, `items_type` FROM `QuestRequest` WHERE `quest_id`=@quest_id; ";
 
         private const string SqlUpdateQuest =
-            "UPDATE `QuestRequest` SET `id`=@id, `ItemName`=@ItemName, `ItemType`=@ItemType,  `Physics`=@Physics, `Magic`=@Magic, `EnchantID`=@EnchantID, `Durab`=@Durab, `Hardness`=@Hardness, `MaxDur`=@MaxDur, `Numbers`=@Numbers, `Level`=@Level, `Splevel`=@Splevel, `Weight`=@Weight, `State`=@State WHERE `id`=@id;";
+            "UPDATE `QuestRequest` SET `id`=@id, `item_name`=@item_name, `items_type`=@items_type,  `physics`=@physics, `magic`=@magic, `enchant_id`=@enchant_id, `durab`=@durab, `hardness`=@hardness, `max_dur`=@max_dur, `numbers`=@numbers, `level`=@level, `sp_level`=@sp_level, `weight`=@weight, `state`=@state WHERE `id`=@id;";
 
         private const string SqlDeleteQuest =
-            "DELETE FROM `QuestRequest` WHERE `QuestID`=@QuestID;";
+            "DELETE FROM `QuestRequest` WHERE `quest_id`=@quest_id;";
 
         public bool InsertQuest(Quest quest)
         {
             int rowsAffected = ExecuteNonQuery(SqlCreateQuest, command =>
             {
-                AddParameter(command, "@QuestID", quest.QuestID);
-                AddParameter(command, "@SoulLevelMission", quest.SoulLevelMission);
-                AddParameter(command, "@QuestName", quest.QuestName);
-                AddParameter(command, "@QuestLevel", quest.QuestLevel);
-                AddParameter(command, "@TimeLimit", quest.TimeLimit);
-                AddParameter(command, "@QuestGiverName", quest.QuestGiverName);
-                AddParameter(command, "@RewardEXP", quest.RewardEXP);
-                AddParameter(command, "@RewardGold", quest.RewardGold);
-                AddParameter(command, "@NumbersOfItems", quest.NumbersOfItems);
-                AddParameter(command, "@ItemsType", quest.ItemsType);
+                AddParameter(command, "@quest_id", quest.QuestID);
+                AddParameter(command, "@soul_level_mission", quest.SoulLevelMission);
+                AddParameter(command, "@quest_name", quest.QuestName);
+                AddParameter(command, "@quest_level", quest.QuestLevel);
+                AddParameter(command, "@time_limit", quest.TimeLimit);
+                AddParameter(command, "@quest_giver_name", quest.QuestGiverName);
+                AddParameter(command, "@reward_exp", quest.RewardEXP);
+                AddParameter(command, "@reward_gold", quest.RewardGold);
+                AddParameter(command, "@numbers_of_items", quest.NumbersOfItems);
+                AddParameter(command, "@items_type", quest.ItemsType);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
@@ -49,7 +49,7 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             Quest quest = null;
             ExecuteReader(SqlSelectQuestById,
-                command => { AddParameter(command, "@QuestID", questId); }, reader =>
+                command => { AddParameter(command, "@quest_id", questId); }, reader =>
                 {
                     if (reader.Read())
                     {
@@ -63,16 +63,16 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateQuest, command =>
             {
-                AddParameter(command, "@QuestID", quest.QuestID);
-                AddParameter(command, "@SoulLevelMission", quest.SoulLevelMission);
-                AddParameter(command, "@QuestName", quest.QuestName);
-                AddParameter(command, "@QuestLevel", quest.QuestLevel);
-                AddParameter(command, "@TimeLimit", quest.TimeLimit);
-                AddParameter(command, "@QuestGiverName", quest.QuestGiverName);
-                AddParameter(command, "@RewardEXP", quest.RewardEXP);
-                AddParameter(command, "@RewardGold", quest.RewardGold);
-                AddParameter(command, "@NumbersOfItems", quest.NumbersOfItems);
-                AddParameter(command, "@ItemsType", quest.ItemsType);
+                AddParameter(command, "@quest_id", quest.QuestID);
+                AddParameter(command, "@soul_level_mission", quest.SoulLevelMission);
+                AddParameter(command, "@quest_name", quest.QuestName);
+                AddParameter(command, "@quest_level", quest.QuestLevel);
+                AddParameter(command, "@time_limit", quest.TimeLimit);
+                AddParameter(command, "@quest_giver_name", quest.QuestGiverName);
+                AddParameter(command, "@reward_exp", quest.RewardEXP);
+                AddParameter(command, "@reward_gold", quest.RewardGold);
+                AddParameter(command, "@numbers_of_items", quest.NumbersOfItems);
+                AddParameter(command, "@items_type", quest.ItemsType);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -80,23 +80,23 @@ namespace Necromancy.Server.Database.Sql.Core
         public bool DeleteQuest(int questId)
         {
             int rowsAffected = ExecuteNonQuery(SqlDeleteQuest,
-                command => { AddParameter(command, "@QuestID", questId); });
+                command => { AddParameter(command, "@quest_id", questId); });
             return rowsAffected > NoRowsAffected;
         }
 
         private Quest ReadQuest(DbDataReader reader)
         {
             Quest quest = new Quest();
-            quest.QuestID = GetInt32(reader, "QuestID");
-            quest.SoulLevelMission = GetByte(reader, "SoulLevelMission");
-            quest.QuestName = GetString(reader, "QuestName");
-            quest.QuestLevel = GetInt32(reader, "QuestLevel");
-            quest.TimeLimit = GetInt32(reader, "TimeLimit");
-            quest.QuestGiverName = GetString(reader, "QuestGiverName");
-            quest.RewardEXP = GetInt32(reader, "RewardEXP");
-            quest.RewardGold = GetInt32(reader, "RewardGold");
-            quest.NumbersOfItems = (short)GetInt32(reader, "NumbersOfItems");
-            quest.ItemsType = GetInt32(reader, "ItemsType");
+            quest.QuestID = GetInt32(reader, "quest_id");
+            quest.SoulLevelMission = GetByte(reader, "soul_level_mission");
+            quest.QuestName = GetString(reader, "quest_name");
+            quest.QuestLevel = GetInt32(reader, "quest_level");
+            quest.TimeLimit = GetInt32(reader, "time_limit");
+            quest.QuestGiverName = GetString(reader, "quest_giver_name");
+            quest.RewardEXP = GetInt32(reader, "reward_exp");
+            quest.RewardGold = GetInt32(reader, "reward_gold");
+            quest.NumbersOfItems = (short)GetInt32(reader, "numbers_of_items");
+            quest.ItemsType = GetInt32(reader, "items_type");
             return quest;
         }
     }

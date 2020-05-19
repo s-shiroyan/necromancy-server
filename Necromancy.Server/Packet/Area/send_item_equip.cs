@@ -25,6 +25,17 @@ namespace Necromancy.Server.Packet.Area
             int equipBit = packet.Data.ReadInt32();
             Logger.Debug(
                 $"storageType: [{storageType}] bagId: [{bagId}]  backpackSlot: [{backpackSlot}] equipBit: [{equipBit}]");
+            Item item = null;
+            if (client.Character.GetInventoryItem(storageType, bagId, backpackSlot) != null)
+            {
+                InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
+                item = Server.Instances64.GetInstance(invItem.StorageItem.InstanceId) as Item;
+                item.bitmask = equipBit;
+            }
+            else
+            {
+                item = Server.Instances64.GetInstance(3) as Item;
+            }
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(0);
@@ -35,30 +46,66 @@ namespace Necromancy.Server.Packet.Area
             //RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem.StorageItem.InstanceId);
             //Router.Send(eqMask, client);
 
-            EQMask(client, 0);
+            EQMask(client, item);
+            //EQMask2(client);
         }
 
-        void EQMask(NecClient client, int x)
+        void EQMask(NecClient client, Item item)
         {
+            string[] itemIDs = new string[]
+            {
+                "Weapon", "Shield", "Arrow", "Head", "Torso", "Pants", "Hands", "Feet", "Cape", "Necklace", "Earring", 
+                "Belt", "Ring", "Talk Ring", "Avatar Head", "Avatar Torso", "Avatar Pants", "Avatar Hands", "Avatar Feet"
+            };
+
+            int[] EquipBitMask = new int[]
+            {
+                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152
+            };
+
+            /*for(int i = 0; i < 19; i++)
+            {
+                if()
+            }*/
+            //item = Server.Instances64.GetInstance(3) as Item;
             IBuffer res13 = BufferProvider.Provide();
-            //95 torso ?
-            //55 full armor too ?
-            //93 full armor ?
-            // 27 full armor ?
-            //11 under ?
-            // 38 = boots and cape
-            //byte y = unchecked((byte)110111);
-            //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
+            res13.WriteUInt64(item.InstanceId);
+            res13.WriteInt32(2); // Bitmask for location
 
-            res13.WriteInt64(10200101);
-            res13.WriteInt32(8); // Permit to get the armor on the chara
-
-            res13.WriteInt32(180202); // List of items that gonna be equip on the chara
+            res13.WriteInt32(item.icon); // List of items that gonna be equip on the chara
             res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
             res13.WriteByte(0);
             res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
 
-            res13.WriteInt32(1);
+            res13.WriteInt32(item.icon);
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0); //bool
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0);
+            res13.WriteByte(0); // 1 = body pink texture
+            res13.WriteByte(0);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
+        }
+
+        void EQMask2(NecClient client)
+        {
+            Item item = Server.Instances64.GetInstance(3) as Item;
+            IBuffer res13 = BufferProvider.Provide();
+            res13.WriteUInt64(item.InstanceId);
+            res13.WriteInt32(item.bitmask); // Bitmask for location
+
+            res13.WriteInt32(item.icon); // List of items that gonna be equip on the chara
+            res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
+            res13.WriteByte(0);
+            res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
+
+            res13.WriteInt32(item.icon);
             res13.WriteByte(0);
             res13.WriteByte(0);
             res13.WriteByte(0);

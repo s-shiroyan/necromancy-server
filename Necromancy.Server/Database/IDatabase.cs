@@ -83,10 +83,10 @@ namespace Necromancy.Server.Database
         bool DeleteMonsterCoord(int monsterSpawnId);
 
         // Items
-        //bool InsertItems(Items items);
-        //Items SelectitemsById(int itemsId);
-        //bool UpdateItems(Items items);
-        //bool DeleteItems(int itemsId);
+        bool InsertItem(Item item);
+        Item SelectItemById(int itemsId);
+        bool UpdateItem(Item item);
+        bool DeleteItem(int itemsId);
 
         // Quest
         bool InsertQuest(Quest quest);
