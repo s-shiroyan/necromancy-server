@@ -58,9 +58,6 @@ namespace Necromancy.Server.Packet.Area
                             x => (x == 74000022) || (x == 74000024) || (x == 74000023),
                             () => RecoverySpring(client, npcSpawn)
                         },
-                        {x => x == 74013071, () => SendGetWarpTarget(client, npcSpawn)},
-                        {x => x == 74013161, () => SendGetWarpTarget(client, npcSpawn)},
-                        {x => x == 74013271, () => SendGetWarpTarget(client, npcSpawn)},
                         {
                             x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) ||
                                  (x == 10000702),
@@ -94,7 +91,7 @@ namespace Necromancy.Server.Packet.Area
                             x => x < 1000000,
                             () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")
                         },
-                        {x => x < 900000100, () => UpdateNPC(client, npcSpawn)}
+                        {x => x < 900000100, () => WorkInProgress(client, npcSpawn)}
                     };
 
                     eventSwitchPerObjectID.First(sw => sw.Key((int) npcSpawn.NpcId)).Value();
@@ -108,8 +105,30 @@ namespace Necromancy.Server.Packet.Area
                     Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res2, ServerType.Area);
 
                     break;
+
+                case GGateSpawn ggateSpawn:
+                    //client.Map.GGateSpawns.TryGetValue(ggateSpawn.InstanceId, out ggateSpawn);
+                    Logger.Debug(
+                        $"instanceId : {ggateSpawn.InstanceId} |  ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId}");
+                    IBuffer res3 = BufferProvider.Provide();
+                    res3.WriteInt32(0);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res3, ServerType.Area);
+
+                    //logic to execute different actions based on the event that triggered this select execution.
+                    var eventSwitchPerObjectID2 = new Dictionary<Func<int, bool>, Action>
+                    {
+
+                        {x => x == 74013071, () => SendGetWarpTarget(client, ggateSpawn)},
+                        {x => x == 74013161, () => SendGetWarpTarget(client, ggateSpawn)},
+                        {x => x == 74013271, () => SendGetWarpTarget(client, ggateSpawn)},
+
+                        {x => x < 900000100, () => WorkInProgressGGate(client, ggateSpawn) }
+                    };
+
+                    eventSwitchPerObjectID2.First(sw => sw.Key((int)ggateSpawn.SerialId)).Value();
+                    break;
                 default:
-                    Logger.Error($"Instance with InstanceId: {instanceId} does not exist");
+                    Logger.Error($"Event Access logic for InstanceId: {instanceId} does not exist");
                     SendEventEnd(client);
                     break;
             }
@@ -217,9 +236,9 @@ namespace Necromancy.Server.Packet.Area
 
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
-                res2.WriteCString("I used to drive a cab."); //need to find max size; Text block
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res2.WriteCString("I used to drive a cab."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -258,11 +277,11 @@ namespace Necromancy.Server.Packet.Area
         }
 
         // I added these to Npc database for now, should it be handled differently?????
-        private void SendGetWarpTarget(NecClient client, NpcSpawn npcSpawn)
+        private void SendGetWarpTarget(NecClient client, GGateSpawn ggateSpawn)
         {
             client.Character.eventSelectExecCode = -1;
             Logger.Debug(
-                $"npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId} client.Character.eventSelectExecCode: {client.Character.eventSelectExecCode}");
+                $"ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId} client.Character.eventSelectExecCode: {client.Character.eventSelectExecCode}");
             if (client.Character.eventSelectExecCode == -1)
             {
                 IBuffer res3 = BufferProvider.Provide();
@@ -294,7 +313,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteCString("Select area to travel to"); // It's the title dude
-                res1.WriteUInt32(npcSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
+                res1.WriteUInt32(ggateSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
                 Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res1,
                     ServerType.Area); // Actual map change is handled by send_event_select_exec_r, need to figure out how to handle this better
             }
@@ -348,6 +367,75 @@ namespace Necromancy.Server.Packet.Area
                 ServerType.Area); // It's the windows that contain the multiple choice
         }
 
+        private void WorkInProgress(NecClient client, NpcSpawn npcSpawn)
+        {
+            String[] Text1 = new string[]
+            {
+                $"Welcome to the test server for Wizardry Online {client.Character.Name}!",
+                "Go Away!",
+                "Hey there good lookin. that's a nice hat you have there!",
+                "i heard there's a secret green door in white town",
+                "there might be some beetles in caligrase",
+                $"{client.Soul.Name}.... were you born with that name?",
+                "ありがとうございます", //game client can't render japanese text
+                "мы ценим вас"                
+            };
+            String[] Text2 = new string[]
+            {
+                $"This NPC is still under development",
+                "  ..no seriously, go away!",
+                "Be a shame if somebody..... Took it!",
+                "see if you can find it",
+                "go kill those beetles!",
+                "or did you choose it?  ",
+                " 参加していただきありがとうございます",
+                "Спасибо, что присоединились"
+            };
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length-1);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}"); //Name
+            res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res2.WriteCString(Text1[randomTextChoice]); 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteCString($"{npcSpawn.Name}"); //Name
+            res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res3.WriteCString(Text2[randomTextChoice]);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+            IBuffer res6 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+        }
+
+        private void WorkInProgressGGate(NecClient client, GGateSpawn npcSpawn)
+        {
+            String[] Text1 = new string[]
+            {
+                $"Here lies {client.Character.Name}!",
+                "Go Away!",
+                "I am an inanimate Object!",
+                "Sorry, device is broke",
+                "$5.99 early access special *thwack*...",
+                $"{client.Soul.Name}.... please help us?",
+                "ありがとうございます", //game client can't render japanese text
+                "мы ценим вас"
+            };
+
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length - 1);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}"); //Name
+            res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+            res2.WriteCString(Text1[randomTextChoice]);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+            IBuffer res6 = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+        }
+
+        //Use this as a default event if we ever need to do some serious NPC model updating and heading setting again.
         private void UpdateNPC(NecClient client, NpcSpawn npcSpawn)
         {
             IBuffer res3 = BufferProvider.Provide();
@@ -372,16 +460,16 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextBlacksmith)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //need to find max size; Text block
+                    "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
-                res3.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res3.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
-                res3.WriteCString("sometimes the process fails."); //need to find max size; Text block
+                res3.WriteCString($"{npcSpawn.Name}"); //Name
+                res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res3.WriteCString("sometimes the process fails."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -411,10 +499,10 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextDonkey)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //need to find max size; Text block
+                    "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -444,10 +532,10 @@ namespace Necromancy.Server.Packet.Area
             if (client.Character.helperTextCloakRoom)
             {
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //need to find max size; Name
-                res2.WriteCString($"{npcSpawn.Title}"); //need to find max size; Title (inside chat box)
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
-                    "Welcome! We take care of your belongings and money."); //need to find max size; Text block
+                    "Welcome! We take care of your belongings and money."); //Text block
                 Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -501,9 +589,9 @@ namespace Necromancy.Server.Packet.Area
                 ServerType.Area); // It's the windows that contain the multiple choice
 
             /*IBuffer res2 = BufferProvider.Provide();
-            res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
-            res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
-            res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//need to find max size; Text block
+            res2.WriteCString($"{npcSpawn.Name}");//Name
+            res2.WriteCString($"{npcSpawn.Title}");//Title (inside chat box)
+            res2.WriteCString("Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*");//Text block
             Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
             //IBuffer res6 = BufferProvider.Provide();

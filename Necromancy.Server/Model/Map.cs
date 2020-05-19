@@ -117,12 +117,12 @@ namespace Necromancy.Server.Model
                 }
 
                 monsterSpawn.ModelId = modelSetting.Id;
-                monsterSpawn.Size = (short) (modelSetting.Height / 2);
+                //monsterSpawn.Size = (short) (modelSetting.Height / 2);   //commenting out to use size setting from database.
                 monsterSpawn.Radius = (short) modelSetting.Radius;
                 monsterSpawn.Hp.setMax(300);
                 monsterSpawn.Hp.setCurrent(300);
                 monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
-                monsterSpawn.Level = (byte) monsterSetting.Level;
+                //monsterSpawn.Level = (byte) monsterSetting.Level;
                 monsterSpawn.CombatMode = monsterSetting.CombatMode;
                 monsterSpawn.CatalogId = monsterSetting.CatalogId;
                 monsterSpawn.TextureType = monsterSetting.TextureType;

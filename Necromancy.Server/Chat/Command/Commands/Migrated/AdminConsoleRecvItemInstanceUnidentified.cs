@@ -26,7 +26,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             10800405 /*Weapon*/, 15100901 /*Shield* */, 20000101 /*Arrow*/, 110301 /*head*/, 210701 /*Torso*/,
             360103 /*Pants*/, 401201 /*Hands*/, 560103 /*Feet*/, 690101 /*Cape*/, 30300101 /*Necklace*/,
-            30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 160801 /*Avatar Head */,
+            30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/, 180201 /*160801 Avatar Head */,
             260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/, 560801 /*Avatar Feet*/, 1, 2, 3
         };
 
@@ -96,61 +96,61 @@ namespace Necromancy.Server.Chat.Command.Commands
                 IBuffer res0 = BufferProvider.Provide();
                 res0.WriteInt64(client.Character.EquipId[x]);
                 res0.WriteInt32(Util.GetRandomNumber(199, 200)); // MaxDura points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res0, ServerType.Area);
 
 
                 IBuffer res2 = BufferProvider.Provide(); // Maybe not the good one ?
                 res2.WriteInt64(client.Character.EquipId[x]);
                 res2.WriteInt32(Util.GetRandomNumber(1, 200)); // Durability points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res2, ServerType.Area);
 
 
                 IBuffer res4 = BufferProvider.Provide();
                 res4.WriteInt64(client.Character.EquipId[x]);
                 res4.WriteInt32(Util.GetRandomNumber(800, 10000)); // Weight points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
 
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteInt64(client.Character.EquipId[x]);
                 res5.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Defense and attack points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
 
 
                 IBuffer res6 = BufferProvider.Provide();
                 res6.WriteInt64(client.Character.EquipId[x]);
                 res6.WriteInt16((short) Util.GetRandomNumber(5, 500)); // Magic def and attack Points
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
 
 
                 IBuffer res7 = BufferProvider.Provide();
                 res7.WriteInt64(client.Character.EquipId[x]);
                 res7.WriteInt32(Util.GetRandomNumber(1, 10)); // for the moment i don't know what it change
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
 
 
                 IBuffer res8 = BufferProvider.Provide();
                 res8.WriteInt64(client.Character.EquipId[x]);
                 res8.WriteInt16((short) Util.GetRandomNumber(0, 100000)); // Shwo GP on certain items
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
 
                 IBuffer res9 = BufferProvider.Provide();
                 res9.WriteInt64(client.Character.EquipId[x]);
                 res9.WriteInt32(Util.GetRandomNumber(1, 50)); // for the moment i don't know what it change
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
 
 
                 IBuffer res11 = BufferProvider.Provide();
                 res11.WriteInt64(client.Character.EquipId[x]);
                 res11.WriteByte((byte) Util.GetRandomNumber(0, 100)); // Hardness
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
 
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteInt64(client.Character
                     .EquipId[x]); //client.Character.EquipId[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
                 res1.WriteInt32(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
+                //Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
 
 
                 IBuffer res13 = BufferProvider.Provide();
@@ -190,8 +190,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 IBuffer res17 = BufferProvider.Provide();
                 res17.WriteInt64(itemIDs[x]);
                 res17.WriteInt32(EquipBitMask[x]);
-                Router.Send(client.Map, (ushort) AreaPacketId.recv_item_update_spirit_eqmask, res17, ServerType.Area,
-                    client);
+                //Router.Send(client.Map, (ushort) AreaPacketId.recv_item_update_spirit_eqmask, res17, ServerType.Area,
+                    //client);
 
 
                 /*IBuffer res19 = BufferProvider.Provide();
