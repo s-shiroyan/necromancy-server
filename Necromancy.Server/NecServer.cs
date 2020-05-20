@@ -169,12 +169,12 @@ namespace Necromancy.Server
             _areaServer.Start();
             _running = true;
             NecromancyBot.Start();
-          //  NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
+            NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
         }
 
         public void Stop()
         {
-         //   NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
+            NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
