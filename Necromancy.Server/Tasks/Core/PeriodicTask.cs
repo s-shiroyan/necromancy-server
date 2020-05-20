@@ -29,7 +29,7 @@ namespace Necromancy.Server.Tasks.Core
 
             _cancellationTokenSource = new CancellationTokenSource();
             _task = new Task(Run, _cancellationTokenSource.Token);
-            _task.Start(TaskScheduler.Default);
+            _task.Start();
         }
 
         public void Stop()

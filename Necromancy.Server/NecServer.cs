@@ -140,6 +140,8 @@ namespace Necromancy.Server
                 return;
             }
 
+            Clients.Remove(client);
+
             Map map = client.Map;
             if (map != null)
             {
@@ -152,8 +154,11 @@ namespace Necromancy.Server
                 union.Leave(client);
             }
 
-            //Remove the client from the list of server clients on disconnect
-            this.Clients.Remove(client);
+            Character character = client.Character;
+            if (character != null)
+            {
+                character.characterActive = false;
+            }
         }
 
         public void Start()
@@ -164,10 +169,12 @@ namespace Necromancy.Server
             _areaServer.Start();
             _running = true;
             NecromancyBot.Start();
+          //  NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
         }
 
         public void Stop()
         {
+         //   NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
