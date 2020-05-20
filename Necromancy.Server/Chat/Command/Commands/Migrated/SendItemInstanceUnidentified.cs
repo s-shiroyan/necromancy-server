@@ -31,7 +31,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             item.type = 2;
             item.bitmask = 1;
             item.count = 1;
-            item.icon = 10280101;
+            item.icon = 10202102;
 
             //recv_item_instance_unidentified = 0xD57A,
 

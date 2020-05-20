@@ -245,6 +245,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             invItem.StorageType = 0;
             invItem.StorageCount = (byte) count;
             item.count = invItem.StorageCount;
+            item.bitmask = 1; //Fix the calculation for this 
+
             res = null;
             res = BufferProvider.Provide();
  
@@ -254,7 +256,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(item.type); //item type
 
-            res.WriteInt32(1); //Bit mask designation
+            res.WriteInt32(item.bitmask); //Bit mask designation
 
             res.WriteByte(invItem.StorageCount); //Number of items
 
@@ -381,7 +383,8 @@ namespace Necromancy.Server.Chat.Command.Commands
 
         public void UpdateEqMask(NecClient client, InventoryItem invItem)
         {
-            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem.StorageItem.InstanceId);
+            //Item item = invItem.StorageItem;
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask);
             Router.Send(eqMask, client);
         }
 

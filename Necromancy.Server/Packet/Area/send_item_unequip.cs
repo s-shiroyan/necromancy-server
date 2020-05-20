@@ -14,28 +14,37 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort) AreaPacketId.send_item_unequip;
         public override void Handle(NecClient client, NecPacket packet)
         {
+                /*
+                ERR_UNEQUIP 1
+                ERR_UNEQUIP - 203
+                ERR_UNEQUIP - 201
+                ERR_UNEQUIP - 208
+                ERR_UNEQUIP GENERIC
+                */
             int slotNum = packet.Data.ReadInt32();
 
-            IBuffer res = BufferProvider.Provide();
+            InventoryItem invItem = Server.Instances64.GetInstance(client.Character.equipSlots[slotNum].InstanceId) as InventoryItem;
 
-            res.WriteInt32(0); //error check. 0 to work
+            if (invItem != null)
+            {
+                EQMask(client, invItem);
 
-            /*
-            ERR_UNEQUIP 1
-            ERR_UNEQUIP - 203
-            ERR_UNEQUIP - 201
-            ERR_UNEQUIP - 208
-            ERR_UNEQUIP GENERIC
-            */
-
-            Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
-            EQMask(client, slotNum);
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(0); //error check. 0 to work
+                Router.Send(client, (ushort)AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
+            }
+            else
+            {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteInt32(203); //error check. 0 to work
+                Router.Send(client, (ushort)AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
+            }
         }
 
-        void EQMask(NecClient client, int instanceId)
+        void EQMask(NecClient client, InventoryItem invItem)
         {
             IBuffer res13 = BufferProvider.Provide();
-            res13.WriteInt64(instanceId);
+            res13.WriteUInt64(invItem.InstanceId);
             res13.WriteInt32(0); // Bitmask for location (0 to unequip)
 
             res13.WriteInt32(0); // List of items that gonna be equip on the chara
