@@ -61,6 +61,8 @@ Open the `necromancy.sln`-file
 Run the `Necromancy.Cli`-Project
 
 # Project
+The following section will explain some concepts and systems that have been designed and explain the intentions.
+This should help developers to gain high level overview of existing components and how to make best use of them.
 
 ## Id Types
 | Name       | Type       | Uniqueness | Constant | Description                                                                                             |
@@ -93,7 +95,7 @@ To summarize the Instance-System is used to create journal entries / lookups for
 Additionally it provides the ability to retrieve the object instance by `InstanceId`.
 
 This is why the `InstanceId` should never be used in any comparison (`InstanceId != 0`) or stored anywhere.
-It should exclusively be used when sending packet data (by appending it) and when handling packet data (by looking the object up).0
+It should exclusively be used when sending packet data (by appending it) and when handling packet data (by looking the object up).
 
 ```
 uint instanceId = packet.ReadUInt32();
@@ -127,6 +129,12 @@ Do not use `InstanceId` for anything else other than (writing to packet, reading
 
 ## Item
 
+Item
+InventoryItem
+Inventory
+
+EquipItem ?
+Equipment ?
 
 
 

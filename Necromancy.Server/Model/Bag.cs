@@ -3,13 +3,13 @@ using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Model
 {
-    public class Bag : IInstance64
+    public class Bag : IInstance
     {
         public Bag()
         {
         }
 
-        public ulong InstanceId { get; set; }
+        public uint InstanceId { get; set; }
         public int BagId { get; set; }
         public byte StorageId { get; set; }
         public short NumSlots { get; set; }

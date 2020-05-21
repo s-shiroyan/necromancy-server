@@ -363,7 +363,7 @@ namespace Necromancy.Server.Model
 
             if (slotId != -1)
             {
-                invItem = server.Instances64.CreateInstance<InventoryItem>();
+                invItem = server.Instances.CreateInstance<InventoryItem>();
                 invItem.StorageId = bagId;
                 invItem.StorageSlot = slotId;
                 inventoryItems.Add(invItem);

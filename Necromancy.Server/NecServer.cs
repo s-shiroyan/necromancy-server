@@ -57,7 +57,6 @@ namespace Necromancy.Server
         public ChatManager Chat { get; }
         public NecromancyBot NecromancyBot { get; }
         public InstanceGenerator Instances { get; }
-        public InstanceGenerator64 Instances64 { get; }
         public bool Running => _running;
 
         private readonly NecQueueConsumer _authConsumer;
@@ -77,7 +76,6 @@ namespace Necromancy.Server
             NecromancyBot.AddSingleton(this);
 
             Instances = new InstanceGenerator();
-            Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
             Characters = new CharacterLookup();
             Maps = new MapLookup();

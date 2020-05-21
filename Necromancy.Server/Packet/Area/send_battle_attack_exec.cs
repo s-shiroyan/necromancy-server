@@ -36,7 +36,6 @@ namespace Necromancy.Server.Packet.Area
 
 
             int damage = 0;
-            float perHp = 100.0f;
             int seed = Util.GetRandomNumber(0, 20);
             if (seed < 2)
                 damage = Util.GetRandomNumber(1, 4); // Light hit

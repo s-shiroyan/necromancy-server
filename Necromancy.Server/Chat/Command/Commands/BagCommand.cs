@@ -51,7 +51,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return null;
             }
 
-            Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
+            Item item = invItem.StorageItem = _server.Instances.CreateInstance<Item>();
             Logger.Debug($"invItem.StorageId [{invItem.StorageId}] invItem.StorageSlot [{invItem.StorageSlot}]");
             item.Id = 50100501;
             item.IconType = 47;
@@ -121,7 +121,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return null;
             }
 
-            Item item = invItem.StorageItem = _server.Instances64.CreateInstance<Item>();
+            Item item = invItem.StorageItem = _server.Instances.CreateInstance<Item>();
             item.Id = 50100501;
             item.IconType = 47;
             item.Name = "bag";

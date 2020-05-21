@@ -69,7 +69,7 @@ namespace Necromancy.Server.Model
                         itemSetting.IconType = 55;
                     }
 
-                    Item item = _server.Instances64
+                    Item item = _server.Instances
                         .CreateInstance<Item>(); //  Need to get fully populated Item repository
                     item.AddItemSetting(itemSetting);
                     int numItems = GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems + 1);

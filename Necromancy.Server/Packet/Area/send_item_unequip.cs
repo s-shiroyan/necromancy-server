@@ -12,7 +12,7 @@ namespace Necromancy.Server.Packet.Area
         }
 
         public override ushort Id => (ushort) AreaPacketId.send_item_unequip;
-        int x;
+
         int y;
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -38,7 +38,6 @@ namespace Necromancy.Server.Packet.Area
 
         private void SendCharaUnequipped(NecClient client)
         {
-            x = 1;
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(-1);//itemIDs[x]);
