@@ -84,7 +84,7 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32(0); //Item status 0 = identified  
 
-                res.WriteInt32(dropItem.Item.Id); //Item icon 50100301 = camp
+                res.WriteUInt32(dropItem.Item.Id); //Item icon 50100301 = camp
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);

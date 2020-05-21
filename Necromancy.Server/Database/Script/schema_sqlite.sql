@@ -232,25 +232,6 @@ CREATE TABLE IF NOT EXISTS `SlotsNumbers`(
    FOREIGN KEY(`BagID`) REFERENCES `Inventory`(`BagID`)
 );
 
-CREATE TABLE IF NOT EXISTS `Items`(
-   `ItemsID`    BIGINT,
-   `ItemName`   TEXT        NOT NULL,
-   `ItemType`   INT,
-   `Physics`    SMALLINT,
-   `Magic`      SMALLINT,
-   `EnchantID`  INT,
-   `Durab`      INT,
-   `Hardness`   TINYINT,
-   `MaxDur`     INT,
-   `Numbers`    TINYINT,
-   `Level`      TINYINT,
-   `Splevel`    TINYINT,
-   `Weight`     INT,
-   `State`      INT,
-   PRIMARY KEY(`ItemsID`)
-);
-
-
 CREATE TABLE IF NOT EXISTS `ItemsInSlot`(
    `BagID`      INT,
    `BagIndex`   INT,

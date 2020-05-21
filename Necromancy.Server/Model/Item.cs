@@ -11,13 +11,13 @@ namespace Necromancy.Server.Model
 
         public void AddItemSetting(ItemSetting setting)
         {
-            Id = setting.Id;
+            Id = (uint)setting.Id;
             Name = setting.Name;
             ItemType = setting.ItemType;
             IconType = setting.IconType;
         }
         public uint InstanceId { get; set; }
-        public int Id { get; set; }
+        public uint Id { get; set; }
         public string Name { get; set; }
         public int ItemType { get; set; }
         public int IconType { get; set; }

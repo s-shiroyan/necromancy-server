@@ -1,4 +1,3 @@
-using System;
 using Necromancy.Server.Common.Instance;
 
 namespace Necromancy.Server.Model
@@ -11,6 +10,7 @@ namespace Necromancy.Server.Model
         public short StorageSlot { get; set; }
         public byte StorageCount { get; set; }
         public Item StorageItem { get; set; }
+
         public InventoryItem()
         {
             StorageItem = new Item();

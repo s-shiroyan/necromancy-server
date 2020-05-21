@@ -74,7 +74,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(0); //Item status 0 = identified  
 
-            res.WriteInt32(item.Id); //Item icon 50100301 = camp
+            res.WriteUInt32(item.Id); //Item icon 50100301 = camp
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -137,7 +137,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(invItem.StorageId); // 0~2 // maybe.. more bag index?
             res.WriteInt16(invItem.StorageSlot); // bag index
             res.WriteInt32(0); //Equip bitmask
-            res.WriteInt32(item.Id); //Percentage stat, 9 max i think
+            res.WriteUInt32(item.Id); //Percentage stat, 9 max i think
             res.WriteByte(0);
             res.WriteByte(0); // Dest slot
             res.WriteCString(item.Name); // find max size 

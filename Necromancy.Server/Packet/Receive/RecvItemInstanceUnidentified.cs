@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Receive
 
             res.WriteInt32(0); //Item status 0 = identified  
 
-            res.WriteInt32(_invItem.StorageItem.Id); //Item icon 50100301 = camp
+            res.WriteUInt32(_invItem.StorageItem.Id); //Item icon 50100301 = camp
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);

@@ -76,7 +76,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Item createItem = null;
                     if (y == 0)
                     {
-                        createItem = SendItemInstanceUnidentified(client, x, 1, y, "");
+                        createItem = SendItemInstanceUnidentified(client, (uint)x, 1, y, "");
                     }
                     else
                     {
@@ -212,7 +212,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override string Key => "iitem";
         public override string HelpText => "usage: `/iitem [command] [int]`";
 
-        public Item SendItemInstanceUnidentified(NecClient client, int itemId, int count, int itemType, string name)
+        public Item SendItemInstanceUnidentified(NecClient client, uint itemId, int count, int itemType, string name)
         {
             IBuffer res = null;
             invItem = client.Character.GetNextInventoryItem(_server);
@@ -250,7 +250,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt32(0); //Item status 0 = identified  
 
-            res.WriteInt32(item.Id); //Item icon 50100301 = camp
+            res.WriteUInt32(item.Id); //Item icon 50100301 = camp
             res.WriteByte(1);
             res.WriteByte(1);
             res.WriteByte(1);
@@ -289,7 +289,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             return item;
         }
 
-        public Item SendItemInstance(NecClient client, int itemId, int itemType, string name)
+        public Item SendItemInstance(NecClient client, uint itemId, int itemType, string name)
         {
             IBuffer res = BufferProvider.Provide();
             //Item item = _server.Instances64.CreateInstance<Item>();
@@ -325,7 +325,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(invItem.StorageId); // 0~2 // maybe.. more bag index?
             res.WriteInt16(invItem.StorageSlot); // bag index
             res.WriteInt32(0); //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)                          /13
-            res.WriteInt32(invItem.StorageItem
+            res.WriteUInt32(invItem.StorageItem
                 .Id); //Percentage stat, 9 max i think                                                                        /12
             res.WriteByte(36); //1
             res.WriteByte(37); // Dest slot

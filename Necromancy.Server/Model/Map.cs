@@ -69,7 +69,7 @@ namespace Necromancy.Server.Model
             foreach (MapTransition mapTran in mapTransitions)
             {
                 server.Instances.AssignInstance(mapTran);
-                mapTran.Start(_server, this);
+             //   mapTran.Start(_server, this);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);
             }
 
