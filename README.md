@@ -10,10 +10,9 @@ Server Emulator for the Online Game Wizardry Online.
   - [VS Code](#vs-code)
   - [IntelliJ Rider](#intellij-rider)
 - [Project](#project)
-  - [Common](#common)
-  - [Data](#data)  
-  - [Database](#database)
-  - [Packet](#packet)
+  - [Id Types](#id-types)
+  - [Instance](#instance)  
+  - [Item](#item)
 - [Guidelines](#guidelines)
 - [Attribution](#attribution)
   - [Contributers](#contributers)
@@ -62,20 +61,74 @@ Open the `necromancy.sln`-file
 Run the `Necromancy.Cli`-Project
 
 # Project
-### Ids
+
+## Id Types
 | Name       | Type       | Uniqueness | Constant | Description                                                                                             |
 |:-----------|:-----------|:-----------|:---------|:--------------------------------------------------------------------------------------------------------|
 | InstanceId | ObjectId   | Globally   | No       | Identifies a object uniquely globally (No duplicate Ids are possible, can distinguish between anything) |
 | Id         | DatabaseId | per Domain | Yes      | Identifies a object uniquely among its domain. (Can distinguish between two npcs with the same NpcId)   |
-| NpcId      | SerialId   | None       | Yes      | Identifies a type of npc (Multiple npc can exist with same NpcId)                                               |
-| MonsterId  | SerialId   | None       | Yes      | Identifies a type of monster (Multiple monster can exist with same MonsterId)                                   |
-| ModelId    | SerialId   | None       | Yes      | Identifies a type of model (Multiple model can exist with same ModelId)                                         |
+| NpcId      | SerialId   | None       | Yes      | Identifies a type of npc (Multiple npc can exist with same NpcId)                                       |
+| MonsterId  | SerialId   | None       | Yes      | Identifies a type of monster (Multiple monster can exist with same MonsterId)                           |
+| ModelId    | SerialId   | None       | Yes      | Identifies a type of model (Multiple model can exist with same ModelId)                                 |
+
+## Instance
+Inside the game world various kinds of objects exist.
+The game uses ids to identify a specific object inside the game world.
+This brings the requirement that every id needs to be globally unique, to identify a specific object.
+For example there could be two monsters, who look identically but to differentiate them we need to give them different ids.
+These ids are called `InstanceId` because they point to a specific instance of an object inside the game world.
+Every object that exists inside the game world needs to be assigned an unique `InstanceId` so we can identify the object that is being interacted with.
+  
+In general and during development you should not concern yourself about these `InstanceId`s they are supposed to be randomly and on demand assigned.
+That means after a server restart, every object inside the game world could have a different `InstanceId`.
+
+We are using concrete objects to represent an object inside the game world, for example a `Item.cs` or `Monster.cs` class.
+These classes when instantiated will be assigned an `InstanceId`. 
+While the `InstanceId` is assigned, the server will keep a journal of object instance reference to `InstanceId`. 
+When a monster spawn packet is send, the `InstanceId` of the instantiated `Monster.cs` class will be added to the packet.
+The moment a player will attack this monster, we will receive the `InstanceId` in our handling method,
+then the journal can be used to find the original `Monster.cs` class instance by the provided `InstanceId`.
+
+To summarize the Instance-System is used to create journal entries / lookups for `InstanceId` to object instance.
+Additionally it provides the ability to retrieve the object instance by `InstanceId`.
+
+This is why the `InstanceId` should never be used in any comparison (`InstanceId != 0`) or stored anywhere.
+It should exclusively be used when sending packet data (by appending it) and when handling packet data (by looking the object up).0
+
+```
+uint instanceId = packet.ReadUInt32();
+IInstance instance = Server.Instances.GetInstance(instanceId);
+if(instance == null)
+{
+  // the instanceId is invalid
+} else if (instance is Character character)
+{
+  // the instanceId is a valid Character class object
+  // access character properties
+  Logger.Info($"CharacterName: {character.Name}")
+} else if (instance is Monster monster)
+{
+  // the instanceId is a valid Monster class object
+  // access monster properties
+  Logger.Info($"MonsterName: {monster.Name}")
+}
+```
+Looking up a `InstanceId` will return a `IInstance` object.
+If the object is null, it means the instance is invalid or does not exist anymore.
+Usually `IInstance` is expected to be of a certain type, for example in a monster attack handler check
+if it is a valid monster instance (`if (instance is Monster monster)`) and continue handling by utilizing the `monster` instance.
+If the check failed it just means the instance is not valid anymore and it can be logged or dealt with in an appropriate way.
+
+In a case where it is expected that an `InstanceId` can be multiple types of an object, the above if-else construct can be used to
+test for multiple types of object instances and handle them accordingly.
+
+If dealing with an `InstanceId` only use it to retrieve the expected object, and then use that object. 
+Do not use `InstanceId` for anything else other than (writing to packet, reading from packet, looking object up).
+
+## Item
 
 
-## Common
-## Data
-## Database
-## Packet
+
 
 # Guidelines
 ## Git 
