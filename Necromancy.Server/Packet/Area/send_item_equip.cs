@@ -4,6 +4,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -25,53 +26,41 @@ namespace Necromancy.Server.Packet.Area
             int equipBit = packet.Data.ReadInt32();
             Logger.Debug(
                 $"storageType: [{storageType}] bagId: [{bagId}]  backpackSlot: [{backpackSlot}] equipBit: [{equipBit}]");
+
+            InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
+
             IBuffer res = BufferProvider.Provide();
 
             res.WriteInt32(0);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
 
-            //InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
-            //RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem.StorageItem.InstanceId);
-            //Router.Send(eqMask, client);
+            int slotNum = 0;
 
-            EQMask(client, 0);
+            for (int i = 0; i < 19; i++)
+            {
+                if (EquipBitMask[i] == invItem.StorageItem.bitmask)
+                {
+                    slotNum = i;
+                    break;
+                }
+            }
+
+            if (client.Character.equipSlots[slotNum] != null)
+            {
+                RecvItemUpdateEqMask ueqMask = new RecvItemUpdateEqMask(client.Character.equipSlots[slotNum], 0); //used to unequip item if it is equpped before a switch
+                Router.Send(ueqMask, client);
+            }
+
+            client.Character.equipSlots[slotNum] = invItem;
+
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask); //used to unequip item if it is equpped before a switch
+            Router.Send(eqMask, client);
         }
-
-        void EQMask(NecClient client, int x)
-        {
-            IBuffer res13 = BufferProvider.Provide();
-            //95 torso ?
-            //55 full armor too ?
-            //93 full armor ?
-            // 27 full armor ?
-            //11 under ?
-            // 38 = boots and cape
-            //byte y = unchecked((byte)110111);
-            //byte y = unchecked ((byte)Util.GetRandomNumber(0, 100)); // for the moment i only get the armor on this way :/
-
-            res13.WriteInt64(10200101);
-            res13.WriteInt32(1); // Permit to get the armor on the chara
-
-            res13.WriteInt32(11100301); // List of items that gonna be equip on the chara
-            res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
-            res13.WriteByte(0);
-            res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
-
-            res13.WriteInt32(1);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0); //bool
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0); // 1 = body pink texture
-            res13.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
-        }
+        
+        int[] EquipBitMask = new int[]
+            {
+                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152
+            };
     }
 }

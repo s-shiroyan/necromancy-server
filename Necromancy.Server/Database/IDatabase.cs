@@ -82,11 +82,11 @@ namespace Necromancy.Server.Database
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
 
-        // Item
+        // Items
         bool InsertItem(Item item);
-        Item SelectItemById(uint itemId);
+        Item SelectItemById(int itemsId);
         bool UpdateItem(Item item);
-        bool DeleteItemById(uint itemId);
+        bool DeleteItem(int itemsId);
 
         // Quest
         bool InsertQuest(Quest quest);
@@ -124,7 +124,6 @@ namespace Necromancy.Server.Database
         List<MapTransition> SelectMapTransitionsByMapId(int mapId);
         bool UpdateMapTransition(MapTransition mapTran);
         bool DeleteMapTransition(int mapTranId);
-        
         // GGate Spawn
         bool InsertGGateSpawn(GGateSpawn gGateSpawn);
         List<GGateSpawn> SelectGGateSpawns();

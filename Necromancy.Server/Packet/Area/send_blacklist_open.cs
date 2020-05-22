@@ -29,6 +29,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(TempCharacterCount); //count of entries to display
 
             //for (int i = 0; i < 10; i++)
+            int i = 0;
             foreach (Character blackCharacter in Server.Characters.GetAll()
             ) //Max 10 Loops. will break if more than 10 characters in Db.
             {
@@ -54,6 +55,9 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(blackCharacter.MapId); //Character Map ID of BlackListMember
                 res.WriteInt32(client.Character.AdventureBagGold); //world number?? or Map Area?
                 res.WriteFixedString($"Channel {blackCharacter.Channel}", 97);
+                i++;
+                if (i == 10)
+                    break;
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_blacklist_open_r, res, ServerType.Area);

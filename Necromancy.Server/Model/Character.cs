@@ -104,6 +104,7 @@ namespace Necromancy.Server.Model
         public int shortcutBar4Id { get; set; }
         public List<InventoryItem> inventoryItems { get; set; }
         public List<Bag> inventoryBags { get; set; }
+        public InventoryItem[] equipSlots { get; set; }
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
         public bool helperText { get; set; }
@@ -216,6 +217,7 @@ namespace Necromancy.Server.Model
             criminalState = 0;
             helperTextAbdul = true;
             mapChange = false;
+            equipSlots = new InventoryItem[19];
         }
 
         public bool characterActive
