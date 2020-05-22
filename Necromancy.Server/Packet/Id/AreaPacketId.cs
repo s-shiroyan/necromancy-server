@@ -727,7 +727,7 @@ namespace Necromancy.Server.Packet.Id
         send_blacklist_open = 0xC923, 
         send_blacklist_unlock = 0x23AD, 
         send_buff_request_detach = 0x43, //opcode not found
-        send_buff_shop_buy = 0x44, //opcode not found   TODO
+        send_buff_shop_buy = 0x0B47,
         send_cash_shop2_buy = 0x45, //opcode not found
         send_cash_shop_buy = 0x46, //opcode not found  TODO
         send_cash_shop_check_billing_zip = 0x47, //opcode not found

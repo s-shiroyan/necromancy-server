@@ -2,6 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -31,6 +32,8 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(0); //error check. 0 to work
+                RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, 0);
+                Router.Send(eqMask, client);
                 Router.Send(client, (ushort)AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
             }
             else

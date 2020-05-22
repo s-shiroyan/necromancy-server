@@ -286,12 +286,12 @@ namespace Necromancy.Server.Chat.Command.Commands
             
             res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
 
-            res.WriteInt64(0);
+            res.WriteInt64(69);
 
-            res.WriteInt32(0);
+            res.WriteInt32(59);
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
-            //ConfigureItem(client, invItem.InstanceId, item);
+            ConfigureItem(client, invItem.InstanceId, item);
 
             //client.Character.inventoryItems.Add(invItem);
             //client.Character.EquipId[0] = 10200101;
