@@ -3,6 +3,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -27,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug(
                 $"storageType: [{storageType}] bagId: [{bagId}]  backpackSlot: [{backpackSlot}] equipBit: [{equipBit}]");
 
-            InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
+       //     InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
 
             IBuffer res = BufferProvider.Provide();
 
@@ -39,12 +40,12 @@ namespace Necromancy.Server.Packet.Area
 
             for (int i = 0; i < 19; i++)
             {
-                if (EquipBitMask[i] == invItem.StorageItem.bitmask)
-                {
-                    slotNum = i;
-                    break;
+           //     if (EquipBitMask[i] == invItem.StorageItem.bitmask)
+           //     {
+          //          slotNum = i;
+          //          break;
                 }
-            }
+         //   }
 
             if (client.Character.equipSlots[slotNum] != null)
             {
@@ -52,10 +53,10 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(ueqMask, client);
             }
 
-            client.Character.equipSlots[slotNum] = invItem;
+       //     client.Character.equipSlots[slotNum] = invItem;
 
-            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask); //used to unequip item if it is equpped before a switch
-            Router.Send(eqMask, client);
+       //     RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask); //used to unequip item if it is equpped before a switch
+       //     Router.Send(eqMask, client);
         }
         
         int[] EquipBitMask = new int[]

@@ -1,26 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Necromancy.Server.Model
 {
-    public enum ITEM_TYPE : int
+    public enum ItemType
     {
-        HAND = 0,
-        TRUMP,
+        TRUMP = 0,
         DAGGER,
-        SWORD_1H,
         RAPIER,
+        SWORD_1H,
         SWORD_2H,
         KATANA_1H,
         KATANA_2H,
         AXE_1H,
         AXE_2H,
+        SPEAR,
         CLUB_1H,
         CLUB_2H,
         WAND_1H,
         WAND_2H,
-        SPEAR,
         BOW,
         CROSSBOW,
         GUN,
@@ -45,6 +40,7 @@ namespace Necromancy.Server.Model
         GAUNTLETS,
         BRACLET,
         SABATONS,
+        LEATHER,
         SHOES,
         MANTLE,
         RING,
@@ -56,6 +52,7 @@ namespace Necromancy.Server.Model
         BAG,
         LOSTSOUL,
         EVENT,
+        SYSTEM,
         FORGESTONE,
         TALKRING_MAKEKIT,
         MASTER_TALKRING,
@@ -68,22 +65,9 @@ namespace Necromancy.Server.Model
         OTHERS,
         AVATAR,
         WHOLECHAT,
+        ALLCHT,
         BUFF,
-        LEATHER,
-        FORGETICKET
+        FORGETICKET,
+        FORGE_SP_SUPPORT,
     }
-
-    public enum EQUIP_BIT : int
-    { 
-        HAND_R = 1,
-        HAND_L = 1 << 1,
-        QUIVER = 1 << 2,
-        HEAD = 1 << 3,
-        BODY = 1 << 4,
-        LEGS = 1 << 5,
-        ARMS = 1 << 6,
-        FEET = 1 << 7,
-        MANTLE = 1 << 8
-    }
-
 }

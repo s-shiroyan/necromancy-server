@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Data.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 
 namespace Necromancy.Server.Database.Sql.Core
 {
@@ -9,47 +9,34 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateItem =
-            "INSERT INTO `nec_item` (`name`,`type`,`bitmask`,`count`,`state`,`icon`,`hair_override`,`face_override`,`durability`,`max_durability`,`weight`,`physics`,`magic`,`enchant_id`,`ac`,`date_end_protect`,`hardness`,`level`) VALUES (@name,@type,@bitmask,@count,@state,@icon,@hair_override,@face_override,@durability,@max_durability,@weight,@physics,@magic,@enchant_id,@ac,@date_end_protect,@hardness,@level);";
+            "INSERT INTO `nec_item` (`id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability`) VALUES (@id, @name, @item_type, @equipment_slot_type, @physical, @magical, @durability);";
 
         private const string SqlSelectItemById =
-            "SELECT `row_id`, `name`, `type`, `bitmask`, `count`, `state`, `icon`, `hair_override`, `face_override`, `durability`, `max_durability`, `weight`, `physics`, `magic`, `enchant_id`, `ac`, `date_end_protect`, `hardness`, `level` FROM `Items` WHERE `row_id`=@row_id; ";
+            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item` WHERE `id`=@id; ";
 
         private const string SqlUpdateItem =
-            "UPDATE `Items` SET `row_id`=@row_id, `name`=@name, `type`=@type, `bitmask`=@bitmask, `count`=@count, `state`=@state, `icon`=@icon, `hair_override`=@hair_override, `face_override`=@face_override, `durability`=@durability, `max_durability`=@max_durability, `weight`=@weight, `physics`=@physics, `magic`=@magic, `enchant_id`=@enchant_id, `ac`=@ac, `date_end_protect`=@date_end_protect, `hardness`=@hardness, `level`=@level WHERE `row_id`=@row_id;";
+            "UPDATE `nec_item` SET `name`=@name, `item_type`=@item_type, `equipment_slot_type`=@equipment_slot_type, `physical`=@physical, `magical`=@magical, `durability`=@durability WHERE `id`=@id;";
 
         private const string SqlDeleteItem =
-            "DELETE FROM `Items` WHERE `row_id`=@row_id;";
+            "DELETE FROM `nec_item` WHERE `id`=@id;";
 
         public bool InsertItem(Item item)
         {
             int rowsAffected = ExecuteNonQuery(SqlCreateItem, command =>
             {
-                //AddParameter(command, "@rowId", item.instanceId);
-                AddParameter(command, "@name", item.name);
-                AddParameter(command, "@type", item.type);
-                AddParameter(command, "@bitmask", item.bitmask);
-                AddParameter(command, "@count", item.count);
-                AddParameter(command, "@state", item.state);
-                AddParameter(command, "@icon", item.icon);
-                AddParameter(command, "@hair_override", item.hairOverride);
-                AddParameter(command, "@face_override", item.faceOverride);
-                AddParameter(command, "@durability", item.durability);
-                AddParameter(command, "@max_durability", item.maxDurability);
-                AddParameter(command, "@weight", item.weight);
-                AddParameter(command, "@physics", item.physics);
-                AddParameter(command, "@magic", item.magic);
-                AddParameter(command, "@enchant_id", item.enchatId);
-                AddParameter(command, "@ac", item.ac);
-                AddParameter(command, "@date_end_protect", item.dateEndProtect);
-                AddParameter(command, "@hardness", item.hardness);
-                AddParameter(command, "@level", item.level);
+                AddParameter(command, "@id", item.Id);
+                AddParameter(command, "@name", item.Name);
+                AddParameter(command, "@item_type", (int) item.ItemType);
+                AddParameter(command, "@equipment_slot_type", (int) item.EquipmentSlotType);
+                AddParameter(command, "@physical", item.Physical);
+                AddParameter(command, "@magical", item.Magical);
+                AddParameter(command, "@durability", item.Durability);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
                 return false;
             }
 
-            item.rowId = autoIncrement;
             return true;
         }
 
@@ -58,7 +45,7 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             Item item = null;
             ExecuteReader(SqlSelectItemById,
-                command => { AddParameter(command, "@row_id", itemId); }, reader =>
+                command => { AddParameter(command, "@id", itemId); }, reader =>
                 {
                     if (reader.Read())
                     {
@@ -72,24 +59,13 @@ namespace Necromancy.Server.Database.Sql.Core
         {
             int rowsAffected = ExecuteNonQuery(SqlUpdateItem, command =>
             {
-                AddParameter(command, "@name", item.name);
-                AddParameter(command, "@type", item.type);
-                AddParameter(command, "@bitmask", item.bitmask);
-                AddParameter(command, "@count", item.count);
-                AddParameter(command, "@state", item.state);
-                AddParameter(command, "@icon", item.icon);
-                AddParameter(command, "@hair_override", item.hairOverride);
-                AddParameter(command, "@face_override", item.faceOverride);
-                AddParameter(command, "@durability", item.durability);
-                AddParameter(command, "@max_durability", item.maxDurability);
-                AddParameter(command, "@weight", item.weight);
-                AddParameter(command, "@physics", item.physics);
-                AddParameter(command, "@magic", item.magic);
-                AddParameter(command, "@enchant_id", item.enchatId);
-                AddParameter(command, "@ac", item.ac);
-                AddParameter(command, "@date_end_protect", item.dateEndProtect);
-                AddParameter(command, "@hardness", item.hardness);
-                AddParameter(command, "@level", item.level);
+                AddParameter(command, "@id", item.Id);
+                AddParameter(command, "@name", item.Name);
+                AddParameter(command, "@item_type", (int) item.ItemType);
+                AddParameter(command, "@equipment_slot_type", (int) item.EquipmentSlotType);
+                AddParameter(command, "@physical", item.Physical);
+                AddParameter(command, "@magical", item.Magical);
+                AddParameter(command, "@durability", item.Durability);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -97,33 +73,20 @@ namespace Necromancy.Server.Database.Sql.Core
         public bool DeleteItem(int itemId)
         {
             int rowsAffected = ExecuteNonQuery(SqlDeleteItem,
-                command => { AddParameter(command, "@row_id", itemId); });
+                command => { AddParameter(command, "@id", itemId); });
             return rowsAffected > NoRowsAffected;
         }
 
         private Item ReadItem(DbDataReader reader)
         {
             Item item = new Item();
-            item.rowId = GetInt32(reader, "row_id");
-            item.name = GetString(reader, "name");
-            item.type = GetInt32(reader, "type");
-            item.bitmask = (byte)GetInt32(reader, "bitmask");
-            item.count = (byte)GetInt32(reader, "count");
-            item.state = GetInt32(reader, "state");
-            item.icon = (byte)GetInt32(reader, "icon");
-            item.hairOverride = (byte)GetInt32(reader, "hair_override");
-            item.faceOverride = (byte)GetInt32(reader, "face_override");
-            item.durability = (byte)GetInt32(reader, "durability");
-            item.maxDurability = (byte)GetInt32(reader, "max_durability");
-            item.weight = (byte)GetInt32(reader, "weight");
-            item.physics = (byte)GetInt32(reader, "physics");
-            item.magic = (byte)GetInt32(reader, "magic");
-            item.enchatId = (byte)GetInt32(reader, "enchant_id");
-            item.ac = (byte)GetInt32(reader, "ac");
-            item.dateEndProtect = (byte)GetInt32(reader, "date_end_protect");
-            item.hardness = (byte)GetInt32(reader, "hardness");
-            item.level = (byte)GetInt32(reader, "level");
-
+            item.Id = GetUInt32(reader, "id");
+            item.Name = GetString(reader, "name");
+            item.ItemType = (ItemType) GetInt32(reader, "item_type");
+            item.EquipmentSlotType = (EquipmentSlotType) GetInt32(reader, "equipment_slot_type");
+            item.Physical = GetInt32(reader, "physical");
+            item.Magical = GetInt32(reader, "magical");
+            item.Durability = GetInt32(reader, "durability");
             return item;
         }
     }

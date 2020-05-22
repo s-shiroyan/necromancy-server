@@ -213,8 +213,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
             Chat.CommandHandler.AddCommand(new SendEventEnd(this));
             Chat.CommandHandler.AddCommand(new SendEventTreasureboxBegin(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstance(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstanceUnidentified(this));
             Chat.CommandHandler.AddCommand(new SendItemUpdateState(this));
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
@@ -244,7 +242,7 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new MobCommand(this));
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
             Chat.CommandHandler.AddCommand(new ItemCommand(this));
-            Chat.CommandHandler.AddCommand(new BagCommand(this));
+            // Chat.CommandHandler.AddCommand(new BagCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportToCommand(this));
         }

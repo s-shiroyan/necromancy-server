@@ -4,6 +4,7 @@ using System.Linq;
 using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Tasks;
 
@@ -280,98 +281,98 @@ namespace Necromancy.Server.Model
             return isStealthed;
         }
 
-        public InventoryItem GetInventoryItem(byte storageType, byte storageId, short storageSlot)
-        {
-            InventoryItem invItem = inventoryItems.Find(x =>
-                x.StorageType == storageType && x.StorageId == storageId && x.StorageSlot == storageSlot);
-            return invItem;
-        }
+//     public InventoryItem GetInventoryItem(byte storageType, byte storageId, short storageSlot)
+//     {
+//         InventoryItem invItem = inventoryItems.Find(x =>
+//             x.StorageType == storageType && x.StorageId == storageId && x.StorageSlot == storageSlot);
+//         return invItem;
+//     }
 
-        public InventoryItem GetInventoryItem(ulong instanceId)
-        {
-            InventoryItem invItem = inventoryItems.Find(x => x.StorageItem.InstanceId == instanceId);
-            return invItem;
-        }
+//     public InventoryItem GetInventoryItem(ulong instanceId)
+//     {
+//         InventoryItem invItem = inventoryItems.Find(x => x.StorageItem.InstanceId == instanceId);
+//         return invItem;
+//     }
 
-        public InventoryItem
-            GetInventoryItem(Item item,
-                byte canHold =
-                    0) // If just need to get the item only pass item, if looking for a stack to add looted/traded items use canHold
-        {
-            InventoryItem invItem =
-                inventoryItems.Find(x => (x.StorageItem == item) && (x.StorageCount + canHold <= 255));
-            return invItem;
-        }
+//     public InventoryItem
+//         GetInventoryItem(Item item,
+//             byte canHold =
+//                 0) // If just need to get the item only pass item, if looking for a stack to add looted/traded items use canHold
+//     {
+//         InventoryItem invItem =
+//             inventoryItems.Find(x => (x.StorageItem == item) && (x.StorageCount + canHold <= 255));
+//         return invItem;
+//     }
 
-        public void UpdateInventoryItem(InventoryItem invItem)
-        {
-            InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
-            invItm.StorageId = invItem.StorageId;
-            invItm.StorageItem = invItem.StorageItem;
-            invItm.StorageSlot = invItem.StorageSlot;
-            invItm.StorageType = invItem.StorageType;
-        }
+   //    public void UpdateInventoryItem(InventoryItem invItem)
+   //    {
+   //        InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
+   //        invItm.StorageId = invItem.StorageId;
+   //        invItm.StorageItem = invItem.StorageItem;
+   //        invItm.StorageSlot = invItem.StorageSlot;
+   //        invItm.StorageType = invItem.StorageType;
+   //    }
 
-        public void RemoveInventoryItem(InventoryItem invItem)
-        {
-            InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
-            inventoryItems.Remove(invItm);
-        }
+   //    public void RemoveInventoryItem(InventoryItem invItem)
+   //    {
+   //        InventoryItem invItm = inventoryItems.Where(w => w.InstanceId == invItem.InstanceId).First();
+   //        inventoryItems.Remove(invItm);
+   //    }
 
-        public InventoryItem GetNextInventoryItem(NecServer server, byte desiredCount = 1, Item item = null)
-        {
-            InventoryItem invItem = null;
-            if (item != null)
-            {
-                invItem = GetInventoryItem(item, desiredCount);
-                if (invItem != null)
-                    return invItem;
-            }
+    //  public InventoryItem GetNextInventoryItem(NecServer server, byte desiredCount = 1, Item item = null)
+    //  {
+    //      InventoryItem invItem = null;
+    //      if (item != null)
+    //      {
+    //          invItem = GetInventoryItem(item, desiredCount);
+    //          if (invItem != null)
+    //              return invItem;
+    //      }
 
-            byte bagId = 0;
-            short slotId = -1;
-            foreach (Bag bag in inventoryBags)
-            {
-                bagId = bag.StorageId;
-                List<InventoryItem> invItems = inventoryItems.FindAll(x => x.StorageId == bag.StorageId);
-                if (invItems.Count == bag.NumSlots)
-                    continue;
-                else if (invItems.Count == 0)
-                {
-                    slotId = 0;
-                    break;
-                }
+    //      byte bagId = 0;
+    //      short slotId = -1;
+    //      foreach (Bag bag in inventoryBags)
+    //      {
+    //          bagId = bag.StorageId;
+    //          List<InventoryItem> invItems = inventoryItems.FindAll(x => x.StorageId == bag.StorageId);
+    //          if (invItems.Count == bag.NumSlots)
+    //              continue;
+    //          else if (invItems.Count == 0)
+    //          {
+    //              slotId = 0;
+    //              break;
+    //          }
 
-                bagId = bag.StorageId;
-                short[] slots = invItems.Select(invItems => invItems.StorageSlot).OrderBy(StorageSlot => StorageSlot)
-                    .ToArray(); // Get a sorted list of occupied slots
-                short i = 0;
-                foreach (short slot in slots)
-                {
-                    if (slot != i)
-                    {
-                        slotId = i;
-                        break;
-                    }
+    //          bagId = bag.StorageId;
+    //          short[] slots = invItems.Select(invItems => invItems.StorageSlot).OrderBy(StorageSlot => StorageSlot)
+    //              .ToArray(); // Get a sorted list of occupied slots
+    //          short i = 0;
+    //          foreach (short slot in slots)
+    //          {
+    //              if (slot != i)
+    //              {
+    //                  slotId = i;
+    //                  break;
+    //              }
 
-                    i++;
-                }
+    //              i++;
+    //          }
 
-                if (slotId == -1 && i < bag.NumSlots)
-                {
-                    slotId = i;
-                }
-            }
+    //          if (slotId == -1 && i < bag.NumSlots)
+    //          {
+    //              slotId = i;
+    //          }
+    //      }
 
-            if (slotId != -1)
-            {
-                invItem = server.Instances.CreateInstance<InventoryItem>();
-                invItem.StorageId = bagId;
-                invItem.StorageSlot = slotId;
-                inventoryItems.Add(invItem);
-            }
+    //      if (slotId != -1)
+    //      {
+    //          invItem = server.Instances.CreateInstance<InventoryItem>();
+    //          invItem.StorageId = bagId;
+    //          invItem.StorageSlot = slotId;
+    //          inventoryItems.Add(invItem);
+    //      }
 
-            return invItem;
-        }
+    //      return invItem;
+    //  }
     }
 }

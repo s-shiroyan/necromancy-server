@@ -1,16 +1,13 @@
 using System.Collections.Generic;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Database
 {
     public interface IDatabase
     {
-        long Version
-        {
-            get;
-            set;
-        }
+        long Version { get; set; }
 
         void Execute(string sql);
 
@@ -88,6 +85,13 @@ namespace Necromancy.Server.Database
         bool UpdateItem(Item item);
         bool DeleteItem(int itemsId);
 
+        // Inventory Items
+        bool InsertInventoryItem(InventoryItem inventoryItem);
+        InventoryItem SelectInventoryItemById(int inventoryItemId);
+        List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
+        bool UpdateInventoryItem(InventoryItem inventoryItem);
+        bool DeleteInventoryItem(int inventoryItemId);
+
         // Quest
         bool InsertQuest(Quest quest);
         Quest SelectQuestById(int questId);
@@ -123,7 +127,9 @@ namespace Necromancy.Server.Database
         MapTransition SelectMapTransitionsById(int Id);
         List<MapTransition> SelectMapTransitionsByMapId(int mapId);
         bool UpdateMapTransition(MapTransition mapTran);
+
         bool DeleteMapTransition(int mapTranId);
+
         // GGate Spawn
         bool InsertGGateSpawn(GGateSpawn gGateSpawn);
         List<GGateSpawn> SelectGGateSpawns();

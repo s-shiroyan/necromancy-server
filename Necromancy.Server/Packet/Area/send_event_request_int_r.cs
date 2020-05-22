@@ -36,14 +36,14 @@ namespace Necromancy.Server.Packet.Area
 
             switch (client.Character.currentEvent)
             {
-                case MoveItem moveItem:
-                    IBuffer res = BufferProvider.Provide();
-                    int count = packet.Data.ReadInt32();
-                    Logger.Debug($"Returned [{count}]");
-                    SendEventEnd(client);
-                    MoveItem(client, moveItem, count);
-                    client.Character.currentEvent = null;
-                    break;
+         //       case MoveItem moveItem:
+         //           IBuffer res = BufferProvider.Provide();
+         //           int count = packet.Data.ReadInt32();
+         //           Logger.Debug($"Returned [{count}]");
+         //           SendEventEnd(client);
+         //           MoveItem(client, moveItem, count);
+         //           client.Character.currentEvent = null;
+         //           break;
                 case NpcModelUpdate npcModelUpdate:
                     int newModelId = packet.Data.ReadInt32();
                     Logger.Debug($"Entered ModelID [{newModelId}]");
@@ -90,16 +90,16 @@ namespace Necromancy.Server.Packet.Area
             }
         }
 
-        private void MoveItem(NecClient client, MoveItem moveItem, int count)
-        {
-            if (count <= 0)
-            {
-                return;
-            }
+    //   private void MoveItem(NecClient client, MoveItem moveItem, int count)
+    //   {
+    //       if (count <= 0)
+    //       {
+    //           return;
+    //       }
 
-            moveItem.itemCount = (byte) count;
-            moveItem.Move(_server, client);
-        }
+    //       moveItem.itemCount = (byte) count;
+    //       moveItem.Move(_server, client);
+    //   }
 
         private void SendEventEnd(NecClient client)
         {

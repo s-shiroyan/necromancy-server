@@ -3,6 +3,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.ItemModel;
 
 namespace Necromancy.Server.Model
 {
@@ -69,11 +70,11 @@ namespace Necromancy.Server.Model
                         itemSetting.IconType = 55;
                     }
 
-                    Item item = _server.Instances
-                        .CreateInstance<Item>(); //  Need to get fully populated Item repository
-                    item.AddItemSetting(itemSetting);
-                    int numItems = GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems + 1);
-                    dropItem = new DropItem(numItems, item);
+             //     Item item = _server.Instances
+             //         .CreateInstance<Item>(); //  Need to get fully populated Item repository
+             //     item.AddItemSetting(itemSetting);
+             //     int numItems = GetNumberItems(ItemDrop[0].MinItems, ItemDrop[0].Maxitems + 1);
+             //     dropItem = new DropItem(numItems, item);
                 }
             }
             else
@@ -85,8 +86,8 @@ namespace Necromancy.Server.Model
                 }
 
                 Item item = new Item(); //  Need to get fully populated Item repository
-                item.IconType = 45;
-                item.ItemType = 1;
+           //     item.IconType = 45;
+           //     item.ItemType = 1;
                 dropItem = new DropItem(1, item);
             }
 
