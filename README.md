@@ -127,16 +127,15 @@ test for multiple types of object instances and handle them accordingly.
 If dealing with an `InstanceId` only use it to retrieve the expected object, and then use that object. 
 Do not use `InstanceId` for anything else other than (writing to packet, reading from packet, looking object up).
 
-## Item
+## Items
 
-Item
-InventoryItem
-Inventory
-
-EquipItem ?
-Equipment ?
+### Item
+It holds basic static default values of an item.
 
 
+### InventoryItem
+Represents an actual `Item` that belongs to a `Character`
+The `InventoryItem` will hold values that are unique to the item.
 
 # Guidelines
 ## Git 
