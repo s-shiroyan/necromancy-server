@@ -48,45 +48,19 @@ namespace Necromancy.Server.Packet.Area
 
             if (client.Character.equipSlots[slotNum] != null)
             {
-                RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(client.Character.equipSlots[slotNum], 0); //used to unequip item if it is equpped before a switch
-                Router.Send(eqMask, client);
+                RecvItemUpdateEqMask ueqMask = new RecvItemUpdateEqMask(client.Character.equipSlots[slotNum], 0); //used to unequip item if it is equpped before a switch
+                Router.Send(ueqMask, client);
             }
 
             client.Character.equipSlots[slotNum] = invItem;
 
-            EQMask(client, invItem);
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask); //used to unequip item if it is equpped before a switch
+            Router.Send(eqMask, client);
         }
         
         int[] EquipBitMask = new int[]
             {
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152
             };
-
-        void EQMask(NecClient client, InventoryItem invItem)
-        {
-            IBuffer res13 = BufferProvider.Provide();
-            res13.WriteUInt64(invItem.InstanceId);
-            res13.WriteInt32(1); // Bitmask for location
-
-            res13.WriteInt32(invItem.StorageItem.icon); // List of items that gonna be equip on the chara
-            res13.WriteByte(0); // ?? when you change this the armor dissapear, apparently
-            res13.WriteByte(0);
-            res13.WriteByte(0); //need to find the right number, permit to get the armor on the chara
-
-            res13.WriteInt32(invItem.StorageItem.icon);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0); //bool
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0);
-            res13.WriteByte(0); // 1 = body pink texture
-            res13.WriteByte(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_eqmask, res13, ServerType.Area);
-        }
     }
 }
