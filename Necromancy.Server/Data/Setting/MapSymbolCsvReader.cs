@@ -69,7 +69,7 @@ namespace Necromancy.Server.Data.Setting
                     case "Modamus Arms":
                     settingIdOrText = 99009908;
                         break;
-                    case "Vortak's Items":
+                    case "Vortak's ItemInfo":
                     settingIdOrText = 99009909;
                         break;
                     case "Sagil Armor":

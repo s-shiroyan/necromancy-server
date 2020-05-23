@@ -249,11 +249,12 @@ namespace Necromancy.Server
 
         private void LoadSettingRepository()
         {
-            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            foreach (MapSetting mapSetting in SettingRepository.Map.Values)
             {
                 Map map = new Map(mapSetting, this);
                 Maps.Add(map);
             }
+            
         }
 
         private void LoadCharacterRepository()

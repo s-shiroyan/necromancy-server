@@ -40,7 +40,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(0x10); //size of string
                 res.WriteFixedString("", 0x10);
                 res.WriteInt16(1); // Numbers of items
-                res.WriteInt32(8); // Items type (Cursed, Blessed, Ect...)
+                res.WriteInt32(8); // ItemInfo type (Cursed, Blessed, Ect...)
             }
             res.WriteByte(1);
             int numEntries5 = 0xC;
@@ -48,7 +48,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 res.WriteInt32(0x10); //size of string
                 res.WriteFixedString("Please Save the dandy sexy Dwarf !", 0x10);
-                res.WriteInt16(1); // Selected Prize Numbers of Items
+                res.WriteInt16(1); // Selected Prize Numbers of ItemInfo
                 res.WriteInt32(8); // Selected Prize Item Type (Cursed, Blessed, Ect...)
             }
             res.WriteByte(1);
@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet.Area
             for (int m = 0; m < 0x5; m++)
             {
                 res.WriteByte(0); // Type of more completion requirmeent
-                res.WriteInt32(4); // Mobs Name, Items Names, for the more requirement
+                res.WriteInt32(4); // Mobs Name, ItemInfo Names, for the more requirement
                 res.WriteInt32(50); // Max of mob to kill, or itemc collect, or ect....
                 res.WriteInt32(0);
                 res.WriteInt32(0);

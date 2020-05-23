@@ -80,7 +80,7 @@ namespace Necromancy.Server.Database.Sql.Core
         private Item ReadItem(DbDataReader reader)
         {
             Item item = new Item();
-            item.Id = GetUInt32(reader, "id");
+            item.Id = GetInt32(reader, "id");
             item.Name = GetString(reader, "name");
             item.ItemType = (ItemType) GetInt32(reader, "item_type");
             item.EquipmentSlotType = (EquipmentSlotType) GetInt32(reader, "equipment_slot_type");

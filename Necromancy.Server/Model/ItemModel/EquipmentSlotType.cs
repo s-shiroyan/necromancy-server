@@ -5,6 +5,7 @@ namespace Necromancy.Server.Model.ItemModel
     [Flags]
     public enum EquipmentSlotType
     {
+        NONE = 0,
         HAND_R = 1,
         HAND_L = 1 << 1, // 2
         QUIVER = 1 << 2,

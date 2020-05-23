@@ -54,21 +54,21 @@ namespace Necromancy.Server.Model
                 if (ItemDrop.Count == 1)
                 {
                     Logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
-                    if (!_server.SettingRepository.Items.TryGetValue(ItemDrop[0].ItemId, out ItemSetting itemSetting))
+                    if (!_server.SettingRepository.ItemInfo.TryGetValue(ItemDrop[0].ItemId, out ItemInfoSetting itemSetting))
                     {
                         Logger.Error($"Could not retrieve ItemSettings for ItemId [{ItemDrop[0].ItemId}]");
                         return null;
                     }
 
-                    Logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
-                    if (itemSetting.Id == 10200101)
-                    {
-                        itemSetting.IconType = 2;
-                    }
-                    else if (itemSetting.Id == 80000101)
-                    {
-                        itemSetting.IconType = 55;
-                    }
+           //         Logger.Debug($"ItemId [ItemDrop ItemId {ItemDrop[0].ItemId}]");
+           //         if (itemSetting.Id == 10200101)
+           //         {
+           //             itemSetting.IconType = 2;
+           //         }
+           //         else if (itemSetting.Id == 80000101)
+           //         {
+           //             itemSetting.IconType = 55;
+           //         }
 
              //     Item item = _server.Instances
              //         .CreateInstance<Item>(); //  Need to get fully populated Item repository
@@ -79,7 +79,7 @@ namespace Necromancy.Server.Model
             }
             else
             {
-                if (!_server.SettingRepository.Items.TryGetValue(50100301, out ItemSetting itemSetting))
+                if (!_server.SettingRepository.ItemInfo.TryGetValue(50100301, out ItemInfoSetting itemSetting))
                 {
                     Logger.Error($"Could not retrieve ItemSettings for default Item Camp");
                     return null;

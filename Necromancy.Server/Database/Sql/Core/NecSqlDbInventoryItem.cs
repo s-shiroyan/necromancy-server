@@ -9,7 +9,7 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateInventoryItem =
-            "INSERT INTO `nec_inventory_item` (`character_id`, `item_id`, `quantity`, `current_durability`) VALUES (@item_id, @quantity, @current_durability);";
+            "INSERT INTO `nec_inventory_item` (`character_id`, `item_id`, `quantity`, `current_durability`) VALUES (@character_id, @item_id, @quantity, @current_durability);";
 
         private const string SqlSelectInventoryItemById =
             "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_inventory_item` WHERE `id`=@id; ";
@@ -96,7 +96,7 @@ namespace Necromancy.Server.Database.Sql.Core
             InventoryItem inventoryItem = new InventoryItem();
             inventoryItem.Id = GetInt32(reader, "id");
             inventoryItem.CharacterId = GetInt32(reader, "character_id");
-            inventoryItem.ItemId = GetUInt32(reader, "item_id");
+            inventoryItem.ItemId = GetInt32(reader, "item_id");
             inventoryItem.Quantity = GetInt32(reader, "quantity");
             inventoryItem.CurrentDurability = GetInt32(reader, "current_durability");
             return inventoryItem;

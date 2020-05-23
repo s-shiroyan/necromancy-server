@@ -79,13 +79,13 @@ namespace Necromancy.Server.Database
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
 
-        // Items
+        // ItemInfo
         bool InsertItem(Item item);
         Item SelectItemById(int itemsId);
         bool UpdateItem(Item item);
         bool DeleteItem(int itemsId);
 
-        // Inventory Items
+        // Inventory ItemInfo
         bool InsertInventoryItem(InventoryItem inventoryItem);
         InventoryItem SelectInventoryItemById(int inventoryItemId);
         List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
