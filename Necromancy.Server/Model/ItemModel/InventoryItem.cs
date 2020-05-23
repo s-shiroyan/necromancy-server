@@ -12,5 +12,9 @@ namespace Necromancy.Server.Model.ItemModel
         public byte Quantity { get; set; }
         public int CurrentDurability { get; set; }
         public Item Item { get; set; }
+        public EquipmentSlotType CurrentEquipmentSlotType { get; set; }
+
+        public byte BagId { get; set; }
+        public short BagSlotIndex { get; set; }
     }
 }

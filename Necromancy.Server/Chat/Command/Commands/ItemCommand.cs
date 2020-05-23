@@ -94,45 +94,33 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.Quantity = 1;
             inventoryItem.CurrentDurability = item.Durability;
             inventoryItem.CharacterId = character.Id;
+            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+            inventoryItem.BagId = 0;
+            inventoryItem.BagSlotIndex = 5;
+
+            client.Inventory.AddInventoryItem(inventoryItem);
 
             if (!Server.Database.InsertInventoryItem(inventoryItem))
             {
                 responses.Add(ChatResponse.CommandError(client, "Could not save InventoryItem to Database"));
                 return;
             }
-
-
+            
             IBuffer res = BufferProvider.Provide();
-
-      //    if (itemId > 10100100 && itemId < 11700302)
-      //        item.type = (byte) (itemId / 100000 % 100);
-      //    else
-      //        item.type = itemId;
-
-      //    item.Id = (uint) itemId;
-      //    item.icon = itemId;
-      //    item.IconType = itemType;
-      //    item.Name = name;
-      //    item.name = name;
-      //    invItem.StorageType = 0;
-      //    invItem.StorageCount = (byte) count;
-      //    item.count = invItem.StorageCount;
-      //    item.bitmask = 1; //Fix the calculation for this 
-
             res.WriteUInt64((ulong)inventoryItem.Id); //Item Object Instance ID 
             res.WriteCString(inventoryItem.Item.Name); //Name
             res.WriteInt32((int)inventoryItem.Item.ItemType); //item type
-            res.WriteInt32(1); //Bit mask designation
+            res.WriteInt32((int)inventoryItem.CurrentEquipmentSlotType); //Bit mask designation
             res.WriteByte(inventoryItem.Quantity); //Number of items
             res.WriteInt32(0); //Item status 0 = identified  
             res.WriteInt32(inventoryItem.Item.Id); //Item icon 50100301 = camp
             res.WriteByte(5);
             res.WriteByte(4);
-            res.WriteByte(3);
+            res.WriteByte(7);
             res.WriteInt32(8);
             res.WriteByte(1);
             res.WriteByte(2);
-            res.WriteByte(3);
+            res.WriteByte(9);
             res.WriteByte(4);
             res.WriteByte(5);
             res.WriteByte(0); // bool
@@ -143,7 +131,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteByte(0);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2
-            res.WriteInt16(1); // bag index
+            res.WriteInt16(inventoryItem.BagSlotIndex); // bag index
             res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
             res.WriteInt64(69);
             res.WriteInt32(59);

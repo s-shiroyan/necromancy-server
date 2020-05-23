@@ -1,3 +1,5 @@
+using System;
+
 namespace Necromancy.Server.Model.ItemModel
 {
     public class Item
@@ -94,6 +96,21 @@ namespace Necromancy.Server.Model.ItemModel
                 case EquipmentSlotType.AVATAR_FEET: return ItemType.BAG;
                 default: return ItemType.BAG;
             }
+        }
+
+        public static EquipmentSlotType GetEquipmentSlotTypeBySlotNumber(int slotNumber)
+        {
+            EquipmentSlotType equipmentSlotType = EquipmentSlotType.NONE;
+            if (slotNumber > 0)
+            {
+                int value = 1 << slotNumber;
+                if (Enum.IsDefined(typeof(EquipmentSlotType), value))
+                {
+                    equipmentSlotType = (EquipmentSlotType) value;
+                }
+            }
+
+            return equipmentSlotType;
         }
 
         /// <summary>

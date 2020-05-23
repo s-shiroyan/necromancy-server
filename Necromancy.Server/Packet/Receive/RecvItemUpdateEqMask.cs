@@ -20,7 +20,7 @@ namespace Necromancy.Server.Packet.Receive
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt64((ulong) _inventoryItem.Id);
-            res.WriteInt32((int) _inventoryItem.Item.EquipmentSlotType);
+            res.WriteInt32((int) _inventoryItem.CurrentEquipmentSlotType);
 
             res.WriteInt32(_inventoryItem.Item.Id);
             res.WriteByte(0);
