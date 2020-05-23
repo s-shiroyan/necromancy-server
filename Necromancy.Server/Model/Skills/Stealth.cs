@@ -5,6 +5,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Receive;
 
@@ -63,20 +64,18 @@ namespace Necromancy.Server.Model.Skills
             IBuffer res11 = BufferProvider.Provide();
 
             res11.WriteUInt32(_client.Character.InstanceId);
-
-            uint newState = 0;
+            
             if (_client.Character.IsStealthed())
             {
-                newState = _client.Character.ClearStateBit(0x8);
-                res11.WriteUInt32(newState);
+                _client.Character.ClearStateBit(CharacterState.StealthForm);
             }
             else
             {
-                newState = _client.Character.AddStateBit(0x8);
-                res11.WriteUInt32(newState);
+                _client.Character.AddStateBit(CharacterState.StealthForm);
             }
-
-            RecvCharaNotifyStateflag stateFlag = new RecvCharaNotifyStateflag(_client.Character.InstanceId, newState);
+            res11.WriteUInt32((uint)_client.Character.State);
+            
+            RecvCharaNotifyStateflag stateFlag = new RecvCharaNotifyStateflag(_client.Character.InstanceId, (uint)_client.Character.State);
             //_server.Router.Send(_client.Map, stateFlag);   //fix stealth bug bby disabling stealth for now
 
             //0bxxxxxxx1 - 1 Soul Form / 0 Normal  | (Soul form is Glowing with No armor) 

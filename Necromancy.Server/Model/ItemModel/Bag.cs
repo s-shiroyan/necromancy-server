@@ -1,9 +1,6 @@
-using Necromancy.Server.Data.Setting;
-using Necromancy.Server.Common.Instance;
-
-namespace Necromancy.Server.Model
+namespace Necromancy.Server.Model.ItemModel
 {
-    public class Bag : IInstance
+    public class Bag
     {
         public Bag()
         {

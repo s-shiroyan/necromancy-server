@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Response
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
             res.WriteInt32(_character.Level); //Player level (main gui)
-            res.WriteUInt32(_character._state);
+            res.WriteUInt32((uint)_character.State);
             res.WriteInt16((short)_character.Hp.max); //Player max hp (main gui)
 
             res.WriteInt32(numEntries); // Number of equipment Slots

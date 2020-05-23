@@ -1,6 +1,7 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
@@ -36,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
                 client);
 
             client.Character.weaponEquipped = true;
-            client.Character.AddStateBit(0x2);
+            client.Character.AddStateBit(CharacterState.BattlePose);
         }
     }
 }

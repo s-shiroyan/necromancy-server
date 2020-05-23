@@ -38,6 +38,7 @@ namespace Necromancy.Server.Database.Sql.Core
                 return false;
             }
 
+            inventoryItem.Id = (int)autoIncrement;
             return true;
         }
 
@@ -97,7 +98,7 @@ namespace Necromancy.Server.Database.Sql.Core
             inventoryItem.Id = GetInt32(reader, "id");
             inventoryItem.CharacterId = GetInt32(reader, "character_id");
             inventoryItem.ItemId = GetInt32(reader, "item_id");
-            inventoryItem.Quantity = GetInt32(reader, "quantity");
+            inventoryItem.Quantity = GetByte(reader, "quantity");
             inventoryItem.CurrentDurability = GetInt32(reader, "current_durability");
             return inventoryItem;
         }

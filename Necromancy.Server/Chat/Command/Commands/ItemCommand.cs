@@ -101,49 +101,102 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
+
             IBuffer res = BufferProvider.Provide();
 
+      //    if (itemId > 10100100 && itemId < 11700302)
+      //        item.type = (byte) (itemId / 100000 % 100);
+      //    else
+      //        item.type = itemId;
+
+      //    item.Id = (uint) itemId;
+      //    item.icon = itemId;
+      //    item.IconType = itemType;
+      //    item.Name = name;
+      //    item.name = name;
+      //    invItem.StorageType = 0;
+      //    invItem.StorageCount = (byte) count;
+      //    item.count = invItem.StorageCount;
+      //    item.bitmask = 1; //Fix the calculation for this 
+
+            res.WriteUInt64((ulong)inventoryItem.Id); //Item Object Instance ID 
+            res.WriteCString(inventoryItem.Item.Name); //Name
+            res.WriteInt32((int)inventoryItem.Item.ItemType); //item type
+            res.WriteInt32(1); //Bit mask designation
+            res.WriteByte(inventoryItem.Quantity); //Number of items
+            res.WriteInt32(0); //Item status 0 = identified  
+            res.WriteInt32(inventoryItem.Item.Id); //Item icon 50100301 = camp
+            res.WriteByte(5);
+            res.WriteByte(4);
+            res.WriteByte(3);
+            res.WriteInt32(8);
+            res.WriteByte(1);
+            res.WriteByte(2);
+            res.WriteByte(3);
+            res.WriteByte(4);
+            res.WriteByte(5);
+            res.WriteByte(0); // bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
+            res.WriteByte(0); // 0~2
+            res.WriteInt16(1); // bag index
+            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
+            res.WriteInt64(69);
+            res.WriteInt32(59);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
+
+            return;
+            int iid = 10500202;
+
             res.WriteUInt64((ulong) inventoryItem.Id); //ItemID
-            res.WriteInt32(47); // 0 does not display icon
-            res.WriteByte((byte) inventoryItem.Quantity); //Number of "items"
-            res.WriteInt32(0); //Item status, in multiples of numbers, 8 = blessed/cursed/both 
-            res.WriteFixedString(inventoryItem.Item.Name + "          ", 0x10);
+            // res.WriteInt32(inventoryItem.Id);
+            // res.WriteInt32(iid);
+            res.WriteInt32((byte) (itemId / 100000 % 100)); // 0 does not display icon
+            res.WriteByte(1); //Number of "items"
+            res.WriteInt32(0); //--Item status, in multiples of numbers, 8 = blessed/cursed/both 
+            res.WriteFixedString(inventoryItem.Item.Name, 0x10);
             res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
             res.WriteByte(0); // 0~2 // maybe.. more bag index?
-            res.WriteInt16(0); // bag index
-            res.WriteInt32(0); //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)  /13
-            res.WriteUInt32(9); //Percentage stat, 9 max i think       /12
-            res.WriteByte(36); //1
-            res.WriteByte(37); // Dest slot
-            res.WriteCString(inventoryItem.Item.Name); // find max size     //11    10 byte fixed string
-            res.WriteInt16(38); //10
-            res.WriteInt16(39); //9
-            res.WriteInt32(32); //Divides max % by this number     //8
-            res.WriteByte(40); //7
-            res.WriteInt32(33); //6
+            res.WriteInt16(2); //-- bag slot index
+            res.WriteInt32(0); //-- EquipmentSlotId (when equipped 0= not equipped)  //Slot spots? 10200101 here caused certain spots to have an item, -1 for all slots(avatar included)  /13
+            res.WriteInt32(inventoryItem.Item.Id); //Percentage stat, 9 max i think       /12
+            res.WriteByte(0); //1
+            res.WriteByte(0); // Dest slot
+            res.WriteCString(inventoryItem.Item.Name); // no max length
+            res.WriteInt16(short.MaxValue); //10
+            res.WriteInt16(short.MaxValue); //9
+            res.WriteInt32(inventoryItem.Item.Id); //Divides max % by this number     //8
+            res.WriteByte(0); //7
+            res.WriteInt32(inventoryItem.Item.Id); //6
 
-            int numEntries = 0;
+            int numEntries = 1;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(34 + i);
+                res.WriteInt32(0 + i);
             }
 
-            numEntries = 0;
+            numEntries = 1;
             res.WriteInt32(numEntries); // less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteByte(0); //bool
-                res.WriteInt32(0);
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteByte(1); //bool
+                res.WriteInt32(1);
+                res.WriteInt32(1);
+                res.WriteInt32(1);
             }
 
-            res.WriteInt32(34); //4
-            res.WriteInt32(35); //5
-            res.WriteInt16(41);
-            res.WriteInt32(43); //Guard protection toggle, 1 = on, everything else is off //3
-            res.WriteInt16(42); //2
+            res.WriteInt32(inventoryItem.Item.Id); //4
+
+            res.WriteInt32(inventoryItem.Item.Id); //5
+            res.WriteInt16(0xFF); // 0 = green | 0xFF = normal
+
+            res.WriteInt32(inventoryItem.Item.Id); //Guard protection toggle, 1 = on, everything else is off //3
+            res.WriteInt16(0); //2
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_instance, res, ServerType.Area);
 
