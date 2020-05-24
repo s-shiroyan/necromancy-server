@@ -6,12 +6,13 @@ namespace Necromancy.Server.Model.ItemModel
     {
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, InventoryItem[]> _inventory;
-        private const int bagSize = 100;
+        private const int bagSize = 24;
 
 
         public Inventory()
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
+            _inventory.Add(0, new InventoryItem[bagSize]);
         }
 
         public InventoryItem GetEquippedInventoryItem(EquipmentSlotType equipmentSlotType)
@@ -62,9 +63,39 @@ namespace Necromancy.Server.Model.ItemModel
             return null;
         }
 
+        public bool RemoveInventoryItem(InventoryItem inventoryItem)
+        {
+            if (_inventory.ContainsKey(inventoryItem.BagId))
+            {
+                InventoryItem[] bag = _inventory[inventoryItem.BagId];
+                if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                {
+                    bag[inventoryItem.BagSlotIndex] = null;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool AddInventoryItem(InventoryItem inventoryItem)
         {
-            return AddInventoryItem(inventoryItem, inventoryItem.BagId, inventoryItem.BagSlotIndex);
+            foreach (byte bagId in _inventory.Keys)
+            {
+                InventoryItem[] bag = _inventory[bagId];
+                for (short bagSlotIndex = 0; bagSlotIndex < bag.Length; bagSlotIndex++)
+                {
+                    if (bag[bagSlotIndex] == null)
+                    {
+                        bag[bagSlotIndex] = inventoryItem;
+                        inventoryItem.BagId = bagId;
+                        inventoryItem.BagSlotIndex = bagSlotIndex;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public bool AddInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)

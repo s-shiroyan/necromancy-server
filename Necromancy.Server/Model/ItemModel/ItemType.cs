@@ -2,7 +2,8 @@ namespace Necromancy.Server.Model
 {
     public enum ItemType
     {
-        TRUMP = 1,
+        NONE = 0,
+        TRUMP,
         DAGGER,
         RAPIER,
         SWORD_1H,
