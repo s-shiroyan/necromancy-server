@@ -40,13 +40,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            Item item = Server.Database.SelectItemById(itemId);
-            if (item == null)
+            if (!Server.Items.ContainsKey(itemId))
             {
-                responses.Add(ChatResponse.CommandError(client, $"ItemId: '{itemId}' does not exist in database"));
+                responses.Add(ChatResponse.CommandError(client, $"ItemId: '{itemId}' does not exist"));
                 return;
             }
 
+            Item item = Server.Items[itemId];
             Character character = client.Character;
             if (character == null)
             {
