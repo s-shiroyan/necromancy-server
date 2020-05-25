@@ -110,6 +110,9 @@ but will eventually be merged back into develop (to definitely add the new featu
 | Delegate name             | PascalCase  | [A-z]              | No          |
 | Enum type name            | PascalCase  | [A-z]              | No          |
 
+## SQL Style
+- Table, Column, and Indices names are all lower case with underscore ( _ ) separating the names
+
 # Attribution
 ## Contributors
 - Unknownone69 [@Unknownone69](https://github.com/Unknownone69) 

@@ -7,7 +7,7 @@
         <Company>Necromancy Team</Company>
         <Product>Necromancy.Cli</Product>
         <Version>$(Version)</Version>
-        <Copyright>Copyright © 2019 Necromancy Team</Copyright>
+        <Copyright>Copyright © 2019-2020 Necromancy Team</Copyright>
         <LangVersion>8</LangVersion>
     </PropertyGroup>
     <ItemGroup>

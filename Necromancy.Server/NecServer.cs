@@ -20,6 +20,7 @@
  * along with Necromancy.Server. If not, see <https://www.gnu.org/licenses/>.
  */
 
+using System;
 using Arrowgene.Logging;
 using Arrowgene.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;
@@ -27,6 +28,7 @@ using Necromancy.Server.Chat.Command.Commands;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database;
+using Necromancy.Server.Discord;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Union;
@@ -44,7 +46,7 @@ namespace Necromancy.Server
     public class NecServer
     {
         private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(NecServer));
-        
+
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
@@ -53,6 +55,7 @@ namespace Necromancy.Server
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
+        public NecromancyBot NecromancyBot { get; }
         public InstanceGenerator Instances { get; }
         public InstanceGenerator64 Instances64 { get; }
         public bool Running => _running;
@@ -70,7 +73,8 @@ namespace Necromancy.Server
             _running = false;
             Setting = new NecSetting(setting);
 
-
+            NecromancyBot = new NecromancyBot(setting);
+            NecromancyBot.AddSingleton(this);
 
             Instances = new InstanceGenerator();
             Instances64 = new InstanceGenerator64();
@@ -115,6 +119,11 @@ namespace Necromancy.Server
             LoadCharacterRepository();
         }
 
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Stop();
+        }
+
         private void AuthClientDisconnected(NecConnection client)
         {
         }
@@ -131,6 +140,8 @@ namespace Necromancy.Server
                 return;
             }
 
+            Clients.Remove(client);
+
             Map map = client.Map;
             if (map != null)
             {
@@ -143,24 +154,33 @@ namespace Necromancy.Server
                 union.Leave(client);
             }
 
-            //Remove the client from the list of server clients on disconnect
-            this.Clients.Remove(client);
+            Character character = client.Character;
+            if (character != null)
+            {
+                character.characterActive = false;
+            }
         }
 
         public void Start()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
             _authServer.Start();
             _msgServer.Start();
             _areaServer.Start();
             _running = true;
+            NecromancyBot.Start();
+            NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
         }
 
         public void Stop()
         {
+            NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
             _authServer.Stop();
             _msgServer.Stop();
             _areaServer.Stop();
             _running = false;
+            NecromancyBot.Stop();
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainOnUnhandledException;
         }
 
         private void LoadChatCommands()

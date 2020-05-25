@@ -97,6 +97,25 @@ namespace Necromancy.Server.Packet.Area
                     case MonsterSpawn monsterSpawn:
                         Logger.Debug($"MonsterId: {monsterSpawn.Id}");
                         break;
+
+                    case GGateSpawn ggateSpawn:
+                        client.Map.GGateSpawns.TryGetValue(ggateSpawn.InstanceId, out ggateSpawn);
+                        Logger.Debug(
+                            $"instanceId : {client.Character.eventSelectReadyCode} |  ggateSpawn.Id: {ggateSpawn.Id}  |   ggateSpawn.NpcId: {ggateSpawn.SerialId}");
+
+                        var eventSwitchPerObjectID2 = new Dictionary<Func<int, bool>, Action>
+                        {
+                            {x => x == 74013071, () => ChangeMap(client, ggateSpawn.SerialId)},
+                            {x => x == 74013161, () => ChangeMap(client, ggateSpawn.SerialId)},
+                            {x => x == 74013271, () => ChangeMap(client, ggateSpawn.SerialId)},
+
+                            {x => x < 900000100, () => Logger.Debug("Yea, Work in progress still.")}
+                        };
+
+                        eventSwitchPerObjectID2.First(sw => sw.Key(ggateSpawn.SerialId)).Value();
+
+
+                        break;
                     default:
                         Logger.Error(
                             $"Instance with InstanceId: {client.Character.eventSelectReadyCode} does not exist");

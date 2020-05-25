@@ -18,26 +18,6 @@ namespace Necromancy.Server.Setting
             Database = "necromancy";
             User = string.Empty;
             Password = string.Empty;
-
-            string envDbType = Environment.GetEnvironmentVariable("DB_TYPE");
-            switch (envDbType)
-            {
-                case "sqlite":
-                    Type = DatabaseType.SQLite;
-                    break;
-            }
-
-            string envDbUser = Environment.GetEnvironmentVariable("DB_USER");
-            if (!string.IsNullOrEmpty(envDbUser))
-            {
-                User = envDbUser;
-            }
-
-            string envDbPass = Environment.GetEnvironmentVariable("DB_PASS");
-            if (!string.IsNullOrEmpty(envDbPass))
-            {
-                Password = envDbPass;
-            }
         }
 
         public DatabaseSettings(DatabaseSettings databaseSettings)
