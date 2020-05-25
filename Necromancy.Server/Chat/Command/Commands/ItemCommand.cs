@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
-using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
@@ -30,7 +29,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             if (command.Length < 1)
             {
-                responses.Add(ChatResponse.CommandError(client, $"To few arguments"));
+                responses.Add(ChatResponse.CommandError(client, "To few arguments"));
                 return;
             }
 
@@ -43,38 +42,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             Item item = Server.Database.SelectItemById(itemId);
             if (item == null)
             {
-                // Require Item to be in Database because we have a constraint.
-                // Create Item
-                // TODO use this code to initialize `nec_item` table
-
-                if (!Server.SettingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
-                {
-                    responses.Add(ChatResponse.CommandError(client,
-                        $"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`"));
-                    return;
-                }
-
-                if (!Server.SettingRepository.ItemInfo.TryGetValue(itemId, out ItemInfoSetting itemInfo))
-                {
-                    responses.Add(ChatResponse.CommandError(client,
-                        $"ItemId: {itemId} - not found in `SettingRepository.ItemInfo`"));
-                    return;
-                }
-
-                item = new Item();
-                item.Id = itemInfo.Id;
-                item.Name = itemInfo.Name;
-                item.Durability = necItem.Durability;
-                item.Physical = necItem.Physical;
-                item.Magical = necItem.Magical;
-                item.ItemType = Item.ItemTypeByItemId(itemInfo.Id);
-                item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
-
-                if (!Server.Database.InsertItem(item))
-                {
-                    responses.Add(ChatResponse.CommandError(client, "Could not save Item to Database"));
-                    return;
-                }
+                responses.Add(ChatResponse.CommandError(client, $"ItemId: '{itemId}' does not exist in database"));
+                return;
             }
 
             Character character = client.Character;
@@ -92,7 +61,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CurrentDurability = item.Durability;
             inventoryItem.CharacterId = character.Id;
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-            
+
             client.Inventory.AddInventoryItem(inventoryItem);
             if (!Server.Database.InsertInventoryItem(inventoryItem))
             {

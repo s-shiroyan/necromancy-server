@@ -55,16 +55,14 @@ namespace Necromancy.Server.Packet.Msg
 
                 Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
 
-                uint UnionLeaderInstanceId = Server.Characters.GetByCharacterId(myUnion.UnionLeaderId).InstanceId;
-                uint UnionSubLeader1InstanceId = 0;
-                if (myUnion.UnionSubLeader1Id != 0)
-                    UnionSubLeader1InstanceId =
-                        Server.Characters.GetByCharacterId(myUnion.UnionSubLeader1Id).InstanceId;
+                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionLeaderId,
+                    out uint UnionLeaderInstanceId);
 
-                uint UnionSubLeader2InstanceId = 0;
-                if (myUnion.UnionSubLeader2Id != 0)
-                    UnionSubLeader2InstanceId =
-                        Server.Characters.GetByCharacterId(myUnion.UnionSubLeader2Id).InstanceId;
+                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader1Id,
+                    out uint UnionSubLeader1InstanceId);
+
+                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader2Id,
+                    out uint UnionSubLeader2InstanceId);
 
                 TimeSpan difference = client.Union.Created.ToUniversalTime() - DateTime.UnixEpoch;
                 int unionCreatedCalculation = (int) Math.Floor(difference.TotalSeconds);
@@ -99,9 +97,26 @@ namespace Necromancy.Server.Packet.Msg
                 foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Union.Id))
                 {
                     Logger.Debug($"Loading union info for Member Id {unionMemberList.Id}");
-                    Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    NecClient otherClient = Server.Clients.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    if (otherClient == null)
+                    {
+                        continue;
+                    }
+
+                    Character character = otherClient.Character;
+                    if (character == null)
+                    {
+                        continue;
+                    }
+
+                    Soul soul = otherClient.Soul;
+                    if (soul == null)
+                    {
+                        continue;
+                    }
+                    
+                    
                     Logger.Debug($"character is named {character.Name}");
-                    Soul soul = Server.Database.SelectSoulById(character.SoulId);
                     Logger.Debug($"Soul is named {soul.Name}");
                     TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
                     int unionJoinedCalculation = (int) Math.Floor(differenceJoined.TotalSeconds);

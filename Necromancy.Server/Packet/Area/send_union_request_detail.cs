@@ -50,8 +50,24 @@ namespace Necromancy.Server.Packet.Msg
                     foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Character
                         .unionId))
                     {
-                        Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
-                        Soul soul = Server.Database.SelectSoulById(character.SoulId);
+                        NecClient otherClient = Server.Clients.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                        if (otherClient == null)
+                        {
+                            continue;
+                        }
+
+                        Character character = otherClient.Character;
+                        if (character == null)
+                        {
+                            continue;
+                        }
+
+                        Soul soul = otherClient.Soul;
+                        if (soul == null)
+                        {
+                            continue;
+                        }
+
                         TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
                         int unionJoinedCalculation = (int) Math.Floor(differenceJoined.TotalSeconds);
                         IBuffer res3 = BufferProvider.Provide();
@@ -74,19 +90,15 @@ namespace Necromancy.Server.Packet.Msg
                         res3.WriteInt32(Util.GetRandomNumber(0, 3));
                         Router.Send(client, (ushort) MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
                     }
+                    
+                    Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionLeaderId,
+                        out uint UnionLeaderInstanceId);
 
+                    Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader1Id,
+                        out uint UnionSubLeader1InstanceId);
 
-                    uint UnionLeaderInstanceId = Server.Characters.GetByCharacterId(myUnion.UnionLeaderId).InstanceId;
-                    uint UnionSubLeader1InstanceId = 0;
-                    if (myUnion.UnionSubLeader1Id != 0)
-                        UnionSubLeader1InstanceId =
-                            Server.Characters.GetByCharacterId(myUnion.UnionSubLeader1Id).InstanceId;
-
-                    uint UnionSubLeader2InstanceId = 0;
-                    if (myUnion.UnionSubLeader2Id != 0)
-                        UnionSubLeader2InstanceId =
-                            Server.Characters.GetByCharacterId(myUnion.UnionSubLeader2Id).InstanceId;
-
+                    Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader2Id,
+                        out uint UnionSubLeader2InstanceId);
 
                     //Notify client if msg server found Union settings in database(memory) for client character Unique Persistant ID.
                     IBuffer res = BufferProvider.Provide();

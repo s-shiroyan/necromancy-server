@@ -36,6 +36,18 @@ CREATE TABLE IF NOT EXISTS `nec_soul`
     CONSTRAINT `uq_nec_soul_name` UNIQUE (`name`)
 );
 
+CREATE TABLE IF NOT EXISTS `nec_map`
+(
+    `id`          INTEGER NOT NULL PRIMARY KEY,
+    `country`     TEXT    NOT NULL,
+    `area`        TEXT    NOT NULL,
+    `place`       TEXT    NOT NULL,
+    `x`           INTEGER NOT NULL,
+    `y`           INTEGER DEFAULT NULL,
+    `z`           INTEGER DEFAULT NULL,
+    `orientation` INTEGER DEFAULT NULL
+);
+
 CREATE TABLE IF NOT EXISTS `nec_character`
 (
     `id`               INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -252,69 +264,6 @@ CREATE TABLE IF NOT EXISTS `nec_friend_list`
     FOREIGN KEY (`friend_soul_id`) REFERENCES `nec_soul` (`id`)
 );
 
-
-
-CREATE TABLE IF NOT EXISTS `inventory`
-(
-    `bag_id` INTEGER,
-    `gold`   INTEGER,
-    PRIMARY KEY (`bag_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `slots_numbers`
-(
-    `bag_id`    INTEGER,
-    `bag_index` INTEGER,
-    PRIMARY KEY (`bag_id`, `bag_index`),
-    FOREIGN KEY (`bag_id`) REFERENCES `Inventory` (`bag_id`)
-);
-
-CREATE TABLE IF NOT EXISTS `items`
-(
-    `items_id`   BIGINT,
-    `item_name`  TEXT NOT NULL,
-    `item_type`  INT,
-    `physics`    SMALLINT,
-    `magic`      SMALLINT,
-    `enchant_id` INT,
-    `durab`      INT,
-    `hardness`   TINYINT,
-    `max_dur`    INT,
-    `numbers`    TINYINT,
-    `level`      TINYINT,
-    `sp_level`   TINYINT,
-    `weight`     INT,
-    `state`      INT,
-    PRIMARY KEY (`items_id`)
-);
-
-
-CREATE TABLE IF NOT EXISTS `items_in_slot`
-(
-    `bag_id`    INT,
-    `bag_index` INT,
-    `items_id`  INT,
-    PRIMARY KEY (`bag_id`, `bag_index`, `items_id`),
-    FOREIGN KEY (`bag_id`, `bag_index`) REFERENCES `slots_numbers` (`bag_id`, `bag_index`),
-    FOREIGN KEY (`items_id`) REFERENCES Items (`items_id`)
-);
-
-CREATE TABLE IF NOT EXISTS quest_request
-(
-    quest_id           INT,
-    soul_level_mission BYTE,
-    quest_name         CHAR(50),
-    quest_level        INT,
-    time_limit         INT,
-    quest_giver_name   CHAR(50),
-    reward_exp         INT,
-    reward_gold        INT,
-    numbers_of_items   SMALLINT,
-    items_type         INT,
-    PRIMARY KEY (quest_id)
-);
-
--- Table: nec_gimmick
 CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn`
 (
     `id`       INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -329,7 +278,6 @@ CREATE TABLE IF NOT EXISTS `nec_gimmick_spawn`
     `updated`  DATETIME
 );
 
--- Table: nec_map_transition
 CREATE TABLE IF NOT EXISTS `nec_map_transition`
 (
     `id`                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -358,6 +306,7 @@ CREATE TABLE IF NOT EXISTS `nec_map_transition`
     `created`           DATETIME,
     `updated`           DATETIME
 );
+
 CREATE TABLE IF NOT EXISTS `nec_ggate_spawn`
 (
     `id`          INTEGER PRIMARY KEY NOT NULL,
