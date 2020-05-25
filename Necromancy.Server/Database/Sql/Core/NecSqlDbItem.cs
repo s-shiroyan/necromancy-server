@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
@@ -13,6 +14,9 @@ namespace Necromancy.Server.Database.Sql.Core
 
         private const string SqlSelectItemById =
             "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item` WHERE `id`=@id; ";
+
+        private const string SqlSelectItems =
+            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item`; ";
 
         private const string SqlUpdateItem =
             "UPDATE `nec_item` SET `name`=@name, `item_type`=@item_type, `equipment_slot_type`=@equipment_slot_type, `physical`=@physical, `magical`=@magical, `durability`=@durability WHERE `id`=@id;";
@@ -53,6 +57,20 @@ namespace Necromancy.Server.Database.Sql.Core
                     }
                 });
             return item;
+        }
+
+        public List<Item> SelectItems()
+        {
+            List<Item> items = new List<Item>();
+            ExecuteReader(SqlSelectItems, reader =>
+            {
+                while (reader.Read())
+                {
+                    Item item = ReadItem(reader);
+                    items.Add(item);
+                }
+            });
+            return items;
         }
 
         public bool UpdateItem(Item item)

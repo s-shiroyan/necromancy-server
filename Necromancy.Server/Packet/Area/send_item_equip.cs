@@ -22,31 +22,35 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             byte storageType = packet.Data.ReadByte();
-            byte bagId = packet.Data.ReadByte(); //Equip slot maybe?
-            short bagSlotIndex = packet.Data.ReadInt16(); //Slot from backpack the item is in
+            byte bagId = packet.Data.ReadByte();
+            short bagSlotIndex = packet.Data.ReadInt16();
             int equipBit = packet.Data.ReadInt32();
-            Logger.Debug(
-                $"storageType: [{storageType}] bagId: [{bagId}]  backpackSlot: [{bagSlotIndex}] equipBit: [{equipBit}]");
+            Logger.Debug($"storageType:{storageType} bagId:{bagId} bagSlotIndex:{bagSlotIndex} equipBit:{equipBit}");
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
-
             InventoryItem inventoryItem = client.Inventory.GetInventoryItem(bagId, bagSlotIndex);
             if (inventoryItem == null)
             {
+                Logger.Error($"Item not found: bagId:{bagId} BagSlot:{bagSlotIndex}");
+                res.WriteInt32((int) ItemActionResultType.ErrorGeneric);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
                 return;
             }
 
             if (inventoryItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
             {
-                // already equipped
+                Logger.Error($"Already Equipped: {inventoryItem.Id}{inventoryItem.Item.Name}");
+                res.WriteInt32((int) ItemActionResultType.ErrorUse);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
                 return;
             }
 
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);
+
+            res.WriteInt32((int) ItemActionResultType.Ok);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
         }
     }
 }

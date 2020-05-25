@@ -32,6 +32,7 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Discord;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
@@ -53,6 +54,7 @@ namespace Necromancy.Server
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
         public MapLookup Maps { get; }
+        public Dictionary<int, Item> Items { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
@@ -78,12 +80,11 @@ namespace Necromancy.Server
             Instances = new InstanceGenerator();
             Clients = new ClientLookup();
             Maps = new MapLookup();
+            Items = new Dictionary<int, Item>();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
-            Database = new NecDatabaseBuilder(Setting).Build();
-            // TODO remove setting repository, load objects from DB on startup
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
-            //
+            Database = new NecDatabaseBuilder(Setting, SettingRepository).Build();
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);
@@ -257,6 +258,14 @@ namespace Necromancy.Server
             }
 
             Logger.Info($"Maps: {maps.Count}");
+
+            List<Item> items = Database.SelectItems();
+            foreach (Item item in items)
+            {
+                Items.Add(item.Id, item);
+            }
+
+            Logger.Info($"Items: {items.Count}");
         }
 
         private void LoadHandler()

@@ -31,14 +31,14 @@ namespace Necromancy.Server.Database
         List<Soul> SelectSoulsByAccountId(int accountId);
         bool UpdateSoul(Soul soul);
         bool DeleteSoul(int soulId);
-        
+
         // Map
         bool InsertMap(MapData map);
         MapData SelectItemMapId(int mapId);
         List<MapData> SelectMaps();
         bool UpdateMap(MapData map);
         bool DeleteMap(int mapId);
-        
+
         // Character
         bool InsertCharacter(Character character);
         Character SelectCharacterById(int characterId);
@@ -66,6 +66,7 @@ namespace Necromancy.Server.Database
         // Item
         bool InsertItem(Item item);
         Item SelectItemById(int itemsId);
+        List<Item> SelectItems();
         bool UpdateItem(Item item);
         bool DeleteItem(int itemsId);
 
@@ -75,7 +76,7 @@ namespace Necromancy.Server.Database
         List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
         bool UpdateInventoryItem(InventoryItem inventoryItem);
         bool DeleteInventoryItem(int inventoryItemId);
-        
+
         // ShortcutBar
         bool InsertShortcutBar(ShortcutBar shortcutBar);
         ShortcutBar SelectShortcutBarById(int shortcutBarId);
@@ -89,7 +90,7 @@ namespace Necromancy.Server.Database
         SkillTreeItem SelectSkillTreeItemByCharSkillId(int charId, int skillId);
         bool UpdateSkillTreeItem(SkillTreeItem skillTreeItem);
         bool DeleteSkillTreeItem(int id);
-        
+
         // Monster Coord
         bool InsertMonsterCoords(MonsterCoord monsterCoord);
         List<MonsterCoord> SelectMonsterCoords();
@@ -98,7 +99,7 @@ namespace Necromancy.Server.Database
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
-        
+
         // Quest
         bool InsertQuest(Quest quest);
         Quest SelectQuestById(int questId);

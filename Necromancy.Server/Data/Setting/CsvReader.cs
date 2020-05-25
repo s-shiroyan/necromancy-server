@@ -18,7 +18,7 @@ namespace Necromancy.Server.Data.Setting
 
         public List<T> Read(string path)
         {
-            Logger.Debug($"Reading {path}");
+            Logger.Info($"Reading {path}");
             List<T> items = new List<T>();
             FileInfo file = new FileInfo(path);
             if (file.Exists)

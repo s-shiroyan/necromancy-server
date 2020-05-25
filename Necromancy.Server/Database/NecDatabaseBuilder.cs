@@ -5,6 +5,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database.Sql;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
+using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Setting;
 
 namespace Necromancy.Server.Database
@@ -13,11 +14,17 @@ namespace Necromancy.Server.Database
     {
         private static readonly ILogger Logger = LogProvider.Logger(typeof(NecDatabaseBuilder));
 
-        private NecSetting _setting;
+        private readonly NecSetting _setting;
+        private readonly SettingRepository _settingRepository;
 
-        public NecDatabaseBuilder(NecSetting setting)
+        public NecDatabaseBuilder(NecSetting setting, SettingRepository settingRepository = null)
         {
             _setting = setting;
+            _settingRepository = settingRepository;
+            if (_settingRepository == null)
+            {
+                _settingRepository = new SettingRepository(_setting.RepositoryFolder).Initialize();
+            }
         }
 
         public IDatabase Build()
@@ -46,15 +53,45 @@ namespace Necromancy.Server.Database
             if (database.CreateDatabase())
             {
                 ScriptRunner scriptRunner = new ScriptRunner(database);
-                SettingRepository settingRepository = new SettingRepository(_setting.RepositoryFolder).Initialize();
 
                 // create table structure
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "schema_sqlite.sql"));
 
-                // insert items into database
-                foreach (int itemId in settingRepository.ItemInfo.Keys)
+                // insert maps
+                foreach (MapSetting mapSetting in _settingRepository.Map.Values)
                 {
-                    if (!settingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
+                    MapData mapData = new MapData();
+                    mapData.Id = mapSetting.Id;
+                    mapData.Country = mapSetting.Country;
+                    if (mapData.Country == null)
+                    {
+                        mapData.Country = "";
+                    }
+                    mapData.Area = mapSetting.Area;                    
+                    if (mapData.Area == null)
+                    {
+                        mapData.Area = "";
+                    }
+                    mapData.Place = mapSetting.Place;                    
+                    if (mapData.Place == null)
+                    {
+                        mapData.Place = "";
+                    }
+                    mapData.X = mapSetting.X;
+                    mapData.Y = mapSetting.Y;
+                    mapData.Z = mapSetting.Z;
+                    mapData.Orientation = mapSetting.Orientation;
+                    if (!database.InsertMap(mapData))
+                    {
+                        Logger.Error($"MapId: {mapData.Id} - failed to insert`");
+                        return;
+                    }
+                }
+
+                // insert items
+                foreach (int itemId in _settingRepository.ItemInfo.Keys)
+                {
+                    if (!_settingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
                     {
                         Logger.Error($"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`");
                         continue;
@@ -74,12 +111,10 @@ namespace Necromancy.Server.Database
                         return;
                     }
                 }
-
-                // TODO insert npc / monster into DB instead from CSV
                 
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_account.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_npc_spawn.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_monster_spawn.sql"));
-                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_account.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_skill.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_union.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_auction.sql"));
