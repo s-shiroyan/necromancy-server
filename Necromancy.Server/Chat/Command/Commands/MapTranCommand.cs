@@ -83,7 +83,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     myMapTransition.RightPos.Y = client.Character.Y - 50;
                     myMapTransition.RightPos.Z = client.Character.Z - 10;
                     myMapTransition.InvertedTransition = false;
-                    Server.SettingRepository.Maps.TryGetValue(x, out MapSetting targetMap);
+                    Server.SettingRepository.Map.TryGetValue(x, out MapSetting targetMap);
                     myMapTransition.ToPos.X = targetMap.X;
                     myMapTransition.ToPos.Y = targetMap.Y;
                     myMapTransition.ToPos.Z = targetMap.Z;

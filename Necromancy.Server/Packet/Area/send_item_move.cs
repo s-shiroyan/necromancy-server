@@ -3,6 +3,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -67,72 +68,72 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
 
-            InventoryItem fromInvItem = client.Character.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
-            InventoryItem toInvItem = client.Character.GetInventoryItem(toStoreType, toBagId, toSlot);
-            if (toInvItem != null && (fromInvItem.StorageItem != toInvItem.StorageItem))
-            {
-                RecvNormalSystemMessage unlikeItems = new RecvNormalSystemMessage("You can only stack like items!");
-                _server.Router.Send(unlikeItems, client);
-                return;
-            }
+       //     InventoryItem fromInvItem = client.Character.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
+       //   InventoryItem toInvItem = client.Character.GetInventoryItem(toStoreType, toBagId, toSlot);
+       //   if (toInvItem != null && (fromInvItem.StorageItem != toInvItem.StorageItem))
+       //   {
+       //       RecvNormalSystemMessage unlikeItems = new RecvNormalSystemMessage("You can only stack like items!");
+       //       _server.Router.Send(unlikeItems, client);
+       //       return;
+       //   }
 
-            if (toInvItem != null && (toInvItem.StorageCount >= 255))
-            {
-                RecvNormalSystemMessage unlikeItems =
-                    new RecvNormalSystemMessage("The move would place too many items in destination slot!");
-                _server.Router.Send(unlikeItems, client);
-                return;
-            }
+       //   if (toInvItem != null && (toInvItem.StorageCount >= 255))
+       //   {
+       //       RecvNormalSystemMessage unlikeItems =
+       //           new RecvNormalSystemMessage("The move would place too many items in destination slot!");
+       //       _server.Router.Send(unlikeItems, client);
+       //       return;
+       //   }
 
-            if (fromInvItem.StorageCount > 1)
-            {
-                if (client.Character.currentEvent != null)
-                {
-                    Logger.Error(
-                        $"Trying to start new event with another outstanding event active! Outstanding event type [{client.Character.currentEvent.EventType}]");
-                    client.Character.currentEvent = null;
-                }
+       //   if (fromInvItem.StorageCount > 1)
+       //   {
+       //       if (client.Character.currentEvent != null)
+       //       {
+       //           Logger.Error(
+       //               $"Trying to start new event with another outstanding event active! Outstanding event type [{client.Character.currentEvent.EventType}]");
+       //           client.Character.currentEvent = null;
+       //       }
 
-                MoveItem moveItem = _server.Instances.CreateInstance<MoveItem>();
-                moveItem.toStoreType = toStoreType;
-                moveItem.toBagId = toBagId;
-                moveItem.toSlot = toSlot;
-                moveItem.fromStoreType = fromStoreType;
-                moveItem.fromBagId = moveItem.fromBagId;
-                moveItem.fromSlot = fromSlot;
-                moveItem.itemCount = (byte) itemCount;
-                moveItem.item = fromInvItem.StorageItem;
-                client.Character.currentEvent = moveItem;
-                RecvEventStart eventStart = new RecvEventStart(0, 0);
-                Router.Send(eventStart, client);
-                RecvEventRequestInt getCount = new RecvEventRequestInt("Select number to move.", 1,
-                    fromInvItem.StorageCount, fromInvItem.StorageCount);
-                Router.Send(getCount, client);
-            }
-            else
-            {
-                if (toInvItem == null)
-                {
-                    fromInvItem.StorageType = toStoreType;
-                    fromInvItem.StorageId = toBagId;
-                    fromInvItem.StorageSlot = toSlot;
-                    client.Character.UpdateInventoryItem(fromInvItem);
-                    RecvItemUpdatePlace changePlace =
-                        new RecvItemUpdatePlace(fromInvItem.InstanceId, toStoreType, toBagId, toSlot);
-                    _server.Router.Send(changePlace, client);
-                    client.Character.UpdateInventoryItem(fromInvItem);
-                }
-                else
-                {
-                    toInvItem.StorageCount += 1;
-                    RecvItemUpdateNum updateNum = new RecvItemUpdateNum(toInvItem.InstanceId, toInvItem.StorageCount);
-                    _server.Router.Send(updateNum, client);
-                    RecvItemRemove removeitem = new RecvItemRemove(fromInvItem.InstanceId);
-                    _server.Router.Send(removeitem, client);
-                    client.Character.UpdateInventoryItem(toInvItem);
-                    client.Character.RemoveInventoryItem(fromInvItem);
-                }
-            }
+       //       MoveItem moveItem = _server.Instances.CreateInstance<MoveItem>();
+       //       moveItem.toStoreType = toStoreType;
+       //       moveItem.toBagId = toBagId;
+       //       moveItem.toSlot = toSlot;
+       //       moveItem.fromStoreType = fromStoreType;
+       //       moveItem.fromBagId = moveItem.fromBagId;
+       //       moveItem.fromSlot = fromSlot;
+       //       moveItem.itemCount = (byte) itemCount;
+       //       moveItem.item = fromInvItem.StorageItem;
+       //       client.Character.currentEvent = moveItem;
+       //       RecvEventStart eventStart = new RecvEventStart(0, 0);
+       //       Router.Send(eventStart, client);
+       //       RecvEventRequestInt getCount = new RecvEventRequestInt("Select number to move.", 1,
+       //           fromInvItem.StorageCount, fromInvItem.StorageCount);
+       //       Router.Send(getCount, client);
+       //   }
+       //   else
+       //   {
+       //       if (toInvItem == null)
+       //       {
+       //           fromInvItem.StorageType = toStoreType;
+       //           fromInvItem.StorageId = toBagId;
+       //           fromInvItem.StorageSlot = toSlot;
+       //           client.Character.UpdateInventoryItem(fromInvItem);
+       //           RecvItemUpdatePlace changePlace =
+       //               new RecvItemUpdatePlace(fromInvItem.InstanceId, toStoreType, toBagId, toSlot);
+       //           _server.Router.Send(changePlace, client);
+       //           client.Character.UpdateInventoryItem(fromInvItem);
+       //       }
+       //       else
+       //       {
+       //           toInvItem.StorageCount += 1;
+       //           RecvItemUpdateNum updateNum = new RecvItemUpdateNum(toInvItem.InstanceId, toInvItem.StorageCount);
+       //           _server.Router.Send(updateNum, client);
+       //           RecvItemRemove removeitem = new RecvItemRemove(fromInvItem.InstanceId);
+       //           _server.Router.Send(removeitem, client);
+       //           client.Character.UpdateInventoryItem(toInvItem);
+       //           client.Character.RemoveInventoryItem(fromInvItem);
+       //       }
+       //   }
 
             //SendItemPlace(client);
             //SendItemPlaceChange(client);

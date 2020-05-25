@@ -85,8 +85,7 @@ namespace Necromancy.Server.Data.Setting
 
             if (item == null)
             {
-                Logger.Error(
-                    $"Skipping Line: '{line}' could not be converted");
+                Logger.Error($"Skipping Line: '{line}' could not be converted");
                 return;
             }
 

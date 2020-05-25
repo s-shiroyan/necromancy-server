@@ -1,16 +1,13 @@
 using System.Collections.Generic;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Database
 {
     public interface IDatabase
     {
-        long Version
-        {
-            get;
-            set;
-        }
+        long Version { get; set; }
 
         void Execute(string sql);
 
@@ -82,11 +79,18 @@ namespace Necromancy.Server.Database
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
 
-        // Items
-        bool InsertItems(Items items);
-        Items SelectitemsById(int itemsId);
-        bool UpdateItems(Items items);
-        bool DeleteItems(int itemsId);
+        // ItemInfo
+        bool InsertItem(Item item);
+        Item SelectItemById(int itemsId);
+        bool UpdateItem(Item item);
+        bool DeleteItem(int itemsId);
+
+        // Inventory ItemInfo
+        bool InsertInventoryItem(InventoryItem inventoryItem);
+        InventoryItem SelectInventoryItemById(int inventoryItemId);
+        List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
+        bool UpdateInventoryItem(InventoryItem inventoryItem);
+        bool DeleteInventoryItem(int inventoryItemId);
 
         // Quest
         bool InsertQuest(Quest quest);
@@ -123,7 +127,9 @@ namespace Necromancy.Server.Database
         MapTransition SelectMapTransitionsById(int Id);
         List<MapTransition> SelectMapTransitionsByMapId(int mapId);
         bool UpdateMapTransition(MapTransition mapTran);
+
         bool DeleteMapTransition(int mapTranId);
+
         // GGate Spawn
         bool InsertGGateSpawn(GGateSpawn gGateSpawn);
         List<GGateSpawn> SelectGGateSpawns();

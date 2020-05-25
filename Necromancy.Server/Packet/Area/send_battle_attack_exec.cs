@@ -6,6 +6,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
@@ -36,7 +37,6 @@ namespace Necromancy.Server.Packet.Area
 
 
             int damage = 0;
-            float perHp = 100.0f;
             int seed = Util.GetRandomNumber(0, 20);
             if (seed < 2)
                 damage = Util.GetRandomNumber(1, 4); // Light hit
@@ -91,7 +91,7 @@ namespace Necromancy.Server.Packet.Area
                 }
 
                 targetClient.Character.Hp.Modify(-damage, client.Character.InstanceId);
-                perHp = (float)targetClient.Character.Hp.current/targetClient.Character.Hp.max * 100;
+                perHp = (float) targetClient.Character.Hp.current / targetClient.Character.Hp.max * 100;
                 Logger.Debug(
                     $"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
                 RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);
@@ -141,7 +141,7 @@ namespace Necromancy.Server.Packet.Area
                 }
 
                 monsterSpawn.Hp.Modify(-damage, client.Character.InstanceId);
-                perHp = (float)monsterSpawn.Hp.current / monsterSpawn.Hp.max * 100;
+                perHp = (float) monsterSpawn.Hp.current / monsterSpawn.Hp.max * 100;
                 Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{monsterSpawn.Hp.max}] perHp[{perHp}]");
 
                 DamageTheObject(client, monsterSpawn.InstanceId, damage, perHp);
@@ -271,13 +271,13 @@ namespace Necromancy.Server.Packet.Area
 
                     if (client.Character.IsStealthed())
                     {
-                        uint newState = client.Character.ClearStateBit(0x8);
+                        client.Character.ClearStateBit(CharacterState.StealthForm);
                         RecvCharaNotifyStateflag charState =
-                            new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                            new RecvCharaNotifyStateflag(client.Character.InstanceId, (uint)client.Character.State);
                         _server.Router.Send(client.Map, charState);
                     }
 
-                    perHp = (float)monsterSpawn.Hp.current/monsterSpawn.Hp.max * 100;
+                    perHp = (float) monsterSpawn.Hp.current / monsterSpawn.Hp.max * 100;
                     Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{monsterSpawn.Hp.max}] perHp[{perHp}]");
                 }
                     break;
@@ -294,7 +294,7 @@ namespace Necromancy.Server.Packet.Area
                     }
 
                     targetClient.Character.Hp.Modify(-damage, character.InstanceId);
-                    perHp = (float)targetClient.Character.Hp.current/targetClient.Character.Hp.max * 100;
+                    perHp = (float) targetClient.Character.Hp.current / targetClient.Character.Hp.max * 100;
                     Logger.Debug(
                         $"CurrentHp [{targetClient.Character.Hp.current}] MaxHp[{targetClient.Character.Hp.max}] perHp[{perHp}]");
                     RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(targetClient.Character.Hp.current);

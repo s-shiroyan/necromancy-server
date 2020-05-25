@@ -43,10 +43,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     foreach (NecClient theirClient in Server.Clients.GetAll())
                     {
                         if (theirClient.Map != null)
-                        {
                             responses.Add(ChatResponse.CommandError(client,
-                            $"{theirClient.Character.Name} {theirClient.Soul.Name} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
-                        }
+                                $"{theirClient.Character.Name} {theirClient.Soul.Name} is on Map {theirClient.Character.MapId} with InstanceID {theirClient.Character.InstanceId}"));
                     }
 
                     break;
@@ -61,7 +59,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         if (theirCharacter.Name == command[0])
                         {
                             responses.Add(ChatResponse.CommandError(client,
-                                $"{theirCharacter.Name} {theirCharacter.SoulName} is on Map {theirCharacter.MapId} with InstanceID {theirCharacter.InstanceId}"));
+                                $"{theirCharacter.Name} SoulId:{theirCharacter.SoulId} is on Map {theirCharacter.MapId} with InstanceID {theirCharacter.InstanceId}"));
                             soulFound = true;
                         }
                     }

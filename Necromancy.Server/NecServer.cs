@@ -57,7 +57,6 @@ namespace Necromancy.Server
         public ChatManager Chat { get; }
         public NecromancyBot NecromancyBot { get; }
         public InstanceGenerator Instances { get; }
-        public InstanceGenerator64 Instances64 { get; }
         public bool Running => _running;
 
         private readonly NecQueueConsumer _authConsumer;
@@ -77,7 +76,6 @@ namespace Necromancy.Server
             NecromancyBot.AddSingleton(this);
 
             Instances = new InstanceGenerator();
-            Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
             Characters = new CharacterLookup();
             Maps = new MapLookup();
@@ -215,8 +213,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
             Chat.CommandHandler.AddCommand(new SendEventEnd(this));
             Chat.CommandHandler.AddCommand(new SendEventTreasureboxBegin(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstance(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstanceUnidentified(this));
             Chat.CommandHandler.AddCommand(new SendItemUpdateState(this));
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
@@ -246,18 +242,19 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new MobCommand(this));
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
             Chat.CommandHandler.AddCommand(new ItemCommand(this));
-            Chat.CommandHandler.AddCommand(new BagCommand(this));
+            // Chat.CommandHandler.AddCommand(new BagCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportToCommand(this));
         }
 
         private void LoadSettingRepository()
         {
-            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            foreach (MapSetting mapSetting in SettingRepository.Map.Values)
             {
                 Map map = new Map(mapSetting, this);
                 Maps.Add(map);
             }
+            
         }
 
         private void LoadCharacterRepository()
@@ -498,6 +495,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_request_rename(this));
             _areaConsumer.AddHandler(new send_event_quest_report_list_end(this));
             _areaConsumer.AddHandler(new send_event_quest_report_select(this));
+            _areaConsumer.AddHandler(new send_buff_shop_buy(this));
         }
     }
 }

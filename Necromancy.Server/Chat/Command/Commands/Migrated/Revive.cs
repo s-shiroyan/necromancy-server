@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
 
@@ -32,7 +33,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 client.Character.soulFormState -= 1;
                 client.Character.Hp.toMax();
                 client.Character.movementId = client.Character.InstanceId;
-                client.Character.state = 0b00000000;
+                client.Character.State = CharacterState.NormalForm;
 
 
                 IBuffer res2 = BufferProvider.Provide();

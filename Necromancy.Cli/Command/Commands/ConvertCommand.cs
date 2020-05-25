@@ -48,6 +48,6 @@ namespace Necromancy.Cli.Command.Commands
 
 
         public override string Key => "convert";
-        public override string Description => $"Find English iteminfo in Japanese Items and add to new file substituting name.{Environment.NewLine}";
+        public override string Description => $"Find English iteminfo in Japanese ItemInfo and add to new file substituting name.{Environment.NewLine}";
     }
 }
