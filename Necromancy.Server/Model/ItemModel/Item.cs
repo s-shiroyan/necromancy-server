@@ -127,7 +127,7 @@ namespace Necromancy.Server.Model.ItemModel
             switch (itemType)
             {
                 case ItemType.NONE: return EquipmentSlotType.NONE;
-                case ItemType.TRUMP: return EquipmentSlotType.HAND_R;
+                case ItemType.TRUMP: return EquipmentSlotType.HAND_R | EquipmentSlotType.HAND_L;
                 case ItemType.DAGGER: return EquipmentSlotType.HAND_R;
                 case ItemType.SWORD_1H: return EquipmentSlotType.HAND_R;
                 case ItemType.RAPIER: return EquipmentSlotType.HAND_R;
@@ -167,10 +167,10 @@ namespace Necromancy.Server.Model.ItemModel
                 case ItemType.SABATONS: return EquipmentSlotType.NONE;
                 case ItemType.SHOES: return EquipmentSlotType.NONE;
                 case ItemType.CLOAK: return EquipmentSlotType.NONE;
-                case ItemType.RING: return EquipmentSlotType.ACCESSORY_2;
-                case ItemType.EARRING: return EquipmentSlotType.ACCESSORY_3;
-                case ItemType.NECKLACE: return EquipmentSlotType.ACCESSORY_4;
-                case ItemType.BELT: return EquipmentSlotType.NONE;
+                case ItemType.RING: return EquipmentSlotType.ACCESSORY_1;
+                case ItemType.EARRING: return EquipmentSlotType.ACCESSORY_2; 
+                case ItemType.NECKLACE: return EquipmentSlotType.ACCESSORY_3;
+                case ItemType.BELT: return EquipmentSlotType.ACCESSORY_4;
                 case ItemType.DRUG: return EquipmentSlotType.NONE;
                 case ItemType.SKILLCHIP: return EquipmentSlotType.NONE;
                 case ItemType.BAG: return EquipmentSlotType.NONE;

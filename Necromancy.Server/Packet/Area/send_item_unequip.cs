@@ -27,30 +27,27 @@ namespace Necromancy.Server.Packet.Area
             int slotNum = packet.Data.ReadInt32();
             EquipmentSlotType type = Item.GetEquipmentSlotTypeBySlotNumber(slotNum);
             InventoryItem inventoryItem = client.Inventory.GetEquippedInventoryItem(type);
-
-            if (inventoryItem != null)
+            IBuffer res = BufferProvider.Provide();
+            if (inventoryItem == null)
             {
-                if (inventoryItem.CurrentEquipmentSlotType == EquipmentSlotType.NONE)
-                {
-                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-                }
-                else
-                {
-                    inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-                }
-
-                IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(0); //error check. 0 to work
-                RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(inventoryItem);
-                Router.Send(eqMask, client);
-                Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
-            }
-            else
-            {
-                IBuffer res = BufferProvider.Provide();
+                // not found
                 res.WriteInt32(203); //error check. 0 to work
                 Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
+                return;
             }
+
+            if (inventoryItem.CurrentEquipmentSlotType == EquipmentSlotType.NONE)
+            {
+                // item already unequipped
+                return;
+            }
+
+
+            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+            res.WriteInt32(0); //error check. 0 to work
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(inventoryItem);
+            Router.Send(eqMask, client);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
         }
     }
 }

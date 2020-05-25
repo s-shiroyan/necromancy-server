@@ -38,15 +38,13 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
-            if (inventoryItem.CurrentEquipmentSlotType == EquipmentSlotType.NONE)
+            if (inventoryItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
             {
-                inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-            }
-            else
-            {
-                inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                // already equipped
+                return;
             }
 
+            inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);
         }
