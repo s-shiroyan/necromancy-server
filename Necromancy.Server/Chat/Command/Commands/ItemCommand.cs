@@ -67,9 +67,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 item.Durability = necItem.Durability;
                 item.Physical = necItem.Physical;
                 item.Magical = necItem.Magical;
-                item.EquipmentSlotType = Item.EquipmentSlotTypeByItemId(itemInfo.Id);
-                // TODO remove this when ItemType is defined in SettingRepository.ItemNecromancy
                 item.ItemType = Item.ItemTypeByItemId(itemInfo.Id);
+                item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
 
                 if (!Server.Database.InsertItem(item))
                 {
