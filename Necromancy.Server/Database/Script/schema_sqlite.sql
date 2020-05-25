@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `nec_character`
     `created`          DATETIME NOT NULL,
     CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
     CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
+    CONSTRAINT `fk_nec_character_map_id` FOREIGN KEY (`map_id`) REFERENCES `nec_map` (`id`),
     CONSTRAINT `uq_nec_character_soul_id_name` UNIQUE (`soul_id`, `name`),
     CONSTRAINT `uq_nec_character_soul_id_slot` UNIQUE (`soul_id`, `slot`)
 );

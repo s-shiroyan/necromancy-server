@@ -74,11 +74,11 @@ namespace Necromancy.Server.Database
                         return;
                     }
                 }
-                
+
                 // TODO insert npc / monster into DB instead from CSV
                 
-                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_npc.sql"));
-                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_monster.sql"));
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_npc_spawn.sql"));
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_monster_spawn.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_account.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_skill.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_union.sql"));
