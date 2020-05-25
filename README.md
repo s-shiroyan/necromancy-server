@@ -182,6 +182,7 @@ but will eventually be merged back into develop (to definitely add the new featu
 - taewyth [@taewyth](https://github.com/taewyth) 
 - koffeeMist [@koffeeMist](https://github.com/koffeeMist) 
 - WIZONMAGLOVE [@WIZONMAGLOVE](https://github.com/WIZONMAGLOVE) 
+- Wolfzennn [@Wolfzennn](https://github.com/Wolfzennn)
 - Nothilvien [@sebastian-heinz](https://github.com/sebastian-heinz)
 
 ## 3rd Parties and Libraries
