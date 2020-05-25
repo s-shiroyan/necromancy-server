@@ -92,19 +92,15 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CurrentDurability = item.Durability;
             inventoryItem.CharacterId = character.Id;
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-            for (int i = 60; i < 80; i++)
+            
+            client.Inventory.AddInventoryItem(inventoryItem);
+            if (!Server.Database.InsertInventoryItem(inventoryItem))
             {
-                inventoryItem.Item.ItemType = (ItemType) i;
-
-                client.Inventory.AddInventoryItem(inventoryItem);
-                if (!Server.Database.InsertInventoryItem(inventoryItem))
-                {
-                    responses.Add(ChatResponse.CommandError(client, "Could not save InventoryItem to Database"));
-                    return;
-                }
-
-                RecvItemInstanceUnidentified(client, inventoryItem);
+                responses.Add(ChatResponse.CommandError(client, "Could not save InventoryItem to Database"));
+                return;
             }
+
+            RecvItemInstanceUnidentified(client, inventoryItem);
         }
 
         private void RecvItemInstanceUnidentified(NecClient client, InventoryItem inventoryItem)
