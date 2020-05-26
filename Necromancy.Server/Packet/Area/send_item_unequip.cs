@@ -17,40 +17,30 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            /*
-            ERR_UNEQUIP 1
-            ERR_UNEQUIP - 203
-            ERR_UNEQUIP - 201
-            ERR_UNEQUIP - 208
-            ERR_UNEQUIP GENERIC
-            */
             int slotNum = packet.Data.ReadInt32();
             EquipmentSlotType type = Item.GetEquipmentSlotTypeBySlotNumber(slotNum);
             InventoryItem inventoryItem = client.Inventory.GetEquippedInventoryItem(type);
-
-            if (inventoryItem != null)
+            IBuffer res = BufferProvider.Provide();
+            if (inventoryItem == null)
             {
-                if (inventoryItem.CurrentEquipmentSlotType == EquipmentSlotType.NONE)
-                {
-                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-                }
-                else
-                {
-                    inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-                }
+                res.WriteInt32((int) ItemActionResultType.ErrorGeneric);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
+                return;
+            }
 
-                IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(0); //error check. 0 to work
-                RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(inventoryItem);
-                Router.Send(eqMask, client);
-                Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
-            }
-            else
+            if (inventoryItem.CurrentEquipmentSlotType == EquipmentSlotType.NONE)
             {
-                IBuffer res = BufferProvider.Provide();
-                res.WriteInt32(203); //error check. 0 to work
+                res.WriteInt32((int) ItemActionResultType.ErrorGeneric);
                 Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
+                return;
             }
+
+            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(inventoryItem);
+            Router.Send(eqMask, client);
+
+            res.WriteInt32((int) ItemActionResultType.Ok);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_unequip_r, res, ServerType.Area);
         }
     }
 }

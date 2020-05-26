@@ -20,16 +20,14 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             int characterId = packet.Data.ReadInt32();
-            //Character character = Database.SelectCharacterById(characterId);
-            Character character = Server.Characters.GetByCharacterId(characterId);
+            Character character = Database.SelectCharacterById(characterId);
             if (character == null)
             {
                 Logger.Error(client, $"No character for CharacterId: {characterId}");
                 client.Close();
                 return;
             }
-
-            //Server.Instances.AssignInstance(character); //moved to database load. 
+            Server.Instances.AssignInstance(character); 
 
             client.Character = character;
             client.UpdateIdentity();

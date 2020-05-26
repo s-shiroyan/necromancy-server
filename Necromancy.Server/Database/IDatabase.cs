@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
+using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
 
 namespace Necromancy.Server.Database
@@ -31,6 +32,51 @@ namespace Necromancy.Server.Database
         bool UpdateSoul(Soul soul);
         bool DeleteSoul(int soulId);
 
+        // Map
+        bool InsertMap(MapData map);
+        MapData SelectItemMapId(int mapId);
+        List<MapData> SelectMaps();
+        bool UpdateMap(MapData map);
+        bool DeleteMap(int mapId);
+
+        // Character
+        bool InsertCharacter(Character character);
+        Character SelectCharacterById(int characterId);
+        Character SelectCharacterBySlot(int soulId, int slot);
+        List<Character> SelectCharactersByAccountId(int accountId);
+        List<Character> SelectCharactersBySoulId(int soulId);
+        bool UpdateCharacter(Character character);
+        bool DeleteCharacter(int characterId);
+        List<Character> SelectCharacters();
+
+        // Npc Spawn
+        bool InsertNpcSpawn(NpcSpawn npcSpawn);
+        List<NpcSpawn> SelectNpcSpawns();
+        List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
+        bool UpdateNpcSpawn(NpcSpawn npcSpawn);
+        bool DeleteNpcSpawn(int npcSpawnId);
+
+        // Monster Spawn
+        bool InsertMonsterSpawn(MonsterSpawn monsterSpawn);
+        List<MonsterSpawn> SelectMonsterSpawns();
+        List<MonsterSpawn> SelectMonsterSpawnsByMapId(int mapId);
+        bool UpdateMonsterSpawn(MonsterSpawn monsterSpawn);
+        bool DeleteMonsterSpawn(int monsterSpawnId);
+
+        // Item
+        bool InsertItem(Item item);
+        Item SelectItemById(int itemsId);
+        List<Item> SelectItems();
+        bool UpdateItem(Item item);
+        bool DeleteItem(int itemsId);
+
+        // Inventory Item
+        bool InsertInventoryItem(InventoryItem inventoryItem);
+        InventoryItem SelectInventoryItemById(int inventoryItemId);
+        List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
+        bool UpdateInventoryItem(InventoryItem inventoryItem);
+        bool DeleteInventoryItem(int inventoryItemId);
+
         // ShortcutBar
         bool InsertShortcutBar(ShortcutBar shortcutBar);
         ShortcutBar SelectShortcutBarById(int shortcutBarId);
@@ -45,31 +91,6 @@ namespace Necromancy.Server.Database
         bool UpdateSkillTreeItem(SkillTreeItem skillTreeItem);
         bool DeleteSkillTreeItem(int id);
 
-        // Character
-        bool InsertCharacter(Character character);
-        Character SelectCharacterById(int characterId);
-        Character SelectCharacterBySlot(int soulId, int slot);
-        List<Character> SelectCharactersByAccountId(int accountId);
-        List<Character> SelectCharactersBySoulId(int soulId);
-        bool UpdateCharacter(Character character);
-        bool DeleteCharacter(int characterId);
-        List<Character> SelectCharacters();
-
-
-        // NpcSpawn
-        bool InsertNpcSpawn(NpcSpawn npcSpawn);
-        List<NpcSpawn> SelectNpcSpawns();
-        List<NpcSpawn> SelectNpcSpawnsByMapId(int mapId);
-        bool UpdateNpcSpawn(NpcSpawn npcSpawn);
-        bool DeleteNpcSpawn(int npcSpawnId);
-
-        // Monster Spawn
-        bool InsertMonsterSpawn(MonsterSpawn monsterSpawn);
-        List<MonsterSpawn> SelectMonsterSpawns();
-        List<MonsterSpawn> SelectMonsterSpawnsByMapId(int mapId);
-        bool UpdateMonsterSpawn(MonsterSpawn monsterSpawn);
-        bool DeleteMonsterSpawn(int monsterSpawnId);
-
         // Monster Coord
         bool InsertMonsterCoords(MonsterCoord monsterCoord);
         List<MonsterCoord> SelectMonsterCoords();
@@ -78,19 +99,6 @@ namespace Necromancy.Server.Database
         List<MonsterCoord> SelectMonsterCoordsByMapId(int mapId);
         bool UpdateMonsterCoord(MonsterCoord monsterCoord);
         bool DeleteMonsterCoord(int monsterSpawnId);
-
-        // ItemInfo
-        bool InsertItem(Item item);
-        Item SelectItemById(int itemsId);
-        bool UpdateItem(Item item);
-        bool DeleteItem(int itemsId);
-
-        // Inventory ItemInfo
-        bool InsertInventoryItem(InventoryItem inventoryItem);
-        InventoryItem SelectInventoryItemById(int inventoryItemId);
-        List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
-        bool UpdateInventoryItem(InventoryItem inventoryItem);
-        bool DeleteInventoryItem(int inventoryItemId);
 
         // Quest
         bool InsertQuest(Quest quest);

@@ -15,6 +15,11 @@ namespace Necromancy.Server.Model.ItemModel
             _inventory.Add(0, new InventoryItem[bagSize]);
         }
 
+        public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
+        {
+            return ItemActionResultType.Ok;
+        }
+
         public InventoryItem GetEquippedInventoryItem(EquipmentSlotType equipmentSlotType)
         {
             foreach (InventoryItem[] bag in _inventory.Values)

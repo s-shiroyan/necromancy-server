@@ -3,72 +3,70 @@ namespace Necromancy.Server.Model
     public enum ItemType
     {
         NONE = 0,
-        TRUMP,
+        TRUMP = 1,
         DAGGER,
-        RAPIER,
         SWORD_1H,
-        SWORD_2H,
+        RAPIER,
+        SWORD_2H = 5,
         KATANA_1H,
         KATANA_2H,
         AXE_1H,
         AXE_2H,
-        SPEAR,
-        CLUB_1H,
+        CLUB_1H = 10,
         CLUB_2H,
         WAND_1H,
         WAND_2H,
-        BOW,
+        SPEAR,
+        BOW = 15,
         CROSSBOW,
         GUN,
         INSTRUMENT,
         SHIELD_SMALL,
-        SHIELD_MEDIUM,
+        SHIELD_MEDIUM = 20,
         SHIELD_LARGE,
         ARROW,
         BOLT,
         BULLET,
-        PROTECTOR,
-        ACCESSORY,
+        PROTECTOR = 25, //PROTCT
+        ACCESSORY, //ACCRY
         HELMET,
         HAT,
         HOOD,
-        ARMOR_TOPS,
-        ARMOR_BOTTOMS,
-        CLOTHES_TOPS,
+        ARMOR_TOPS = 30, //ARMOR
+        ARMOR_BOTTOMS, //GREAVES
+        CLOTHES_TOPS, //TOP
         CLOTHES_BOTTOMS,
         COAT,
-        GLOVES,
+        GLOVES = 35,
         GAUNTLETS,
         BRACLET,
-        SABATONS,
-        LEATHER,
-        SHOES,
-        MANTLE,
+        SABATONS, //S.SHOE
+        SHOES, // SHOES
+        CLOAK = 40,
         RING,
         EARRING,
-        NECKLACE,
+        NECKLACE, //NCKLCE
         BELT,
-        DRUG,
-        SKILLCHIP,
+        DRUG = 45, //MEDICINE
+        SKILLCHIP, //SKLCHP
         BAG,
-        LOSTSOUL,
-        EVENT,
+        LOSTSOUL, //LSTSOL
         SYSTEM,
-        FORGESTONE,
-        TALKRING_MAKEKIT,
-        MASTER_TALKRING,
-        TALKRING,
-        FORGEGUARDSTONE,
-        GEM,
-        GEM_PIECE,
-        GEM_SYNTHESIS,
-        MAP_FRAGMENT,
-        OTHERS,
-        AVATAR,
-        WHOLECHAT,
+        FORGESTONE = 50, //FG_STN
+        TALKRING_MAKEKIT, //TOKRNG
+        MASTER_TALKRING, //TOKRING
+        TALKRING, //TOKRNG
+        FORGEGUARDSTONE, //FG_GRD
+        GEM = 55, //GEM
+        GEM_PIECE, //GEM
+        GEM_SYNTHESIS, //GEM
+        MAP_FRAGMENT, //MAP PC
+        OTHERS, //OTHER
+        AVATAR = 60,
         ALLCHT,
         BUFF,
-        FORGETICKET,
-        FORGE_SP_SUPPORT,
+        LEATHER, //L.SHOES
+        FORGETICKET, //FG_TKT
+        FORGE_SP_SUPPORT = 65, //特殊鍛錬万能素材
     }
 }

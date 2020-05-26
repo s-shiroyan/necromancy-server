@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
-using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -30,7 +30,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             if (command.Length < 1)
             {
-                responses.Add(ChatResponse.CommandError(client, $"To few arguments"));
+                responses.Add(ChatResponse.CommandError(client, "To few arguments"));
                 return;
             }
 
@@ -40,44 +40,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            Item item = Server.Database.SelectItemById(itemId);
-            if (item == null)
+            if (!Server.Items.ContainsKey(itemId))
             {
-                // Require Item to be in Database because we have a constraint.
-                // Create Item
-                // TODO use this code to initialize `nec_item` table
-
-                if (!Server.SettingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
-                {
-                    responses.Add(ChatResponse.CommandError(client,
-                        $"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`"));
-                    return;
-                }
-
-                if (!Server.SettingRepository.ItemInfo.TryGetValue(itemId, out ItemInfoSetting itemInfo))
-                {
-                    responses.Add(ChatResponse.CommandError(client,
-                        $"ItemId: {itemId} - not found in `SettingRepository.ItemInfo`"));
-                    return;
-                }
-
-                item = new Item();
-                item.Id = itemInfo.Id;
-                item.Name = itemInfo.Name;
-                item.Durability = necItem.Durability;
-                item.Physical = necItem.Physical;
-                item.Magical = necItem.Magical;
-                item.EquipmentSlotType = Item.EquipmentSlotTypeByItemId(itemInfo.Id);
-                // TODO remove this when ItemType is defined in SettingRepository.ItemNecromancy
-                item.ItemType = Item.ItemTypeByItemId(itemInfo.Id);
-
-                if (!Server.Database.InsertItem(item))
-                {
-                    responses.Add(ChatResponse.CommandError(client, "Could not save Item to Database"));
-                    return;
-                }
+                responses.Add(ChatResponse.CommandError(client, $"ItemId: '{itemId}' does not exist"));
+                return;
             }
 
+            Item item = Server.Items[itemId];
             Character character = client.Character;
             if (character == null)
             {
@@ -101,41 +70,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            RecvItemInstanceUnidentified(client, inventoryItem);
-        }
-
-        private void RecvItemInstanceUnidentified(NecClient client, InventoryItem inventoryItem)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong) inventoryItem.Id);
-            res.WriteCString(inventoryItem.Item.Name);
-            res.WriteInt32((int) inventoryItem.Item.ItemType); // TODO Investigate, for weapons it is -1 sometimes, why
-            res.WriteInt32((int) inventoryItem.CurrentEquipmentSlotType);
-            res.WriteByte(inventoryItem.Quantity);
-            res.WriteInt32(0); //Item status 0 = identified  
-            res.WriteInt32(inventoryItem.Item.Id); //Item icon 50100301 = camp
-            res.WriteByte(5);
-            res.WriteByte(4);
-            res.WriteByte(7);
-            res.WriteInt32(8);
-            res.WriteByte(1);
-            res.WriteByte(2);
-            res.WriteByte(9);
-            res.WriteByte(4);
-            res.WriteByte(5);
-            res.WriteByte(0); // bool
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
-            res.WriteByte(0); // 0~2
-            res.WriteInt16(inventoryItem.BagSlotIndex);
-            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
-            res.WriteInt64(69);
-            res.WriteInt32(59);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+            Router.Send(recvItemInstanceUnidentified, client);
         }
 
         public void RecvItemInstance(NecClient client, InventoryItem inventoryItem)
