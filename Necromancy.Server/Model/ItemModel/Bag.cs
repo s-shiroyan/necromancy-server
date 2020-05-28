@@ -1,15 +1,12 @@
-using Necromancy.Server.Data.Setting;
-using Necromancy.Server.Common.Instance;
-
-namespace Necromancy.Server.Model
+namespace Necromancy.Server.Model.ItemModel
 {
-    public class Bag : IInstance64
+    public class Bag
     {
         public Bag()
         {
         }
 
-        public ulong InstanceId { get; set; }
+        public uint InstanceId { get; set; }
         public int BagId { get; set; }
         public byte StorageId { get; set; }
         public short NumSlots { get; set; }

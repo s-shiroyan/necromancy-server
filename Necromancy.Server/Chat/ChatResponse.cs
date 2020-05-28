@@ -18,6 +18,20 @@ namespace Necromancy.Server.Chat
                 Recipients = {client}
             };
         }
+        
+        public static ChatResponse CommandInfo(NecClient client, string message)
+        {
+            return new ChatResponse()
+            {
+                Deliver = true,
+                SoulName = "System",
+                CharacterName = "",
+                ErrorType = ChatErrorType.Success,
+                Message = message,
+                MessageType = ChatMessageType.TextCommandLog,
+                Recipients = {client}
+            };
+        }
 
 
         public ChatResponse()

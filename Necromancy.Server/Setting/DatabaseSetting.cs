@@ -13,6 +13,7 @@ namespace Necromancy.Server.Setting
         {
             Type = DatabaseType.SQLite;
             SqLiteFolder = Path.Combine(Util.RelativeExecutingDirectory(), "Database");
+            ScriptFolder = Path.Combine(Util.RelativeExecutingDirectory(), "Database/Script");
             Host = "localhost";
             Port = 3306;
             Database = "necromancy";
@@ -29,6 +30,7 @@ namespace Necromancy.Server.Setting
             User = databaseSettings.User;
             Password = databaseSettings.Password;
             Database = databaseSettings.Database;
+            ScriptFolder = databaseSettings.ScriptFolder;
         }
 
         [DataMember(Order = 0)] public DatabaseType Type { get; set; }
@@ -44,5 +46,7 @@ namespace Necromancy.Server.Setting
         [DataMember(Order = 5)] public string Password { get; set; }
 
         [DataMember(Order = 6)] public string Database { get; set; }
+        
+        [DataMember(Order = 7)] public string ScriptFolder { get; set; }
     }
 }

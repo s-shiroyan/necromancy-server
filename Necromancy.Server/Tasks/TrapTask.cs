@@ -7,6 +7,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Receive;
@@ -145,9 +146,9 @@ namespace Necromancy.Server.Tasks
             NecClient client = _map.ClientLookup.GetByCharacterInstanceId(ownerInstanceId);
             if (client.Character.IsStealthed())
             {
-                uint newState = client.Character.ClearStateBit(0x8);
+                client.Character.ClearStateBit(CharacterState.StealthForm);
                 RecvCharaNotifyStateflag charState =
-                    new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                    new RecvCharaNotifyStateflag(client.Character.InstanceId, (uint) client.Character.State);
                 _server.Router.Send(client.Map, charState);
             }
 

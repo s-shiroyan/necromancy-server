@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
@@ -32,7 +33,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 client.Character.hadDied =
                     true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
                 client.Character.Hp.Modify(-client.Character.Hp.current);
-                client.Character.state = 0b00000001;
+                client.Character.State = CharacterState.SoulForm;
                 List<PacketResponse> brList = new List<PacketResponse>();
                 RecvBattleReportStartNotify brStart = new RecvBattleReportStartNotify(client.Character.InstanceId);
                 RecvBattleReportNoactDead cDead1 = new RecvBattleReportNoactDead(client.Character.InstanceId, 1);

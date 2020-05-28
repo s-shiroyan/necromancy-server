@@ -12,7 +12,7 @@ namespace Necromancy.Test.Database
         {
             /* Confirm successful build with currently configured database. */
             NecSetting settings = new NecSetting();
-            new NecDatabaseBuilder().Build(settings.DatabaseSettings);
+            new NecDatabaseBuilder(settings).Build();
         }
     }
 }

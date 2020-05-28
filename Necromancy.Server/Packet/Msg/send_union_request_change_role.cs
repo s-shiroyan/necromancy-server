@@ -22,8 +22,14 @@ namespace Necromancy.Server.Packet.Msg
             uint targetInstanceId = packet.Data.ReadUInt32();
             uint targetRole = packet.Data.ReadUInt32(); //3 beginer, 2 member, 1 sub-leader, 0 leader
 
+            // TODO why not retrieve via GetInstance??
             NecClient targetClient = Server.Clients.GetByCharacterInstanceId(targetInstanceId);
-            Character targetCharacter = Server.Characters.GetByCharacterInstanceId(targetInstanceId);
+            Character targetCharacter = targetClient.Character;
+            if (targetCharacter == null)
+            {
+                return;
+            }
+            
             UnionMember unionMember = Server.Database.SelectUnionMemberByCharacterId(targetCharacter.Id);
             uint previousRank = unionMember.Rank;
             unionMember.Rank = targetRole;
@@ -43,9 +49,16 @@ namespace Necromancy.Server.Packet.Msg
 
             if (previousLeaderCharacterInstanceId > 0)
             {
+                // TODO why not retrieve via GetInstance??
                 NecClient oldLeaderClient = Server.Clients.GetByCharacterInstanceId(previousLeaderCharacterInstanceId);
-                Character oldLeaderCharacter =
-                    Server.Characters.GetByCharacterInstanceId(previousLeaderCharacterInstanceId);
+                Character oldLeaderCharacter = targetClient.Character;
+                if (oldLeaderCharacter == null)
+                {
+                    return;
+                }
+         
+                
+                
                 UnionMember oldLeaderMember = Server.Database.SelectUnionMemberByCharacterId(oldLeaderCharacter.Id);
                 oldLeaderMember.Rank = previousRank;
                 Server.Database.UpdateUnionMember(oldLeaderMember);

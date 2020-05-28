@@ -21,6 +21,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Arrowgene.Logging;
 using Arrowgene.Networking.Tcp.Server.AsyncEvent;
 using Necromancy.Server.Chat;
@@ -31,6 +32,8 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Discord;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
+using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Area;
@@ -50,14 +53,13 @@ namespace Necromancy.Server
         public NecSetting Setting { get; }
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
-        public CharacterLookup Characters { get; }
         public MapLookup Maps { get; }
+        public Dictionary<int, Item> Items { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
         public NecromancyBot NecromancyBot { get; }
         public InstanceGenerator Instances { get; }
-        public InstanceGenerator64 Instances64 { get; }
         public bool Running => _running;
 
         private readonly NecQueueConsumer _authConsumer;
@@ -75,16 +77,14 @@ namespace Necromancy.Server
 
             NecromancyBot = new NecromancyBot(setting);
             NecromancyBot.AddSingleton(this);
-
             Instances = new InstanceGenerator();
-            Instances64 = new InstanceGenerator64();
             Clients = new ClientLookup();
-            Characters = new CharacterLookup();
             Maps = new MapLookup();
+            Items = new Dictionary<int, Item>();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
-            Database = new NecDatabaseBuilder().Build(Setting.DatabaseSettings);
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
+            Database = new NecDatabaseBuilder(Setting, SettingRepository).Build();
             _authConsumer = new NecQueueConsumer(ServerType.Auth, Setting, Setting.AuthSocketSettings);
             _authConsumer.ClientDisconnected += AuthClientDisconnected;
             _msgConsumer = new NecQueueConsumer(ServerType.Msg, Setting, Setting.MsgSocketSettings);
@@ -114,9 +114,8 @@ namespace Necromancy.Server
             );
 
             LoadChatCommands();
-            LoadSettingRepository();
+            LoadDatabaseObjects();
             LoadHandler();
-            LoadCharacterRepository();
         }
 
         private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -215,8 +214,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
             Chat.CommandHandler.AddCommand(new SendEventEnd(this));
             Chat.CommandHandler.AddCommand(new SendEventTreasureboxBegin(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstance(this));
-            Chat.CommandHandler.AddCommand(new SendItemInstanceUnidentified(this));
             Chat.CommandHandler.AddCommand(new SendItemUpdateState(this));
             Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
             Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
@@ -246,29 +243,29 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new MobCommand(this));
             Chat.CommandHandler.AddCommand(new CharaCommand(this));
             Chat.CommandHandler.AddCommand(new ItemCommand(this));
-            Chat.CommandHandler.AddCommand(new BagCommand(this));
+            // Chat.CommandHandler.AddCommand(new BagCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportToCommand(this));
         }
 
-        private void LoadSettingRepository()
+        private void LoadDatabaseObjects()
         {
-            foreach (MapSetting mapSetting in SettingRepository.Maps.Values)
+            List<MapData> maps = Database.SelectMaps();
+            foreach (MapData mapData in maps)
             {
-                Map map = new Map(mapSetting, this);
+                Map map = new Map(mapData, this);
                 Maps.Add(map);
             }
-        }
 
-        private void LoadCharacterRepository()
-        {
-            foreach (Character character in Database.SelectCharacters())
+            Logger.Info($"Maps: {maps.Count}");
+
+            List<Item> items = Database.SelectItems();
+            foreach (Item item in items)
             {
-                Instances.AssignInstance(character);
-                Characters.Add(character);
-                Logger.Debug(
-                    $"Character {character.Name} loaded from database added to memory. Assigned Intance ID {character.InstanceId} ");
+                Items.Add(item.Id, item);
             }
+
+            Logger.Info($"Items: {items.Count}");
         }
 
         private void LoadHandler()

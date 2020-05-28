@@ -144,7 +144,10 @@ namespace Necromancy.Server.Discord
             DiscordEvent discordEvent = new DiscordEvent();
             discordEvent.TextChannelId = _setting.DiscordBotChannel_ServerStatus;
             discordEvent.Text = text;
-            Send(discordEvent);
+            if (!Send(discordEvent))
+            {
+                Logger.Debug($"Discord event not send: {text}");
+            }
         }
 
         private async void Run()

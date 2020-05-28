@@ -3,6 +3,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -21,46 +22,35 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             byte storageType = packet.Data.ReadByte();
-            byte bagId = packet.Data.ReadByte(); //Equip slot maybe?
-            short backpackSlot = packet.Data.ReadInt16(); //Slot from backpack the item is in
+            byte bagId = packet.Data.ReadByte();
+            short bagSlotIndex = packet.Data.ReadInt16();
             int equipBit = packet.Data.ReadInt32();
-            Logger.Debug(
-                $"storageType: [{storageType}] bagId: [{bagId}]  backpackSlot: [{backpackSlot}] equipBit: [{equipBit}]");
-
-            InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, backpackSlot);
+            Logger.Debug($"storageType:{storageType} bagId:{bagId} bagSlotIndex:{bagSlotIndex} equipBit:{equipBit}");
 
             IBuffer res = BufferProvider.Provide();
+            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(bagId, bagSlotIndex);
+            if (inventoryItem == null)
+            {
+                Logger.Error($"Item not found: bagId:{bagId} BagSlot:{bagSlotIndex}");
+                res.WriteInt32((int) ItemActionResultType.ErrorGeneric);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
+                return;
+            }
 
-            res.WriteInt32(0);
+            if (inventoryItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+            {
+                Logger.Error($"Already Equipped: {inventoryItem.Id}{inventoryItem.Item.Name}");
+                res.WriteInt32((int) ItemActionResultType.ErrorUse);
+                Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
+                return;
+            }
 
+            inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+            RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
+            Router.Send(recvItemUpdateEqMask, client);
+
+            res.WriteInt32((int) ItemActionResultType.Ok);
             Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
-
-            int slotNum = 0;
-
-            for (int i = 0; i < 19; i++)
-            {
-                if (EquipBitMask[i] == invItem.StorageItem.bitmask)
-                {
-                    slotNum = i;
-                    break;
-                }
-            }
-
-            if (client.Character.equipSlots[slotNum] != null)
-            {
-                RecvItemUpdateEqMask ueqMask = new RecvItemUpdateEqMask(client.Character.equipSlots[slotNum], 0); //used to unequip item if it is equpped before a switch
-                Router.Send(ueqMask, client);
-            }
-
-            client.Character.equipSlots[slotNum] = invItem;
-
-            RecvItemUpdateEqMask eqMask = new RecvItemUpdateEqMask(invItem, invItem.StorageItem.bitmask); //used to unequip item if it is equpped before a switch
-            Router.Send(eqMask, client);
         }
-        
-        int[] EquipBitMask = new int[]
-            {
-                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152
-            };
     }
 }

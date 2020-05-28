@@ -41,8 +41,14 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             bool soulFound = false;
 
-            foreach (Character theirCharacter in Server.Characters.GetAll())
+            foreach (NecClient otherClient in Server.Clients.GetAll())
             {
+                Character theirCharacter = otherClient.Character;
+                if (theirCharacter == null)
+                {
+                    continue;
+                }
+
                 Logger.Debug($"Comparing {theirCharacter.Name} to {command[0]}");
                 if (theirCharacter.Name == command[0])
                 {

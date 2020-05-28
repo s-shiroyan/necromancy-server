@@ -19,9 +19,9 @@ namespace Necromancy.Server.Data.Setting
                 return;
             }
 
-            Items = new Dictionary<int, ItemSetting>();
-            Maps = new Dictionary<int, MapSetting>();
-            MapSymbols = new Dictionary<int, MapSymbolSetting>();
+            ItemInfo = new Dictionary<int, ItemInfoSetting>();
+            ItemNecromancy = new Dictionary<int, ItemNecromancySetting>();
+            Map = new Dictionary<int, MapSetting>();
             Strings = new StrTableSettingLookup();
             Monster = new Dictionary<int, MonsterSetting>();
             SkillBase = new Dictionary<int, SkillBaseSetting>();
@@ -31,12 +31,11 @@ namespace Necromancy.Server.Data.Setting
             ModelCommon = new Dictionary<int, ModelCommonSetting>();
         }
 
-        public Dictionary<int, ItemSetting> Items { get; }
-        public Dictionary<int, MapSetting> Maps { get; }
-        public Dictionary<int, MapSymbolSetting> MapSymbols { get; }
+        public Dictionary<int, ItemInfoSetting> ItemInfo { get; }
+        public Dictionary<int, ItemNecromancySetting> ItemNecromancy { get; }
+        public Dictionary<int, MapSetting> Map { get; }
         public Dictionary<int, MonsterSetting> Monster { get; }
         public Dictionary<int, SkillBaseSetting> SkillBase { get; }
-        public Dictionary<int, CharacterAttackSetting> CharacterAttack { get; }
         public Dictionary<int, EoBaseSetting> EoBase { get; }
         public StrTableSettingLookup Strings { get; }
         public Dictionary<int, NpcSetting> Npc { get; }
@@ -45,9 +44,9 @@ namespace Necromancy.Server.Data.Setting
 
         public SettingRepository Initialize()
         {
-            Items.Clear();
-            Maps.Clear();
-            MapSymbols.Clear();
+            ItemInfo.Clear();
+            ItemNecromancy.Clear();
+            Map.Clear();
             Strings.Clear();
             Monster.Clear();
             SkillBase.Clear();
@@ -56,15 +55,14 @@ namespace Necromancy.Server.Data.Setting
             ModelAtr.Clear();
             ModelCommon.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
-            Load(Items, "iteminfo.csv", new ItemInfoCsvReader());
+            Load(ItemInfo, "iteminfo.csv", new ItemInfoCsvReader());
+            Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader());
             Load(Monster, "monster.csv", new MonsterCsvReader());
             Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
-            //Load(CharacterAttack, "chara_attack.csv", new CharacterAttackCsvReader());
             Load(EoBase, "eo_base.csv", new EoBaseCsvReader());
             Load(Npc, "npc.csv", new NpcCsvReader());
             Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());
-            Load(Maps, "map.csv", new MapCsvReader(Strings));
-            //Load(MapSymbols, "map_symbol.csv", new MapSymbolCsvReader());
+            Load(Map, "map.csv", new MapCsvReader(Strings));
             Load(ModelCommon, "model_common.csv", new ModelCommonCsvReader(Monster, ModelAtr));
             return this;
         }
@@ -89,6 +87,11 @@ namespace Necromancy.Server.Data.Setting
             {
                 if (item is ISettingRepositoryItem repositoryItem)
                 {
+                    if (dictionary.ContainsKey(repositoryItem.Id))
+                    {
+                        Logger.Error($"Key: '{repositoryItem.Id}' already exists, skipping");
+                        continue;
+                    }
                     dictionary.Add(repositoryItem.Id, item);
                 }
             }

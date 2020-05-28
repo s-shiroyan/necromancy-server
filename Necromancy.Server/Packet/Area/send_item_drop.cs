@@ -1,6 +1,7 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
@@ -17,17 +18,29 @@ namespace Necromancy.Server.Packet.Area
         {
             byte storageType = packet.Data.ReadByte();
             byte bagId = packet.Data.ReadByte();
-            short bagSlot = packet.Data.ReadInt16();
+            short bagSlotIndex = packet.Data.ReadInt16();
             byte stackSize = packet.Data.ReadByte();
 
+
+            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(bagId, bagSlotIndex);
+            if (inventoryItem == null)
+            {
+                return;
+            }
+
+            if (!client.Inventory.RemoveInventoryItem(inventoryItem))
+            {
+                return;
+            }
+
             IBuffer res = BufferProvider.Provide();
+            res.SetPositionStart();
+            res.WriteUInt64((ulong) inventoryItem.Id);
+            Router.Send(client, (ushort) AreaPacketId.recv_item_remove, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_item_drop_r, res, ServerType.Area);
-
-            InventoryItem invItem = client.Character.GetInventoryItem(storageType, bagId, bagSlot);
-            res.SetPositionStart();
-            res.WriteUInt64(invItem.InstanceId); //Item instance Id here
-            Router.Send(client, (ushort)AreaPacketId.recv_item_remove, res, ServerType.Area);
         }
     }
 }

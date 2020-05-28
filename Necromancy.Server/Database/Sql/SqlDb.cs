@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using Arrowgene.Logging;
 
 namespace Necromancy.Server.Database.Sql
 {
@@ -11,6 +12,8 @@ namespace Necromancy.Server.Database.Sql
         where TCon : DbConnection
         where TCom : DbCommand
     {
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(SqlDb<TCon, TCom>));
+
         public const int NoRowsAffected = 0;
         public const long NoAutoIncrement = 0;
 
@@ -41,6 +44,7 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception ex)
             {
+                Logger.Error($"Query: {query}");
                 Exception(ex);
                 return NoRowsAffected;
             }
@@ -63,6 +67,7 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception ex)
             {
+                Logger.Error($"Query: {query}");
                 Exception(ex);
                 autoIncrement = NoAutoIncrement;
                 return NoRowsAffected;
@@ -87,6 +92,7 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception ex)
             {
+                Logger.Error($"Query: {query}");
                 Exception(ex);
             }
         }
@@ -108,6 +114,7 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception ex)
             {
+                Logger.Error($"Query: {query}");
                 Exception(ex);
             }
         }
@@ -126,6 +133,7 @@ namespace Necromancy.Server.Database.Sql
             }
             catch (Exception ex)
             {
+                Logger.Error($"Query: {query}");
                 Exception(ex);
             }
         }
@@ -148,7 +156,8 @@ namespace Necromancy.Server.Database.Sql
 
         protected virtual void Exception(Exception ex)
         {
-            throw ex;
+            //throw ex;
+            Logger.Exception(ex);
         }
 
         protected DbParameter Parameter(TCom command, string name, object value, DbType type)
@@ -239,6 +248,11 @@ namespace Necromancy.Server.Database.Sql
         protected int GetInt32(DbDataReader reader, string column)
         {
             return reader.GetInt32(reader.GetOrdinal(column));
+        }
+
+        protected uint GetUInt32(DbDataReader reader, string column)
+        {
+            return (uint) GetInt32(reader, column);
         }
 
         protected byte GetByte(DbDataReader reader, string column)

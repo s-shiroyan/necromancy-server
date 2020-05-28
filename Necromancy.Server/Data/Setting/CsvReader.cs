@@ -18,7 +18,7 @@ namespace Necromancy.Server.Data.Setting
 
         public List<T> Read(string path)
         {
-            Logger.Debug($"Reading {path}");
+            Logger.Info($"Reading {path}");
             List<T> items = new List<T>();
             FileInfo file = new FileInfo(path);
             if (file.Exists)
@@ -85,8 +85,7 @@ namespace Necromancy.Server.Data.Setting
 
             if (item == null)
             {
-                Logger.Error(
-                    $"Skipping Line: '{line}' could not be converted");
+                Logger.Error($"Skipping Line: '{line}' could not be converted");
                 return;
             }
 

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Numerics;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.CharacterModel;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -66,9 +67,9 @@ namespace Necromancy.Server.Packet.Area
             int skillBase = skillId / 1000;
             if (client.Character.IsStealthed() && skillBase != 114607)
             {
-                uint newState = client.Character.ClearStateBit(0x8);
+                client.Character.ClearStateBit(CharacterState.StealthForm);
                 RecvCharaNotifyStateflag charState =
-                    new RecvCharaNotifyStateflag(client.Character.InstanceId, newState);
+                    new RecvCharaNotifyStateflag(client.Character.InstanceId, (uint)client.Character.State);
                 _server.Router.Send(client.Map, charState);
             }
 
