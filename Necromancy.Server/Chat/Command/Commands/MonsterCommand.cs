@@ -23,7 +23,8 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            MonsterSpawn monsterSpawn = Server.Instances.CreateInstance<MonsterSpawn>();
+            MonsterSpawn monsterSpawn = new MonsterSpawn();
+            Server.Instances.AssignInstance(monsterSpawn);
             if (!int.TryParse(command[0], out int monsterId))
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));

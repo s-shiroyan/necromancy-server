@@ -333,7 +333,8 @@ namespace Necromancy.Server.Packet.Area
             }
             else if (client.Character.eventSelectExecCode == 1)
             {
-                NpcModelUpdate npcModelUpdate = Server.Instances.CreateInstance<NpcModelUpdate>();
+                NpcModelUpdate npcModelUpdate = new NpcModelUpdate();
+                Server.Instances.AssignInstance(npcModelUpdate);
                 npcModelUpdate.npcSpawn = npcSpawn;
 
                 client.Character.currentEvent = npcModelUpdate;

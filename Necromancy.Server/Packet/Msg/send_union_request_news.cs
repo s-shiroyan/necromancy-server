@@ -1,6 +1,8 @@
+using System;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Msg
@@ -33,6 +35,59 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             Router.Send(client, (ushort) MsgPacketId.recv_union_request_news_r, res, ServerType.Msg);
+            
+            
+            //Query and update the state of all members in your union roster. for when you click the members tab
+            foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Character.unionId))
+            {
+                int onlineStatus = 1;
+                Character character = null;
+                Soul soul = null;
+                NecClient otherClient = Server.Clients.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                if (otherClient == null)
+                {
+                    character = Server.Database.SelectCharacterById(unionMemberList.CharacterDatabaseId);
+                    soul = Server.Database.SelectSoulById(character.SoulId);
+                }
+                else
+                {
+                    character = otherClient.Character;
+                    soul = otherClient.Soul;
+                    onlineStatus = 0;
+                }
+                if (character == null)
+                {
+                    continue;
+                }
+                if (soul == null)
+                {
+                    continue;
+                }
+
+                TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
+                int unionJoinedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
+
+                res = BufferProvider.Provide();
+
+                res.WriteInt32(client.Character.unionId); //Union Id
+                res.WriteUInt32(character.InstanceId);
+                res.WriteFixedString($"{soul.Name}", 0x31); //size is 0x31
+                res.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
+                res.WriteUInt32(character.ClassId);
+                res.WriteByte(character.Level);
+                res.WriteInt32(character.MapId); // Location of your Union Member
+                res.WriteInt32(69); //Area of Map, somehow. or Channel;
+                res.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
+                res.WriteUInt32(unionMemberList.MemberPriviledgeBitMask); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+                res.WriteUInt32(unionMemberList.Rank); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
+                res.WriteInt32(onlineStatus); //online status. 0 = online, 1 = offline, 2 = away
+                res.WriteInt32(69); //Date Joined in seconds since unix time
+                res.WriteInt32(Util.GetRandomNumber(0, 0));
+                res.WriteInt32(Util.GetRandomNumber(0, 0));
+                Router.Send(client, (ushort)MsgPacketId.recv_union_notify_member_state, res, ServerType.Msg);
+            }
+            
+            
         }
     }
 }

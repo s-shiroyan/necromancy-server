@@ -75,9 +75,9 @@ namespace Necromancy.Server
             _running = false;
             Setting = new NecSetting(setting);
 
-            NecromancyBot = new NecromancyBot(setting);
+            NecromancyBot = new NecromancyBot(Setting);
             NecromancyBot.AddSingleton(this);
-            Instances = new InstanceGenerator();
+            Instances = new InstanceGenerator(Setting);
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Items = new Dictionary<int, Item>();

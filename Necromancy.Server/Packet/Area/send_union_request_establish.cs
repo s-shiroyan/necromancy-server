@@ -73,7 +73,8 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
-            Union myFirstUnion = Server.Instances.CreateInstance<Union>();
+            Union myFirstUnion = new Union();
+            Server.Instances.AssignInstance(myFirstUnion);
             client.Character.unionId = (int) myFirstUnion.InstanceId;
             myFirstUnion.Name = unionName;
             myFirstUnion.UnionLeaderId = client.Character.Id;
@@ -89,7 +90,8 @@ namespace Necromancy.Server.Packet.Area
 
             Logger.Debug($"{unionName} established with Id {myFirstUnion.Id} and instanceId {myFirstUnion.InstanceId}");
 
-            UnionMember myFirstUnionMember = Server.Instances.CreateInstance<UnionMember>();
+            UnionMember myFirstUnionMember = new UnionMember();
+            Server.Instances.AssignInstance(myFirstUnionMember);
             myFirstUnionMember.UnionId = (int) myFirstUnion.Id;
             myFirstUnionMember.CharacterDatabaseId = client.Character.Id;
             myFirstUnionMember.MemberPriviledgeBitMask = 0b11111111;

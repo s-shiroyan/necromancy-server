@@ -41,7 +41,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            NpcSpawn npcSpawn = Server.Instances.CreateInstance<NpcSpawn>();
+            NpcSpawn npcSpawn = new NpcSpawn();
+            Server.Instances.AssignInstance(npcSpawn);
             npcSpawn.NpcId = npcSetting.Id;
             npcSpawn.Name = npcSetting.Name;
             npcSpawn.Title = npcSetting.Title;

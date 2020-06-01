@@ -47,7 +47,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "spawn"
                     : //spawns a new object on the map at your position.  makes a sign above it.  and jumps over it
-                    myGimmick = Server.Instances.CreateInstance<Gimmick>();
+                    myGimmick = new Gimmick();
+                    Server.Instances.AssignInstance(myGimmick);
                     myGimmick.ModelId = x;
                     myGimmick.X = client.Character.X;
                     myGimmick.Y = client.Character.Y;
@@ -66,7 +67,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Logger.Debug($"You just created a gimmick with instance ID {myGimmick.InstanceId}");
 
                     //Add a sign above them so you know their ID.
-                    GGateSpawn gGateSpawn = Server.Instances.CreateInstance<GGateSpawn>();
+                    GGateSpawn gGateSpawn = new GGateSpawn();
+                    Server.Instances.AssignInstance(gGateSpawn);
                     res = BufferProvider.Provide();
                     res.WriteUInt32(gGateSpawn
                         .InstanceId); // Unique Object ID.  Crash if already in use (dont use your character ID)

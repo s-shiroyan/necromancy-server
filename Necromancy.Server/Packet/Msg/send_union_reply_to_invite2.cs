@@ -43,7 +43,8 @@ namespace Necromancy.Server.Packet.Msg
                 client.Union = myUnion;
                 client.Union.Join(client);
 
-                UnionMember myUnionMember = Server.Instances.CreateInstance<UnionMember>();
+                UnionMember myUnionMember = new UnionMember();
+                Server.Instances.AssignInstance(myUnionMember);
                 myUnionMember.UnionId = (int) myUnion.Id;
                 myUnionMember.CharacterDatabaseId = client.Character.Id;
 
@@ -114,8 +115,8 @@ namespace Necromancy.Server.Packet.Msg
                     {
                         continue;
                     }
-                    
-                    
+
+
                     Logger.Debug($"character is named {character.Name}");
                     Logger.Debug($"Soul is named {soul.Name}");
                     TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;

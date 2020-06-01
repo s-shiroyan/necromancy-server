@@ -74,6 +74,16 @@ namespace Necromancy.Server.Setting
         [DataMember(Order = 31)] public ulong DiscordGuild { get; set; }
         [DataMember(Order = 32)] public ulong DiscordBotChannel_ServerStatus { get; set; }
 
+        // Instance Id Pools
+        [DataMember(Order = 40)] public uint PoolCharacterIdLowerBound { get; set; }
+        [DataMember(Order = 41)] public uint PoolCharacterIdSize { get; set; }
+        [DataMember(Order = 42)] public uint PoolNpcLowerBound { get; set; }
+        [DataMember(Order = 43)] public uint PoolNpcIdSize { get; set; }
+        [DataMember(Order = 44)] public uint PoolMonsterIdLowerBound { get; set; }
+        [DataMember(Order = 45)] public uint PoolMonsterIdSize { get; set; }
+        [DataMember(Order = 46)] public uint PoolDynamicIdLowerBound { get; set; }
+        [DataMember(Order = 47)] public uint PoolDynamicIdSize { get; set; }
+
         // Folder
         [DataMember(Order = 60)] public string RepositoryFolder { get; set; }
         [DataMember(Order = 61)] public string SecretsFolder { get; set; }
@@ -97,6 +107,17 @@ namespace Necromancy.Server.Setting
             AreaPort = 60002;
             RequireRegistration = false;
             RequirePin = false;
+
+            uint poolSize = uint.MaxValue / 4;
+            PoolCharacterIdLowerBound = 1;
+            PoolCharacterIdSize = poolSize - 1;
+            PoolNpcLowerBound = poolSize;
+            PoolNpcIdSize = poolSize;
+            PoolMonsterIdLowerBound = poolSize * 1;
+            PoolMonsterIdSize = poolSize;
+            PoolDynamicIdLowerBound = poolSize * 2;
+            PoolDynamicIdSize = poolSize;
+
             LogLevel = 0;
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;
@@ -126,6 +147,14 @@ namespace Necromancy.Server.Setting
             AreaPort = setting.AreaPort;
             RequireRegistration = setting.RequireRegistration;
             RequirePin = setting.RequirePin;
+            PoolCharacterIdLowerBound = setting.PoolCharacterIdLowerBound;
+            PoolCharacterIdSize = setting.PoolCharacterIdSize;
+            PoolNpcLowerBound = setting.PoolNpcLowerBound;
+            PoolNpcIdSize = setting.PoolNpcIdSize;
+            PoolMonsterIdLowerBound = setting.PoolMonsterIdLowerBound;
+            PoolMonsterIdSize = setting.PoolMonsterIdSize;
+            PoolDynamicIdLowerBound = setting.PoolDynamicIdLowerBound;
+            PoolDynamicIdSize = setting.PoolDynamicIdSize;
             LogLevel = setting.LogLevel;
             LogUnknownIncomingPackets = setting.LogUnknownIncomingPackets;
             LogOutgoingPackets = setting.LogOutgoingPackets;
