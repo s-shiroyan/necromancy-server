@@ -41,13 +41,20 @@ namespace Necromancy.Server.Common.Instance
             {
                 foreach (IInstanceIdPool otherPool in _pools)
                 {
-                    if (pool.LowerBound < otherPool.UpperBound && otherPool.LowerBound < pool.UpperBound)
+                    if (pool == otherPool)
+                    {
+                        continue;
+                    }
+
+                    if (pool.LowerBound <= otherPool.UpperBound && otherPool.LowerBound <= pool.UpperBound)
                     {
                         Logger.Error(
                             $"Pool: {pool.Name}({pool.LowerBound}-{pool.UpperBound}) overlaps with Pool {otherPool.Name}({otherPool.LowerBound}-{otherPool.UpperBound})");
                     }
                 }
             }
+
+            LogStatus();
         }
 
         public void AssignInstance(IInstance instance)
@@ -67,17 +74,16 @@ namespace Necromancy.Server.Common.Instance
             }
             else if (_dynamicPool.TryPop(out instanceId))
             {
-                Logger.Info($"Registered dynamic instanceId");
-                return;
+                // noop - retrieved dynamic id
             }
             else
             {
-                Logger.Error($"Failed to retrieve id, object not added");
-                return;
+                instanceId = UnassignedInstanceId;
             }
 
             if (instanceId == UnassignedInstanceId)
             {
+                Logger.Error("Failed to retrieve instanceId");
                 return;
             }
 
@@ -88,6 +94,12 @@ namespace Necromancy.Server.Common.Instance
         public void FreeInstance(IInstance instance)
         {
             uint instanceId = instance.InstanceId;
+            if (instanceId == UnassignedInstanceId)
+            {
+                Logger.Error("Failed to free, instanceId is invalid");
+                return;
+            }
+            
             if (_instances.ContainsKey(instanceId))
             {
                 _instances.Remove(instanceId);
@@ -124,11 +136,12 @@ namespace Necromancy.Server.Common.Instance
         public void LogStatus()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("");
             sb.AppendLine("--- IdPool Status ---");
             foreach (IInstanceIdPool pool in _pools)
             {
                 sb.AppendLine(
-                    $"{pool.Name}: ${pool.Used}/{pool.Size} ({pool.LowerBound}-{pool.UpperBound})");
+                    $"{pool.Name}: {pool.Used}/{pool.Size} ({pool.LowerBound}-{pool.UpperBound})");
             }
 
             sb.AppendLine("---");

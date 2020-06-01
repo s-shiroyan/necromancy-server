@@ -107,17 +107,14 @@ namespace Necromancy.Server.Setting
             AreaPort = 60002;
             RequireRegistration = false;
             RequirePin = false;
-
-            uint poolSize = uint.MaxValue / 4;
-            PoolCharacterIdLowerBound = 1;
-            PoolCharacterIdSize = poolSize - 1;
-            PoolNpcLowerBound = poolSize;
-            PoolNpcIdSize = poolSize;
-            PoolMonsterIdLowerBound = poolSize * 1;
-            PoolMonsterIdSize = poolSize;
-            PoolDynamicIdLowerBound = poolSize * 2;
-            PoolDynamicIdSize = poolSize;
-
+            PoolDynamicIdLowerBound = 1;
+            PoolDynamicIdSize = 1000000;
+            PoolCharacterIdLowerBound = 200000000;
+            PoolCharacterIdSize = 100000000;
+            PoolNpcLowerBound = 400000000;
+            PoolNpcIdSize = 100000000;
+            PoolMonsterIdLowerBound = 600000000;
+            PoolMonsterIdSize = 100000000;
             LogLevel = 0;
             LogUnknownIncomingPackets = true;
             LogOutgoingPackets = true;

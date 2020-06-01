@@ -8,36 +8,34 @@ namespace Necromancy.Server.Common.Instance
         private static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseInstanceIdPool));
 
         private readonly ConcurrentDictionary<uint, uint> _idPool;
-        private readonly uint _lowerBound;
-        private readonly uint _size;
-        private readonly string _name;
 
         public DatabaseInstanceIdPool(string name, uint lowerBound, uint size)
         {
-            _name = name;
             _idPool = new ConcurrentDictionary<uint, uint>();
-            _lowerBound = lowerBound;
-            _size = size;
+            Name = name;
+            LowerBound = lowerBound;
+            Size = size;
+            UpperBound = LowerBound + Size;
         }
 
-        public uint Used => _size - (uint) _idPool.Count;
-        public uint LowerBound => _lowerBound;
-        public uint UpperBound => _lowerBound + _size;
-        public uint Size => _size;
-        public string Name => _name;
+        public uint Used => (uint) _idPool.Count;
+        public uint LowerBound { get; }
+        public uint UpperBound { get; }
+        public uint Size { get; }
+        public string Name { get; }
 
         public uint Assign(uint dbId)
         {
-            if (dbId > _size)
+            if (dbId > Size)
             {
-                Logger.Error($"Exhausted pool size of {_size} for dbId: {dbId}");
+                Logger.Error($"Exhausted pool {Name} size of {Size} for dbId: {dbId}");
                 return InstanceGenerator.UnassignedInstanceId;
             }
 
-            uint instanceId = dbId + _lowerBound;
+            uint instanceId = dbId + LowerBound;
             if (!_idPool.TryAdd(instanceId, dbId))
             {
-                Logger.Error($"DbId: {dbId} already assigned to instanceId: {instanceId}.");
+                Logger.Error($"DbId: {dbId} already assigned to instanceId: {instanceId} for pool {Name}");
                 return InstanceGenerator.UnassignedInstanceId;
             }
 
