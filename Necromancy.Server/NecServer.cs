@@ -77,7 +77,7 @@ namespace Necromancy.Server
 
             NecromancyBot = new NecromancyBot(Setting);
             NecromancyBot.AddSingleton(this);
-            Instances = new InstanceGenerator(Setting);
+            Instances = new InstanceGenerator(this);
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Items = new Dictionary<int, Item>();
@@ -178,6 +178,7 @@ namespace Necromancy.Server
             Character character = client.Character;
             if (character != null)
             {
+                Instances.FreeInstance(character);
                 character.characterActive = false;
             }
         }

@@ -46,8 +46,7 @@ namespace Necromancy.Server.Packet.Msg
                 NecClient otherClient = Server.Clients.GetByCharacterId(unionMemberList.CharacterDatabaseId);
                 if (otherClient == null)
                 {
-                    character = Server.Database.SelectCharacterById(unionMemberList.CharacterDatabaseId);
-                    Server.Instances.AssignDbInstance(character);
+                    character = Server.Instances.GetCharacterByDatabaseId(unionMemberList.CharacterDatabaseId);
                     soul = Server.Database.SelectSoulById(character.SoulId);
                 }
                 else

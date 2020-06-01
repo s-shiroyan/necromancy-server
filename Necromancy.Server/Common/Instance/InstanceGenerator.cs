@@ -21,20 +21,24 @@ namespace Necromancy.Server.Common.Instance
         private readonly DatabaseInstanceIdPool _npcPool;
         private readonly DatabaseInstanceIdPool _monsterPool;
         private readonly List<IInstanceIdPool> _pools;
+        private readonly NecServer _server;
+        private readonly NecSetting _setting;
 
-        public InstanceGenerator(NecSetting setting)
+        public InstanceGenerator(NecServer server)
         {
+            _setting = server.Setting;
+            _server = server;
             _pools = new List<IInstanceIdPool>();
             _instances = new Dictionary<uint, IInstance>();
-            _dynamicPool = new InstanceIdPool("Dynamic", setting.PoolDynamicIdLowerBound, setting.PoolDynamicIdSize);
+            _dynamicPool = new InstanceIdPool("Dynamic", _setting.PoolDynamicIdLowerBound, _setting.PoolDynamicIdSize);
             _pools.Add(_dynamicPool);
-            _characterPool = new DatabaseInstanceIdPool("Character", setting.PoolCharacterIdLowerBound,
-                setting.PoolCharacterIdSize);
+            _characterPool = new DatabaseInstanceIdPool("Character", _setting.PoolCharacterIdLowerBound,
+                _setting.PoolCharacterIdSize);
             _pools.Add(_characterPool);
-            _npcPool = new DatabaseInstanceIdPool("Npc", setting.PoolNpcLowerBound, setting.PoolNpcIdSize);
+            _npcPool = new DatabaseInstanceIdPool("Npc", _setting.PoolNpcLowerBound, _setting.PoolNpcIdSize);
             _pools.Add(_npcPool);
             _monsterPool =
-                new DatabaseInstanceIdPool("Monster", setting.PoolMonsterIdLowerBound, setting.PoolMonsterIdSize);
+                new DatabaseInstanceIdPool("Monster", _setting.PoolMonsterIdLowerBound, _setting.PoolMonsterIdSize);
             _pools.Add(_monsterPool);
 
             foreach (IInstanceIdPool pool in _pools)
@@ -57,6 +61,39 @@ namespace Necromancy.Server.Common.Instance
             LogStatus();
         }
 
+        public Character GetCharacterByDatabaseId(int characterDatabaseId)
+        {
+            uint characterInstanceId = _characterPool.GetInstanceId((uint) characterDatabaseId);
+            IInstance instance = GetInstance(characterInstanceId);
+            if (instance is Character character)
+            {
+                return character;
+            }
+
+            character = _server.Clients.GetCharacterByCharacterId(characterDatabaseId);
+            if (character != null)
+            {
+                Logger.Error(
+                    $"Character {character.Name} in server lookup but not in instance lookup - fix synchronisation");
+                return character;
+            }
+
+            character = _server.Database.SelectCharacterById(characterDatabaseId);
+            if (character != null)
+            {
+                character.InstanceId = characterInstanceId;
+                return character;
+            }
+
+            return null;
+        }
+
+        public Character GetCharacterByInstanceId(uint characterInstanceId)
+        {
+            int characterDatabaseId = _characterPool.GetDatabaseId(characterInstanceId);
+            return GetCharacterByDatabaseId(characterDatabaseId);
+        }
+
         public uint GetCharacterInstanceId(int characterDatabaseId)
         {
             return _characterPool.GetInstanceId((uint) characterDatabaseId);
@@ -65,39 +102,6 @@ namespace Necromancy.Server.Common.Instance
         public int GetCharacterDatabaseId(uint characterInstanceId)
         {
             return _characterPool.GetDatabaseId(characterInstanceId);
-        }
-
-        /// <summary>
-        /// Assigns InstanceId without registering in lookup.
-        /// </summary>
-        public void AssignDbInstance(IInstance instance)
-        {
-            uint instanceId;
-            if (instance is Character character)
-            {
-                instanceId = _characterPool.GetInstanceId((uint) character.Id);
-            }
-            else if (instance is NpcSpawn npc)
-            {
-                instanceId = _npcPool.GetInstanceId((uint) npc.Id);
-            }
-            else if (instance is MonsterSpawn monster)
-            {
-                instanceId = _monsterPool.GetInstanceId((uint) monster.Id);
-            }
-            else
-            {
-                Logger.Error($"Failed to retrieve instanceId, type {instance.GetType()} not supported.");
-                return;
-            }
-
-            if (instanceId == UnassignedInstanceId)
-            {
-                Logger.Error($"Failed to retrieve instanceId for database object type {instance.GetType()}");
-                return;
-            }
-
-            instance.InstanceId = instanceId;
         }
 
         /// <summary>
