@@ -47,6 +47,7 @@ namespace Necromancy.Server.Packet.Msg
                 if (otherClient == null)
                 {
                     character = Server.Database.SelectCharacterById(unionMemberList.CharacterDatabaseId);
+                    Server.Instances.AssignDbInstance(character);
                     soul = Server.Database.SelectSoulById(character.SoulId);
                 }
                 else

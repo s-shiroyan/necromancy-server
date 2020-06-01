@@ -57,33 +57,94 @@ namespace Necromancy.Server.Common.Instance
             LogStatus();
         }
 
-        public void AssignInstance(IInstance instance)
+        public uint GetCharacterInstanceId(int characterDatabaseId)
+        {
+            return _characterPool.GetInstanceId((uint) characterDatabaseId);
+        }
+
+        public int GetCharacterDatabaseId(uint characterInstanceId)
+        {
+            return _characterPool.GetDatabaseId(characterInstanceId);
+        }
+
+        /// <summary>
+        /// Assigns InstanceId without registering in lookup.
+        /// </summary>
+        public void AssignDbInstance(IInstance instance)
         {
             uint instanceId;
             if (instance is Character character)
             {
-                instanceId = _characterPool.Assign((uint) character.Id);
+                instanceId = _characterPool.GetInstanceId((uint) character.Id);
             }
             else if (instance is NpcSpawn npc)
             {
-                instanceId = _npcPool.Assign((uint) npc.Id);
+                instanceId = _npcPool.GetInstanceId((uint) npc.Id);
             }
             else if (instance is MonsterSpawn monster)
             {
-                instanceId = _monsterPool.Assign((uint) monster.Id);
-            }
-            else if (_dynamicPool.TryPop(out instanceId))
-            {
-                // noop - retrieved dynamic id
+                instanceId = _monsterPool.GetInstanceId((uint) monster.Id);
             }
             else
             {
-                instanceId = UnassignedInstanceId;
+                Logger.Error($"Failed to retrieve instanceId, type {instance.GetType()} not supported.");
+                return;
             }
 
             if (instanceId == UnassignedInstanceId)
             {
-                Logger.Error("Failed to retrieve instanceId");
+                Logger.Error($"Failed to retrieve instanceId for database object type {instance.GetType()}");
+                return;
+            }
+
+            instance.InstanceId = instanceId;
+        }
+
+        /// <summary>
+        /// Creates a lookup for the instance and assigns an InstanceId.
+        /// </summary>
+        public void AssignInstance(IInstance instance)
+        {
+            uint instanceId;
+            bool success;
+            if (instance is Character character)
+            {
+                success = _characterPool.TryAssign((uint) character.Id, out instanceId);
+            }
+            else if (instance is NpcSpawn npc)
+            {
+                success = _npcPool.TryAssign((uint) npc.Id, out instanceId);
+            }
+            else if (instance is MonsterSpawn monster)
+            {
+                success = _monsterPool.TryAssign((uint) monster.Id, out instanceId);
+            }
+            else if (_dynamicPool.TryPop(out instanceId))
+            {
+                success = true;
+            }
+            else
+            {
+                instanceId = UnassignedInstanceId;
+                success = false;
+            }
+
+            if (instanceId == UnassignedInstanceId)
+            {
+                Logger.Error($"Failed to retrieve instanceId for type {instance.GetType()}");
+                return;
+            }
+
+            if (!success)
+            {
+                if (_instances.ContainsKey(instanceId))
+                {
+                    // object already exists in lookup.
+                    instance.InstanceId = instanceId;
+                    return;
+                }
+
+                Logger.Error($"Failed to assign instanceId for type {instance.GetType()}");
                 return;
             }
 
@@ -91,6 +152,9 @@ namespace Necromancy.Server.Common.Instance
             _instances.Add(instanceId, instance);
         }
 
+        /// <summary>
+        /// Deletes the lookup.
+        /// </summary>
         public void FreeInstance(IInstance instance)
         {
             uint instanceId = instance.InstanceId;
@@ -99,7 +163,7 @@ namespace Necromancy.Server.Common.Instance
                 Logger.Error("Failed to free, instanceId is invalid");
                 return;
             }
-            
+
             if (_instances.ContainsKey(instanceId))
             {
                 _instances.Remove(instanceId);
@@ -123,14 +187,17 @@ namespace Necromancy.Server.Common.Instance
             }
         }
 
-        public IInstance GetInstance(uint id)
+        /// <summary>
+        /// Retrieves an Instance by InstanceId
+        /// </summary>
+        public IInstance GetInstance(uint instanceId)
         {
-            if (!_instances.ContainsKey(id))
+            if (!_instances.ContainsKey(instanceId))
             {
                 return null;
             }
 
-            return _instances[id];
+            return _instances[instanceId];
         }
 
         public void LogStatus()

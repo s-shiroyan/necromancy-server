@@ -24,22 +24,40 @@ namespace Necromancy.Server.Common.Instance
         public uint Size { get; }
         public string Name { get; }
 
-        public uint Assign(uint dbId)
+        public uint GetInstanceId(uint dbId)
+        {
+            return dbId + LowerBound;
+        }
+
+        public int GetDatabaseId(uint instanceId)
+        {
+            return (int) (instanceId - LowerBound);
+        }
+
+        public bool TryAssign(uint dbId, out uint instanceId)
         {
             if (dbId > Size)
             {
                 Logger.Error($"Exhausted pool {Name} size of {Size} for dbId: {dbId}");
-                return InstanceGenerator.UnassignedInstanceId;
+                instanceId = InstanceGenerator.UnassignedInstanceId;
+                return false;
             }
 
-            uint instanceId = dbId + LowerBound;
+            instanceId = GetInstanceId(dbId);
+            if (_idPool.ContainsKey(instanceId))
+            {
+                // Instance already recorded
+                return false;
+            }
+
             if (!_idPool.TryAdd(instanceId, dbId))
             {
                 Logger.Error($"DbId: {dbId} already assigned to instanceId: {instanceId} for pool {Name}");
-                return InstanceGenerator.UnassignedInstanceId;
+                instanceId = InstanceGenerator.UnassignedInstanceId;
+                return false;
             }
 
-            return instanceId;
+            return true;
         }
 
         public bool Free(uint instanceId)
