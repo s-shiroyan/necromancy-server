@@ -1,6 +1,7 @@
 using System;
 using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
+using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Model.Stats;
@@ -117,11 +118,12 @@ namespace Necromancy.Server.Model
 
         public Character()
         {
-            Id = -1;
-            AccountId = -1;
-            SoulId = -1;
+            InstanceId = InstanceGenerator.InvalidInstanceId;
+            Id = IDatabase.InvalidDatabaseId;
+            AccountId = IDatabase.InvalidDatabaseId;
+            SoulId = IDatabase.InvalidDatabaseId;
             Created = DateTime.Now;
-            MapId = -1;
+            MapId = IDatabase.InvalidDatabaseId;
             X = 0;
             Y = 0;
             Z = 0;

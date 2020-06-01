@@ -34,6 +34,12 @@ namespace Necromancy.Server.Common.Instance
 
         public void Push(uint id)
         {
+            if (id < LowerBound || id > UpperBound)
+            {
+                Logger.Error($"Id: {id} does not belong to pool {Name} ({LowerBound}-{UpperBound})");
+                return;
+            }
+
             _idPool.Push(id);
         }
 

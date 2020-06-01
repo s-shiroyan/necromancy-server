@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Arrowgene.Logging;
+using Necromancy.Server.Database;
 
 namespace Necromancy.Server.Common.Instance
 {
@@ -31,6 +32,12 @@ namespace Necromancy.Server.Common.Instance
 
         public int GetDatabaseId(uint instanceId)
         {
+            if (instanceId < LowerBound || instanceId > UpperBound)
+            {
+                Logger.Error($"InstanceId: {instanceId} does not belong to pool {Name} ({LowerBound}-{UpperBound})");
+                return IDatabase.InvalidDatabaseId;
+            }
+
             return (int) (instanceId - LowerBound);
         }
 
@@ -39,7 +46,7 @@ namespace Necromancy.Server.Common.Instance
             if (dbId > Size)
             {
                 Logger.Error($"Exhausted pool {Name} size of {Size} for dbId: {dbId}");
-                instanceId = InstanceGenerator.UnassignedInstanceId;
+                instanceId = InstanceGenerator.InvalidInstanceId;
                 return false;
             }
 
@@ -53,7 +60,7 @@ namespace Necromancy.Server.Common.Instance
             if (!_idPool.TryAdd(instanceId, dbId))
             {
                 Logger.Error($"DbId: {dbId} already assigned to instanceId: {instanceId} for pool {Name}");
-                instanceId = InstanceGenerator.UnassignedInstanceId;
+                instanceId = InstanceGenerator.InvalidInstanceId;
                 return false;
             }
 

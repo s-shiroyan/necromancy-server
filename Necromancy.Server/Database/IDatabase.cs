@@ -8,6 +8,8 @@ namespace Necromancy.Server.Database
 {
     public interface IDatabase
     {
+        const int InvalidDatabaseId = -1;
+        
         long Version { get; set; }
 
         void Execute(string sql);

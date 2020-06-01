@@ -13,7 +13,7 @@ namespace Necromancy.Server.Common.Instance
     {
         private static readonly ILogger Logger = LogProvider.Logger(typeof(InstanceGenerator));
 
-        public const uint UnassignedInstanceId = 0;
+        public const uint InvalidInstanceId = 0;
 
         private readonly Dictionary<uint, IInstance> _instances;
         private readonly InstanceIdPool _dynamicPool;
@@ -129,11 +129,11 @@ namespace Necromancy.Server.Common.Instance
             }
             else
             {
-                instanceId = UnassignedInstanceId;
+                instanceId = InvalidInstanceId;
                 success = false;
             }
 
-            if (instanceId == UnassignedInstanceId)
+            if (instanceId == InvalidInstanceId)
             {
                 Logger.Error($"Failed to retrieve instanceId for type {instance.GetType()}");
                 return;
@@ -162,7 +162,7 @@ namespace Necromancy.Server.Common.Instance
         public void FreeInstance(IInstance instance)
         {
             uint instanceId = instance.InstanceId;
-            if (instanceId == UnassignedInstanceId)
+            if (instanceId == InvalidInstanceId)
             {
                 Logger.Error("Failed to free, instanceId is invalid");
                 return;
