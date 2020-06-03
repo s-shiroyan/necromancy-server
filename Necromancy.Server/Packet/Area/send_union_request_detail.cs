@@ -97,9 +97,9 @@ namespace Necromancy.Server.Packet.Msg
                         Router.Send(client, (ushort) MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
                     }
 
-                    uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionLeaderId);
-                    uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader1Id);
-                    uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader2Id);
+                    uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.LeaderId);
+                    uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader1Id);
+                    uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader2Id);
 
                     //Notify client if msg server found Union settings in database(memory) for client character Unique Persistant ID.
                     IBuffer res = BufferProvider.Provide();

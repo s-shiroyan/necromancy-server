@@ -38,7 +38,7 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteFixedString($"{client.Character.Name}", 0x5B);
             res2.WriteUInt32(client.Character.ClassId);
             res2.WriteByte(client.Character.Level);
-            res2.WriteByte(2); //Criminal Status
+            res2.WriteByte(client.Character.criminalState); //Criminal Status
             res2.WriteByte(1); //Beginner Protection (bool) 
             res2.WriteByte(1); //Membership Status
             res2.WriteByte(1);
