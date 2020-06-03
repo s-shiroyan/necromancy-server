@@ -211,19 +211,21 @@ CREATE TABLE IF NOT EXISTS `nec_block_list`
 
 CREATE TABLE IF NOT EXISTS `nec_union`
 (
-    `id`                    INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-    `name`                  TEXT     NOT NULL,
+    `id`                        INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    `name`                      TEXT     NOT NULL,
     `leader_character_id`       INTEGER  NOT NULL,
-    `subleader1_character_id`  INTEGER,
-    `subleader2_character_id`  INTEGER,
-    `level`                 INTEGER  NOT NULL,
-    `current_exp`           INTEGER  NOT NULL,
-    `next_level_exp`        INTEGER  NOT NULL,
-    `member_limit_increase` INTEGER  NOT NULL,
-    `cape_design_id`        INTEGER,
-    `union_news`            TEXT,
-    `created`               DATETIME NOT NULL,
-    FOREIGN KEY (`leader_character_id`) REFERENCES `nec_character` (`id`)
+    `subleader1_character_id`   INTEGER,
+    `subleader2_character_id`   INTEGER,
+    `level`                     INTEGER  NOT NULL,
+    `current_exp`               INTEGER  NOT NULL,
+    `next_level_exp`            INTEGER  NOT NULL,
+    `member_limit_increase`     INTEGER  NOT NULL,
+    `cape_design_id`            INTEGER,
+    `union_news`                TEXT,
+    `created`                   DATETIME NOT NULL,
+    CONSTRAINT `fk_nec_union_leader_character_id` FOREIGN KEY (`leader_character_id`) REFERENCES `nec_character` (`id`)
+    CONSTRAINT `fk_nec_union_subleader1_character_id` FOREIGN KEY (`subleader1_character_id`) REFERENCES `nec_character` (`id`)
+    CONSTRAINT `fk_nec_union_subleader2_character_id` FOREIGN KEY (`subleader2_character_id`) REFERENCES `nec_character` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_member`
