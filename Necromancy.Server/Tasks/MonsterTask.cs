@@ -253,13 +253,13 @@ namespace Necromancy.Server.Tasks
                             //Casters
                             if (_monster.MonsterId == 100201)
                             {
-                                skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
-                                Logger.Debug($"attackId [200301411]");
-                                //_monster.MonsterStop(Server,8, 231, 2.0F);
-                                StartMonsterCastQueue(200301411, skillInstanceId);
-                                PlayerDamage();
-                                waitTime = 2000;
-                                CastState = 1;
+                             //  skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
+                             //  Logger.Debug($"attackId [200301411]");
+                             //  //_monster.MonsterStop(Server,8, 231, 2.0F);
+                             //  StartMonsterCastQueue(200301411, skillInstanceId);
+                             //  PlayerDamage();
+                             //  waitTime = 2000;
+                             //  CastState = 1;
                             }
                             //Melee Attackers
                             else

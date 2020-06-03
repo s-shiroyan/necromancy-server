@@ -146,20 +146,5 @@ namespace Necromancy.Server.Model
             return null;
         }
 
-        /// <summary>
-        /// Returns a characterInstanceId by characterId.
-        /// </summary>
-        public bool GetCharacterInstanceIdByCharacterId(int characterId, out uint instanceId)
-        {
-            Character character = GetCharacterByCharacterId(characterId);
-            if (character == null)
-            {
-                instanceId = 0;
-                return false;
-            }
-
-            instanceId = character.InstanceId;
-            return true;
-        }
     }
 }

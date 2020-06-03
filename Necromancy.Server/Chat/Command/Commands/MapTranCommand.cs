@@ -50,7 +50,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "spawn"
                     : //spawns a new object on the map at your position.  makes a sign above it.  and jumps over it
-                    myMapTransition = Server.Instances.CreateInstance<MapTransition>();
+                    myMapTransition = new MapTransition();
+                    Server.Instances.AssignInstance(myMapTransition);
 
                     IBuffer res1 = BufferProvider.Provide(); // it's the aura portal for map
                     res1.WriteUInt32(myMapTransition.InstanceId); // Unique ID

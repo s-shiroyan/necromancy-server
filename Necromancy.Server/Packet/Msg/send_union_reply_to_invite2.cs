@@ -43,7 +43,8 @@ namespace Necromancy.Server.Packet.Msg
                 client.Union = myUnion;
                 client.Union.Join(client);
 
-                UnionMember myUnionMember = Server.Instances.CreateInstance<UnionMember>();
+                UnionMember myUnionMember = new UnionMember();
+                Server.Instances.AssignInstance(myUnionMember);
                 myUnionMember.UnionId = (int) myUnion.Id;
                 myUnionMember.CharacterDatabaseId = client.Character.Id;
 
@@ -55,14 +56,9 @@ namespace Necromancy.Server.Packet.Msg
 
                 Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
 
-                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionLeaderId,
-                    out uint UnionLeaderInstanceId);
-
-                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader1Id,
-                    out uint UnionSubLeader1InstanceId);
-
-                Server.Clients.GetCharacterInstanceIdByCharacterId(myUnion.UnionSubLeader2Id,
-                    out uint UnionSubLeader2InstanceId);
+                uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionLeaderId);
+                uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader1Id);
+                uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader2Id);
 
                 TimeSpan difference = client.Union.Created.ToUniversalTime() - DateTime.UnixEpoch;
                 int unionCreatedCalculation = (int) Math.Floor(difference.TotalSeconds);
@@ -114,8 +110,8 @@ namespace Necromancy.Server.Packet.Msg
                     {
                         continue;
                     }
-                    
-                    
+
+
                     Logger.Debug($"character is named {character.Name}");
                     Logger.Debug($"Soul is named {soul.Name}");
                     TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;

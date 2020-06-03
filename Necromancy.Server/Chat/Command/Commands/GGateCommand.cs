@@ -73,7 +73,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "spawn"
                     : //spawns a new object on the map at your position.  makes a sign above it.  and jumps over it
-                    myGGateSpawn = Server.Instances.CreateInstance<GGateSpawn>();
+                    myGGateSpawn = new GGateSpawn();
+                    Server.Instances.AssignInstance(myGGateSpawn);
                     myGGateSpawn.ModelId = x;
                     myGGateSpawn.X = client.Character.X;
                     myGGateSpawn.Y = client.Character.Y;
