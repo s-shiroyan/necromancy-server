@@ -9,20 +9,20 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertUnion =
-            "INSERT INTO `nec_union` (`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created`)VALUES(@name,@union_leader_id,@union_sub_leader1_id,@union_sub_leader2_id,@level,@current_exp,@next_level_exp,@member_limit_increase,@cape_design_id,@union_news,@created);";
+            "INSERT INTO `nec_union` (`name`,`leader_character_id`,`subleader1_character_id`,`subleader2_character_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created`)VALUES(@name,@leader_character_id,@subleader1_character_id,@subleader2_character_id,@level,@current_exp,@next_level_exp,@member_limit_increase,@cape_design_id,@union_news,@created);";
         
         private const string SqlSelectUnionById =
-            "SELECT `id`,`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `id`=@id;";
+            "SELECT `id`,`name`,`leader_character_id`,`subleader1_character_id`,`subleader2_character_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `id`=@id;";
 
-        private const string SqlSelectUnionByUnionLeaderId =
-            "SELECT `id`,`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `union_leader_id`=@union_leader_id;";
+        private const string SqlSelectUnionByLeaderId =
+            "SELECT `id`,`name`,`leader_character_id`,`subleader1_character_id`,`subleader2_character_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `leader_character_id`=@leader_character_id;";
         
         private const string SqlSelectUnionByName =
-            "SELECT `id`,`name`,`union_leader_id`,`union_sub_leader1_id`,`union_sub_leader2_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `name`=@name;";
+            "SELECT `id`,`name`,`leader_character_id`,`subleader1_character_id`,`subleader2_character_id`,`level`,`current_exp`,`next_level_exp`,`member_limit_increase`,`cape_design_id`,`union_news`,`created` FROM `nec_union` WHERE `name`=@name;";
 
 
         private const string SqlUpdateUnion =
-            "UPDATE `nec_union` SET `id`=@id,`name`=@name,`union_leader_id`=@union_leader_id,`union_sub_leader1_id`=@union_sub_leader1_id,`union_sub_leader2_id`=@union_sub_leader2_id,`level`=@level,`current_exp`=@current_exp,`next_level_exp`=@next_level_exp,`member_limit_increase`=@member_limit_increase,`cape_design_id`=@cape_design_id,`union_news`=@union_news,`created`=@created WHERE `id`=@id;";
+            "UPDATE `nec_union` SET `id`=@id,`name`=@name,`leader_character_id`=@leader_character_id,`subleader1_character_id`=@subleader1_character_id,`subleader2_character_id`=@subleader2_character_id,`level`=@level,`current_exp`=@current_exp,`next_level_exp`=@next_level_exp,`member_limit_increase`=@member_limit_increase,`cape_design_id`=@cape_design_id,`union_news`=@union_news,`created`=@created WHERE `id`=@id;";
 
         private const string SqlDeleteUnion =
             "DELETE FROM `nec_union` WHERE `id`=@id;";
@@ -33,9 +33,9 @@ namespace Necromancy.Server.Database.Sql.Core
             {
                 //AddParameter(command, "@id", union.Id);
                 AddParameter(command, "@name", union.Name);
-                AddParameter(command, "@union_leader_id", union.UnionLeaderId);
-                AddParameter(command, "@union_sub_leader1_id", union.UnionSubLeader1Id);
-                AddParameter(command, "@union_sub_leader2_id", union.UnionSubLeader2Id);
+                AddParameter(command, "@leader_character_id", union.LeaderId);
+                AddParameter(command, "@subleader1_character_id", union.SubLeader1Id);
+                AddParameter(command, "@subleader2_character_id", union.SubLeader2Id);
                 AddParameter(command, "@level", union.Level);
                 AddParameter(command, "@current_exp", union.CurrentExp);
                 AddParameter(command, "@next_level_exp", union.NextLevelExp);
@@ -66,11 +66,11 @@ namespace Necromancy.Server.Database.Sql.Core
                 });
             return union;
         }
-        public Union SelectUnionByUnionLeaderId(int leaderId)
+        public Union SelectUnionByLeaderId(int leaderId)
         {
             Union union = null;
-            ExecuteReader(SqlSelectUnionByUnionLeaderId,
-                command => { AddParameter(command, "@union_leader_id", leaderId); }, reader =>
+            ExecuteReader(SqlSelectUnionByLeaderId,
+                command => { AddParameter(command, "@leader_character_id", leaderId); }, reader =>
                 {
                     if (reader.Read())
                     {
@@ -100,9 +100,9 @@ namespace Necromancy.Server.Database.Sql.Core
             {
                 AddParameter(command, "@id", union.Id);
                 AddParameter(command, "@name", union.Name);
-                AddParameter(command, "@union_leader_id", union.UnionLeaderId);
-                AddParameter(command, "@union_sub_leader1_id", union.UnionSubLeader1Id);
-                AddParameter(command, "@union_sub_leader2_id", union.UnionSubLeader2Id);
+                AddParameter(command, "@leader_character_id", union.LeaderId);
+                AddParameter(command, "@subleader1_character_id", union.SubLeader1Id);
+                AddParameter(command, "@subleader2_character_id", union.SubLeader2Id);
                 AddParameter(command, "@level", union.Level);
                 AddParameter(command, "@current_exp", union.CurrentExp);
                 AddParameter(command, "@next_level_exp", union.NextLevelExp);
@@ -126,9 +126,9 @@ namespace Necromancy.Server.Database.Sql.Core
                 Union union = new Union();
                 union.Id = GetInt32(reader, "id");
                 union.Name = GetStringNullable(reader, "name");
-                union.UnionLeaderId = GetInt32(reader, "union_leader_id");
-                union.UnionSubLeader1Id = GetInt32(reader, "union_sub_leader1_id");
-                union.UnionSubLeader2Id = GetInt32(reader, "union_sub_leader1_id");
+                union.LeaderId = GetInt32(reader, "leader_character_id");
+                union.SubLeader1Id = GetInt32(reader, "subleader1_character_id");
+                union.SubLeader2Id = GetInt32(reader, "subleader1_character_id");
                 union.Level = (uint)GetInt32(reader, "level");
                 union.CurrentExp = (uint)GetInt32(reader, "current_exp");
                 union.NextLevelExp = (uint)GetInt32(reader, "next_level_exp");

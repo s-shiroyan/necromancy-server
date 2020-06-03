@@ -111,7 +111,7 @@ namespace Necromancy.Server.Database
         //Union
         bool InsertUnion(Union union);
         Union SelectUnionById(int unionId);
-        Union SelectUnionByUnionLeaderId(int leaderId);
+        Union SelectUnionByLeaderId(int leaderId);
         Union SelectUnionByName(string unionName);
         bool UpdateUnion(Union union);
         bool DeleteUnion(int unionId);

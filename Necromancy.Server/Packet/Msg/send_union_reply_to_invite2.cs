@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Msg
                 $"replyToInstanceId {replyToInstanceId} resultAcceptOrDeny {resultAcceptOrDeny} replyToClient.Character.unionId {replyToClient.Character.unionId}");
 
             //Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
-            Union myUnion = Server.Database.SelectUnionByUnionLeaderId(replyToClient.Character.Id);
+            Union myUnion = Server.Database.SelectUnionByLeaderId(replyToClient.Character.Id);
             Logger.Debug($"my union is {myUnion.Name}");
             IBuffer res5 = BufferProvider.Provide();
 
@@ -56,9 +56,9 @@ namespace Necromancy.Server.Packet.Msg
 
                 Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
 
-                uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionLeaderId);
-                uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader1Id);
-                uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.UnionSubLeader2Id);
+                uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.LeaderId);
+                uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader1Id);
+                uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader2Id);
 
                 TimeSpan difference = client.Union.Created.ToUniversalTime() - DateTime.UnixEpoch;
                 int unionCreatedCalculation = (int) Math.Floor(difference.TotalSeconds);

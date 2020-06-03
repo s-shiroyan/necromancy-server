@@ -77,7 +77,7 @@ namespace Necromancy.Server.Packet.Area
             Server.Instances.AssignInstance(myFirstUnion);
             client.Character.unionId = (int) myFirstUnion.InstanceId;
             myFirstUnion.Name = unionName;
-            myFirstUnion.UnionLeaderId = client.Character.Id;
+            myFirstUnion.LeaderId = client.Character.Id;
             client.Union = myFirstUnion;
 
             if (!Server.Database.InsertUnion(myFirstUnion))
