@@ -5,6 +5,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
+using System.Numerics;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -136,123 +137,36 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
                 Router.Send(client, (ushort) AreaPacketId.recv_object_point_move_r, res3, ServerType.Area);
             }
-
-            //CheckMapChange(client);
+            //Logic to see if you are in range of a map transition
+            CheckMapChange(client);
         }
 
         private void CheckMapChange(NecClient client)
         {
-            MapPosition mapPos = new MapPosition();
-            switch (client.Character.MapId)
+            Vector3 characterPos = new Vector3(client.Character.X, client.Character.Y, client.Character.Z);
+
+            foreach (MapTransition mapTransition in client.Map.MapTransitions.Values)
             {
-                case 1001001:
-                    if ((client.Character.X < 4842.5 && client.Character.X > 4282) && client.Character.Y > 4448)
+                bool transition = ((characterPos.X - mapTransition.LeftPos.X) * (mapTransition.RightPos.Y - mapTransition.LeftPos.Y)) -
+                        ((characterPos.Y - mapTransition.LeftPos.Y) * (mapTransition.RightPos.X - mapTransition.LeftPos.X)) <= 0;
+
+                if (transition)
+                {
+                    if (!Server.Maps.TryGet(mapTransition.TransitionMapId, out Map transitionMap))
                     {
-                        Map map = Server.Maps.Get(1001004);
-                        mapPos.X = 1;
-                        mapPos.Y = 1;
-                        mapPos.Z = 1;
-                        mapPos.Heading = 0;
-                        map.EnterForce(client, mapPos);
-                    }
-                    else if ((client.Character.X < 225 && client.Character.X > 50) && client.Character.Y > 10200)
-                    {
-                        Map map = Server.Maps.Get(1001007);
-                        mapPos.X = -5622;
-                        mapPos.Y = -5874;
-                        mapPos.Z = 1;
-                        mapPos.Heading = 93;
-                        map.EnterForce(client, mapPos);
-                    }
-                    else if (client.Character.X > 6800 && (client.Character.Y > 945 && client.Character.Y < 1723))
-                    {
-                        Map map = Server.Maps.Get(1001902);
-                        mapPos.X = 22697;
-                        mapPos.Y = -180;
-                        mapPos.Z = 5;
-                        mapPos.Heading = 132;
-                        map.EnterForce(client, mapPos);
+                        return;
                     }
 
-                    break;
-                case 1001002:
-                case 1001902:
-                    if (client.Character.X < 21797 && (client.Character.Y > -755 && client.Character.Y < 485))
-                    {
-                        Map map = Server.Maps.Get(1001001);
-                        mapPos.X = 6700;
-                        mapPos.Y = 1452;
-                        mapPos.Z = -3;
-                        mapPos.Heading = 51;
-                        map.EnterForce(client, mapPos);
-                    }
-                    else if ((client.Character.X > 36246 && client.Character.X < 37254) && client.Character.Y > 5313)
-                    {
-                        Map map = Server.Maps.Get(1001003);
-                        mapPos.X = 3701;
-                        mapPos.Y = -7057;
-                        mapPos.Z = 5;
-                        mapPos.Heading = 0;
-                        map.EnterForce(client, mapPos);
-                    }
+                    //client.Character.mapChange = true;
+                    transitionMap.EnterForce(client, mapTransition.ToPos);
+                }
 
-                    break;
-                case 1001003:
-                    if ((client.Character.X < 3926 && client.Character.X > 3518) && client.Character.Y < -7511)
-                    {
-                        Map map = Server.Maps.Get(1001902);
-                        mapPos.X = 36638;
-                        mapPos.Y = 5216;
-                        mapPos.Z = -10;
-                        mapPos.Heading = 87;
-                        map.EnterForce(client, mapPos);
-                    }
-
-                    break;
-                case 1001004:
-                    if ((client.Character.X < 1046 && client.Character.X > -1062) && client.Character.Y > 5300)
-                    {
-                        Map map = Server.Maps.Get(1001009);
-                        mapPos.X = -410;
-                        mapPos.Y = -859;
-                        mapPos.Z = 68;
-                        mapPos.Heading = 0;
-                        map.EnterForce(client, mapPos);
-                    }
-                    else if (client.Character.X < -413 && (client.Character.Y > -712 && client.Character.Y < -345))
-                    {
-                        Map map = Server.Maps.Get(1001001);
-                        mapPos.X = 4243;
-                        mapPos.Y = 4492;
-                        mapPos.Z = 405;
-                        mapPos.Heading = 67;
-                        map.EnterForce(client, mapPos);
-                    }
-
-                    break;
-                case 1001005:
-                    break;
-                case 1001006:
-                    break;
-                case 1001007:
-                    if ((client.Character.X < -5400 && client.Character.X > -5845) && client.Character.Y < -6288)
-                    {
-                        Map map = Server.Maps.Get(1001001);
-                        mapPos.X = 159;
-                        mapPos.Y = 9952;
-                        mapPos.Z = 601;
-                        mapPos.Heading = 46;
-                        map.EnterForce(client, mapPos);
-                    }
-
-                    break;
-                case 1001008:
-                    break;
-                case 1001009:
-                    break;
-                default:
-                    break;
+                Logger.Debug(
+                    $"{client.Character.Name} in range [transition] id {mapTransition.Id} Instance {mapTransition.InstanceId} to destination {mapTransition.TransitionMapId}[{transition}].");
+            
             }
+
         }
+
     }
 }
