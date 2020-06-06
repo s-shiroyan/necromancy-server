@@ -31,7 +31,6 @@ namespace Necromancy.Server.Packet.Msg
             Router.Send(client, (ushort) MsgPacketId.recv_union_request_set_info_r, res, ServerType.Msg);
 
             //ToDo
-            //Notify all union members immediatly that news has changed 
             //L"network::proto_msg_implement_client::recv_union_notify_info()\n"
             //Permissions check for news updating based on 'newsUpdatedByInstanceId'. Returns 0 or 1709
             //Naughty word scrubbing for 'banned words' returns 1715
@@ -42,7 +41,7 @@ namespace Necromancy.Server.Packet.Msg
             res2.WriteInt32(0); //Error check probably.  0 means success?
             res2.WriteCString($"{unionNews}"); //max size 0x196
 
-            Router.Send(client.Map /*myUnion.UnionMembers*/, (ushort) MsgPacketId.recv_union_notify_info, res2,
+            Router.Send(client.Union.UnionMembers, (ushort) MsgPacketId.recv_union_notify_info, res2,
                 ServerType.Msg);
         }
     }

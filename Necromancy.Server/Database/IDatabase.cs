@@ -8,6 +8,8 @@ namespace Necromancy.Server.Database
 {
     public interface IDatabase
     {
+        const int InvalidDatabaseId = -1;
+        
         long Version { get; set; }
 
         void Execute(string sql);
@@ -109,7 +111,7 @@ namespace Necromancy.Server.Database
         //Union
         bool InsertUnion(Union union);
         Union SelectUnionById(int unionId);
-        Union SelectUnionByUnionLeaderId(int leaderId);
+        Union SelectUnionByLeaderId(int leaderId);
         Union SelectUnionByName(string unionName);
         bool UpdateUnion(Union union);
         bool DeleteUnion(int unionId);

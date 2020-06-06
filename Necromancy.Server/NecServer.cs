@@ -75,9 +75,9 @@ namespace Necromancy.Server
             _running = false;
             Setting = new NecSetting(setting);
 
-            NecromancyBot = new NecromancyBot(setting);
+            NecromancyBot = new NecromancyBot(Setting);
             NecromancyBot.AddSingleton(this);
-            Instances = new InstanceGenerator();
+            Instances = new InstanceGenerator(this);
             Clients = new ClientLookup();
             Maps = new MapLookup();
             Items = new Dictionary<int, Item>();
@@ -118,6 +118,28 @@ namespace Necromancy.Server
             LoadHandler();
         }
 
+        public void Start()
+        {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            _authServer.Start();
+            _msgServer.Start();
+            _areaServer.Start();
+            _running = true;
+            NecromancyBot.Start();
+            NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
+        }
+
+        public void Stop()
+        {
+            NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
+            _authServer.Stop();
+            _msgServer.Stop();
+            _areaServer.Stop();
+            _running = false;
+            NecromancyBot.Stop();
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainOnUnhandledException;
+        }
+
         private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Stop();
@@ -156,30 +178,9 @@ namespace Necromancy.Server
             Character character = client.Character;
             if (character != null)
             {
+                Instances.FreeInstance(character);
                 character.characterActive = false;
             }
-        }
-
-        public void Start()
-        {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-            _authServer.Start();
-            _msgServer.Start();
-            _areaServer.Start();
-            _running = true;
-            NecromancyBot.Start();
-            NecromancyBot.EnqueueEvent_ServerStatus("Hello! I'm Online!");
-        }
-
-        public void Stop()
-        {
-            NecromancyBot.Send_ServerStatus("Bye Byte, I'm Offline");
-            _authServer.Stop();
-            _msgServer.Stop();
-            _areaServer.Stop();
-            _running = false;
-            NecromancyBot.Stop();
-            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainOnUnhandledException;
         }
 
         private void LoadChatCommands()
