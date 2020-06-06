@@ -4,7 +4,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Setting;
 
-namespace Necromancy.Server.Packet.Receive
+namespace Necromancy.Server.Packet.Receive.Auth
 {
     public class RecvBaseSelectWorld : PacketResponse
     {

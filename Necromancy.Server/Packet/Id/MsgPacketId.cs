@@ -8,16 +8,15 @@ namespace Necromancy.Server.Packet.Id
     public enum MsgPacketId : ushort
     {
         // Recv OP Codes - Switch: 0x4E4268 - ordered by op code
-        recv_0x6C49 = 0x6C94,
+        recv_0x6C94 = 0x6C94,
         recv_0x8D74 = 0x8D74,
         recv_0x9A9B = 0x9A9B,
         recv_0x95E6 = 0x95E6,
         recv_0x831C = 0x831C,
-        recv_0xC8D2 = 0xC8D2,
         recv_0xC991 = 0xC991,
-        recv_0xD2D6 = 0xD2D6, //recv_base_ping_r
         recv_base_check_version_r = 0xEFDD,
         recv_base_login_r = 0xA68E,
+        recv_base_ping_r = 0xD2D6,
         recv_cash_buy_premium_r = 0x6FF,
         recv_cash_buy_start_r = 0x9E49,
         recv_cash_get_url_commerce_r = 0x4426,
@@ -40,7 +39,7 @@ namespace Necromancy.Server.Packet.Id
         recv_chara_select_channel_r = 0xA535,
         recv_chara_select_r = 0x482,
         recv_chat_notify_message = 0xC003,
-        recv_cpf_authentication = 0xBA73,
+        recv_cpf_authenticate = 0xBA73,
         recv_cpf_notify_error = 0x73D7,
         recv_dbg_message = 0x9DE2,
         recv_easy_friend_notify_add_member = 0x7566,
@@ -69,6 +68,8 @@ namespace Necromancy.Server.Packet.Id
         recv_party_notify_change_mode = 0xD1A8,
         recv_party_notify_dead = 0x182B,
         recv_party_notify_decline_to_apply = 0x8EEE,
+        recv_party_notify_decline_to_invite = 0xC8D2,
+        recv_party_notify_detach_buff = 0x680C,
         recv_party_notify_disband = 0x5F9A,
         recv_party_notify_establish = 0xD0AC,
         recv_party_notify_get_item = 0xF7F0,

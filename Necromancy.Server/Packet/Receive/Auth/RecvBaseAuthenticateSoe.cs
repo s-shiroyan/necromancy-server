@@ -3,7 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Receive
+namespace Necromancy.Server.Packet.Receive.Auth
 {
     public class RecvBaseAuthenticateSoe : PacketResponse
     {
