@@ -62,6 +62,7 @@ namespace Necromancy.Server.Packet.Area
                             {x => x == 74013271, () => ChangeMap(client, npcSpawn.NpcId)},
                             {x => x == 10000002, () => RegularInn(client, npcSpawn.NpcId, npcSpawn)},
                             {x => x == 10000703, () => CrimInn(client, npcSpawn.NpcId, npcSpawn)},
+                            { x => x == 10000004 ,  () => SoulRankNPC(client, npcSpawn.NpcId, npcSpawn)},
                             {
                                 x => x < 10,
                                 () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")
@@ -538,5 +539,33 @@ namespace Necromancy.Server.Packet.Area
             client.Character.eventSelectReadyCode = 0;
             client.Character.secondInnAccess = false;
         }
+
+        private void SoulRankNPC(NecClient client, int objectId, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            switch (client.Character.eventSelectExecCode)
+            {
+                case 0:
+                    SendEventEnd(client);
+                    break;
+                case 1:
+                    SendEventEnd(client);
+                    break;
+                case 2:
+                    SendEventEnd(client);
+                    break;
+                case 3:
+                    SendEventEnd(client);
+                    break;
+                case 4:
+                    SendEventEnd(client);
+                    break;
+                case 5:
+                    SendEventEnd(client);
+                    break;
+            }
+
+        }
+
     }
 }
