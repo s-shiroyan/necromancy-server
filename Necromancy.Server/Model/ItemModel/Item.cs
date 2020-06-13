@@ -107,7 +107,7 @@ namespace Necromancy.Server.Model.ItemModel
         public static EquipmentSlotType GetEquipmentSlotTypeBySlotNumber(int slotNumber)
         {
             EquipmentSlotType equipmentSlotType = EquipmentSlotType.NONE;
-            if (slotNumber > 0)
+            if (slotNumber >= 0)
             {
                 int value = 1 << slotNumber;
                 if (Enum.IsDefined(typeof(EquipmentSlotType), value))

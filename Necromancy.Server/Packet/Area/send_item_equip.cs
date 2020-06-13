@@ -45,6 +45,14 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
+            InventoryItem equippedItem = client.Inventory.GetEquippedInventoryItem(inventoryItem.Item.EquipmentSlotType);
+            if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+            {
+                equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                Router.Send(recvItemUpdateEqMaskCurr, client);
+            }
+            
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);

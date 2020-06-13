@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Model.ItemModel
 {
@@ -27,7 +29,7 @@ namespace Necromancy.Server.Model.ItemModel
                 for (int i = 0; i < bag.Length; i++)
                 {
                     InventoryItem inventoryItem = bag[i];
-                    if (inventoryItem != null && inventoryItem.CurrentEquipmentSlotType == equipmentSlotType)
+                    if (inventoryItem != null && (inventoryItem.CurrentEquipmentSlotType.HasFlag(equipmentSlotType))
                     {
                         return inventoryItem;
                     }
@@ -120,6 +122,22 @@ namespace Necromancy.Server.Model.ItemModel
             }
 
             return true;
+        }
+
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Inventory));
+        public void LogEquppedItems()
+        {
+            foreach (InventoryItem[] bag in _inventory.Values)
+            {
+                for (int i = 0; i < bag.Length; i++)
+                {
+                    InventoryItem inventoryItem = bag[i];
+                    if (inventoryItem != null && inventoryItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                    {
+                        Logger.Debug($"Equipped: {inventoryItem.Id} {inventoryItem.Item.Name} -> {inventoryItem.CurrentEquipmentSlotType}");
+                    }
+                }
+            }
         }
     }
 }
