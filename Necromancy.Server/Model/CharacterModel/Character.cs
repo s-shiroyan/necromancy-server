@@ -70,7 +70,7 @@ namespace Necromancy.Server.Model
         public int MapId { get; set; }
 
         //Temporary Value Holders
-        public int WeaponType { get; set; }
+        public int stepCount { get; set; }
         public int AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
@@ -130,7 +130,6 @@ namespace Necromancy.Server.Model
             Slot = 0;
             Name = null;
             Level = 0;
-            WeaponType = 8;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;
             Hp = new BaseStat(1000, 1000);
@@ -164,6 +163,7 @@ namespace Necromancy.Server.Model
             criminalState = 0;
             helperTextAbdul = true;
             mapChange = false;
+            stepCount = 0;
         }
 
         public bool characterActive
