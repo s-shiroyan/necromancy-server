@@ -70,15 +70,25 @@ namespace Necromancy.Server.Model
             List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(mapData.Id);
             foreach (MapTransition mapTran in mapTransitions)
             {
-                mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth/2 * Math.Cos(mapTran.MaplinkHeading));
-                mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth/2 * Math.Sin(mapTran.MaplinkHeading));
-                mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth/2 * Math.Cos(mapTran.MaplinkHeading));
-                mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth/2 * Math.Sin(mapTran.MaplinkHeading));
+                if (!mapTran.InvertedTransition)
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                }
+                else
+                {
+                    Logger.Debug($"{mapTran.Id} is an inverted transition");
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                }
 
                 server.Instances.AssignInstance(mapTran);
-             //   mapTran.Start(_server, this);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);
-                Logger.Debug($"Loaded Map transition {mapTran.InstanceId} on map {this.FullName}");
+                Logger.Debug($"Loaded Map transition {mapTran.Id} on map {this.FullName}");
             }
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
