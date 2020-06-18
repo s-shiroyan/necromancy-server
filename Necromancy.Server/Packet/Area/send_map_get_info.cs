@@ -81,7 +81,7 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
             {
-                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(this.Id, mapTran.ReferencePos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor, mapTran.MaplinkHeading);
+                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(mapTran.InstanceId, mapTran.ReferencePos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor, mapTran.MaplinkHeading);
                 Router.Send(mapLink, client);
 
                 GGateSpawn gGateSpawn = new GGateSpawn();
