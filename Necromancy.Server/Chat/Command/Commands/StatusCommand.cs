@@ -19,7 +19,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             responses.Add(ChatResponse.CommandError(client,
                 $"AccountId: {client.Account.Id} SoulId: {client.Soul.Id} CharacterId:{client.Character.Id} InstanceId: {client.Character.InstanceId}"));
             responses.Add(ChatResponse.CommandError(client,
-                $"MapId: {client.Character.MapId} X: {client.Character.X} Y:{client.Character.Y} Z:{client.Character.Z}"));
+                $"MapId: {client.Character.MapId} X: {client.Character.X} Y:{client.Character.Y} Z:{client.Character.Z}  H:{client.Character.Heading}"));
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
