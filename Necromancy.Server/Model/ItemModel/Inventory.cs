@@ -29,7 +29,7 @@ namespace Necromancy.Server.Model.ItemModel
                 for (int i = 0; i < bag.Length; i++)
                 {
                     InventoryItem inventoryItem = bag[i];
-                    if (inventoryItem != null && (inventoryItem.CurrentEquipmentSlotType.HasFlag(equipmentSlotType))
+                    if (inventoryItem != null && (inventoryItem.CurrentEquipmentSlotType.HasFlag(equipmentSlotType)))
                     {
                         return inventoryItem;
                     }
