@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Msg
                 $"replyToInstanceId {replyToInstanceId} resultAcceptOrDeny {resultAcceptOrDeny} replyToClient.Character.unionId {replyToClient.Character.unionId}");
 
             //Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
-            Union myUnion = Server.Database.SelectUnionByUnionLeaderId(replyToClient.Character.Id);
+            Union myUnion = Server.Database.SelectUnionByLeaderId(replyToClient.Character.Id);
             Logger.Debug($"my union is {myUnion.Name}");
             IBuffer res5 = BufferProvider.Provide();
 
@@ -43,7 +43,8 @@ namespace Necromancy.Server.Packet.Msg
                 client.Union = myUnion;
                 client.Union.Join(client);
 
-                UnionMember myUnionMember = Server.Instances.CreateInstance<UnionMember>();
+                UnionMember myUnionMember = new UnionMember();
+                Server.Instances.AssignInstance(myUnionMember);
                 myUnionMember.UnionId = (int) myUnion.Id;
                 myUnionMember.CharacterDatabaseId = client.Character.Id;
 
@@ -55,16 +56,9 @@ namespace Necromancy.Server.Packet.Msg
 
                 Logger.Debug($"union member ID{myUnionMember.Id} added to nec_union_member table");
 
-                uint UnionLeaderInstanceId = Server.Characters.GetByCharacterId(myUnion.UnionLeaderId).InstanceId;
-                uint UnionSubLeader1InstanceId = 0;
-                if (myUnion.UnionSubLeader1Id != 0)
-                    UnionSubLeader1InstanceId =
-                        Server.Characters.GetByCharacterId(myUnion.UnionSubLeader1Id).InstanceId;
-
-                uint UnionSubLeader2InstanceId = 0;
-                if (myUnion.UnionSubLeader2Id != 0)
-                    UnionSubLeader2InstanceId =
-                        Server.Characters.GetByCharacterId(myUnion.UnionSubLeader2Id).InstanceId;
+                uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.LeaderId);
+                uint UnionSubLeader1InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader1Id);
+                uint UnionSubLeader2InstanceId = Server.Instances.GetCharacterInstanceId(myUnion.SubLeader2Id);
 
                 TimeSpan difference = client.Union.Created.ToUniversalTime() - DateTime.UnixEpoch;
                 int unionCreatedCalculation = (int) Math.Floor(difference.TotalSeconds);
@@ -99,9 +93,26 @@ namespace Necromancy.Server.Packet.Msg
                 foreach (UnionMember unionMemberList in Server.Database.SelectUnionMembersByUnionId(client.Union.Id))
                 {
                     Logger.Debug($"Loading union info for Member Id {unionMemberList.Id}");
-                    Character character = Server.Characters.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    NecClient otherClient = Server.Clients.GetByCharacterId(unionMemberList.CharacterDatabaseId);
+                    if (otherClient == null)
+                    {
+                        continue;
+                    }
+
+                    Character character = otherClient.Character;
+                    if (character == null)
+                    {
+                        continue;
+                    }
+
+                    Soul soul = otherClient.Soul;
+                    if (soul == null)
+                    {
+                        continue;
+                    }
+
+
                     Logger.Debug($"character is named {character.Name}");
-                    Soul soul = Server.Database.SelectSoulById(character.SoulId);
                     Logger.Debug($"Soul is named {soul.Name}");
                     TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
                     int unionJoinedCalculation = (int) Math.Floor(differenceJoined.TotalSeconds);

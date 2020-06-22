@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Response;
@@ -43,7 +45,7 @@ namespace Necromancy.Server.Model
         public Dictionary<uint, GGateSpawn> GGateSpawns { get; }
 
 
-        public Map(MapSetting setting, NecServer server)
+        public Map(MapData mapData, NecServer server)
         {
             _server = server;
             ClientLookup = new ClientLookup();
@@ -55,26 +57,42 @@ namespace Necromancy.Server.Model
             DeadBodies = new Dictionary<uint, DeadBody>();
 
 
-            Id = setting.Id;
-            X = setting.X;
-            Y = setting.Y;
-            Z = setting.Z;
-            Country = setting.Country;
-            Area = setting.Area;
-            Place = setting.Place;
-            Orientation = (byte) (setting.Orientation / 2); // Client uses 180 degree orientation
+            Id = mapData.Id;
+            X = mapData.X;
+            Y = mapData.Y;
+            Z = mapData.Z;
+            Country = mapData.Country;
+            Area = mapData.Area;
+            Place = mapData.Place;
+            Orientation = (byte) (mapData.Orientation / 2); // Client uses 180 degree orientation
             Traps = new Dictionary<uint, TrapStack>();
 
-            List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(setting.Id);
+            List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(mapData.Id);
             foreach (MapTransition mapTran in mapTransitions)
             {
+                if (!mapTran.InvertedTransition)
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                }
+                else
+                {
+                    Logger.Debug($"{mapTran.Id} is an inverted transition");
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
+                }
+
                 server.Instances.AssignInstance(mapTran);
-                mapTran.Start(_server, this);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);
+                Logger.Debug($"Loaded Map transition {mapTran.Id} on map {this.FullName}");
             }
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
-            List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(setting.Id);
+            List<NpcSpawn> npcSpawns = server.Database.SelectNpcSpawnsByMapId(mapData.Id);
             foreach (NpcSpawn npcSpawn in npcSpawns)
             {
                 server.Instances.AssignInstance(npcSpawn);
@@ -82,14 +100,14 @@ namespace Necromancy.Server.Model
             }
 
             //Assign Unique Instance ID to each Gimmick per map. Add to dictionary stored with the Map object
-            List<Gimmick> gimmickSpawns = server.Database.SelectGimmicksByMapId(setting.Id);
+            List<Gimmick> gimmickSpawns = server.Database.SelectGimmicksByMapId(mapData.Id);
             foreach (Gimmick gimmickSpawn in gimmickSpawns)
             {
                 server.Instances.AssignInstance(gimmickSpawn);
                 GimmickSpawns.Add(gimmickSpawn.InstanceId, gimmickSpawn);
             }
 
-            List<GGateSpawn> gGateSpawns = server.Database.SelectGGateSpawnsByMapId(setting.Id);
+            List<GGateSpawn> gGateSpawns = server.Database.SelectGGateSpawnsByMapId(mapData.Id);
             foreach (GGateSpawn gGateSpawn in gGateSpawns)
             {
                 server.Instances.AssignInstance(gGateSpawn);
@@ -98,7 +116,7 @@ namespace Necromancy.Server.Model
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
 
-            List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(setting.Id);
+            List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(mapData.Id);
             foreach (MonsterSpawn monsterSpawn in monsterSpawns)
             {
                 server.Instances.AssignInstance(monsterSpawn);
@@ -151,8 +169,7 @@ namespace Necromancy.Server.Model
                     homeCoord.CoordIdx = 0;
                     homeCoord.destination = homeVector3;
                     monsterSpawn.monsterCoords.Add(homeCoord);
-
-                    //default path part 2
+                   //default path part 2
                     Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150),
                         monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
@@ -161,8 +178,7 @@ namespace Necromancy.Server.Model
                     defaultCoord.MapId = (uint) monsterSpawn.MapId;
                     defaultCoord.CoordIdx = 1;
                     defaultCoord.destination = defaultVector3;
-
-                    monsterSpawn.monsterCoords.Add(defaultCoord);
+                   monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
                     Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150),
@@ -181,6 +197,7 @@ namespace Necromancy.Server.Model
 
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
+            client.Character.mapChange = true;
             Enter(client, mapPosition);
             _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
 

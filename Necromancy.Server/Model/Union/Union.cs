@@ -10,9 +10,9 @@ namespace Necromancy.Server.Model.Union
         public uint InstanceId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public int UnionLeaderId { get; set; }
-        public int UnionSubLeader1Id { get; set; }
-        public int UnionSubLeader2Id { get; set; }
+        public int LeaderId { get; set; }
+        public int SubLeader1Id { get; set; }
+        public int SubLeader2Id { get; set; }
         public uint Level { get; set; }
         public uint CurrentExp { get; set; }
         public uint NextLevelExp { get; set; }
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Model.Union
             UnionMembers = new List<NecClient>();
             Id = -1;
             Name = "";
-            UnionLeaderId = 0;
+            LeaderId = 0;
             Level = 0;
             CurrentExp = 0;
             NextLevelExp = 100;

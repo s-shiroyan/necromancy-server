@@ -65,7 +65,7 @@ namespace Necromancy.Server.Chat.Command
             {
                 return;
             }
-
+            
             string commandMessage = message.Message.Substring(1);
             string[] command = commandMessage.Split(ChatCommandSeparator);
             if (command.Length <= 0)

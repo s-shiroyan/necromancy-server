@@ -19,9 +19,6 @@ namespace Necromancy.Server.Packet.Response
 
         protected override IBuffer ToBuffer()
         {
-            int numEntries = 19; //Max of 19 Equipment Slots for Character Player
-            int numStatusEffects = 0x80; //Statuses effects. Max 128
-
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(_character.InstanceId);
             res.WriteInt32(_character.unionId);

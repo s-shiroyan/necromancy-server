@@ -60,14 +60,15 @@ namespace Necromancy.Server.Model
         }
 
         /// <summary>
-        /// Returns a Client by Soul name if it exists.
+        /// Returns a Client by soul name if it exists.
         /// </summary>
         public NecClient GetBySoulName(string soulName)
         {
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Soul.Name == soulName)
+                Soul soul = client.Soul;
+                if (soul != null && soul.Name == soulName)
                 {
                     return client;
                 }
@@ -77,20 +78,36 @@ namespace Necromancy.Server.Model
         }
 
         /// <summary>
-        /// Returns a Client by CharacterName if it exists.
+        /// Returns a Client by characterId if it exists.
         /// </summary>
         public NecClient GetByCharacterId(int characterId)
         {
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Character.Id == characterId)
+                Character character = client.Character;
+                if (character != null && character.Id == characterId)
                 {
                     return client;
                 }
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Returns a Character by CharacterName if it exists or null.
+        /// </summary>
+        public Character GetCharacterByCharacterId(int characterId)
+        {
+            NecClient client = GetByCharacterId(characterId);
+            if (client == null)
+            {
+                return null;
+            }
+
+            Character character = client.Character;
+            return character;
         }
 
         /// <summary>
@@ -101,7 +118,8 @@ namespace Necromancy.Server.Model
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Account.Id == accountId)
+                Account account = client.Account;
+                if (account != null && account.Id == accountId)
                 {
                     return client;
                 }
@@ -111,14 +129,15 @@ namespace Necromancy.Server.Model
         }
 
         /// <summary>
-        /// Returns a Client by AccountId if it exists.
+        /// Returns a Client by instanceId if it exists.
         /// </summary>
-        public NecClient GetByCharacterInstanceId(uint isntanceId)
+        public NecClient GetByCharacterInstanceId(uint instanceId)
         {
             List<NecClient> clients = GetAll();
             foreach (NecClient client in clients)
             {
-                if (client.Character != null && client.Character.InstanceId == isntanceId)
+                Character character = client.Character;
+                if (character != null && character.InstanceId == instanceId)
                 {
                     return client;
                 }
@@ -126,5 +145,6 @@ namespace Necromancy.Server.Model
 
             return null;
         }
+
     }
 }

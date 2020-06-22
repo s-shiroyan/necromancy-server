@@ -109,12 +109,7 @@ namespace Necromancy.Server.Packet.Msg
             Logger.Info($"Created piety: {piety}");
             Logger.Info($"Created luck: {luck}");
             Logger.Info($"Created class_id: {class_id}");
-
-            //-------------------------------------------------------------------------------
-            Server.Characters.Add(character);
-            //-------------------------------------------------------------------------------
-
-
+            
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(character.Id); //CharacterId

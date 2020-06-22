@@ -253,13 +253,13 @@ namespace Necromancy.Server.Tasks
                             //Casters
                             if (_monster.MonsterId == 100201)
                             {
-                                skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
-                                Logger.Debug($"attackId [200301411]");
-                                //_monster.MonsterStop(Server,8, 231, 2.0F);
-                                StartMonsterCastQueue(200301411, skillInstanceId);
-                                PlayerDamage();
-                                waitTime = 2000;
-                                CastState = 1;
+                             //  skillInstanceId = _server.Instances.CreateInstance<Skill>().InstanceId;
+                             //  Logger.Debug($"attackId [200301411]");
+                             //  //_monster.MonsterStop(Server,8, 231, 2.0F);
+                             //  StartMonsterCastQueue(200301411, skillInstanceId);
+                             //  PlayerDamage();
+                             //  waitTime = 2000;
+                             //  CastState = 1;
                             }
                             //Melee Attackers
                             else
@@ -728,7 +728,7 @@ namespace Necromancy.Server.Tasks
         private bool StealthCheck(NecClient client)
         {
             // Needs to be expanded to consider skill, distance and orientation 
-            if ((client.Character.state & 0x100) > 0)
+            if (((uint)client.Character.State & 0x100) > 0)
             {
                 return true;
             }
