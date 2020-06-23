@@ -224,8 +224,6 @@ CREATE TABLE IF NOT EXISTS `nec_union`
     `union_news`                TEXT,
     `created`                   DATETIME NOT NULL,
     CONSTRAINT `fk_nec_union_leader_character_id` FOREIGN KEY (`leader_character_id`) REFERENCES `nec_character` (`id`)
-    CONSTRAINT `fk_nec_union_subleader1_character_id` FOREIGN KEY (`subleader1_character_id`) REFERENCES `nec_character` (`id`)
-    CONSTRAINT `fk_nec_union_subleader2_character_id` FOREIGN KEY (`subleader2_character_id`) REFERENCES `nec_character` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_member`
