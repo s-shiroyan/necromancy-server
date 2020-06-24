@@ -45,13 +45,49 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
-            InventoryItem equippedItem = client.Inventory.GetEquippedInventoryItem(inventoryItem.Item.EquipmentSlotType);
-            if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+
+
+            //two phased equipped item check for two H weapons
+            if (inventoryItem.Item.EquipmentSlotType.HasFlag(EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R))
             {
-                equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-                RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
-                Router.Send(recvItemUpdateEqMaskCurr, client);
+                Logger.Debug($"two handed item detected {inventoryItem.Item.EquipmentSlotType}");
+                InventoryItem equippedItem = client.Inventory.CheckAlreadyEquipped(EquipmentSlotType.HAND_R);
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    client.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
+                equippedItem = client.Inventory.CheckAlreadyEquipped(EquipmentSlotType.HAND_L);
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    client.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
             }
+            else  //everything besides 2h weapons
+            {
+                Logger.Debug($"equipment slot type {inventoryItem.Item.EquipmentSlotType}");
+                //InventoryItem equippedItem = client.Inventory.GetEquippedInventoryItem(inventoryItem.Item.EquipmentSlotType);
+
+                InventoryItem equippedItem = client.Inventory.CheckAlreadyEquipped(inventoryItem.Item.EquipmentSlotType);
+
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    Logger.Debug($"equipment slot type already equipped item {equippedItem.Item.EquipmentSlotType}");
+                    client.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
+            }
+               
+
+            //add the item to list of equipped items
+            client.Inventory.Equip(inventoryItem);
             
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);

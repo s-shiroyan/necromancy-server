@@ -9,14 +9,44 @@ namespace Necromancy.Server.Model.ItemModel
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, InventoryItem[]> _inventory;
         private const int bagSize = 24;
+        private Dictionary<EquipmentSlotType, InventoryItem> _equippedItems;
+
 
 
         public Inventory()
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
+            _equippedItems = new Dictionary<EquipmentSlotType, InventoryItem>();
         }
-
+        public void Equip(InventoryItem inventoryItem)
+        {
+            _equippedItems.Add(inventoryItem.Item.EquipmentSlotType, inventoryItem);
+        }
+        public void UnEquip(InventoryItem inventoryItem)
+        {
+            _equippedItems.Remove(inventoryItem.Item.EquipmentSlotType);
+        }
+        public InventoryItem CheckAlreadyEquipped(EquipmentSlotType equipmentSlotType)
+        {
+            InventoryItem inventoryItem = null;
+            if (equipmentSlotType == EquipmentSlotType.HAND_R | equipmentSlotType == EquipmentSlotType.HAND_L)
+            {
+                if (_equippedItems.ContainsKey(EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R))
+                {
+                    _equippedItems.TryGetValue((EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R), out inventoryItem);
+                }
+                else
+                {
+                    _equippedItems.TryGetValue(equipmentSlotType, out inventoryItem);
+                }
+            }
+            else
+            {
+                _equippedItems.TryGetValue(equipmentSlotType, out inventoryItem);
+            }
+            return inventoryItem;
+        }
         public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
         {
             return ItemActionResultType.Ok;
