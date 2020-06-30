@@ -4,6 +4,8 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -12,6 +14,7 @@ namespace Necromancy.Server.Chat.Command.Commands
     /// </summary>
     public class TeleportToCommand : ServerChatCommand
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(TeleportToCommand));
         public TeleportToCommand(NecServer server) : base(server)
         {
         }
@@ -22,6 +25,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             Character character2 = null;
             NpcSpawn npc2 = null;
             Gimmick gimmick2 = null;
+            MapTransition mapTran2 = null;
             MonsterSpawn monsterSpawn2 = null;
             if (uint.TryParse(command[0], out uint x))
             {
@@ -42,10 +46,14 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     monsterSpawn2 = monsterSpawn;
                 }
+                else if (instance is MapTransition mapTran)
+                {
+                    mapTran2 = mapTran;
+                }
                 else
                 {
                     responses.Add(ChatResponse.CommandError(client,
-                        $"Please provide a character/npc/gimmick instance id"));
+                        $"Please provide a character/npc/gimmick/map transition instance id"));
                     return;
                 }
             }
@@ -84,6 +92,15 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteFloat(monsterSpawn2.X);
                 res.WriteFloat(monsterSpawn2.Y);
                 res.WriteFloat(monsterSpawn2.Z);
+                res.WriteByte(client.Character.Heading);
+                res.WriteByte(client.Character.movementAnim);
+            }
+            else if (mapTran2 != null)
+            {
+                res.WriteUInt32(client.Character.InstanceId);
+                res.WriteFloat(mapTran2.ReferencePos.X);
+                res.WriteFloat(mapTran2.ReferencePos.Y);
+                res.WriteFloat(mapTran2.ReferencePos.Z);
                 res.WriteByte(client.Character.Heading);
                 res.WriteByte(client.Character.movementAnim);
             }

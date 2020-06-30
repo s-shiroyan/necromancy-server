@@ -70,21 +70,35 @@ namespace Necromancy.Server.Model
             List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(mapData.Id);
             foreach (MapTransition mapTran in mapTransitions)
             {
-                if (!mapTran.InvertedTransition)
+                /*this section needs to be fixed
+                if (mapTran.InvertedTransition != true) //map is x dominant
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2);
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y);
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2);
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y);
+                }
+                else if(mapTran.InvertedTransition != false) //map is y dominant
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X);
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2);
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X);
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2);
+                }
+                else if (mapTran.InvertedTransition != true) //transition needs to be diagonal
                 {
                     mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
                     mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
                     mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
                     mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
                 }
-                else
+                else //transition needs to be diagonal and flipped
                 {
-                    Logger.Debug($"{mapTran.Id} is an inverted transition");
                     mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
                     mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
                     mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2 * Math.Sin(mapTran.MaplinkHeading));
                     mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2 * Math.Cos(mapTran.MaplinkHeading));
-                }
+                }*/
 
                 server.Instances.AssignInstance(mapTran);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);

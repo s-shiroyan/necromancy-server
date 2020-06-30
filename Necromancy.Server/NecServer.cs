@@ -247,6 +247,7 @@ namespace Necromancy.Server
             // Chat.CommandHandler.AddCommand(new BagCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportCommand(this));
             Chat.CommandHandler.AddCommand(new TeleportToCommand(this));
+            Chat.CommandHandler.AddCommand(new GetCommand(this));
         }
 
         private void LoadDatabaseObjects()
