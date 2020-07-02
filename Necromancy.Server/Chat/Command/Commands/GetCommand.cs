@@ -45,7 +45,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         
                     }
                     break;
-                case "transition":
+                case "maptran":
                     responses.Add(ChatResponse.CommandError(client, "Map transition instance ids for current map:"));
                     foreach (KeyValuePair<uint, MapTransition> mapTran in client.Map.MapTransitions)
                     {
