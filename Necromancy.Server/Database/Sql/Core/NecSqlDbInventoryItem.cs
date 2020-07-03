@@ -9,19 +9,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateInventoryItem =
-            "INSERT INTO `nec_inventory_item` (`character_id`, `item_id`, `quantity`, `current_durability`) VALUES (@character_id, @item_id, @quantity, @current_durability);";
+            "INSERT INTO `nec_item_spawn` (`character_id`, `item_id`, `quantity`, `current_durability`) VALUES (@character_id, @item_id, @quantity, @current_durability);";
 
         private const string SqlSelectInventoryItemById =
-            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_inventory_item` WHERE `id`=@id; ";
+            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_item_spawn` WHERE `id`=@id; ";
 
         private const string SqlSelectInventoryItemsByCharacterId =
-            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_inventory_item` WHERE `character_id`=@character_id; ";
+            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_item_spawn` WHERE `character_id`=@character_id; ";
 
         private const string SqlUpdateInventoryItem =
-            "UPDATE `nec_inventory_item` SET `character_id`=@character_id, `item_id`=@item_id, `quantity`=@quantity, `current_durability`=@current_durability WHERE `id`=@id;";
+            "UPDATE `nec_item_spawn` SET `character_id`=@character_id, `item_id`=@item_id, `quantity`=@quantity, `current_durability`=@current_durability WHERE `id`=@id;";
 
         private const string SqlDeleteInventoryItem =
-            "DELETE FROM `nec_inventory_item` WHERE `id`=@id;";
+            "DELETE FROM `nec_item_spawn` WHERE `id`=@id;";
 
 
         public bool InsertInventoryItem(InventoryItem inventoryItem)

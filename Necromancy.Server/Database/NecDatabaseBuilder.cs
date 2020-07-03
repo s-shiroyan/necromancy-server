@@ -88,8 +88,8 @@ namespace Necromancy.Server.Database
                     }
                 }
 
-                // insert items
-                foreach (int itemId in _settingRepository.ItemInfo.Keys)
+                // insert items (un-comment to rebuild table from settings lookup) Currently disabled for inventory development
+                /*foreach (int itemId in _settingRepository.ItemInfo.Keys)
                 {
                     if (!_settingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
                     {
@@ -107,11 +107,11 @@ namespace Necromancy.Server.Database
                     item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
                     if (!database.InsertItem(item))
                     {
-                        Logger.Error($"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`");
+                        Logger.Error($"ItemId: {itemId} - could not be inserted into table`");
                         return;
                     }
                 }
-                
+                */
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_account.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_npc_spawn.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_monster_spawn.sql"));
@@ -121,6 +121,7 @@ namespace Necromancy.Server.Database
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_gimmick.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_maptransition.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_ggate.sql"));
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_item_library.sql"));
             }
 
             SqlMigrator migrator = new SqlMigrator(database);
