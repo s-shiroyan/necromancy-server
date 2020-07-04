@@ -13,10 +13,35 @@ namespace Necromancy.Server.Model.ItemModel
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
+            _inventory.Add(1, new InventoryItem[bagSize]);
+            _inventory.Add(2, new InventoryItem[bagSize]);
+            _inventory.Add(3, new InventoryItem[bagSize]);
+            _inventory.Add(4, new InventoryItem[bagSize]);
         }
 
         public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
         {
+            if (_inventory.ContainsKey(inventoryItem.BagId))
+            {
+                InventoryItem[] bag = _inventory[inventoryItem.BagId];
+                if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                {
+                    bag[inventoryItem.BagSlotIndex] = null;
+                }
+            }
+            inventoryItem.BagId = bagId;
+            inventoryItem.BagSlotIndex = bagSlotIndex;
+            if (_inventory.ContainsKey(bagId))
+            {
+                InventoryItem[] bag = _inventory[bagId];
+                bag[bagSlotIndex] = inventoryItem;
+            }
+            else
+            {
+                InventoryItem[] bag = new InventoryItem[bagSize];
+                bag[bagSlotIndex] = inventoryItem;
+                _inventory.Add(bagId, bag);
+            }
             return ItemActionResultType.Ok;
         }
 
