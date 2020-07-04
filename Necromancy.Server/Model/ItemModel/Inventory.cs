@@ -45,6 +45,32 @@ namespace Necromancy.Server.Model.ItemModel
             return ItemActionResultType.Ok;
         }
 
+        public ItemActionResultType SwapInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex, InventoryItem inventoryItem2, byte bagId2, short bagSlotIndex2)
+        {
+            if (_inventory.ContainsKey(inventoryItem.BagId))
+            {
+                InventoryItem[] bag = _inventory[inventoryItem.BagId];
+                if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                {
+                    bag[inventoryItem.BagSlotIndex] = inventoryItem2;
+                }
+            }
+            inventoryItem.BagId = bagId;
+            inventoryItem.BagSlotIndex = bagSlotIndex;
+
+            if (_inventory.ContainsKey(inventoryItem2.BagId))
+            {
+                InventoryItem[] bag = _inventory[inventoryItem2.BagId];
+                if (bag[inventoryItem2.BagSlotIndex] == inventoryItem2)
+                {
+                    bag[inventoryItem2.BagSlotIndex] = inventoryItem;
+                }
+            }
+            inventoryItem2.BagId = bagId2;
+            inventoryItem2.BagSlotIndex = bagSlotIndex2;
+            return ItemActionResultType.Ok;
+        }
+
         public InventoryItem GetEquippedInventoryItem(EquipmentSlotType equipmentSlotType)
         {
             foreach (InventoryItem[] bag in _inventory.Values)
