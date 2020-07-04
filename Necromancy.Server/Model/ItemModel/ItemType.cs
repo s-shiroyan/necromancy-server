@@ -49,7 +49,7 @@ namespace Necromancy.Server.Model
         BELT,
         DRUG = 45, //MEDICINE
         SKILLCHIP, //SKLCHP
-        BAG,
+        BAG = 47,
         LOSTSOUL, //LSTSOL
         SYSTEM,
         FORGESTONE = 50, //FG_STN
@@ -63,8 +63,8 @@ namespace Necromancy.Server.Model
         MAP_FRAGMENT, //MAP PC
         OTHERS, //OTHER
         AVATAR = 60,
-        ALLCHT,
-        BUFF,
+        ALLCHT = 61,
+        BUFF = 62,
         LEATHER, //L.SHOES
         FORGETICKET, //FG_TKT
         FORGE_SP_SUPPORT = 65, //特殊鍛錬万能素材
