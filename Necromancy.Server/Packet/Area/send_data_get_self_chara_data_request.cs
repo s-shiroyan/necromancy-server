@@ -206,7 +206,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFixedString($"{client.Soul.Name} Comment", 385); //Comment
 
             //sub_494890
-            res.WriteByte(0); //Bool 0 off 1 on
+            res.WriteByte(0); //Bool for showing/hiding character comment.
 
             //sub_4834A0
             res.WriteFixedString($"{client.Soul.Name} chatbox?", 385); //Chatbox?
