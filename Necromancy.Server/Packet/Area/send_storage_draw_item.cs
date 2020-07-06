@@ -37,8 +37,8 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"itemCount [{itemCount}]");
 
             IBuffer res = BufferProvider.Provide();
-            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromBagId, fromSlot);
-            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toBagId, toSlot);
+            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
+            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
             if (inventoryItem == null)
             {
                 res.WriteInt32((int)ItemActionResultType.ErrorGeneric);

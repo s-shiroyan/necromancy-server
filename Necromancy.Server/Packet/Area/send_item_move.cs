@@ -22,14 +22,14 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
-            byte toStoreType = packet.Data.ReadByte();
-            byte toBagId = packet.Data.ReadByte();
-            short fromSlot = packet.Data.ReadInt16();
             byte fromStoreType = packet.Data.ReadByte();
             byte fromBagId = packet.Data.ReadByte();
+            short fromSlot = packet.Data.ReadInt16();
+            byte toStoreType = packet.Data.ReadByte();
+            byte toBagId = packet.Data.ReadByte();
             short toSlot = packet.Data.ReadInt16();
-            int itemCount = packet.Data.ReadByte(); //last byte is stack count?
-            
+            byte itemCount = packet.Data.ReadByte();
+
             Logger.Debug($"fromStoreType byte [{fromStoreType}]");
             Logger.Debug($"fromBagId byte [{fromBagId}]");
             Logger.Debug($"fromSlot byte [{fromSlot}]");
@@ -39,8 +39,8 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"itemCount [{itemCount}]");
             
             IBuffer res = BufferProvider.Provide();
-            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromBagId, fromSlot);
-            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toBagId, toSlot);
+            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
+            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
             if (inventoryItem == null)
             {
                 res.WriteInt32((int)ItemActionResultType.ErrorGeneric); 

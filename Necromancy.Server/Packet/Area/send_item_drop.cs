@@ -22,7 +22,7 @@ namespace Necromancy.Server.Packet.Area
             byte stackSize = packet.Data.ReadByte();
 
 
-            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(bagId, bagSlotIndex);
+            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(storageType, bagId, bagSlotIndex);
             if (inventoryItem == null)
             {
                 return;
