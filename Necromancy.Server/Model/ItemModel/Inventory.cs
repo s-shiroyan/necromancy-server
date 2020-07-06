@@ -7,6 +7,8 @@ namespace Necromancy.Server.Model.ItemModel
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, InventoryItem[]> _inventory;
         private const int bagSize = 24;
+        private const int cloakRoomSize = 30;
+
 
 
         public Inventory()
@@ -15,11 +17,11 @@ namespace Necromancy.Server.Model.ItemModel
             _inventory.Add(0, new InventoryItem[bagSize]);
             _inventory.Add(1, new InventoryItem[bagSize]);
             _inventory.Add(2, new InventoryItem[bagSize]);
-            _inventory.Add(3, new InventoryItem[bagSize]);
+            _inventory.Add(3, new InventoryItem[cloakRoomSize]);
             _inventory.Add(4, new InventoryItem[bagSize]);
         }
 
-        public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
+        public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte storageType, byte bagId, short bagSlotIndex)
         {
             if (_inventory.ContainsKey(inventoryItem.BagId))
             {
@@ -45,7 +47,7 @@ namespace Necromancy.Server.Model.ItemModel
             return ItemActionResultType.Ok;
         }
 
-        public ItemActionResultType SwapInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex, InventoryItem inventoryItem2, byte bagId2, short bagSlotIndex2)
+        public ItemActionResultType SwapInventoryItem(InventoryItem inventoryItem, byte storageType, byte bagId, short bagSlotIndex, InventoryItem inventoryItem2, byte storageType2, byte bagId2, short bagSlotIndex2)
         {
             if (_inventory.ContainsKey(inventoryItem.BagId))
             {
@@ -55,6 +57,7 @@ namespace Necromancy.Server.Model.ItemModel
                     bag[inventoryItem.BagSlotIndex] = inventoryItem2;
                 }
             }
+            inventoryItem.StorageType = storageType;
             inventoryItem.BagId = bagId;
             inventoryItem.BagSlotIndex = bagSlotIndex;
 
@@ -66,6 +69,7 @@ namespace Necromancy.Server.Model.ItemModel
                     bag[inventoryItem2.BagSlotIndex] = inventoryItem;
                 }
             }
+            inventoryItem2.StorageType = storageType2;
             inventoryItem2.BagId = bagId2;
             inventoryItem2.BagSlotIndex = bagSlotIndex2;
             return ItemActionResultType.Ok;

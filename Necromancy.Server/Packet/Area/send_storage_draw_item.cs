@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Area
             }
             if (inventoryItemTo == null)
             {
-                ItemActionResultType actionResult = client.Inventory.MoveInventoryItem(inventoryItem, toBagId, toSlot);
+                ItemActionResultType actionResult = client.Inventory.MoveInventoryItem(inventoryItem, toStoreType, toBagId, toSlot);
                 if (actionResult != ItemActionResultType.Ok)
                 {
                     res.WriteInt32((int)actionResult);
@@ -59,10 +59,15 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(client, (ushort)AreaPacketId.recv_storage_draw_item2_r, res, ServerType.Area);
 
                 SendItemPlace(client, inventoryItem.Id, toStoreType, toBagId, toSlot);
+                if (!Server.Database.UpdateInventoryItem(inventoryItem))
+                {
+                    Logger.Error("Could not update InventoryItem in Database");
+                    return;
+                }
             }
             else
             {
-                ItemActionResultType actionResult = client.Inventory.SwapInventoryItem(inventoryItem, toBagId, toSlot, inventoryItemTo, fromBagId, fromSlot);
+                ItemActionResultType actionResult = client.Inventory.SwapInventoryItem(inventoryItem, toStoreType, toBagId, toSlot, inventoryItemTo, fromStoreType, fromBagId, fromSlot);
                 if (actionResult != ItemActionResultType.Ok)
                 {
                     res.WriteInt32((int)actionResult);
@@ -73,6 +78,16 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32((int)actionResult);
                 Router.Send(client, (ushort)AreaPacketId.recv_item_move_r, res, ServerType.Area);
                 SendItemPlaceChange(client, inventoryItem.Id, toStoreType, toBagId, toSlot, inventoryItemTo.Id, fromStoreType, fromBagId, fromSlot);
+                if (!Server.Database.UpdateInventoryItem(inventoryItem))
+                {
+                    Logger.Error("Could not update InventoryItem in Database");
+                    return;
+                }
+                if (!Server.Database.UpdateInventoryItem(inventoryItemTo))
+                {
+                    Logger.Error("Could not update InventoryItem number 2 in Database");
+                    return;
+                }
             }
         }
 
