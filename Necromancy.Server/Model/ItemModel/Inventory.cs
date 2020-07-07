@@ -16,12 +16,12 @@ namespace Necromancy.Server.Model.ItemModel
         private const int cloakRoomTabSize = 30;
         private const int avatarTabSize = 50;
 
+        private Logger logger;
+
 
 
         public Inventory()
         {
-
-
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
             _cloakRoom = new Dictionary<byte, InventoryItem[]>();
@@ -46,7 +46,6 @@ namespace Necromancy.Server.Model.ItemModel
             if (_storageContainers.ContainsKey(storageType))
             {
                 _storageContainers.TryGetValue(storageType, out Dictionary<byte, InventoryItem[]> _storageContainer);
-
                 if (_storageContainer.ContainsKey(bagId))
                 {
                     InventoryItem[] bag = _storageContainer[inventoryItem.BagId];
@@ -60,11 +59,12 @@ namespace Necromancy.Server.Model.ItemModel
                 inventoryItem.BagSlotIndex = bagSlotIndex;
                 if (_storageContainer.ContainsKey(bagId))
                 {
-                    InventoryItem[] bag = _inventory[bagId];
+                    InventoryItem[] bag = _storageContainer[bagId];
                     bag[bagSlotIndex] = inventoryItem;
                 }
                 else
                 {
+                    logger.Error("had to create a bag. this is not intended.");
                     InventoryItem[] bag = new InventoryItem[bagSize];
                     bag[bagSlotIndex] = inventoryItem;
                     _storageContainer.Add(bagId, bag);
@@ -81,14 +81,15 @@ namespace Necromancy.Server.Model.ItemModel
 
         public ItemActionResultType SwapInventoryItem(InventoryItem inventoryItem, byte storageType, byte bagId, short bagSlotIndex, InventoryItem inventoryItem2, byte storageType2, byte bagId2, short bagSlotIndex2)
         {
-            if (_storageContainers.ContainsKey(storageType))
+            if (_storageContainers.ContainsKey(storageType) && _storageContainers.ContainsKey(storageType2))
             {
                 _storageContainers.TryGetValue(storageType, out Dictionary<byte, InventoryItem[]> _storageContainer);
+                _storageContainers.TryGetValue(storageType2, out Dictionary<byte, InventoryItem[]> _storageContainer2);
 
                 if (_storageContainer.ContainsKey(bagId))
                 {
                     InventoryItem[] bag = _storageContainer[inventoryItem.BagId];
-                    if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                    //if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
                     {
                         bag[inventoryItem.BagSlotIndex] = inventoryItem2;
                     }
@@ -97,10 +98,10 @@ namespace Necromancy.Server.Model.ItemModel
                 inventoryItem.BagId = bagId;
                 inventoryItem.BagSlotIndex = bagSlotIndex;
 
-                if (_storageContainer.ContainsKey(inventoryItem2.BagId))
+                if (_storageContainer2.ContainsKey(inventoryItem2.BagId))
                 {
-                    InventoryItem[] bag = _storageContainer[inventoryItem2.BagId];
-                    if (bag[inventoryItem2.BagSlotIndex] == inventoryItem2)
+                    InventoryItem[] bag = _storageContainer2[inventoryItem2.BagId];
+                    //if (bag[inventoryItem2.BagSlotIndex] == inventoryItem2)
                     {
                         bag[inventoryItem2.BagSlotIndex] = inventoryItem;
                     }
@@ -178,20 +179,25 @@ namespace Necromancy.Server.Model.ItemModel
                         return bag[bagSlotIndex];
                     }
                 }
-            }     
-
+            }
+            logger.Error("null hit on GetInventoryItem");
             return null;
         }
 
         public bool RemoveInventoryItem(InventoryItem inventoryItem)
         {
-            if (_inventory.ContainsKey(inventoryItem.BagId))
+            if (_storageContainers.ContainsKey(inventoryItem.StorageType))
             {
-                InventoryItem[] bag = _inventory[inventoryItem.BagId];
-                if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                _storageContainers.TryGetValue(inventoryItem.StorageType, out Dictionary<byte, InventoryItem[]> _storageContainer);
+
+                if (_storageContainer.ContainsKey(inventoryItem.BagId))
                 {
-                    bag[inventoryItem.BagSlotIndex] = null;
-                    return true;
+                    InventoryItem[] bag = _storageContainer[inventoryItem.BagId];
+                    if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
+                    {
+                        bag[inventoryItem.BagSlotIndex] = null;
+                        return true;
+                    }
                 }
             }
 

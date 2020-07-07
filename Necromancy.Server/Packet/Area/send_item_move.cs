@@ -40,14 +40,14 @@ namespace Necromancy.Server.Packet.Area
             
             IBuffer res = BufferProvider.Provide();
             InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
-            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
+            InventoryItem inventoryItem2 = client.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
             if (inventoryItem == null)
             {
                 res.WriteInt32((int)ItemActionResultType.ErrorGeneric); 
                 Router.Send(client, (ushort) AreaPacketId.recv_item_move_r, res, ServerType.Area);
                 return;
             }
-            if (inventoryItemTo == null)
+            if (inventoryItem2 == null)
             {
                 ItemActionResultType actionResult = client.Inventory.MoveInventoryItem(inventoryItem, toStoreType, toBagId, toSlot);
                 if (actionResult != ItemActionResultType.Ok)
@@ -69,7 +69,7 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                ItemActionResultType actionResult = client.Inventory.SwapInventoryItem(inventoryItem, toStoreType, toBagId, toSlot, inventoryItemTo,fromStoreType, fromBagId, fromSlot);
+                ItemActionResultType actionResult = client.Inventory.SwapInventoryItem(inventoryItem, toStoreType, toBagId, toSlot, inventoryItem2,fromStoreType, fromBagId, fromSlot);
                 if (actionResult != ItemActionResultType.Ok)
                 {
                     res.WriteInt32((int)actionResult);
@@ -79,13 +79,13 @@ namespace Necromancy.Server.Packet.Area
 
                 res.WriteInt32((int)actionResult);
                 Router.Send(client, (ushort)AreaPacketId.recv_item_move_r, res, ServerType.Area);
-                SendItemPlaceChange(client, inventoryItem.Id, toStoreType, toBagId, toSlot, inventoryItemTo.Id, fromStoreType, fromBagId, fromSlot);
+                SendItemPlaceChange(client, inventoryItem.Id, toStoreType, toBagId, toSlot, inventoryItem2.Id, fromStoreType, fromBagId, fromSlot);
                 if (!Server.Database.UpdateInventoryItem(inventoryItem))
                 {
                     Logger.Error("Could not update InventoryItem in Database");
                     return;
                 }
-                if (!Server.Database.UpdateInventoryItem(inventoryItemTo))
+                if (!Server.Database.UpdateInventoryItem(inventoryItem2))
                 {
                     Logger.Error("Could not update InventoryItem number 2 in Database");
                     return;
