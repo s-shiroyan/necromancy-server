@@ -17,9 +17,6 @@ namespace Necromancy.Server.Model.ItemModel
         private const int avatarTabSize = 50;
 
         private Logger logger;
-
-
-
         public Inventory()
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
