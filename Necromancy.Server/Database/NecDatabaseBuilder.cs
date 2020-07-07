@@ -122,6 +122,7 @@ namespace Necromancy.Server.Database
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_maptransition.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_ggate.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_item_library.sql"));
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_item_spawn.sql"));
             }
 
             SqlMigrator migrator = new SqlMigrator(database);

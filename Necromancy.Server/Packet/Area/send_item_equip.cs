@@ -46,6 +46,12 @@ namespace Necromancy.Server.Packet.Area
             }
 
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+            inventoryItem.State = 1; //Crude equipped flag. to be further developed.
+            if (!Server.Database.UpdateInventoryItem(inventoryItem))
+            {
+                Logger.Error("Could not update InventoryItem in Database");
+                return;
+            }
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);
 

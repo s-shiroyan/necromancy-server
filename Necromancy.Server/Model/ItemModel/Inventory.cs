@@ -221,23 +221,19 @@ namespace Necromancy.Server.Model.ItemModel
             return false;
         }
 
-        public bool AddInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
+        public void LoginLoadInventory(InventoryItem inventoryItem)
         {
-            inventoryItem.BagId = bagId;
-            inventoryItem.BagSlotIndex = bagSlotIndex;
-            if (_inventory.ContainsKey(bagId))
+            if (_storageContainers.ContainsKey(inventoryItem.StorageType))
             {
-                InventoryItem[] bag = _inventory[bagId];
-                bag[bagSlotIndex] = inventoryItem;
-            }
-            else
-            {
-                InventoryItem[] bag = new InventoryItem[bagSize];
-                bag[bagSlotIndex] = inventoryItem;
-                _inventory.Add(bagId, bag);
-            }
+                _storageContainers.TryGetValue(inventoryItem.StorageType, out Dictionary<byte, InventoryItem[]> _storageContainer);
 
-            return true;
+                if (_storageContainer.ContainsKey(inventoryItem.BagId))
+                {
+                    InventoryItem[] bag = _storageContainer[inventoryItem.BagId];
+                    bag[inventoryItem.BagSlotIndex] = inventoryItem;
+                }
+
+            }
         }
     }
 }

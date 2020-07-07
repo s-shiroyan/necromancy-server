@@ -38,7 +38,19 @@ namespace Necromancy.Server.Packet.Area
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
                 Router.Send(recvItemInstanceUnidentified, client);
 
-                client.Inventory.AddInventoryItem(inventoryItem);
+                client.Inventory.LoginLoadInventory(inventoryItem);
+
+                //equip items with state flag set to 1 to your paperdoll.
+                //if (inventoryItem.State == 1)
+                //{
+                //    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+
+                //    RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
+                //    Router.Send(recvItemUpdateEqMask, client);
+
+                //    res.WriteInt32((int)ItemActionResultType.Ok);
+                //    Router.Send(client, (ushort)AreaPacketId.recv_item_equip_r, res, ServerType.Area);
+                //}
             }
 
         }
