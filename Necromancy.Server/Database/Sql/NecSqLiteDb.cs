@@ -40,7 +40,7 @@ namespace Necromancy.Server.Database.Sql
                 FileStream fs = File.Create(_databasePath);
                 fs.Close();
                 fs.Dispose();
-                Logger.Info($"Created new v{Version} database");
+                Logger.Info($"Creating new v{Version} database. This may take a few minutes.");
                 return true;
             }
 

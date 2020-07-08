@@ -56,7 +56,7 @@ namespace Necromancy.Server.Data.Setting
             ModelCommon.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
             Load(ItemInfo, "iteminfo.csv", new ItemInfoCsvReader());
-            //Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader()); //disabled for testing to reduce console noise
+            Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader()); //disabled for testing to reduce console noise
             Load(Monster, "monster.csv", new MonsterCsvReader());
             Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
             Load(EoBase, "eo_base.csv", new EoBaseCsvReader());
