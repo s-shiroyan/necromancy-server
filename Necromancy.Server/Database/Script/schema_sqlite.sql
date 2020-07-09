@@ -131,30 +131,6 @@ CREATE TABLE IF NOT EXISTS `nec_monster_spawn`
     `updated`    DATETIME NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item`
-(
-    `id`                  INTEGER NOT NULL PRIMARY KEY,
-    `name`                TEXT    NOT NULL,
-    `item_type`           INTEGER NOT NULL,
-    `equipment_slot_type` INTEGER NOT NULL,
-    `physical`            INTEGER NOT NULL,
-    `magical`             INTEGER NOT NULL,
-    `durability`          INTEGER NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS `nec_inventory_item`
-(
-    `id`                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `character_id`       TEXT    NOT NULL,
-    `item_id`            INTEGER NOT NULL,
-    `quantity`           INTEGER NOT NULL,
-    `current_durability` INTEGER NOT NULL,
-    CONSTRAINT `fk_nec_inventory_item_item_id` FOREIGN KEY (`item_id`) REFERENCES `nec_item` (`id`)
-);
-
--- TODO
-
-
 CREATE TABLE IF NOT EXISTS `nec_skilltree_item`
 (
     `id`       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -224,8 +200,8 @@ CREATE TABLE IF NOT EXISTS `nec_union`
     `union_news`                TEXT,
     `created`                   DATETIME NOT NULL,
     CONSTRAINT `fk_nec_union_leader_character_id` FOREIGN KEY (`leader_character_id`) REFERENCES `nec_character` (`id`)
-    CONSTRAINT `fk_nec_union_subleader1_character_id` FOREIGN KEY (`subleader1_character_id`) REFERENCES `nec_character` (`id`)
-    CONSTRAINT `fk_nec_union_subleader2_character_id` FOREIGN KEY (`subleader2_character_id`) REFERENCES `nec_character` (`id`)
+    --CONSTRAINT `fk_nec_union_subleader1_character_id` FOREIGN KEY (`subleader1_character_id`) REFERENCES `nec_character` (`id`)
+    --CONSTRAINT `fk_nec_union_subleader2_character_id` FOREIGN KEY (`subleader2_character_id`) REFERENCES `nec_character` (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_union_member`
@@ -328,4 +304,38 @@ CREATE TABLE IF NOT EXISTS `nec_ggate_spawn`
     `glow`        INTEGER             NOT NULL,
     `created`     DATETIME            NOT NULL,
     `updated`     DATETIME            NOT NULL
+);
+
+--Inventory and Item Related tables
+
+CREATE TABLE IF NOT EXISTS `nec_item_library`
+(
+    `id`                  INTEGER NOT NULL PRIMARY KEY,
+    `name`                TEXT    NOT NULL,
+    `item_type`           INTEGER NOT NULL,
+    `equipment_slot_type` INTEGER NOT NULL,
+    `physical`            INTEGER NOT NULL,
+    `magical`             INTEGER NOT NULL,
+    `durability`          INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `nec_item_spawn` (
+	`id`	                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`character_id`	        INTEGER NOT NULL,
+	`item_id`	            INTEGER NOT NULL,
+	`quantity`	            INTEGER NOT NULL,
+	`current_durability`	INTEGER NOT NULL,
+    `storage_type`          INTEGER NOT NULL,   --ToDo identify Union location and avatar location bytes
+	`bag`	                INTEGER NOT NULL,	
+	`slot`	                INTEGER NOT NULL,	
+    `state`	                INTEGER NOT NULL,	--equipped, soulbound, at auction, in shop. placeholder for bitmask.
+	CONSTRAINT `fk_nec_item_spawn_item_id` FOREIGN KEY(`item_id`) REFERENCES `nec_item_library`(`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `nec_item_character_bag` (
+	`id`	    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`char_id`	INTEGER NOT NULL,
+	`slot`      INTEGER NOT NULL,
+	`size`	    INTEGER NOT NULL,
+	CONSTRAINT `fk_nec_item_character_bag_character_id` FOREIGN KEY(`char_id`) REFERENCES `nec_character`(`id`)
 );

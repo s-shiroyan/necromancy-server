@@ -37,16 +37,15 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteByte(4); //These 8 bytes represent how items need to change the character's features.
             res.WriteByte(5);
             res.WriteByte(0); // bool
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment. 2 = Royal bag.
-            res.WriteByte(0); // 0~2
+            res.WriteByte(1);
+            res.WriteByte(2);
+            res.WriteByte(3);
+            res.WriteByte(4);
+            res.WriteByte(5);
+            res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
+            res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
-            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
+            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
             res.WriteInt64(69);
             res.WriteInt32(59);
             return res;

@@ -62,6 +62,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CurrentDurability = item.Durability;
             inventoryItem.CharacterId = character.Id;
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+            inventoryItem.State = 0;
 
             client.Inventory.AddInventoryItem(inventoryItem);
             if (!Server.Database.InsertInventoryItem(inventoryItem))
@@ -72,6 +73,8 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
             Router.Send(recvItemInstanceUnidentified, client);
+            responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
+
         }
 
         public void RecvItemInstance(NecClient client, InventoryItem inventoryItem)

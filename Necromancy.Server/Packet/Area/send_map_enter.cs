@@ -21,21 +21,9 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); //error check. must be 0
-            res.WriteByte(0); //Bool - play cutscene. 1 yes, 0 no?
+            res.WriteByte(0); //Bool - play cutscene. 1 yes, 0 no?  //to-do,  play a cutscene on first time map entry 
             Router.Send(client, (ushort) AreaPacketId.recv_map_enter_r, res, ServerType.Area);
         }
 
-        private void SendDataNotifyCharaData(NecClient client, NecClient thisNecClient)
-        {
-            SendMapBGM(client);
-            client.Character.weaponEquipped = false;
-        }
-
-        private void SendMapBGM(NecClient client)
-        {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(100401);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_map_update_bgm, res, ServerType.Area, client);
-        }
     }
 }

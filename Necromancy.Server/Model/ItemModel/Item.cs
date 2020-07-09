@@ -15,11 +15,36 @@ namespace Necromancy.Server.Model.ItemModel
             switch (value)
             {
                 case 0: return ItemType.NONE;
-                case 1: return ItemType.HELMET;
-                case 2: return ItemType.ARMOR_TOPS;
-                case 3: return ItemType.ARMOR_BOTTOMS;
-                case 4: return ItemType.GLOVES;
-                case 5: return ItemType.SABATONS;
+                case 1: 
+                    if (itemId >= 154101)
+                    {
+                        return ItemType.AVATAR;
+                    }
+                    return ItemType.HELMET;
+                case 2: 
+                    if (itemId >= 254101)
+                    {
+                        return ItemType.AVATAR;
+                    }
+                    return ItemType.ARMOR_TOPS;
+                case 3: 
+                    if (itemId >= 354101)
+                    {
+                        return ItemType.AVATAR;
+                    }
+                    return ItemType.ARMOR_BOTTOMS;
+                case 4: 
+                    if (itemId >= 454101)
+                    {
+                        return ItemType.AVATAR;
+                    }
+                    return ItemType.GLOVES;
+                case 5: 
+                    if (itemId >= 554101)
+                    {
+                        return ItemType.AVATAR;
+                    }
+                    return ItemType.SABATONS;
                 case 6: return ItemType.CLOAK;
                 case 7: return ItemType.AVATAR;
                 case 101: return ItemType.TRUMP;
@@ -186,7 +211,7 @@ namespace Necromancy.Server.Model.ItemModel
                 case ItemType.GEM_SYNTHESIS: return EquipmentSlotType.NONE;
                 case ItemType.MAP_FRAGMENT: return EquipmentSlotType.NONE;
                 case ItemType.OTHERS: return EquipmentSlotType.NONE;
-                case ItemType.AVATAR: return EquipmentSlotType.NONE;
+                case ItemType.AVATAR: return EquipmentSlotType.AVATAR_ARMS; //testing default of arms
                 case ItemType.ALLCHT: return EquipmentSlotType.NONE;
                 case ItemType.BUFF: return EquipmentSlotType.NONE;
                 case ItemType.LEATHER: return EquipmentSlotType.NONE;

@@ -53,6 +53,7 @@ namespace Necromancy.Server.Packet.Area
                         }, //set to Manaphes in slums for testing.
                         {x => x == 10000005, () => SendEventSelectMapAndChannel(client, instanceId)},
                         {x => x == 10000012, () => SendEventSelectMapAndChannel(client, instanceId)},
+                        {x => x == 10000912, () => SendEventSelectMapAndChannel(client, instanceId)},
                         {x => x == 10000019, () => Abdul(client, npcSpawn)},
                         {
                             x => (x == 74000022) || (x == 74000024) || (x == 74000023),

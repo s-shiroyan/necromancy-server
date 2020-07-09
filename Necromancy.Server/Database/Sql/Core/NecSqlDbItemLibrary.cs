@@ -10,19 +10,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateItem =
-            "INSERT INTO `nec_item` (`id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability`) VALUES (@id, @name, @item_type, @equipment_slot_type, @physical, @magical, @durability);";
+            "INSERT INTO `nec_item_library` (`id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability`) VALUES (@id, @name, @item_type, @equipment_slot_type, @physical, @magical, @durability);";
 
         private const string SqlSelectItemById =
-            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item` WHERE `id`=@id; ";
+            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item_library` WHERE `id`=@id; ";
 
         private const string SqlSelectItems =
-            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item`; ";
+            "SELECT `id`, `name`, `item_type`, `equipment_slot_type`, `physical`, `magical`, `durability` FROM `nec_item_library`; ";
 
         private const string SqlUpdateItem =
-            "UPDATE `nec_item` SET `name`=@name, `item_type`=@item_type, `equipment_slot_type`=@equipment_slot_type, `physical`=@physical, `magical`=@magical, `durability`=@durability WHERE `id`=@id;";
+            "UPDATE `nec_item_library` SET `name`=@name, `item_type`=@item_type, `equipment_slot_type`=@equipment_slot_type, `physical`=@physical, `magical`=@magical, `durability`=@durability WHERE `id`=@id;";
 
         private const string SqlDeleteItem =
-            "DELETE FROM `nec_item` WHERE `id`=@id;";
+            "DELETE FROM `nec_item_library` WHERE `id`=@id;";
 
         public bool InsertItem(Item item)
         {

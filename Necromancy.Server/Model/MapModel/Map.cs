@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Arrowgene.Logging;
@@ -69,9 +70,33 @@ namespace Necromancy.Server.Model
             List<MapTransition> mapTransitions = server.Database.SelectMapTransitionsByMapId(mapData.Id);
             foreach (MapTransition mapTran in mapTransitions)
             {
+                
+                if(mapTran.Id == 0) //Only one special transition
+                {
+                    double angle = mapTran.MaplinkHeading / 255.0;
+                    mapTran.LeftPos.X = (float)((mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2) * Math.Cos(angle));
+                    mapTran.LeftPos.Y = (float)((mapTran.ReferencePos.Y) * Math.Cos(angle));
+                    mapTran.RightPos.X = (float)((mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2) * Math.Cos(angle));
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2);
+                }
+                else if (mapTran.InvertedTransition != true) //map is x dominant
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X + mapTran.MaplinkWidth / 2);
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y);
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X - mapTran.MaplinkWidth / 2);
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y);
+                }
+                else if(mapTran.InvertedTransition != false) //map is y dominant
+                {
+                    mapTran.LeftPos.X = (float)(mapTran.ReferencePos.X);
+                    mapTran.LeftPos.Y = (float)(mapTran.ReferencePos.Y + mapTran.MaplinkWidth / 2);
+                    mapTran.RightPos.X = (float)(mapTran.ReferencePos.X);
+                    mapTran.RightPos.Y = (float)(mapTran.ReferencePos.Y - mapTran.MaplinkWidth / 2);
+                }
+
                 server.Instances.AssignInstance(mapTran);
-             //   mapTran.Start(_server, this);
                 MapTransitions.Add(mapTran.InstanceId, mapTran);
+                Logger.Debug($"Loaded Map transition {mapTran.Id} on map {this.FullName}");
             }
 
             //Assign Unique Instance ID to each NPC per map. Add to dictionary stored with the Map object
@@ -182,6 +207,7 @@ namespace Necromancy.Server.Model
 
         public void EnterForce(NecClient client, MapPosition mapPosition = null)
         {
+            client.Character.mapChange = true;
             Enter(client, mapPosition);
             _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
 
