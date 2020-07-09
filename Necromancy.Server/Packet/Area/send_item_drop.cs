@@ -33,6 +33,11 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
+            if (!Server.Database.DeleteInventoryItem(inventoryItem.Id))
+            {
+                return;
+            }
+
             IBuffer res = BufferProvider.Provide();
             res.SetPositionStart();
             res.WriteUInt64((ulong) inventoryItem.Id);
