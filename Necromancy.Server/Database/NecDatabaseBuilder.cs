@@ -88,18 +88,18 @@ namespace Necromancy.Server.Database
                     }
                 }
 
-                // insert items
-                foreach (int itemId in _settingRepository.ItemInfo.Keys)
+                // insert items (un-comment to rebuild table from settings lookup) Currently disabled for inventory development
+                foreach (ItemInfoSetting itemInfoSetting in _settingRepository.ItemInfo.Values)
                 {
-                    if (!_settingRepository.ItemNecromancy.TryGetValue(itemId, out ItemNecromancySetting necItem))
+                    if (!_settingRepository.ItemNecromancy.TryGetValue(itemInfoSetting.Id, out ItemNecromancySetting necItem))
                     {
-                        Logger.Error($"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`");
+                        Logger.Error($"ItemId: {itemInfoSetting.Id} - not found in `SettingRepository.ItemNecromancy`");
                         continue;
                     }
 
                     Item item = new Item();
                     item.Id = necItem.Id;
-                    item.Name = necItem.Name;
+                    item.Name = itemInfoSetting.Name;
                     item.Durability = necItem.Durability;
                     item.Physical = necItem.Physical;
                     item.Magical = necItem.Magical;
@@ -107,7 +107,7 @@ namespace Necromancy.Server.Database
                     item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
                     if (!database.InsertItem(item))
                     {
-                        Logger.Error($"ItemId: {itemId} - not found in `SettingRepository.ItemNecromancy`");
+                        Logger.Error($"ItemId: {item.Id} - could not be inserted into table`");
                         return;
                     }
                 }
@@ -121,6 +121,8 @@ namespace Necromancy.Server.Database
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_gimmick.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_maptransition.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_ggate.sql"));
+                //scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_item_library.sql"));
+                scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_item_spawn.sql"));
             }
 
             SqlMigrator migrator = new SqlMigrator(database);

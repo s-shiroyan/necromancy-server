@@ -9,19 +9,19 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlCreateInventoryItem =
-            "INSERT INTO `nec_inventory_item` (`character_id`, `item_id`, `quantity`, `current_durability`) VALUES (@character_id, @item_id, @quantity, @current_durability);";
+            "INSERT INTO `nec_item_spawn` (`character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `slot`, `state`) VALUES (@character_id, @item_id, @quantity, @current_durability, @storage_type, @bag, @slot, @state);";
 
         private const string SqlSelectInventoryItemById =
-            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_inventory_item` WHERE `id`=@id; ";
+            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `slot`, `state` FROM `nec_item_spawn` WHERE `id`=@id; ";
 
         private const string SqlSelectInventoryItemsByCharacterId =
-            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability` FROM `nec_inventory_item` WHERE `character_id`=@character_id; ";
+            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `slot`, `state` FROM `nec_item_spawn` WHERE `character_id`=@character_id; ";
 
         private const string SqlUpdateInventoryItem =
-            "UPDATE `nec_inventory_item` SET `character_id`=@character_id, `item_id`=@item_id, `quantity`=@quantity, `current_durability`=@current_durability WHERE `id`=@id;";
+            "UPDATE `nec_item_spawn` SET `character_id`=@character_id, `item_id`=@item_id, `quantity`=@quantity, `current_durability`=@current_durability, `storage_type`=@storage_type, `bag`=@bag, `slot`=@slot, `state`=@state WHERE `id`=@id;";
 
         private const string SqlDeleteInventoryItem =
-            "DELETE FROM `nec_inventory_item` WHERE `id`=@id;";
+            "DELETE FROM `nec_item_spawn` WHERE `id`=@id;";
 
 
         public bool InsertInventoryItem(InventoryItem inventoryItem)
@@ -32,6 +32,11 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@item_id", inventoryItem.ItemId);
                 AddParameter(command, "@quantity", inventoryItem.Quantity);
                 AddParameter(command, "@current_durability", inventoryItem.CurrentDurability);
+                AddParameter(command, "@storage_type", inventoryItem.StorageType);
+                AddParameter(command, "@bag", inventoryItem.BagId);
+                AddParameter(command, "@slot", inventoryItem.BagSlotIndex);
+                AddParameter(command, "@state", inventoryItem.State);
+
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
             {
@@ -81,6 +86,10 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@item_id", inventoryItem.ItemId);
                 AddParameter(command, "@quantity", inventoryItem.Quantity);
                 AddParameter(command, "@current_durability", inventoryItem.CurrentDurability);
+                AddParameter(command, "@storage_type", inventoryItem.StorageType);
+                AddParameter(command, "@bag", inventoryItem.BagId);
+                AddParameter(command, "@slot", inventoryItem.BagSlotIndex);
+                AddParameter(command, "@state", inventoryItem.State);
             });
             return rowsAffected > NoRowsAffected;
         }
@@ -100,6 +109,10 @@ namespace Necromancy.Server.Database.Sql.Core
             inventoryItem.ItemId = GetInt32(reader, "item_id");
             inventoryItem.Quantity = GetByte(reader, "quantity");
             inventoryItem.CurrentDurability = GetInt32(reader, "current_durability");
+            inventoryItem.StorageType = GetByte(reader, "storage_type");
+            inventoryItem.BagId = GetByte(reader, "bag");
+            inventoryItem.BagSlotIndex = GetInt16(reader, "slot");
+            inventoryItem.State = GetInt32(reader, "state");
             return inventoryItem;
         }
     }
