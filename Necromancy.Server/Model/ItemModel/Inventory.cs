@@ -26,6 +26,20 @@ namespace Necromancy.Server.Model.ItemModel
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
             _equippedItems = new Dictionary<EquipmentSlotType, InventoryItem>();
+            _cloakRoom = new Dictionary<byte, InventoryItem[]>();
+            _cloakRoom.Add(0, new InventoryItem[cloakRoomTabSize]);
+            _avatar = new Dictionary<byte, InventoryItem[]>();
+            _avatar.Add(0, new InventoryItem[avatarTabSize]);
+            _avatar.Add(1, new InventoryItem[avatarTabSize]);
+            _avatar.Add(2, new InventoryItem[avatarTabSize]);
+            _unionStorage = new Dictionary<byte, InventoryItem[]>();
+            _unionStorage.Add(0, new InventoryItem[bagSize]);
+
+            _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
+            _storageContainers.Add(0, _inventory);
+            _storageContainers.Add(3, _cloakRoom);
+            _storageContainers.Add(4, _avatar);
+            _storageContainers.Add(5, _unionStorage);
         }
         public void Equip(InventoryItem inventoryItem)
         {
@@ -54,23 +68,6 @@ namespace Necromancy.Server.Model.ItemModel
                 _equippedItems.TryGetValue(equipmentSlotType, out inventoryItem);
             }
             return inventoryItem;
-        }
-        public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte bagId, short bagSlotIndex)
-            _cloakRoom = new Dictionary<byte, InventoryItem[]>();
-            _cloakRoom.Add(0, new InventoryItem[cloakRoomTabSize]);
-            _avatar = new Dictionary<byte, InventoryItem[]>();
-            _avatar.Add(0, new InventoryItem[avatarTabSize]);
-            _avatar.Add(1, new InventoryItem[avatarTabSize]);
-            _avatar.Add(2, new InventoryItem[avatarTabSize]);
-            _unionStorage = new Dictionary<byte, InventoryItem[]>();
-            _unionStorage.Add(0, new InventoryItem[bagSize]);
-
-            _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
-            _storageContainers.Add(0, _inventory);
-            _storageContainers.Add(3, _cloakRoom);
-            _storageContainers.Add(4, _avatar);
-            _storageContainers.Add(5, _unionStorage);
-
         }
 
         public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte storageType, byte bagId, short bagSlotIndex)
