@@ -34,7 +34,7 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteByte(2);
             res.WriteByte(9);
 
-            res.WriteByte(4); //These 8 bytes represent avatar stuff.
+            res.WriteByte(4); //These 8 bytes represent how items need to change the character's features.
             res.WriteByte(5);
             res.WriteByte(0); // bool
             res.WriteByte(0);
