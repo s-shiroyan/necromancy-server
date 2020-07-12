@@ -1,6 +1,5 @@
 using Arrowgene.Logging;
 using System.Collections.Generic;
-using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Model.ItemModel
