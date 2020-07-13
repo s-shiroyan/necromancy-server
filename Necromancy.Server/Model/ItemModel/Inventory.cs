@@ -1,5 +1,6 @@
 using Arrowgene.Logging;
 using System.Collections.Generic;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Model.ItemModel
 {
@@ -8,6 +9,8 @@ namespace Necromancy.Server.Model.ItemModel
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, Dictionary<byte, InventoryItem[]>> _storageContainers;
         private Dictionary<byte, InventoryItem[]> _inventory;
+        private Dictionary<EquipmentSlotType, InventoryItem> _equippedItems;
+
         private Dictionary<byte, InventoryItem[]> _cloakRoom;
         private Dictionary<byte, InventoryItem[]> _avatar;
         private Dictionary<byte, InventoryItem[]> _unionStorage;
@@ -21,6 +24,7 @@ namespace Necromancy.Server.Model.ItemModel
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
+            _equippedItems = new Dictionary<EquipmentSlotType, InventoryItem>();
             _cloakRoom = new Dictionary<byte, InventoryItem[]>();
             _cloakRoom.Add(0, new InventoryItem[cloakRoomTabSize]);
             _avatar = new Dictionary<byte, InventoryItem[]>();
@@ -35,7 +39,34 @@ namespace Necromancy.Server.Model.ItemModel
             _storageContainers.Add(3, _cloakRoom);
             _storageContainers.Add(4, _avatar);
             _storageContainers.Add(5, _unionStorage);
-
+        }
+        public void Equip(InventoryItem inventoryItem)
+        {
+            _equippedItems.Add(inventoryItem.Item.EquipmentSlotType, inventoryItem);
+        }
+        public void UnEquip(InventoryItem inventoryItem)
+        {
+            _equippedItems.Remove(inventoryItem.Item.EquipmentSlotType);
+        }
+        public InventoryItem CheckAlreadyEquipped(EquipmentSlotType equipmentSlotType)
+        {
+            InventoryItem inventoryItem = null;
+            if (equipmentSlotType == EquipmentSlotType.HAND_R | equipmentSlotType == EquipmentSlotType.HAND_L)
+            {
+                if (_equippedItems.ContainsKey(EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R))
+                {
+                    _equippedItems.TryGetValue((EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R), out inventoryItem);
+                }
+                else
+                {
+                    _equippedItems.TryGetValue(equipmentSlotType, out inventoryItem);
+                }
+            }
+            else
+            {
+                _equippedItems.TryGetValue(equipmentSlotType, out inventoryItem);
+            }
+            return inventoryItem;
         }
 
         public ItemActionResultType MoveInventoryItem(InventoryItem inventoryItem, byte storageType, byte bagId, short bagSlotIndex)
@@ -122,7 +153,7 @@ namespace Necromancy.Server.Model.ItemModel
                 for (int i = 0; i < bag.Length; i++)
                 {
                     InventoryItem inventoryItem = bag[i];
-                    if (inventoryItem != null && inventoryItem.CurrentEquipmentSlotType == equipmentSlotType)
+                    if (inventoryItem != null && (inventoryItem.CurrentEquipmentSlotType.HasFlag(equipmentSlotType)))
                     {
                         return inventoryItem;
                     }
@@ -233,6 +264,22 @@ namespace Necromancy.Server.Model.ItemModel
                     bag[inventoryItem.BagSlotIndex] = inventoryItem;
                 }
 
+            }
+        }
+
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Inventory));
+        public void LogEquppedItems()
+        {
+            foreach (InventoryItem[] bag in _inventory.Values)
+            {
+                for (int i = 0; i < bag.Length; i++)
+                {
+                    InventoryItem inventoryItem = bag[i];
+                    if (inventoryItem != null && inventoryItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                    {
+                        Logger.Debug($"Equipped: {inventoryItem.Id} {inventoryItem.Item.Name} -> {inventoryItem.CurrentEquipmentSlotType}");
+                    }
+                }
             }
         }
     }

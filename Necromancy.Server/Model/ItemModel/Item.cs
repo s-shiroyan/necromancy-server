@@ -132,7 +132,7 @@ namespace Necromancy.Server.Model.ItemModel
         public static EquipmentSlotType GetEquipmentSlotTypeBySlotNumber(int slotNumber)
         {
             EquipmentSlotType equipmentSlotType = EquipmentSlotType.NONE;
-            if (slotNumber > 0)
+            if (slotNumber >= 0)
             {
                 int value = 1 << slotNumber;
                 if (Enum.IsDefined(typeof(EquipmentSlotType), value))
@@ -181,17 +181,17 @@ namespace Necromancy.Server.Model.ItemModel
                 case ItemType.HELMET: return EquipmentSlotType.HEAD;
                 case ItemType.HAT: return EquipmentSlotType.HEAD;
                 case ItemType.HOOD: return EquipmentSlotType.HEAD;
-                case ItemType.ARMOR_TOPS: return EquipmentSlotType.NONE;
-                case ItemType.ARMOR_BOTTOMS: return EquipmentSlotType.NONE;
-                case ItemType.CLOTHES_TOPS: return EquipmentSlotType.NONE;
-                case ItemType.CLOTHES_BOTTOMS: return EquipmentSlotType.NONE;
-                case ItemType.COAT: return EquipmentSlotType.NONE;
-                case ItemType.GLOVES: return EquipmentSlotType.NONE;
-                case ItemType.GAUNTLETS: return EquipmentSlotType.NONE;
-                case ItemType.BRACLET: return EquipmentSlotType.NONE;
-                case ItemType.SABATONS: return EquipmentSlotType.NONE;
-                case ItemType.SHOES: return EquipmentSlotType.NONE;
-                case ItemType.CLOAK: return EquipmentSlotType.NONE;
+                case ItemType.ARMOR_TOPS: return EquipmentSlotType.BODY;
+                case ItemType.ARMOR_BOTTOMS: return EquipmentSlotType.LEGS;
+                case ItemType.CLOTHES_TOPS: return EquipmentSlotType.BODY;
+                case ItemType.CLOTHES_BOTTOMS: return EquipmentSlotType.LEGS;
+                case ItemType.COAT: return EquipmentSlotType.BODY;
+                case ItemType.GLOVES: return EquipmentSlotType.ARMS;
+                case ItemType.GAUNTLETS: return EquipmentSlotType.ARMS;
+                case ItemType.BRACLET: return EquipmentSlotType.ARMS;
+                case ItemType.SABATONS: return EquipmentSlotType.FEET;
+                case ItemType.SHOES: return EquipmentSlotType.FEET;
+                case ItemType.CLOAK: return EquipmentSlotType.MANTLE;
                 case ItemType.RING: return EquipmentSlotType.ACCESSORY_1;
                 case ItemType.EARRING: return EquipmentSlotType.ACCESSORY_2; 
                 case ItemType.NECKLACE: return EquipmentSlotType.ACCESSORY_3;
