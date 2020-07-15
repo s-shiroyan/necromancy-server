@@ -4,7 +4,6 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Model.CharacterModel;
-using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -36,8 +35,6 @@ namespace Necromancy.Server.Packet.Area
             client.Character.Hp.toMax();
             client.Character.movementId = client.Character.InstanceId;
             client.Character.State = CharacterState.NormalForm;
-
-            Task.Delay(System.TimeSpan.FromSeconds(6)).ContinueWith(t1 => client.Character.State = CharacterState.NormalForm);
 
             RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(client.Character.Hp.current);
             Router.Send(client, cHpUpdate.ToPacket());
