@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.CharacterModel;
+using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -21,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_event_access_object;
+        public override ushort Id => (ushort)AreaPacketId.send_event_access_object;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -43,7 +45,7 @@ namespace Necromancy.Server.Packet.Area
                         $"instanceId : {npcSpawn.InstanceId} |  npcSpawn.Id: {npcSpawn.Id}  |   npcSpawn.NpcId: {npcSpawn.NpcId}");
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(0);
-                    Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res, ServerType.Area);
 
                     //logic to execute different actions based on the event that triggered this select execution.
                     var eventSwitchPerObjectID = new Dictionary<Func<int, bool>, Action>
@@ -92,10 +94,12 @@ namespace Necromancy.Server.Packet.Area
                             x => x < 1000000,
                             () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")
                         },
+                        {x => (x == 10000112 || x == 10000316 || x == 10000003 || x == 10000706 || x == 10000911 || x == 10000209),
+                            () => PlayerRevive(client, npcSpawn)},
                         {x => x < 900000100, () => WorkInProgress(client, npcSpawn)}
                     };
 
-                    eventSwitchPerObjectID.First(sw => sw.Key((int) npcSpawn.NpcId)).Value();
+                    eventSwitchPerObjectID.First(sw => sw.Key((int)npcSpawn.NpcId)).Value();
 
                     break;
                 case MonsterSpawn monsterSpawn:
@@ -103,7 +107,7 @@ namespace Necromancy.Server.Packet.Area
 
                     IBuffer res2 = BufferProvider.Provide();
                     res2.WriteInt32(monsterSpawn.Id);
-                    Router.Send(client, (ushort) AreaPacketId.recv_event_access_object_r, res2, ServerType.Area);
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_access_object_r, res2, ServerType.Area);
 
                     break;
 
@@ -141,7 +145,7 @@ namespace Necromancy.Server.Packet.Area
             res2.WriteInt32(0); // 0 = normal 1 = cinematic
             res2.WriteByte(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_start, res2, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res2, ServerType.Area);
             // it's the event than permit to that all the code under
             // dont forget tu put a recv_event_end, at the end, if you don't want to get stuck, and do nothing.
         }
@@ -151,20 +155,20 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteCString("Select a Map!. just not the town"); // find max size
             res.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
         }
 
         private void SendEventShowBoardEnd(NecClient client, uint instanceId)
         {
             IBuffer res = BufferProvider.Provide();
-            Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_end, res, ServerType.Area);
         }
 
         private void SendEventEnd(NecClient client)
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteByte(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_end, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
         }
 
         private void SendEventMessageNoObject(NecClient client, int instanceId)
@@ -174,7 +178,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteCString("QuestChat"); //Chat Window lable
             res.WriteCString(
                 "You've got 5 seconds before this window closes. Think Quick!'"); // it's the npc text, switch automatically to an other window when text finish
-            Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res, ServerType.Area);
         }
 
         private void SendEventMessage(NecClient client, int instanceId)
@@ -182,7 +186,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(1);
             res.WriteCString("Hello world.");
-            Router.Send(client, (ushort) AreaPacketId.recv_event_message, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message, res, ServerType.Area);
         }
 
         private void SendEventBlockMessage(NecClient client, int instanceId)
@@ -190,7 +194,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(instanceId);
             res.WriteCString("Hello world.");
-            Router.Send(client, (ushort) AreaPacketId.recv_event_block_message, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_block_message, res, ServerType.Area);
         }
 
         private void SendEventSelectMapAndChannel(NecClient client, uint instanceId)
@@ -226,7 +230,7 @@ namespace Necromancy.Server.Packet.Area
                 res7.WriteByte(6); //Number or Channels  - comment from other recv
             }
 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
         }
 
 
@@ -240,10 +244,10 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Name}"); //Name
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString("I used to drive a cab."); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextAbdul = false;
             }
@@ -252,27 +256,27 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res = BufferProvider.Provide();
                 res.WriteCString(npcSpawn.Title); // Title at top of Window
                 res.WriteUInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
-                Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteCString("Accept Mission"); //Length 0x601  // name of the choice 
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3,
                     ServerType.Area); // It's the first choice
 
                 IBuffer res4 = BufferProvider.Provide();
                 res4.WriteCString("Report Mission"); //Length 0x601 // name of the choice
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res4,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4,
                     ServerType.Area); // It's the second choice 
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString("Back"); //Length 0x601 // name of the choice
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res5,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5,
                     ServerType.Area); // It's the second choice 
 
                 IBuffer res11 = BufferProvider.Provide();
                 res11.WriteCString("Pick a Button..  What are you waiting for"); // Window Heading / Name
                 res11.WriteUInt32(npcSpawn.InstanceId);
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res11,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
                     ServerType.Area); // It's the windows that contain the multiple choice
             }
         }
@@ -296,7 +300,7 @@ namespace Necromancy.Server.Packet.Area
                     res3.WriteCString("Rusted Gate"); //Length 0x601
                 }
 
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3,
                     ServerType.Area); // It's the first choice
 
                 IBuffer res70 = BufferProvider.Provide();
@@ -309,13 +313,13 @@ namespace Necromancy.Server.Packet.Area
                     res70.WriteCString("Isolated Hall"); //Length 0x601
                 }
 
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res70,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res70,
                     ServerType.Area); // It's the second choice
 
                 IBuffer res1 = BufferProvider.Provide();
                 res1.WriteCString("Select area to travel to"); // It's the title dude
                 res1.WriteUInt32(ggateSpawn.InstanceId); // This is the Event Type.  0xFFFD sends a 58 byte packet
-                Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res1,
+                Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res1,
                     ServerType.Area); // Actual map change is handled by send_event_select_exec_r, need to figure out how to handle this better
             }
         }
@@ -328,7 +332,7 @@ namespace Necromancy.Server.Packet.Area
             //SendEventBlockMessage(client, instanceId);
             SendEventSelectMapAndChannel(client, instanceId);
 
-            Task.Delay(TimeSpan.FromMilliseconds((int) (15 * 1000))).ContinueWith
+            Task.Delay(TimeSpan.FromMilliseconds((int)(15 * 1000))).ContinueWith
             (t1 =>
                 {
                     SendEventShowBoardEnd(client, instanceId);
@@ -342,29 +346,29 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteCString(npcSpawn.Title); // Title at top of Window
             res.WriteUInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
-            Router.Send(client, (ushort) AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
 
 
             IBuffer res12 = BufferProvider.Provide();
             res12.WriteCString("The fountain is brimmed with water. Has enough for 5 more drinks."); // Length 0xC01
-            Router.Send(client, (ushort) AreaPacketId.recv_event_system_message, res12,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12,
                 ServerType.Area); // show system message on middle of the screen.
 
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteCString("Drink"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3,
                 ServerType.Area); // It's the first choice
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteCString("Don't drink"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res5,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5,
                 ServerType.Area); // It's the second choice
 
             IBuffer res11 = BufferProvider.Provide();
             res11.WriteCString("Effect: Recover 50% of maximum HP and MP"); // Window Heading / Name
             res11.WriteUInt32(npcSpawn.InstanceId);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res11,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
                 ServerType.Area); // It's the windows that contain the multiple choice
         }
 
@@ -379,7 +383,7 @@ namespace Necromancy.Server.Packet.Area
                 "there might be some beetles in caligrase",
                 $"{client.Soul.Name}.... were you born with that name?",
                 "ありがとうございます", //game client can't render japanese text
-                "мы ценим вас"                
+                "мы ценим вас"
             };
             String[] Text2 = new string[]
             {
@@ -392,12 +396,12 @@ namespace Necromancy.Server.Packet.Area
                 " 参加していただきありがとうございます",
                 "Спасибо, что присоединились"
             };
-            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length-1);
+            int randomTextChoice = Util.GetRandomNumber(0, Text1.Length - 1);
 
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteCString($"{npcSpawn.Name}"); //Name
             res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
-            res2.WriteCString(Text1[randomTextChoice]); 
+            res2.WriteCString(Text1[randomTextChoice]);
             Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
             IBuffer res3 = BufferProvider.Provide();
@@ -441,18 +445,18 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteCString("Set the NPC Heading in Database"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3,
                 ServerType.Area); // It's the first choice
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteCString("Update the Model ID of NPC in Database"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res5,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5,
                 ServerType.Area); // It's the second choice
 
             IBuffer res11 = BufferProvider.Provide();
             res11.WriteCString("Which Admin function would you like to do?"); // Window Heading / Name
             res11.WriteUInt32(npcSpawn.InstanceId);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res11,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
                 ServerType.Area); // It's the windows that contain the multiple choice
         }
 
@@ -465,16 +469,16 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
                     "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteCString($"{npcSpawn.Name}"); //Name
                 res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res3.WriteCString("sometimes the process fails."); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextBlacksmith = false;
             }
@@ -487,11 +491,11 @@ namespace Necromancy.Server.Packet.Area
                 res4.WriteInt32(10800405);
                 res4.WriteInt32(10800405);
                 res4.WriteByte(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
             }
         }
 
@@ -504,10 +508,10 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
                     "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextDonkey = false;
             }
@@ -520,11 +524,11 @@ namespace Necromancy.Server.Packet.Area
                 res4.WriteInt32(0);
                 res4.WriteInt32(0);
                 res4.WriteByte(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
             }
         }
 
@@ -537,10 +541,10 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
                     "Welcome! We take care of your belongings and money."); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextCloakRoom = false;
             }
@@ -549,7 +553,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_event_soul_storage_open = 0x3DD0, 
                 res4.WriteInt64(client.Soul.WarehouseGold); // Gold in the storage
-                Router.Send(client, (ushort) AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
             }
         }
 
@@ -557,36 +561,36 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteCString("While Beginner (Usable until SR 2) : 100 G"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0       
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0       
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteCString("Floor : Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteCString("Simple Bed : 60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteCString("Economy Room : 300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
             res6.WriteCString("Suite Room : 1,200 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res7 = BufferProvider.Provide();
             res7.WriteCString("Royal Suite : 3000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res7, ServerType.Area); // 5
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // 5
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 6
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 6
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
             res9.WriteUInt32(npcSpawn.InstanceId);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res9,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9,
                 ServerType.Area); // It's the windows that contain the multiple choice
 
             /*IBuffer res2 = BufferProvider.Provide();
@@ -611,32 +615,32 @@ namespace Necromancy.Server.Packet.Area
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteCString("While Beginner (Usable until SR 2) 100 G"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res2, ServerType.Area); // 0
 
             IBuffer res3 = BufferProvider.Provide();
             res3.WriteCString("Pig stable : Free!"); //Length 0x601  // name of the choice 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3, ServerType.Area); // 1
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteCString("Storage room : 60 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 2
 
             IBuffer res5 = BufferProvider.Provide();
             res5.WriteCString("Sleeper : 300 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 3
 
             IBuffer res6 = BufferProvider.Provide();
             res6.WriteCString("Slum Suite : 10,000 G"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 4
 
             IBuffer res8 = BufferProvider.Provide();
             res8.WriteCString("Back"); //Length 0x601 // name of the choice
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 5
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 5
 
             IBuffer res9 = BufferProvider.Provide();
             res9.WriteCString("Welcome! Please choose a room to stay in!"); // Window Heading / Name
             res9.WriteUInt32(npcSpawn.InstanceId);
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_exec, res9,
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res9,
                 ServerType.Area); // It's the windows that contain the multiple choice
         }
 
@@ -657,7 +661,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(14);
             res.WriteInt16(16);
 
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_message_board_notify_open, res, ServerType.Area);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_message_board_notify_open, res, ServerType.Area);
         }
 
         private void UnionWindow(NecClient client, NpcSpawn npcSpawn)
@@ -668,7 +672,7 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             //recv_union_open_window = 0x7D75,
             //no structure
-            Router.Send(client, (ushort) AreaPacketId.recv_union_open_window, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_union_open_window, res, ServerType.Area);
         }
 
         private void EventChangeChannel(NecClient client, NpcSpawn npcSpawn)
@@ -691,14 +695,14 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteFixedString($"Channel {i}", 97);
                 res2.WriteByte(1); //bool 1 | 0
                 res2.WriteInt16(0xF); //Max players
-                res2.WriteInt16((short) i); //Current players
+                res2.WriteInt16((short)i); //Current players
                 res2.WriteByte(3);
                 res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
                 //
             }
 
             res2.WriteByte(10); //# of channels
-            Router.Send(client, (ushort) AreaPacketId.recv_event_select_channel, res2, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_channel, res2, ServerType.Area);
         }
 
         private void CharaChangeChannel(NecClient client, NpcSpawn npcSpawn) //Usage TBD. calls up Send_Channel_Select
@@ -721,14 +725,30 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteFixedString($"Channel {i}", 97);
                 res2.WriteByte(1); //bool 1 | 0
                 res2.WriteInt16(0xF); //Max players
-                res2.WriteInt16((short) i); //Current players
+                res2.WriteInt16((short)i); //Current players
                 res2.WriteByte(3);
                 res2.WriteByte(6); //channel Emoticon - 6 for a Happy Face
                 //
             }
 
             res2.WriteByte(10); //# of channels
-            Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+            Router.Send(client, (ushort)MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+        }
+
+        private void PlayerRevive(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res0 = BufferProvider.Provide();
+            res0.WriteInt32(0); //1 = cinematic, 0 Just start the event without cinematic
+            res0.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_start, res0, ServerType.Area);
+
+            IBuffer res15 = BufferProvider.Provide();
+            //recv_raisescale_view_open = 0xC25D, // Parent = 0xC2E5 // Range ID = 01  // was 0xC25D
+            res15.WriteInt16(1); //Basic revival rate %
+            res15.WriteInt16(5); //Penalty %
+            res15.WriteInt16(69); //Offered item % (this probably changes with recv_raisescale_update_success_per)
+            res15.WriteInt16(4); //Dimento medal addition %
+            Router.Send(client, (ushort)AreaPacketId.recv_raisescale_view_open, res15, ServerType.Area);
         }
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)

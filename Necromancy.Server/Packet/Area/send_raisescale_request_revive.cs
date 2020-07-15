@@ -3,6 +3,8 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Model.CharacterModel;
+using System.Threading.Tasks;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -16,11 +18,27 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            IBuffer res1 = BufferProvider.Provide();
+            res1.WriteInt32(0); //Has to be 0 or else you DC
+            res1.WriteUInt32(client.Character.DeadBodyInstanceId);
+            res1.WriteUInt32(client.Character.InstanceId);
+            Router.Send(client, (ushort)AreaPacketId.recv_revive_init_r, res1, ServerType.Area);
+
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_raisescale_request_revive_r, res, ServerType.Area);
 
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteInt32(0); // Error code, 0 = success
+            Router.Send(client, (ushort)AreaPacketId.recv_revive_execute_r, res2, ServerType.Area);
+
+            client.Character.soulFormState -= 1;
+            client.Character.Hp.toMax();
+            client.Character.movementId = client.Character.InstanceId;
+            client.Character.State = CharacterState.NormalForm;
+
+            Task.Delay(System.TimeSpan.FromSeconds(6)).ContinueWith(t1 => client.Character.State = CharacterState.NormalForm);
+
             RecvCharaUpdateHp cHpUpdate = new RecvCharaUpdateHp(client.Character.Hp.current);
             Router.Send(client, cHpUpdate.ToPacket());
 
