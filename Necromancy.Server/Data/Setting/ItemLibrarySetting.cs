@@ -17,6 +17,7 @@ namespace Necromancy.Server.Data.Setting
         public int MagicalAttack { get; set; }
         public int RangeDistance { get; set; }
         public int SpecialPerformance { get; set; }
+        public int Durability { get; set; }
         public int Hardness { get; set; }
         public float Weight { get; set; }
 
@@ -29,16 +30,16 @@ namespace Necromancy.Server.Data.Setting
         public int BonusTolerance { get; set; }
 
         //Equip Restrictions
-        public bool FIG { get; set; }
-        public bool THI { get; set; }
-        public bool MAG { get; set; }
-        public bool PRI { get; set; }
-        public bool SAM { get; set; }
-        public bool NIN { get; set; }
-        public bool BIS { get; set; }
-        public bool LOR { get; set; }
-        public bool CLO { get; set; }
-        public bool ALC { get; set; }
+        public int FIG { get; set; }
+        public int THI { get; set; }
+        public int MAG { get; set; }
+        public int PRI { get; set; }
+        public int SAM { get; set; }
+        public int NIN { get; set; }
+        public int BIS { get; set; }
+        public int LOR { get; set; }
+        public int CLO { get; set; }
+        public int ALC { get; set; }
 
         //Bitmask of occupation restrictions
         public int Occupation { get; set; }
@@ -109,10 +110,10 @@ namespace Necromancy.Server.Data.Setting
         public string RequiredAlignment { get; set; }
 
         //Race Requirement
-        public bool RequiredHuman { get; set; }
-        public bool RequiredElf { get; set; }
-        public bool RequiredDwarf { get; set; }
-        public bool RequiredPorkul { get; set; }
+        public int RequiredHuman { get; set; }
+        public int RequiredElf { get; set; }
+        public int RequiredDwarf { get; set; }
+        public int RequiredPorkul { get; set; }
 
         //Gender Requirement
         public string RequiredGender { get; set; }
