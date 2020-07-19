@@ -21,6 +21,7 @@ namespace Necromancy.Server.Data.Setting
 
             ItemInfo = new Dictionary<int, ItemInfoSetting>();
             ItemNecromancy = new Dictionary<int, ItemNecromancySetting>();
+            ItemLibrary = new Dictionary<int, ItemLibrarySetting>();
             Map = new Dictionary<int, MapSetting>();
             Strings = new StrTableSettingLookup();
             Monster = new Dictionary<int, MonsterSetting>();
@@ -33,6 +34,7 @@ namespace Necromancy.Server.Data.Setting
 
         public Dictionary<int, ItemInfoSetting> ItemInfo { get; }
         public Dictionary<int, ItemNecromancySetting> ItemNecromancy { get; }
+        public Dictionary<int, ItemLibrarySetting> ItemLibrary { get; }
         public Dictionary<int, MapSetting> Map { get; }
         public Dictionary<int, MonsterSetting> Monster { get; }
         public Dictionary<int, SkillBaseSetting> SkillBase { get; }
@@ -45,7 +47,8 @@ namespace Necromancy.Server.Data.Setting
         public SettingRepository Initialize()
         {
             ItemInfo.Clear();
-            ItemNecromancy.Clear();
+            //ItemNecromancy.Clear();
+            ItemLibrary.Clear();
             Map.Clear();
             Strings.Clear();
             Monster.Clear();
@@ -56,7 +59,8 @@ namespace Necromancy.Server.Data.Setting
             ModelCommon.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
             Load(ItemInfo, "iteminfo.csv", new ItemInfoCsvReader());
-            Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader()); //disabled for testing to reduce console noise
+            //Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader()); //disabled migrating to new library
+            Load(ItemLibrary, "itemlibrary.csv", new ItemLibrarySettingCsvReader()); //disabled for testing to reduce console noise
             Load(Monster, "monster.csv", new MonsterCsvReader());
             Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
             Load(EoBase, "eo_base.csv", new EoBaseCsvReader());

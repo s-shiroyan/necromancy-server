@@ -20,7 +20,7 @@ namespace Necromancy.Server.Data.Setting
         public int Hardness { get; set; }
         public float Weight { get; set; }
 
-        //Attach type
+        //Attack type
         public int Slash { get; set; }
         public int Strike { get; set; }
         public int Pierce { get; set; }
@@ -71,7 +71,7 @@ namespace Necromancy.Server.Data.Setting
         public int WindDef { get; set; }
         public int EarthDef { get; set; }
         public int LightDef { get; set; }
-        public int Darkdef { get; set; }
+        public int DarkDef { get; set; }
 
         //Bonus Elemental Attack
         public int FireAtk { get; set; }
@@ -83,8 +83,8 @@ namespace Necromancy.Server.Data.Setting
 
         //Transfer Restrictions
         public bool Sellable { get; set; }
-        public bool Tradable { get; set; }
-        public bool New { get; set; }
+        public bool Tradeable { get; set; }
+        public bool NewItem { get; set; }
         public bool Lootable { get; set; }
         public bool Blessable { get; set; }
         public bool Curseable { get; set; }
