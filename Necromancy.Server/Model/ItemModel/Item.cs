@@ -200,7 +200,7 @@ namespace Necromancy.Server.Model.ItemModel
                 case ItemType.SKILLCHIP: return EquipmentSlotType.NONE;
                 case ItemType.BAG: return EquipmentSlotType.NONE;
                 case ItemType.LOSTSOUL: return EquipmentSlotType.NONE;
-                case ItemType.SYSTEM: return EquipmentSlotType.NONE;
+                case ItemType.EVENT: return EquipmentSlotType.NONE;
                 case ItemType.FORGESTONE: return EquipmentSlotType.NONE;
                 case ItemType.TALKRING_MAKEKIT: return EquipmentSlotType.TALKRING;
                 case ItemType.MASTER_TALKRING: return EquipmentSlotType.TALKRING;
@@ -214,7 +214,7 @@ namespace Necromancy.Server.Model.ItemModel
                 case ItemType.AVATAR: return EquipmentSlotType.AVATAR_ARMS; //testing default of arms
                 case ItemType.ALLCHT: return EquipmentSlotType.NONE;
                 case ItemType.BUFF: return EquipmentSlotType.NONE;
-                case ItemType.LEATHER: return EquipmentSlotType.NONE;
+                //case ItemType.LEATHER: return EquipmentSlotType.NONE;
                 case ItemType.FORGETICKET: return EquipmentSlotType.NONE;
                 case ItemType.FORGE_SP_SUPPORT: return EquipmentSlotType.NONE;
                 default: return EquipmentSlotType.NONE;

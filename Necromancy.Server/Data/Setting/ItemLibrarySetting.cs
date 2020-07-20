@@ -113,6 +113,7 @@ namespace Necromancy.Server.Data.Setting
         public int RequiredHuman { get; set; }
         public int RequiredElf { get; set; }
         public int RequiredDwarf { get; set; }
+        public int RequiredGnome { get; set; }
         public int RequiredPorkul { get; set; }
 
         //Gender Requirement

@@ -113,11 +113,11 @@ namespace Necromancy.Server.Database
                 //}
 
                 // insert items (un-comment to rebuild table from settings lookup) Currently disabled for inventory development
-                foreach (ItemLibrarySetting itemLibrarySetting in _settingRepository.ItemLibrary.Values)
+                foreach (ItemInfoSetting itemInfoSetting in _settingRepository.ItemInfo.Values)
                 {
-                    if (!_settingRepository.ItemNecromancy.TryGetValue(itemLibrarySetting.Id, out ItemNecromancySetting necItem))
+                    if (!_settingRepository.ItemLibrary.TryGetValue(itemInfoSetting.Id, out ItemLibrarySetting itemLibrarySetting))
                     {
-                        Logger.Debug($"ItemId: {itemLibrarySetting.Id} - not in this client version in iteminfo.csv`");
+                        Logger.Debug($"ItemId: {itemInfoSetting.Id} - is in itemInfo.CSV for this client, but not the Item Library`");
                         continue;
                     }
 
@@ -129,6 +129,7 @@ namespace Necromancy.Server.Database
                     item.Magical = itemLibrarySetting.MagicalAttack;
                     item.ItemType = (ItemType)Enum.Parse(typeof(ItemType), itemLibrarySetting.ItemType);
                     item.EquipmentSlotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), itemLibrarySetting.EquipmentType);
+                    
                     if (!database.InsertItem(item))
                     {
                         Logger.Error($"ItemId: {item.Id} - could not be inserted into table`");

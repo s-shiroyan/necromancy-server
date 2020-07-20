@@ -207,6 +207,7 @@ namespace Necromancy.Server.Data.Setting
                 RequiredHuman = requiredHuman,
                 RequiredElf = requiredElf,
                 RequiredDwarf = requiredDwarf,
+                RequiredGnome = requiredGnome,
                 RequiredPorkul = requiredPorkul,
                 RequiredGender = requiredGender,
                 WhenEquippedText = whenEquippedText
