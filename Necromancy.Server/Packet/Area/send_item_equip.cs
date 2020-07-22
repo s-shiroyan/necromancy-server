@@ -56,6 +56,7 @@ namespace Necromancy.Server.Packet.Area
                 {
                     client.Inventory.UnEquip(equippedItem);
                     equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
                     RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
                     Router.Send(recvItemUpdateEqMaskCurr, client);
                 }
@@ -64,6 +65,7 @@ namespace Necromancy.Server.Packet.Area
                 {
                     client.Inventory.UnEquip(equippedItem);
                     equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
                     RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
                     Router.Send(recvItemUpdateEqMaskCurr, client);
                 }
@@ -80,6 +82,7 @@ namespace Necromancy.Server.Packet.Area
                     Logger.Debug($"equipment slot type already equipped item {equippedItem.Item.EquipmentSlotType}");
                     client.Inventory.UnEquip(equippedItem);
                     equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
                     RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
                     Router.Send(recvItemUpdateEqMaskCurr, client);
                 }
@@ -90,7 +93,7 @@ namespace Necromancy.Server.Packet.Area
             client.Inventory.Equip(inventoryItem);
             
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-            inventoryItem.State = 1; //Crude equipped flag. to be further developed.
+            inventoryItem.State = (int)inventoryItem.Item.EquipmentSlotType; //Crude equipped flag. to be further developed.
             if (!Server.Database.UpdateInventoryItem(inventoryItem))
             {
                 Logger.Error("Could not update InventoryItem in Database");
