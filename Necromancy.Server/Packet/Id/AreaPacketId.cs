@@ -53,6 +53,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xB586 = 0xB586, // Doesn't crash
         recv_0xB684 = 0xB684, // Cause crash
         recv_0xBA61 = 0xBA61, // Cause Crash
+        recv_0xBF0D = 0xBF0D,
         recv_0xC055 = 0xC055, // Doesn't crash
         recv_0xC078 = 0xC078, // cause Crash
         recv_0xCF29 = 0xCF29, // Cause crash

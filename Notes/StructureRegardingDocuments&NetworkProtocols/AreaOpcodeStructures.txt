@@ -612,7 +612,7 @@ recv_battle_report_noact_notify_heal_mp = 0xD8D5,
 	res.WriteInt32(0);
 	
 	
-recv_gimmick_access_object_notify = 0xD804, <-----
+recv_gimmick_access_object_notify = 0xD804,
 
 	res.WriteInt32(0);
 	
@@ -645,7 +645,7 @@ recv_charabody_salvage_end = 0xD688,
 	res.WriteInt32(0);
 	
 	
-recv_charabody_notify_party_join = 0xD67D,
+recv_charabody_notify_party_join = 0xD67D, <----
 
 	res.WriteInt32(0);
 	
