@@ -33,24 +33,20 @@ namespace Necromancy.Server.Packet.Area
             foreach (InventoryItem inventoryItem in inventoryItems)
             {
                 Item item = Server.Items[inventoryItem.ItemId];
-                inventoryItem.Item = item;       
+                inventoryItem.Item = item;
+                if(inventoryItem.State > 0)
+                {
+                    client.Inventory.Equip(inventoryItem);
+                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                }
 
+                RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem);
+                Router.Send(recvItemInstance, client);
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
                 Router.Send(recvItemInstanceUnidentified, client);
 
                 client.Inventory.LoginLoadInventory(inventoryItem);
 
-                //equip items with state flag set to 1 to your paperdoll.
-                //if (inventoryItem.State == 1)
-                //{
-                //    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-
-                //    RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
-                //    Router.Send(recvItemUpdateEqMask, client);
-
-                //    res.WriteInt32((int)ItemActionResultType.Ok);
-                //    Router.Send(client, (ushort)AreaPacketId.recv_item_equip_r, res, ServerType.Area);
-                //}
             }
 
         }

@@ -24,30 +24,31 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteInt32((int) _inventoryItem.Item.ItemType);
             res.WriteInt32((int) _inventoryItem.CurrentEquipmentSlotType);
             res.WriteByte(_inventoryItem.Quantity);
-            res.WriteInt32(0); //Item status 0 = identified  
+            res.WriteInt32(0b10101010); //Item status 0 = identified  //bitmask . cursed, blessed, etc
             res.WriteInt32(_inventoryItem.Item.Id); //Item icon 50100301 = camp
-            res.WriteByte(5);
-            res.WriteByte(4);
-            res.WriteByte(7);
+            res.WriteByte(1);
+            res.WriteByte(1);
+            res.WriteByte(1);
             res.WriteInt32(_inventoryItem.Item.Id);
             res.WriteByte(1);
-            res.WriteByte(2);
-            res.WriteByte(9);
-
-            res.WriteByte(4); //These 8 bytes represent how items need to change the character's features.
-            res.WriteByte(5);
-            res.WriteByte(0); // bool
             res.WriteByte(1);
-            res.WriteByte(2);
-            res.WriteByte(3);
-            res.WriteByte(4);
+            res.WriteByte(1);
+
+            res.WriteByte(8); //These 8 bytes represent how items need to change the character's features.
+            res.WriteByte(7);
+            res.WriteByte(1); // bool
             res.WriteByte(5);
+            res.WriteByte(4);
+            res.WriteByte(3);
+            res.WriteByte(2);
+            res.WriteByte(1);
+
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
-            res.WriteInt64(69);
-            res.WriteInt32(59);
+            res.WriteInt64(0b1111111111111111);
+            res.WriteInt32(_inventoryItem.Item.Id);
             return res;
         }
     }

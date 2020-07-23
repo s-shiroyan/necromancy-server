@@ -42,6 +42,10 @@ namespace Necromancy.Server.Model.ItemModel
         }
         public void Equip(InventoryItem inventoryItem)
         {
+            if (_equippedItems.ContainsKey(inventoryItem.Item.EquipmentSlotType))
+            {
+                UnEquip(inventoryItem);
+            }
             _equippedItems.Add(inventoryItem.Item.EquipmentSlotType, inventoryItem);
         }
         public void UnEquip(InventoryItem inventoryItem)
