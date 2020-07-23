@@ -645,7 +645,7 @@ recv_charabody_salvage_end = 0xD688,
 	res.WriteInt32(0);
 	
 	
-recv_charabody_notify_party_join = 0xD67D, <----
+recv_charabody_notify_party_join = 0xD67D, 
 
 	res.WriteInt32(0);
 	
@@ -2076,7 +2076,7 @@ recv_equip_honor_r = 0x92DE,
 	res.WriteInt32(0);
 	
 	
-recv_stall_regist_item_r = 0x9289,
+recv_stall_regist_item_r = 0x9289, <-------
 
 	res.WriteInt32(0);
 	
