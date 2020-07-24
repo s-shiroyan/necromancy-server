@@ -74,6 +74,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); // testing (Theory Hands Tex)
                 res.WriteByte(0); // testing (Theory Feet Tex)
                 res.WriteByte(0); //Alternate texture for item model 
+
                 res.WriteByte(0); // separate in assembly
                 x++;
             }

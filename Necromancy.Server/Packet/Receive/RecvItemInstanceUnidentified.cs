@@ -24,31 +24,35 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteInt32((int) _inventoryItem.Item.ItemType);
             res.WriteInt32((int) _inventoryItem.CurrentEquipmentSlotType);
             res.WriteByte(_inventoryItem.Quantity);
-            res.WriteInt32(0b10101010); //Item status 0 = identified  //bitmask . cursed, blessed, etc
-            res.WriteInt32(_inventoryItem.Item.Id); //Item icon 50100301 = camp
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteInt32(_inventoryItem.Item.Id);
-            res.WriteByte(1);
-            res.WriteByte(1);
-            res.WriteByte(1);
 
-            res.WriteByte(8); //These 8 bytes represent how items need to change the character's features.
-            res.WriteByte(7);
-            res.WriteByte(1); // bool
-            res.WriteByte(5);
-            res.WriteByte(4);
-            res.WriteByte(3);
-            res.WriteByte(2);
+            res.WriteInt32(0b111111110); //statuses bitmask /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
+            //BEGIN ITEM  UPDATE EQUMASK SECTION
+            res.WriteInt32(_inventoryItem.Item.Id); //Item icon 50100301 = camp
+            res.WriteByte(0);
+            res.WriteByte(0);
             res.WriteByte(1);
+            
+            res.WriteInt32(_inventoryItem.Item.Id);
+            res.WriteByte(0);
+            res.WriteByte(1);
+            res.WriteByte(0);
+
+            res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+            res.WriteByte(0); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+            res.WriteByte(0); // bool
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(4); //texture related
+
+            res.WriteByte(0);
 
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
-            res.WriteInt64(0b1111111111111111);
-            res.WriteInt32(_inventoryItem.Item.Id);
+            res.WriteInt64(long.MaxValue);
+            res.WriteInt32(200000002);
             return res;
         }
     }
