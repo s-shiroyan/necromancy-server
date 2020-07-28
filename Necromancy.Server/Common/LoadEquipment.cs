@@ -10,13 +10,10 @@ namespace Necromancy.Server.Common
         {
             res.WriteUInt32(myCharacter.Raceid); //race
             res.WriteUInt32(myCharacter.Sexid);
-            ; //gender
             res.WriteByte(myCharacter.HairId); //hair
             res.WriteByte(myCharacter.HairColorId); //color
             res.WriteByte(myCharacter.FaceId); //face
         }
-
-
         public static void SlotSetup(IBuffer res, Character myCharacter, int numEntries)
         {
             TemporaryCharacterSwitch(myCharacter, numEntries); //needed to instantiate Weapon ID for Weapon logic below

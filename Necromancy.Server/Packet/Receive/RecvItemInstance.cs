@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteUInt64((ulong)_inventoryItem.Id);
             res.WriteInt32((int)_inventoryItem.CurrentEquipmentSlotType);
             res.WriteByte(_inventoryItem.Quantity);
-            res.WriteInt32(1); //Item status 0 = identified  //bitmask . cursed, blessed, etc 0001 Shows correct icon in bag, 0010 unknown, 0100 shows broken, 1000 shows cursed, 1 0000 shows blessed
+            res.WriteInt32(_inventoryItem.Id); //?????
             res.WriteFixedString($"TEST3", 0x10);
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
@@ -34,9 +34,9 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteInt32((int)_client.Character.InstanceId);
             res.WriteByte(1);
             res.WriteByte(1);
-            res.WriteCString("ThisIsThis"); // find max size 
-            res.WriteInt16(1);
-            res.WriteInt16(2);
+            res.WriteCString(_inventoryItem.Item.Name); // find max size 
+            res.WriteInt16(999);
+            res.WriteInt16(2999);
             res.WriteInt32(19);
             res.WriteByte(1);
             res.WriteInt32((int)_client.Character.InstanceId);
@@ -51,17 +51,17 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteInt32(numEntries); // Count of Gem Slots. less than or equal to 3
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteByte(1); //Gem in slot : yes or no
+                res.WriteByte((byte)(Util.GetRandomNumber(0,2))); //Gem in slot : yes or no
                 res.WriteInt32(i+1); //slot type 1 round, 2 triangle, 3 diamond
-                res.WriteInt32(1);// theory GEM ID 1
-                res.WriteInt32(1);// theory gem id 2.  Diamonds were two Gems combined to one
+                res.WriteInt32(1111);// theory GEM ID 1
+                res.WriteInt32(2222);// theory gem id 2.  Diamonds were two Gems combined to one
             }
 
             res.WriteInt32(20);
             res.WriteInt32(200);
-            res.WriteInt16(1);
-            res.WriteInt32(1); //1 here lables the item "Gaurd".   no effect from higher numbers
-            res.WriteInt16(2);
+            res.WriteInt16(1000);
+            res.WriteInt32(0); //1 here lables the item "Gaurd".   no effect from higher numbers
+            res.WriteInt16(2000);
 
 
 
