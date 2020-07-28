@@ -2076,7 +2076,7 @@ recv_equip_honor_r = 0x92DE,
 	res.WriteInt32(0);
 	
 	
-recv_stall_regist_item_r = 0x9289, <-------
+recv_stall_regist_item_r = 0x9289,
 
 	res.WriteInt32(0);
 	
@@ -2582,7 +2582,7 @@ recv_chara_update_ap_cost_diff = 0x7A5C,
 	res.WriteInt16(0);
 	
 	
-recv_storage_drawmoney = 0x79A9,
+recv_storage_drawmoney = 0x79A9, <----
 
 	res.WriteInt32(0);
 	
