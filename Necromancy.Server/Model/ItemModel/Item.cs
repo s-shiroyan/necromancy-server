@@ -12,6 +12,7 @@ namespace Necromancy.Server.Model.ItemModel
         public string Name { get; set; }
         public ItemType ItemType { get; set; }
         public EquipmentSlotType EquipmentSlotType { get; set; }
+        public LoadEquipType LoadEquipType { get; set; }
         public int Physical { get; set; }
         public int Magical { get; set; }
         public int Durability { get; set; }
