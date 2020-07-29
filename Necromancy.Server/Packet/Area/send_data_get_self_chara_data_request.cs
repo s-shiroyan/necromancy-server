@@ -258,18 +258,16 @@ namespace Necromancy.Server.Packet.Area
         public void LoadInventory(NecClient client)
         {
             //populate soul and character inventory from database.
-            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(client.Character.Id);
+            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterIdEquipped(client.Character.Id);
             foreach (InventoryItem inventoryItem in inventoryItems)
             {
                 Item item = Server.Items[inventoryItem.ItemId];
                 inventoryItem.Item = item;
-                if (inventoryItem.State > 0)
+                if (inventoryItem.State > 0) //this is redundant. could be removed for  better performance. 
                 {
                     client.Character.Inventory.Equip(inventoryItem);
                     inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
                 }
-
-                client.Character.Inventory.LoginLoadInventory(inventoryItem);
 
             }
 

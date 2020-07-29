@@ -30,12 +30,33 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
 
             LoadInventory(client);
+            LoadCloakRoom(client);
         }
 
         public void LoadInventory(NecClient client)
         {
             //populate soul and character inventory from database.
             List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(client.Character.Id);
+            foreach (InventoryItem inventoryItem in inventoryItems)
+            {
+                if (inventoryItem.StorageType == 3) continue; //cloak room stuff gets handled below.  possibility to refine SQL query to skip, but this was easier.
+                Item item = Server.Items[inventoryItem.ItemId];
+                inventoryItem.Item = item;
+
+                RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+                Router.Send(recvItemInstance, client);
+                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+                Router.Send(recvItemInstanceUnidentified, client);
+
+                itemStats(inventoryItem, client);
+                client.Character.Inventory.LoginLoadInventory(inventoryItem);
+            }
+
+        }
+        public void LoadCloakRoom(NecClient client)
+        {
+            //populate soul and character inventory from database.
+            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsBySoulIdCloakRoom(client.Character.SoulId);
             foreach (InventoryItem inventoryItem in inventoryItems)
             {
                 Item item = Server.Items[inventoryItem.ItemId];
@@ -47,9 +68,11 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(recvItemInstanceUnidentified, client);
 
                 itemStats(inventoryItem, client);
+                client.Character.Inventory.LoginLoadInventory(inventoryItem);
             }
 
         }
+
         public void itemStats(InventoryItem inventoryItem, NecClient client)
         {
             Server.SettingRepository.ItemLibrary.TryGetValue(inventoryItem.Item.Id, out ItemLibrarySetting itemLibrarySetting);

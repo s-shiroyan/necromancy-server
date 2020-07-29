@@ -76,6 +76,8 @@ namespace Necromancy.Server.Database
         bool InsertInventoryItem(InventoryItem inventoryItem);
         InventoryItem SelectInventoryItemById(int inventoryItemId);
         List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
+        List<InventoryItem> SelectInventoryItemsByCharacterIdEquipped(int characterId);
+        List<InventoryItem> SelectInventoryItemsBySoulIdCloakRoom(int soulId);
         bool UpdateInventoryItem(InventoryItem inventoryItem);
         bool DeleteInventoryItem(int inventoryItemId);
 
