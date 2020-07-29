@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
                 inventoryItem.Item = item;
                 if(inventoryItem.State > 0)
                 {
-                    client.Inventory.Equip(inventoryItem);
+                    client.Character.Inventory.Equip(inventoryItem);
                     inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
                 }
 
@@ -48,7 +48,7 @@ namespace Necromancy.Server.Packet.Area
 
                 itemStats(inventoryItem, client);
 
-                client.Inventory.LoginLoadInventory(inventoryItem);
+                client.Character.Inventory.LoginLoadInventory(inventoryItem);
 
             }
 

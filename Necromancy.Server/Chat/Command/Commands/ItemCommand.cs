@@ -64,7 +64,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
             inventoryItem.State = 0;
 
-            client.Inventory.AddInventoryItem(inventoryItem);
+            client.Character.Inventory.AddInventoryItem(inventoryItem);
             if (!Server.Database.InsertInventoryItem(inventoryItem))
             {
                 responses.Add(ChatResponse.CommandError(client, "Could not save InventoryItem to Database"));

@@ -9,7 +9,7 @@ namespace Necromancy.Server.Model.ItemModel
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, Dictionary<byte, InventoryItem[]>> _storageContainers;
         private Dictionary<byte, InventoryItem[]> _inventory;
-        private Dictionary<EquipmentSlotType, InventoryItem> _equippedItems;
+        public Dictionary<EquipmentSlotType, InventoryItem> _equippedItems;
 
         private Dictionary<byte, InventoryItem[]> _cloakRoom;
         private Dictionary<byte, InventoryItem[]> _avatar;

@@ -1,6 +1,7 @@
 using Necromancy.Server.Model;
 using System;
 using Arrowgene.Buffers;
+using Necromancy.Server.Model.ItemModel;
 
 namespace Necromancy.Server.Common
 {
@@ -16,6 +17,11 @@ namespace Necromancy.Server.Common
         }
         public static void SlotSetup(IBuffer res, Character myCharacter, int numEntries)
         {
+            if (myCharacter.Inventory._equippedItems.Count != 0) 
+            {
+                SlotSetupNew(res, myCharacter);
+                return;
+            }
             TemporaryCharacterSwitch(myCharacter, numEntries); //needed to instantiate Weapon ID for Weapon logic below
             int Armor = 25; //Armor 25
             int Accessory = 26; //Accessory 26
@@ -24,7 +30,7 @@ namespace Necromancy.Server.Common
             int Other = 27; //None of the Above
             int Weapon =
                 Convert.ToInt32(string.Concat($"{(myCharacter.EquipId[0])}"[1], $"{(myCharacter.EquipId[0])}"[2]));
-            myCharacter.battlePose = (byte) Weapon;
+            myCharacter.battlePose = (byte)Weapon;
             //Console.WriteLine($"Weapon : {Weapon}");
 
             //ItemType Select See str_table ID 100 SubID 121 for Item Type info. Increment by +1
@@ -43,6 +49,11 @@ namespace Necromancy.Server.Common
 
         public static void EquipItems(IBuffer res, Character myCharacter, int numEntries)
         {
+            if (myCharacter.Inventory._equippedItems.Count != 0)
+            {
+                EquipItemsNew(res, myCharacter);
+                return;
+            }
             //sub_483420
             int x = 0;
 
@@ -62,7 +73,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); // (theory Slot)
 
                 res.WriteByte(
-                    (byte) headSlot[
+                    (byte)headSlot[
                         x]); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res.WriteByte(
                     00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
@@ -79,6 +90,11 @@ namespace Necromancy.Server.Common
 
         public static void EquipSlotBitMask(IBuffer res, Character myCharacter, int numEntries)
         {
+            if (myCharacter.Inventory._equippedItems.Count != 0)
+            {
+                EquipSlotBitMaskNew(res, myCharacter);
+                return;
+            }
             int[] EquipBitMask = new int[] //Correct Bit Mask
             {
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144
@@ -87,7 +103,6 @@ namespace Necromancy.Server.Common
             {
                 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128
             };
-            EquipBitMask = TemporaryCharacterSwitch(myCharacter, numEntries, 1);
             for (int i = 0; i < numEntries; i++)
             {
                 //sub_483420   
@@ -95,7 +110,55 @@ namespace Necromancy.Server.Common
             }
         }
 
-        private static int[] TemporaryCharacterSwitch(Character myCharacter, int numEntries, int type = 0)
+        public static void SlotSetupNew(IBuffer res, Character character)
+        {
+            //sub_483660 
+            foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+            {
+                res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
+            }
+        }
+
+        public static void EquipItemsNew(IBuffer res, Character character)
+        {
+            //sub_4948C0
+            foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+            {
+                res.WriteInt32(inventoryItem.Item.Id); //Sets your Item ID per Iteration
+                res.WriteByte(0); // 
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
+                res.WriteByte(0); //
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(0); //Alternate texture for item model 
+
+                res.WriteByte(0); // separate in assembly
+            }
+        }
+        
+        public static void EquipSlotBitMaskNew(IBuffer res, Character character)
+        {
+            //sub_483420 
+            foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+            {
+                res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
+            }
+        }
+
+
+        //This goes away soon.  as soon as NPC gear is stored in a CSV or database table.  and character equipment is finished.
+
+        private static int[] TemporaryCharacterSwitch(Character myCharacter, int numEntries)
         {
             string CharacterSet = myCharacter.Name;
             int[] headSlot = new int[numEntries];
@@ -243,11 +306,6 @@ namespace Necromancy.Server.Common
                         break;
                 }
             }
-
-            if (type == 0)
-                return headSlot;
-            else if (type == 1)
-                return EquipBitMask;
 
             return headSlot;
         }

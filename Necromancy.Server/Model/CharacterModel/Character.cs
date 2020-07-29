@@ -4,6 +4,7 @@ using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Tasks;
 
@@ -116,6 +117,9 @@ namespace Necromancy.Server.Model
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
 
+        //Inventory
+        public Inventory Inventory { get; set; }
+
         public Character()
         {
             InstanceId = InstanceGenerator.InvalidInstanceId;
@@ -164,6 +168,8 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
             stepCount = 0;
+
+            Inventory = new Inventory();
         }
 
         public bool characterActive

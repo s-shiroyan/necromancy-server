@@ -57,19 +57,17 @@ namespace Necromancy.Server.Packet.Msg
             {
                 //populate soul and character inventory from database.
                 List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(character.Id); //to-do. leverage SQL query to grab items where state > 0
-                List<InventoryItem> EquippedItems = new List<InventoryItem>();
                 foreach (InventoryItem inventoryItem in inventoryItems)
                 {
                     Item item = Server.Items[inventoryItem.ItemId];
                     inventoryItem.Item = item;
                     if (inventoryItem.State > 0)
                     {
+                        character.Inventory.Equip(inventoryItem);
                         inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
                         inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
-                        EquippedItems.Add(inventoryItem);
                     }
                 }
-
 
                 IBuffer res = BufferProvider.Provide();
 
@@ -82,78 +80,33 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteInt32(2); //todo (unknown)
                 res.WriteUInt32(character.ClassId); //class stat 
 
-                if (EquippedItems.Count == 110)
-                {
-                    //Consolidated Frequently Used Code
-                    LoadEquip.BasicTraits(res, character);
-                    LoadEquip.SlotSetup(res, character, 19);
-                    LoadEquip.EquipItems(res, character, 19);
-                    LoadEquip.EquipSlotBitMask(res, character, 19);
-                }
-                else
-                {
-                    LoadEquip.BasicTraits(res, character);
-
-                    //sub_483660 
-                    foreach (InventoryItem inventoryItem in EquippedItems) 
-                    {
-                        res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
-
-                    }
-
-                    //sub_4948C0
-                    foreach (InventoryItem inventoryItem in EquippedItems)
-                    {
-                        res.WriteInt32(inventoryItem.Item.Id); //Sets your Item ID per Iteration
-                        res.WriteByte(0); // 
-                        res.WriteByte(0); // (theory bag)
-                        res.WriteByte(0); // (theory Slot)
-
-                        res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
-                        res.WriteByte(0); //
-                        res.WriteByte(0); // (theory bag)
-                        res.WriteByte(0); // (theory Slot)
-
-                        res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-                        res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                        res.WriteByte(0); // testing (Theory Torso Tex)
-                        res.WriteByte(0); // testing (Theory Pants Tex)
-                        res.WriteByte(0); // testing (Theory Hands Tex)
-                        res.WriteByte(0); // testing (Theory Feet Tex)
-                        res.WriteByte(0); //Alternate texture for item model 
-
-                        res.WriteByte(0); // separate in assembly
-                    }
-
-                    //sub_483420 
-                    foreach (InventoryItem inventoryItem in EquippedItems)
-                    {
-                        res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
-                    }
-                }
-
+                //Consolidated Frequently Used Code
+                LoadEquip.BasicTraits(res, character);
+                LoadEquip.SlotSetup(res, character, 19);
+                LoadEquip.EquipItems(res, character, 19);
+                LoadEquip.EquipSlotBitMask(res, character, 19);
 
                 //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
-                res.WriteInt32(10); //Right Hand    //1 for weapon
-                res.WriteInt32(10); //Left Hand     //2 for Shield
-                res.WriteInt32(10); //Torso         //16 for torso
-                res.WriteInt32(10); //Head          //08 for head
-                res.WriteInt32(10); //Legs          //32 for legs
-                res.WriteInt32(10); //Arms          //64 for Arms
-                res.WriteInt32(10); //Feet          //128 for feet
-                res.WriteInt32(5); //???Cape
-                res.WriteInt32(5); //???Ring
-                res.WriteInt32(5); //???Earring
-                res.WriteInt32(5); //???Necklace
-                res.WriteInt32(5); //???Belt
-                res.WriteInt32(0); //Avatar Torso
-                res.WriteInt32(0); //Avatar Feet
-                res.WriteInt32(0); //Avatar Arms
-                res.WriteInt32(0); //Avatar Legs
-                res.WriteInt32(0); //Avatar Head  
-                res.WriteInt32(0); //???Talk Ring
-                res.WriteInt32(00); //???Quiver    
-                res.WriteByte(19); //Number of equipment to display
+                res.WriteInt32(19); //Right Hand    
+                res.WriteInt32(19); //Left Hand
+                res.WriteInt32(19); //Quiver
+                res.WriteInt32(19); //Head
+                res.WriteInt32(19); //Body 
+                res.WriteInt32(19); //Legs
+                res.WriteInt32(19); //Arms          
+                res.WriteInt32(19);  //Feet
+                res.WriteInt32(19);  //Mantle
+                res.WriteInt32(19);  //ACCESSORY_1
+                res.WriteInt32(19);  //ACCESSORY_2
+                res.WriteInt32(19);  //ACCESSORY_3
+                res.WriteInt32(19);  //ACCESSORY_4
+                res.WriteInt32(19);  //TALKRING
+                res.WriteInt32(19);  //AVATAR_HEAD
+                res.WriteInt32(19);  //AVATAR_BODY
+                res.WriteInt32(19);  //AVATAR_LEGS 
+                res.WriteInt32(19);  //AVATAR_ARMS
+                res.WriteInt32(19); //AVATAR_FEET
+                res.WriteByte(19);  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);
             }
