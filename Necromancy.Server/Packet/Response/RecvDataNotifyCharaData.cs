@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Response
             LoadEquip.EquipSlotBitMask(res, _character, numEntries);
 
             //sub_4835C0
-            res.WriteInt32(0); //1 here means crouching?
+            res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
             LoadEquip.BasicTraits(res, _character);
             //sub_483420
@@ -61,7 +61,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_4835E0
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
-            res.WriteInt32(0);
+            res.WriteInt32(_character.battleAnim); //???
             //sub_483440
             res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
