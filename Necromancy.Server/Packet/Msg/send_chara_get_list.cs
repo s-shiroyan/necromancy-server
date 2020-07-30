@@ -68,6 +68,11 @@ namespace Necromancy.Server.Packet.Msg
                         inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
                     }
                 }
+                if (character.Inventory._equippedItems.Count > 20)
+                {
+                    Logger.Error($"Character {character.Name} has too many equipment entries"); 
+                    continue;  // skip if more than 19 equipped items.  corrupt DB entries in itemSpawn
+                }
 
                 IBuffer res = BufferProvider.Provide();
 
@@ -85,27 +90,8 @@ namespace Necromancy.Server.Packet.Msg
                 LoadEquip.SlotSetup(res, character, 19);
                 LoadEquip.EquipItems(res, character, 19);
                 LoadEquip.EquipSlotBitMask(res, character, 19);
+                LoadEquip.SlotUpgradeLevel(res, character, 19);
 
-                //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
-                res.WriteInt32(19); //Right Hand    
-                res.WriteInt32(19); //Left Hand
-                res.WriteInt32(19); //Quiver
-                res.WriteInt32(19); //Head
-                res.WriteInt32(19); //Body 
-                res.WriteInt32(19); //Legs
-                res.WriteInt32(19); //Arms          
-                res.WriteInt32(19);  //Feet
-                res.WriteInt32(19);  //Mantle
-                res.WriteInt32(19);  //ACCESSORY_1
-                res.WriteInt32(19);  //ACCESSORY_2
-                res.WriteInt32(19);  //ACCESSORY_3
-                res.WriteInt32(19);  //ACCESSORY_4
-                res.WriteInt32(19);  //TALKRING
-                res.WriteInt32(19);  //AVATAR_HEAD
-                res.WriteInt32(19);  //AVATAR_BODY
-                res.WriteInt32(19);  //AVATAR_LEGS 
-                res.WriteInt32(19);  //AVATAR_ARMS
-                res.WriteInt32(19); //AVATAR_FEET
                 res.WriteByte(19);  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);

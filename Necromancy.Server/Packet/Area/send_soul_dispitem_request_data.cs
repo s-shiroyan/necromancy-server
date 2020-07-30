@@ -50,6 +50,12 @@ namespace Necromancy.Server.Packet.Area
 
                 itemStats(inventoryItem, client);
                 client.Character.Inventory.LoginLoadInventory(inventoryItem);
+
+                if (inventoryItem.State > 0) 
+                {
+                    client.Character.Inventory.Equip(inventoryItem);
+                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                }
             }
 
         }

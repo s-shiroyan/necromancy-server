@@ -2,11 +2,15 @@ using Necromancy.Server.Model;
 using System;
 using Arrowgene.Buffers;
 using Necromancy.Server.Model.ItemModel;
+using Arrowgene.Logging;
+using Necromancy.Server.Logging;
 
 namespace Necromancy.Server.Common
 {
     class LoadEquip
     {
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(LoadEquip));
+
         public static void BasicTraits(IBuffer res, Character myCharacter)
         {
             res.WriteUInt32(myCharacter.Raceid); //race
@@ -112,15 +116,25 @@ namespace Necromancy.Server.Common
 
         public static void SlotSetupNew(IBuffer res, Character character)
         {
+            int i = 0;
             //sub_483660 
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
                 res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
+                Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType}");
+                i++;
+            }
+            while (i < 19)
+            {
+                //sub_483660   
+                res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                i++;
             }
         }
 
         public static void EquipItemsNew(IBuffer res, Character character)
         {
+            int i = 0;
             //sub_4948C0
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
@@ -143,15 +157,73 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); //Alternate texture for item model 
 
                 res.WriteByte(0); // separate in assembly
+                i++;
             }
+            while (i < 19)//Must have 19 on recv_chara_notify_data
+            {
+                res.WriteInt32(0); //Sets your Item ID per Iteration
+                res.WriteByte(0); // 
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteInt32(0); //testing (Theory, Icon related)
+                res.WriteByte(0); //
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(0); //Alternate texture for item model 
+
+                res.WriteByte(0); // separate in assembly
+                i++;
+            }
+
         }
         
         public static void EquipSlotBitMaskNew(IBuffer res, Character character)
         {
+            int i = 0;
             //sub_483420 
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
                 res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
+                i++;
+            }
+            while (i < 19)
+            {
+                //sub_483420   
+                res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                i++;
+            }
+        }
+
+        public static void SlotUpgradeLevel(IBuffer res, Character character, int numEntries)
+        {
+            if (character.Inventory._equippedItems.Count != 0)
+            {
+                int i = 0;
+                foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+                {
+                    res.WriteInt32(19); ///item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
+                    i++;
+                }
+                while (i < 19)
+                {
+                    //sub_483420   
+                    res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                    i++;
+                }
+            }
+            else
+            for (int i = 0; i < numEntries; i++)
+            {
+                //sub_483420   
+                res.WriteInt32(19); //bitmask per equipment slot
             }
         }
 

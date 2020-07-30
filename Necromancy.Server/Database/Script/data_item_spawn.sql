@@ -1,6 +1,6 @@
 ﻿INSERT INTO "nec_item_spawn" ("id","character_id","item_id","quantity","current_durability","storage_type","bag","slot","state") 
 VALUES 
-  42,2,360103,1,0,3,0,0,0),
+ (42,2,360103,1,0,3,0,0,0),
  (43,2,410505,1,31,3,0,1,0),
  (44,2,560103,1,0,3,0,2,0),
  (51,5,260801,1,0,3,0,0,0),
