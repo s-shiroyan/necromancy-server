@@ -139,9 +139,9 @@ namespace Necromancy.Server.Common
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
                 res.WriteInt32(inventoryItem.Item.Id); //Sets your Item ID per Iteration
-                res.WriteByte(character.HairId); //hair
-                res.WriteByte(character.HairColorId); //color
-                res.WriteByte(character.FaceId); //face
+                res.WriteByte(0); //hair
+                res.WriteByte(0); //color
+                res.WriteByte(0); //face
 
                 res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
                 res.WriteByte(character.HairId); //hair

@@ -16,12 +16,6 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            //  //Testing Logic.  Delete after blacklist is databased
-            //  int TempCharacterCount = Server.Characters.GetAll().Count;
-            //  if (TempCharacterCount > 10)
-            //  {
-            //      TempCharacterCount = 10;
-            //  }
 
             TimeSpan differenceJoined = DateTime.Today.ToUniversalTime() - DateTime.UnixEpoch;
             int DateAttackedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
@@ -37,14 +31,24 @@ namespace Necromancy.Server.Packet.Area
             foreach (Character blackCharacter in Server.Database.SelectCharacters()) //Max 10 Loops. will break if more than 10 characters in Db.
             {
                 Soul blackSoul = Server.Database.SelectSoulById(blackCharacter.SoulId);
-                int onlineStatus = 1;
+                int onlineStatus = 0;
+                NecClient otherClient = Server.Clients.GetByCharacterId(blackCharacter.Id);
+                if (otherClient == null)
+                {
+                    //character = Server.Instances.GetCharacterByDatabaseId(unionMemberList.CharacterDatabaseId);
+                    //soul = Server.Database.SelectSoulById(character.SoulId);
+                }
+                else
+                {
+                    onlineStatus = 1;
+                }
 
                 res.WriteInt32(DateAttackedCalculation); //TimeStamp of when you were PKed or Stolen from
                 res.WriteUInt32(blackCharacter.InstanceId); //
                 res.WriteInt32(Util.GetRandomNumber(1, 10)); //Count of times BlackListMember PKed you
                 res.WriteInt32(Util.GetRandomNumber(0, 3)); //count of times BlackListMember looted you
                 res.WriteInt32(Util.GetRandomNumber(0, 150)); //Count of items BlackListMember looted from you
-                res.WriteInt32(66); //Union ID?  we dont have any unions yet
+                res.WriteInt32(1); //Union ID?  we dont have any unions yet
                 res.WriteByte((byte)Util.GetRandomNumber(0, 2)); //Locked entry on blacklist  1:yes 0:No
                 res.WriteByte((byte)Util.GetRandomNumber(0,2)); // Current Bounty on blackCharacter.  1:Yes  0:No
 
@@ -56,7 +60,7 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteUInt32(blackCharacter.ClassId); // Character Class of BlackListMember
                 res.WriteByte(blackCharacter.Level); //Character level of BlackListMember
                 res.WriteInt32(blackCharacter.MapId); //Character Map ID of BlackListMember
-                res.WriteInt32(1); //world number?? or Map Area?
+                res.WriteInt32(blackCharacter.MapId); //world number?? or Map Area?
                 res.WriteFixedString($"Channel {blackCharacter.Channel}", 97);
                 i++;
                 if (i == 10)

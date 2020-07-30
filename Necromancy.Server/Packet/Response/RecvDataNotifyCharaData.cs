@@ -61,7 +61,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_4835E0
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
-            res.WriteInt32(_character.battleAnim); //???
+            res.WriteInt32(88888888); //???
             //sub_483440
             res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
