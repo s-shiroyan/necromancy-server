@@ -2582,7 +2582,7 @@ recv_chara_update_ap_cost_diff = 0x7A5C,
 	res.WriteInt16(0);
 	
 	
-recv_storage_drawmoney = 0x79A9, <----
+recv_storage_drawmoney = 0x79A9,
 
 	res.WriteInt32(0);
 	
@@ -3018,7 +3018,7 @@ recv_loot_access_object_r = 0x6023,
 	res.WriteInt32(0);
 	
 	
-recv_message_board_close_r = 0x6001,
+recv_message_board_close_r = 0x6001, <----
 
 	res.WriteInt32(0);
 	
