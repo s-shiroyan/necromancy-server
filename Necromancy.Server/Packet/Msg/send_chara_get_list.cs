@@ -82,7 +82,7 @@ namespace Necromancy.Server.Packet.Msg
 
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(character.Level); //character level stat
-                res.WriteInt32(2); //todo (unknown)
+                res.WriteInt32(1); //todo (unknown)
                 res.WriteUInt32(character.ClassId); //class stat 
 
                 //Consolidated Frequently Used Code

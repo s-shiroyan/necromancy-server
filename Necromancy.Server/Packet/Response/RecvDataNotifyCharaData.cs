@@ -65,7 +65,7 @@ namespace Necromancy.Server.Packet.Response
             //sub_483440
             res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
-            res.WriteByte(1); //no change?
+            res.WriteByte(1); //no change?   MemberShip Status?
             //sub_read_byte
             res.WriteByte(1); //no change?
             //sub_read_int_32
