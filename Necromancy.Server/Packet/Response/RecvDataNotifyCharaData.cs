@@ -2,6 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Response
 {
@@ -15,10 +16,13 @@ namespace Necromancy.Server.Packet.Response
         {
             _character = character;
             _soulName = soulName;
+
         }
 
         protected override IBuffer ToBuffer()
         {
+            TimeSpan differenceJoined = DateTime.Today.ToUniversalTime() - DateTime.UnixEpoch;
+            int DateAttackedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
             int numEntries = 19; //Max of 19 Equipment Slots for Character Player
             int numStatusEffects = 0x80; //Statuses effects. Max 128
 
@@ -78,8 +82,8 @@ namespace Necromancy.Server.Packet.Response
             for (int i = 0; i < numStatusEffects; i++)
             {
                 res.WriteInt32(0); //Status effect ID
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteInt32(DateAttackedCalculation);
+                res.WriteInt32(DateAttackedCalculation +100);
             }
 
             //sub_481AA0

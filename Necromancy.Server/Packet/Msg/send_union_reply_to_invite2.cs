@@ -29,8 +29,9 @@ namespace Necromancy.Server.Packet.Msg
                 $"replyToInstanceId {replyToInstanceId} resultAcceptOrDeny {resultAcceptOrDeny} replyToClient.Character.unionId {replyToClient.Character.unionId}");
 
             //Union myUnion = Server.Instances.GetInstance(replyToClient.Character.unionId) as Union;
-            Union myUnion = Server.Database.SelectUnionByLeaderId(replyToClient.Character.Id);
+            Union myUnion = Server.Database.SelectUnionById(replyToClient.Character.unionId);
             Logger.Debug($"my union is {myUnion.Name}");
+
             IBuffer res5 = BufferProvider.Provide();
 
             res5.WriteUInt32(resultAcceptOrDeny); //Result

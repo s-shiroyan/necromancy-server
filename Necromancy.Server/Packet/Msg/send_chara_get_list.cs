@@ -61,7 +61,7 @@ namespace Necromancy.Server.Packet.Msg
                 {
                     Item item = Server.Items[inventoryItem.ItemId];
                     inventoryItem.Item = item;
-                    if (inventoryItem.State > 0)
+                    if (inventoryItem.State > 0  & inventoryItem.State < 262145)
                     {
                         character.Inventory.Equip(inventoryItem);
                         inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;

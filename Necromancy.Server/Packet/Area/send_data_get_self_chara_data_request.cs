@@ -263,7 +263,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 Item item = Server.Items[inventoryItem.ItemId];
                 inventoryItem.Item = item;
-                if (inventoryItem.State > 0) //this is redundant. could be removed for  better performance. 
+                if (inventoryItem.State > 0 & inventoryItem.State < 262145) //this is redundant. could be removed for  better performance. 
                 {
                     client.Character.Inventory.Equip(inventoryItem);
                     inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
