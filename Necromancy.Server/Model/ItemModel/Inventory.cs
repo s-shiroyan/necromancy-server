@@ -16,7 +16,7 @@ namespace Necromancy.Server.Model.ItemModel
         private Dictionary<byte, InventoryItem[]> _unionStorage;
 
         private const int bagSize = 24; //temporary
-        private const int cloakRoomTabSize = 30;
+        private const int cloakRoomTabSize = 32;
         private const int avatarTabSize = 50;
 
         private Logger logger;
@@ -78,13 +78,18 @@ namespace Necromancy.Server.Model.ItemModel
             if (_storageContainers.ContainsKey(storageType))
             {
                 _storageContainers.TryGetValue(storageType, out Dictionary<byte, InventoryItem[]> _storageContainer);
-                if (_storageContainer.ContainsKey(bagId))
+                _storageContainers.TryGetValue(inventoryItem.StorageType, out Dictionary<byte, InventoryItem[]> _storageContainerFrom);
+                if (_storageContainerFrom.ContainsKey(inventoryItem.BagId))
                 {
-                    InventoryItem[] bag = _storageContainer[inventoryItem.BagId];
+                    InventoryItem[] bag = _storageContainerFrom[inventoryItem.BagId];
                     if (bag[inventoryItem.BagSlotIndex] == inventoryItem)
                     {
                         bag[inventoryItem.BagSlotIndex] = null;
                     }
+                }
+                else
+                {
+                    logger.Error("missing bag. this is not possible.");
                 }
                 inventoryItem.StorageType = storageType;
                 inventoryItem.BagId = bagId;
