@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Receive
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items. 
-            res.WriteInt32((int)_client.Character.InstanceId);
+            res.WriteInt32(_inventoryItem.State); //Spirit_eq_mask??
             res.WriteByte(1);
             res.WriteByte(1);
             res.WriteCString(_inventoryItem.Item.Name); // find max size 

@@ -223,7 +223,7 @@ namespace Necromancy.Server.Common
             for (int i = 0; i < numEntries; i++)
             {
                 //sub_483420   
-                res.WriteInt32(19); //bitmask per equipment slot
+                res.WriteInt32(19); 
             }
         }
 
