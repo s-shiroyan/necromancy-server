@@ -30,7 +30,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     res.WriteInt32(honorSetting.Id);
                     res.WriteUInt32(client.Character.InstanceId);
-                    res.WriteByte(1); // bool		
+                    res.WriteByte(0); // bool	New Title 0:Yes  1:No	
                 }
                 Router.Send(client, (ushort)AreaPacketId.recv_get_honor_notify, res, ServerType.Area);
             }
@@ -45,7 +45,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res2 = BufferProvider.Provide();
                 res2.WriteInt32(x);
                 res2.WriteUInt32(client.Character.InstanceId);
-                res2.WriteByte(1); // bool		
+                res2.WriteByte(1); // bool		New Title 0:Yes  1:No	
                 Router.Send(client, (ushort)AreaPacketId.recv_get_honor, res2, ServerType.Area);
 
         }

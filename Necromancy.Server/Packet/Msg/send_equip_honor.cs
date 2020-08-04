@@ -35,7 +35,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteUInt32(client.Character.InstanceId);
             res.WriteInt32(honorTitleID);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_notify_honor, res, ServerType.Area);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_chara_update_notify_honor, res, ServerType.Area);
         }
     }
 }
