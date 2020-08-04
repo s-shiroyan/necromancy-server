@@ -765,7 +765,7 @@ namespace Necromancy.Server.Packet.Id
         send_door_close = 0xC218,
         send_door_open = 0x1D8A,
         send_emotion_update_type = 0x7672, 
-        send_equip_honor = 0x70, //opcode not found  TODO
+        send_equip_honor = 0x9747,
         send_event_abort = 0x71, //opcode not found  TODO
         send_event_access_object = 0x718D, 
         send_event_quest_get_order_list = 0x72, //opcode not found
