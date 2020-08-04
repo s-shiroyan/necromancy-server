@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
@@ -18,13 +19,28 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            if (!int.TryParse(command[0], out int x))
+            int x = 0;
+            if (command[0] == "all")
+            {
+                IBuffer res = BufferProvider.Provide();
+                int numEntries = Server.SettingRepository.Honor.Count;
+                res.WriteInt32(numEntries); // must be under 0x3E8 // wtf?
+                //for (int i = 0; i < numEntries; i++)
+                foreach (HonorSetting honorSetting in Server.SettingRepository.Honor.Values)
+                {
+                    res.WriteInt32(honorSetting.Id);
+                    res.WriteUInt32(client.Character.InstanceId);
+                    res.WriteByte(1); // bool		
+                }
+                Router.Send(client, (ushort)AreaPacketId.recv_get_honor_notify, res, ServerType.Area);
+            }
+            else if (!int.TryParse(command[0], out x))
             {
                 responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}.  try 10010101"));
                 return;
             }
 
-            IBuffer res = BufferProvider.Provide(), res2 = BufferProvider.Provide();
+            IBuffer  res2 = BufferProvider.Provide();
 
                 res2 = BufferProvider.Provide();
                 res2.WriteInt32(x);

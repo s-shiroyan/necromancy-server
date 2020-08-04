@@ -30,6 +30,7 @@ namespace Necromancy.Server.Data.Setting
             Npc = new Dictionary<int, NpcSetting>();
             ModelAtr = new Dictionary<int, ModelAtrSetting>();
             ModelCommon = new Dictionary<int, ModelCommonSetting>();
+            Honor = new Dictionary<int, HonorSetting>();
         }
 
         public Dictionary<int, ItemInfoSetting> ItemInfo { get; }
@@ -43,6 +44,8 @@ namespace Necromancy.Server.Data.Setting
         public Dictionary<int, NpcSetting> Npc { get; }
         public Dictionary<int, ModelAtrSetting> ModelAtr { get; }
         public Dictionary<int, ModelCommonSetting> ModelCommon { get; }
+        public Dictionary<int, HonorSetting> Honor { get; }
+
 
         public SettingRepository Initialize()
         {
@@ -57,10 +60,11 @@ namespace Necromancy.Server.Data.Setting
             Npc.Clear();
             ModelAtr.Clear();
             ModelCommon.Clear();
+            Honor.Clear();
             Load(Strings, "str_table.csv", new StrTableCsvReader());
             Load(ItemInfo, "iteminfo.csv", new ItemInfoCsvReader());
             //Load(ItemNecromancy, "item_necromancy.csv", new ItemNecromancyCsvReader()); //disabled migrating to new library
-            Load(ItemLibrary, "itemlibrary.csv", new ItemLibrarySettingCsvReader()); //disabled for testing to reduce console noise
+            Load(ItemLibrary, "itemlibrary.csv", new ItemLibrarySettingCsvReader());
             Load(Monster, "monster.csv", new MonsterCsvReader());
             Load(SkillBase, "skill_base.csv", new SkillBaseCsvReader());
             Load(EoBase, "eo_base.csv", new EoBaseCsvReader());
@@ -68,6 +72,7 @@ namespace Necromancy.Server.Data.Setting
             Load(ModelAtr, "model_atr.csv", new ModelAtrCsvReader());
             Load(Map, "map.csv", new MapCsvReader(Strings));
             Load(ModelCommon, "model_common.csv", new ModelCommonCsvReader(Monster, ModelAtr));
+            Load(Honor, "honor.csv", new HonorCsvReader());
             return this;
         }
 
