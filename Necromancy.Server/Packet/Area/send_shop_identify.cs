@@ -11,9 +11,9 @@ namespace Necromancy.Server.Packet.Area
         public send_shop_identify(NecServer server) : base(server)
         {
         }
-        
 
-        public override ushort Id => (ushort) AreaPacketId.send_shop_identify;
+
+        public override ushort Id => (ushort)AreaPacketId.send_shop_identify;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -21,7 +21,7 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
 
             SendItemInstanceUnidentified(client, itemId);
         }
@@ -72,7 +72,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(1);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
 
             /*IBuffer res30 = BufferProvider.Provide();
             res30.WriteInt64(itemId);
@@ -128,5 +128,5 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);*/
         }
 
-}
+    }
 }

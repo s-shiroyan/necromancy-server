@@ -8,15 +8,13 @@ namespace Necromancy.Server.Packet.Response
     public class RecvDataNotifyCharaBodyData : PacketResponse
     {
         private readonly DeadBody _deadBody;
-        private readonly Character _character; //no.. do better!
-        private readonly Soul _soul;
+        private readonly Character _character;
 
-        public RecvDataNotifyCharaBodyData(DeadBody deadBody, NecClient client) // Character character, client)
+        public RecvDataNotifyCharaBodyData(DeadBody deadBody, Character character, NecClient client) 
             : base((ushort) AreaPacketId.recv_data_notify_charabody_data, ServerType.Area)
         {
             _deadBody = deadBody;
-            _character = client.Character;
-            _soul = client.Soul;
+            _character = character;
         }
 
         protected override IBuffer ToBuffer()

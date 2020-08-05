@@ -22,8 +22,8 @@ namespace Necromancy.Server.Packet.Area
         {
             int slotNum = packet.Data.ReadInt32();
             EquipmentSlotType type = Item.GetEquipmentSlotTypeBySlotNumber(slotNum);
-            InventoryItem inventoryItem = client.Inventory.GetEquippedInventoryItem(type);
-            InventoryItem equippedItem = client.Inventory.CheckAlreadyEquipped(inventoryItem.Item.EquipmentSlotType);
+            InventoryItem inventoryItem = client.Character.Inventory.GetEquippedInventoryItem(type);
+            InventoryItem equippedItem = client.Character.Inventory.CheckAlreadyEquipped(inventoryItem.Item.EquipmentSlotType);
 
             IBuffer res = BufferProvider.Provide();
             if (inventoryItem == null)
@@ -51,7 +51,7 @@ namespace Necromancy.Server.Packet.Area
             Router.Send(eqMask, client);
             if (equippedItem != null)
             {
-                client.Inventory.UnEquip(equippedItem);
+                client.Character.Inventory.UnEquip(equippedItem);
             }
 
             res.WriteInt32((int) ItemActionResultType.Ok);

@@ -88,30 +88,55 @@ namespace Necromancy.Server.Database
                     }
                 }
 
+                //// insert items (un-comment to rebuild table from settings lookup) Currently disabled for inventory development
+                //foreach (ItemInfoSetting itemInfoSetting in _settingRepository.ItemInfo.Values)
+                //{
+                //    if (!_settingRepository.ItemNecromancy.TryGetValue(itemInfoSetting.Id, out ItemNecromancySetting necItem))
+                //    {
+                //        Logger.Error($"ItemId: {itemInfoSetting.Id} - not found in `SettingRepository.ItemNecromancy`");
+                //        continue;
+                //    }
+
+                //    Item item = new Item();
+                //    item.Id = necItem.Id;
+                //    item.Name = itemInfoSetting.Name;
+                //    item.Durability = necItem.Durability;
+                //    item.Physical = necItem.Physical;
+                //    item.Magical = necItem.Magical;
+                //    item.ItemType = Item.ItemTypeByItemId(necItem.Id);
+                //    item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
+                //    if (!database.InsertItem(item))
+                //    {
+                //        Logger.Error($"ItemId: {item.Id} - could not be inserted into table`");
+                //        return;
+                //    }
+                //}
+
                 // insert items (un-comment to rebuild table from settings lookup) Currently disabled for inventory development
                 foreach (ItemInfoSetting itemInfoSetting in _settingRepository.ItemInfo.Values)
                 {
-                    if (!_settingRepository.ItemNecromancy.TryGetValue(itemInfoSetting.Id, out ItemNecromancySetting necItem))
+                    if (!_settingRepository.ItemLibrary.TryGetValue(itemInfoSetting.Id, out ItemLibrarySetting itemLibrarySetting))
                     {
-                        Logger.Error($"ItemId: {itemInfoSetting.Id} - not found in `SettingRepository.ItemNecromancy`");
+                        Logger.Debug($"ItemId: {itemInfoSetting.Id} - is in itemInfo.CSV for this client, but not the Item Library`");
                         continue;
                     }
 
                     Item item = new Item();
-                    item.Id = necItem.Id;
-                    item.Name = itemInfoSetting.Name;
-                    item.Durability = necItem.Durability;
-                    item.Physical = necItem.Physical;
-                    item.Magical = necItem.Magical;
-                    item.ItemType = Item.ItemTypeByItemId(necItem.Id);
-                    item.EquipmentSlotType = Item.EquipmentSlotTypeByItemType(item.ItemType);
+                    item.Id = itemLibrarySetting.Id;
+                    item.Name = itemLibrarySetting.Name;
+                    item.Durability = itemLibrarySetting.Durability;
+                    item.Physical = itemLibrarySetting.PhysicalAttack;
+                    item.Magical = itemLibrarySetting.MagicalAttack;
+                    item.ItemType = (ItemType)Enum.Parse(typeof(ItemType), itemLibrarySetting.ItemType);
+                    item.EquipmentSlotType = (EquipmentSlotType)Enum.Parse(typeof(EquipmentSlotType), itemLibrarySetting.EquipmentType);
+                    
                     if (!database.InsertItem(item))
                     {
                         Logger.Error($"ItemId: {item.Id} - could not be inserted into table`");
                         return;
                     }
                 }
-                
+
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_account.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_npc_spawn.sql"));
                 scriptRunner.Run(Path.Combine(_setting.DatabaseSettings.ScriptFolder, "data_monster_spawn.sql"));

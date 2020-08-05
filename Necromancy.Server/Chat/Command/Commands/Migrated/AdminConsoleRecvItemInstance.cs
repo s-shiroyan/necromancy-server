@@ -33,12 +33,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                 IBuffer res = BufferProvider.Provide();
                 //recv_item_instance = 0x86EA,
                 x++;
-                res.WriteInt64(client.Character
-                    .EquipId[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
+                res.WriteInt64(client.Character.EquipId[x]); //  Assume Unique ID instance identifier. 1 here makes item green icon
                 res.WriteInt32(EquipItemType[x] - 1);
                 res.WriteByte(1); //number of items in stack
-                res.WriteInt32(
-                    1); // 0001 Shows correct icon in bag, 0010 unknown, 0100 shows broken, 1000 shows cursed, 1 0000 shows blessed
+                res.WriteInt32(1); // 0001 Shows correct icon in bag, 0010 unknown, 0100 shows broken, 1000 shows cursed, 1 0000 shows blessed
                 res.WriteFixedString("WhatIsThis", 0x10);
                 res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
                 res.WriteByte(0); // 0~2

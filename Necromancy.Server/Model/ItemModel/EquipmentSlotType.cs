@@ -25,5 +25,6 @@ namespace Necromancy.Server.Model.ItemModel
         AVATAR_LEGS = 1 << 16,
         AVATAR_ARMS = 1 << 17,
         AVATAR_FEET = 1 << 18,
+        TWO_HAND = HAND_R | HAND_L
     }
 }

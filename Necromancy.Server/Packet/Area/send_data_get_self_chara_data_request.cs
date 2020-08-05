@@ -1,9 +1,13 @@
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
+using System.Collections.Generic;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -20,6 +24,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            LoadInventory(client);
+
             SendDataGetSelfCharaData(client);
 
             IBuffer res2 = BufferProvider.Provide();
@@ -38,9 +44,9 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"Character ID Loading : {client.Character.Id}");
             res.WriteUInt32(client.Character.InstanceId); // InstanceId
             res.WriteUInt32(client.Character.ClassId); // class
-            res.WriteInt16(client.Character.Level); // current level //+50 Temporary client.Character.Level
+            res.WriteInt16(client.Character.Level); // current level 
             res.WriteInt64(91978348); // current exp
-            res.WriteInt64(50); // soul exp
+            res.WriteInt64(50000000); // soul exp
             res.WriteInt64(96978348); // exp needed to level
             res.WriteInt64(1100); // soul exp needed to level
             res.WriteInt32(client.Character.Hp.current); // current hp
@@ -108,9 +114,9 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(Util.GetRandomNumber(90400101, 90400130)); // title from honor.csv
 
             //sub_484980
-            res.WriteInt32(1); // ac eval calculation?
-            res.WriteInt32(1); // ac eval calculation?
-            res.WriteInt32(1); // ac eval calculation?
+            res.WriteInt32(10000); // ac eval calculation?
+            res.WriteInt32(20000); // ac eval calculation?
+            res.WriteInt32(30000); // ac eval calculation?
 
             // characters stats
             res.WriteUInt16(client.Character.Strength); // str
@@ -174,30 +180,30 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(101); // skill point
 
             //sub_483420 character state like alive/dead/invis
-            res.WriteInt32(0); //-254 GM
+            res.WriteInt32((int)client.Character.State); //-254 GM
 
             //sub_494AC0
-            res.WriteByte(20); // soul level
+            res.WriteByte(client.Soul.Level); // soul level
             res.WriteInt32(22); // current soul points
             res.WriteInt32(790); // soul point bar value (percenage of current/max)
             res.WriteInt32(120); // max soul points
-            res.WriteByte(0); // 0 is white,1 yellow 2 red 3+ skull
-            res.WriteByte(0); //Beginner protection (bool)
+            res.WriteByte(client.Character.criminalState); // 0 is white,1 yellow 2 red 3+ skull
+            res.WriteByte((byte)client.Character.beginnerProtection); //Beginner protection (bool)
             res.WriteByte(50); //Level cap
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res.WriteByte(1);
+            res.WriteByte(2);
+            res.WriteByte(3);
 
             //sub_read_3-int16 unknown
             res.WriteInt16(50); // HP Consumption Rate?
             res.WriteInt16(50); // MP Consumption Rate?
-            res.WriteInt16(50); // OD Consumption Rate (if greater than currentOD, Can not sprint)
+            res.WriteInt16(5); // OD Consumption Rate (if greater than currentOD, Can not sprint)
 
             //sub_4833D0
-            res.WriteInt64(0);
+            res.WriteInt64(1234);
 
             //sub_4833D0
-            res.WriteInt64(0);
+            res.WriteInt64(5678);
 
             //sub_4834A0
             res.WriteFixedString($"{client.Soul.Name} Shop", 97); //Shopname
@@ -216,7 +222,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_483420
             int numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19(defines how many int32s to read?)
+            res.WriteInt32(numEntries); //has to be less than 19(max equipment slots)
 
             //Consolidated Frequently Used Code
             LoadEquip.SlotSetup(res, client.Character, numEntries);
@@ -234,18 +240,38 @@ namespace Necromancy.Server.Packet.Area
             LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
 
             //sub_483420
-            numEntries = 128;
+            numEntries = 1;
             res.WriteInt32(numEntries); //has to be less than 128
 
             //sub_485A70
             for (int k = 0; k < numEntries; k++) //status buffs / debuffs
             {
-                res.WriteInt32(0); //set to k
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteInt32(2); //status
+                res.WriteInt32(9999998); //time start?
+                res.WriteInt32(9999999); //time end?
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
         }
+
+
+        public void LoadInventory(NecClient client)
+        {
+            //populate soul and character inventory from database.
+            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterIdEquipped(client.Character.Id);
+            foreach (InventoryItem inventoryItem in inventoryItems)
+            {
+                Item item = Server.Items[inventoryItem.ItemId];
+                inventoryItem.Item = item;
+                if (inventoryItem.State > 0 & inventoryItem.State < 262145) //this is redundant. could be removed for  better performance. 
+                {
+                    client.Character.Inventory.Equip(inventoryItem);
+                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                }
+
+            }
+
+        }
+
     }
 }

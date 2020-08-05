@@ -37,8 +37,8 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"itemCount [{itemCount}]");
 
             IBuffer res = BufferProvider.Provide();
-            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
-            InventoryItem inventoryItemTo = client.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
+            InventoryItem inventoryItem = client.Character.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
+            InventoryItem inventoryItemTo = client.Character.Inventory.GetInventoryItem(toStoreType, toBagId, toSlot);
             if (inventoryItem == null)
             {
                 res.WriteInt32((int)ItemActionResultType.ErrorGeneric);
@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Area
             }
             if (inventoryItemTo == null)
             {
-                ItemActionResultType actionResult = client.Inventory.MoveInventoryItem(inventoryItem, toStoreType, toBagId, toSlot);
+                ItemActionResultType actionResult = client.Character.Inventory.MoveInventoryItem(inventoryItem, toStoreType, toBagId, toSlot);
                 if (actionResult != ItemActionResultType.Ok)
                 {
                     res.WriteInt32((int)actionResult);
@@ -67,7 +67,7 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                ItemActionResultType actionResult = client.Inventory.SwapInventoryItem(inventoryItem, toStoreType, toBagId, toSlot, inventoryItemTo, fromStoreType, fromBagId, fromSlot);
+                ItemActionResultType actionResult = client.Character.Inventory.SwapInventoryItem(inventoryItem, toStoreType, toBagId, toSlot, inventoryItemTo, fromStoreType, fromBagId, fromSlot);
                 if (actionResult != ItemActionResultType.Ok)
                 {
                     res.WriteInt32((int)actionResult);

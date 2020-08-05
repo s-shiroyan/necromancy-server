@@ -45,7 +45,7 @@ namespace Necromancy.Server.Packet.Msg
                     client.Union.Join(client);
 
                     TimeSpan differenceCreated = client.Union.Created.ToUniversalTime() - DateTime.UnixEpoch;
-                    int unionCreatedCalculation = (int) Math.Floor(differenceCreated.TotalSeconds);
+                    int unionCreatedCalculation = (int)Math.Floor(differenceCreated.TotalSeconds);
 
                     //To-Do,  move this whole thing to a response packet, since it's used multiple places.
                     //Notify client of each union member in above union, queried by charaname and InstanceId (for menu based interactions)
@@ -77,7 +77,7 @@ namespace Necromancy.Server.Packet.Msg
                         }
 
                         TimeSpan differenceJoined = unionMemberList.Joined.ToUniversalTime() - DateTime.UnixEpoch;
-                        int unionJoinedCalculation = (int) Math.Floor(differenceJoined.TotalSeconds);
+                        int unionJoinedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
                         IBuffer res3 = BufferProvider.Provide();
                         res3.WriteInt32(client.Character.unionId); //Union Id
                         res3.WriteUInt32(character.InstanceId);  //unique Identifier of the member in the union roster.
@@ -94,7 +94,7 @@ namespace Necromancy.Server.Packet.Msg
                         res3.WriteInt32(unionJoinedCalculation); //Date Joined in seconds since unix time
                         res3.WriteInt32(Util.GetRandomNumber(0, 0));
                         res3.WriteInt32(Util.GetRandomNumber(0, 0));
-                        Router.Send(client, (ushort) MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
+                        Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
                     }
 
                     uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.LeaderId);
@@ -112,7 +112,7 @@ namespace Necromancy.Server.Packet.Msg
                     res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting? 
                     res.WriteUInt32(UnionSubLeader2InstanceId); //subleader2
                     res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting? 
-                    res.WriteByte((byte) myUnion.Level); //Union Level
+                    res.WriteByte((byte)myUnion.Level); //Union Level
                     res.WriteUInt32(myUnion.CurrentExp); //Union EXP Current
                     res.WriteUInt32(myUnion.NextLevelExp); //Union EXP next level Target
                     res.WriteByte(myUnion.MemberLimitIncrease); //Increase Union Member Limit above default 50 (See Union Bonuses
@@ -124,15 +124,15 @@ namespace Necromancy.Server.Packet.Msg
                     for (int i = 0; i < 8; i++)
                         res.WriteInt32(i);
                     res.WriteByte(255);
-                    Router.Send(client, (ushort) MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
+                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
                 }
+            }
 
                 //Acknowledge send.  'Hey send,  i'm finished doing my stuff.  go do the next stuff'
                 IBuffer res2 = BufferProvider.Provide();
-                res2.WriteInt32(myUnion.Id); //probably error check. 0 for success?           
+                res2.WriteInt32(0);          
                 Router.Send(client, (ushort)MsgPacketId.recv_union_request_detail_r, res2, ServerType.Msg);
-            }
-
+            
         }
     }
 }

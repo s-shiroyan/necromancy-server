@@ -17,6 +17,12 @@ namespace Necromancy.Server.Database.Sql.Core
         private const string SqlSelectInventoryItemsByCharacterId =
             "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `slot`, `state` FROM `nec_item_spawn` WHERE `character_id`=@character_id; ";
 
+        private const string SqlSelectInventoryItemsByCharacterIdEquipped =
+            "SELECT `id`, `character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `slot`, `state` FROM `nec_item_spawn` WHERE `character_id`=@character_id AND 'state'> 0; ";
+
+        private const string SqlSelectInventoryItemsBySoulIdCloakRoom =
+            "SELECT `nec_item_spawn`.`id`, `character_id`, `item_id`, `quantity`, `current_durability`, `storage_type`, `bag`, `nec_item_spawn`.`slot`, `state` FROM `nec_item_spawn` INNER JOIN `nec_character` ON `nec_character`.`id` = `nec_item_spawn`.`character_id` WHERE `nec_item_spawn`.`storage_type` = 3 AND `nec_character`.`soul_id` = @soul_id;";
+
         private const string SqlUpdateInventoryItem =
             "UPDATE `nec_item_spawn` SET `character_id`=@character_id, `item_id`=@item_id, `quantity`=@quantity, `current_durability`=@current_durability, `storage_type`=@storage_type, `bag`=@bag, `slot`=@slot, `state`=@state WHERE `id`=@id;";
 
@@ -67,6 +73,34 @@ namespace Necromancy.Server.Database.Sql.Core
             List<InventoryItem> inventoryItems = new List<InventoryItem>();
             ExecuteReader(SqlSelectInventoryItemsByCharacterId,
                 command => { AddParameter(command, "@character_id", characterId); }, reader =>
+                {
+                    while (reader.Read())
+                    {
+                        InventoryItem item = ReadInventoryItem(reader);
+                        inventoryItems.Add(item);
+                    }
+                });
+            return inventoryItems;
+        }
+        public List<InventoryItem> SelectInventoryItemsByCharacterIdEquipped(int characterId)
+        {
+            List<InventoryItem> inventoryItems = new List<InventoryItem>();
+            ExecuteReader(SqlSelectInventoryItemsByCharacterIdEquipped,
+                command => { AddParameter(command, "@character_id", characterId); }, reader =>
+                {
+                    while (reader.Read())
+                    {
+                        InventoryItem item = ReadInventoryItem(reader);
+                        inventoryItems.Add(item);
+                    }
+                });
+            return inventoryItems;
+        }
+        public List<InventoryItem> SelectInventoryItemsBySoulIdCloakRoom(int soulId)
+        {
+            List<InventoryItem> inventoryItems = new List<InventoryItem>();
+            ExecuteReader(SqlSelectInventoryItemsBySoulIdCloakRoom,
+                command => { AddParameter(command, "@soul_id", soulId); }, reader =>
                 {
                     while (reader.Read())
                     {
