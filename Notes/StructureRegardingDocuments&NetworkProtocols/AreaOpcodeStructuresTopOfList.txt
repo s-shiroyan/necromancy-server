@@ -199,7 +199,7 @@ recv_trade_add_item_r = 0x52C9, // Parent = 0x5243 // Range ID = 01
 						
 						res.WriteInt32(0);
 	
-recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02 <-----
+recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
 						
 						res.WriteInt16(0); //Shop type
 						res.WriteInt32(0);
@@ -798,7 +798,7 @@ recv_quest_get_mission_quest_works_r = 0x1BD6,
             res.WriteInt32(0);
             res.WriteInt32(0);
 
-recv_skill_tree_notify = 0x1C0A, 
+recv_skill_tree_notify = 0x1C0A, <----
             
             res.WriteInt32(0);
             res.WriteInt32(0);
