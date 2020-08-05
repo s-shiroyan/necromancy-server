@@ -35,12 +35,12 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFloat(inventoryItem.Item.Magical);
             res.WriteInt32(itemLibrarySetting.Durability/*Max Durability*/);
             res.WriteByte((byte)itemLibrarySetting.Hardness);
-            res.WriteFloat(6/*PhysicalAttack after successful upgrade*/);
-            res.WriteFloat(7/*Magical Attack after successful upgrade*/);
-            res.WriteInt32(8/*Max Durability after successful upgrade*/);
-            res.WriteByte(22/*Hardness after successfull upgrade*/);
-            res.WriteInt32(500/*Weight after successful upgrade. times 10*/);
-            res.WriteInt16(11 /*GP after upgrade?*/);
+            res.WriteFloat(100/*PhysicalAttack after successful upgrade*/);
+            res.WriteFloat(101/*Magical Attack after successful upgrade*/);
+            res.WriteInt32(102/*Max Durability after successful upgrade*/);
+            res.WriteByte(103/*Hardness after successfull upgrade*/);
+            res.WriteInt32(1000/*Weight after successful upgrade. times 10*/);
+            res.WriteInt16(104 /*GP after upgrade?*/);
 
             Router.Send(client, (ushort) AreaPacketId.recv_forge_check_r, res, ServerType.Area);
         }
