@@ -3018,7 +3018,7 @@ recv_loot_access_object_r = 0x6023,
 	res.WriteInt32(0);
 	
 	
-recv_message_board_close_r = 0x6001, <----
+recv_message_board_close_r = 0x6001,
 
 	res.WriteInt32(0);
 	

@@ -5,17 +5,17 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvCharaBodySelfNotifyDeadNextTime : PacketResponse
+    public class RecvBattleReleaseAttackPoseSelf : PacketResponse
     {
-        public RecvCharaBodySelfNotifyDeadNextTime()
-            : base((ushort) AreaPacketId.recv_charabody_self_notify_deadnext_time, ServerType.Area)
+        public RecvBattleReleaseAttackPoseSelf()
+            : base((ushort) AreaPacketId.recv_battle_release_attack_pose_self, ServerType.Area)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // time dead length
+            
             return res;
         }
     }

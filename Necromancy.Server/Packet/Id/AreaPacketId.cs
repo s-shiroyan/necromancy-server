@@ -61,9 +61,13 @@ namespace Necromancy.Server.Packet.Id
         recv_0xD1F6 = 0xD1F6, // Cause crash
         recv_0xD909 = 0xD909, // Doesn't crash
         recv_0xDA4A = 0xDA4A, // Doesn't crash
+        recv_0xE7CF = 0xE7CF,
+        recv_0xE983 = 0xE983,
+        recv_0xEDE7 = 0xEDE7,
         recv_0xEE18 = 0xEE18, // Cause crash
         recv_0xEEB7 = 0xEEB7, // cause crash
         recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit : Confirmed Recv String
+        recv_0xF024 = 0xF024,
         recv_0xFA0B = 0xFA0B, // res.WriteInt32(client.Character.Id); doesn't crash
         recv_0xFB79 = 0xFB79, //   res.WriteInt32(0); doesn't crash too
         recv_0xE8B9 = 0xE8B9, // res.WriteInt32(client.Character.Id); cause crash

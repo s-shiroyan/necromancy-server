@@ -5,17 +5,18 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvCharaBodySelfNotifyDeadNextTime : PacketResponse
+    public class RecvCashShopGetUrlWebGoods : PacketResponse
     {
-        public RecvCharaBodySelfNotifyDeadNextTime()
-            : base((ushort) AreaPacketId.recv_charabody_self_notify_deadnext_time, ServerType.Area)
+        public RecvCashShopGetUrlWebGoods()
+            : base((ushort) AreaPacketId.recv_cash_shop_get_url_web_goods_r, ServerType.Area)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // time dead length
+            res.WriteInt32(0);
+            res.WriteCString("ToBeFound"); // find max size
             return res;
         }
     }

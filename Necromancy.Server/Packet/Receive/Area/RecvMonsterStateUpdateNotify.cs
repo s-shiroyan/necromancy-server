@@ -5,17 +5,18 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvCharaBodySelfNotifyDeadNextTime : PacketResponse
+    public class RecvMonsterStateUpdateNotify : PacketResponse
     {
-        public RecvCharaBodySelfNotifyDeadNextTime()
-            : base((ushort) AreaPacketId.recv_charabody_self_notify_deadnext_time, ServerType.Area)
+        public RecvMonsterStateUpdateNotify()
+            : base((ushort) AreaPacketId.recv_monster_state_update_notify, ServerType.Area)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); // time dead length
+            res.WriteInt32(0);
+            res.WriteInt32(0);
             return res;
         }
     }
