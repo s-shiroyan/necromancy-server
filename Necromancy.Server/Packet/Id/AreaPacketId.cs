@@ -556,6 +556,7 @@ namespace Necromancy.Server.Packet.Id
         recv_select_package_update_r = 0xD170,
         recv_self_action_cost = 0x8CD,
         recv_self_buff_notify = 0x73D1,
+        recv_self_dragon_pos_notify = 0x6FB2,
         recv_self_dragon_warp_notify = 0xC6EF,
         recv_self_exp_notify = 0xC47A,
         recv_self_inherit_skill_level_notify = 0x3F5B,
