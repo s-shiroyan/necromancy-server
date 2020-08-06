@@ -60,6 +60,11 @@ namespace Necromancy.Server.Packet.Area
                             () => RecoverySpring(client, npcSpawn)
                         },
                         {
+                            x => (x == 10000044) || (x == 10000122) || (x == 10000329) || (x == 10000710) ||
+                                 (x == 90000031),
+                            () => Jeweler(client, npcSpawn)
+                        },
+                        {
                             x => (x == 10000033) || (x == 10000113) || (x == 10000305) || (x == 10000311) ||
                                  (x == 10000702),
                             () => Blacksmith(client, npcSpawn)
@@ -465,16 +470,16 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
                     "By forging, you can use the same equipment for a long time. The equipment will get more powerful the more you forge. Of course,"); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteCString($"{npcSpawn.Name}"); //Name
                 res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res3.WriteCString("sometimes the process fails."); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextBlacksmith = false;
             }
@@ -483,15 +488,53 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
                 res4.WriteInt16(
-                    0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair;
-                res4.WriteInt32(10800405);
+                    0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
+                res4.WriteUInt32(client.Character.InstanceId);
                 res4.WriteInt32(10800405);
                 res4.WriteByte(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+            }
+        }
+        private void Jeweler(NecClient client, NpcSpawn npcSpawn)
+        {
+            if (client.Character.helperTextBlacksmith)
+            {
+                IBuffer res2 = BufferProvider.Provide();
+                res2.WriteCString($"{npcSpawn.Name}"); //Name
+                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res2.WriteCString(
+                    "This will be the Jeweler NPC"); //Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+                IBuffer res3 = BufferProvider.Provide();
+                res3.WriteCString($"{npcSpawn.Name}"); //Name
+                res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
+                res3.WriteCString("sometimes the process fails."); //Text block
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+                IBuffer res6 = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
+
+                client.Character.helperTextBlacksmith = false;
+            }
+            else
+            {
+                IBuffer res4 = BufferProvider.Provide();
+                //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                res4.WriteInt16(0b110000000000000); 
+                //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
+                res4.WriteInt32(10800405);
+                res4.WriteInt32(10800405);
+                res4.WriteByte(0);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
+                IBuffer res5 = BufferProvider.Provide();
+                res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
             }
         }
 

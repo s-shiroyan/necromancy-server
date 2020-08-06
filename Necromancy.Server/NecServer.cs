@@ -185,6 +185,7 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new ItemInstanceCommand(this));
             Chat.CommandHandler.AddCommand(new HonorCommand(this));
             Chat.CommandHandler.AddCommand(new SummonCommand(this));
             Chat.CommandHandler.AddCommand(new PlayersCommand(this));
@@ -502,6 +503,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_equip_honor(this));
             _areaConsumer.AddHandler(new send_update_honor(this));
             _areaConsumer.AddHandler(new send_forge_check(this));
+            _areaConsumer.AddHandler(new send_gem_close(this));
         }
     }
 }
