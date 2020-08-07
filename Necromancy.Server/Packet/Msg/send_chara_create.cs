@@ -77,8 +77,7 @@ namespace Necromancy.Server.Packet.Msg
             character.intelligence = intelligence;
             character.piety = piety;
             character.luck = luck;
-            character.ClassId = class_id;
-            CreateShortcutBars(client, character, class_id);
+            character.ClassId = class_id;            
 
             //----------------------------------------------------------
             // Character Slot ID
@@ -91,6 +90,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             CreateSkillTreeItems(client, character, class_id);
+            CreateShortcutBars(client, character, class_id);
 
             client.Character = character;
             Logger.Info($"Created CharacterSlot: {character_slot_id}");
@@ -196,116 +196,44 @@ namespace Necromancy.Server.Packet.Msg
             ShortcutBar shortcutBar0 = new ShortcutBar();
             if (class_id == 0) // Fighter
             {
-                shortcutBar0.Slot0 = 11101;
-                shortcutBar0.Action0 = 3;
-                shortcutBar0.Slot1 = 11201;
-                shortcutBar0.Action1 = 3;
+                //TODO Fix magic numbers all over the place
+                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(11101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(11201, ShortcutItem.ShortcutType.SKILL));          
             }
             else if (class_id == 1) // Thief
             {
-                shortcutBar0.Slot0 = 14101;
-                shortcutBar0.Action0 = 3;
-                shortcutBar0.Slot1 = 14302;
-                shortcutBar0.Action1 = 3;
-                shortcutBar0.Slot2 = 14803;
-                shortcutBar0.Action2 = 3;
+                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(14101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(14302, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 0, 2, new ShortcutItem(14803, ShortcutItem.ShortcutType.SKILL));
             }
             else if (class_id == 2) // Mage
             {
-                shortcutBar0.Slot0 = 13101;
-                shortcutBar0.Action0 = 3;
-                shortcutBar0.Slot1 = 13404;
-                shortcutBar0.Action1 = 3;
+                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(13101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(13404, ShortcutItem.ShortcutType.SKILL));
             }
             else if (class_id == 3) // Priest
             {
-                shortcutBar0.Slot0 = 12501;
-                shortcutBar0.Action0 = 3;
-                shortcutBar0.Slot1 = 12601;
-                shortcutBar0.Action1 = 3;
+                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(12501, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(12601, ShortcutItem.ShortcutType.SKILL));
             }
 
-            shortcutBar0.Slot4 = 11;
-            shortcutBar0.Action4 = 4;
-            shortcutBar0.Slot6 = 18;
-            shortcutBar0.Action6 = 4;
-            shortcutBar0.Slot7 = 22;
-            shortcutBar0.Action7 = 4;
-            shortcutBar0.Slot9 = 2;
-            shortcutBar0.Action9 = 4;
-            if (!Database.InsertShortcutBar(shortcutBar0))
-            {
-                Logger.Error(client, $"Failed to create ShortcutBar0");
-                client.Close();
-                character.shortcutBar0Id = -1;
-                return;
-            }
+            Database.InsertOrReplaceShortcutItem(character, 0, 4, new ShortcutItem(11, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 0, 6, new ShortcutItem(18, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 0, 7, new ShortcutItem(22, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 0, 9, new ShortcutItem(2, ShortcutItem.ShortcutType.SYSTEM));    
 
-            character.shortcutBar0Id = shortcutBar0.Id;
 
             ShortcutBar shortcutBar1 = new ShortcutBar();
-            shortcutBar1.Slot0 = 1;
-            shortcutBar1.Action0 = 5;
-            shortcutBar1.Slot1 = 2;
-            shortcutBar1.Action1 = 5;
-            shortcutBar1.Slot2 = 4;
-            shortcutBar1.Action2 = 5;
-            shortcutBar1.Slot3 = 5;
-            shortcutBar1.Action3 = 5;
-            shortcutBar1.Slot4 = 6;
-            shortcutBar1.Action4 = 5;
-            shortcutBar1.Slot5 = 7;
-            shortcutBar1.Action5 = 5;
-            shortcutBar1.Slot6 = 11;
-            shortcutBar1.Action6 = 5;
-            shortcutBar1.Slot7 = 14;
-            shortcutBar1.Action7 = 5;
-            shortcutBar1.Slot8 = 15;
-            shortcutBar1.Action8 = 5;
-            shortcutBar1.Slot9 = 16;
-            shortcutBar1.Action9 = 5;
-            if (!Database.InsertShortcutBar(shortcutBar1))
-            {
-                Logger.Error(client, $"Failed to create ShortcutBar1");
-                client.Close();
-                character.shortcutBar1Id = -1;
-                return;
-            }
-
-            character.shortcutBar1Id = shortcutBar1.Id;
-
-            ShortcutBar shortcutBar2 = new ShortcutBar();
-            if (!Database.InsertShortcutBar(shortcutBar2))
-            {
-                Logger.Error(client, $"Failed to create ShortcutBar2");
-                client.Close();
-                character.shortcutBar2Id = -1;
-                return;
-            }
-
-            character.shortcutBar2Id = shortcutBar2.Id;
-
-            ShortcutBar shortcutBar3 = new ShortcutBar();
-            if (!Database.InsertShortcutBar(shortcutBar3))
-            {
-                Logger.Error(client, $"Failed to create ShortcutBar3");
-                client.Close();
-                character.shortcutBar3Id = -1;
-                return;
-            }
-
-            character.shortcutBar3Id = shortcutBar3.Id;
-
-            ShortcutBar shortcutBar4 = new ShortcutBar();
-            if (!Database.InsertShortcutBar(shortcutBar4))
-            {
-                Logger.Error(client, $"Failed to create ShortcutBar4");
-                client.Close();
-                character.shortcutBar4Id = -1;
-                return;
-            }
-
-            character.shortcutBar4Id = shortcutBar4.Id;
+            Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(1, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(2, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 2, new ShortcutItem(4, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 3, new ShortcutItem(5, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 4, new ShortcutItem(6, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 5, new ShortcutItem(7, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 6, new ShortcutItem(11, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 7, new ShortcutItem(14, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 8, new ShortcutItem(15, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 1, 9, new ShortcutItem(16, ShortcutItem.ShortcutType.EMOTE));
         }
     }
 }
