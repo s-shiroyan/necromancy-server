@@ -37,9 +37,9 @@ namespace Necromancy.Server.Database.Sql.Core
                 {
                     while (reader.Read())
                     {
-                        int i = GetInt32(reader, "@slot_num");
+                        int i = GetInt32(reader, "slot_num");
                         if (i < 0 || i > ShortcutBar.COUNT) continue;                        
-                        ShortcutItem shortcutItem = new ShortcutItem(GetInt32(reader, "@shortcut_id"), (ShortcutItem.ShortcutType)GetInt32(reader, "@shortcut_type"));                        
+                        ShortcutItem shortcutItem = new ShortcutItem(GetInt32(reader, "shortcut_id"), (ShortcutItem.ShortcutType)GetInt32(reader, "shortcut_type"));                        
                         shortcutBar.Item[i] = shortcutItem;
                     }
                 });

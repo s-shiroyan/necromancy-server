@@ -197,43 +197,43 @@ namespace Necromancy.Server.Packet.Msg
             if (class_id == 0) // Fighter
             {
                 //TODO Fix magic numbers all over the place
-                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(11101, ShortcutItem.ShortcutType.SKILL));
-                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(11201, ShortcutItem.ShortcutType.SKILL));          
+                Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(11101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(11201, ShortcutItem.ShortcutType.SKILL));          
             }
             else if (class_id == 1) // Thief
             {
-                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(14101, ShortcutItem.ShortcutType.SKILL));
-                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(14302, ShortcutItem.ShortcutType.SKILL));
-                Database.InsertOrReplaceShortcutItem(character, 0, 2, new ShortcutItem(14803, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(14101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(14302, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 2, new ShortcutItem(14803, ShortcutItem.ShortcutType.SKILL));
             }
             else if (class_id == 2) // Mage
             {
-                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(13101, ShortcutItem.ShortcutType.SKILL));
-                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(13404, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(13101, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(13404, ShortcutItem.ShortcutType.SKILL));
             }
             else if (class_id == 3) // Priest
             {
-                Database.InsertOrReplaceShortcutItem(character, 0, 0, new ShortcutItem(12501, ShortcutItem.ShortcutType.SKILL));
-                Database.InsertOrReplaceShortcutItem(character, 0, 1, new ShortcutItem(12601, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(12501, ShortcutItem.ShortcutType.SKILL));
+                Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(12601, ShortcutItem.ShortcutType.SKILL));
             }
 
-            Database.InsertOrReplaceShortcutItem(character, 0, 4, new ShortcutItem(11, ShortcutItem.ShortcutType.SYSTEM));
-            Database.InsertOrReplaceShortcutItem(character, 0, 6, new ShortcutItem(18, ShortcutItem.ShortcutType.SYSTEM));
-            Database.InsertOrReplaceShortcutItem(character, 0, 7, new ShortcutItem(22, ShortcutItem.ShortcutType.SYSTEM));
-            Database.InsertOrReplaceShortcutItem(character, 0, 9, new ShortcutItem(2, ShortcutItem.ShortcutType.SYSTEM));    
+            Database.InsertOrReplaceShortcutItem(character, 1, 4, new ShortcutItem(11, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 1, 6, new ShortcutItem(18, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 1, 7, new ShortcutItem(22, ShortcutItem.ShortcutType.SYSTEM));
+            Database.InsertOrReplaceShortcutItem(character, 1, 9, new ShortcutItem(2, ShortcutItem.ShortcutType.SYSTEM));    
 
 
             ShortcutBar shortcutBar1 = new ShortcutBar();
-            Database.InsertOrReplaceShortcutItem(character, 1, 0, new ShortcutItem(1, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 1, new ShortcutItem(2, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 2, new ShortcutItem(4, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 3, new ShortcutItem(5, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 4, new ShortcutItem(6, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 5, new ShortcutItem(7, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 6, new ShortcutItem(11, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 7, new ShortcutItem(14, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 8, new ShortcutItem(15, ShortcutItem.ShortcutType.EMOTE));
-            Database.InsertOrReplaceShortcutItem(character, 1, 9, new ShortcutItem(16, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 0, new ShortcutItem(1, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 1, new ShortcutItem(2, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 2, new ShortcutItem(4, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 3, new ShortcutItem(5, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 4, new ShortcutItem(6, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 5, new ShortcutItem(7, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 6, new ShortcutItem(11, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 7, new ShortcutItem(14, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 8, new ShortcutItem(15, ShortcutItem.ShortcutType.EMOTE));
+            Database.InsertOrReplaceShortcutItem(character, 2, 9, new ShortcutItem(16, ShortcutItem.ShortcutType.EMOTE));
         }
     }
 }
