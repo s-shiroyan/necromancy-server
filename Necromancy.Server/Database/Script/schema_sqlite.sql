@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS 'nec_shortcut_bar' (
 	'shortcut_type'	INTEGER NOT NULL,
 	'shortcut_id'	INTEGER NOT NULL,
 	PRIMARY KEY('character_id','bar_num','slot_num'),
-	FOREIGN KEY('character_id') REFERENCES 'nec_character'('id') ON DELETE CASCADE)
+	FOREIGN KEY('character_id') REFERENCES 'nec_character'('id') ON DELETE CASCADE);
 
 CREATE TABLE IF NOT EXISTS `nec_monster_coords`
 (
