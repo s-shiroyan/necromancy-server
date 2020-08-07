@@ -21,35 +21,8 @@ namespace Necromancy.Server.Packet.Area
             int actionType = packet.Data.ReadInt32();
             long skillID = packet.Data.ReadInt64();
 
-            int shortcutBarId = -1;
-            switch (shortcutBarIdx)
-            {
-                case 0:
-                    shortcutBarId = client.Character.shortcutBar0Id;
-                    break;
-                case 1:
-                    shortcutBarId = client.Character.shortcutBar1Id;
-                    break;
-                case 2:
-                    shortcutBarId = client.Character.shortcutBar2Id;
-                    break;
-                case 3:
-                    shortcutBarId = client.Character.shortcutBar3Id;
-                    break;
-                case 4:
-                    shortcutBarId = client.Character.shortcutBar4Id;
-                    break;
-                default:
-                    return;
-            }
-            ShortcutBar shortcutBar = Database.SelectShortcutBarById(shortcutBarId);
-            int [] slots = shortcutBar.getSlotArray();
-            slots[slot] = (int)skillID;
-            shortcutBar.setSlotArray(slots);
-            int[] actions = shortcutBar.getActionArray();
-            actions[slot] = actionType;
-            shortcutBar.setActionArray(actions);
-            Database.UpdateShortcutBar(shortcutBar);
+            ShortcutItem shortcutItem = new ShortcutItem(skillID, (ShortcutItem.ShortcutType)actionType);
+            Database.InsertOrReplaceShortcutItem(client.Character, shortcutBarIdx, slot, shortcutItem);
 
             res.WriteByte(shortcutBarIdx);
             res.WriteByte(slot);
