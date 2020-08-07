@@ -43,12 +43,18 @@ namespace Necromancy.Server.Packet.Area
                 Item item = Server.Items[inventoryItem.ItemId];
                 inventoryItem.Item = item;
 
-                RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-                Router.Send(recvItemInstance, client);
+
+
+
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
                 Router.Send(recvItemInstanceUnidentified, client);
 
+                RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+                Router.Send(recvItemInstance, client);
+
                 itemStats(inventoryItem, client);
+
+
                 client.Character.Inventory.LoginLoadInventory(inventoryItem);
 
                 if (inventoryItem.State > 0) 
@@ -96,7 +102,7 @@ namespace Necromancy.Server.Packet.Area
 
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id);
-            res.WriteInt32((int)itemLibrarySetting.Weight); // Weight points
+            res.WriteInt32((int)itemLibrarySetting.Weight*100); // Weight points
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_weight, res, ServerType.Area);
 
             res = BufferProvider.Provide();
@@ -116,18 +122,33 @@ namespace Necromancy.Server.Packet.Area
 
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id);
-            res.WriteInt16((short)Util.GetRandomNumber(1, 100)); // Shwo GP on certain items
+            res.WriteInt16((short)Util.GetRandomNumber(50, 100)); // Shwo GP on certain items
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
 
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id);
-            res.WriteInt32(999999999); // for the moment i don't know what it change
+            res.WriteInt32(1); // for the moment i don't know what it change
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_date_end_protect, res, ServerType.Area);
 
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id);
             res.WriteByte((byte)itemLibrarySetting.Hardness); // Hardness
             Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteByte(1); //Level requirement
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_level, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteByte(0); //sp Level requirement
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_sp_level, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(0b000000); // State bitmask
+            //Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
 
         }
 

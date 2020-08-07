@@ -22,29 +22,29 @@ namespace Necromancy.Server.Packet.Receive
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteUInt64((ulong)_inventoryItem.Id);
-            res.WriteInt32((int)_inventoryItem.CurrentEquipmentSlotType);
+            res.WriteUInt64((ulong)_inventoryItem.Id); //Item instance ID //todo, append character iD to item id  to make unique instance ID per character.
+            res.WriteInt32((int)_inventoryItem.Item.Id);//Icon ID
             res.WriteByte(_inventoryItem.Quantity);
-            res.WriteInt32(_inventoryItem.Id); //?????
+            res.WriteInt32(0b11111111111); // 0001 Shows correct icon in bag, 0010 unknown, 0100 shows broken, 1000 shows cursed, 1 0000 shows blessed
             res.WriteFixedString($"TEST3", 0x10);
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items. 
-            res.WriteInt32(_inventoryItem.State); //Spirit_eq_mask??
+            res.WriteInt32(8888); //Spirit_eq_mask??
             res.WriteByte(1);
             res.WriteByte(1);
-            res.WriteCString(_inventoryItem.Item.Name); // find max size 
-            res.WriteInt16(999);
-            res.WriteInt16(2999);
-            res.WriteInt32(19);
+            res.WriteCString(_inventoryItem.Item.Name); 
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt32(1);
             res.WriteByte(1);
-            res.WriteInt32((int)_client.Character.InstanceId);
+            res.WriteInt32(1);
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(Util.GetRandomNumber(1,10)); //Shop related? "can not equip items listed in your shop"
+                res.WriteInt32(1); //Shop related? "can not equip items listed in your shop"
             }
 
             numEntries = 3; //gem SLOTS
@@ -57,11 +57,11 @@ namespace Necromancy.Server.Packet.Receive
                 res.WriteInt32(2222);// theory gem id 2.  Diamonds were two Gems combined to one
             }
 
-            res.WriteInt32(20);
-            res.WriteInt32(200);
-            res.WriteInt16(1000);
+            res.WriteInt32(1);
+            res.WriteInt32(1);
+            res.WriteInt16(1);
             res.WriteInt32(0); //1 here lables the item "Gaurd".   no effect from higher numbers
-            res.WriteInt16(2000);
+            res.WriteInt16(1);
 
 
 
