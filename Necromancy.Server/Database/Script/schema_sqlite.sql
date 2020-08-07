@@ -24,6 +24,22 @@ CREATE TABLE IF NOT EXISTS `account`
     CONSTRAINT `uq_account_mail` UNIQUE (`mail`)
 );
 
+CREATE TABLE IF NOT EXISTS 'nec_auction_items' (
+	'id'	INTEGER NOT NULL,
+	'character_id'	INTEGER NOT NULL,
+	'item_id'	INTEGER NOT NULL,
+	'quantity'	INTEGER NOT NULL,
+	'expiry_time'	INTEGER NOT NULL,
+	'min_bid'	INTEGER NOT NULL,
+	'buyout_price'	INTEGER NOT NULL,
+	'bidder_id'	INTEGER,
+	'current_bid'	INTEGER,
+	'comment'	TEXT,
+	PRIMARY KEY('id' AUTOINCREMENT),
+	FOREIGN KEY('character_id') REFERENCES 'nec_character'('id') ON DELETE CASCADE,
+	FOREIGN KEY('bidder_id') REFERENCES 'nec_character'('id') ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS `nec_soul`
 (
     `id`         INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
