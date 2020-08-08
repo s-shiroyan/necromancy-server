@@ -53,7 +53,8 @@ namespace Necromancy.Server.Packet.Receive.Area
                 {
                     res.WriteByte(0);
                 }
-                return res;
+            }
+            return res;
         }
     }
 }

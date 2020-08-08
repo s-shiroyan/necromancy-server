@@ -15,7 +15,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            es.WriteInt64(0);
+            res.WriteInt64(0);
             res.WriteInt16(0);
             return res;
         }

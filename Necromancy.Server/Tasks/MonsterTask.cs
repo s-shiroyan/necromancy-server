@@ -3,7 +3,6 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
-using Necromancy.Server.Packet.Response;
 using System;
 using System.Collections.Generic;
 using System.Numerics;

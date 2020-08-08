@@ -5,17 +5,20 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvNormalSystemMessage : PacketResponse
+    public class RecvBattleReleaseAttackPoseR : PacketResponse
     {
-        public RecvNormalSystemMessage()
-            : base((ushort) AreaPacketId.recv_normal_system_message, ServerType.Area)
+        private readonly uint _instanceId;
+
+        public RecvBattleReleaseAttackPoseR(uint instanceId)
+            : base((ushort) AreaPacketId.recv_battle_release_attack_pose_self, ServerType.Area)
         {
+            _instanceId = instanceId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteCString("ToBeFound");
+            res.WriteUInt32(_instanceId);
             return res;
         }
     }

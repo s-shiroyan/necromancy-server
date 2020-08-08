@@ -9,7 +9,6 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
-using Necromancy.Server.Packet.Response;
 
 namespace Necromancy.Server.Packet.Area
 {
