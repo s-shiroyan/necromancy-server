@@ -3,10 +3,11 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
+using Necromancy.Server.Systems.Auction_House;
 
 namespace Necromancy.Server.Database
 {
-    public interface IDatabase
+    public partial interface IDatabase
     {
         const int InvalidDatabaseId = -1;
         
@@ -24,7 +25,7 @@ namespace Necromancy.Server.Database
         Account SelectAccountById(int accountId);
         Account SelectAccountByName(string accountName);
         bool UpdateAccount(Account account);
-        bool DeleteAccount(int accountId);
+        bool DeleteAccount(int accountId);        
 
         // Soul
         bool InsertSoul(Soul soul);

@@ -43,6 +43,7 @@ using Necromancy.Server.Packet.Auth;
 using Necromancy.Server.Packet.Custom;
 using Necromancy.Server.Packet.Msg;
 using Necromancy.Server.Setting;
+using Necromancy.Server.Systems.Auction_House;
 
 namespace Necromancy.Server
 {
@@ -330,7 +331,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new SendDisconnect(this));
             _areaConsumer.AddHandler(new SendHeartbeat(this));
             _areaConsumer.AddHandler(new SendUnknown1(this));
-            _areaConsumer.AddHandler(new send_auction_bid(this));
+            _areaConsumer.AddHandler(new Systems.Auction_House.send_auction_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_bid(this));
             _areaConsumer.AddHandler(new send_auction_cancel_exhibit(this));
             _areaConsumer.AddHandler(new send_auction_close(this));

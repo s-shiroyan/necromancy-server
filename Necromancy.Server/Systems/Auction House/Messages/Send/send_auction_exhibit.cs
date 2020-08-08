@@ -1,9 +1,10 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Area
+namespace Necromancy.Server.Systems.Auction_House
 {
     public class send_auction_exhibit : ClientHandler
     {
