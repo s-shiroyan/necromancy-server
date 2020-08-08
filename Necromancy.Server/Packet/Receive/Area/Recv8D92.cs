@@ -4,7 +4,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Receive
+namespace Necromancy.Server.Packet.Receive.Area
 {
     public class Recv8D92 : PacketResponse
     {

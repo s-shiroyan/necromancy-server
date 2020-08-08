@@ -7,19 +7,28 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdatePlace : PacketResponse
     {
-        public RecvItemUpdatePlace()
+        private readonly ulong _instanceId;
+        private readonly byte _toType;
+        private readonly byte _toBagId;
+        private readonly short _toSlot;
+
+        public RecvItemUpdatePlace(ulong instanceId, byte toType, byte toBagId, short toSlot)
             : base((ushort) AreaPacketId.recv_item_update_place, ServerType.Area)
         {
+            _instanceId = instanceId;
+            _toType = toType;
+            _toBagId = toBagId;
+            _toSlot = toSlot;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(0); // item id
+            res.WriteUInt64(_instanceId);
+            res.WriteByte(_toType);
+            res.WriteByte(_toBagId);
+            res.WriteInt16(_toSlot);
 
-            res.WriteByte(0);	
-            res.WriteByte(0);	
-            res.WriteInt16(0);
             return res;
         }
     }

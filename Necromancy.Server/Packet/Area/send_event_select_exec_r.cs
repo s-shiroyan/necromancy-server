@@ -3,7 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 using System;
 using System.Collections.Generic;
 using System.Linq;

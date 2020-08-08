@@ -7,15 +7,18 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvObjectDisappearNotify : PacketResponse
     {
-        public RecvObjectDisappearNotify()
+        private readonly uint _instanceId;
+
+        public RecvObjectDisappearNotify(uint instanceId)
             : base((ushort) AreaPacketId.recv_object_disappear_notify, ServerType.Area)
         {
+            _instanceId = instanceId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteUInt32(_instanceId);
             return res;
         }
     }

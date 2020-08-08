@@ -7,15 +7,18 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvBattleReportNotifyHitEffect : PacketResponse
     {
-        public RecvBattleReportNotifyHitEffect()
+        private readonly uint _instanceId;
+
+        public RecvBattleReportNotifyHitEffect(uint instanceId)
             : base((ushort) AreaPacketId.recv_battle_report_notify_hit_effect, ServerType.Area)
         {
+            _instanceId = instanceId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteUInt32(_instanceId);
             return res;
         }
     }

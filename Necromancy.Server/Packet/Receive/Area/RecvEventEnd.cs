@@ -7,15 +7,19 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvEventEnd : PacketResponse
     {
-        public RecvEventEnd()
+        private readonly byte _unknown;
+
+        public RecvEventEnd(byte unknown)
             : base((ushort) AreaPacketId.recv_event_end, ServerType.Area)
         {
+            _unknown = unknown;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteByte(0);
+            res.WriteByte(_unknown);
+
             return res;
         }
     }

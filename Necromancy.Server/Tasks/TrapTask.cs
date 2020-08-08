@@ -10,7 +10,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Tasks.Core;
 
 namespace Necromancy.Server.Tasks

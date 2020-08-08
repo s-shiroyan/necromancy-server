@@ -7,17 +7,22 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvSkillExec : PacketResponse
     {
-        public RecvSkillExec()
-            : base((ushort) AreaPacketId.recv_skill_exec_r, ServerType.Area)
+        private readonly int _skillId;
+        private readonly float _castingTime;
+
+        public RecvSkillExec(int skillId, float castingTime)
+            : base((ushort) AreaPacketId.send_skill_start_cast, ServerType.Area)
         {
+            _skillId = skillId;
+            _castingTime = castingTime;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteFloat(0);
-            res.WriteFloat(0);
+            res.WriteInt32(0); //Error check     | 0 - success  
+            res.WriteInt32(_skillId); //previously Skill ID
+            res.WriteFloat(_castingTime);
             return res;
         }
     }

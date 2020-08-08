@@ -7,15 +7,19 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvEventSystemMessage : PacketResponse
     {
-        public RecvEventSystemMessage()
+        private readonly string _message;
+
+        public RecvEventSystemMessage(string message)
             : base((ushort) AreaPacketId.recv_event_system_message, ServerType.Area)
         {
+            _message = message;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteCString(""); // Length 0xC01
+            res.WriteCString(_message);
+
             return res;
         }
     }

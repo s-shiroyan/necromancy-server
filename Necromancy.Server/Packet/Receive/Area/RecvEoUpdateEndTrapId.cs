@@ -7,16 +7,21 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvEoUpdateEndTrapId : PacketResponse
     {
-        public RecvEoUpdateEndTrapId()
+        private readonly uint _instanceId;
+        private readonly int _effectId;
+
+        public RecvEoUpdateEndTrapId(uint instanceId, int effectId)
             : base((ushort) AreaPacketId.recv_eo_update_end_trapid, ServerType.Area)
         {
+            _instanceId = instanceId;
+            _effectId = effectId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteUInt32(_instanceId);
+            res.WriteInt32(_effectId);
             return res;
         }
     }

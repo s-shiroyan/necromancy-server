@@ -16,6 +16,21 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteFloat(0);//Seems to be a float in the asm
+
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteInt16(0);
+
+            res.WriteByte(0);
+
+            res.WriteByte(0);
+
+            res.WriteByte(0);
             return res;
         }
     }

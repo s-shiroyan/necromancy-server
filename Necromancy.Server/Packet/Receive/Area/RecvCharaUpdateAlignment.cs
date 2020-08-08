@@ -7,15 +7,18 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvCharaUpdateAlignment : PacketResponse
     {
-        public RecvCharaUpdateAlignment()
+        private readonly uint _alignment;
+
+        public RecvCharaUpdateAlignment(uint alignment)
             : base((ushort) AreaPacketId.recv_chara_update_alignment, ServerType.Area)
         {
+            _alignment = alignment;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); //Alignment ID
+            res.WriteUInt32(_alignment);
             return res;
         }
     }

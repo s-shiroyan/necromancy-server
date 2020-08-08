@@ -7,15 +7,18 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemRemove : PacketResponse
     {
-        public RecvItemRemove()
+        private readonly ulong _instanceId;
+
+        public RecvItemRemove(ulong instanceId)
             : base((ushort) AreaPacketId.recv_item_remove, ServerType.Area)
         {
+            _instanceId = instanceId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(0);
+            res.WriteUInt64(_instanceId); // 0 = normal 1 = cinematic
             return res;
         }
     }

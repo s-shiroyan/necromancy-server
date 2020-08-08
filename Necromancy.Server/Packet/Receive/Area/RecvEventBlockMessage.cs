@@ -7,16 +7,22 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvEventBlockMessage : PacketResponse
     {
-        public RecvEventBlockMessage()
+        private readonly int _unknown;
+        private readonly string _message;
+
+        public RecvEventBlockMessage(int unknown, string message)
             : base((ushort) AreaPacketId.recv_event_block_message, ServerType.Area)
         {
+            _unknown = unknown;
+            _message = message;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteCString("ToBeFound"); // find max size
+            res.WriteInt32(_unknown);
+            res.WriteCString(_message);
+
             return res;
         }
     }

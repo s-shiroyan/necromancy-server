@@ -7,17 +7,22 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvBattleReportActionMonsterSkillStartCast : PacketResponse
     {
-        public RecvBattleReportActionMonsterSkillStartCast()
+        private readonly uint _instanceId;
+        private readonly int _skillId;
+
+        public RecvBattleReportActionMonsterSkillStartCast(uint instanceId, int skillId)
             : base((ushort) AreaPacketId.recv_battle_report_action_monster_skill_start_cast, ServerType.Area)
         {
+            _instanceId = instanceId;
+            _skillId = skillId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteFloat(0);
+            res.WriteInt32(_skillId); // From skill_base.csv
+            res.WriteUInt32(_instanceId); //  ????????????????????
+            res.WriteFloat(2.0F); //  ????????????????????
             return res;
         }
     }

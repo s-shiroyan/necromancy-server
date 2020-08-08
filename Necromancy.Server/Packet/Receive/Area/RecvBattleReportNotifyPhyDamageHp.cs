@@ -5,18 +5,23 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvBattleReportNotifyPhyDamageHp : PacketResponse
+    public class RecvBattleReportPhyDamageHp : PacketResponse
     {
-        public RecvBattleReportNotifyPhyDamageHp()
+        private readonly uint _instanceId;
+        private readonly int _damage;
+
+        public RecvBattleReportPhyDamageHp(uint instanceId, int damage)
             : base((ushort) AreaPacketId.recv_battle_report_notify_phy_damage_hp, ServerType.Area)
         {
+            _instanceId = instanceId;
+            _damage = damage;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteUInt32(_instanceId);
+            res.WriteInt32(_damage);
             return res;
         }
     }

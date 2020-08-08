@@ -6,7 +6,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Skills;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Tasks;
 

@@ -3,18 +3,19 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 
-namespace Necromancy.Server.Packet.Receive
+namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvSkillCastCancel : PacketResponse
+    public class Recv0xC078WRONG1 : PacketResponse
     {
-        public RecvSkillCastCancel()
-            : base((ushort) AreaPacketId.recv_skill_cast_cancel, ServerType.Area)
+        public Recv0xC078WRONG1()
+            : base((ushort) AreaPacketId.recv_0xC078, ServerType.Area)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
             return res;
         }
     }

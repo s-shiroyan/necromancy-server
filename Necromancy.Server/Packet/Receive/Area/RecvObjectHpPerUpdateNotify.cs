@@ -7,18 +7,28 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvObjectHpPerUpdateNotify : PacketResponse
     {
-        public RecvObjectHpPerUpdateNotify()
+        private readonly uint _instanceId;
+        private float _perHp;
+
+        public RecvObjectHpPerUpdateNotify(uint instanceId, float perHp)
             : base((ushort) AreaPacketId.recv_object_hp_per_update_notify, ServerType.Area)
         {
+            _instanceId = instanceId;
+            _perHp = perHp;
         }
 
         protected override IBuffer ToBuffer()
         {
-            IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            if (_perHp < 0)
+            {
+                _perHp = 0;
+            }
 
-            res.WriteByte(0);
-            return res;
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteUInt32(_instanceId);
+            res4.WriteByte(
+                (byte) _perHp); // % hp remaining of target.  need to store current NPC HP and OD as variables to "attack" them
+            return res4;
         }
     }
 }
