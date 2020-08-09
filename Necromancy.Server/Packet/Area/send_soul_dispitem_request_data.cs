@@ -43,14 +43,11 @@ namespace Necromancy.Server.Packet.Area
                 Item item = Server.Items[inventoryItem.ItemId];
                 inventoryItem.Item = item;
 
-
-
-
-                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
-                Router.Send(recvItemInstanceUnidentified, client);
-
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
                 Router.Send(recvItemInstance, client);
+
+                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem); //do some testing without the state bit set to inentifried
+                Router.Send(recvItemInstanceUnidentified, client);
 
                 itemStats(inventoryItem, client);
 

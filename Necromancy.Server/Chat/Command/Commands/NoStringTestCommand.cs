@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -25,10 +26,23 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
 
+            for (int i = 0; i < 5; i++)
+            {
+                res.WriteFixedString("aaaa", 0x31);
+                res.WriteFixedString("bbbb", 0x25);
+                res.WriteUInt32(client.Character.InstanceId);
+                res.WriteUInt32(client.Character.InstanceId);
+                res.WriteInt64(1111111111111);
+                res.WriteUInt32(client.Character.InstanceId);
+            }
+            res.WriteFixedString("dddd", 0x31);
+            res.WriteFixedString("  cccc", 0x25);
             res.WriteUInt32(client.Character.InstanceId);
-            res.WriteInt32(x);
+            res.WriteUInt32(client.Character.InstanceId);
+            res.WriteInt64(111111111111111);
+            res.WriteUInt32(client.Character.InstanceId);
+            Router.Send(client, (ushort)0x9201, res, ServerType.Area);
 
-            Router.Send(client.Map, 0x1489, res, ServerType.Area);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

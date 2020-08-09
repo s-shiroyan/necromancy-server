@@ -500,7 +500,7 @@ namespace Necromancy.Server.Tasks
             IBuffer res = BufferProvider.Provide();
             res = BufferProvider.Provide();
             res.WriteUInt32(currentTarget.InstanceId);
-            _server.Router.Send(Map, (ushort) AreaPacketId.recv_battle_attack_start, res, ServerType.Area);
+            _server.Router.Send(Map, (ushort) AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area);
         }
 
         public void MonsterSpawn()

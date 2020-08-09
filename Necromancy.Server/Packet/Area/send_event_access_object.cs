@@ -54,6 +54,7 @@ namespace Necromancy.Server.Packet.Area
                         {x => x == 10000005, () => SendEventSelectMapAndChannel(client, instanceId)},
                         {x => x == 10000012, () => SendEventSelectMapAndChannel(client, instanceId)},
                         {x => x == 10000912, () => SendEventSelectMapAndChannel(client, instanceId)},
+                        {x => x == 80000018, () => AuctionHouse(client, npcSpawn)},
                         {x => x == 10000019, () => Abdul(client, npcSpawn)},
                         {
                             x => (x == 74000022) || (x == 74000024) || (x == 74000023),
@@ -485,14 +486,32 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
+                IBuffer res = BufferProvider.Provide();
+                res.WriteByte(1);
+                res.WriteUInt32(10200101); // item Serial id
+                res.WriteInt64(10200101); // item price
+                res.WriteFixedString("Dagger", 0x10); // ?
+                //Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+
+                res = BufferProvider.Provide();
+                res.WriteInt64(10200101); // id?
+                res.WriteInt64(10200101); // price?
+                res.WriteInt64(10200101); // identify?
+                res.WriteInt64(10200101); // curse?
+                res.WriteInt64(10200101); // repair?
+                //Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
+
+
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
                 res4.WriteInt16(
                     0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
-                res4.WriteUInt32(client.Character.InstanceId);
-                res4.WriteInt32(10800405);
-                res4.WriteByte(0);
+                res4.WriteUInt32(1);//item num
+                res4.WriteInt32(10800405);// cash
+                res4.WriteByte(0); //tabs num
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
+
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name} the {npcSpawn.Title}");
@@ -547,10 +566,10 @@ namespace Necromancy.Server.Packet.Area
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
                 res2.WriteCString(
                     "Wee! There's plenty of weapons and armor at the specialty shops. The weapon and armor shops are in Bustling Market. *Hiccup*"); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_event_sync, res6, ServerType.Area);
 
                 client.Character.helperTextDonkey = false;
             }
@@ -563,12 +582,62 @@ namespace Necromancy.Server.Packet.Area
                 res4.WriteInt32(0);
                 res4.WriteInt32(0);
                 res4.WriteByte(0);
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
-                Router.Send(client, (ushort) AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
             }
+        }
+        private void AuctionHouse(NecClient client, NpcSpawn npcSpawn)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            int numEntries = 0x5;
+            res.WriteInt32(numEntries); // must be <= 5    // item information tab
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte((byte)i);
+
+                res.WriteInt32(i);
+                res.WriteInt64(10500501);
+                res.WriteInt32(2);
+                res.WriteInt32(3);
+                res.WriteFixedString($"{client.Soul.Name}", 49);
+                res.WriteByte(1);
+                res.WriteFixedString("Item Description", 385);
+                res.WriteInt16(4);
+                res.WriteInt32(5);
+
+                res.WriteInt32(6);
+                res.WriteInt32(7);
+
+            }
+            int numEntries2 = 0x8;
+            res.WriteInt32(numEntries2); // must be< = 8   //bid info tab
+
+            for (int i = 0; i < numEntries2; i++)
+            {
+                res.WriteByte((byte)i);
+
+                res.WriteInt32(i);
+                res.WriteInt64(10500501);
+                res.WriteInt32(2);
+                res.WriteInt32(3);
+                res.WriteFixedString("soulname", 49);
+                res.WriteByte(1);
+                res.WriteFixedString("ToBeFound", 385);
+                res.WriteInt16(4);
+                res.WriteInt32(5);
+
+                res.WriteInt32(6);
+                res.WriteInt32(7);
+
+            }
+
+            res.WriteByte(0); // bool
+            Router.Send(client, (ushort)AreaPacketId.recv_auction_notify_open, res, ServerType.Area);
+            
         }
 
         private void CloakRoomShopClerk(NecClient client, NpcSpawn npcSpawn)

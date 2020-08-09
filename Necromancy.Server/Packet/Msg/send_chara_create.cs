@@ -88,8 +88,6 @@ namespace Necromancy.Server.Packet.Msg
                 return;
             }
             
-            character = Database.SelectCharacterBySlot(character.SoulId,character_slot_id);
-
             Server.Instances.AssignInstance(character);
 
             CreateSkillTreeItems(client, character, class_id);

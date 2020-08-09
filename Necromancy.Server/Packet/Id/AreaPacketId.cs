@@ -90,12 +90,10 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_attack_exec_r = 0xF1A0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
-        recv_battle_attack_pose = 0x0, //todo
         recv_battle_attack_pose_end_notify = 0xF633,
         recv_battle_attack_pose_r = 0x5DEB,
         recv_battle_attack_pose_self = 0x9F74,
         recv_battle_attack_pose_start_notify = 0x7CB2,
-        recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
         recv_battle_attack_start_r = 0xD752,
         recv_battle_charge_end_r = 0x5AE9,
         recv_battle_charge_start_r = 0x4F10,
@@ -103,8 +101,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_guard_end_self = 0x5E48,
         recv_battle_guard_start_r = 0xADC8,
         recv_battle_guard_start_self = 0x1E96,
-        recv_battle_life_notify = 0x1E2, // opcode not found
-        recv_battle_release_attack_pose = 0x0, //todo
+        recv_battle_life_notify = 0x1E2,
         recv_battle_release_attack_pose_r = 0xE990,
         recv_battle_release_attack_pose_self = 0x4EF4,
         recv_battle_report_action_attack_exec = 0xB3F7,
