@@ -34,11 +34,26 @@ namespace Necromancy.Server.Systems.Auction_House
         }
 
         public void Exhibit(AuctionItem auctionItem)
-        {
-            DbAuction dbAuction = new DbAuction();
+        {            
             int currentNumLots = GetLots().Length;
             if (currentNumLots >= MAX_LOTS)
-                throw new AuctionException();
+                throw new AuctionException(AuctionException.Type.LOT_SLOTS_FULL);
+
+            //TODO CHECK IF EQUIPPED
+            if (false)
+                throw new AuctionException(AuctionException.Type.EQUIP_LISTING);
+
+            //TODO CHECK IF INVALID ITEM
+            if(false)
+                throw new AuctionException(AuctionException.Type.INVALID_LISTING);
+
+            //TODO CHECK DIMETO MEDAL whatever that is
+            if (false)
+                throw new AuctionException(AuctionException.Type.LOT_DIMETO_MEDAL_EXPIRED);
+
+            //TODO CHECK ITEM ALREADY_LISTED items must have a unique serial!
+            if (false)
+                throw new AuctionException(AuctionException.Type.LOT_DIMETO_MEDAL_EXPIRED);
 
             new DbAuction().InsertAuctionItem(auctionItem);
         }

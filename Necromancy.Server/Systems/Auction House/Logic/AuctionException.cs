@@ -9,7 +9,7 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
     public class AuctionException : Exception
     {
         public Type ExceptionType { get; private set; }
-        public AuctionException() : base() { ExceptionType = Type.GENERIC_ERROR }
+        public AuctionException() : base() { ExceptionType = Type.GENERIC_ERROR; }
         public AuctionException(Type exceptionType) : base() { ExceptionType = exceptionType; }
         public AuctionException(string message) : base(message) { }
         public AuctionException(string message, System.Exception inner) : base(message, inner) { }
