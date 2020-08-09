@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `nec_character`
     `shortcut_bar3_id` INTEGER  NOT NULL,
     `shortcut_bar4_id` INTEGER  NOT NULL,
     `created`          DATETIME NOT NULL,
-    'gold'             INTEGER  NOT NULL,
+    'gold'             INTEGER  NOT NULL DEFAULT 0,
     CONSTRAINT `fk_nec_character_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
     CONSTRAINT `fk_nec_character_soul_id` FOREIGN KEY (`soul_id`) REFERENCES `nec_soul` (`id`),
     CONSTRAINT `fk_nec_character_map_id` FOREIGN KEY (`map_id`) REFERENCES `nec_map` (`id`),

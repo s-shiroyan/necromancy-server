@@ -1,4 +1,4 @@
-INSERT INTO "nec_shortcut_bar" ("id","slot0","slot1","slot2","slot3","slot4","slot5","slot6","slot7","slot8","slot9","action0","action1","action2","action3","action4","action5","action6","action7","action8","action9") 
+/*INSERT INTO "nec_shortcut_bar" ("id","slot0","slot1","slot2","slot3","slot4","slot5","slot6","slot7","slot8","slot9","action0","action1","action2","action3","action4","action5","action6","action7","action8","action9") 
 VALUES 
  (1,12501,12601,-1,-1,11,12506,18,22,12512,2,3,3,-1,-1,4,3,4,4,3,4),
  (2,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
@@ -64,7 +64,7 @@ VALUES
  (62,1,2,4,5,6,7,11,14,15,16,5,5,5,5,5,5,5,5,5,5),
  (63,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
  (64,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1),
- (65,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1);
+ (65,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1);*/
 
 INSERT INTO "nec_skilltree_item" ("id","skill_id","char_id","level") 
 VALUES 
