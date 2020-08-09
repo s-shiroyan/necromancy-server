@@ -58,18 +58,13 @@ namespace Necromancy.Server.Systems
         {
             try
             {
-                using (DbConnection conn = new SQLiteConnection(sqLiteConnectionString))
-                {
-                    conn.Open();
-                    using (DbCommand command = conn.CreateCommand())
-                    {
-                        command.CommandText = query;
-                        nonQueryAction(command);
-                        using (DbDataReader reader = command.ExecuteReader()){
-                            readAction(reader);
-                        }
-                    }
-                }      
+                using DbConnection conn = new SQLiteConnection(sqLiteConnectionString);
+                conn.Open();
+                using DbCommand command = conn.CreateCommand();
+                command.CommandText = query;
+                nonQueryAction(command);
+                using DbDataReader reader = command.ExecuteReader();
+                readAction(reader);    
             }
             catch (Exception ex)
             {

@@ -22,11 +22,6 @@ namespace Necromancy.Server.Systems.Auction_House
             this.nClient = nClient;
         }
 
-        public BidsAndLots GetBidsAndLots()
-        {
-            return new BidsAndLots(getAuctionBids(), getAuctionLots());
-        }
-
         public AuctionItem[] Search(SearchCriteria searchCritera)
         {
             return new AuctionItem[4];
@@ -38,11 +33,21 @@ namespace Necromancy.Server.Systems.Auction_House
             //aOpen.send(this);
         }
 
-        private AuctionItem[]  getAuctionBids() {
+        public void Exhibit(AuctionItem auctionItem)
+        {
+            DbAuction dbAuction = new DbAuction();
+            int currentNumLots = GetLots().Length;
+            if (currentNumLots >= MAX_LOTS)
+                throw new AuctionException();
+
+            new DbAuction().InsertAuctionItem(auctionItem);
+        }
+
+        public AuctionItem[]  GetBids() {
             return new DbAuction().SelectAuctionBids(nClient.Character);
         }
 
-        private AuctionItem[] getAuctionLots()
+        public AuctionItem[] GetLots()
         {
             return new DbAuction().SelectAuctionLots(nClient.Character);
         }
