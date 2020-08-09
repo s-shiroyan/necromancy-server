@@ -581,8 +581,18 @@ namespace Necromancy.Server.Packet.Area
                     14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
                 res4.WriteInt32(0);
                 res4.WriteInt32(0);
-                res4.WriteByte(0);
+                res4.WriteByte(12);
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
+                for(int i = 0; i < 12; i++)
+                {
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteByte((byte)i); //idx
+                    res.WriteUInt32(10310301); // item Serial id
+                    res.WriteInt64(10200101); // item price
+                    res.WriteFixedString("Dagger", 0x10); // ?
+                    Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+                }
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
