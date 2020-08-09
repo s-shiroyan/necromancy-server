@@ -118,7 +118,7 @@ namespace Necromancy.Server.Model
         public bool _characterActive { get; private set; }
 
         //Inventory
-        public Inventory Inventory { get; set; }
+        public Necromancy.Server.Model.ItemModel.Inventory Inventory { get; set; }
 
         public Character()
         {
@@ -169,7 +169,7 @@ namespace Necromancy.Server.Model
             mapChange = false;
             stepCount = 0;
 
-            Inventory = new Inventory();
+            Inventory = new Necromancy.Server.Model.ItemModel.Inventory();
         }
 
         public bool characterActive

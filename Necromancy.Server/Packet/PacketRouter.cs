@@ -138,7 +138,7 @@ namespace Necromancy.Server.Packet
         {
             List<NecClient> mapClients = map.ClientLookup.GetAll();
             mapClients.AddRange(response.Clients);
-            response.CleatClients();
+            response.ClearClients();
             List<NecClient> clients = GetClients(mapClients, excepts);
             response.AddClients(clients);
             Send(response);

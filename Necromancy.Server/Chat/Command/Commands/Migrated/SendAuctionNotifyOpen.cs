@@ -3,6 +3,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Auction_House;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -16,52 +17,49 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            AuctionHouse auctionHouse = new AuctionHouse(client);
+            BidsAndLots bnl = auctionHouse.GetBidsAndLots();
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(5); // must be <= 5
-
-            int numEntries = 0x5;
-            for (int i = 0; i < numEntries; i++)
+            res.WriteInt32(bnl.Lots.Length); // must be <= 5 | Why?            
+            
+            for (int i = 0; i < bnl.Lots.Length; i++)
             {
-                res.WriteByte(0); // Slots 0 to 2
-                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+                res.WriteByte((byte) i); // row number?
+                res.WriteInt32(i); // row number ??
+                res.WriteInt64(bnl.Lots[i].ItemID);
+                res.WriteInt32(bnl.Lots[i].MinimumBid); // Lowest
+                res.WriteInt32(bnl.Lots[i].BuyoutPrice); // Buy Now
+                res.WriteFixedString(bnl.Lots[i].ConsignerName, 49);
+                res.WriteByte(1); // 1 permit to show item in the search section ?? flags?
+                res.WriteFixedString(bnl.Lots[i].Comment, 385); // Comment in the item information
+                res.WriteInt16((short) bnl.Lots[i].CurrentBid); // Bid why convert to short?
+                res.WriteInt32(bnl.Lots[i].ExpiryTime);
 
-                res.WriteInt32(0);
-                res.WriteInt64(0);
-                res.WriteInt32(0); // Lowest
-                res.WriteInt32(0); // Buy Now
-                res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteByte(1); // 1 permit to show item in the search section ??
-                res.WriteFixedString("Comment", 385); // Comment in the item information
-                res.WriteInt16(0); // Bid
-                res.WriteInt32(0);
-
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteInt32(0); // unknown
+                res.WriteInt32(0); // unknown
             }
 
-            res.WriteInt32(8); // must be< = 8
+            res.WriteInt32(bnl.Bids.Length); // must be< = 8 | why?
 
-            int numEntries2 = 0x8;
-            for (int i = 0; i < numEntries2; i++)
+            for (int i = 0; i < bnl.Bids.Length; i++)
             {
-                res.WriteByte(0); // Slots 0 to 3
-                // res.WriteInt64(0xAAAAAAAA); // this is shown in the structure but for some reason isnt read
+                res.WriteByte((byte)i); // row number?
+                res.WriteInt32(i); // row number ??
+                res.WriteInt64(bnl.Bids[i].ItemID);
+                res.WriteInt32(bnl.Bids[i].MinimumBid); // Lowest
+                res.WriteInt32(bnl.Bids[i].BuyoutPrice); // Buy Now
+                res.WriteFixedString(bnl.Bids[i].ConsignerName, 49);
+                res.WriteByte(1); // 1 permit to show item in the search section ?? flags?
+                res.WriteFixedString(bnl.Bids[i].Comment, 385); // Comment in the item information
+                res.WriteInt16((short)bnl.Bids[i].CurrentBid); // Bid why convert to short?
+                res.WriteInt32(bnl.Bids[i].ExpiryTime);
 
-                res.WriteInt32(0);
-                res.WriteInt64(0);
-                res.WriteInt32(0); // Lowest bid info
-                res.WriteInt32(0); // Buy now bid info
-                res.WriteFixedString($"{client.Soul.Name}", 49);
-                res.WriteByte(1); // Change nothing ??
-                res.WriteFixedString("Zgeg", 385); // Comment in the bid info
-                res.WriteInt16(0);
-                res.WriteInt32(0);
-
-                res.WriteInt32(0); // Bid Amount (bid info seciton)
-                res.WriteInt32(0);
+                res.WriteInt32(0); // unknown
+                res.WriteInt32(0); // unknown
             }
 
-            res.WriteByte(0); // bool
+            res.WriteByte(0); // bool  | what?
             Router.Send(client, (ushort) AreaPacketId.recv_auction_notify_open, res, ServerType.Area);
         }
 

@@ -18,7 +18,7 @@ namespace Necromancy.Server.Systems.Auction_House
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); // error
 
             int NUMBER_OF_ITEMS_DEBUG = 2;
             res.WriteInt32(NUMBER_OF_ITEMS_DEBUG); // number of loops
@@ -31,8 +31,7 @@ namespace Necromancy.Server.Systems.Auction_House
                 res.WriteInt32(10); // Lowest
                 res.WriteInt32(500); // Buy Now
                 res.WriteFixedString(hellothere, 49); // Soul Name Of Sellers
-                res.WriteByte(
-                    5); // 0 = nothing.    Other = Logo appear. maybe it's effect or rank, or somethiung else ?
+                res.WriteByte(63); // 0 = nothing.    Other = Logo appear. maybe it's effect or rank, or somethiung else ?
                 res.WriteFixedString("0 000000000 1111111111 2222222222 3333333333 44444444444 5555555555 6666666666 7777777777 88888888888 9999999999 1 000000000 1111111111 2222222222 3333333333 44444444444 5555555555 6666666666 7777777777 88888888888 9999999999 2 000000000 1111111111 2222222222 3333333333 44444444444 5555555555 6666666666 7777777777 88888888888 9999999999 3 000000000 1111111111 2222222222", 385); // Item Comment
                 res.WriteInt16(0); // Bid
                 res.WriteInt32(1000); // Item remaining time

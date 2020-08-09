@@ -29,4 +29,8 @@
             <TargetPath>Client\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Systems\Inventory\Messages\Recieve\" />
+      <Folder Include="Systems\Inventory\Messages\Send\" />
+    </ItemGroup>
 </Project>
