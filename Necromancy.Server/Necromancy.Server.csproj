@@ -30,11 +30,12 @@
         </ContentWithTargetPath>
     </ItemGroup>
     <ItemGroup>
-      <ContentWithTargetPath Remove="Database\Script\datat_item_library0.sql" />
       <ContentWithTargetPath Remove="Database\Script\data_item_library0.sql" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Systems\Inventory\Messages\Recieve\" />
       <Folder Include="Systems\Inventory\Messages\Send\" />
+      <Folder Include="Systems\World\Database\" />
+      <Folder Include="Systems\World\Messages\Send\" />
     </ItemGroup>
 </Project>

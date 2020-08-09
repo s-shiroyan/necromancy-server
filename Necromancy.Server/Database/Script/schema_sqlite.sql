@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS `nec_item_library`
     `durability`          INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "item_library" (
+CREATE TABLE "item_library" (
 	"id"	INTEGER NOT NULL,
 	"type_miku"	TEXT NOT NULL,
 	"type"	TEXT NOT NULL,
@@ -383,13 +383,13 @@ CREATE TABLE IF NOT EXISTS "item_library" (
 	"earth_atk"	INTEGER NOT NULL,
 	"light_atk"	INTEGER NOT NULL,
 	"dark_atk"	INTEGER NOT NULL,
-	"sellable"	TEXT NOT NULL,
-	"tradable"	TEXT NOT NULL,
-	"NEW"	TEXT NOT NULL,
-	"lootable"	TEXT NOT NULL,
-	"blessable"	TEXT NOT NULL,
-	"cursable"	TEXT,
-	"lower_limit"	INTEGER,
+	"sellable"	INTEGER NOT NULL,
+	"tradable"	INTEGER NOT NULL,
+	"new"	INTEGER NOT NULL,
+	"lootable"	INTEGER NOT NULL,
+	"blessable"	INTEGER NOT NULL,
+	"cursable"	INTEGER NOT NULL,
+	"lower_limit"	INTEGER NOT NULL,
 	"upper_limit"	INTEGER NOT NULL,
 	"required_str"	INTEGER NOT NULL,
 	"required_vit"	INTEGER NOT NULL,

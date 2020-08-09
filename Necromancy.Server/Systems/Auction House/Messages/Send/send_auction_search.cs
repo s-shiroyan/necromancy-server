@@ -3,6 +3,8 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
+using System;
+using System.Text;
 
 namespace Necromancy.Server.Systems.Auction_House
 {
@@ -20,15 +22,30 @@ namespace Necromancy.Server.Systems.Auction_House
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); // error
 
-            int NUMBER_OF_ITEMS_DEBUG = 2;
+            int NUMBER_OF_ITEMS_DEBUG = 64;
             res.WriteInt32(NUMBER_OF_ITEMS_DEBUG); // number of loops
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
-                string hellothere = (i + i + 1).ToString();
-                res.WriteInt32(i); // row identifier
-                res.WriteInt64((long)10500501); // 1 = add, 2 blue icons, what is this ?
-                res.WriteInt32(10); // Lowest
+                string hellothere = i.ToString() + " " + Convert.ToString(i, 2).PadLeft(8, '0'); ;
+                //START ROW IDENTIFIER
+                res.WriteByte((byte)i);                
+                res.WriteByte((byte) 255); //seemingly ignored
+                res.WriteByte((byte) 255); //seemingly ignored               
+                res.WriteByte((byte) 255); //seemingly ignored
+
+                //START UNKNOWN
+                //res.WriteByte((byte)0); 
+                //res.WriteByte((byte)0);
+                //res.WriteByte((byte)255);
+                //res.WriteByte((byte)255);
+                //res.WriteByte((byte)0);
+                //res.WriteByte((byte)0);
+                //res.WriteByte((byte)0);
+                //res.WriteByte((byte)0);
+
+                res.WriteInt64(i + 64); // 1 = add, 2 blue icons, what is this ? probably serial id | test: 10500501, 100114
+                res.WriteInt32(17); // Lowest
                 res.WriteInt32(500); // Buy Now
                 res.WriteFixedString(hellothere, 49); // Soul Name Of Sellers
                 res.WriteByte(63); // 0 = nothing.    Other = Logo appear. maybe it's effect or rank, or somethiung else ?

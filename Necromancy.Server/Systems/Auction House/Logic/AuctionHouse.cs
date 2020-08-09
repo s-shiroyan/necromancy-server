@@ -3,6 +3,7 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Model;
 using Necromancy.Server.Systems.Auction_House.Logic;
 using Necromancy.Server.Systems.Auction_House.Messages.Receive;
+using Necromancy.Server.Systems.Inventory.Logic;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Necromancy.Server.Systems.Auction_House
     {
         public const int MAX_BIDS = 8;
         public const int MAX_LOTS = 5;
+        private const double LISTING_FEE_PERCENT = .05;
 
         private readonly NecClient nClient;
 
@@ -44,16 +46,19 @@ namespace Necromancy.Server.Systems.Auction_House
                 throw new AuctionException(AuctionException.Type.EQUIP_LISTING);
 
             //TODO CHECK IF INVALID ITEM
-            if(false)
+            if (false)
                 throw new AuctionException(AuctionException.Type.INVALID_LISTING);
 
-            //TODO CHECK DIMETO MEDAL whatever that is
+            //TODO CHECK DIMETO MEDAL ROYAL ACCOUNT STATUS
             if (false)
                 throw new AuctionException(AuctionException.Type.LOT_DIMETO_MEDAL_EXPIRED);
 
-            //TODO CHECK ITEM ALREADY_LISTED items must have a unique serial!
+            //TODO CHECK ITEM ALREADY_LISTED items must have a unique serial in item spawn!
             if (false)
                 throw new AuctionException(AuctionException.Type.LOT_DIMETO_MEDAL_EXPIRED);
+
+            InventoryManager iManager = new InventoryManager(nClient);
+            iManager.SubtractGold((int) Math.Ceiling(auctionItem.BuyoutPrice * LISTING_FEE_PERCENT));
 
             new DbAuction().InsertAuctionItem(auctionItem);
         }

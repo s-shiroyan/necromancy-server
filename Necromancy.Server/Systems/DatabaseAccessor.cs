@@ -6,10 +6,11 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Text;
 
+
 namespace Necromancy.Server.Systems
 {
     //CLASS IS JUST FOR TESTING ABSTRACTING OF DATABASE FUNCTIONS
-    //TODO investigate LINQ as a way to make easier to read. Should eliminate 90% of this boilerplate
+    //TODO MOVE UNDER /DATABASE
     public class DatabaseAccessor
     {
         private static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseAccessor));

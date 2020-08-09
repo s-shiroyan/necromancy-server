@@ -109,6 +109,16 @@ namespace Necromancy.Server.Auction.Database
             return rowsAffected > 0;
         }
 
+        public bool UpdateAuctionBid(AuctionItem auctionItem)
+        {
+            int rowsAffected = ExecuteNonQuery(SqlInsertAuctionItem, command =>
+            {
+                AddParameter(command, "@bidder_id", auctionItem.BidderID);
+                AddParameter(command, "@current_bid", auctionItem.CurrentBid);
+            });
+            return rowsAffected > 0;
+        }
+
         public AuctionItem[] SelectAuctionBids(Character character)
         {
             AuctionItem[] bids = new AuctionItem[AuctionHouse.MAX_BIDS];

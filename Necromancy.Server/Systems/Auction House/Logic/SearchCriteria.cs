@@ -6,32 +6,33 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
 {
     public class SearchCriteria
     {
-
-        public enum QualityFlags
+        [Flags]
+        public enum Qualities
         {
-            None        = 0b_0000_0000,  
-            Poor        = 0b_0000_0001,  
-            Normal      = 0b_0000_0010,  
-            Good        = 0b_0000_0100,  
-            Master      = 0b_0000_1000,  
-            Artifact    = 0b_0001_0000 
+            None        = 0 << 0,  
+            Poor        = 1 << 0,  
+            Normal      = 1 << 1,  
+            Good        = 1 << 2,  
+            Master      = 1 << 3,  
+            Artifact    = 1 << 4
         }
 
-        public enum ClassFlags
+        [Flags]
+        public enum Classes
         {
-            None    = 0b_0000_0000,
-            Fighter = 0b_0000_0001,
-            Thief   = 0b_0000_0010,
-            Priest  = 0b_0000_0100,
-            Mage    = 0b_0000_1000
+            None    = 0 << 0,
+            Fighter = 1 << 0,
+            Thief   = 1 << 1,
+            Priest  = 1 << 2,
+            Mage    = 1 << 3
         }
 
         public int SoulRankMin {get; set; }
         public int SoulRankMax { get; set; }
         public int ForgePriceMin { get; set; }
         public int ForgePriceMax { get; set; }
-        public QualityFlags Quality { get; set; }
-        public ClassFlags Class { get;set; }
+        public Qualities Quality { get; set; }
+        public Classes Class { get;set; }
 
     }
 }

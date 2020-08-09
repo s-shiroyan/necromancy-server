@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Necromancy.Server.Systems
 {
+    //TODO MOVE UNDER PACKET
     abstract class Message 
     {
         public abstract ushort Id { get; }
