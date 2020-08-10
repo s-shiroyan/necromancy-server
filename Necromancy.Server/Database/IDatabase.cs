@@ -76,14 +76,14 @@ namespace Necromancy.Server.Database
         bool InsertInventoryItem(InventoryItem inventoryItem);
         InventoryItem SelectInventoryItemById(int inventoryItemId);
         List<InventoryItem> SelectInventoryItemsByCharacterId(int characterId);
+        List<InventoryItem> SelectInventoryItemsByCharacterIdEquipped(int characterId);
+        List<InventoryItem> SelectInventoryItemsBySoulIdCloakRoom(int soulId);
         bool UpdateInventoryItem(InventoryItem inventoryItem);
         bool DeleteInventoryItem(int inventoryItemId);
 
         // ShortcutBar
-        bool InsertShortcutBar(ShortcutBar shortcutBar);
-        ShortcutBar SelectShortcutBarById(int shortcutBarId);
-        bool UpdateShortcutBar(ShortcutBar shortcutBar);
-        bool DeleteShortcutBar(int shortcutBarId);
+        void InsertOrReplaceShortcutItem(Character character, int barNumber, int slotNumber, ShortcutItem shortcutItem);
+        ShortcutBar GetShortcutBar(Character character, int barNumber);
 
         // SkillTreeItem
         bool InsertSkillTreeItem(SkillTreeItem skillTreeItem);

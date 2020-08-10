@@ -91,7 +91,8 @@ namespace Necromancy.Server.Tasks
             Thread.Sleep(5000);
             _client.Character.hadDied = false; // quick switch to living state so your dead body loads with your gear
             //load your dead body on to the map for you to see in soul form. 
-            RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, _client);
+            //_client.Character.State = Model.CharacterModel.CharacterState.SoulForm;  //Mess with this after you finish inventory
+            RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, _client.Character, _client);
             _server.Router.Send(_client, cBodyData.ToPacket());
 
             _client.Character.hadDied = true; // back to dead so your soul appears with-out gear.

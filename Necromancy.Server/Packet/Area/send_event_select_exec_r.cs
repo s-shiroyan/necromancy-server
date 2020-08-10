@@ -60,6 +60,7 @@ namespace Necromancy.Server.Packet.Area
                             {x => x == 74013071, () => ChangeMap(client, npcSpawn.NpcId)},
                             {x => x == 74013161, () => ChangeMap(client, npcSpawn.NpcId)},
                             {x => x == 74013271, () => ChangeMap(client, npcSpawn.NpcId)},
+                            {x => x == 10000912, () => ChangeMap(client, npcSpawn.NpcId)},
                             {x => x == 10000002, () => RegularInn(client, npcSpawn.NpcId, npcSpawn)},
                             {x => x == 10000703, () => CrimInn(client, npcSpawn.NpcId, npcSpawn)},
                             { x => x == 10000004 ,  () => SoulRankNPC(client, npcSpawn.NpcId, npcSpawn)},

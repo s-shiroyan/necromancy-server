@@ -63,21 +63,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 RecvDataNotifyGimmickData gimmickData = new RecvDataNotifyGimmickData(gimmickSpawn);
                 Router.Send(gimmickData, client);
-                GGateSpawn gGateSpawn = new GGateSpawn();
-                Server.Instances.AssignInstance(gGateSpawn);
-                gGateSpawn.X = gimmickSpawn.X;
-                gGateSpawn.Y = gimmickSpawn.Y;
-                gGateSpawn.Z = gimmickSpawn.Z + 300;
-                gGateSpawn.Heading = gimmickSpawn.Heading;
-                gGateSpawn.Name = $"gGateSpawn to your current position. ID {gimmickSpawn.ModelId}";
-                gGateSpawn.Title = $"type '/gimmick move {gimmickSpawn.InstanceId} to move this ";
-                gGateSpawn.MapId = gimmickSpawn.MapId;
-                gGateSpawn.ModelId = 1900001;
-                gGateSpawn.Active = 0;
-                gGateSpawn.SerialId = 1900001;
 
-                RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
-                Router.Send(gGateData, client);
             }
 
             foreach (GGateSpawn gGateSpawn in client.Map.GGateSpawns.Values)
@@ -88,17 +74,46 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
             {
-                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client.Character, client);
                 Router.Send(deadBodyData, client);
             }
 
             foreach (MapTransition mapTran in client.Map.MapTransitions.Values)
             {
-                MapPosition mapPos = new MapPosition(mapTran.ReferencePos.X, mapTran.ReferencePos.Y,
-                    mapTran.ReferencePos.Z, mapTran.MaplinkHeading);
-                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(client, this.Id, mapPos,
-                    mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor);
+                RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(mapTran.InstanceId, mapTran.ReferencePos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor, mapTran.MaplinkHeading);
                 Router.Send(mapLink, client);
+
+                GGateSpawn gGateSpawn = new GGateSpawn();
+                Server.Instances.AssignInstance(gGateSpawn);
+                gGateSpawn.X = mapTran.LeftPos.X;
+                gGateSpawn.Y = mapTran.LeftPos.Y;
+                gGateSpawn.Z = mapTran.LeftPos.Z;
+                gGateSpawn.Heading = mapTran.MaplinkHeading;
+                gGateSpawn.Name = $"This is the Left Side of the transition";
+                gGateSpawn.Title = $"X: {mapTran.LeftPos.X}  Y:{mapTran.LeftPos.Y} ";
+                gGateSpawn.MapId = mapTran.MapId;
+                gGateSpawn.ModelId = 1805000;
+                gGateSpawn.Active = 0;
+                gGateSpawn.SerialId = 1900001;
+
+                RecvDataNotifyGGateData gGateData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateData, client);
+
+                gGateSpawn = new GGateSpawn();
+                Server.Instances.AssignInstance(gGateSpawn);
+                gGateSpawn.X = mapTran.RightPos.X;
+                gGateSpawn.Y = mapTran.RightPos.Y;
+                gGateSpawn.Z = mapTran.RightPos.Z;
+                gGateSpawn.Heading = mapTran.MaplinkHeading;
+                gGateSpawn.Name = $"This is the Right Side of the transition";
+                gGateSpawn.Title = $"X: {mapTran.RightPos.X}  Y:{mapTran.RightPos.Y} ";
+                gGateSpawn.MapId = mapTran.MapId;
+                gGateSpawn.ModelId = 1805000;
+                gGateSpawn.Active = 0;
+                gGateSpawn.SerialId = 1900002;
+
+                gGateData = new RecvDataNotifyGGateData(gGateSpawn);
+                Router.Send(gGateData, client);
             }
 
             // ToDo this should be a database lookup

@@ -2,6 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using System;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
@@ -15,10 +16,13 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             _character = character;
             _soulName = soulName;
+
         }
 
         protected override IBuffer ToBuffer()
         {
+            TimeSpan differenceJoined = DateTime.Today.ToUniversalTime() - DateTime.UnixEpoch;
+            int DateAttackedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
             int numEntries = 19; //Max of 19 Equipment Slots for Character Player
             int numStatusEffects = 0x80; //Statuses effects. Max 128
 
@@ -47,7 +51,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             LoadEquip.EquipSlotBitMask(res, _character, numEntries);
 
             //sub_4835C0
-            res.WriteInt32(0); //1 here means crouching?
+            res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
             LoadEquip.BasicTraits(res, _character);
             //sub_483420
@@ -61,11 +65,11 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_4835E0
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
-            res.WriteInt32(0);
+            res.WriteInt32(88888888); //???
             //sub_483440
             res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
-            res.WriteByte(1); //no change?
+            res.WriteByte(1); //no change?   MemberShip Status?
             //sub_read_byte
             res.WriteByte(1); //no change?
             //sub_read_int_32
@@ -78,8 +82,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             for (int i = 0; i < numStatusEffects; i++)
             {
                 res.WriteInt32(0); //Status effect ID
-                res.WriteInt32(0);
-                res.WriteInt32(0);
+                res.WriteInt32(DateAttackedCalculation);
+                res.WriteInt32(DateAttackedCalculation +100);
             }
 
             //sub_481AA0

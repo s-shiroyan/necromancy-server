@@ -773,7 +773,7 @@ namespace Necromancy.Server.Packet.Id
         send_door_close = 0xC218,
         send_door_open = 0x1D8A,
         send_emotion_update_type = 0x7672, 
-        send_equip_honor = 0x70, //opcode not found  TODO
+        send_equip_honor = 0x9747,
         send_event_abort = 0x71, //opcode not found  TODO
         send_event_access_object = 0x718D, 
         send_event_quest_get_order_list = 0x72, //opcode not found
@@ -798,7 +798,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
         send_event_union_storage_close = 0x93, //opcode not found
-        send_forge_check = 0x94, //opcode not found
+        send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found
         send_forge_sp_check = 0x96, //opcode not found
         send_forge_sp_execute = 0x97, //opcode not found
@@ -956,7 +956,7 @@ namespace Necromancy.Server.Packet.Id
         send_union_storage_deposit_money = 0x218, //opcode not found
         send_union_storage_draw_money = 0x219, //opcode not found
         send_union_storage_move_item = 0x220, //opcode not found
-        send_update_honor = 0x221, //opcode not found
+        send_update_honor = 0xB0EB, 
         send_wanted_entry = 0xA86F, 
         send_wanted_jail_close = 0x86D8, 
         send_wanted_jail_draw_point = 0x309E,

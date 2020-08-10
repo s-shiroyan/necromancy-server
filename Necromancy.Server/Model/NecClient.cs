@@ -18,7 +18,7 @@ namespace Necromancy.Server.Model
             Identity = "";
             Soul = new Soul();
             Character = new Character();
-            Inventory = new Inventory();
+            //Inventory = new Inventory();
         }
 
         public DateTime Creation { get; }

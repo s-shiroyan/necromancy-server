@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"storageType:{storageType} bagId:{bagId} bagSlotIndex:{bagSlotIndex} equipBit:{equipBit}");
 
             IBuffer res = BufferProvider.Provide();
-            InventoryItem inventoryItem = client.Inventory.GetInventoryItem(bagId, bagSlotIndex);
+            InventoryItem inventoryItem = client.Character.Inventory.GetInventoryItem(bagId, bagSlotIndex);
             if (inventoryItem == null)
             {
                 Logger.Error($"Item not found: bagId:{bagId} BagSlot:{bagSlotIndex}");
@@ -45,7 +45,60 @@ namespace Necromancy.Server.Packet.Area
                 return;
             }
 
+
+
+            //two phased equipped item check for two H weapons
+            if (inventoryItem.Item.EquipmentSlotType.HasFlag(EquipmentSlotType.HAND_L | EquipmentSlotType.HAND_R))
+            {
+                Logger.Debug($"two handed item detected {inventoryItem.Item.EquipmentSlotType}");
+                InventoryItem equippedItem = client.Character.Inventory.CheckAlreadyEquipped(EquipmentSlotType.HAND_R);
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    client.Character.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
+                equippedItem = client.Character.Inventory.CheckAlreadyEquipped(EquipmentSlotType.HAND_L);
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    client.Character.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
+            }
+            else  //everything besides 2h weapons
+            {
+                Logger.Debug($"equipment slot type {inventoryItem.Item.EquipmentSlotType}");
+                //InventoryItem equippedItem = client.Character.Inventory.GetEquippedInventoryItem(inventoryItem.Item.EquipmentSlotType);
+
+                InventoryItem equippedItem = client.Character.Inventory.CheckAlreadyEquipped(inventoryItem.Item.EquipmentSlotType);
+
+                if (equippedItem != null && equippedItem.CurrentEquipmentSlotType != EquipmentSlotType.NONE)
+                {
+                    Logger.Debug($"equipment slot type already equipped item {equippedItem.Item.EquipmentSlotType}");
+                    client.Character.Inventory.UnEquip(equippedItem);
+                    equippedItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    equippedItem.State = (int)EquipmentSlotType.NONE;
+                    RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(equippedItem);
+                    Router.Send(recvItemUpdateEqMaskCurr, client);
+                }
+            }
+               
+
+            //add the item to list of equipped items
+            client.Character.Inventory.Equip(inventoryItem);
+            
             inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+            inventoryItem.State = (int)inventoryItem.Item.EquipmentSlotType; //Crude equipped flag. to be further developed.
+            if (!Server.Database.UpdateInventoryItem(inventoryItem))
+            {
+                Logger.Error("Could not update InventoryItem in Database");
+                return;
+            }
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);
 
