@@ -29,7 +29,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 res.WriteByte((byte) i); // row number?
                 res.WriteInt32(i); // row number ??
-                res.WriteInt64(lots[i].ItemID);
+                res.WriteInt64(lots[i].ItemID); //spawned item id
                 res.WriteInt32(lots[i].MinimumBid); 
                 res.WriteInt32(lots[i].BuyoutPrice); 
                 res.WriteFixedString(lots[i].ConsignerName, 49);

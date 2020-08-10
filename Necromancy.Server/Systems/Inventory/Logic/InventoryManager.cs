@@ -16,7 +16,6 @@ namespace Necromancy.Server.Systems.Inventory.Logic
             this.nClient = nClient;
         }
 
-        //DO NOT MAKE GOLD A PROPERTY, HELPS USE DATABASE CALLS SPARINGLY
         public int GetGold()
         {
             return new DbInventory().SelectInventoryGold(nClient.Character);
@@ -24,21 +23,12 @@ namespace Necromancy.Server.Systems.Inventory.Logic
 
         public void AddGold(int amount)
         {
-            int gold = GetGold();
-            gold = gold + amount;
-            SetGold(gold);
+            new DbInventory().UpdateInventoryGoldAdd(nClient.Character, amount);
         }
 
         public void SubtractGold(int amount)
         {
-            int gold = GetGold();
-            gold = gold - amount;
-            SetGold(gold);
-        }
-
-        private void SetGold(int value)
-        {
-            new DbInventory().UpdateInventoryGold(nClient.Character, value);
+            new DbInventory().UpdateInventoryGoldSubtract(nClient.Character, amount);
         }
 
         public void AddItem()

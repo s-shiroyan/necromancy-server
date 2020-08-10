@@ -17,9 +17,9 @@ namespace Necromancy.Server.Inventory.Database
             FROM
                 nec_character
             WHERE
-                id = @character_id";
+                id = @character_id";        
 
-        private const string SqlUpdateGold = @"
+        private const string SqlUpdateGoldAdd = @"
             UPDATE
                 nec_character
                 (
@@ -27,11 +27,24 @@ namespace Necromancy.Server.Inventory.Database
                 )
             VALUES
                 (
-                    @gold
+                    gold + @amount
                 )
             WHERE
                 id = @character_id";
-            
+
+        private const string SqlUpdateGoldSubtract = @"
+            UPDATE
+                nec_character
+                (
+                    gold
+                )
+            VALUES
+                (
+                    gold - @amount
+                )
+            WHERE
+                id = @character_id";
+
         public int SelectInventoryGold(Character character)
         {
             int gold = 0;
@@ -47,11 +60,21 @@ namespace Necromancy.Server.Inventory.Database
             return gold;
         }
 
-        public void UpdateInventoryGold(Character character, int newValue)
+        public void UpdateInventoryGoldAdd(Character character, int amount)
         {
-            ExecuteNonQuery(SqlUpdateGold, command =>
+            ExecuteNonQuery(SqlUpdateGoldAdd, command =>
             {
-                AddParameter(command, "@gold", newValue);
+                AddParameter(command, "@amount", amount);
+                AddParameter(command, "@character_id", character.Id);
+
+            });
+        }
+
+        public void UpdateInventoryGoldSubtract(Character character, int amount)
+        {
+            ExecuteNonQuery(SqlUpdateGoldSubtract, command =>
+            {
+                AddParameter(command, "@amount", amount);
                 AddParameter(command, "@character_id", character.Id);
 
             });
