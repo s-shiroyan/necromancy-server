@@ -8,6 +8,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
+        recv_0x916 = 0x916,
         recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos
         recv_0x10DA = 0x10DA, // Crash
         recv_0x1489 = 0x1489, // Crash
@@ -17,6 +18,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x28A0 = 0x28A0, // Crash 
         recv_0x29C5 = 0x29C5, // Doesn't crash
         recv_0x3A0E = 0x3A0E, // Doesn't crash
+        recv_0x3C1F = 0x3C1F,
         recv_0x3C81 = 0x3C81, // Crash
         recv_0x3F2F = 0x3F2F, // Crash
         recv_0x488D = 0x488D, // Crash
@@ -53,6 +55,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xB586 = 0xB586, // Doesn't crash
         recv_0xB684 = 0xB684, // Cause crash
         recv_0xBA61 = 0xBA61, // Cause Crash
+        recv_0xBF0D = 0xBF0D,
         recv_0xC055 = 0xC055, // Doesn't crash
         recv_0xC078 = 0xC078, // cause Crash
         recv_0xCF29 = 0xCF29, // Cause crash
@@ -60,9 +63,13 @@ namespace Necromancy.Server.Packet.Id
         recv_0xD1F6 = 0xD1F6, // Cause crash
         recv_0xD909 = 0xD909, // Doesn't crash
         recv_0xDA4A = 0xDA4A, // Doesn't crash
+        recv_0xE7CF = 0xE7CF,
+        recv_0xE983 = 0xE983,
+        recv_0xEDE7 = 0xEDE7,
         recv_0xEE18 = 0xEE18, // Cause crash
         recv_0xEEB7 = 0xEEB7, // cause crash
         recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit : Confirmed Recv String
+        recv_0xF024 = 0xF024,
         recv_0xFA0B = 0xFA0B, // res.WriteInt32(client.Character.Id); doesn't crash
         recv_0xFB79 = 0xFB79, //   res.WriteInt32(0); doesn't crash too
         recv_0xE8B9 = 0xE8B9, // res.WriteInt32(client.Character.Id); cause crash
@@ -549,6 +556,7 @@ namespace Necromancy.Server.Packet.Id
         recv_select_package_update_r = 0xD170,
         recv_self_action_cost = 0x8CD,
         recv_self_buff_notify = 0x73D1,
+        recv_self_dragon_pos_notify = 0x6FB2,
         recv_self_dragon_warp_notify = 0xC6EF,
         recv_self_exp_notify = 0xC47A,
         recv_self_inherit_skill_level_notify = 0x3F5B,

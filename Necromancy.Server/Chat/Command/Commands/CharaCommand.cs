@@ -5,10 +5,10 @@ using Necromancy.Server.Packet.Id;
 using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Packet.Response;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
