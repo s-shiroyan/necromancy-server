@@ -80,6 +80,16 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
 
             Router.Send(client, (ushort)0xBA61, res, ServerType.Area);
+
+            int numEntries4 = 0xA;// <=0xA
+            res.WriteInt32(numEntries4); //// <=0xA
+            for (int i = 0; i < numEntries4; i++)
+            {
+                res.WriteInt16((short)i);
+                res.WriteInt32(10500501);
+            }
+            Router.Send(client, (ushort)0x8D62, res, ServerType.Area);
+
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

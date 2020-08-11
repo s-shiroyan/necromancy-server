@@ -486,6 +486,18 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
+
+
+
+                IBuffer res4 = BufferProvider.Provide();
+                //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
+                res4.WriteInt16(
+                    0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
+                res4.WriteUInt32(1);//tabs num
+                res4.WriteInt32(10800405);// cash
+                res4.WriteByte(0); //Items num for expected recv_shop_notify_open
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+
                 IBuffer res = BufferProvider.Provide();
                 res.WriteByte(1);
                 res.WriteUInt32(10200101); // item Serial id
@@ -500,17 +512,6 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt64(10200101); // curse?
                 res.WriteInt64(10200101); // repair?
                 //Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
-
-
-                IBuffer res4 = BufferProvider.Provide();
-                //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res4.WriteInt16(
-                    0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
-                res4.WriteUInt32(1);//item num
-                res4.WriteInt32(10800405);// cash
-                res4.WriteByte(0); //tabs num
-                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
-
 
 
                 IBuffer res5 = BufferProvider.Provide();
@@ -575,24 +576,55 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                IBuffer res4 = BufferProvider.Provide();
+                IBuffer res = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res4.WriteInt16(
-                    14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
-                res4.WriteInt32(0);
-                res4.WriteInt32(0);
-                res4.WriteByte(12);
-                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res4, ServerType.Area);
+                res.WriteInt16(14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(12);
+                Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res, ServerType.Area);
 
                 for(int i = 0; i < 12; i++)
                 {
-                    IBuffer res = BufferProvider.Provide();
+                    res = BufferProvider.Provide();
                     res.WriteByte((byte)i); //idx
-                    res.WriteUInt32(10310301); // item Serial id
+                    res.WriteUInt32(10200101); // item Serial id
                     res.WriteInt64(10200101); // item price
                     res.WriteFixedString("Dagger", 0x10); // ?
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+
+                    res = BufferProvider.Provide();
+                    res.WriteInt64(i); // id?
+                    res.WriteInt64(10200101); // price?
+                    res.WriteInt64(10200101); // identify?
+                    res.WriteInt64(10200101); // curse?
+                    res.WriteInt64(10200101); // repair?
+                    Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
+
                 }
+                res = BufferProvider.Provide();
+
+                int numEntries3 = 0xA;
+                res.WriteInt32(numEntries3);
+                for (int j = 0; j < numEntries3; j++)
+                {
+                    res.WriteInt16((short)j);
+                    res.WriteInt64(10200101);
+                    res.WriteFixedString("UNKNOWN", 0xC1);
+                }
+
+                Router.Send(client, (ushort)0xBA61, res, ServerType.Area);
+
+                res = BufferProvider.Provide();
+
+                int numEntries4 = 0xA;// <=0xA
+                res.WriteInt32(numEntries4); //// <=0xA
+                for (int k = 0; k < numEntries4; k++)
+                {
+                    res.WriteInt16((short)k);
+                    res.WriteInt32(10500501);
+                }
+                Router.Send(client, (ushort)0x8D62, res, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
