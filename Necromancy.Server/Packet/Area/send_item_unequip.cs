@@ -5,7 +5,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Packet.Area
 {

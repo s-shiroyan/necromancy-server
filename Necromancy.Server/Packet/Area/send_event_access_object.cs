@@ -80,6 +80,7 @@ namespace Necromancy.Server.Packet.Area
                             () => CharaChangeChannel(client, npcSpawn)
                         },
                         {x => x == 80000009, () => UnionWindow(client, npcSpawn)},
+                        { x => x == 10000004 ,  () => SoulRankNPC(client, npcSpawn)},
                         {x => x < 10, () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")},
                         {x => x < 100, () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")},
                         {
@@ -883,6 +884,56 @@ namespace Necromancy.Server.Packet.Area
 
             res2.WriteByte(10); //# of channels
             Router.Send(client, (ushort) MsgPacketId.recv_chara_select_channel_r, res2, ServerType.Msg);
+        }
+
+        private void SoulRankNPC(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res1 = BufferProvider.Provide();
+            res1.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+            res1.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+            res1.WriteCString("I'm Calarde, the Maiden of Isic. I look after the souls of you adventurers.");//Text block
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res1, ServerType.Area);
+
+            IBuffer res2 = BufferProvider.Provide();
+            res2.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+            res2.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+            res2.WriteCString("Your soul has the ability to shine brighter. I look forward to seeing you in the future.");//Text block
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteCString($"{npcSpawn.Name}");//need to find max size; Name
+            res3.WriteCString($"{npcSpawn.Title}");//need to find max size; Title (inside chat box)
+            res3.WriteCString("Come back when you've gaind more experience. I'll unlock your soul's power.");//Text block
+            Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
+
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteCString("Ask about Souls"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4, ServerType.Area); // 1
+
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteCString("Trade Soul Material"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5, ServerType.Area); // 2
+
+            IBuffer res6 = BufferProvider.Provide();
+            res6.WriteCString("Increase Soul Amount"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res6, ServerType.Area); // 3
+
+            IBuffer res7 = BufferProvider.Provide();
+            res7.WriteCString("Increase Soul Limit"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res7, ServerType.Area); // 4
+
+            IBuffer res8 = BufferProvider.Provide();
+            res8.WriteCString("Akashic Record"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res8, ServerType.Area); // 5
+
+            IBuffer res9 = BufferProvider.Provide();
+            res9.WriteCString("Leave"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res9, ServerType.Area); // 6
+
+            IBuffer res10 = BufferProvider.Provide();
+            res10.WriteCString("How can I help you?"); // Window Heading / Name
+            res10.WriteUInt32(npcSpawn.InstanceId);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res10, ServerType.Area); // It's the windows that contain the multiple choice
         }
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)

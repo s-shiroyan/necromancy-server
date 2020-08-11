@@ -10,8 +10,8 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.Skills;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Response;
 using Necromancy.Server.Tasks;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Packet.Area
 {
