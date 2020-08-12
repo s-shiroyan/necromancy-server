@@ -16,8 +16,7 @@ namespace Necromancy.Server.Auction.Database
         private const string SqlInsertItem = @"
             INSERT INTO 
                 nec_auction_items 
-                (
-                    character_id, 
+                ( 
                     item_spawn_id, 
                     quantity, 
                     expiry_datetime, 
@@ -27,7 +26,6 @@ namespace Necromancy.Server.Auction.Database
                 ) 
             VALUES 
                 (
-                    @character_id, 
                     @item_spawn_id, 
                     @quantity, 
                     @expiry_datetime, 
@@ -39,85 +37,90 @@ namespace Necromancy.Server.Auction.Database
         private const string SqlUpdateBid = @"
             UPDATE 
                 nec_auction_items 
-                (
-                    bidder_id, 
-                    current_bid
-                    is_cancellable
-                ) 
-            VALUES 
-                (
-                    @bidder_id, 
-                    @current_bid,
-                    (bidder_id != 0)
-                ) 
+            SET 
+                bidder_id = 3, 
+                current_bid = 50, 
+                is_cancellable = (bidder_id IS NULL) 
             WHERE 
-                id = @id";
+                id = 2";
 
         private const string SqlSelectBids = @"
-            SELECT 
-                nec_auction_items.id, 
-                nec_auction_items.character_id, 
-                nec_character.name AS character_name, 
-                nec_auction_items.item_spawn_id, 
-                nec_auction_items.quantity, 
-                nec_auction_items.expiry_datetime, 
-                nec_auction_items.min_bid, 
-                nec_auction_items.buyout_price, 
-                nec_auction_items.current_bid, 
-                nec_auction_items.bidder_id, 
-                nec_auction_items.comment 
+            SELECT 			
+                auct.id                 AS id, 
+                consigner.id            AS consigner_id, 
+                consigner.name          AS consigner_name, 
+                auct.item_spawn_id      AS spawn_id, 
+                auct.quantity           AS quantity, 
+                auct.expiry_datetime    AS expiry_datetime, 
+                auct.min_bid            AS min_bid, 
+                auct.buyout_price       AS buyout_price, 
+                auct.current_bid        AS current_bid, 
+                auct.bidder_id          AS bidder_id, 
+                auct.comment            AS comment
             FROM 
-                nec_auction_items 
+                nec_auction_items auct
+			INNER JOIN
+				nec_item_spawn spawn
+			ON
+				auct.item_spawn_id = spawn.id
             INNER JOIN 
-                nec_character 
+                nec_character consigner
             ON 
-                nec_auction_items.character_id = nec_character.id 
+                spawn.character_id = consigner.id
             WHERE 
                 bidder_id = @character_id";
 
         private const string SqlSelectLots = @"
-            SELECT 
-                nec_auction_items.id, 
-                nec_auction_items.character_id, 
-                nec_character.name AS character_name, 
-                nec_auction_items.item_spawn_id, 
-                nec_auction_items.quantity, 
-                nec_auction_items.expiry_datetime, 
-                nec_auction_items.min_bid, 
-                nec_auction_items.buyout_price, 
-                nec_auction_items.current_bid, 
-                nec_auction_items.bidder_id, 
-                nec_auction_items.comment 
+            SELECT 			
+                auct.id                 AS id, 
+                consigner.id            AS consigner_id, 
+                consigner.name          AS consigner_name, 
+                auct.item_spawn_id      AS spawn_id, 
+                auct.quantity           AS quantity, 
+                auct.expiry_datetime    AS expiry_datetime, 
+                auct.min_bid            AS min_bid, 
+                auct.buyout_price       AS buyout_price, 
+                auct.current_bid        AS current_bid, 
+                auct.bidder_id          AS bidder_id, 
+                auct.comment            AS comment
             FROM 
-                nec_auction_items 
+                nec_auction_items auct
+			INNER JOIN
+				nec_item_spawn spawn
+			ON
+				auct.item_spawn_id = spawn.id
             INNER JOIN 
-                nec_character 
+                nec_character consigner
             ON 
-                nec_auction_items.character_id = nec_character.id 
+                spawn.character_id = consigner.id
             WHERE 
-                character_id = @character_id";
+                consigner_id = @character_id";
 
         private const string SqlSelectItem = @"
-            SELECT 
-                nec_auction_items.id, 
-                nec_auction_items.character_id, 
-                nec_character.name AS character_name, 
-                nec_auction_items.item_spawn_id, 
-                nec_auction_items.quantity, 
-                nec_auction_items.expiry_datetime, 
-                nec_auction_items.min_bid, 
-                nec_auction_items.buyout_price, 
-                nec_auction_items.current_bid, 
-                nec_auction_items.bidder_id, 
-                nec_auction_items.comment 
+            SELECT 			
+                auct.id                 AS id, 
+                consigner.id            AS consigner_id, 
+                consigner.name          AS consigner_name, 
+                auct.item_spawn_id      AS spawn_id, 
+                auct.quantity           AS quantity, 
+                auct.expiry_datetime    AS expiry_datetime, 
+                auct.min_bid            AS min_bid, 
+                auct.buyout_price       AS buyout_price, 
+                auct.current_bid        AS current_bid, 
+                auct.bidder_id          AS bidder_id, 
+                auct.comment            AS comment
             FROM 
-                nec_auction_items 
+                nec_auction_items auct
+			INNER JOIN
+				nec_item_spawn spawn
+			ON
+				auct.item_spawn_id = spawn.id
             INNER JOIN 
-                nec_character 
+                nec_character consigner
             ON 
-                nec_auction_items.character_id = nec_character.id 
+                spawn.character_id = consigner.id
             WHERE 
-                nec_auction_items.id = @id";
+                consigner_id = @character_id";
 
         private const string SqlSelectIsCancellable = @"
             SELECT
@@ -216,9 +219,9 @@ namespace Necromancy.Server.Auction.Database
         {
             AuctionItem auctionItem = new AuctionItem();
             auctionItem.Id = reader.GetInt32("id");
-            auctionItem.ConsignerID = reader.GetInt32("character_id");
-            auctionItem.ConsignerName = reader.GetString("character_name");
-            auctionItem.SpawnedItemID = reader.GetInt64("item_spawn_id");
+            auctionItem.ConsignerID = reader.GetInt32("consigner_id");
+            auctionItem.ConsignerName = reader.GetString("consigner_name");
+            auctionItem.SpawnedItemID = reader.GetInt64("spawn_id");
             auctionItem.Quantity = reader.GetInt32("quantity");
             auctionItem.SecondsUntilExpiryTime = calcSecondsToExpiry(reader.GetInt64("expiry_datetime"));
             auctionItem.MinimumBid = reader.GetInt32("min_bid");
@@ -258,7 +261,7 @@ namespace Necromancy.Server.Auction.Database
         public bool SelectIsBidCancellable(long itemId)
         {
             bool isCancellable = false;
-            ExecuteReader(SqlSelectLots,
+            ExecuteReader(SqlSelectIsCancellable,
                 command =>
                 {
                     AddParameter(command, "@id", itemId);
