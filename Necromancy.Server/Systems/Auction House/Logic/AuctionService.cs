@@ -68,22 +68,28 @@ namespace Necromancy.Server.Systems.Auction_House
             auctionItem.BidderID = _client.Character.Id;
             auctionItem.CurrentBid = bid;
 
-            AuctionItem currentAuctionItem = _auctionDao.SelectAuctionItem(auctionItem.Id);
+            AuctionItem currentAuctionItem = _auctionDao.SelectItem(auctionItem.Id);
             if (auctionItem.CurrentBid < currentAuctionItem.CurrentBid) throw new AuctionException(AuctionExceptionType.NewBidLowerThanPrev);
             
-            AuctionItem[] bids = _auctionDao.SelectAuctionBids(_client.Character);
-            Console.WriteLine(bids.Length);
+            AuctionItem[] bids = _auctionDao.SelectBids(_client.Character);
             if(bids.Length >= MAX_BIDS) throw new AuctionException(AuctionExceptionType.BidSlotsFull);
 
             //TODO ADD CHECK FOR DIMENTO MEDAL / ROYAL after 5 bids
             if (false) throw new AuctionException(AuctionExceptionType.BidDimentoMedalExpired);
 
-            _auctionDao.UpdateAuctionBid(auctionItem);
+            _auctionDao.UpdateBid(auctionItem);
         }
 
         public void CancelBid(AuctionItem auctionItem)
         {
-            throw new NotImplementedException();
+            bool isCancellable = _auctionDao.SelectIsBidCancellable(auctionItem.Id);
+            if (isCancellable)
+            {
+                
+            } else
+            {
+                throw new AuctionException(AuctionExceptionType.AnotherCharacterAlreadyBid);
+            }
         }
 
         public void CancelExhibit(AuctionItem auctionItem)
@@ -128,7 +134,7 @@ namespace Necromancy.Server.Systems.Auction_House
             InventoryService iManager = new InventoryService(_client); //remove this 
             iManager.SubtractGold((int) Math.Ceiling(auctionItem.BuyoutPrice * LISTING_FEE_PERCENT)); 
 
-            _auctionDao.InsertAuctionItem(auctionItem);
+            _auctionDao.InsertItem(auctionItem);
 
             return auctionItem;
         }
@@ -139,12 +145,12 @@ namespace Necromancy.Server.Systems.Auction_House
         }
 
         public AuctionItem[]  GetBids() {
-            return _auctionDao.SelectAuctionBids(_client.Character);
+            return _auctionDao.SelectBids(_client.Character);
         }
 
         public AuctionItem[] GetLots()
         {
-            return _auctionDao.SelectAuctionLots(_client.Character);
+            return _auctionDao.SelectLots(_client.Character);
         }        
 
     }

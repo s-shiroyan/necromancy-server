@@ -8,18 +8,21 @@ namespace Necromancy.Server.Systems.Auction_House.Data_Access
 {
     public interface IAuctionDao
     {
-        public bool InsertAuctionItem(AuctionItem auctionItem);
+        public bool InsertItem(AuctionItem insertItem);
 
-        public bool UpdateAuctionBid(AuctionItem auctionItem);
+        public bool UpdateBid(AuctionItem updateBidItem);
 
-        public AuctionItem SelectAuctionItem(long auctionItemId);
+        public AuctionItem SelectItem(long itemId);
 
-        public AuctionItem[] SelectAuctionBids(Character character);
+        public AuctionItem[] SelectBids(Character character);
 
-        public AuctionItem[] SelectAuctionLots(Character character);
+        public AuctionItem[] SelectLots(Character character);
 
         public int SelectGold(Character character);
 
         public void SubtractGold(Character character, int amount);
+
+        public bool SelectIsBidCancellable(long itemId);
+        
     }
 }

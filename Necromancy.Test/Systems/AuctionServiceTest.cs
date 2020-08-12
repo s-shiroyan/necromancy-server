@@ -25,13 +25,13 @@ namespace Necromancy.Test.Systems
                 AuctionedItems = new List<AuctionItem>();
             }
 
-            public bool InsertAuctionItem(AuctionItem auctionItem)
+            public bool InsertItem(AuctionItem auctionItem)
             {
                 AuctionedItems.Add(auctionItem);
                 return true;
             }
 
-            public AuctionItem[] SelectAuctionBids(Character character)
+            public AuctionItem[] SelectBids(Character character)
             {
                 List<AuctionItem> bids = new List<AuctionItem>();
                 foreach(AuctionItem auctionItem in AuctionedItems)
@@ -44,7 +44,7 @@ namespace Necromancy.Test.Systems
                 return bids.ToArray();
             }
 
-            public AuctionItem SelectAuctionItem(long auctionItemId)
+            public AuctionItem SelectItem(long auctionItemId)
             {
                 AuctionItem auctionItem = new AuctionItem();
                 foreach (AuctionItem a in AuctionedItems)
@@ -57,7 +57,7 @@ namespace Necromancy.Test.Systems
                 return auctionItem;
             }
 
-            public AuctionItem[] SelectAuctionLots(Character character)
+            public AuctionItem[] SelectLots(Character character)
             {
                 throw new NotImplementedException();
             }
@@ -72,7 +72,7 @@ namespace Necromancy.Test.Systems
                 Gold -= amount;
             }
 
-            public bool UpdateAuctionBid(AuctionItem auctionItem)
+            public bool UpdateBid(AuctionItem auctionItem)
             {
                 foreach (AuctionItem a in AuctionedItems)
                 {

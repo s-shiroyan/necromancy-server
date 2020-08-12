@@ -13,7 +13,7 @@ namespace Necromancy.Server.Auction.Database
 {
     public class AuctionDao : DatabaseAccessObject, IAuctionDao
     {
-        private const string SqlInsertAuctionItem = @"
+        private const string SqlInsertItem = @"
             INSERT INTO 
                 nec_auction_items 
                 (
@@ -36,7 +36,7 @@ namespace Necromancy.Server.Auction.Database
                     @comment
                 )";
 
-        private const string SqlUpdateAuctionBid = @"
+        private const string SqlUpdateBid = @"
             UPDATE 
                 nec_auction_items 
                 (
@@ -95,7 +95,7 @@ namespace Necromancy.Server.Auction.Database
             WHERE 
                 character_id = @character_id";
 
-        private const string SqlSelectAuctionItem = @"
+        private const string SqlSelectItem = @"
             SELECT 
                 nec_auction_items.id, 
                 nec_auction_items.character_id, 
@@ -117,9 +117,17 @@ namespace Necromancy.Server.Auction.Database
             WHERE 
                 nec_auction_items.id = @id";
 
-        public bool InsertAuctionItem(AuctionItem auctionItem)
+        private const string SqlSelectIsCancellable = @"
+            SELECT
+                is_cancellable
+            FROM
+                nec_auction_items
+            WHERE
+                id = @id";
+
+        public bool InsertItem(AuctionItem auctionItem)
         {           
-              int rowsAffected = ExecuteNonQuery(SqlInsertAuctionItem, command =>
+              int rowsAffected = ExecuteNonQuery(SqlInsertItem, command =>
                 {
                     AddParameter(command, "@character_id", auctionItem.ConsignerID);
                     AddParameter(command, "@item_spawn_id", auctionItem.ItemID);
@@ -132,10 +140,10 @@ namespace Necromancy.Server.Auction.Database
             return rowsAffected > 0;
         }
 
-        public AuctionItem SelectAuctionItem(long auctionItemId)
+        public AuctionItem SelectItem(long auctionItemId)
         {
             AuctionItem auctionItem = new AuctionItem();
-            ExecuteReader(SqlSelectBids,
+            ExecuteReader(SqlSelectItem,
                 command =>
                 {
                     AddParameter(command, "@id", auctionItemId);
@@ -146,9 +154,9 @@ namespace Necromancy.Server.Auction.Database
             return auctionItem;
         }
 
-        public bool UpdateAuctionBid(AuctionItem auctionItem)
+        public bool UpdateBid(AuctionItem auctionItem)
         {
-            int rowsAffected = ExecuteNonQuery(SqlInsertAuctionItem, command =>
+            int rowsAffected = ExecuteNonQuery(SqlUpdateBid, command =>
             {
                 AddParameter(command, "@bidder_id", auctionItem.BidderID);
                 AddParameter(command, "@current_bid", auctionItem.CurrentBid);
@@ -156,7 +164,7 @@ namespace Necromancy.Server.Auction.Database
             return rowsAffected > 0;
         }
 
-        public AuctionItem[] SelectAuctionBids(Character character)
+        public AuctionItem[] SelectBids(Character character)
         {
             AuctionItem[] bids = new AuctionItem[AuctionService.MAX_BIDS];
             int i = 0;
@@ -179,7 +187,7 @@ namespace Necromancy.Server.Auction.Database
             return truncatedBids;
         }
 
-        public AuctionItem[] SelectAuctionLots(Character character)
+        public AuctionItem[] SelectLots(Character character)
         {
             AuctionItem[] lots = new AuctionItem[AuctionService.MAX_LOTS];
             int i = 0;
@@ -245,5 +253,19 @@ namespace Necromancy.Server.Auction.Database
             throw new NotImplementedException();
         }
 
+        public bool SelectIsBidCancellable(long itemId)
+        {
+            bool isCancellable = false;
+            ExecuteReader(SqlSelectLots,
+                command =>
+                {
+                    AddParameter(command, "@id", itemId);
+                }, reader =>
+                {
+                    reader.Read();
+                    isCancellable = reader.GetBoolean("is_cancellable");
+                });
+            return isCancellable;
+        }
     }
 }

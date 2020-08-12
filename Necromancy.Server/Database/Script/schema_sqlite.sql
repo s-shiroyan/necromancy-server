@@ -427,21 +427,22 @@ CREATE TABLE "item_library" (
 	PRIMARY KEY("id")
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item_spawn` (
-	`id`	                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`character_id`	        INTEGER NOT NULL,
-	`item_id`	            INTEGER NOT NULL,
-	`quantity`	            INTEGER NOT NULL,
-	`current_durability`	INTEGER NOT NULL,
-    `storage_type`          INTEGER NOT NULL,   --ToDo identify Union location and avatar location bytes
-	`bag`	                INTEGER NOT NULL,	
-	`slot`	                INTEGER NOT NULL,	
-    `state`	                INTEGER NOT NULL,	--equipped, soulbound, at auction, in shop. placeholder for bitmask.
-    "gem_slot_type_0"	    INTEGER NOT NULL DEFAULT 0,
-	"gem_slot_type_1"	    INTEGER NOT NULL DEFAULT 0,
-	"gem_slot_type_2"	    INTEGER NOT NULL DEFAULT 0,
-	CONSTRAINT `fk_nec_item_spawn_item_id` FOREIGN KEY(`item_id`) REFERENCES `nec_item_library`(`id`)
-    PRIMARY KEY("id" AUTOINCREMENT)
+CREATE TABLE "nec_auction_items" (
+	"id"	INTEGER NOT NULL,
+	"character_id"	INTEGER NOT NULL,
+	"item_spawn_id"	INTEGER NOT NULL,
+	"quantity"	INTEGER NOT NULL,
+	"expiry_datetime"	INTEGER NOT NULL,
+	"min_bid"	INTEGER NOT NULL,
+	"buyout_price"	INTEGER NOT NULL,
+	"bidder_id"	INTEGER,
+	"current_bid"	INTEGER,
+	"comment"	TEXT,
+	"is_cancellable"	INTEGER NOT NULL DEFAULT 1,
+	FOREIGN KEY("bidder_id") REFERENCES "nec_character"("id") ON UPDATE CASCADE,
+	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
+	FOREIGN KEY("item_spawn_id") REFERENCES "item_spawn"("id") ON DELETE CASCADE,
+	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_item_character_bag` (
