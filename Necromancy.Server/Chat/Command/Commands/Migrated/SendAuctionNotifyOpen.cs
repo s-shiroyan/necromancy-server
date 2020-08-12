@@ -18,7 +18,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            AuctionHouse auctionHouse = new AuctionHouse(client);
+            AuctionService auctionHouse = new AuctionService(client);
             AuctionItem[] lots = auctionHouse.GetLots();
             AuctionItem[] bids = auctionHouse.GetBids();
 
@@ -36,7 +36,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteByte(1); // 1 permit to show item in the search section ?? flags?
                 res.WriteFixedString(lots[i].Comment, 385); 
                 res.WriteInt16((short) lots[i].CurrentBid); // Bid why convert to short?
-                res.WriteInt32(lots[i].ExpiryTime);
+                res.WriteInt32(lots[i].SecondsUntilExpiryTime);
 
                 res.WriteInt32(0); // unknown
                 res.WriteInt32(0); // unknown
@@ -55,7 +55,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteByte(1); // 1 permit to show item in the search section ?? flags?
                 res.WriteFixedString(bids[i].Comment, 385); // Comment in the item information
                 res.WriteInt16((short)bids[i].CurrentBid); // Bid why convert to short?
-                res.WriteInt32(bids[i].ExpiryTime);
+                res.WriteInt32(bids[i].SecondsUntilExpiryTime);
 
                 res.WriteInt32(0); // unknown
                 res.WriteInt32(0); // unknown

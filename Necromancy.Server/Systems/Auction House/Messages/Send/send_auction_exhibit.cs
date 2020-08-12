@@ -3,6 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Auction_House.Logic;
 
 namespace Necromancy.Server.Systems.Auction_House
 {
@@ -17,22 +18,44 @@ namespace Necromancy.Server.Systems.Auction_House
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            byte myAuctionSlot = packet.Data.ReadByte(); // 0-4  for slots 1-5
-            short unknown = packet.Data.ReadInt16(); // not sure 00-00
-            short unknown2 = packet.Data.ReadInt16(); // not sure 03-00
+            byte auctionSlot = packet.Data.ReadByte(); 
+            short bagNumber = packet.Data.ReadInt16(); 
+            short bagSlot = packet.Data.ReadInt16(); 
 
-            byte itemCount = packet.Data.ReadByte(); //count of items in auction slot
+            byte quantity = packet.Data.ReadByte(); 
+            int auctionTimeSelector = packet.Data.ReadInt32(); //0:4hours 1:8 hours 2:16 hours 3:24 hours
+            int minBid = packet.Data.ReadInt32(); 
+            int buyoutPrice = packet.Data.ReadInt32(); 
+            string comment = packet.Data.ReadCString();
+            
+            AuctionItem auctionItem = new AuctionItem();
 
-            int auctionTime = packet.Data.ReadInt32(); //0:4hours 1:8 hours 2:16 hours 3:24 hours
+            auctionItem.Quantity = quantity;
+            auctionItem.MinimumBid = minBid;
+            auctionItem.BuyoutPrice = buyoutPrice;
+            auctionItem.Comment = comment;
+            
+            int auctionTimeInSecondsFromNow = 0;
+            const int SECONDS_PER_FOUR_HOURS = 60 * 60 * 4;
+            for(int i = 0; i < auctionTimeSelector; i++)
+            {
+                auctionTimeInSecondsFromNow = (i + 1) * SECONDS_PER_FOUR_HOURS;
+            }
+            auctionItem.SecondsUntilExpiryTime = auctionTimeInSecondsFromNow;
 
-            int MinimumBidPrice = packet.Data.ReadInt32(); //Minimum Bid
-            int sellNowPrice = packet.Data.ReadInt32(); //Buy it now price
-            string auctionComment = packet.Data.ReadCString(); //Comment for selling item
+            AuctionService auctionService = new AuctionService(client);
+            int auctionException = 0;
+            try { 
+            auctionItem = auctionService.Exhibit(auctionItem, bagNumber, bagSlot);
+            } catch(AuctionException e)
+            {
+                auctionException = (int) e.Type;
+            }
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0); //error check.
-            res.WriteInt32(sellNowPrice);
-            res.WriteInt64(10200101);
+            res.WriteInt32(auctionException); //error check.
+            res.WriteInt32(auctionItem.BuyoutPrice);
+            res.WriteInt64(auctionItem.ItemID); //spawn id
             Router.Send(client.Map, (ushort) AreaPacketId.recv_auction_exhibit_r, res, ServerType.Area);
         }
 

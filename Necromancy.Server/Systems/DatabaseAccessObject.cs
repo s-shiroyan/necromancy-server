@@ -11,15 +11,15 @@ namespace Necromancy.Server.Systems
 {
     //CLASS IS JUST FOR TESTING ABSTRACTING OF DATABASE FUNCTIONS
     //TODO MOVE UNDER /DATABASE
-    public class DatabaseAccessor
+    public class DatabaseAccessObject
     {
-        private static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseAccessor));
+        private static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseAccessObject));
 
         protected const int NO_ROWS_AFFECTED = 0;
         
         private readonly string sqLiteConnectionString;
 
-        public DatabaseAccessor()
+        public DatabaseAccessObject()
         {
             sqLiteConnectionString = makeSQLiteConnectionString();
         }

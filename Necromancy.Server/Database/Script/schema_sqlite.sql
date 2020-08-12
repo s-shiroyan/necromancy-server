@@ -437,7 +437,11 @@ CREATE TABLE IF NOT EXISTS `nec_item_spawn` (
 	`bag`	                INTEGER NOT NULL,	
 	`slot`	                INTEGER NOT NULL,	
     `state`	                INTEGER NOT NULL,	--equipped, soulbound, at auction, in shop. placeholder for bitmask.
+    "gem_slot_type_0"	    INTEGER NOT NULL DEFAULT 0,
+	"gem_slot_type_1"	    INTEGER NOT NULL DEFAULT 0,
+	"gem_slot_type_2"	    INTEGER NOT NULL DEFAULT 0,
 	CONSTRAINT `fk_nec_item_spawn_item_id` FOREIGN KEY(`item_id`) REFERENCES `nec_item_library`(`id`)
+    PRIMARY KEY("id" AUTOINCREMENT)
 );
 
 CREATE TABLE IF NOT EXISTS `nec_item_character_bag` (

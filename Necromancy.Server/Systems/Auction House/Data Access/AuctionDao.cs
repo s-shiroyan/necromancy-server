@@ -1,6 +1,7 @@
 using Necromancy.Server.Model;
 using Necromancy.Server.Systems;
 using Necromancy.Server.Systems.Auction_House;
+using Necromancy.Server.Systems.Auction_House.Data_Access;
 using Necromancy.Server.Systems.Auction_House.Logic;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ using System.Text;
 
 namespace Necromancy.Server.Auction.Database
 {
-    public class DbAuction : DatabaseAccessor
+    public class AuctionDao : DatabaseAccessObject, IAuctionDao
     {
         private const string SqlInsertAuctionItem = @"
             INSERT INTO 
                 nec_auction_items 
                 (
                     character_id, 
-                    item_id, 
+                    item_spawn_id, 
                     quantity, 
-                    expiry_time, 
+                    expiry_datetime, 
                     min_bid, 
                     buyout_price, 
                     comment
@@ -27,9 +28,9 @@ namespace Necromancy.Server.Auction.Database
             VALUES 
                 (
                     @character_id, 
-                    @item_id, 
+                    @item_spawn_id, 
                     @quantity, 
-                    @expiry_time, 
+                    @expiry_datetime, 
                     @min_bid, 
                     @buyout_price, 
                     @comment
@@ -55,9 +56,9 @@ namespace Necromancy.Server.Auction.Database
                 nec_auction_items.id, 
                 nec_auction_items.character_id, 
                 nec_character.name AS character_name, 
-                nec_auction_items.item_id, 
+                nec_auction_items.item_spawn_id, 
                 nec_auction_items.quantity, 
-                nec_auction_items.expiry_time, 
+                nec_auction_items.expiry_datetime, 
                 nec_auction_items.min_bid, 
                 nec_auction_items.buyout_price, 
                 nec_auction_items.current_bid, 
@@ -77,9 +78,9 @@ namespace Necromancy.Server.Auction.Database
                 nec_auction_items.id, 
                 nec_auction_items.character_id, 
                 nec_character.name AS character_name, 
-                nec_auction_items.item_id, 
+                nec_auction_items.item_spawn_id, 
                 nec_auction_items.quantity, 
-                nec_auction_items.expiry_time, 
+                nec_auction_items.expiry_datetime, 
                 nec_auction_items.min_bid, 
                 nec_auction_items.buyout_price, 
                 nec_auction_items.current_bid, 
@@ -94,19 +95,55 @@ namespace Necromancy.Server.Auction.Database
             WHERE 
                 character_id = @character_id";
 
+        private const string SqlSelectAuctionItem = @"
+            SELECT 
+                nec_auction_items.id, 
+                nec_auction_items.character_id, 
+                nec_character.name AS character_name, 
+                nec_auction_items.item_spawn_id, 
+                nec_auction_items.quantity, 
+                nec_auction_items.expiry_datetime, 
+                nec_auction_items.min_bid, 
+                nec_auction_items.buyout_price, 
+                nec_auction_items.current_bid, 
+                nec_auction_items.bidder_id, 
+                nec_auction_items.comment 
+            FROM 
+                nec_auction_items 
+            INNER JOIN 
+                nec_character 
+            ON 
+                nec_auction_items.character_id = nec_character.id 
+            WHERE 
+                nec_auction_items.id = @id";
+
         public bool InsertAuctionItem(AuctionItem auctionItem)
         {           
               int rowsAffected = ExecuteNonQuery(SqlInsertAuctionItem, command =>
                 {
                     AddParameter(command, "@character_id", auctionItem.ConsignerID);
-                    AddParameter(command, "@item_id", auctionItem.ItemID);
+                    AddParameter(command, "@item_spawn_id", auctionItem.ItemID);
                     AddParameter(command, "@quantity", auctionItem.Quantity);
-                    AddParameter(command, "@expiry_time", calcExpiryTime(auctionItem.ExpiryTime));
+                    AddParameter(command, "@expiry_datetime", calcExpiryTime(auctionItem.SecondsUntilExpiryTime));
                     AddParameter(command, "@min_bid", auctionItem.MinimumBid);
                     AddParameter(command, "@buyout_price", auctionItem.BuyoutPrice);
                     AddParameter(command, "@comment", auctionItem.Comment);
                 });
             return rowsAffected > 0;
+        }
+
+        public AuctionItem SelectAuctionItem(long auctionItemId)
+        {
+            AuctionItem auctionItem = new AuctionItem();
+            ExecuteReader(SqlSelectBids,
+                command =>
+                {
+                    AddParameter(command, "@id", auctionItemId);
+                }, reader =>
+                {
+                    makeAuctionItem(reader);
+                });
+            return auctionItem;
         }
 
         public bool UpdateAuctionBid(AuctionItem auctionItem)
@@ -121,7 +158,7 @@ namespace Necromancy.Server.Auction.Database
 
         public AuctionItem[] SelectAuctionBids(Character character)
         {
-            AuctionItem[] bids = new AuctionItem[AuctionHouse.MAX_BIDS];
+            AuctionItem[] bids = new AuctionItem[AuctionService.MAX_BIDS];
             int i = 0;
             ExecuteReader(SqlSelectBids,
                 command =>
@@ -131,7 +168,7 @@ namespace Necromancy.Server.Auction.Database
                 {
                     while (reader.Read())
                     {
-                        if (i >= AuctionHouse.MAX_BIDS) break;
+                        if (i >= AuctionService.MAX_BIDS) break;
                         AuctionItem bid = makeAuctionItem(reader);
                         bids[i] = bid;
                         i++;
@@ -144,7 +181,7 @@ namespace Necromancy.Server.Auction.Database
 
         public AuctionItem[] SelectAuctionLots(Character character)
         {
-            AuctionItem[] lots = new AuctionItem[AuctionHouse.MAX_LOTS];
+            AuctionItem[] lots = new AuctionItem[AuctionService.MAX_LOTS];
             int i = 0;
             ExecuteReader(SqlSelectLots,
                 command =>
@@ -154,7 +191,7 @@ namespace Necromancy.Server.Auction.Database
                 {                    
                     while (reader.Read())
                     {
-                        if (i >= AuctionHouse.MAX_LOTS) break;
+                        if (i >= AuctionService.MAX_LOTS) break;
                         AuctionItem lot = makeAuctionItem(reader);
                         lots[i] = lot;
                         i++;
@@ -168,12 +205,12 @@ namespace Necromancy.Server.Auction.Database
         private AuctionItem makeAuctionItem(DbDataReader reader)
         {
             AuctionItem auctionItem = new AuctionItem();
-            auctionItem.LotID = reader.GetInt32("id");
+            auctionItem.Id = reader.GetInt32("id");
             auctionItem.ConsignerID = reader.GetInt32("character_id");
             auctionItem.ConsignerName = reader.GetString("character_name");
-            auctionItem.ItemID = reader.GetInt64("item_id");
+            auctionItem.SpawnedItemID = reader.GetInt64("item_spawn_id");
             auctionItem.Quantity = reader.GetInt32("quantity");
-            auctionItem.ExpiryTime = calcSecondsToExpiry(reader.GetInt64("expiry_time"));
+            auctionItem.SecondsUntilExpiryTime = calcSecondsToExpiry(reader.GetInt64("expiry_datetime"));
             auctionItem.MinimumBid = reader.GetInt32("min_bid");
             auctionItem.BuyoutPrice = reader.GetInt32("buyout_price");
             auctionItem.CurrentBid = reader.GetInt32("current_bid");
@@ -197,5 +234,16 @@ namespace Necromancy.Server.Auction.Database
             DateTimeOffset dOffsetNow = new DateTimeOffset(dNow);
             return dOffsetNow.ToUnixTimeSeconds() + secondsToExpiry;
         }
+
+        public int SelectGold(Character character)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubtractGold(Character character, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
