@@ -42,11 +42,13 @@ namespace Necromancy.Server.Auction.Database
                 (
                     bidder_id, 
                     current_bid
+                    is_cancellable
                 ) 
             VALUES 
                 (
                     @bidder_id, 
-                    @current_bid
+                    @current_bid,
+                    (bidder_id != 0)
                 ) 
             WHERE 
                 id = @id";

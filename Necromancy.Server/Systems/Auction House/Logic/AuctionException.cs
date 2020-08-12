@@ -58,7 +58,7 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
             /// </summary>
             IllegalSearchQuery = 9,
 
-            //NEGATIVE EXCEPTIONS SHOULD NEVER HAPPEN, PREVENT HACKERS / AUCTION HOUSE MANIPULATE ONLY
+            //NEGATIVE EXCEPTIONS SHOULD NEVER HAPPEN BECAUSE CLIENT PREVENTS, STILL CHECK ERRORS
 
             /// <summary>
             /// Item has already been listed.
