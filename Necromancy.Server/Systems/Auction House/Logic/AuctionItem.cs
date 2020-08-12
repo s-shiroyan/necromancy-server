@@ -19,5 +19,6 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
         public string BidderName { get; set; }
         public int CurrentBid { get; set; }
         public string Comment { get; set; }
+        public bool IsCancellable { get; set; }
     }
 }

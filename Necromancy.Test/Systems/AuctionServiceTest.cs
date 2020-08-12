@@ -80,10 +80,23 @@ namespace Necromancy.Test.Systems
                     {
                         a.CurrentBid = auctionItem.CurrentBid;
                         a.BidderID = auctionItem.BidderID;
+                        a.IsCancellable = (a.BidderID == 0);
                         return true;
                     }
                 }
 
+                return false;
+            }
+
+            public bool SelectIsBidCancellable(long itemId)
+            {
+                foreach (AuctionItem a in AuctionedItems)
+                {
+                    if (a.Id == itemId)
+                    {
+                        return a.IsCancellable;
+                    }
+                }
                 return false;
             }
         }
@@ -258,12 +271,14 @@ namespace Necromancy.Test.Systems
             //VARIABLES
             const int MOCK_AUCTION_ITEM_ID = 100;
             const int MOCK_CHARACTER_ID = 777;
+            const int MOCK_BID = 29;
 
             //SETUP
             MockAuctionItem mockAuctionItem = new MockAuctionItem();
             mockAuctionItem.Id = MOCK_AUCTION_ITEM_ID;
-            mockAuctionItem.CurrentBid = 500;
             mockAuctionItem.BidderID = MOCK_CHARACTER_ID;
+            mockAuctionItem.CurrentBid = MOCK_BID;
+            mockAuctionItem.IsCancellable = true;
 
             MockAuctionDao mockAuctionDao = new MockAuctionDao();
             mockAuctionDao.AuctionedItems.Add(mockAuctionItem);
@@ -286,7 +301,7 @@ namespace Necromancy.Test.Systems
                     Assert.AreEqual(0, a.BidderID);
                     Assert.AreEqual(0, a.CurrentBid);
                 }
-            }
+            }            
         }
 
         [TestMethod]
@@ -295,35 +310,32 @@ namespace Necromancy.Test.Systems
             //VARIABLES
             const int MOCK_AUCTION_ITEM_ID = 100;
             const int MOCK_CHARACTER_ID = 777;
+            const int MOCK_COMPETITOR_ID = 888;
+            const int MOCK_BID = 5;
 
             //SETUP
-            MockAuctionItem mockAuctionItem = new MockAuctionItem();
-            mockAuctionItem.Id = MOCK_AUCTION_ITEM_ID;
-            mockAuctionItem.CurrentBid = 500;
-            mockAuctionItem.BidderID = MOCK_CHARACTER_ID;
+            MockAuctionItem mockAuctionItem0 = new MockAuctionItem();
+            mockAuctionItem0.Id = MOCK_AUCTION_ITEM_ID;
+            mockAuctionItem0.BidderID = MOCK_COMPETITOR_ID;
+
+            MockAuctionItem mockAuctionItem1 = new MockAuctionItem();
+            mockAuctionItem1.Id = MOCK_AUCTION_ITEM_ID;
+            mockAuctionItem1.BidderID = MOCK_CHARACTER_ID;
 
             MockAuctionDao mockAuctionDao = new MockAuctionDao();
-            mockAuctionDao.AuctionedItems.Add(mockAuctionItem);
+            mockAuctionDao.AuctionedItems.Add(mockAuctionItem0);
 
             MockNecClient mockNecClient = new MockNecClient();
             mockNecClient.Character.Id = MOCK_CHARACTER_ID;
 
             AuctionService auctionService = new AuctionService(mockNecClient, mockAuctionDao);
 
-            //TEST            
-            AuctionItem auctionItem = new AuctionItem();
-            auctionItem.Id = MOCK_AUCTION_ITEM_ID;
-            auctionService.CancelBid(auctionItem);
+            //TEST
+            auctionService.Bid(mockAuctionItem1, MOCK_BID);            
 
-            //RESOLVE
-            foreach (AuctionItem a in mockAuctionDao.AuctionedItems)
-            {
-                if (a.Id == MOCK_AUCTION_ITEM_ID)
-                {
-                    Assert.AreEqual(0, a.BidderID);
-                    Assert.AreEqual(0, a.CurrentBid);
-                }
-            }
+            //TEST / RESOLVE
+            AuctionException e = Assert.ThrowsException<AuctionException>(() => auctionService.CancelBid(mockAuctionItem1));
+            Assert.AreEqual(AuctionException.AuctionExceptionType.AnotherCharacterAlreadyBid, e.Type);
         }
 
         [TestMethod]

@@ -85,7 +85,9 @@ namespace Necromancy.Server.Systems.Auction_House
             bool isCancellable = _auctionDao.SelectIsBidCancellable(auctionItem.Id);
             if (isCancellable)
             {
-                
+                auctionItem.BidderID = 0;
+                auctionItem.CurrentBid = 0;
+                _auctionDao.UpdateBid(auctionItem);
             } else
             {
                 throw new AuctionException(AuctionExceptionType.AnotherCharacterAlreadyBid);
