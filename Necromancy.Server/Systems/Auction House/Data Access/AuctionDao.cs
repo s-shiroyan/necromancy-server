@@ -126,7 +126,7 @@ namespace Necromancy.Server.Auction.Database
               int rowsAffected = ExecuteNonQuery(SqlInsertItem, command =>
                 {
                     AddParameter(command, "@character_id", auctionItem.ConsignerID);
-                    AddParameter(command, "@spawn_id", auctionItem.SpawnedItemID);
+                    AddParameter(command, "@item_spawn_id", auctionItem.SpawnedItemID);
                     AddParameter(command, "@quantity", auctionItem.Quantity);
                     AddParameter(command, "@expiry_datetime", CalcExpiryTime(auctionItem.SecondsUntilExpiryTime));
                     AddParameter(command, "@min_bid", auctionItem.MinimumBid);

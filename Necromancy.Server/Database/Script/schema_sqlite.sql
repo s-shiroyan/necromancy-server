@@ -24,22 +24,6 @@ CREATE TABLE IF NOT EXISTS `account`
     CONSTRAINT `uq_account_mail` UNIQUE (`mail`)
 );
 
-CREATE TABLE IF NOT EXISTS "nec_auction_item" (
-	"id"	            INTEGER NOT NULL,
-	"item_spawn_id"	    INTEGER NOT NULL,
-	"quantity"	        INTEGER NOT NULL,
-	"expiry_datetime"	INTEGER NOT NULL,
-	"min_bid"	        INTEGER NOT NULL,
-	"buyout_price"	    INTEGER NOT NULL,
-	"bidder_id"	        INTEGER,
-	"current_bid"	    INTEGER,
-	"comment"	        TEXT,
-	"is_cancellable"	INTEGER NOT NULL DEFAULT 1,
-	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("bidder_id") REFERENCES "nec_character"("id") ON UPDATE CASCADE,
-	FOREIGN KEY("item_spawn_id") REFERENCES "item_spawn"("id") ON DELETE CASCADE
-);
-
 CREATE TABLE IF NOT EXISTS `nec_soul`
 (
     `id`         INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -427,17 +411,17 @@ CREATE TABLE "item_library" (
 	PRIMARY KEY("id")
 );
 
-CREATE TABLE "nec_auction_items" (
-	"id"	INTEGER NOT NULL,
-	"character_id"	INTEGER NOT NULL,
-	"item_spawn_id"	INTEGER NOT NULL,
-	"quantity"	INTEGER NOT NULL,
+CREATE TABLE IF NOT EXISTS "nec_auction_item" (
+	"id"	        	INTEGER NOT NULL,
+	"character_id"		INTEGER NOT NULL,
+	"item_spawn_id"		INTEGER NOT NULL,
+	"quantity"			INTEGER NOT NULL,
 	"expiry_datetime"	INTEGER NOT NULL,
-	"min_bid"	INTEGER NOT NULL,
-	"buyout_price"	INTEGER NOT NULL,
-	"bidder_id"	INTEGER,
-	"current_bid"	INTEGER,
-	"comment"	TEXT,
+	"min_bid"			INTEGER NOT NULL,
+	"buyout_price"		INTEGER NOT NULL,
+	"bidder_id"			INTEGER,
+	"current_bid"		INTEGER,
+	"comment"			TEXT,
 	"is_cancellable"	INTEGER NOT NULL DEFAULT 1,
 	FOREIGN KEY("bidder_id") REFERENCES "nec_character"("id") ON UPDATE CASCADE,
 	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
