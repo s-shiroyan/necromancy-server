@@ -43,7 +43,12 @@ namespace Necromancy.Server.Systems.Auction_House
         */
 
         public const int MAX_BIDS = 8;
+        public const int MAX_BIDS_NO_DIMENTO = 5;
         public const int MAX_LOTS = 5;
+        public const int MAX_LOTS_NO_DIMENTO = 3;
+
+        private const int ITEM_NOT_FOUND_ID = -1;
+
         private const double LISTING_FEE_PERCENT = .05;
 
         private readonly NecClient _client;
@@ -69,6 +74,9 @@ namespace Necromancy.Server.Systems.Auction_House
             auctionItem.CurrentBid = bid;
 
             AuctionItem currentAuctionItem = _auctionDao.SelectItem(auctionItem.Id);
+
+            if (currentAuctionItem.Id == ITEM_NOT_FOUND_ID) throw new AuctionException(AuctionExceptionType.Generic);
+
             if (auctionItem.CurrentBid < currentAuctionItem.CurrentBid) throw new AuctionException(AuctionExceptionType.NewBidLowerThanPrev);
             
             AuctionItem[] bids = _auctionDao.SelectBids(_client.Character);
@@ -77,21 +85,24 @@ namespace Necromancy.Server.Systems.Auction_House
             //TODO ADD CHECK FOR DIMENTO MEDAL / ROYAL after 5 bids
             if (false) throw new AuctionException(AuctionExceptionType.BidDimentoMedalExpired);
 
+            int currentWealth = _auctionDao.SelectGold(_client.Character);
+            if(currentWealth < bid) throw new AuctionException(AuctionExceptionType.Generic);
+
+            _auctionDao.SubtractGold(_client.Character, bid);
             _auctionDao.UpdateBid(auctionItem);
         }
 
         public void CancelBid(AuctionItem auctionItem)
         {
-            bool isCancellable = _auctionDao.SelectIsBidCancellable(auctionItem.Id);
-            if (isCancellable)
-            {
-                auctionItem.BidderID = 0;
-                auctionItem.CurrentBid = 0;
-                _auctionDao.UpdateBid(auctionItem);
-            } else
-            {
-                throw new AuctionException(AuctionExceptionType.AnotherCharacterAlreadyBid);
-            }
+            AuctionItem currentItem = _auctionDao.SelectItem(auctionItem.Id);
+            if (!currentItem.IsCancellable) throw new AuctionException(AuctionExceptionType.AnotherCharacterAlreadyBid);
+
+
+            _auctionDao.AddGold(_client.Character, currentItem.CurrentBid);
+
+            auctionItem.BidderID = 0;
+            auctionItem.CurrentBid = 0;            
+            _auctionDao.UpdateBid(auctionItem);            
         }
 
         public void CancelExhibit(AuctionItem auctionItem)

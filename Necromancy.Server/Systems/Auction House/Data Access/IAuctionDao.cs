@@ -12,7 +12,7 @@ namespace Necromancy.Server.Systems.Auction_House.Data_Access
 
         public bool UpdateBid(AuctionItem updateBidItem);
 
-        public AuctionItem SelectItem(long itemId);
+        public AuctionItem SelectItem(int itemId);
 
         public AuctionItem[] SelectBids(Character character);
 
@@ -20,9 +20,9 @@ namespace Necromancy.Server.Systems.Auction_House.Data_Access
 
         public int SelectGold(Character character);
 
-        public void SubtractGold(Character character, int amount);
+        public void AddGold(Character character, int amount);
 
-        public bool SelectIsBidCancellable(long itemId);
+        public void SubtractGold(Character character, int amount);
         
     }
 }

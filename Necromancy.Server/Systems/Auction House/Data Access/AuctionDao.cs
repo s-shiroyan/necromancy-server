@@ -145,7 +145,7 @@ namespace Necromancy.Server.Auction.Database
             return rowsAffected > 0;
         }
 
-        public AuctionItem SelectItem(long auctionItemId)
+        public AuctionItem SelectItem(int auctionItemId)
         {
             AuctionItem auctionItem = new AuctionItem();
             ExecuteReader(SqlSelectItem,
@@ -232,8 +232,6 @@ namespace Necromancy.Server.Auction.Database
             return auctionItem;
         }
 
-
-        //TODO look into moving these to business logic
         private int calcSecondsToExpiry(long unixTimeSecondsExpiry)
         {
             DateTime dNow = DateTime.Now;
@@ -253,12 +251,17 @@ namespace Necromancy.Server.Auction.Database
             throw new NotImplementedException();
         }
 
+        public void AddGold(Character character, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SubtractGold(Character character, int amount)
         {
             throw new NotImplementedException();
         }
 
-        public bool SelectIsBidCancellable(long itemId)
+        public bool SelectIsBidCancellable(int itemId)
         {
             bool isCancellable = false;
             ExecuteReader(SqlSelectIsCancellable,

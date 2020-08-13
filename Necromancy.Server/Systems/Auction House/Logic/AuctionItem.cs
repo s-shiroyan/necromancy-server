@@ -6,7 +6,7 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
 {
     public class AuctionItem
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public int ConsignerID { get; set; }
         public string ConsignerName { get; set; }
         public int ItemID { get; set; }
