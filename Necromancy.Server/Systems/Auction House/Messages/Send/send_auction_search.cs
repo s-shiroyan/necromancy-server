@@ -28,6 +28,43 @@ namespace Necromancy.Server.Systems.Auction_House
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
+                IBuffer r0 = BufferProvider.Provide();
+                r0.WriteInt64(i + 300); //spawned item id
+                r0.WriteCString("Soldier Cuirass " + i.ToString()); // name
+                r0.WriteInt32((int)ItemType.ARMOR_TOPS); // type
+                r0.WriteInt32((int)ItemEquipSlot.Torso); // equip slot display on icon
+                r0.WriteByte(1); //quantity?
+                r0.WriteInt32((int)ItemStatuses.Normal); //statuses
+                r0.WriteInt32(200901); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass
+
+                r0.WriteByte(5); //unknown
+                r0.WriteByte(5); //unknown
+                r0.WriteByte(5); //unknown
+
+                r0.WriteInt32(0); // base item id?
+                r0.WriteByte(1); //unknown 
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(1); //unknown
+
+                r0.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                r0.WriteByte(0); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                r0.WriteByte(1); // bool
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(4); //texture related
+
+                r0.WriteByte(1); //unknown
+
+                r0.WriteByte((byte)i); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
+                r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
+                r0.WriteInt16((short)(i)); // VERIFIED slot in bag
+                r0.WriteInt32(0); // equips item to this slot ItemEquipSlot
+                r0.WriteInt64(long.MaxValue); //unknown
+                r0.WriteInt32(1); //unknown
+
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+
                 //IBuffer r1 = BufferProvider.Provide();
                 //r1.WriteInt64(i + 300); //spawned item iD
                 //r1.WriteInt32(0); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType
@@ -75,42 +112,7 @@ namespace Necromancy.Server.Systems.Auction_House
 
                 //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
 
-                IBuffer r0 = BufferProvider.Provide();
-                r0.WriteInt64(i + 300); //spawned item id
-                r0.WriteCString("Soldier Cuirass " + i.ToString()); // name
-                r0.WriteInt32((int) ItemType.ARMOR_TOPS); // type
-                r0.WriteInt32((int) ItemEquipSlot.Torso); // equip slot display on icon
-                r0.WriteByte(1); //quantity
-                r0.WriteInt32((int) ItemStatuses.Normal); //statuses
-                r0.WriteInt32(200901); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass
 
-                r0.WriteByte(5); //unknown
-                r0.WriteByte(5); //unknown
-                r0.WriteByte(5); //unknown
-
-                r0.WriteInt32(0); // base item id?
-                r0.WriteByte(1); //unknown 
-                r0.WriteByte(1); //unknown
-                r0.WriteByte(1); //unknown
-
-                r0.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-                r0.WriteByte(0); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                r0.WriteByte(1); // bool
-                r0.WriteByte(1); //unknown
-                r0.WriteByte(1); //unknown
-                r0.WriteByte(1); //unknown
-                r0.WriteByte(4); //texture related
-
-                r0.WriteByte(1); //unknown
-
-                r0.WriteByte((byte) i); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
-                r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
-                r0.WriteInt16((short) (i)); // VERIFIED slot in bag
-                r0.WriteInt32(0); // equips item to this slot ItemEquipSlot
-                r0.WriteInt64(long.MaxValue); //unknown
-                r0.WriteInt32(1); //unknown
-
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
             }
 
             Logger.Info("YEFASF");

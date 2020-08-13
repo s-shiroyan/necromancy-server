@@ -14,6 +14,7 @@ namespace Necromancy.Server.Model
     {
         private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(Character));
 
+
         public uint InstanceId { get; set; }
 
         //core attributes
@@ -27,7 +28,7 @@ namespace Necromancy.Server.Model
 
         public CharacterState State { get; set; }
 
-        // TODO sort this messy class out...
+        //TODO sort this messy class out...
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }
         public byte HairId { get; set; }

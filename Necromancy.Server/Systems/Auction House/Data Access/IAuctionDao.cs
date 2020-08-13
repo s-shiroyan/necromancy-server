@@ -23,6 +23,8 @@ namespace Necromancy.Server.Systems.Auction_House.Data_Access
         public void AddGold(Character character, int amount);
 
         public void SubtractGold(Character character, int amount);
+
+        public AuctionItem[] SelectItemsByCriteria(SearchCriteria searchCriteria);
         
     }
 }

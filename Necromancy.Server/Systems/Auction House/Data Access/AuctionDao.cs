@@ -13,6 +13,46 @@ namespace Necromancy.Server.Auction.Database
 {
     public class AuctionDao : DatabaseAccessObject, IAuctionDao
     {
+        private const string SqlCreateItemsUpForAuctionView = @"
+            DROP VIEW IF EXISTS [items_up_for_auction];
+            CREATE OR REPLACE TEMP VIEW items_up_for_auction
+	            (
+		            id, 
+                    consigner_id, 
+		            consigner_name, 
+		            spawn_id, 
+		            quantity, 
+		            expiry_datetime, 
+		            min_bid, 
+		            buyout_price, 
+		            current_bid, 
+		            bidder_id, 
+		            comment
+	            )
+            AS
+            SELECT 			
+                nec_auction_items.id,
+                consigner.id,
+                consigner.name,
+                nec_auction_items.item_spawn_id, 
+                nec_auction_items.quantity,
+                nec_auction_items.expiry_datetime, 
+                nec_auction_items.min_bid,
+                nec_auction_items.buyout_price, 
+                nec_auction_items.current_bid, 
+                nec_auction_items.bidder_id,
+                nec_auction_items.comment
+            FROM 
+                nec_auction_items
+			INNER JOIN
+				nec_item_spawn spawn
+			ON
+				nec_auction_items.item_spawn_id = spawn.id
+            INNER JOIN 
+                nec_character consigner
+            ON 
+                spawn.character_id = consigner.id";
+
         private const string SqlInsertItem = @"
             INSERT INTO 
                 nec_auction_items 
@@ -38,104 +78,55 @@ namespace Necromancy.Server.Auction.Database
             UPDATE 
                 nec_auction_items 
             SET 
-                bidder_id = 3, 
-                current_bid = 50, 
+                bidder_id = @bidder_id, 
+                current_bid = @current_bid, 
                 is_cancellable = (bidder_id IS NULL) 
             WHERE 
-                id = 2";
+                id = @id";
 
         private const string SqlSelectBids = @"
             SELECT 			
-                auct.id                 AS id, 
-                consigner.id            AS consigner_id, 
-                consigner.name          AS consigner_name, 
-                auct.item_spawn_id      AS spawn_id, 
-                auct.quantity           AS quantity, 
-                auct.expiry_datetime    AS expiry_datetime, 
-                auct.min_bid            AS min_bid, 
-                auct.buyout_price       AS buyout_price, 
-                auct.current_bid        AS current_bid, 
-                auct.bidder_id          AS bidder_id, 
-                auct.comment            AS comment
-            FROM 
-                nec_auction_items auct
-			INNER JOIN
-				nec_item_spawn spawn
-			ON
-				auct.item_spawn_id = spawn.id
-            INNER JOIN 
-                nec_character consigner
-            ON 
-                spawn.character_id = consigner.id
-            WHERE 
+                *
+            FROM
+                items_up_for_auction
+            WHERE
                 bidder_id = @character_id";
 
         private const string SqlSelectLots = @"
             SELECT 			
-                auct.id                 AS id, 
-                consigner.id            AS consigner_id, 
-                consigner.name          AS consigner_name, 
-                auct.item_spawn_id      AS spawn_id, 
-                auct.quantity           AS quantity, 
-                auct.expiry_datetime    AS expiry_datetime, 
-                auct.min_bid            AS min_bid, 
-                auct.buyout_price       AS buyout_price, 
-                auct.current_bid        AS current_bid, 
-                auct.bidder_id          AS bidder_id, 
-                auct.comment            AS comment
+                *
             FROM 
-                nec_auction_items auct
-			INNER JOIN
-				nec_item_spawn spawn
-			ON
-				auct.item_spawn_id = spawn.id
-            INNER JOIN 
-                nec_character consigner
-            ON 
-                spawn.character_id = consigner.id
+                items_up_for_auction			
             WHERE 
                 consigner_id = @character_id";
 
         private const string SqlSelectItem = @"
             SELECT 			
-                auct.id                 AS id, 
-                consigner.id            AS consigner_id, 
-                consigner.name          AS consigner_name, 
-                auct.item_spawn_id      AS spawn_id, 
-                auct.quantity           AS quantity, 
-                auct.expiry_datetime    AS expiry_datetime, 
-                auct.min_bid            AS min_bid, 
-                auct.buyout_price       AS buyout_price, 
-                auct.current_bid        AS current_bid, 
-                auct.bidder_id          AS bidder_id, 
-                auct.comment            AS comment
-            FROM 
-                nec_auction_items auct
-			INNER JOIN
-				nec_item_spawn spawn
-			ON
-				auct.item_spawn_id = spawn.id
-            INNER JOIN 
-                nec_character consigner
-            ON 
-                spawn.character_id = consigner.id
-            WHERE 
-                consigner_id = @character_id";
-
-        private const string SqlSelectIsCancellable = @"
-            SELECT
-                is_cancellable
+                *
             FROM
-                nec_auction_items
-            WHERE
+                items_up_for_auction
+            WHERE 
                 id = @id";
+
+        private const string SqlSelectItemsByCriteria = @"";
+
+
+        public AuctionDao()
+        {
+            CreateView();
+        }
+
+        private void CreateView()
+        {
+            ExecuteNonQuery(SqlCreateItemsUpForAuctionView, null);
+        }
 
         public bool InsertItem(AuctionItem auctionItem)
         {           
               int rowsAffected = ExecuteNonQuery(SqlInsertItem, command =>
                 {
                     AddParameter(command, "@character_id", auctionItem.ConsignerID);
-                    AddParameter(command, "@item_spawn_id", auctionItem.ItemID);
+                    AddParameter(command, "@spawn_id", auctionItem.SpawnedItemID);
                     AddParameter(command, "@quantity", auctionItem.Quantity);
                     AddParameter(command, "@expiry_datetime", calcExpiryTime(auctionItem.SecondsUntilExpiryTime));
                     AddParameter(command, "@min_bid", auctionItem.MinimumBid);
@@ -261,19 +252,20 @@ namespace Necromancy.Server.Auction.Database
             throw new NotImplementedException();
         }
 
-        public bool SelectIsBidCancellable(int itemId)
+        public AuctionItem[] SelectItemsByCriteria(SearchCriteria searchCriteria)
         {
-            bool isCancellable = false;
-            ExecuteReader(SqlSelectIsCancellable,
+            AuctionItem[] results = new AuctionItem[1];
+            ExecuteReader(SqlSelectItemsByCriteria,
                 command =>
                 {
-                    AddParameter(command, "@id", itemId);
+                    
                 }, reader =>
                 {
-                    reader.Read();
-                    isCancellable = reader.GetBoolean("is_cancellable");
+                    while (reader.Read()) { 
+                    //TODO do something
+                    }
                 });
-            return isCancellable;
+            throw new NotImplementedException();
         }
     }
 }

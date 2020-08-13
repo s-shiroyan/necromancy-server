@@ -59,6 +59,11 @@ namespace Necromancy.Test.Systems
                 }                
             }
 
+            public AuctionItem[] SelectItemsByCriteria(SearchCriteria searchCriteria)
+            {
+                throw new NotImplementedException();
+            }
+
             public AuctionItem[] SelectLots(Character character)
             {
                 throw new NotImplementedException();
@@ -87,6 +92,7 @@ namespace Necromancy.Test.Systems
         private const int BID = 5000;
         private const int DUMMY_ROW_IN_DATABASE_ID =1704;
         private const int START_GOLD = 10000;
+                
 
         [TestInitialize]
         public void Setup()
@@ -199,6 +205,7 @@ namespace Necromancy.Test.Systems
             //SETUP
             _dummyRowInDatabaseItem.BidderID = CHARACTER_ID;
             _dummyRowInDatabaseItem.CurrentBid = BID;
+            _dummyRowInDatabaseItem.SecondsUntilExpiryTime = AuctionService.SECONDS_IN_AN_HOUR;
             _dummyRowInDatabaseItem.IsCancellable = true;
 
             AuctionItem auctionItem = new AuctionItem();
@@ -220,6 +227,7 @@ namespace Necromancy.Test.Systems
             //SETUP
             _dummyRowInDatabaseItem.BidderID = CHARACTER_ID;
             _dummyRowInDatabaseItem.CurrentBid = BID;
+            _dummyRowInDatabaseItem.SecondsUntilExpiryTime = AuctionService.SECONDS_IN_AN_HOUR;
             _dummyRowInDatabaseItem.IsCancellable = false;
 
             AuctionItem auctionItem = new AuctionItem();
@@ -228,6 +236,23 @@ namespace Necromancy.Test.Systems
             //EXERCISE AND VERIFY
             AuctionException e = Assert.ThrowsException<AuctionException>(() => _dummyAuctionService.CancelBid(auctionItem));
             Assert.AreEqual(AuctionException.AuctionExceptionType.AnotherCharacterAlreadyBid, e.Type);
+        }
+
+        [TestMethod]
+        public void TestCancelBidNoCancelExpiry()
+        {
+            //SETUP
+            _dummyRowInDatabaseItem.BidderID = CHARACTER_ID;
+            _dummyRowInDatabaseItem.CurrentBid = BID;
+            _dummyRowInDatabaseItem.SecondsUntilExpiryTime = AuctionService.SECONDS_IN_AN_HOUR - 1;
+            _dummyRowInDatabaseItem.IsCancellable = true;
+
+            AuctionItem auctionItem = new AuctionItem();
+            auctionItem.Id = DUMMY_ROW_IN_DATABASE_ID;
+
+            //EXERCISE AND VERIFY
+            AuctionException e = Assert.ThrowsException<AuctionException>(() => _dummyAuctionService.CancelBid(auctionItem));
+            Assert.AreEqual(AuctionException.AuctionExceptionType.NoCancelExpiry, e.Type);
         }
 
         [TestMethod]
@@ -269,7 +294,27 @@ namespace Necromancy.Test.Systems
         [TestMethod]
         public void TestSearch()
         {
+            //SETUP
+            SearchCriteria searchCriteria = new SearchCriteria();
 
+            //EXERCISE
+            AuctionItem[] results = _dummyAuctionService.Search(searchCriteria);
+
+            //VERIFY
+            Assert.IsNotNull(results);
+        }
+
+        [TestMethod]
+        public void TestSearchIllegalSearchQuery()
+        {
+            //SETUP
+            SearchCriteria searchCriteria = new SearchCriteria();
+            searchCriteria.Class = SearchCriteria.Classes.Priest - 10;
+            throw new NotImplementedException();
+
+            //EXERCISE AND VERIFY
+            AuctionException e = Assert.ThrowsException<AuctionException>(() => _dummyAuctionService.Search(searchCriteria));
+            Assert.AreEqual(AuctionException.AuctionExceptionType.IllegalSearchQuery, e.Type);
         }
     }
 }

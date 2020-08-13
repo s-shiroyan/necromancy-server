@@ -46,6 +46,7 @@ namespace Necromancy.Server.Systems.Auction_House
         public const int MAX_BIDS_NO_DIMENTO = 5;
         public const int MAX_LOTS = 5;
         public const int MAX_LOTS_NO_DIMENTO = 3;
+        public const int SECONDS_IN_AN_HOUR = 60 * 60;
 
         private const int ITEM_NOT_FOUND_ID = -1;
 
@@ -64,20 +65,18 @@ namespace Necromancy.Server.Systems.Auction_House
         {
             _client = nClient;
             _auctionDao = new AuctionDao();
-        }
-
-        
+        }        
 
         public void Bid(AuctionItem auctionItem, int bid)
         {
             auctionItem.BidderID = _client.Character.Id;
             auctionItem.CurrentBid = bid;
 
-            AuctionItem currentAuctionItem = _auctionDao.SelectItem(auctionItem.Id);
+            AuctionItem currentItem = _auctionDao.SelectItem(auctionItem.Id);
 
-            if (currentAuctionItem.Id == ITEM_NOT_FOUND_ID) throw new AuctionException(AuctionExceptionType.Generic);
+            if (currentItem.Id == ITEM_NOT_FOUND_ID) throw new AuctionException(AuctionExceptionType.Generic);            
 
-            if (auctionItem.CurrentBid < currentAuctionItem.CurrentBid) throw new AuctionException(AuctionExceptionType.NewBidLowerThanPrev);
+            if (auctionItem.CurrentBid < currentItem.CurrentBid) throw new AuctionException(AuctionExceptionType.NewBidLowerThanPrev);
             
             AuctionItem[] bids = _auctionDao.SelectBids(_client.Character);
             if(bids.Length >= MAX_BIDS) throw new AuctionException(AuctionExceptionType.BidSlotsFull);
@@ -95,8 +94,8 @@ namespace Necromancy.Server.Systems.Auction_House
         public void CancelBid(AuctionItem auctionItem)
         {
             AuctionItem currentItem = _auctionDao.SelectItem(auctionItem.Id);
+            if (currentItem.SecondsUntilExpiryTime < SECONDS_IN_AN_HOUR) throw new AuctionException(AuctionExceptionType.NoCancelExpiry);
             if (!currentItem.IsCancellable) throw new AuctionException(AuctionExceptionType.AnotherCharacterAlreadyBid);
-
 
             _auctionDao.AddGold(_client.Character, currentItem.CurrentBid);
 
