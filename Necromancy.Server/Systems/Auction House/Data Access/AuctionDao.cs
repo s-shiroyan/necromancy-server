@@ -15,7 +15,7 @@ namespace Necromancy.Server.Auction.Database
     {
         private const string SqlCreateItemsUpForAuctionView = @"
             DROP VIEW IF EXISTS [items_up_for_auction];
-            CREATE OR REPLACE TEMP VIEW items_up_for_auction
+            CREATE VIEW items_up_for_auction
 	            (
 		            id, 
                     consigner_id, 
@@ -31,23 +31,23 @@ namespace Necromancy.Server.Auction.Database
 	            )
             AS
             SELECT 			
-                nec_auction_items.id,
+                nec_auction_item.id,
                 consigner.id,
                 consigner.name,
-                nec_auction_items.item_spawn_id, 
-                nec_auction_items.quantity,
-                nec_auction_items.expiry_datetime, 
-                nec_auction_items.min_bid,
-                nec_auction_items.buyout_price, 
-                nec_auction_items.current_bid, 
-                nec_auction_items.bidder_id,
-                nec_auction_items.comment
+                nec_auction_item.item_spawn_id, 
+                nec_auction_item.quantity,
+                nec_auction_item.expiry_datetime, 
+                nec_auction_item.min_bid,
+                nec_auction_item.buyout_price, 
+                nec_auction_item.current_bid, 
+                nec_auction_item.bidder_id,
+                nec_auction_item.comment
             FROM 
-                nec_auction_items
+                nec_auction_item
 			INNER JOIN
 				nec_item_spawn spawn
 			ON
-				nec_auction_items.item_spawn_id = spawn.id
+				nec_auction_item.item_spawn_id = spawn.id
             INNER JOIN 
                 nec_character consigner
             ON 
@@ -55,7 +55,7 @@ namespace Necromancy.Server.Auction.Database
 
         private const string SqlInsertItem = @"
             INSERT INTO 
-                nec_auction_items 
+                nec_auction_item 
                 ( 
                     item_spawn_id, 
                     quantity, 
@@ -76,7 +76,7 @@ namespace Necromancy.Server.Auction.Database
 
         private const string SqlUpdateBid = @"
             UPDATE 
-                nec_auction_items 
+                nec_auction_item 
             SET 
                 bidder_id = @bidder_id, 
                 current_bid = @current_bid, 
@@ -118,7 +118,7 @@ namespace Necromancy.Server.Auction.Database
 
         private void CreateView()
         {
-            ExecuteNonQuery(SqlCreateItemsUpForAuctionView, null);
+            ExecuteNonQuery(SqlCreateItemsUpForAuctionView, command => { });
         }
 
         public bool InsertItem(AuctionItem auctionItem)
@@ -128,7 +128,7 @@ namespace Necromancy.Server.Auction.Database
                     AddParameter(command, "@character_id", auctionItem.ConsignerID);
                     AddParameter(command, "@spawn_id", auctionItem.SpawnedItemID);
                     AddParameter(command, "@quantity", auctionItem.Quantity);
-                    AddParameter(command, "@expiry_datetime", calcExpiryTime(auctionItem.SecondsUntilExpiryTime));
+                    AddParameter(command, "@expiry_datetime", CalcExpiryTime(auctionItem.SecondsUntilExpiryTime));
                     AddParameter(command, "@min_bid", auctionItem.MinimumBid);
                     AddParameter(command, "@buyout_price", auctionItem.BuyoutPrice);
                     AddParameter(command, "@comment", auctionItem.Comment);
@@ -145,7 +145,7 @@ namespace Necromancy.Server.Auction.Database
                     AddParameter(command, "@id", auctionItemId);
                 }, reader =>
                 {
-                    makeAuctionItem(reader);
+                    MakeAuctionItem(reader);
                 });
             return auctionItem;
         }
@@ -173,7 +173,7 @@ namespace Necromancy.Server.Auction.Database
                     while (reader.Read())
                     {
                         if (i >= AuctionService.MAX_BIDS) break;
-                        AuctionItem bid = makeAuctionItem(reader);
+                        AuctionItem bid = MakeAuctionItem(reader);
                         bids[i] = bid;
                         i++;
                     }
@@ -196,7 +196,7 @@ namespace Necromancy.Server.Auction.Database
                     while (reader.Read())
                     {
                         if (i >= AuctionService.MAX_LOTS) break;
-                        AuctionItem lot = makeAuctionItem(reader);
+                        AuctionItem lot = MakeAuctionItem(reader);
                         lots[i] = lot;
                         i++;
                     }
@@ -206,7 +206,7 @@ namespace Necromancy.Server.Auction.Database
             return truncatedLots;
         }
 
-        private AuctionItem makeAuctionItem(DbDataReader reader)
+        private AuctionItem MakeAuctionItem(DbDataReader reader)
         {
             AuctionItem auctionItem = new AuctionItem();
             auctionItem.Id = reader.GetInt32("id");
@@ -214,7 +214,7 @@ namespace Necromancy.Server.Auction.Database
             auctionItem.ConsignerName = reader.GetString("consigner_name");
             auctionItem.SpawnedItemID = reader.GetInt64("spawn_id");
             auctionItem.Quantity = reader.GetInt32("quantity");
-            auctionItem.SecondsUntilExpiryTime = calcSecondsToExpiry(reader.GetInt64("expiry_datetime"));
+            auctionItem.SecondsUntilExpiryTime = CalcSecondsToExpiry(reader.GetInt64("expiry_datetime"));
             auctionItem.MinimumBid = reader.GetInt32("min_bid");
             auctionItem.BuyoutPrice = reader.GetInt32("buyout_price");
             auctionItem.CurrentBid = reader.GetInt32("current_bid");
@@ -223,14 +223,14 @@ namespace Necromancy.Server.Auction.Database
             return auctionItem;
         }
 
-        private int calcSecondsToExpiry(long unixTimeSecondsExpiry)
+        private int CalcSecondsToExpiry(long unixTimeSecondsExpiry)
         {
             DateTime dNow = DateTime.Now;
             DateTimeOffset dOffsetNow = new DateTimeOffset(dNow);
             return ((int)(unixTimeSecondsExpiry - dOffsetNow.ToUnixTimeSeconds()));
         }
 
-        private long calcExpiryTime(int secondsToExpiry)
+        private long CalcExpiryTime(int secondsToExpiry)
         {
             DateTime dNow = DateTime.Now;
             DateTimeOffset dOffsetNow = new DateTimeOffset(dNow);
