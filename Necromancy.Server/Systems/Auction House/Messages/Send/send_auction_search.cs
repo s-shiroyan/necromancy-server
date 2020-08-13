@@ -24,7 +24,7 @@ namespace Necromancy.Server.Systems.Auction_House
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-            int NUMBER_OF_ITEMS_DEBUG = 16;
+            int NUMBER_OF_ITEMS_DEBUG = 8;
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
@@ -58,8 +58,8 @@ namespace Necromancy.Server.Systems.Auction_House
 
                 r0.WriteByte((byte)i); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
                 r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
-                r0.WriteInt16((short)(i)); // VERIFIED slot in bag
-                r0.WriteInt32(0); // equips item to this slot ItemEquipSlot
+                r0.WriteInt16((short)1); // VERIFIED slot in bag
+                r0.WriteInt32((int)ItemEquipSlot.Belt); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag (maybe more) cannot be equipped.
                 r0.WriteInt64(long.MaxValue); //unknown
                 r0.WriteInt32(1); //unknown
 
@@ -121,10 +121,10 @@ namespace Necromancy.Server.Systems.Auction_House
 
             res.WriteInt32(NUMBER_OF_ITEMS_DEBUG); // number of loops
 
-            for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
+            for (int i = 0; i < 1; i++)
             {
                 string hellothere = i.ToString() + " " + Convert.ToString(i, 2).PadLeft(8, '0'); ;
-                res.WriteInt32(i * 2); //row identifier 
+                res.WriteInt32(i); //row identifier 
                 res.WriteInt64(i + 300); //spawned item id
                 res.WriteInt32(17); // Lowest
                 res.WriteInt32(500); // Buy Now

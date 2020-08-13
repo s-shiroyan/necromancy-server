@@ -14,8 +14,8 @@ namespace Necromancy.Server.Auction.Database
     public class AuctionDao : DatabaseAccessObject, IAuctionDao
     {
         private const string SqlCreateItemsUpForAuctionView = @"
-            DROP VIEW IF EXISTS [items_up_for_auction];
-            CREATE VIEW items_up_for_auction
+            DROP VIEW IF EXISTS items_up_for_auction;
+            CREATE VIEW IF NOT EXISTS items_up_for_auction
 	            (
 		            id, 
                     consigner_id, 
