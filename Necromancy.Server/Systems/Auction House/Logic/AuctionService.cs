@@ -47,6 +47,7 @@ namespace Necromancy.Server.Systems.Auction_House
         public const int MAX_LOTS = 5;
         public const int MAX_LOTS_NO_DIMENTO = 3;
         public const int SECONDS_IN_AN_HOUR = 60 * 60;
+        public const int MAX_SEARCH_RESULTS = 100;
 
         private const int ITEM_NOT_FOUND_ID = -1;
 

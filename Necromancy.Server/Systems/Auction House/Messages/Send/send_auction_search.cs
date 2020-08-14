@@ -23,8 +23,8 @@ namespace Necromancy.Server.Systems.Auction_House
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-
-            int NUMBER_OF_ITEMS_DEBUG = 8;
+            Logger.Info("YEFAS2F");
+            int NUMBER_OF_ITEMS_DEBUG = 24;
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
@@ -37,11 +37,11 @@ namespace Necromancy.Server.Systems.Auction_House
                 r0.WriteInt32((int)ItemStatuses.Normal); //statuses
                 r0.WriteInt32(200901); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass
 
-                r0.WriteByte(5); //unknown
-                r0.WriteByte(5); //unknown
-                r0.WriteByte(5); //unknown
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(1); //unknown
+                r0.WriteByte(1); //unknown
 
-                r0.WriteInt32(0); // base item id?
+                r0.WriteInt32(0); // base item id? tested a bit
                 r0.WriteByte(1); //unknown 
                 r0.WriteByte(1); //unknown
                 r0.WriteByte(1); //unknown
@@ -56,12 +56,12 @@ namespace Necromancy.Server.Systems.Auction_House
 
                 r0.WriteByte(1); //unknown
 
-                r0.WriteByte((byte)i); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
-                r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
-                r0.WriteInt16((short)1); // VERIFIED slot in bag
-                r0.WriteInt32((int)ItemEquipSlot.Belt); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag (maybe more) cannot be equipped.
-                r0.WriteInt64(long.MaxValue); //unknown
-                r0.WriteInt32(1); //unknown
+                r0.WriteByte((byte) i); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
+                r0.WriteByte((byte)0); // 0~2 bag slot?, crashes if no bag equipped in slot
+                r0.WriteInt16((short) i); // VERIFIED slot in bag
+                r0.WriteInt32((int)ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag (maybe more) cannot be equipped.
+                r0.WriteInt64(0); //unknown tested a bit
+                r0.WriteInt32(1); //unknown tested a bit
 
                 Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
 
@@ -120,8 +120,8 @@ namespace Necromancy.Server.Systems.Auction_House
             res.WriteInt32(0); // error
 
             res.WriteInt32(NUMBER_OF_ITEMS_DEBUG); // number of loops
-
-            for (int i = 0; i < 1; i++)
+            
+            for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
                 string hellothere = i.ToString() + " " + Convert.ToString(i, 2).PadLeft(8, '0'); ;
                 res.WriteInt32(i); //row identifier 
@@ -180,8 +180,9 @@ namespace Necromancy.Server.Systems.Auction_House
             Equipment       = 1,
             RoyalBag        = 2,
             Warehouse       = 3,
+            //probably warehouse expansions
             WarehouseSp     = 10,
-            AvatarInventory = 12
+            AvatarInventory = 12 //seems to be max
         }
     }
 }

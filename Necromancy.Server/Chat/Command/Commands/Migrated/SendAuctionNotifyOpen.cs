@@ -18,9 +18,10 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            AuctionService auctionHouse = new AuctionService(client);
-            AuctionItem[] lots = auctionHouse.GetLots();
-            AuctionItem[] bids = auctionHouse.GetBids();
+            //AuctionService auctionHouse = new AuctionService(client);
+            AuctionItem[] lots = new AuctionItem[0]; //TODO auctionHouse.GetLots();
+            AuctionItem[] bids = new AuctionItem[0]; //TODO auctionHouse.GetBids();
+            const byte isInMaintenanceMode = 0x0;
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(lots.Length);      
@@ -61,7 +62,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(0); // unknown
             }
 
-            res.WriteByte(0); // bool  | what?
+            res.WriteByte(isInMaintenanceMode); // bool  IsInMaintenanceMode
             Router.Send(client, (ushort) AreaPacketId.recv_auction_notify_open, res, ServerType.Area);
         }
 

@@ -31,6 +31,7 @@ namespace Necromancy.Server.Systems
             sqLiteConnStrBuilder.DataSource = "Database\\db.sqlite";            
             sqLiteConnStrBuilder.Version = 3; 
             sqLiteConnStrBuilder.Pooling = true;
+            sqLiteConnStrBuilder.ForeignKeys = true;
             sqLiteConnStrBuilder.Flags = sqLiteConnStrBuilder.Flags & SQLiteConnectionFlags.StrictConformance;
             return sqLiteConnStrBuilder.ConnectionString;
         }

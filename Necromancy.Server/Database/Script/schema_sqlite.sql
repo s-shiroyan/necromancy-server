@@ -429,6 +429,19 @@ CREATE TABLE IF NOT EXISTS "nec_auction_item" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
+CREATE TABLE IF NOT EXISTS `nec_item_spawn` (
+	`id`	                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`character_id`	        INTEGER NOT NULL,
+	`item_id`	            INTEGER NOT NULL,
+	`quantity`	            INTEGER NOT NULL,
+	`current_durability`	INTEGER NOT NULL,
+    `storage_type`          INTEGER NOT NULL,   --ToDo identify Union location and avatar location bytes
+	`bag`	                INTEGER NOT NULL,	
+	`slot`	                INTEGER NOT NULL,	
+    `state`	                INTEGER NOT NULL,	--equipped, soulbound, at auction, in shop. placeholder for bitmask.
+	CONSTRAINT `fk_nec_item_spawn_item_id` FOREIGN KEY(`item_id`) REFERENCES `nec_item_library`(`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `nec_item_character_bag` (
 	`id`	    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`char_id`	INTEGER NOT NULL,

@@ -18,20 +18,7 @@
         <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />      
         <PackageReference Include="Discord.Net" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
-    </ItemGroup>
-    <ItemGroup>
-        <ContentWithTargetPath Include="Database\Script\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Database\Script\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="Client\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Client\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
-        </ContentWithTargetPath>
-    </ItemGroup>
-    <ItemGroup>
-      <ContentWithTargetPath Remove="Database\Script\data_item_library0.sql" />
-    </ItemGroup>
+    </ItemGroup>   
     <ItemGroup>
       <Folder Include="Systems\Inventory\Messages\Recieve\" />
       <Folder Include="Systems\Inventory\Messages\Send\" />
