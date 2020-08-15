@@ -505,6 +505,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_forge_check(this));
             _areaConsumer.AddHandler(new send_gem_close(this));
             _areaConsumer.AddHandler(new send_shop_buy(this));
+            _areaConsumer.AddHandler(new send_event_union_storage_close(this));
         }
     }
 }
