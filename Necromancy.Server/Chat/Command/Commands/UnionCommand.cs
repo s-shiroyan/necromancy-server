@@ -74,6 +74,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "storage":
+                    //Start an event
+                    IBuffer res35 = BufferProvider.Provide();
+                    res35.WriteInt32(0);
+                    res35.WriteByte(0);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_event_start, res35, ServerType.Area);
+                    //Open union storage
                     res36.WriteInt64(1);
                     res36.WriteInt64(1);
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_event_union_storage_open, res36,

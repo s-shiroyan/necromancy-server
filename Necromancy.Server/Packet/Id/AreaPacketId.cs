@@ -797,7 +797,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_system_message_timer_r = 0xF9B8,
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
-        send_event_union_storage_close = 0x93, //opcode not found
+        send_event_union_storage_close = 0xA2A5,
         send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found
         send_forge_sp_check = 0x96, //opcode not found

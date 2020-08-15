@@ -502,6 +502,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_equip_honor(this));
             _areaConsumer.AddHandler(new send_update_honor(this));
             _areaConsumer.AddHandler(new send_forge_check(this));
+            _areaConsumer.AddHandler(new send_event_union_storage_close(this));
         }
     }
 }
