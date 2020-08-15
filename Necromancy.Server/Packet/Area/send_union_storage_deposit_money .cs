@@ -16,9 +16,21 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            byte unknown = packet.Data.ReadByte();
+            long DepositeGold = packet.Data.ReadInt64();
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_union_storage_deposit_money_r, res, ServerType.Area);
+            res.WriteInt32(0);  // 0 to work
+            Router.Send(client, (ushort)AreaPacketId.recv_union_storage_deposit_money_r, res, ServerType.Area);
+
+            //To-Do,  make a variable to track union gold
+            client.Character.AdventureBagGold -= DepositeGold; //Updates your Character.AdventureBagGold
+            client.Soul.WarehouseGold += DepositeGold; //Updates your Soul.warehouseGold
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(client.Character.AdventureBagGold); // Sets your Adventure Bag Gold
+            Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res, ServerType.Area);
+
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Necromancy.Server.Model.ItemModel
         private const int bagSize = 24; //temporary
         private const int cloakRoomTabSize = 32;
         private const int avatarTabSize = 50;
+        private const int unionTabSize = 50;
 
         private Logger logger;
         public Inventory()
@@ -32,13 +33,13 @@ namespace Necromancy.Server.Model.ItemModel
             _avatar.Add(1, new InventoryItem[avatarTabSize]);
             _avatar.Add(2, new InventoryItem[avatarTabSize]);
             _unionStorage = new Dictionary<byte, InventoryItem[]>();
-            _unionStorage.Add(0, new InventoryItem[bagSize]);
+            _unionStorage.Add(0, new InventoryItem[unionTabSize]);
 
             _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
             _storageContainers.Add(0, _inventory);
             _storageContainers.Add(3, _cloakRoom);
             _storageContainers.Add(4, _avatar);
-            _storageContainers.Add(5, _unionStorage);
+            _storageContainers.Add(0x51, _unionStorage);
         }
         public void Equip(InventoryItem inventoryItem)
         {

@@ -21,7 +21,6 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            // [0 = adventure bag. 1 = character equipment], [then unknown byte], [then slot], [then unknown]
             byte fromStoreType = packet.Data.ReadByte();
             byte fromBagId = packet.Data.ReadByte();
             short fromSlot = packet.Data.ReadInt16();
