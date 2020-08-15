@@ -31,6 +31,11 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt64(client.Character.AdventureBagGold); // Sets your Adventure Bag Gold
             Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res, ServerType.Area);
 
+            res = BufferProvider.Provide();
+            res.WriteByte(unknown);
+            res.WriteInt64(client.Soul.WarehouseGold/*client.Union.GeneralSafeGold*/);
+            Router.Send(client.Union.UnionMembers, (ushort)AreaPacketId.recv_event_union_storage_update_money, res, ServerType.Area);
+
         }
     }
 }
