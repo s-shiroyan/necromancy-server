@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Model.ItemModel;
+using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -577,30 +580,44 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
+                int numItems = 6;
+                int[] DonkeyItems = new int[] { 100101, 50100301, 50100302, 50100401, 50100402, 70000301, 100101, 110101, 120101, 200101, 210101, 220101, 300101, 310101, 320101, 400101, 410101, 420101, 500101, 510101, 520101, 10200101, 10300101, 11000101, 11300101, 10210003, 15000101,15300003 };
+                int[] DonkeyPrices = new int[] {100,02,100,10,500,500,400,280,350,1100,1000,1000,500,450,450,300,350,250,450,400,450,1450,1500,1400,1550,1000,1500,1500 };
                 IBuffer res = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
                 res.WriteInt16(14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
                 res.WriteInt32(0);
                 res.WriteInt32(0);
-                res.WriteByte(12);
+                res.WriteByte((byte)numItems);
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res, ServerType.Area);
+                Character character = client.Character;
 
-                for(int i = 0; i < 12; i++)
+                for (int i = 0; i < numItems; i++)
                 {
+
+                    Item item = Server.Items[DonkeyItems[i]];
+
+                    // Create InventoryItem
+                    InventoryItem inventoryItem = new InventoryItem();
+                    inventoryItem.Item = item;
+                    inventoryItem.ItemId = item.Id;
+
+
                     res = BufferProvider.Provide();
                     res.WriteByte((byte)i); //idx
-                    res.WriteUInt32(10200101); // item Serial id
-                    res.WriteInt64(10200101); // item price
-                    res.WriteFixedString("Dagger", 0x10); // ?
+                    res.WriteInt32(inventoryItem.Item.Id); // item Serial id
+                    res.WriteInt64(DonkeyPrices[i]); // item price
+                    res.WriteFixedString($"{inventoryItem.Item.Name}", 0x10); // ?
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+                    character.Inventory.AddInventoryItem(inventoryItem);
 
-                    res = BufferProvider.Provide();
-                    res.WriteInt64(i); // id?
-                    res.WriteInt64(10200101); // price?
-                    res.WriteInt64(10200101); // identify?
-                    res.WriteInt64(10200101); // curse?
-                    res.WriteInt64(10200101); // repair?
-                    Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
+                    RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+                    Router.Send(recvItemInstance, client);
+                    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem); //do some testing without the state bit set to inentifried
+                    Router.Send(recvItemInstanceUnidentified, client);
+
+
+
 
                 }
                 res = BufferProvider.Provide();
@@ -614,7 +631,7 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteFixedString("UNKNOWN", 0xC1);
                 }
 
-                Router.Send(client, (ushort)0xBA61, res, ServerType.Area);
+               // Router.Send(client, (ushort)0xBA61, res, ServerType.Area);
 
                 res = BufferProvider.Provide();
 
@@ -625,7 +642,7 @@ namespace Necromancy.Server.Packet.Area
                     res.WriteInt16((short)k);
                     res.WriteInt32(10500501);
                 }
-                Router.Send(client, (ushort)0x8D62, res, ServerType.Area);
+                //Router.Send(client, (ushort)0x8D62, res, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
