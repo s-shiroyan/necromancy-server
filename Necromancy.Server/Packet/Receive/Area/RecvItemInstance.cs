@@ -23,10 +23,10 @@ namespace Necromancy.Server.Packet.Receive.Area
             IBuffer res = BufferProvider.Provide();
 
             res.WriteUInt64((ulong)_inventoryItem.Id);
-            res.WriteInt32((int)_inventoryItem.CurrentEquipmentSlotType);
+            res.WriteInt32(_inventoryItem.Item.Id); //item Icon  
             res.WriteByte(_inventoryItem.Quantity);
-            res.WriteInt32(_inventoryItem.Id); //?????
-            res.WriteFixedString($"TEST3", 0x10);
+            res.WriteInt32(_inventoryItem.Item.Id); //?????
+            res.WriteFixedString($"POOR", 0x10);
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);

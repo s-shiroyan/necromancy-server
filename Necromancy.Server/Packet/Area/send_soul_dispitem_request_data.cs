@@ -47,7 +47,7 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(recvItemInstance, client);
 
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem); //do some testing without the state bit set to inentifried
-                Router.Send(recvItemInstanceUnidentified, client);
+                //Router.Send(recvItemInstanceUnidentified, client); //Commented out for testing identify NPC
 
                 itemStats(inventoryItem, client);
 
