@@ -9,14 +9,14 @@ namespace Necromancy.Server.Systems.Auction_House.Logic
     {
         [Flags]
         public enum Qualities
-        {
-            None        = 0x0 << 0,  
+        {              
             Poor        = 0x1 << 0,  
             Normal      = 0x1 << 1,  
             Good        = 0x1 << 2,  
-            Master      = 0x1 << 3,  
-            Artifact    = 0x1 << 4,
-            All         = Poor & Normal & Good & Master & Artifact
+            Master      = 0x1 << 3,
+            Legend      = 0x1 << 4,
+            Artifact    = 0x1 << 5,
+            All         = Poor & Normal & Good & Master & Legend & Artifact
         }
 
         [Flags]

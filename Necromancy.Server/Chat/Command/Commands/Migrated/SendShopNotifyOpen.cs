@@ -17,7 +17,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             List<ChatResponse> responses)
         {
             IBuffer res0 = BufferProvider.Provide();
-            res0.WriteInt16(2);
+            res0.WriteInt16(14);
             /* Shop ID, 0 it's forge, 1 it's cursed, 2 Purchase shop, 3 purchase and curse, 4 it's sell, 
                         5 sell and curse. 6 purchase and sell. 7 Purchase, Sell, Curse.
                         

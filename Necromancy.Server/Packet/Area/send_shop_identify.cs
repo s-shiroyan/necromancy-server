@@ -1,5 +1,7 @@
 using Arrowgene.Buffers;
+using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using System;
@@ -8,6 +10,8 @@ namespace Necromancy.Server.Packet.Area
 {
     public class send_shop_identify : ClientHandler
     {
+
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_shop_identify));
         public send_shop_identify(NecServer server) : base(server)
         {
         }
@@ -17,13 +21,102 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int itemId = 10200101;
+            byte itemZone = packet.Data.ReadByte();
+            byte itemBag = packet.Data.ReadByte();
+            byte itemSlot = packet.Data.ReadByte();
+
+            //Logger.Debug(client, itemId + " ItemID Identify");
+            IBuffer r1 = BufferProvider.Provide();
+            r1.WriteInt64(300); //spawned item iD
+            r1.WriteInt32((int)11300101); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
+            r1.WriteByte((byte)1); //quantity
+            r1.WriteInt32((int)2); //Item status
+            r1.WriteFixedString("Derp", 16);
+            r1.WriteByte((byte)itemZone); // V | ItemZone - storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
+            r1.WriteByte((byte)itemBag); // V | bag id 0~2
+            r1.WriteInt16((short)itemSlot); // V | bag slot
+            r1.WriteInt32((int)0); // V | ItemEquipSlot - equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
+            r1.WriteInt32((int)11300101); //Spirit_eq_mask?? _inventoryItem.State // no clue
+            r1.WriteByte((byte)3); // V | enhancement level +1, +2 etc
+            r1.WriteByte(0); //unknown
+            r1.WriteCString(""); // _inventoryItem.Item.Name find max size 
+            r1.WriteInt16((short)001); //unknown
+            r1.WriteInt16((short)01); //unknown
+            r1.WriteInt32((int)11300101); //unknown
+            r1.WriteByte(0); //unknown
+            r1.WriteInt32((int)11300101); //channel? _client.Character.InstanceId
+
+            const int MAX_WHATEVER_SLOTS = 2;
+            const int numEntries = 2;
+            r1.WriteInt32(numEntries); // less than or equal to 2
+            for (int j = 0; j < numEntries; j++)
+            {
+                r1.WriteInt32(0); //Shop related? "can not equip items listed in your shop" Util.GetRandomNumber(1, 10)
+            }
+
+            const int MAX_GEM_SLOTS = 3;
+            const int numGemSlots = 1;
+            r1.WriteInt32(numGemSlots); //VERIFIED Count of Gem Slots. less than or equal to 3
+            for (int j = 0; j < numGemSlots; j++)
+            {
+                r1.WriteByte(1); //VERIFIED GEM SLOT ACTIVE
+                r1.WriteInt32(3); //slot type 1 round, 2 triangle, 3 diamond
+                r1.WriteInt32(0);// theory GEM ID 1
+                r1.WriteInt32(0);// theory gem id 2.  Diamonds were two Gems combined to one
+            }
+
+            r1.WriteInt32(0); //unknown
+            r1.WriteInt32(0); //unknown
+            r1.WriteInt16((short)0); //unknown
+            r1.WriteInt32(0); //enchant id 
+            r1.WriteInt16((short)0); // unknown
+
+
+            IBuffer r0 = BufferProvider.Provide();
+            r0.WriteInt64(301); //V | SPAWN ID
+            r0.WriteCString("Durka Durka"); // V | DISPLAY NAME
+            r0.WriteInt32((int)ItemType.ARMOR_TOPS); // V | ITEM TYPE
+            r0.WriteInt32((int)(1 << 4)); // equip slot display on icon AND WHERE CLIENT SAYS YOU CAN EQUIP
+            r0.WriteByte((byte)1); //V | QUANTITY
+            r0.WriteInt32((int)2); //V | STATUS, CURSED / BESSED / ETC
+            r0.WriteInt32(11300101); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass | 90012001 bag?  always 8
+
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //unknown
+
+            r0.WriteInt32(11300101); // base item id? tested a bit
+            r0.WriteByte((byte)1); //unknown 
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //unknown
+
+            r0.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+            r0.WriteByte(0); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+            r0.WriteByte(1); // bool
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //unknown
+            r0.WriteByte((byte)1); //texture related
+
+            r0.WriteByte((byte)1); //unknown
+
+            r0.WriteByte((byte)0); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
+            r0.WriteByte((byte)itemBag); // 0~2 bag slot?, crashes if no bag equipped in slot
+            r0.WriteInt16((short) (itemSlot + 1)); // VERIFIED slot in bag
+            r0.WriteInt32((int)0); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
+            r0.WriteInt64(300); //unknown tested a bit maybe sale price?
+            r0.WriteInt32(1); //unknown tested a bit something to do with gems?
+
+            //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+
+           // Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(0); //error message 1 "You cannot identify items you have already identified
             Router.Send(client.Map, (ushort)AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
 
-            SendItemInstanceUnidentified(client, itemId);
+            //SendItemInstanceUnidentified(client, itemId);
         }
 
         private void SendItemInstanceUnidentified(NecClient client, int itemId)

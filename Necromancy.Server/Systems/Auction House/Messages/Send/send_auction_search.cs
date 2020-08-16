@@ -5,6 +5,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Auction_House.Logic;
 using System;
 using System.Text;
 
@@ -23,38 +24,48 @@ namespace Necromancy.Server.Systems.Auction_House
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            SearchCriteria searchCriteria = new SearchCriteria();
+            searchCriteria.SoulRankMin = packet.Data.ReadByte();
+            searchCriteria.SoulRankMax = packet.Data.ReadByte();
+            searchCriteria.ForgePriceMin = packet.Data.ReadByte();
+            searchCriteria.ForgePriceMax = packet.Data.ReadByte();
+            searchCriteria.Quality = (SearchCriteria.Qualities) packet.Data.ReadInt16();
+            searchCriteria.Class = (SearchCriteria.Classes) packet.Data.ReadInt16();
+
+
+
             Logger.Info("YEFAS2F");
-            int NUMBER_OF_ITEMS_DEBUG = 100;
+            int NUMBER_OF_ITEMS_DEBUG = 1;
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
 
                 IBuffer r1 = BufferProvider.Provide();
                 r1.WriteInt64(i + 300); //spawned item iD
-                r1.WriteInt32((int)ItemType.ARMOR_TOPS); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
+                r1.WriteInt32((int)0); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
                 r1.WriteByte((byte)i); //quantity
-                r1.WriteInt32((int)ItemStatuses.Cursed); //Item status
+                r1.WriteInt32((int)ItemStatuses.IsUnidentified); //Item status
                 r1.WriteFixedString("", 16);
-                r1.WriteByte((byte)ItemZone.AvatarInventory); // storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
+                r1.WriteByte((byte)ItemZone.AdventureBag); // storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
                 r1.WriteByte((byte)( i  / 50)); // bag id 0~2
                 r1.WriteInt16((short) ( i % 50)); //bag slot
                 r1.WriteInt32((int)ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
                 r1.WriteInt32((int)ItemType.ARMOR_TOPS); //Spirit_eq_mask?? _inventoryItem.State // no clue
                 r1.WriteByte((byte) i); // enhancement level +1, +2 etc
                 r1.WriteByte(0); //unknown
-                r1.WriteCString("TEST,POOR,193,,,,,"); // _inventoryItem.Item.Name find max size 
-                r1.WriteInt16((short)0); //unknown
-                r1.WriteInt16((short)0); //unknown
-                r1.WriteInt32((int)ItemType.ARMOR_TOPS); //unknown
-                r1.WriteByte(0); //unknown
-                r1.WriteInt32((int)ItemType.ARMOR_TOPS); //channel? _client.Character.InstanceId
+                r1.WriteCString(""); // _inventoryItem.Item.Name find max size 
+                r1.WriteInt16((short)i); //unknown
+                r1.WriteInt16((short)i); //unknown
+                r1.WriteInt32((int)i); //unknown
+                r1.WriteByte((byte)i); //unknown
+                r1.WriteInt32((int)i); //channel? _client.Character.InstanceId
 
                 const int MAX_WHATEVER_SLOTS = 2;
                 const int numEntries = 2;
                 r1.WriteInt32(numEntries); // less than or equal to 2
                 for (int j = 0; j < numEntries; j++)
                 {
-                    r1.WriteInt32(0); //Shop related? "can not equip items listed in your shop" Util.GetRandomNumber(1, 10)
+                    r1.WriteInt32((byte)i); //Shop related? "can not equip items listed in your shop" Util.GetRandomNumber(1, 10)
                 }
 
                 const int MAX_GEM_SLOTS = 3;
@@ -68,11 +79,11 @@ namespace Necromancy.Server.Systems.Auction_House
                     r1.WriteInt32(0);// theory gem id 2.  Diamonds were two Gems combined to one
                 }
 
-                r1.WriteInt32(0); //unknown
-                r1.WriteInt32(0); //unknown
+                r1.WriteInt32(i); //unknown
+                r1.WriteInt32(i); //unknown
                 r1.WriteInt16((short)i); //unknown
-                r1.WriteInt32(0); //enchant id 
-                r1.WriteInt16((short)0); // unknown
+                r1.WriteInt32(i); //enchant id 
+                r1.WriteInt16((short)i); // unknown
 
                 IBuffer r0 = BufferProvider.Provide();
                 r0.WriteInt64(i + 300); //V | SPAWN ID
@@ -80,37 +91,45 @@ namespace Necromancy.Server.Systems.Auction_House
                 r0.WriteInt32((int)ItemType.ARMOR_TOPS); // V | ITEM TYPE
                 r0.WriteInt32((int)ItemEquipSlot.Torso); // equip slot display on icon AND WHERE CLIENT SAYS YOU CAN EQUIP
                 r0.WriteByte((byte) 1); //V | QUANTITY
-                r0.WriteInt32((int) ItemStatuses.Normal); //V | STATUS, CURSED / BESSED / ETC
-                r0.WriteInt32(200901); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass | 90012001 bag?
+                r0.WriteInt32((int) ItemStatuses.IsUnidentified); //V | STATUS, CURSED / BESSED / ETC
+                r0.WriteInt32(11300101); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass | 90012001 bag?  always 8
 
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //unknown
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //unknown
 
-                r0.WriteInt32(0); // base item id? tested a bit
-                r0.WriteByte(0); //unknown 
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //unknown
+                r0.WriteInt32(i); // base item id? tested a bit
+                r0.WriteByte((byte)i); //unknown 
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //unknown
 
                 r0.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 r0.WriteByte(0); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                r0.WriteByte(0); // bool
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //unknown
-                r0.WriteByte(0); //texture related
+                r0.WriteByte(1); // bool
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //unknown
+                r0.WriteByte((byte)i); //texture related
 
-                r0.WriteByte(0); //unknown
+                r0.WriteByte((byte)i); //unknown
 
-                r0.WriteByte((byte) ItemZone.AvatarInventory); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
-                r0.WriteByte((byte) (i / 50)); // 0~2 bag slot?, crashes if no bag equipped in slot
-                r0.WriteInt16((short) ( i % 50)); // VERIFIED slot in bag
+                r0.WriteByte((byte) ItemZone.AdventureBag); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
+                r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
+                r0.WriteInt16((short) i); // VERIFIED slot in bag
                 r0.WriteInt32((int) ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
-                r0.WriteInt64(0); //unknown tested a bit maybe sale price?
-                r0.WriteInt32(0); //unknown tested a bit something to do with gems?
+                r0.WriteInt64(50); //unknown tested a bit maybe sale price?
+                r0.WriteInt32(i); //unknown tested a bit something to do with gems?
 
-                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
+                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+
+                IBuffer r8 = BufferProvider.Provide();
+                r8.WriteInt64(i + 300); // id?
+                r8.WriteInt64(i + 100); // price
+                r8.WriteInt64(i + 200); // identify
+                r8.WriteInt64(i + 300); // curse?
+                r8.WriteInt64(i + 400); // repair?
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, r8, ServerType.Area);
 
                 IBuffer r4 = BufferProvider.Provide();
                 r4 = BufferProvider.Provide();
@@ -143,7 +162,7 @@ namespace Necromancy.Server.Systems.Auction_House
 
                 //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_update_place, r3, ServerType.Area);
 
-            }
+            }            
 
             Logger.Info("YEFASF");
             IBuffer res = BufferProvider.Provide();
@@ -154,8 +173,8 @@ namespace Necromancy.Server.Systems.Auction_House
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
                 string hellothere = i.ToString() + " " + Convert.ToString(i, 2).PadLeft(8, '0'); ;
-                res.WriteInt32(i + 300); //row identifier 
-                res.WriteInt64(1); //spawned item id
+                res.WriteInt32(i); //row identifier 
+                res.WriteInt64(i + 300); //spawned item id
                 res.WriteInt32(17); // Lowest
                 res.WriteInt32(500); // Buy Now
                 res.WriteFixedString(hellothere, 49); // Soul Name Of Sellers
@@ -215,6 +234,17 @@ namespace Necromancy.Server.Systems.Auction_House
             UNKNOWN2MAYBEOTHERPLAYERS        = 9, //shows item 
             WarehouseSp     = 10,
             AvatarInventory = 12 //seems to be max
+        }
+
+        [Flags]
+        private enum ItemRarity
+        {
+            Poor        = 1 << 1,
+            Normal      = 1 << 2,
+            Good        = 1 << 3,
+            Master      = 1 << 4,
+            Legend      = 1 << 5,
+            Artifact    = 1 << 6
         }
     }
 }
