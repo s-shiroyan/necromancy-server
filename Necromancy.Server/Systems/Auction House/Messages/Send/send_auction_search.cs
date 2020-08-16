@@ -98,7 +98,7 @@ namespace Necromancy.Server.Systems.Auction_House
                 r0.WriteByte((byte)i); //unknown
                 r0.WriteByte((byte)i); //unknown
 
-                r0.WriteInt32(i); // base item id? tested a bit
+                r0.WriteInt32(11300101); // base item id? tested a bit
                 r0.WriteByte((byte)i); //unknown 
                 r0.WriteByte((byte)i); //unknown
                 r0.WriteByte((byte)i); //unknown
@@ -117,11 +117,11 @@ namespace Necromancy.Server.Systems.Auction_House
                 r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
                 r0.WriteInt16((short) i); // VERIFIED slot in bag
                 r0.WriteInt32((int) ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
-                r0.WriteInt64(50); //unknown tested a bit maybe sale price?
+                r0.WriteInt64(long.MaxValue); //unknown tested a bit maybe sale price?
                 r0.WriteInt32(i); //unknown tested a bit something to do with gems?
 
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
-                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
 
                 IBuffer r8 = BufferProvider.Provide();
                 r8.WriteInt64(i + 300); // id?

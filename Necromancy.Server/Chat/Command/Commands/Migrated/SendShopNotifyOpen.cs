@@ -40,7 +40,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //res.WriteByte(0);
             //res.WriteByte(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
 
 
 

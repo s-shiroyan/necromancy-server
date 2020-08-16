@@ -73,12 +73,12 @@ namespace Necromancy.Server.Packet.Area
 
 
             IBuffer r0 = BufferProvider.Provide();
-            r0.WriteInt64(301); //V | SPAWN ID
+            r0.WriteInt64(300); //V | SPAWN ID
             r0.WriteCString("Durka Durka"); // V | DISPLAY NAME
             r0.WriteInt32((int)ItemType.ARMOR_TOPS); // V | ITEM TYPE
             r0.WriteInt32((int)(1 << 4)); // equip slot display on icon AND WHERE CLIENT SAYS YOU CAN EQUIP
             r0.WriteByte((byte)1); //V | QUANTITY
-            r0.WriteInt32((int)2); //V | STATUS, CURSED / BESSED / ETC
+            r0.WriteInt32((int)1); //V | STATUS, CURSED / BESSED / ETC
             r0.WriteInt32(11300101); //Item icon 50100301 = camp | base item id | leadher guard 100101 | 50100502 bag medium | 200901 soldier cuirass | 90012001 bag?  always 8
 
             r0.WriteByte((byte)1); //unknown
@@ -102,13 +102,13 @@ namespace Necromancy.Server.Packet.Area
 
             r0.WriteByte((byte)0); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
             r0.WriteByte((byte)itemBag); // 0~2 bag slot?, crashes if no bag equipped in slot
-            r0.WriteInt16((short) (itemSlot + 1)); // VERIFIED slot in bag
+            r0.WriteInt16((short) itemSlot); // VERIFIED slot in bag
             r0.WriteInt32((int)0); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
-            r0.WriteInt64(300); //unknown tested a bit maybe sale price?
+            r0.WriteInt64(long.MaxValue); //unknown tested a bit maybe sale price?
             r0.WriteInt32(1); //unknown tested a bit something to do with gems?
 
             //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+            
 
            // Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
 
@@ -116,7 +116,14 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(0); //error message 1 "You cannot identify items you have already identified
             Router.Send(client.Map, (ushort)AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
 
+            Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+
             //SendItemInstanceUnidentified(client, itemId);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(300);
+            res.WriteInt32(0); // State bitmask
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
         }
 
         private void SendItemInstanceUnidentified(NecClient client, int itemId)
