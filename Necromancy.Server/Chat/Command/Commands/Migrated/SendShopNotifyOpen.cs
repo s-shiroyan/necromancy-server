@@ -16,6 +16,34 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteByte(0);
+
+            res.WriteInt32(0); // item id
+
+            res.WriteInt64(0); // item price
+
+            res.WriteByte(0); // loops 0x10 times assuming this is stats for weapon / armor
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+            //res.WriteByte(0);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
+
+
+
             IBuffer res0 = BufferProvider.Provide();
             res0.WriteInt16(14);
             /* Shop ID, 0 it's forge, 1 it's cursed, 2 Purchase shop, 3 purchase and curse, 4 it's sell, 
