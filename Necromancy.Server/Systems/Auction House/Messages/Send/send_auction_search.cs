@@ -35,30 +35,30 @@ namespace Necromancy.Server.Systems.Auction_House
 
 
             Logger.Info("YEFAS2F");
-            int NUMBER_OF_ITEMS_DEBUG = 1;
+            int NUMBER_OF_ITEMS_DEBUG = 100;
 
             for (int i = 0; i < NUMBER_OF_ITEMS_DEBUG; i++)
             {
 
                 IBuffer r1 = BufferProvider.Provide();
                 r1.WriteInt64(i + 300); //spawned item iD
-                r1.WriteInt32((int)1); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
-                r1.WriteByte((byte)i); //quantity
+                r1.WriteInt32((int)11300101); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
+                r1.WriteByte((byte)1); //quantity
                 r1.WriteInt32((int)ItemStatuses.IsUnidentified); //Item status
                 r1.WriteFixedString("TEST THIS", 16);
-                r1.WriteByte((byte)ItemZone.AdventureBag); // storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
+                r1.WriteByte((byte)ItemZone.AvatarInventory); // storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
                 r1.WriteByte((byte)( i  / 50)); // bag id 0~2
                 r1.WriteInt16((short) ( i % 50)); //bag slot
                 r1.WriteInt32((int)ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
-                r1.WriteInt32((int)ItemType.ARMOR_TOPS); //Spirit_eq_mask?? _inventoryItem.State // no clue
+                r1.WriteInt32((int)ItemStatuses.IsUnidentified); //Spirit_eq_mask?? _inventoryItem.State // no clue
                 r1.WriteByte((byte) i); // enhancement level +1, +2 etc
-                r1.WriteByte(0); //unknown
+                r1.WriteByte(1); //unknown
                 r1.WriteCString("FOUR SCORE"); // _inventoryItem.Item.Name find max size 
-                r1.WriteInt16((short)i); //unknown
-                r1.WriteInt16((short)i); //unknown
-                r1.WriteInt32((int)i); //unknown
-                r1.WriteByte((byte)i); //unknown
-                r1.WriteInt32((int)i); //channel? _client.Character.InstanceId
+                r1.WriteInt16((short)999); //unknown
+                r1.WriteInt16((short)2999); //unknown
+                r1.WriteInt32((int)19); //unknown
+                r1.WriteByte((byte)1); //unknown
+                r1.WriteInt32((int)2); //channel? _client.Character.InstanceId
 
                 const int MAX_WHATEVER_SLOTS = 2;
                 const int numEntries = 2;
@@ -113,15 +113,15 @@ namespace Necromancy.Server.Systems.Auction_House
 
                 r0.WriteByte((byte)i); //unknown
                     
-                r0.WriteByte((byte) ItemZone.AdventureBag); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
-                r0.WriteByte((byte) 0); // 0~2 bag slot?, crashes if no bag equipped in slot
-                r0.WriteInt16((short) i); // VERIFIED slot in bag
+                r0.WriteByte((byte) ItemZone.AvatarInventory); // 0 = adventure bag. 1 = character equipment 2 = Royal bag. _inventoryItem.StorageType
+                r0.WriteByte((byte) (i / 50)); // 0~2 bag slot?, crashes if no bag equipped in slot
+                r0.WriteInt16((short) (i % 50)); // VERIFIED slot in bag
                 r0.WriteInt32((int) ItemEquipSlot.None); // equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
                 r0.WriteInt64(long.MaxValue); //unknown tested a bit maybe sale price?
                 r0.WriteInt32(i); //unknown tested a bit something to do with gems?
 
-                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
-                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
+                Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance, r1, ServerType.Area);
+                //Router.Send(client.Map, (ushort)AreaPacketId.recv_item_instance_unidentified, r0, ServerType.Area);
 
                 IBuffer r8 = BufferProvider.Provide();
                 r8.WriteInt64(i + 300); // id?

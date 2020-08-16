@@ -30,21 +30,21 @@ namespace Necromancy.Server.Packet.Area
             r1.WriteInt64(300); //spawned item iD
             r1.WriteInt32((int)11300101); //equip slot flags? (int)_inventoryItem.CurrentEquipmentSlotType ?? no clue
             r1.WriteByte((byte)1); //quantity
-            r1.WriteInt32((int)2); //Item status
-            r1.WriteFixedString("Derp", 16);
+            r1.WriteInt32((int)0); //Item status
+            r1.WriteFixedString("? Shoes", 16);
             r1.WriteByte((byte)itemZone); // V | ItemZone - storage type 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             r1.WriteByte((byte)itemBag); // V | bag id 0~2
             r1.WriteInt16((short)itemSlot); // V | bag slot
-            r1.WriteInt32((int)0); // V | ItemEquipSlot - equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
-            r1.WriteInt32((int)11300101); //Spirit_eq_mask?? _inventoryItem.State // no clue
+            r1.WriteInt32((int)2); // V | ItemEquipSlot - equips item to this slot ItemEquipSlot items not in zone adventure bag, character equipment, and royal bag, avatar bag (maybe more) cannot be equipped.
+            r1.WriteInt32((int)2); //Spirit_eq_mask?? _inventoryItem.State // no clue
             r1.WriteByte((byte)3); // V | enhancement level +1, +2 etc
             r1.WriteByte(0); //unknown
             r1.WriteCString(""); // _inventoryItem.Item.Name find max size 
             r1.WriteInt16((short)001); //unknown
             r1.WriteInt16((short)01); //unknown
-            r1.WriteInt32((int)11300101); //unknown
-            r1.WriteByte(0); //unknown
-            r1.WriteInt32((int)11300101); //channel? _client.Character.InstanceId
+            r1.WriteInt32((int)2); //unknown
+            r1.WriteByte(1); //unknown
+            r1.WriteInt32((int)2); //channel? _client.Character.InstanceId
 
             const int MAX_WHATEVER_SLOTS = 2;
             const int numEntries = 2;
