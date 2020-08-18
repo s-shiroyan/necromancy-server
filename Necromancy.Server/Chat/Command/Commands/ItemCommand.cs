@@ -76,7 +76,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem,client);
             Router.Send(recvItemInstance, client);
-            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
             Router.Send(recvItemInstanceUnidentified, client);
             responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
             ConfigureItem(client, inventoryItem, itemLibrarySetting);

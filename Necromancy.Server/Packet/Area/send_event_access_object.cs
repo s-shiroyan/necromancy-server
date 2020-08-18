@@ -491,13 +491,9 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-
-
-
                 IBuffer res = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res.WriteInt16(
-                    0b11111010); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
+                res.WriteInt16((short)ShopType.Blacksmith); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
                 res.WriteUInt32(1);//tabs num
                 res.WriteInt32(10800405);// cash
                 res.WriteByte(0); //Items num for expected recv_shop_notify_open
@@ -515,8 +511,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res2 = BufferProvider.Provide();
                 res2.WriteCString($"{npcSpawn.Name}"); //Name
                 res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
-                res2.WriteCString(
-                    "This will be the Jeweler NPC"); //Text block
+                res2.WriteCString("This will be the Jeweler NPC"); //Text block
                 Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
 
                 IBuffer res3 = BufferProvider.Provide();
@@ -534,7 +529,7 @@ namespace Necromancy.Server.Packet.Area
             {
                 IBuffer res4 = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res4.WriteInt16(0b110000000000000); 
+                res4.WriteInt16((short)ShopType.Gem); 
                 //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 16 = repair; 32 = special; 64 = meal
                 res4.WriteInt32(10800405);
                 res4.WriteInt32(10800405);

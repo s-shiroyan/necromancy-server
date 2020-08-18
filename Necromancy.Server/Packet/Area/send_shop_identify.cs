@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Area
 
             InventoryItem inventoryItem = client.Character.Inventory.GetInventoryItem(storageType, Bag, Slot);
 
-            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
             Router.Send(recvItemInstanceUnidentified, client);
 
             itemStats(inventoryItem, client);

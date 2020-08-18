@@ -35,10 +35,10 @@ namespace Necromancy.Server.Packet.Area
 
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id); // id?
-            res.WriteInt64(10200101); // price?
-            res.WriteInt64(10200101); // identify?
-            res.WriteInt64(10200101); // curse?
-            res.WriteInt64(10200101); // repair?
+            res.WriteInt64(Util.GetRandomNumber(1000,25000)); // price?
+            res.WriteInt64(Util.GetRandomNumber(100, 2500)); // identify?
+            res.WriteInt64(Util.GetRandomNumber(100, 2500)); // curse?
+            res.WriteInt64(Util.GetRandomNumber(1000, 2500)); // repair?
             Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
         }
 

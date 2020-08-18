@@ -6,6 +6,7 @@ namespace Necromancy.Server.Model.ItemModel
     {
         public Item()
         {
+            Id = -1;
         }
 
         public int Id { get; set; }

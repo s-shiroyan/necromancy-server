@@ -30,7 +30,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteInt64(inventoryItem.Id);
-                res3.WriteInt32(inventoryItem.Item.Durability + 10); // Current durability points
+                res3.WriteInt32(inventoryItem.Item.Durability); // Current durability points
                 Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res3, ServerType.Area);
                 //When repairing this should be item's max durability.
                 inventoryItem.Item.Durability += 10;

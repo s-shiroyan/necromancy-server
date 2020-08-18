@@ -57,7 +57,7 @@ namespace Necromancy.Server.Packet.Area
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
                 Router.Send(recvItemInstance, client);
 
-                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem); //do some testing without the state bit set to inentifried
+                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client); //do some testing without the state bit set to inentifried
                 Router.Send(recvItemInstanceUnidentified, client); //Commented out for testing identify NPC
 
                 itemStats(inventoryItem, client);
@@ -90,9 +90,10 @@ namespace Necromancy.Server.Packet.Area
                 item.Magical = itemLookup.Magical;
                 item.Name = itemLookup.Name;
                 item.Physical = itemLookup.Physical;
+                if (inventoryItem.Item == null) { continue; }
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
                 Router.Send(recvItemInstance, client);
-                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
                 Router.Send(recvItemInstanceUnidentified, client);
 
                 itemStats(inventoryItem, client);
