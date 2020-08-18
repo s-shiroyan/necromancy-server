@@ -40,14 +40,25 @@ namespace Necromancy.Server.Packet.Area
             foreach (InventoryItem inventoryItem in inventoryItems)
             {
                 if (inventoryItem.StorageType == 3) continue; //cloak room stuff gets handled below.  possibility to refine SQL query to skip, but this was easier.
-                Item item = Server.Items[inventoryItem.ItemId];
+                Item itemLookup = Server.Items[inventoryItem.ItemId];
+
+                Item item = new Item();
+                item.Durability = itemLookup.Durability;
+                item.EquipmentSlotType = itemLookup.EquipmentSlotType ;
+                item.Id = itemLookup.Id;
+                item.ItemType = itemLookup.ItemType;
+                item.LoadEquipType = itemLookup.LoadEquipType;
+                item.Magical = itemLookup.Magical;
+                item.Name = itemLookup.Name;
+                item.Physical = itemLookup.Physical;
+
                 inventoryItem.Item = item;
 
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
                 Router.Send(recvItemInstance, client);
 
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem); //do some testing without the state bit set to inentifried
-                //Router.Send(recvItemInstanceUnidentified, client); //Commented out for testing identify NPC
+                Router.Send(recvItemInstanceUnidentified, client); //Commented out for testing identify NPC
 
                 itemStats(inventoryItem, client);
 
@@ -68,9 +79,17 @@ namespace Necromancy.Server.Packet.Area
             List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsBySoulIdCloakRoom(client.Character.SoulId);
             foreach (InventoryItem inventoryItem in inventoryItems)
             {
-                Item item = Server.Items[inventoryItem.ItemId];
-                inventoryItem.Item = item;
+                Item itemLookup = Server.Items[inventoryItem.ItemId];
 
+                Item item = new Item();
+                item.Durability = itemLookup.Durability;
+                item.EquipmentSlotType = itemLookup.EquipmentSlotType;
+                item.Id = itemLookup.Id;
+                item.ItemType = itemLookup.ItemType;
+                item.LoadEquipType = itemLookup.LoadEquipType;
+                item.Magical = itemLookup.Magical;
+                item.Name = itemLookup.Name;
+                item.Physical = itemLookup.Physical;
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
                 Router.Send(recvItemInstance, client);
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
@@ -145,7 +164,15 @@ namespace Necromancy.Server.Packet.Area
             res = BufferProvider.Provide();
             res.WriteInt64(inventoryItem.Id);
             res.WriteInt32(0b000000); // State bitmask
-            //Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
+                                      //Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id); // id?
+            res.WriteInt64(Util.GetRandomNumber(10, 10000)); // price
+            res.WriteInt64(Util.GetRandomNumber(10, 100)); // identify
+            res.WriteInt64(Util.GetRandomNumber(10, 1000)); // curse?
+            res.WriteInt64(Util.GetRandomNumber(10, 500)); // repair?
+            Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item_sell_price, res, ServerType.Area);
 
         }
 

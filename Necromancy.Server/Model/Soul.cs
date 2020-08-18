@@ -10,7 +10,7 @@ namespace Necromancy.Server.Model
         public string Password { get; set; }
         public byte Level { get; set; }
         public DateTime Created { get; set; }
-        public int WarehouseGold { get; set; }
+        public long WarehouseGold { get; set; }
 
         public Soul()
         {

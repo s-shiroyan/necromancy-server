@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt16(0b1111); //mode flag
             res.WriteByte(0); //item number
-            res.WriteInt32(client.Character.AdventureBagGold); //cash
+            res.WriteInt32(100); //cash
             int numEntries = 1;
             res.WriteInt32(numEntries);// less than or equal to 0xA
             for (int i = 0; i < numEntries; i++) //tabs number
@@ -46,7 +46,7 @@ namespace Necromancy.Server.Packet.Area
             res = BufferProvider.Provide();
             res.WriteInt16(1); //mode flag
             res.WriteByte(1); //item number
-            res.WriteInt32(client.Character.AdventureBagGold); //cash
+            res.WriteInt32(125); //cash
             Router.Send(client, (ushort)AreaPacketId.recv_cash_shop2_notify_open, res, ServerType.Area);
 
 

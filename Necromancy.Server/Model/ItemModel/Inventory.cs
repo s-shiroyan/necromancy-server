@@ -8,7 +8,8 @@ namespace Necromancy.Server.Model.ItemModel
     {
         // TODO remove quick test, replace with BAG class
         private Dictionary<byte, Dictionary<byte, InventoryItem[]>> _storageContainers;
-        private Dictionary<byte, InventoryItem[]> _inventory;
+        public Dictionary<byte, InventoryItem[]> _inventory;
+        public Dictionary<byte, InventoryItem[]> _royalBag;
         public Dictionary<EquipmentSlotType, InventoryItem> _equippedItems;
 
         private Dictionary<byte, InventoryItem[]> _cloakRoom;
@@ -24,6 +25,9 @@ namespace Necromancy.Server.Model.ItemModel
         {
             _inventory = new Dictionary<byte, InventoryItem[]>();
             _inventory.Add(0, new InventoryItem[bagSize]);
+            _royalBag = new Dictionary<byte, InventoryItem[]>();
+            _royalBag.Add(0, new InventoryItem[bagSize]);
+
             _equippedItems = new Dictionary<EquipmentSlotType, InventoryItem>();
             _cloakRoom = new Dictionary<byte, InventoryItem[]>();
             _cloakRoom.Add(0, new InventoryItem[cloakRoomTabSize]);
@@ -36,6 +40,7 @@ namespace Necromancy.Server.Model.ItemModel
 
             _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
             _storageContainers.Add(0, _inventory);
+            _storageContainers.Add(2, _royalBag); //royal bag?
             _storageContainers.Add(3, _cloakRoom);
             _storageContainers.Add(4, _avatar);
             _storageContainers.Add(5, _unionStorage);
