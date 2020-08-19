@@ -85,6 +85,11 @@ namespace Necromancy.Server.Packet.Area
                         },
                         {x => x == 80000009, () => UnionWindow(client, npcSpawn)},
                         { x => x == 10000004 ,  () => SoulRankNPC(client, npcSpawn)},
+                        {
+                            x => (x == 1900002) || (x == 1900003),
+                            () => RandomItemGuy(client, npcSpawn)
+                        },
+
                         {x => x < 10, () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")},
                         {x => x < 100, () => Logger.Debug($" Event Object switch for NPC ID {npcSpawn.NpcId} reached")},
                         {
@@ -929,6 +934,36 @@ namespace Necromancy.Server.Packet.Area
             res10.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res10, ServerType.Area); // It's the windows that contain the multiple choice
         }
+
+        private void RandomItemGuy(NecClient client, NpcSpawn npcSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteCString(npcSpawn.Title); // Title at top of Window
+            res.WriteUInt32(npcSpawn.InstanceId); //should pull name of NPC,  doesnt currently
+            Router.Send(client, (ushort)AreaPacketId.recv_event_show_board_start, res, ServerType.Area);
+
+            IBuffer res3 = BufferProvider.Provide();
+            res3.WriteCString("Weapon"); //Length 0x601  // name of the choice 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res3,
+                ServerType.Area); // It's the first choice
+
+            IBuffer res4 = BufferProvider.Provide();
+            res4.WriteCString("Armor"); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res4,
+                ServerType.Area); // It's the second choice 
+
+            IBuffer res5 = BufferProvider.Provide();
+            res5.WriteCString("Surprise me!..."); //Length 0x601 // name of the choice
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res5,
+                ServerType.Area); // It's the second choice 
+
+            IBuffer res11 = BufferProvider.Provide();
+            res11.WriteCString($"Hi {client.Character.Name}.  What kind of item would you like?"); // Window Heading / Name
+            res11.WriteUInt32(npcSpawn.InstanceId);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
+                ServerType.Area); // It's the windows that contain the multiple choice            
+        }
+
 
         private void SpareEventParts(NecClient client, NpcSpawn npcSpawn)
         {
