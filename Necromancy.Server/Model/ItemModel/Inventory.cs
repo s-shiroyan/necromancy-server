@@ -40,9 +40,9 @@ namespace Necromancy.Server.Model.ItemModel
 
             _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
             _storageContainers.Add(0, _inventory);
-            _storageContainers.Add(2, _royalBag); //royal bag?
+            _storageContainers.Add(2, _royalBag); 
             _storageContainers.Add(3, _cloakRoom);
-            _storageContainers.Add(4, _avatar);
+            _storageContainers.Add(12, _avatar);
             _storageContainers.Add(5, _unionStorage);
         }
         public void Equip(InventoryItem inventoryItem)
@@ -251,6 +251,26 @@ namespace Necromancy.Server.Model.ItemModel
             foreach (byte bagId in _inventory.Keys)
             {
                 InventoryItem[] bag = _inventory[bagId];
+                for (short bagSlotIndex = 0; bagSlotIndex < bag.Length; bagSlotIndex++)
+                {
+                    if (bag[bagSlotIndex] == null)
+                    {
+                        bag[bagSlotIndex] = inventoryItem;
+                        inventoryItem.BagId = bagId;
+                        inventoryItem.BagSlotIndex = bagSlotIndex;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool AddAvatarItem(InventoryItem inventoryItem)
+        {
+            foreach (byte bagId in _avatar.Keys)
+            {
+                InventoryItem[] bag = _avatar[bagId];
                 for (short bagSlotIndex = 0; bagSlotIndex < bag.Length; bagSlotIndex++)
                 {
                     if (bag[bagSlotIndex] == null)

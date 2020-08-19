@@ -17,7 +17,7 @@ namespace Necromancy.Server.Model
         Fuse = 0b100000000000000,
         Donkey = Purchase + Sell + Identify,
         Blacksmith = Purchase + Identify + Repair + Forge,
-        Gem = Restore + Fuse,
+        Gem = Restore + Fuse +Purchase,
         Bar = Meal
 
     }

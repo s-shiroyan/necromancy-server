@@ -522,7 +522,7 @@ namespace Necromancy.Server.Packet.Area
                 IBuffer res3 = BufferProvider.Provide();
                 res3.WriteCString($"{npcSpawn.Name}"); //Name
                 res3.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
-                res3.WriteCString("sometimes the process fails."); //Text block
+                res3.WriteCString("What was i supposed to say?"); //Text block
                 Router.Send(client, (ushort)AreaPacketId.recv_event_message_no_object, res3, ServerType.Area);
 
                 IBuffer res6 = BufferProvider.Provide();
@@ -570,36 +570,43 @@ namespace Necromancy.Server.Packet.Area
                 int[] DonkeyPrices = new int[] {100,02,100,10,500,500,400,280,350,1100,1000,1000,500,450,450,300,350,250,450,400,450,1450,1500,1400,1550,1000,1500,1500 };
                 IBuffer res = BufferProvider.Provide();
                 //recv_shop_notify_open = 0x52FD, // Parent = 0x5243 // Range ID = 02
-                res.WriteInt16(14); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
+                res.WriteInt16((short)ShopType.Donkey); //Shop type, 1 = remove curse; 2 = purchase list; 3 = 1 and 2; 4 = sell; 5 = 1 and 4; 6 = 2 and 4; 7 = 1, 2, and 4; 8 = identify; 14 = purchase, sell, identify; 16 = repair;
                 res.WriteInt32(1);
                 res.WriteInt32(45);
                 res.WriteByte((byte)numItems);
                 Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_open, res, ServerType.Area);
-                Character character = client.Character;
-
+                Character _character = client.Character;
+                NecClient _client = client;
                 for (int i = 0; i < numItems; i++)
                 {
-
                     Item item = Server.Items[DonkeyItems[i]];
-
                     // Create InventoryItem
                     InventoryItem inventoryItem = new InventoryItem();
-                    inventoryItem.Id = i;
+                    inventoryItem.Id = item.Id;
                     inventoryItem.Item = item;
                     inventoryItem.ItemId = item.Id;
+                    inventoryItem.Quantity = 1;
+                    inventoryItem.CurrentDurability = item.Durability;
+                    inventoryItem.CharacterId = client.Character.Id;
+                    inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                    inventoryItem.State = 0;
+                    inventoryItem.StorageType = (int)BagType.AvatarInventory;
+                    _character.Inventory.AddAvatarItem(inventoryItem);
 
-
+                    RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+                    Router.Send(recvItemInstance, client);
+                    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
+                    Router.Send(recvItemInstanceUnidentified, client);
 
                     itemStats(inventoryItem, client);
 
 
                     res = BufferProvider.Provide();
                     res.WriteByte((byte)i); //idx
-                    res.WriteInt32(item.Id); // item Serial id
+                    res.WriteInt32(inventoryItem.Id); // item Serial id
                     res.WriteInt64(DonkeyPrices[i]); // item price
                     res.WriteFixedString($"{inventoryItem.Item.Name}", 0x10); // ?
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
-
 
                 }
                 res = BufferProvider.Provide();
