@@ -15,14 +15,14 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_soul_dispitem_request_data;
+        public override ushort Id => (ushort)AreaPacketId.send_soul_dispitem_request_data;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);            
+            res.WriteInt32(0);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_soul_dispitem_request_data_r, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_request_data_r, res, ServerType.Area);
 
             //notify you of the soul item you got based on something above.
             IBuffer res19 = BufferProvider.Provide();
@@ -31,6 +31,41 @@ namespace Necromancy.Server.Packet.Area
 
             LoadInventory(client);
             LoadCloakRoom(client);
+            LoadBattleStats(client);
+        }
+
+        public void LoadBattleStats(NecClient client)
+        {
+            short PhysAttack = 0;
+            short MagAttack = 0;
+            short PhysDef = 0;
+            short MagDef = 0;
+
+            foreach (InventoryItem inventoryItem2 in client.Character.Inventory._equippedItems.Values)
+            {
+                if ((int)inventoryItem2.CurrentEquipmentSlotType < 3)
+                {
+                    PhysAttack += (short)inventoryItem2.Item.Physical;
+                    MagAttack += (short)inventoryItem2.Item.Magical;
+                }
+                else
+                {
+                    PhysDef += (short)inventoryItem2.Item.Physical;
+                    MagDef += (short)inventoryItem2.Item.Magical;
+                }
+            }
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt16((short)client.Character.Strength); //base Phys Attack
+            res.WriteInt16((short)client.Character.intelligence); //base Mag attack
+            res.WriteInt16((short)client.Character.dexterity); //base Phys Def
+            res.WriteInt16((short)client.Character.piety); //base Mag Def
+
+            res.WriteInt16(PhysAttack); //Equip Bonus Phys attack
+            res.WriteInt16(MagAttack); //Equip Bonus Mag Attack
+            res.WriteInt16(PhysDef); //Equip bonus Phys Def
+            res.WriteInt16(MagDef); //Equip bonus Mag Def
+            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
         }
 
         public void LoadInventory(NecClient client)

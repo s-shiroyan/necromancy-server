@@ -36,9 +36,9 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteCString($"{_inventoryItem.Item.Id}"); // _inventoryItem.Item.Name
             res.WriteInt16((short)_client.Character.Alignmentid);
             res.WriteInt16((short)_client.Character.Alignmentid);
-            res.WriteUInt32(_client.Character.Alignmentid);
+            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteByte((byte)_client.Character.Alignmentid);
-            res.WriteUInt32(_client.Character.Alignmentid);
+            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
@@ -56,11 +56,11 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt32(2222);// theory gem id 2.  Diamonds were two Gems combined to one
             }
 
-            res.WriteUInt32(_client.Character.Alignmentid);
-            res.WriteUInt32(_client.Character.Alignmentid);
-            res.WriteInt16(0xFF); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
-            res.WriteInt32(-1); //1 here lables the item "Gaurd".   no effect from higher numbers
-            res.WriteInt16((short)_client.Character.Alignmentid);
+            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
+            res.WriteInt32(1); //1 here lables the item "Gaurd".   no effect from higher numbers
+            res.WriteInt16(1);
 
 
 
