@@ -12,11 +12,12 @@ namespace Necromancy.Server.Model
         Special = 1 << 5,
         Meal = 1 << 6,
         Forge = 1 <<7,
-        GemFusion = 0b01000000000,
-        GemCombine = 0b10000000000,
+        Trade = 1 <<8,
+        Restore = 0b010000000000000,
+        Fuse = 0b100000000000000,
         Donkey = Purchase + Sell + Identify,
         Blacksmith = Purchase + Identify + Repair + Forge,
-        Gem = GemFusion + GemCombine,
+        Gem = Restore + Fuse,
         Bar = Meal
 
     }
