@@ -26,9 +26,15 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
+            if (characters == null || characters.Count <= 0)
+            {
+                Logger.Debug(client, "No characters found");
+                return;
+            }
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteUInt32(0xFFFFFFFF);
+            res.WriteInt32(characters.Count); //expected character count per soul
             Router.Send(client, (ushort) MsgPacketId.recv_chara_get_list_r, res, ServerType.Msg);
             SendNotifyData(client);
             SendNotifyDataComplete(client);
@@ -38,9 +44,9 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteByte(0xFF);
-            res2.WriteUInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0xFFFFFFFF); //prisonment settings??  .. Slot of character in prison and something else.
             res2.WriteInt32(0xFFF);
-            res2.WriteUInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0b11111111); //Soul Premium Flag
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2, ServerType.Msg);
         }
 

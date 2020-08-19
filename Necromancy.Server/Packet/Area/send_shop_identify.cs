@@ -1,7 +1,11 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 using System;
 
 namespace Necromancy.Server.Packet.Area
@@ -17,116 +21,91 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int itemId = 10200101;
-
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            Router.Send(client.Map, (ushort)AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
+            res.WriteInt32(0); //err check. 0 for success
+            Router.Send(client, (ushort)AreaPacketId.recv_shop_identify_r, res, ServerType.Area);
 
-            SendItemInstanceUnidentified(client, itemId);
+
+            byte storageType = packet.Data.ReadByte();
+            byte Bag = packet.Data.ReadByte();
+            short Slot = packet.Data.ReadInt16();
+            //9 bytes left
+
+            InventoryItem inventoryItem = client.Character.Inventory.GetInventoryItem(storageType, Bag, Slot);
+
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
+            Router.Send(recvItemInstanceUnidentified, client);
+
+            itemStats(inventoryItem, client);
         }
-
-        private void SendItemInstanceUnidentified(NecClient client, int itemId)
+        public void itemStats(InventoryItem inventoryItem, NecClient client)
         {
-            //recv_item_instance_unidentified = 0xD57A,
+            Server.SettingRepository.ItemLibrary.TryGetValue(inventoryItem.Item.Id, out ItemLibrarySetting itemLibrarySetting);
+            if (itemLibrarySetting == null) return;
 
             IBuffer res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(itemLibrarySetting.Durability); // MaxDura points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_maxdur, res, ServerType.Area);
 
-            res.WriteInt64(itemId); //Item Object ID 
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(itemLibrarySetting.Durability - 10); // Durability points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res, ServerType.Area);
 
-            res.WriteCString("DAGGER 10200101"); //Name
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32((int)itemLibrarySetting.Weight+1  * 100 ); // Weight points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_weight, res, ServerType.Area);
 
-            res.WriteInt32(2); //Wep type
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt16((short)itemLibrarySetting.PhysicalAttack); // Defense and attack points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res, ServerType.Area);
 
-            res.WriteInt32(1); //Bit mask designation? (Only lets you apply this to certain slots dependant on what you send here) 1 for right hand, 2 for left hand
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt16((short)itemLibrarySetting.MagicalAttack); // Magic def and attack Points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_magic, res, ServerType.Area);
 
-            res.WriteByte(100); //Number of items
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(1); // for the moment i don't know what it change
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_enchantid, res, ServerType.Area);
 
-            res.WriteInt32(0); //Item status 0 = identified  (same as item status inside senditeminstance)
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt16((short)Util.GetRandomNumber(50, 100)); // Shwo GP on certain items
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
 
-            res.WriteInt32(10200101); //Item icon
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(1); // for the moment i don't know what it change
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_date_end_protect, res, ServerType.Area);
 
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0); // bool
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteByte((byte)itemLibrarySetting.Hardness); // Hardness
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res, ServerType.Area);
 
-            res.WriteByte(0); // 0 = adventure bag. 1 = character equipment
-            res.WriteByte(0); // 0~2
-            res.WriteInt16(3); // bag index
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteByte(1); //Level requirement
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_level, res, ServerType.Area);
 
-            res.WriteInt32(0); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped)
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteByte(0); //sp Level requirement
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_sp_level, res, ServerType.Area);
 
-            res.WriteInt64(-1);
+            res = BufferProvider.Provide();
+            res.WriteInt64(inventoryItem.Id);
+            res.WriteInt32(0b000000); // State bitmask
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
 
-            res.WriteInt32(1);
-
-            Router.Send(client, (ushort)AreaPacketId.recv_item_instance_unidentified, res, ServerType.Area);
-
-            /*IBuffer res30 = BufferProvider.Provide();
-            res30.WriteInt64(itemId);
-            res30.WriteInt32(100); // MaxDura points
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res30, ServerType.Area);
-
-            //recv_item_update_durability = 0x1F5A, 
-            IBuffer res31 = BufferProvider.Provide();
-            res31.WriteInt64(itemId);
-            res31.WriteInt32(10);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res31, ServerType.Area);
-
-            IBuffer res4 = BufferProvider.Provide();
-            res4.WriteInt64(itemId);
-            res4.WriteInt32(27); // Weight points
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res4, ServerType.Area);
-
-            IBuffer res5 = BufferProvider.Provide();
-            res5.WriteInt64(itemId);
-            res5.WriteInt16(51); // Defense and attack points
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res5, ServerType.Area);
-
-            IBuffer res6 = BufferProvider.Provide();
-            res6.WriteInt64(itemId);
-            res6.WriteInt16(69); // Magic def and attack Points
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res6, ServerType.Area);
-
-            IBuffer res7 = BufferProvider.Provide();
-            res7.WriteInt64(itemId);
-            res7.WriteInt32(26); // for the moment i don't know what it change
-            //Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res7, ServerType.Area);
-
-            IBuffer res8 = BufferProvider.Provide();
-            res8.WriteInt64(itemId);
-            res8.WriteInt16(23); // Shwo GP on certain items
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res8, ServerType.Area);
-
-            IBuffer res9 = BufferProvider.Provide();
-            res9.WriteInt64(itemId);
-            res9.WriteInt32(30); // for the moment i don't know what it change
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_date_end_protect, res9, ServerType.Area);
-
-
-            IBuffer res11 = BufferProvider.Provide();
-            res11.WriteInt64(itemId);
-            res11.WriteByte(50); // Hardness
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res11, ServerType.Area);
-
-
-            IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt64(itemId); //client.Character.EquipId[x]   put stuff unidentified and get the status equipped  , 0 put stuff identified
-            res1.WriteInt32(0);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);*/
         }
+
+
 
     }
 }

@@ -21,4 +21,14 @@ namespace Necromancy.Server.Model.ItemModel
     //50100506,Guardian Bag
     //50100511,Jewel Bag(S)
     //50100512,Jewel Bag(M)
+
+    enum BagType
+    {
+        AdventureBag = 0,
+        Equipment = 1,
+        RoyalBag = 2,
+        Warehouse = 3,
+        WarehouseSp = 10,
+        AvatarInventory = 12
+    }
 }
