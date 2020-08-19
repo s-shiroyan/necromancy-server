@@ -675,7 +675,6 @@ namespace Necromancy.Server.Packet.Area
             else if (client.Character.eventSelectExecCode == 2)
             { //50401040,Moist Cudgel
                 Item item = Server.Items[50401040]; //This can select from a small array of items, and a small array of custom names
-                item.Name = $"Super {item.Name}";
 
                 Character character = client.Character;
 
@@ -708,7 +707,7 @@ namespace Necromancy.Server.Packet.Area
                 itemStats(inventoryItem, client);
 
                 IBuffer res12 = BufferProvider.Provide();
-                res12.WriteCString($"Enjoy your new {item.Name}"); // Length 0xC01
+                res12.WriteCString($"Enjoy your new Super {item.Name}"); // Length 0xC01
                 Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res12, ServerType.Area); // show system message on middle of the screen.
             }
 

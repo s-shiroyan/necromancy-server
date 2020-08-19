@@ -58,7 +58,7 @@ namespace Necromancy.Server.Packet.Receive.Area
 
             res.WriteUInt32(_client.Character.Alignmentid);
             res.WriteUInt32(_client.Character.Alignmentid);
-            res.WriteInt16((short)_client.Character.Alignmentid);
+            res.WriteInt16(0xFF); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
             res.WriteInt32(-1); //1 here lables the item "Gaurd".   no effect from higher numbers
             res.WriteInt16((short)_client.Character.Alignmentid);
 
