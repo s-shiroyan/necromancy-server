@@ -123,85 +123,85 @@ namespace Necromancy.Server.Model
 
             //To-Do   | for each deadBody in Deadbodies {RecvDataNotifyCharabodyData} 
 
-         //   List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(mapData.Id);
-         //   foreach (MonsterSpawn monsterSpawn in monsterSpawns)
-         //   {
-         //       server.Instances.AssignInstance(monsterSpawn);
-         //       if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId,
-         //           out ModelCommonSetting modelSetting))
-         //       {
-         //           Logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
-         //           continue;
-         //       }
-//
-         //       if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId,
-         //           out MonsterSetting monsterSetting))
-         //       {
-         //           Logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
-         //           continue;
-         //       }
-//
-         //       monsterSpawn.ModelId = modelSetting.Id;
-         //       //monsterSpawn.Size = (short) (modelSetting.Height / 2);   //commenting out to use size setting from database.
-         //       monsterSpawn.Radius = (short) modelSetting.Radius;
-         //       monsterSpawn.Hp.setMax(300);
-         //       monsterSpawn.Hp.setCurrent(300);
-         //       monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
-         //       //monsterSpawn.Level = (byte) monsterSetting.Level;
-         //       monsterSpawn.CombatMode = monsterSetting.CombatMode;
-         //       monsterSpawn.CatalogId = monsterSetting.CatalogId;
-         //       monsterSpawn.TextureType = monsterSetting.TextureType;
-         //       monsterSpawn.Map = this;
-         //       MonsterSpawns.Add(monsterSpawn.InstanceId, monsterSpawn);
-//
-         //       List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
-         //       if (coords.Count > 0)
-         //       {
-         //           monsterSpawn.defaultCoords = false;
-         //           monsterSpawn.monsterCoords.Clear();
-         //           foreach (MonsterCoord monsterCoord in coords)
-         //           {
-         //               //Console.WriteLine($"added coord {monsterCoord} to monster {monsterSpawn.InstanceId}");
-         //               monsterSpawn.monsterCoords.Add(monsterCoord);
-         //           }
-         //       }
-         //       else
-         //       {
-         //           //home coordinate set to monster X,Y,Z from database
-         //           Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
-         //           MonsterCoord homeCoord = new MonsterCoord();
-         //           homeCoord.Id = monsterSpawn.Id;
-         //           homeCoord.MonsterId = (uint) monsterSpawn.MonsterId;
-         //           homeCoord.MapId = (uint) monsterSpawn.MapId;
-         //           homeCoord.CoordIdx = 0;
-         //           homeCoord.destination = homeVector3;
-         //           monsterSpawn.monsterCoords.Add(homeCoord);
-//
-         //           //default path part 2
-         //           Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150),
-         //               monsterSpawn.Z);
-         //           MonsterCoord defaultCoord = new MonsterCoord();
-         //           defaultCoord.Id = monsterSpawn.Id;
-         //           defaultCoord.MonsterId = (uint) monsterSpawn.MonsterId;
-         //           defaultCoord.MapId = (uint) monsterSpawn.MapId;
-         //           defaultCoord.CoordIdx = 1;
-         //           defaultCoord.destination = defaultVector3;
-//
-         //           monsterSpawn.monsterCoords.Add(defaultCoord);
-//
-         //           //default path part 3
-         //           Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150),
-         //               monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
-         //           MonsterCoord defaultCoord2 = new MonsterCoord();
-         //           defaultCoord2.Id = monsterSpawn.Id;
-         //           defaultCoord2.MonsterId = (uint) monsterSpawn.MonsterId;
-         //           defaultCoord2.MapId = (uint) monsterSpawn.MapId;
-         //           defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
-         //           defaultCoord2.destination = defaultVector32;
-//
-         //           monsterSpawn.monsterCoords.Add(defaultCoord2);
-         //       }
-         //   }
+            List<MonsterSpawn> monsterSpawns = server.Database.SelectMonsterSpawnsByMapId(mapData.Id);
+            foreach (MonsterSpawn monsterSpawn in monsterSpawns)
+            {
+                server.Instances.AssignInstance(monsterSpawn);
+                if (!_server.SettingRepository.ModelCommon.TryGetValue(monsterSpawn.ModelId,
+                    out ModelCommonSetting modelSetting))
+                {
+                    Logger.Error($"Error getting ModelCommonSetting for ModelId {monsterSpawn.ModelId}");
+                    continue;
+                }
+
+                if (!_server.SettingRepository.Monster.TryGetValue(monsterSpawn.MonsterId,
+                    out MonsterSetting monsterSetting))
+                {
+                    Logger.Error($"Error getting MonsterSetting for MonsterId {monsterSpawn.MonsterId}");
+                    continue;
+                }
+
+                monsterSpawn.ModelId = modelSetting.Id;
+                //monsterSpawn.Size = (short) (modelSetting.Height / 2);   //commenting out to use size setting from database.
+                monsterSpawn.Radius = (short)modelSetting.Radius;
+                monsterSpawn.Hp.setMax(300);
+                monsterSpawn.Hp.setCurrent(300);
+                monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
+                //monsterSpawn.Level = (byte) monsterSetting.Level;
+                monsterSpawn.CombatMode = monsterSetting.CombatMode;
+                monsterSpawn.CatalogId = monsterSetting.CatalogId;
+                monsterSpawn.TextureType = monsterSetting.TextureType;
+                monsterSpawn.Map = this;
+                MonsterSpawns.Add(monsterSpawn.InstanceId, monsterSpawn);
+
+                List<MonsterCoord> coords = server.Database.SelectMonsterCoordsByMonsterId(monsterSpawn.Id);
+                if (coords.Count > 0)
+                {
+                    monsterSpawn.defaultCoords = false;
+                    monsterSpawn.monsterCoords.Clear();
+                    foreach (MonsterCoord monsterCoord in coords)
+                    {
+                        //Console.WriteLine($"added coord {monsterCoord} to monster {monsterSpawn.InstanceId}");
+                        monsterSpawn.monsterCoords.Add(monsterCoord);
+                    }
+                }
+                else
+                {
+                    //home coordinate set to monster X,Y,Z from database
+                    Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
+                    MonsterCoord homeCoord = new MonsterCoord();
+                    homeCoord.Id = monsterSpawn.Id;
+                    homeCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    homeCoord.MapId = (uint)monsterSpawn.MapId;
+                    homeCoord.CoordIdx = 0;
+                    homeCoord.destination = homeVector3;
+                    monsterSpawn.monsterCoords.Add(homeCoord);
+
+                    //default path part 2
+                    Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150),
+                        monsterSpawn.Z);
+                    MonsterCoord defaultCoord = new MonsterCoord();
+                    defaultCoord.Id = monsterSpawn.Id;
+                    defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord.CoordIdx = 1;
+                    defaultCoord.destination = defaultVector3;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord);
+
+                    //default path part 3
+                    Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150),
+                        monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
+                    MonsterCoord defaultCoord2 = new MonsterCoord();
+                    defaultCoord2.Id = monsterSpawn.Id;
+                    defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord2.MapId = (uint)monsterSpawn.MapId;
+                    defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
+                    defaultCoord2.destination = defaultVector32;
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord2);
+                }
+            }
         }
 
         public void EnterForce(NecClient client, MapPosition mapPosition = null)

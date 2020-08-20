@@ -45,12 +45,9 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                if (monsterSpawn.Active == false)
-                {
                     RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                     Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
                     Router.Send(monsterData, client);
-                }
             }
 
             foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
