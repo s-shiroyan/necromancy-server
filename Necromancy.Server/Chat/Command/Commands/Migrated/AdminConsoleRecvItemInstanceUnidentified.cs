@@ -45,20 +45,16 @@ namespace Necromancy.Server.Chat.Command.Commands
                 //recv_item_instance_unidentified = 0xD57A,
                 IBuffer res = BufferProvider.Provide();
 
-                res.WriteInt64(client.Character.EquipId[x]);
+                res.WriteInt64(itemIDs[x]);
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]} lvl"); // Item Name
 
-                res.WriteInt32(EquipItemType[x] -
-                               1); // Item Type. Refer To ItemType.csv   // This controls Item Type.  61 ( minus 1) makes everything Type "Avatar"
+                res.WriteInt32(EquipItemType[x] - 1); // Item Type. Refer To ItemType.csv   // This controls Item Type.  61 ( minus 1) makes everything Type "Avatar"
                 res.WriteInt32(EquipBitMask[x]); //Slot Limiting Bitmask.  Limits  Slot Item can be Equiped.
 
                 res.WriteByte(1); // Numbers of items
 
-                res.WriteInt32(
-                    EquipBitMask[
-                        Util.GetRandomNumber(4,
-                            4)]); /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
+                res.WriteInt32(EquipBitMask[Util.GetRandomNumber(4,4)]); /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
 
 
                 res.WriteInt32(client.Character.EquipId[x]); //Item ID for Icon

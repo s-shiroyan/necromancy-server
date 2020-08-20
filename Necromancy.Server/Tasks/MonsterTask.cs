@@ -2,8 +2,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive.Area;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -500,7 +499,7 @@ namespace Necromancy.Server.Tasks
             IBuffer res = BufferProvider.Provide();
             res = BufferProvider.Provide();
             res.WriteUInt32(currentTarget.InstanceId);
-            _server.Router.Send(Map, (ushort) AreaPacketId.recv_battle_attack_start, res, ServerType.Area);
+            _server.Router.Send(Map, (ushort) AreaPacketId.recv_battle_attack_start_r, res, ServerType.Area);
         }
 
         public void MonsterSpawn()

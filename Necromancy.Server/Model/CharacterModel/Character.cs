@@ -4,6 +4,7 @@ using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Stats;
 using Necromancy.Server.Tasks;
 
@@ -71,7 +72,7 @@ namespace Necromancy.Server.Model
 
         //Temporary Value Holders
         public int stepCount { get; set; }
-        public int AdventureBagGold { get; set; }
+        public long AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public uint activeSkillInstance { get; set; }
@@ -115,6 +116,9 @@ namespace Necromancy.Server.Model
         //Task
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
+
+        //Inventory
+        public Inventory Inventory { get; set; }
 
         public Character()
         {
@@ -164,6 +168,8 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
             stepCount = 0;
+
+            Inventory = new Inventory();
         }
 
         public bool characterActive

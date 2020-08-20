@@ -4,8 +4,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -46,12 +45,9 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (MonsterSpawn monsterSpawn in client.Map.MonsterSpawns.Values)
             {
-                if (monsterSpawn.Active == false)
-                {
                     RecvDataNotifyMonsterData monsterData = new RecvDataNotifyMonsterData(monsterSpawn);
                     Logger.Debug($"Monster Id {monsterSpawn.Id} with model {monsterSpawn.ModelId} is loading");
                     Router.Send(monsterData, client);
-                }
             }
 
             foreach (NpcSpawn npcSpawn in client.Map.NpcSpawns.Values)
@@ -75,7 +71,7 @@ namespace Necromancy.Server.Packet.Area
 
             foreach (DeadBody deadBody in client.Map.DeadBodies.Values)
             {
-                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+                RecvDataNotifyCharaBodyData deadBodyData = new RecvDataNotifyCharaBodyData(deadBody, client.Character, client);
                 Router.Send(deadBodyData, client);
             }
 

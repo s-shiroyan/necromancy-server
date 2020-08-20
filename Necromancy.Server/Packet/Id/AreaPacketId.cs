@@ -8,6 +8,7 @@ namespace Necromancy.Server.Packet.Id
         recv_base_check_version_r = 0xEFDD, // this is being used to test other opcodes the normal value should be (0xEFDD)
 
         // Recv OP Codes - Switch: 0x495B88 - ordered by op code
+        recv_0x916 = 0x916,
         recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos
         recv_0x10DA = 0x10DA, // Crash
         recv_0x1489 = 0x1489, // Crash
@@ -17,6 +18,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x28A0 = 0x28A0, // Crash 
         recv_0x29C5 = 0x29C5, // Doesn't crash
         recv_0x3A0E = 0x3A0E, // Doesn't crash
+        recv_0x3C1F = 0x3C1F,
         recv_0x3C81 = 0x3C81, // Crash
         recv_0x3F2F = 0x3F2F, // Crash
         recv_0x488D = 0x488D, // Crash
@@ -53,6 +55,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0xB586 = 0xB586, // Doesn't crash
         recv_0xB684 = 0xB684, // Cause crash
         recv_0xBA61 = 0xBA61, // Cause Crash
+        recv_0xBF0D = 0xBF0D,
         recv_0xC055 = 0xC055, // Doesn't crash
         recv_0xC078 = 0xC078, // cause Crash
         recv_0xCF29 = 0xCF29, // Cause crash
@@ -60,9 +63,13 @@ namespace Necromancy.Server.Packet.Id
         recv_0xD1F6 = 0xD1F6, // Cause crash
         recv_0xD909 = 0xD909, // Doesn't crash
         recv_0xDA4A = 0xDA4A, // Doesn't crash
+        recv_0xE7CF = 0xE7CF,
+        recv_0xE983 = 0xE983,
+        recv_0xEDE7 = 0xEDE7,
         recv_0xEE18 = 0xEE18, // Cause crash
         recv_0xEEB7 = 0xEEB7, // cause crash
         recv_battle_report_action_attack_onhit = 0xF212, // was previously labeled as recv_battle_report_action_attack_onhit : Confirmed Recv String
+        recv_0xF024 = 0xF024,
         recv_0xFA0B = 0xFA0B, // res.WriteInt32(client.Character.Id); doesn't crash
         recv_0xFB79 = 0xFB79, //   res.WriteInt32(0); doesn't crash too
         recv_0xE8B9 = 0xE8B9, // res.WriteInt32(client.Character.Id); cause crash
@@ -90,12 +97,10 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_attack_exec_r = 0xF1A0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
-        recv_battle_attack_pose = 0x0, //todo
         recv_battle_attack_pose_end_notify = 0xF633,
         recv_battle_attack_pose_r = 0x5DEB,
         recv_battle_attack_pose_self = 0x9F74,
         recv_battle_attack_pose_start_notify = 0x7CB2,
-        recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
         recv_battle_attack_start_r = 0xD752,
         recv_battle_charge_end_r = 0x5AE9,
         recv_battle_charge_start_r = 0x4F10,
@@ -103,8 +108,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_guard_end_self = 0x5E48,
         recv_battle_guard_start_r = 0xADC8,
         recv_battle_guard_start_self = 0x1E96,
-        recv_battle_life_notify = 0x1E2, // opcode not found
-        recv_battle_release_attack_pose = 0x0, //todo
+        recv_battle_life_notify = 0x1E2,
         recv_battle_release_attack_pose_r = 0xE990,
         recv_battle_release_attack_pose_self = 0x4EF4,
         recv_battle_report_action_attack_exec = 0xB3F7,
@@ -549,6 +553,7 @@ namespace Necromancy.Server.Packet.Id
         recv_select_package_update_r = 0xD170,
         recv_self_action_cost = 0x8CD,
         recv_self_buff_notify = 0x73D1,
+        recv_self_dragon_pos_notify = 0x6FB2,
         recv_self_dragon_warp_notify = 0xC6EF,
         recv_self_exp_notify = 0xC47A,
         recv_self_inherit_skill_level_notify = 0x3F5B,
@@ -765,7 +770,7 @@ namespace Necromancy.Server.Packet.Id
         send_door_close = 0xC218,
         send_door_open = 0x1D8A,
         send_emotion_update_type = 0x7672, 
-        send_equip_honor = 0x70, //opcode not found  TODO
+        send_equip_honor = 0x9747,
         send_event_abort = 0x71, //opcode not found  TODO
         send_event_access_object = 0x718D, 
         send_event_quest_get_order_list = 0x72, //opcode not found
@@ -789,8 +794,8 @@ namespace Necromancy.Server.Packet.Id
         send_event_system_message_timer_r = 0xF9B8,
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
-        send_event_union_storage_close = 0x93, //opcode not found
-        send_forge_check = 0x94, //opcode not found
+        send_event_union_storage_close = 0xA2A5,
+        send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found
         send_forge_sp_check = 0x96, //opcode not found
         send_forge_sp_execute = 0x97, //opcode not found
@@ -889,7 +894,7 @@ namespace Necromancy.Server.Packet.Id
         send_revive_execute = 0x170, //opcode not found TODO
         send_revive_init = 0x171, //opcode not found  TODO
         send_select_package_update = 0x2A64,
-        send_shop_buy = 0x173, //opcode not found   TODO
+        send_shop_buy = 0xADB6,
         send_shop_close = 0x2469,
         send_shop_identify = 0x9C7E,
         send_shop_repair = 0xED5C, 
@@ -945,10 +950,10 @@ namespace Necromancy.Server.Packet.Id
         send_union_rename_close = 0xC9A9, 
         send_union_request_establish = 0x9956,
         send_union_request_rename = 0x6568,
-        send_union_storage_deposit_money = 0x218, //opcode not found
-        send_union_storage_draw_money = 0x219, //opcode not found
-        send_union_storage_move_item = 0x220, //opcode not found
-        send_update_honor = 0x221, //opcode not found
+        send_union_storage_deposit_money = 0xBEEA,
+        send_union_storage_draw_money = 0x8143,
+        send_union_storage_move_item = 0x5FC3,
+        send_update_honor = 0xB0EB, 
         send_wanted_entry = 0xA86F, 
         send_wanted_jail_close = 0x86D8, 
         send_wanted_jail_draw_point = 0x309E,

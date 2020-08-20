@@ -1,16 +1,21 @@
+using System;
 using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive;
 
 namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_get_list : ClientHandler
     {
         private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_get_list));
+        private readonly SettingRepository _settingRepository;
 
         public send_chara_get_list(NecServer server) : base(server)
         {
@@ -21,9 +26,15 @@ namespace Necromancy.Server.Packet.Msg
 
         public override void Handle(NecClient client, NecPacket packet)
         {
+            List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
+            if (characters == null || characters.Count <= 0)
+            {
+                Logger.Debug(client, "No characters found");
+                return;
+            }
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
-            res.WriteUInt32(0xFFFFFFFF);
+            res.WriteInt32(characters.Count); //expected character count per soul
             Router.Send(client, (ushort) MsgPacketId.recv_chara_get_list_r, res, ServerType.Msg);
             SendNotifyData(client);
             SendNotifyDataComplete(client);
@@ -33,9 +44,9 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteByte(0xFF);
-            res2.WriteUInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0xFFFFFFFF); //prisonment settings??  .. Slot of character in prison and something else.
             res2.WriteInt32(0xFFF);
-            res2.WriteUInt32(0xFFFFFFFF);
+            res2.WriteUInt32(0b11111111); //Soul Premium Flag
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2, ServerType.Msg);
         }
 
@@ -50,6 +61,25 @@ namespace Necromancy.Server.Packet.Msg
 
             foreach (Character character in characters)
             {
+                //populate soul and character inventory from database.
+                List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(character.Id); //to-do. leverage SQL query to grab items where state > 0
+                foreach (InventoryItem inventoryItem in inventoryItems)
+                {
+                    Item item = Server.Items[inventoryItem.ItemId];
+                    inventoryItem.Item = item;
+                    if (inventoryItem.State > 0  & inventoryItem.State < 262145)
+                    {
+                        character.Inventory.Equip(inventoryItem);
+                        inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                        inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
+                    }
+                }
+                if (character.Inventory._equippedItems.Count > 20)
+                {
+                    Logger.Error($"Character {character.Name} has too many equipment entries"); 
+                    continue;  // skip if more than 19 equipped items.  corrupt DB entries in itemSpawn
+                }
+
                 IBuffer res = BufferProvider.Provide();
 
                 res.WriteByte(character.Slot); //character slot, 0 for left, 1 for middle, 2 for right
@@ -66,28 +96,9 @@ namespace Necromancy.Server.Packet.Msg
                 LoadEquip.SlotSetup(res, character, 19);
                 LoadEquip.EquipItems(res, character, 19);
                 LoadEquip.EquipSlotBitMask(res, character, 19);
+                LoadEquip.SlotUpgradeLevel(res, character, 19);
 
-                //19x 4 byte //item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
-                res.WriteInt32(10); //Right Hand    //1 for weapon
-                res.WriteInt32(10); //Left Hand     //2 for Shield
-                res.WriteInt32(10); //Torso         //16 for torso
-                res.WriteInt32(10); //Head          //08 for head
-                res.WriteInt32(10); //Legs          //32 for legs
-                res.WriteInt32(10); //Arms          //64 for Arms
-                res.WriteInt32(10); //Feet          //128 for feet
-                res.WriteInt32(004); //???Cape
-                res.WriteInt32(0); //???Ring
-                res.WriteInt32(0); //???Earring
-                res.WriteInt32(0); //???Necklace
-                res.WriteInt32(0); //???Belt
-                res.WriteInt32(10); //Avatar Torso
-                res.WriteInt32(10); //Avatar Feet
-                res.WriteInt32(10); //Avatar Arms
-                res.WriteInt32(10); //Avatar Legs
-                res.WriteInt32(10); //Avatar Head  
-                res.WriteInt32(10); //???Talk Ring
-                res.WriteInt32(00); //???Quiver    
-                res.WriteByte(19); //Number of equipment to display
+                res.WriteByte(19);  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);
             }

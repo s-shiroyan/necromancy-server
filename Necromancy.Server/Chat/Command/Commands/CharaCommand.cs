@@ -5,10 +5,10 @@ using Necromancy.Server.Packet.Id;
 using System.Threading;
 using System;
 using Necromancy.Server.Common.Instance;
-using Necromancy.Server.Packet.Response;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -327,8 +327,43 @@ namespace Necromancy.Server.Chat.Command.Commands
                     IBuffer res27 = BufferProvider.Provide();
                     //recv_item_update_ac 
                     res27.WriteInt64(10200101);
-                    res27.WriteInt16((short) y);
-                    Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res27, ServerType.Area);
+                    res27.WriteInt16((short)y);
+                    Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res27, ServerType.Area);
+                    break;
+
+                case "ap": //Sets your 'OD'
+                    res = BufferProvider.Provide();
+                    res.WriteInt32(123);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_ap, res, ServerType.Area);
+                    break;
+
+                case "atk":  //udates settings 1-22 on the attribute tab
+                    res = BufferProvider.Provide();
+                    res.WriteInt32(y);
+                    res.WriteInt16(888);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_atk_magic_attr, res, ServerType.Area);
+                    break;
+
+                case "ability":  //udates settings 1-7 on the ability tab
+                    res = BufferProvider.Provide();
+                    res.WriteInt32(y);
+                    res.WriteInt16(10);
+                    res.WriteInt16(25);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_ability, res, ServerType.Area);
+                    break;
+
+                case "battle":  //udates settings 1-7 on the ability tab
+                    res = BufferProvider.Provide();
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
                     break;
 
                 case "alignment":
@@ -337,8 +372,10 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res28.WriteInt32(1);
                     res28.WriteInt32(2);
                     res28.WriteInt32(3);
-                    Router.Send(client, (ushort) AreaPacketId.recv_chara_update_alignment_param, res28,
-                        ServerType.Area);
+                    Router.Send(client, (ushort) AreaPacketId.recv_chara_update_alignment_param, res28, ServerType.Area);
+                    res28 = BufferProvider.Provide();
+                    res28.WriteInt32(y); //Alignment ID
+                    Router.Send(client, (ushort)AreaPacketId.recv_chara_update_alignment, res28, ServerType.Area);
                     break;
 
                 case "shop":

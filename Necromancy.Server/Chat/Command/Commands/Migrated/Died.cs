@@ -7,8 +7,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -43,7 +42,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 brList.Add(brStart);
                 brList.Add(cDead1); //animate the death of your living body
                 brList.Add(brEnd);
-                Server.Router.Send(client.Map, brList, client); // send death animation to other players
+                Router.Send(client.Map, brList, client); // send death animation to other players
 
 
                 brList[1] = cDead2;
@@ -64,7 +63,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                         client.Character.hadDied =
                             false; // quick switch to living state so your dead body loads with your gear
                         //load your dead body on to the map for you to see in soul form. 
-                        RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client);
+                        RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client.Character, client);
                         Server.Router.Send(client, cBodyData.ToPacket());
 
                         client.Character.hadDied = true; // back to dead so your soul appears with-out gear.

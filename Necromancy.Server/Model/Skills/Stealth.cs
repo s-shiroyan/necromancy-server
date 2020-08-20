@@ -7,7 +7,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet;
-using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Model.Skills
 {

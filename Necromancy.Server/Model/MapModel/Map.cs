@@ -7,8 +7,7 @@ using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Skills;
-using Necromancy.Server.Packet.Receive;
-using Necromancy.Server.Packet.Response;
+using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
@@ -144,7 +143,7 @@ namespace Necromancy.Server.Model
 
                 monsterSpawn.ModelId = modelSetting.Id;
                 //monsterSpawn.Size = (short) (modelSetting.Height / 2);   //commenting out to use size setting from database.
-                monsterSpawn.Radius = (short) modelSetting.Radius;
+                monsterSpawn.Radius = (short)modelSetting.Radius;
                 monsterSpawn.Hp.setMax(300);
                 monsterSpawn.Hp.setCurrent(300);
                 monsterSpawn.AttackSkillId = monsterSetting.AttackSkillId;
@@ -172,29 +171,31 @@ namespace Necromancy.Server.Model
                     Vector3 homeVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y, monsterSpawn.Z);
                     MonsterCoord homeCoord = new MonsterCoord();
                     homeCoord.Id = monsterSpawn.Id;
-                    homeCoord.MonsterId = (uint) monsterSpawn.MonsterId;
-                    homeCoord.MapId = (uint) monsterSpawn.MapId;
+                    homeCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    homeCoord.MapId = (uint)monsterSpawn.MapId;
                     homeCoord.CoordIdx = 0;
                     homeCoord.destination = homeVector3;
                     monsterSpawn.monsterCoords.Add(homeCoord);
-                   //default path part 2
+
+                    //default path part 2
                     Vector3 defaultVector3 = new Vector3(monsterSpawn.X, monsterSpawn.Y + Util.GetRandomNumber(50, 150),
                         monsterSpawn.Z);
                     MonsterCoord defaultCoord = new MonsterCoord();
                     defaultCoord.Id = monsterSpawn.Id;
-                    defaultCoord.MonsterId = (uint) monsterSpawn.MonsterId;
-                    defaultCoord.MapId = (uint) monsterSpawn.MapId;
+                    defaultCoord.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord.MapId = (uint)monsterSpawn.MapId;
                     defaultCoord.CoordIdx = 1;
                     defaultCoord.destination = defaultVector3;
-                   monsterSpawn.monsterCoords.Add(defaultCoord);
+
+                    monsterSpawn.monsterCoords.Add(defaultCoord);
 
                     //default path part 3
                     Vector3 defaultVector32 = new Vector3(monsterSpawn.X + Util.GetRandomNumber(50, 150),
                         monsterSpawn.Y + Util.GetRandomNumber(50, 150), monsterSpawn.Z);
                     MonsterCoord defaultCoord2 = new MonsterCoord();
                     defaultCoord2.Id = monsterSpawn.Id;
-                    defaultCoord2.MonsterId = (uint) monsterSpawn.MonsterId;
-                    defaultCoord2.MapId = (uint) monsterSpawn.MapId;
+                    defaultCoord2.MonsterId = (uint)monsterSpawn.MonsterId;
+                    defaultCoord2.MapId = (uint)monsterSpawn.MapId;
                     defaultCoord2.CoordIdx = 2; //64 is currently the Idx of monsterHome on send_map_get_info.cs
                     defaultCoord2.destination = defaultVector32;
 
