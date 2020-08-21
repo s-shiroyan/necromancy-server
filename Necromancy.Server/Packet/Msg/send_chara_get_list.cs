@@ -27,11 +27,6 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
-            if (characters == null || characters.Count <= 0)
-            {
-                Logger.Debug(client, "No characters found");
-                return;
-            }
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(characters.Count); //expected character count per soul
