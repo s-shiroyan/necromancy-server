@@ -1,34 +1,34 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using Xunit;
 
 namespace Necromancy.Test.Systems
 {
-    [TestClass]
-    class ItemTest
+    public class ItemTest
     {
 
-        [TestMethod]
+        [Fact]
         public void TestSpawnItemNoItemFound()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetSpawnItemNoSpawnFound()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetBaseItem()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
+        [Fact]
         public void TestGetBaseItemNoItemFound()
         {
             throw new NotImplementedException();
