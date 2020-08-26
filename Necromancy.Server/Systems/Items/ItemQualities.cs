@@ -1,0 +1,15 @@
+using System;
+
+namespace Necromancy.Server.Systems.Items
+{
+    [Flags]
+    public enum ItemQualities
+    {
+        Poor        = 1 << 1,
+        Normal      = 1 << 2,
+        Good        = 1 << 3,
+        Master      = 1 << 4,
+        Legend      = 1 << 5,
+        Artifact    = 1 << 6
+    }
+}
