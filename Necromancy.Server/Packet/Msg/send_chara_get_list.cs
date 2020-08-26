@@ -88,12 +88,12 @@ namespace Necromancy.Server.Packet.Msg
 
                 //Consolidated Frequently Used Code
                 LoadEquip.BasicTraits(res, character);
-                LoadEquip.SlotSetup(res, character, 19);
-                LoadEquip.EquipItems(res, character, 19);
-                LoadEquip.EquipSlotBitMask(res, character, 19);
-                LoadEquip.SlotUpgradeLevel(res, character, 19);
+                LoadEquip.SlotSetup(res, character, 20);
+                LoadEquip.EquipItems(res, character, 20);
+                LoadEquip.EquipSlotBitMask(res, character, 20);
+                LoadEquip.SlotUpgradeLevel(res, character, 20);
 
-                res.WriteByte(19);  //Number of equipment to display
+                res.WriteByte(20);  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);
             }

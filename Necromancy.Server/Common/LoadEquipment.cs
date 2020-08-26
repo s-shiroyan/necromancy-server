@@ -15,9 +15,12 @@ namespace Necromancy.Server.Common
         {
             res.WriteUInt32(myCharacter.Raceid); //race
             res.WriteUInt32(myCharacter.Sexid);
+                res.WriteByte(1); //unk1
+                res.WriteByte(1); //unk2
             res.WriteByte(myCharacter.HairId); //hair
             res.WriteByte(myCharacter.HairColorId); //color
             res.WriteByte(myCharacter.FaceId); //face
+
         }
         public static void SlotSetup(IBuffer res, Character myCharacter, int numEntries)
         {
@@ -41,7 +44,7 @@ namespace Necromancy.Server.Common
             int[] EquipItemType = new int[]
             {
                 Weapon, Shield, Quiver, Armor, Armor, Armor, Armor, Armor, Other /*Cape-Other*/, Accessory, Accessory,
-                Accessory, Accessory, Other /*TalkRing-Other*/, Armor, Armor, Armor, Armor, Armor
+                Accessory, Accessory, Other /*TalkRing-Other*/, Armor, Armor, Armor, Armor, Armor, Armor
             };
 
             //sub_483660 
@@ -77,8 +80,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); // (theory Slot)
 
                 res.WriteByte(
-                    (byte)headSlot[
-                        x]); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                    0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res.WriteByte(
                     00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
                 res.WriteByte(0); // testing (Theory Torso Tex)
@@ -105,7 +107,7 @@ namespace Necromancy.Server.Common
             };
             EquipBitMask = new int[] //Temporary Bit Mask until i re-figure out Avatar Item Display Precedence.
             {
-                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128
+                1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128, 256
             };
             for (int i = 0; i < numEntries; i++)
             {
@@ -234,7 +236,7 @@ namespace Necromancy.Server.Common
         {
             string CharacterSet = myCharacter.Name;
             int[] headSlot = new int[numEntries];
-            int[] EquipBitMask = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128};
+            int[] EquipBitMask = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 8, 16, 32, 64, 128,265};
 
             if (myCharacter.hadDied == true) //removes all gear in soul form
             {
@@ -273,6 +275,7 @@ namespace Necromancy.Server.Common
                             30200107 /*Earring*/, 30400105 /*Belt*/, 30100106 /*Ring*/, 70000101 /*Talk Ring*/,
                             160801 /*Avatar Head */,
                             260801 /*Avatar Torso*/, 360801 /*Avatar Pants*/, 460801 /*Avatar Hands*/,
+                            560801 /*Avatar Feet*/,
                             560801 /*Avatar Feet*/
                         };
                         headSlot = new int[19] {0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0};
