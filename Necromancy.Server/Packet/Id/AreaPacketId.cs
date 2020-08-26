@@ -97,12 +97,10 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_attack_exec_r = 0xF1A0, // 0x998F - recv_battle_attack_exec_direct_r and then 0xF1A0 - recv_battle_attack_exec_r?
         recv_battle_attack_exec_direct_r = 0x998F,
         recv_battle_attack_next_r = 0x68E7,
-        recv_battle_attack_pose = 0x0, //todo
         recv_battle_attack_pose_end_notify = 0xF633,
         recv_battle_attack_pose_r = 0x5DEB,
         recv_battle_attack_pose_self = 0x9F74,
         recv_battle_attack_pose_start_notify = 0x7CB2,
-        recv_battle_attack_start = 0xD752, //1 other possible inside 0xD68C + 0xC6 - 0x004C8EE5
         recv_battle_attack_start_r = 0xD752,
         recv_battle_charge_end_r = 0x5AE9,
         recv_battle_charge_start_r = 0x4F10,
@@ -110,8 +108,7 @@ namespace Necromancy.Server.Packet.Id
         recv_battle_guard_end_self = 0x5E48,
         recv_battle_guard_start_r = 0xADC8,
         recv_battle_guard_start_self = 0x1E96,
-        recv_battle_life_notify = 0x1E2, // opcode not found
-        recv_battle_release_attack_pose = 0x0, //todo
+        recv_battle_life_notify = 0x1E2,
         recv_battle_release_attack_pose_r = 0xE990,
         recv_battle_release_attack_pose_self = 0x4EF4,
         recv_battle_report_action_attack_exec = 0xB3F7,
@@ -797,7 +794,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_system_message_timer_r = 0xF9B8,
         send_event_tresurebox_end = 0x5F7A,
         send_event_tresurebox_select = 0x92, //opcode not found   TODO
-        send_event_union_storage_close = 0x93, //opcode not found
+        send_event_union_storage_close = 0xA2A5,
         send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found
         send_forge_sp_check = 0x96, //opcode not found
@@ -897,7 +894,7 @@ namespace Necromancy.Server.Packet.Id
         send_revive_execute = 0x170, //opcode not found TODO
         send_revive_init = 0x171, //opcode not found  TODO
         send_select_package_update = 0x2A64,
-        send_shop_buy = 0x173, //opcode not found   TODO
+        send_shop_buy = 0xADB6,
         send_shop_close = 0x2469,
         send_shop_identify = 0x9C7E,
         send_shop_repair = 0xED5C, 
@@ -953,9 +950,9 @@ namespace Necromancy.Server.Packet.Id
         send_union_rename_close = 0xC9A9, 
         send_union_request_establish = 0x9956,
         send_union_request_rename = 0x6568,
-        send_union_storage_deposit_money = 0x218, //opcode not found
-        send_union_storage_draw_money = 0x219, //opcode not found
-        send_union_storage_move_item = 0x220, //opcode not found
+        send_union_storage_deposit_money = 0xBEEA,
+        send_union_storage_draw_money = 0x8143,
+        send_union_storage_move_item = 0x5FC3,
         send_update_honor = 0xB0EB, 
         send_wanted_entry = 0xA86F, 
         send_wanted_jail_close = 0x86D8, 

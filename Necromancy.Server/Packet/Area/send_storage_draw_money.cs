@@ -1,4 +1,4 @@
-﻿using Arrowgene.Buffers;
+using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
@@ -18,8 +18,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
 
-            int WithdrawGold = packet.Data.ReadInt32();
-            int unKnown = packet.Data.ReadInt32();
+            long WithdrawGold = packet.Data.ReadInt64();
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0); 

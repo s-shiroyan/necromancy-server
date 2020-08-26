@@ -1979,3 +1979,16 @@ recv_self_dragon_pos_notify	= 0x6FB2;
             res.WriteFloat(1);
 			
 			res.WriteByte(1);
+			
+			
+recv_chara_update_battle_base_param = 0x2F2F
+   
+					res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);
+                    res.WriteInt16(10);

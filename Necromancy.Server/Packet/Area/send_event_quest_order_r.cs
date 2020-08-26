@@ -38,7 +38,7 @@ namespace Necromancy.Server.Packet.Area
             for (int i = 0; i < numEntries4; i++)
             {
                 res.WriteInt32(0x10); //size of string
-                res.WriteFixedString("", 0x10);
+                res.WriteFixedString("ItemName", 0x10);
                 res.WriteInt16(1); // Numbers of items
                 res.WriteInt32(8); // ItemInfo type (Cursed, Blessed, Ect...)
             }

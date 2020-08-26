@@ -72,7 +72,7 @@ namespace Necromancy.Server.Model
 
         //Temporary Value Holders
         public int stepCount { get; set; }
-        public int AdventureBagGold { get; set; }
+        public long AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
         public uint activeSkillInstance { get; set; }

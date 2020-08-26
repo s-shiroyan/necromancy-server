@@ -45,7 +45,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 //recv_item_instance_unidentified = 0xD57A,
                 IBuffer res = BufferProvider.Provide();
 
-                res.WriteInt64(client.Character.EquipId[x]);
+                res.WriteInt64(itemIDs[x]);
 
                 res.WriteCString($"ID:{itemIDs[x]} MSK:{EquipBitMask[x]} Type:{EquipItemType[x]} lvl"); // Item Name
 

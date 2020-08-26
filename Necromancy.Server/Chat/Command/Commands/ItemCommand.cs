@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
+using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Model.ItemModel;
@@ -64,6 +65,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
             inventoryItem.State = 0;
 
+            Server.SettingRepository.ItemLibrary.TryGetValue(inventoryItem.Item.Id, out ItemLibrarySetting itemLibrarySetting);
+
             client.Character.Inventory.AddInventoryItem(inventoryItem);
             if (!Server.Database.InsertInventoryItem(inventoryItem))
             {
@@ -71,9 +74,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem);
+            RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem,client);
+            Router.Send(recvItemInstance, client);
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
             Router.Send(recvItemInstanceUnidentified, client);
             responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
+            ConfigureItem(client, inventoryItem, itemLibrarySetting);
 
         }
 
@@ -82,8 +88,6 @@ namespace Necromancy.Server.Chat.Command.Commands
             // TODO find the purpose of this call, is it just an update?
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt64((ulong) inventoryItem.Id); //ItemID
-            // res.WriteInt32(inventoryItem.Id);
-            // res.WriteInt32(iid);
             res.WriteInt32(inventoryItem.Item.Id); // 0 does not display icon
             res.WriteByte(1); //Number of "items"
             res.WriteInt32(0); //--Item status, in multiples of numbers, 8 = blessed/cursed/both 
@@ -140,63 +144,68 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res, ServerType.Area);
         }
 
-        public void ConfigureItem(NecClient client, InventoryItem inventoryItem)
+        public void ConfigureItem(NecClient client, InventoryItem inventoryItem, ItemLibrarySetting itemLibrarySetting)
         {
-            //   IBuffer res = BufferProvider.Provide();
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteByte(item.level);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_level, res, ServerType.Area);
-            //   
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt32(item.weight);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_weight, res, ServerType.Area);
-            //   
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt16(inventoryItem.Item.Physical); // Defense and attack points
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_physics, res, ServerType.Area);
+            IBuffer res = BufferProvider.Provide();
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteByte((byte)itemLibrarySetting.RequiredSoulLevel);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_level, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt32(item.enchatId);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_enchantid, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt32((int)itemLibrarySetting.Weight*100);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_weight, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteByte(item.hardness);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_hardness, res, ServerType.Area);
-            //   
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt32(item.maxDurability);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_maxdur, res, ServerType.Area);
-            //   
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt32(item.durability);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_durability, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt16((short)itemLibrarySetting.PhysicalAttack); // Defense and attack points
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_physics, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt16(item.magic);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_magic, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt32(itemLibrarySetting.RequiredSoulLevel);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_enchantid, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt16(item.ac);
-            //   Router.Send(client, (ushort) AreaPacketId.recv_item_update_ac, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteByte((byte)itemLibrarySetting.Hardness);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_hardness, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteInt16((short) 10000); // Shwo GP on certain items
-            //   Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt32(100);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_maxdur, res, ServerType.Area);
 
-            //   res = BufferProvider.Provide();
-            //   res.WriteUInt64((ulong)inventoryItem.Id);
-            //   res.WriteByte(0);
-            //   Router.Send(client, (ushort)AreaPacketId.recv_item_update_sp_level, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt32(99);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt16((short)itemLibrarySetting.MagicalAttack);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_magic, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt16(69);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteInt16((short)10000); // Shwo GP on certain items
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_ac, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteByte(5);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_sp_level, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteUInt64((ulong)inventoryItem.Id);
+            res.WriteUInt32(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_state, res, ServerType.Area);
         }
     }
 }
