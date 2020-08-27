@@ -298,14 +298,49 @@ namespace Necromancy.Server.Packet.Area
             //--Good so far-------------------------
 
             int numEntries = 0x14;
-            res.WriteInt32(0x14); //has to be below or equal to 0x14
-                                        
-            res.WriteInt32(0x14);
-            //some skipped logic here
-            res.WriteInt32(0x14);
-            //more skupped logic
-            res.WriteInt32(0x14);
-            //last bit of skipped logic
+            res.WriteInt32(numEntries); //has to be below or equal to 0x14
+
+            for (int i = 0; i < numEntries; i++)
+                res.WriteInt32(0);
+
+            res.WriteInt32(numEntries); //less than or equal to 0x14
+
+            for(int i = 0; i < numEntries; i++)
+            { 
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0); //bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+
+            res.WriteInt32(numEntries); //less than or equal to 0x14
+
+            for (int i = 0; i < numEntries; i++)
+                res.WriteInt32(0);
+
+            res.WriteInt32(0x80); //less than or equal to 0x80
+
+            for (int i = 0; i < 0x80; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+            }
 
             //The stuff below here should replace the 4 int32 above, but im missing something
 
