@@ -27,11 +27,6 @@ namespace Necromancy.Server.Packet.Msg
         public override void Handle(NecClient client, NecPacket packet)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
-            if (characters == null || characters.Count <= 0)
-            {
-                Logger.Debug(client, "No characters found");
-                return;
-            }
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(characters.Count); //expected character count per soul
@@ -43,21 +38,22 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyDataComplete(NecClient client)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteByte(0xFF);
-            res2.WriteUInt32(0xFFFFFFFF); //prisonment settings??  .. Slot of character in prison and something else.
-            res2.WriteInt32(0xFFF);
-            res2.WriteUInt32(0b11111111); //Soul Premium Flag
+            res2.WriteByte(0); //bool
+            res2.WriteUInt32(0); //prisonment settings??  .. Slot of character in prison and something else.
+            res2.WriteInt64(0);
+            res2.WriteByte(0);
+            res2.WriteUInt32(0);
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2, ServerType.Msg);
         }
 
         private void SendNotifyData(NecClient client)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
-            if (characters == null || characters.Count <= 0)
+            /*if (characters == null || characters.Count <= 0)
             {
                 Logger.Debug(client, "No characters found");
                 return;
-            }
+            }*/
 
             foreach (Character character in characters)
             {
@@ -74,7 +70,7 @@ namespace Necromancy.Server.Packet.Msg
                         inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
                     }
                 }
-                if (character.Inventory._equippedItems.Count > 20)
+                if (character.Inventory._equippedItems.Count > 25)
                 {
                     Logger.Error($"Character {character.Name} has too many equipment entries"); 
                     continue;  // skip if more than 19 equipped items.  corrupt DB entries in itemSpawn
@@ -93,13 +89,26 @@ namespace Necromancy.Server.Packet.Msg
 
                 //Consolidated Frequently Used Code
                 LoadEquip.BasicTraits(res, character);
-                LoadEquip.SlotSetup(res, character, 19);
-                LoadEquip.EquipItems(res, character, 19);
-                LoadEquip.EquipSlotBitMask(res, character, 19);
-                LoadEquip.SlotUpgradeLevel(res, character, 19);
+                LoadEquip.SlotSetup(res, character, 0x19);
+                LoadEquip.EquipItems(res, character, 0x19);
+                LoadEquip.EquipSlotBitMask(res, character, 0x19);
+                LoadEquip.SlotUpgradeLevel(res, character, 0x19);
+                
+                for (int i = 0; i < 0x19; i++)
+                    res.WriteByte(0);
 
-                res.WriteByte(19);  //Number of equipment to display
-                res.WriteInt32(character.MapId); //map location ID
+                res.WriteByte(0);
+
+                res.WriteUInt32(0);
+                res.WriteUInt32(0);
+
+                res.WriteByte(0x19);
+                res.WriteByte(0x19);
+                res.WriteByte(0x19);
+
+                res.WriteFixedString(character.Name, 91); // 0x5B | 91x 1 byte
+                /*res.WriteByte(19);  //Number of equipment to display
+                res.WriteInt32(character.MapId); //map location ID*/
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);
             }
         }

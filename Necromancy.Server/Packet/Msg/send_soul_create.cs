@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Msg
             Soul soul = new Soul();
             soul.Name = soulName;
             soul.AccountId = client.Account.Id;
-            if (!Database.InsertSoul(soul))
+            /*if (!Database.InsertSoul(soul))
             {
                 Logger.Error(client, $"Failed to create SoulName: {soulName}");
                 client.Close();
@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             client.Soul = soul;
-            Logger.Info($"Created SoulName: {soulName}");
+            Logger.Info($"Created SoulName: {soulName}");*/
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
