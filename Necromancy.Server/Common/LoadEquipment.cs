@@ -78,17 +78,15 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); // (theory bag)
                 res.WriteByte(0); // (theory Slot)
 
-                res.WriteByte(
-                    (byte)headSlot[
-                        x]); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-                res.WriteByte(
-                    00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte((byte)headSlot[x]); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(0); // testing (Theory Torso Tex) [BOOL]
                 res.WriteByte(0); // testing (Theory Pants Tex)
                 res.WriteByte(0); // testing (Theory Hands Tex)
                 res.WriteByte(0); // testing (Theory Feet Tex)
                 res.WriteByte(0); //Alternate texture for item model 
-
+                
+                res.WriteByte(0);
                 res.WriteByte(0); // separate in assembly
                 x++;
             }
@@ -129,7 +127,7 @@ namespace Necromancy.Server.Common
             while (i < 0x19)
             {
                 //sub_483660   
-                res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
                 i++;
             }
         }
@@ -159,9 +157,10 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
                 res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
+                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
                 i++;
             }
-            while (i < 19)//Must have 19 on recv_chara_notify_data
+            while (i < 0x19)//Must have 25 on recv_chara_notify_data
             {
                 res.WriteInt32(0); //Sets your Item ID per Iteration
                 res.WriteByte(0); // 
@@ -182,6 +181,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); //Alternate texture for item model 
 
                 res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
                 i++;
             }
 
@@ -196,10 +196,10 @@ namespace Necromancy.Server.Common
                 res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
                 i++;
             }
-            while (i < 19)
+            while (i < 0x19)
             {
                 //sub_483420   
-                res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
                 i++;
             }
         }
@@ -211,13 +211,13 @@ namespace Necromancy.Server.Common
                 int i = 0;
                 foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
                 {
-                    res.WriteInt32(19); ///item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
+                    res.WriteInt32(25); ///item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
                     i++;
                 }
-                while (i < 19)
+                while (i < numEntries)
                 {
                     //sub_483420   
-                    res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                    res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
                     i++;
                 }
             }
@@ -225,7 +225,7 @@ namespace Necromancy.Server.Common
             for (int i = 0; i < numEntries; i++)
             {
                 //sub_483420   
-                res.WriteInt32(19); 
+                res.WriteInt32(25); 
             }
         }
 

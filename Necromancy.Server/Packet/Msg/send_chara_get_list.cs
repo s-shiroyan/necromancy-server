@@ -99,10 +99,9 @@ namespace Necromancy.Server.Packet.Msg
 
                 res.WriteByte(0);
 
-                res.WriteUInt32(0);
-                res.WriteUInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
 
-                res.WriteByte(0x19);
                 res.WriteByte(0x19);
                 res.WriteByte(0x19);
 
