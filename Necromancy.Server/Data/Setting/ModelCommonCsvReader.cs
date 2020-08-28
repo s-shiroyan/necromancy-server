@@ -14,7 +14,7 @@ namespace Necromancy.Server.Data.Setting
             _modelAtrSettings = modelAtrSettings;
         }
 
-        protected override int NumExpectedItems => 11;
+        protected override int NumExpectedItems => 12;
 
         protected override ModelCommonSetting CreateInstance(string[] properties)
         {
@@ -64,7 +64,7 @@ namespace Necromancy.Server.Data.Setting
             }
 
             MonsterSetting monster = null;
-            if (properties.Length > 11 && int.TryParse(properties[11], out int monsterId))
+            if (properties.Length > 12 && int.TryParse(properties[12], out int monsterId))
             {
                 if (_monsterSetting.ContainsKey(monsterId))
                 {

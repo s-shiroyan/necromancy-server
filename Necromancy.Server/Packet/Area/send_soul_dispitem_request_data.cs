@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
             res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
             Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
 
-            //LoadInventory(client);
+            LoadInventory(client);
             //LoadCloakRoom(client);
             //LoadBattleStats(client);
         }
@@ -90,12 +90,12 @@ namespace Necromancy.Server.Packet.Area
                 inventoryItem.Item = item;
 
                 RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-                Router.Send(recvItemInstance, client);
+                //Router.Send(recvItemInstance, client);
 
                 RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client); //do some testing without the state bit set to inentifried
                 Router.Send(recvItemInstanceUnidentified, client); //Commented out for testing identify NPC
 
-                itemStats(inventoryItem, client);
+                //itemStats(inventoryItem, client);
 
 
                 client.Character.Inventory.LoginLoadInventory(inventoryItem);
