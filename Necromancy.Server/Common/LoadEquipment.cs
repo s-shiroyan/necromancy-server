@@ -126,7 +126,7 @@ namespace Necromancy.Server.Common
                 Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType}");
                 i++;
             }
-            while (i < 19)
+            while (i < 20)
             {
                 //sub_483660   
                 res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
@@ -161,7 +161,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
                 i++;
             }
-            while (i < 19)//Must have 19 on recv_chara_notify_data
+            while (i < 20)//Must have 19 on recv_chara_notify_data
             {
                 res.WriteInt32(0); //Sets your Item ID per Iteration
                 res.WriteByte(0); // 
@@ -196,7 +196,7 @@ namespace Necromancy.Server.Common
                 res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
                 i++;
             }
-            while (i < 19)
+            while (i < 20)
             {
                 //sub_483420   
                 res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
@@ -214,7 +214,7 @@ namespace Necromancy.Server.Common
                     res.WriteInt32(19); ///item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
                     i++;
                 }
-                while (i < 19)
+                while (i < 20)
                 {
                     //sub_483420   
                     res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
@@ -247,7 +247,7 @@ namespace Necromancy.Server.Common
                     0 /*Earring*/, 0 /*Belt*/, 0 /*Ring*/, 0 /*Talk Ring*/, 0 /*Avatar Head */,
                     0 /*Avatar Torso*/, 0 /*Avatar Pants*/, 0 /*Avatar Hands*/, 0 /*Avatar Feet*/
                 };
-                headSlot = new int[19] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+                headSlot = new int[20] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
             }
             else
             {
