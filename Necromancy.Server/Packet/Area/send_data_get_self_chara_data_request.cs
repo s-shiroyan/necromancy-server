@@ -41,7 +41,7 @@ namespace Necromancy.Server.Packet.Area
             LoadEquip.BasicTraits(res, client.Character);
 
             //sub_48C1F0
-            for (int k = 0; k < 0xA/2; k++)
+            /*for (int k = 0; k < 0xA/2; k++)
             {
                 for (int j = 0; j < 2; j++)
                 {
@@ -94,8 +94,10 @@ namespace Necromancy.Server.Packet.Area
                         res.WriteInt64(0); // InstanceId
                     }
                 }
-            }
+            }*/
 
+            for (int i = 0; i < 100; i++)
+                res.WriteInt64(0);
 
 
             //sub_484720 - combat/leveling info
@@ -291,7 +293,7 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_494890
             res.WriteByte(1); //Bool
-            
+
             res.WriteInt32(2); //this is new in sunset
 
             res.WriteByte(1); //this is new in sunset
