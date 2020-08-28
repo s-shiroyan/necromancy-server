@@ -232,8 +232,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                     //Consolidated Frequently Used Code
                     LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
-                    //Consolidated Frequently Used Code
-                    LoadEquip.BasicTraits(res14, character2);
+                    //Traits
+                    res14.WriteUInt32(character2.Raceid); //race
+                    res14.WriteUInt32(character2.Sexid);
+                    res14.WriteByte(character2.HairId); //hair
+                    res14.WriteByte(character2.HairColorId); //color
+                    res14.WriteByte(character2.FaceId); //face
 
                     res14.WriteInt32(_deadBody
                         .ConnectionState); // 0 = bag, 1 for dead? (Can't enter soul form if this isn't 0 or 1 i think).

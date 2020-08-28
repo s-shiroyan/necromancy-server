@@ -1,7 +1,6 @@
 using Necromancy.Server.Model;
 using System;
 using Arrowgene.Buffers;
-using Necromancy.Server.Model.ItemModel;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 
@@ -11,19 +10,24 @@ namespace Necromancy.Server.Common
     {
         private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(LoadEquip));
 
-        public static void BasicTraits(IBuffer res, Character myCharacter)
-        {
-            res.WriteUInt32(myCharacter.Raceid); //race
-            res.WriteUInt32(myCharacter.Sexid);
-            res.WriteByte(myCharacter.HairId); //hair
-            res.WriteByte(myCharacter.HairColorId); //color
-            res.WriteByte(myCharacter.FaceId); //face
-        }
         public static void SlotSetup(IBuffer res, Character myCharacter, int numEntries)
         {
             if (myCharacter.Inventory._equippedItems.Count != 0) 
             {
-                SlotSetupNew(res, myCharacter);
+                int i = 0;
+                //sub_483660 
+                foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+                {
+                    res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
+                    Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType}");
+                    i++;
+                }
+                while (i < 19)
+                {
+                    //sub_483660   
+                    res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
+                    i++;
+                }
                 return;
             }
             TemporaryCharacterSwitch(myCharacter, numEntries); //needed to instantiate Weapon ID for Weapon logic below
@@ -111,24 +115,6 @@ namespace Necromancy.Server.Common
             {
                 //sub_483420   
                 res.WriteInt32(EquipBitMask[i]); //bitmask per equipment slot
-            }
-        }
-
-        public static void SlotSetupNew(IBuffer res, Character character)
-        {
-            int i = 0;
-            //sub_483660 
-            foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
-            {
-                res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
-                Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType}");
-                i++;
-            }
-            while (i < 19)
-            {
-                //sub_483660   
-                res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
-                i++;
             }
         }
 

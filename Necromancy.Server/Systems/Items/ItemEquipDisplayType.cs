@@ -1,9 +1,8 @@
 namespace Necromancy.Server.Model
 {
-    public enum LoadEquipType
+    public enum ItemEquipDisplayType
     {
-        ARMOR = 25,
-        OTHER = 27,
+        //TODO 100,120 str_table weird bullshit?        
         NONE = 0,
         TRUMP = 1,
         DAGGER = 2,
@@ -28,23 +27,25 @@ namespace Necromancy.Server.Model
         SHIELD_LARGE = 21,
         ARROW = 22,
         BOLT = 23,
-        BULLET = 24,
-        PROTECTOR = 25, //PROTCT
-        ACCESSORY = 26, //ACCRY
+        BULLET = 24,        
+        ARMOR = 25,
+        ACCESSORY = 26,
+        OTHER = 27,        
+        PROTECTOR = ARMOR, 
         HELMET = ARMOR,
         HAT = ARMOR,
         HOOD = ARMOR,
-        ARMOR_TOPS = ARMOR, //ARMOR
-        ARMOR_BOTTOMS = ARMOR, //GREAVES
-        CLOTHES_TOPS = ARMOR, //TOP
-        CLOTHES_BOTTOMS = ARMOR,
+        ARMOR_TOP = ARMOR, 
+        ARMOR_BOTTOM = ARMOR, 
+        CLOTHES_TOP = ARMOR, 
+        CLOTHES_BOTTOM = ARMOR,
         COAT = ARMOR,
         GLOVES = ARMOR,
         GAUNTLETS = ARMOR,
         BRACLET = ARMOR,
         SABATONS = ARMOR, //S.SHOE
         SHOES = ARMOR, // SHOES
-        CLOAK = ARMOR, // 
+        CLOAK = ARMOR, 
         RING = ACCESSORY,
         EARRING = ACCESSORY,
         NECKLACE = ACCESSORY, //NCKLCE

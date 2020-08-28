@@ -4,7 +4,6 @@ using Arrowgene.Logging;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Database.Sql;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Setting;
 

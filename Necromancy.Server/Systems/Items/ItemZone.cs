@@ -3,7 +3,7 @@ using System;
 namespace Necromancy.Server.Systems.Items
 {
     [Flags]
-    public enum ItemZone
+    public enum ItemZone : byte
     {
         AdventureBag    = 0,
         UNKNOWN1        = 1, //invisible?

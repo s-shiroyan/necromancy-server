@@ -33,4 +33,7 @@
       <ContentWithTargetPath Remove="Client\Data\Settings\item_decrypted.csv" />
       <ContentWithTargetPath Remove="Database\Script\data_item.sql" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Model\ItemModel\" />
+    </ItemGroup>
 </Project>

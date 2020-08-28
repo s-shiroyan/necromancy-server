@@ -1,44 +1,45 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Systems.Items;
+using System;
 
 namespace Necromancy.Server.Packet.Receive
 {
     public class RecvItemInstance : PacketResponse
-    {
-        private readonly InventoryItem _inventoryItem;
-        private readonly NecClient _client;
+    {        
+        private readonly SpawnedItem _spawnedItem;
 
-        public RecvItemInstance(InventoryItem inventoryItem, NecClient client)
+        public RecvItemInstance(NecClient client, SpawnedItem spawnedItem)
             : base((ushort) AreaPacketId.recv_item_instance, ServerType.Area)
         {
-            _inventoryItem = inventoryItem;
-            _client = client;
+            if (!spawnedItem.IsIdentified) throw new ArgumentException("Spawned item must be identified.");
+            _spawnedItem.Statuses |= ItemStatuses.Identified;
+            _spawnedItem = spawnedItem;
+            Clients.Add(client);
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(0);                               //spawned item iD
-            res.WriteInt32(0);                               //item id
-            res.WriteByte((byte) 1);                         //quantity
-            res.WriteInt32((int)ItemStatuses.Identified);             //Item status
+            res.WriteInt64( _spawnedItem.SpawnId);          
+            res.WriteInt32( _spawnedItem.BaseId);                               
+            res.WriteByte(  _spawnedItem.Quantity);                        
+            res.WriteInt32((int) _spawnedItem.Statuses);    
             res.WriteFixedString("", 16);                    //unknown
-            res.WriteByte((byte)(ItemZone.AdventureBag));    //item zone
-            res.WriteByte((byte)0);                          //bag number                
-            res.WriteInt16((short)0);                         //bag slot or slot for bags to go in
-            res.WriteInt32((int)ItemEquipSlot.None);         //slot equipped to
-            res.WriteInt32((int) 0);                         //current durability
-            res.WriteByte((byte) 0);                         //enhancement level +1, +2 etc
-            res.WriteByte(0);                                //special forge level, must be less than or equal the the req special forge level in table
+            res.WriteByte((byte) _spawnedItem.Location.Zone);    
+            res.WriteByte(  _spawnedItem.Location.Bag);                          
+            res.WriteInt16( _spawnedItem.Location.Slot);                      
+            res.WriteInt32((int) _spawnedItem.CurrentEquipSlot);         
+            res.WriteInt32( _spawnedItem.CurrentDurability);                         
+            res.WriteByte(  _spawnedItem.EnhancementLevel);                         
+            res.WriteByte(  _spawnedItem.SpecialForgeLevel);                                
             res.WriteCString("");                            //unknown
-            res.WriteInt16((short) 0);                       //phys attr (attack, def)
-            res.WriteInt16((short) 0);                       //mag attr (mattack, mdef)
-            res.WriteInt32((int) 0);                         //maximum durability
-            res.WriteByte((byte) 0);                         //hardness
+            res.WriteInt16( _spawnedItem.Physical);                       
+            res.WriteInt16( _spawnedItem.Magical);                       
+            res.WriteInt32( _spawnedItem.MaximumDurability);                        
+            res.WriteByte(  _spawnedItem.Hardness);                         
             res.WriteInt32((int) 0);                         //unknown
 
             const int MAX_WHATEVER_SLOTS = 2;
@@ -49,22 +50,20 @@ namespace Necromancy.Server.Packet.Receive
                 res.WriteInt32((byte)    0);                 //unknown
             }
 
-            const int MAX_GEM_SLOTS = 3;
-            const int numGemSlots = 1;
-            res.WriteInt32(numGemSlots);                 //number of gem slots
-            for (int j = 0; j < numGemSlots; j++)
+            res.WriteInt32(_spawnedItem.GemSlots.Length);                
+            for (int j = 0; j < _spawnedItem.GemSlots.Length; j++)
             {
-                res.WriteByte(0);                        //is gem slot filled
-                res.WriteInt32(0);                       //slot type 1 round, 2 triangle, 3 diamond
-                res.WriteInt32(0);                       //gem item id
+                res.WriteByte(Convert.ToByte(_spawnedItem.GemSlots[j].IsFilled));                       
+                res.WriteInt32((int)_spawnedItem.GemSlots[j].Type);                       
+                res.WriteInt32(_spawnedItem.GemSlots[j].Gem.BaseId);                       
                 res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine
             }
 
             res.WriteInt32(0);                           //unknown
             res.WriteInt32(0);                           //unknown
             res.WriteInt16((short)0);                    //unknown
-            res.WriteInt32(0);                           //enchant id 
-            res.WriteInt16((short)0);                    //GP
+            res.WriteInt32(_spawnedItem.EnchantId);                           //enchant id 
+            res.WriteInt16(_spawnedItem.GP);                    //GP
             return res;
         }
     }

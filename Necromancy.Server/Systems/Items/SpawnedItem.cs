@@ -4,12 +4,20 @@ using System.Text;
 
 namespace Necromancy.Server.Systems.Items
 {
-    class SpawnedItem
+    public class SpawnedItem : BaseItem
     {
+        public const int MAX_GEM_SLOTS = 3;
+
+        public SpawnedItem(long spawnId, ItemLocation location)
+        {
+            SpawnId = spawnId;
+            Location = location;
+        }
+
         /// <summary>
         /// ID Generated when item is spawned.
         /// </summary>
-        public long Id { get; set; }
+        public long SpawnId { get; private set; }
         /// <summary>
         /// Owner's character's ID.
         /// </summary>
@@ -23,11 +31,7 @@ namespace Necromancy.Server.Systems.Items
 
         public ItemStatuses Statuses { get; set; }
 
-        public ItemZone Zone { get; set; }
-
-        public byte BagNumber { get; set; }
-
-        public short BagSlot { get; set; }
+        public ItemLocation Location { get; private set; }
 
         public ItemEquipSlot CurrentEquipSlot { get; set; }
         /// <summary>
@@ -46,17 +50,18 @@ namespace Necromancy.Server.Systems.Items
         public int MaximumDurability { get; set; }
 
         public byte Hardness { get; set; }
-        /// <summary>
-        /// Item's gem slots and their type.
-        /// </summary>
-        public GemType[] GemTypes { get; set; }
+        
+        public GemSlot[] GemSlots { get; set; }
 
         public int EnchantId { get; set; }
 
-        public int GP { get; set; }
-        /// <summary>
-        /// Base item.
-        /// </summary>
-        public BaseItem BaseItem { get; set; }
+        public short GP { get; set; }
+
+        public bool IsIdentified { 
+            get
+            {
+                return ((ItemStatuses.Identified & Statuses) != 0) && ((ItemStatuses.Unidentified & Statuses) == 0);
+            } 
+        }
     }
 }

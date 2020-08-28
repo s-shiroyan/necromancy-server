@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.Stats;
+using Necromancy.Server.Systems.Items;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
@@ -40,7 +41,7 @@ namespace Necromancy.Server.Model
         public ushort agility { get; set; }
         public ushort intelligence { get; set; }
         public ushort piety { get; set; }
-        public ushort luck { get; set; }
+        public ushort luck { get; set; }        
 
         public uint ClassId { get; set; }
         public bool hadDied { get; set; }
@@ -117,9 +118,6 @@ namespace Necromancy.Server.Model
         public CharacterTask characterTask;
         public bool _characterActive { get; private set; }
 
-        //Inventory
-        public Inventory Inventory { get; set; }
-
         public Character()
         {
             InstanceId = InstanceGenerator.InvalidInstanceId;
@@ -168,8 +166,6 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
             stepCount = 0;
-
-            Inventory = new Inventory();
         }
 
         public bool characterActive

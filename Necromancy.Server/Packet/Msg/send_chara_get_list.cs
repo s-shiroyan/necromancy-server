@@ -6,7 +6,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -14,16 +13,9 @@ namespace Necromancy.Server.Packet.Msg
 {
     public class send_chara_get_list : ClientHandler
     {
-        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_get_list));
-        private readonly SettingRepository _settingRepository;
-
-        public send_chara_get_list(NecServer server) : base(server)
-        {
-        }
-
+        private static readonly NecLogger Logger = LogProvider.Logger<NecLogger>(typeof(send_chara_get_list));    
+        public send_chara_get_list(NecServer server) : base(server)  { }
         public override ushort Id => (ushort) MsgPacketId.send_chara_get_list;
-
-
         public override void Handle(NecClient client, NecPacket packet)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
@@ -71,7 +63,7 @@ namespace Necromancy.Server.Packet.Msg
                     {
                         character.Inventory.Equip(inventoryItem);
                         inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-                        inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
+                        inventoryItem.Item.LoadEquipType = (ItemEquipDisplayType)Enum.Parse(typeof(ItemEquipDisplayType), inventoryItem.Item.ItemType.ToString());
                     }
                 }
                 if (character.Inventory._equippedItems.Count > 20)
@@ -88,11 +80,16 @@ namespace Necromancy.Server.Packet.Msg
 
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(character.Level); //character level stat
-                res.WriteInt32(1); //todo (unknown)
+                res.WriteInt32(1); //TODO (unknown)
                 res.WriteUInt32(character.ClassId); //class stat 
 
-                //Consolidated Frequently Used Code
-                LoadEquip.BasicTraits(res, character);
+                //Traits
+                res.WriteUInt32(character.Raceid); 
+                res.WriteUInt32(character.Sexid);
+                res.WriteByte(character.HairId); 
+                res.WriteByte(character.HairColorId); 
+                res.WriteByte(character.FaceId); 
+
                 LoadEquip.SlotSetup(res, character, 19);
                 LoadEquip.EquipItems(res, character, 19);
                 LoadEquip.EquipSlotBitMask(res, character, 19);

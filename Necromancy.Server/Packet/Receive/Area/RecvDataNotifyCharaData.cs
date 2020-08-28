@@ -10,13 +10,11 @@ namespace Necromancy.Server.Packet.Receive.Area
     {
         private readonly Character _character;
         private readonly string _soulName;
-
         public RecvDataNotifyCharaData(Character character, string soulName)
             : base((ushort) AreaPacketId.recv_data_notify_chara_data, ServerType.Area)
         {
             _character = character;
             _soulName = soulName;
-
         }
 
         protected override IBuffer ToBuffer()
@@ -53,7 +51,11 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_4835C0
             res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
-            LoadEquip.BasicTraits(res, _character);
+            res.WriteUInt32(_character.Raceid); 
+            res.WriteUInt32(_character.Sexid);
+            res.WriteByte(_character.HairId); 
+            res.WriteByte(_character.HairColorId);
+            res.WriteByte(_character.FaceId); 
             //sub_483420
             res.WriteUInt32(_character.partyId); // party id?
             //sub_4837C0

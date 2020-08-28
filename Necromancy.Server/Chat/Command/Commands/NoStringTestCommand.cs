@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands
@@ -25,17 +24,18 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            IBuffer res = BufferProvider.Provide();
+           // IBuffer res = BufferProvider.Provide();
 
-            foreach (InventoryItem inventoryItem in client.Character.Inventory._inventory[0])
-            {
-                res = BufferProvider.Provide();
-                res.WriteInt64(inventoryItem.Id);
-                res.WriteInt32(inventoryItem.Item.Durability+1); // Current durability points
-                Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res, ServerType.Area);
-                inventoryItem.Item.Durability += 1;
-                //When repairing this should be item's max durability.
-            }
+
+            //foreach (InventoryItem inventoryItem in client.Character.Inventory._inventory[0])
+            //{
+            //    res = BufferProvider.Provide();
+            //    res.WriteInt64(inventoryItem.Id);
+            //    res.WriteInt32(inventoryItem.Item.Durability+1); // Current durability points
+            //    Router.Send(client, (ushort)AreaPacketId.recv_item_update_durability, res, ServerType.Area);
+            //    inventoryItem.Item.Durability += 1;
+            //    //When repairing this should be item's max durability.
+            //}
 
         }
 

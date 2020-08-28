@@ -4,9 +4,10 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Packet.Receive.Area;
+using Necromancy.Server.Systems.Items;
 using System.Collections.Generic;
 
 namespace Necromancy.Server.Packet.Area
@@ -24,10 +25,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            LoadInventory(client);
-
+            LoadItems(client);
             SendDataGetSelfCharaData(client);
-
             IBuffer res2 = BufferProvider.Provide();
             Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
         }
@@ -37,8 +36,12 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
 
             //sub_4953B0 - characteristics
-            //Consolidated Frequently Used Code
-            LoadEquip.BasicTraits(res, client.Character);
+            //Traits
+            res.WriteUInt32(client.Character.Raceid); //race
+            res.WriteUInt32(client.Character.Sexid);
+            res.WriteByte(client.Character.HairId); //hair
+            res.WriteByte(client.Character.HairColorId); //color
+            res.WriteByte(client.Character.FaceId); //face
 
             //sub_484720 - combat/leveling info
             Logger.Debug($"Character ID Loading : {client.Character.Id}");
@@ -252,25 +255,25 @@ namespace Necromancy.Server.Packet.Area
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
-        }
+        }       
 
-
-        public void LoadInventory(NecClient client)
+        private void LoadItems(NecClient client)
         {
-            //populate soul and character inventory from database.
-            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterIdEquipped(client.Character.Id);
-            foreach (InventoryItem inventoryItem in inventoryItems)
+            ItemService itemService = new ItemService(client.Character);
+            List<SpawnedItem> ownedItems = itemService.GetOwnedItems();
+            foreach (SpawnedItem ownedItem in ownedItems)
             {
-                Item item = Server.Items[inventoryItem.ItemId];
-                inventoryItem.Item = item;
-                if (inventoryItem.State > 0 & inventoryItem.State < 262145) //this is redundant. could be removed for  better performance. 
+                if ((ownedItem.Statuses & ItemStatuses.Identified) != 0)
                 {
-                    client.Character.Inventory.Equip(inventoryItem);
-                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                    RecvItemInstance recvItemInstance = new RecvItemInstance(client, ownedItem);
+                    Router.Send(recvItemInstance);
                 }
-
+                else
+                {
+                    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(client, ownedItem);
+                    Router.Send(recvItemInstanceUnidentified);
+                }
             }
-
         }
 
     }
