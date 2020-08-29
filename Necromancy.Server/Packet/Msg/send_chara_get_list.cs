@@ -83,17 +83,17 @@ namespace Necromancy.Server.Packet.Msg
 
                 res.WriteInt32(0); // 0 = Alive | 1 = Dead
                 res.WriteInt32(character.Level); //character level stat
-                res.WriteInt32(1); //todo (unknown)
+                res.WriteInt32(0); //todo (unknown)
                 res.WriteUInt32(character.ClassId); //class stat 
 
                 //Consolidated Frequently Used Code
                 LoadEquip.BasicTraits(res, character);
-                LoadEquip.SlotSetup(res, character, 20);
-                LoadEquip.EquipItems(res, character, 20);
-                LoadEquip.EquipSlotBitMask(res, character, 20);
-                LoadEquip.SlotUpgradeLevel(res, character, 20);
+                LoadEquip.SlotSetup(res, character, character.Inventory._equippedItems.Count);
+                LoadEquip.EquipItems(res, character, character.Inventory._equippedItems.Count);
+                LoadEquip.EquipSlotBitMask(res, character, character.Inventory._equippedItems.Count);
+                LoadEquip.SlotUpgradeLevel(res, character, character.Inventory._equippedItems.Count);
 
-                res.WriteByte(20);  //Number of equipment to display
+                res.WriteByte((byte)(character.Inventory._equippedItems.Count));  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID
                 Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data, res, ServerType.Msg);
             }

@@ -33,7 +33,9 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32((int)_inventoryItem.Item.EquipmentSlotType); //spirit eq mask???
             res.WriteByte(3); //enchantment level
             res.WriteByte((byte)_client.Character.Alignmentid);
+            
             res.WriteCString($"{_inventoryItem.Item.Id}"); // _inventoryItem.Item.Name
+            
             res.WriteInt16((short)_client.Character.Alignmentid);
             res.WriteInt16((short)_client.Character.Alignmentid);
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
@@ -57,11 +59,32 @@ namespace Necromancy.Server.Packet.Receive.Area
             }
 
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
+            
             res.WriteInt32(1); //1 here lables the item "Gaurd".   no effect from higher numbers
             res.WriteInt16(1);
 
+            //new for sunset
+            res.WriteInt64(1234);
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteInt16(1);
+            res.WriteByte(0); 
+            res.WriteByte(0);
+
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
+            res.WriteInt32(1); //
 
 
             return res;

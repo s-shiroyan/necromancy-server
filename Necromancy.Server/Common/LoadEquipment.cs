@@ -24,7 +24,7 @@ namespace Necromancy.Server.Common
         }
         public static void SlotSetup(IBuffer res, Character myCharacter, int numEntries)
         {
-            if (myCharacter.Inventory._equippedItems.Count != 0) 
+            //if (myCharacter.Inventory._equippedItems.Count != 0) 
             {
                 SlotSetupNew(res, myCharacter);
                 return;
@@ -56,7 +56,7 @@ namespace Necromancy.Server.Common
 
         public static void EquipItems(IBuffer res, Character myCharacter, int numEntries)
         {
-            if (myCharacter.Inventory._equippedItems.Count != 0)
+            //if (myCharacter.Inventory._equippedItems.Count != 0)
             {
                 EquipItemsNew(res, myCharacter);
                 return;
@@ -96,7 +96,7 @@ namespace Necromancy.Server.Common
 
         public static void EquipSlotBitMask(IBuffer res, Character myCharacter, int numEntries)
         {
-            if (myCharacter.Inventory._equippedItems.Count != 0)
+            //if (myCharacter.Inventory._equippedItems.Count != 0)
             {
                 EquipSlotBitMaskNew(res, myCharacter);
                 return;
@@ -206,7 +206,7 @@ namespace Necromancy.Server.Common
 
         public static void SlotUpgradeLevel(IBuffer res, Character character, int numEntries)
         {
-            if (character.Inventory._equippedItems.Count != 0)
+            //if (character.Inventory._equippedItems.Count != 0)
             {
                 int i = 0;
                 foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
@@ -221,12 +221,12 @@ namespace Necromancy.Server.Common
                     i++;
                 }
             }
-            else
-            for (int i = 0; i < numEntries; i++)
-            {
-                //sub_483420   
-                res.WriteInt32(19); 
-            }
+            //else
+            //for (int i = 0; i < numEntries; i++)
+            //{
+            //    //sub_483420   
+            //    res.WriteInt32(19); 
+            //}
         }
 
 
