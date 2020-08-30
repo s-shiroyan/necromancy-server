@@ -32,7 +32,7 @@ namespace Necromancy.Server.Common
                 Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType}");
                 i++;
             }
-            while (i < 20)
+            while (i < numEntries)
             {
                 //sub_483660   
                 res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
@@ -68,7 +68,7 @@ namespace Necromancy.Server.Common
                 res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
                 i++;
             }
-            while (i < 20)//Must have 19 on recv_chara_notify_data
+            while (i < numEntries)//Must have 19 on recv_chara_notify_data
             {
                 res.WriteInt32(0); //Sets your Item ID per Iteration
                 res.WriteByte(0); // 
@@ -103,7 +103,7 @@ namespace Necromancy.Server.Common
                 res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
                 i++;
             }
-            while (i < 20)
+            while (i < numEntries)
             {
                 //sub_483420   
                 res.WriteInt32(0); //Must have 19 on recv_chara_notify_data
@@ -119,7 +119,7 @@ namespace Necromancy.Server.Common
                 res.WriteInt32(19); ///item quality(+#) or aura? 10 = +7, 19 = +6,(maybe just wep aura)
                 i++;
             }
-            while (i < 20)
+            while (i < numEntries)
             {
                 //sub_483420   
                 res.WriteInt32(0); //Must have 19 on recv_chara_notify_data

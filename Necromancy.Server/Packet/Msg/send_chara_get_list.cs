@@ -86,12 +86,13 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteInt32(1); //todo (unknown)
                 res.WriteUInt32(character.ClassId); //class stat 
 
+                int CharaEquipSlots = 20;
                 //Consolidated Frequently Used Code
                 LoadEquip.BasicTraits(res, character);
-                LoadEquip.SlotSetup(res, character, character.Inventory._equippedItems.Count);
-                LoadEquip.EquipItems(res, character, character.Inventory._equippedItems.Count);
-                LoadEquip.EquipSlotBitMask(res, character, character.Inventory._equippedItems.Count);
-                LoadEquip.SlotUpgradeLevel(res, character, character.Inventory._equippedItems.Count);
+                LoadEquip.SlotSetup(res, character, CharaEquipSlots);
+                LoadEquip.EquipItems(res, character, CharaEquipSlots);
+                LoadEquip.EquipSlotBitMask(res, character, CharaEquipSlots);
+                LoadEquip.SlotUpgradeLevel(res, character, CharaEquipSlots);
 
                 res.WriteByte((byte)(character.Inventory._equippedItems.Count));  //Number of equipment to display
                 res.WriteInt32(character.MapId); //map location ID

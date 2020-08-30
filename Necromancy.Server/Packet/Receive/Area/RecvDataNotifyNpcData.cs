@@ -19,13 +19,8 @@ namespace Necromancy.Server.Packet.Receive.Area
 
         protected override IBuffer ToBuffer()
         {
-            int numEntries = 19; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
+            int numEntries = 20; // 1 to 20 equipment.  Setting to 0 because NPCS don't wear gear.
             int numStatusEffects = 128;
-
-            if (_npcSpawn.ModelId > 52000 /*CharacterModelUpperLimit*/)
-            {
-                numEntries = 0;
-            } //ToDo find NPCs using chara models and build a table containing their equipment IDs
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(_npcSpawn.InstanceId); // InstanceId 

@@ -19,13 +19,8 @@ namespace Necromancy.Server.Packet.Receive.Area
 
         protected override IBuffer ToBuffer()
         {
-            int numEntries = 02; //Max of 16 Equipment Slots for Monster.  cmp to 0x10
+            int numEntries = 16; //Max of 16 Equipment Slots for Monster.  cmp to 0x10
             int numStatusEffects = 0x80; //Statuses effects. Max 128
-
-            if (_monsterSpawn.ModelId > 52000 /*CharacterModelUpperLimit*/)
-            {
-                numEntries = 0;
-            } //ToDo find any videos with monsters holding weapons.
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(_monsterSpawn.InstanceId);
@@ -76,6 +71,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             {
                 res.WriteInt32(0); // status effect ID. set to i
                 res.WriteInt32(0); //1 on 0 off
+                res.WriteInt32(0);
                 res.WriteInt32(0);
             }
 
