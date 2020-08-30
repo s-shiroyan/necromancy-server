@@ -40,10 +40,14 @@ namespace Necromancy.Server.Packet.Area
             //Consolidated Frequently Used Code
             LoadEquip.BasicTraits(res, client.Character);
 
+            for (int i = 0; i < 100; i++)
+                res.WriteInt64(0);
+
             //sub_484720 - combat/leveling info
             Logger.Debug($"Character ID Loading : {client.Character.Id}");
             res.WriteUInt32(client.Character.InstanceId); // InstanceId
             res.WriteUInt32(client.Character.ClassId); // class
+            res.WriteUInt32(0);//new
             res.WriteInt16(client.Character.Level); // current level 
             res.WriteInt64(91978348); // current exp
             res.WriteInt64(50000000); // soul exp
@@ -167,6 +171,8 @@ namespace Necromancy.Server.Packet.Area
             //sub_484B00 map ip and connection
             res.WriteInt32(client.Character.MapId); //MapSerialID
             res.WriteInt32(client.Character.MapId); //MapID
+            res.WriteInt32(client.Character.MapId); //MapID
+            res.WriteByte(0);//new bool
             res.WriteFixedString(Settings.DataAreaIpAddress, 65); //IP
             res.WriteUInt16(Settings.AreaPort); //Port
 
@@ -179,20 +185,33 @@ namespace Necromancy.Server.Packet.Area
             //sub_read_int32 skill point
             res.WriteInt32(101); // skill point
 
+            res.WriteInt64(0);//new Might be chara state and gm status
+
             //sub_483420 character state like alive/dead/invis
-            res.WriteInt32((int)client.Character.State); //-254 GM
+            //res.WriteInt32((int)client.Character.State); //-254 GM
 
             //sub_494AC0
             res.WriteByte(client.Soul.Level); // soul level
-            res.WriteInt32(22); // current soul points
-            res.WriteInt32(790); // soul point bar value (percenage of current/max)
-            res.WriteInt32(120); // max soul points
+            //res.WriteInt32(22); // current soul points
+            res.WriteInt64(0);//new might replace the above
+            //res.WriteInt32(790); // soul point bar value (percenage of current/max)
+            res.WriteInt64(0);//new
+            //res.WriteInt32(120); // max soul points
+            res.WriteInt64(0);//new
             res.WriteByte(client.Character.criminalState); // 0 is white,1 yellow 2 red 3+ skull
             res.WriteByte((byte)client.Character.beginnerProtection); //Beginner protection (bool)
             res.WriteByte(50); //Level cap
             res.WriteByte(1);
             res.WriteByte(2);
             res.WriteByte(3);
+
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+
+            res.WriteInt32(0);//new
 
             //sub_read_3-int16 unknown
             res.WriteInt16(50); // HP Consumption Rate?
@@ -220,16 +239,46 @@ namespace Necromancy.Server.Packet.Area
             //sub_494890
             res.WriteByte(1); //Bool
 
+            res.WriteInt32(0);//new
+            res.WriteByte(0);//new
+
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 1", 73); //new
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 2", 73); //new
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 3", 73); //new
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 4", 73); //new
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 5", 73); //new
+
+            res.WriteInt64(5678);//new
+            res.WriteInt32(0);//new
+            res.WriteFixedString($"unknown 6", 73); //new
+
+            res.WriteInt32(0);//new
+
             //sub_483420
-            int numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19(max equipment slots)
+            int numEntries = 0x19;
+            res.WriteInt32(numEntries); //has to be less than 0x19(max equipment slots)
 
             //Consolidated Frequently Used Code
             LoadEquip.SlotSetup(res, client.Character, numEntries);
 
 
             //sub_483420
-            res.WriteInt32(numEntries); //has to be less than 19
+            res.WriteInt32(numEntries); //has to be less than 0x19
 
             //Consolidated Frequently Used Code
             LoadEquip.EquipItems(res, client.Character, numEntries);
@@ -249,7 +298,11 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(2); //status
                 res.WriteInt32(9999998); //time start?
                 res.WriteInt32(9999999); //time end?
+                res.WriteInt32(9999999); //new
             }
+
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new bool
 
             Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
         }
