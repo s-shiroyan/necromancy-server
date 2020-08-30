@@ -40,62 +40,6 @@ namespace Necromancy.Server.Packet.Area
             //Consolidated Frequently Used Code
             LoadEquip.BasicTraits(res, client.Character);
 
-            //sub_48C1F0
-            /*for (int k = 0; k < 0xA/2; k++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        res.WriteInt64(2); // InstanceId
-                    }
-                }
-            }
-
-            for (int k = 0; k < 0x14/2; k++) //Equipment related.  20 slots.
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        res.WriteInt64(2); // InstanceId
-                    }
-                }
-            }
-
-            for (int k = 0; k < 0x1E/2; k++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        res.WriteInt64(2); // InstanceId
-                    }
-                }
-            }
-
-            for (int k = 0; k < 0x28/2; k++)
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        res.WriteInt64(2); // InstanceId
-                    }
-                }
-            }
-
-            for (int k = 0; k < 0x32/2; k++) //this one breaks that cmp 14 loop.   
-            {
-                for (int j = 0; j < 2; j++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        res.WriteInt64(0); // InstanceId
-                    }
-                }
-            }*/
-
             for (int i = 0; i < 100; i++)
                 res.WriteInt64(0);
 
@@ -286,7 +230,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteFixedString($"{client.Soul.Name} Comment", 385); //Comment
 
             //sub_494890
-            res.WriteByte(1); //Bool for showing/hiding character comment.
+            res.WriteByte(0); //Bool for showing/hiding character comment.
 
             //sub_4834A0
             res.WriteFixedString($"{client.Soul.Name} chatbox?", 385); //Chatbox?
@@ -297,59 +241,12 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(2); //this is new in sunset
 
             res.WriteByte(1); //this is new in sunset
-            //--Good so far-------------------------
 
             int numEntries = 0x14;
             res.WriteInt32(numEntries); //has to be below or equal to 0x14
 
-            for (int i = 0; i < numEntries; i++)
-                res.WriteInt32(0);
-
-            res.WriteInt32(numEntries); //less than or equal to 0x14
-
-            for(int i = 0; i < numEntries; i++)
-            { 
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteInt32(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0); //bool
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-                res.WriteByte(0);
-            }
-
-            res.WriteInt32(numEntries); //less than or equal to 0x14
-
-            for (int i = 0; i < numEntries; i++)
-                res.WriteInt32(0);
-
-            res.WriteInt32(0x80); //less than or equal to 0x80
-
-            for (int i = 0; i < 0x80; i++)
-            {
-                res.WriteInt32(0);
-                res.WriteInt32(0);
-                res.WriteInt32(0);
-                res.WriteInt32(0);
-            }
-
-            //The stuff below here should replace the 4 int32 above, but im missing something
-
-            /*
             //Consolidated Frequently Used Code
             LoadEquip.SlotSetup(res, client.Character, numEntries);
-
 
             //sub_483420
             res.WriteInt32(numEntries); //has to be less than 19
@@ -362,18 +259,16 @@ namespace Necromancy.Server.Packet.Area
 
             LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
 
-            //sub_483420
-            numEntries = 1;
-            res.WriteInt32(numEntries); //has to be less than 128
+            res.WriteInt32(0x80); //less than or equal to 0x80
 
-            //sub_485A70
-            for (int k = 0; k < numEntries; k++) //status buffs / debuffs
+            for (int i = 0; i < 0x80; i++)
             {
-                res.WriteInt32(2); //status
-                res.WriteInt32(9999998); //time start?
-                res.WriteInt32(9999999); //time end?
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
             }
-            */
+
             Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
         }
 
