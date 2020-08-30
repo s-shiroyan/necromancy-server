@@ -29,9 +29,9 @@ namespace Necromancy.Server.Packet.Area
             res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
             Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
 
-            LoadInventory(client);
-            LoadCloakRoom(client);
-            LoadBattleStats(client);
+            //LoadInventory(client);
+            //LoadCloakRoom(client);
+            //LoadBattleStats(client);
         }
 
         public void LoadBattleStats(NecClient client)

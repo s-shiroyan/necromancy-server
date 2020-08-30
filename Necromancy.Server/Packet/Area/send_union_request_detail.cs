@@ -85,16 +85,22 @@ namespace Necromancy.Server.Packet.Msg
                         res3.WriteFixedString($"{character.Name}", 0x5B); //size is 0x5B
                         res3.WriteUInt32(character.ClassId);
                         res3.WriteByte(character.Level);
+                        res3.WriteByte(0);//new
+
                         res3.WriteInt32(character.MapId); // Location of your Union Member
                         res3.WriteInt32(unionJoinedCalculation); //Area of Map, somehow. or Channel;
                         res3.WriteFixedString($"Channel {character.Channel}", 0x61); // Channel location
                         res3.WriteUInt32(unionMemberList.MemberPriviledgeBitMask); //permissions bitmask  obxxxx1 = invite | obxxx1x = kick | obxx1xx = News | 0bxx1xxxxx = General Storage | 0bx1xxxxxx = Deluxe Storage
+                        res3.WriteByte(0);//new
                         res3.WriteUInt32(unionMemberList.Rank); //Rank  3 = beginner 2 = member, 1 = sub-leader 0 = leader
                         res3.WriteInt32(onlineStatus); //online status. 0 = online, 1 = offline, 2 = away
                         res3.WriteInt32(unionJoinedCalculation); //Date Joined in seconds since unix time
                         res3.WriteInt32(Util.GetRandomNumber(0, 0));
                         res3.WriteInt32(Util.GetRandomNumber(0, 0));
-                        Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
+                        res3.WriteInt32(Util.GetRandomNumber(0, 0));//new
+                        res3.WriteFixedString($"{character.Name}", 0x181); //size is 0x181, new
+
+                        //Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail_member, res3, ServerType.Msg);
                     }
 
                     uint UnionLeaderInstanceId = Server.Instances.GetCharacterInstanceId(myUnion.LeaderId);
@@ -109,29 +115,47 @@ namespace Necromancy.Server.Packet.Msg
                     res.WriteUInt32(UnionLeaderInstanceId); //Leader
                     res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting? 
                     res.WriteUInt32(UnionSubLeader1InstanceId); //subleader1
-                    res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting? 
+                    res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting?
+                    res.WriteByte(0);//new
                     res.WriteUInt32(UnionSubLeader2InstanceId); //subleader2
                     res.WriteInt32(unionCreatedCalculation);//Last login timestamp for demoting? 
                     res.WriteByte((byte)myUnion.Level); //Union Level
+                    res.WriteByte(0);//new
                     res.WriteUInt32(myUnion.CurrentExp); //Union EXP Current
+                    res.WriteInt16(0);//new
+                    res.WriteFixedString(myUnion.Name, 0x196); //size is 0x196, new
                     res.WriteUInt32(myUnion.NextLevelExp); //Union EXP next level Target
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
                     res.WriteByte(myUnion.MemberLimitIncrease); //Increase Union Member Limit above default 50 (See Union Bonuses
-                    res.WriteByte(1); //?
+                    res.WriteUInt32(0);//new
+
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+                    res.WriteUInt32(0);//new
+
+                    /*res.WriteByte(1); //?
                     res.WriteInt32(10); //Creation Date?
                     res.WriteInt16(myUnion.CapeDesignID); //Mantle/Cape
                     res.WriteFixedString($"You are all members of {myUnion.Name} now.  Welcome!",
                         0x196); //size is 0x196
                     for (int i = 0; i < 8; i++)
                         res.WriteInt32(i);
-                    res.WriteByte(255);
-                    Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
+                    res.WriteByte(255);*/
+                    //Router.Send(client, (ushort)MsgPacketId.recv_union_notify_detail, res, ServerType.Msg);
                 }
             }
 
                 //Acknowledge send.  'Hey send,  i'm finished doing my stuff.  go do the next stuff'
                 IBuffer res2 = BufferProvider.Provide();
                 res2.WriteInt32(0);          
-                Router.Send(client, (ushort)MsgPacketId.recv_union_request_detail_r, res2, ServerType.Msg);
+                //Router.Send(client, (ushort)MsgPacketId.recv_union_request_detail_r, res2, ServerType.Msg);
             
         }
     }

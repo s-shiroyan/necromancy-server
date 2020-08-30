@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Receive.Area
 
         protected override IBuffer ToBuffer()
         {
-            int numEntries = 19; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
+            int numEntries = 0x19; // 1 to 19 equipment.  Setting to 0 because NPCS don't wear gear.
             int numStatusEffects = 128;
 
             if (_npcSpawn.ModelId > 52000 /*CharacterModelUpperLimit*/)
@@ -76,6 +76,7 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt32(0);
                 res.WriteInt32(0);
                 res.WriteInt32(0);
+                res.WriteInt32(0);//new
             }
 
             return res;

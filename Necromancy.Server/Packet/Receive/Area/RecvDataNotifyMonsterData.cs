@@ -39,6 +39,10 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32(_monsterSpawn.ModelId); //Monster Model ID
             res.WriteInt16(_monsterSpawn.Size);
 
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
             LoadEquip.SlotSetup(res, _character, numEntries);
@@ -69,6 +73,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt64(1); // item Id ?
             res.WriteByte(231);
             res.WriteByte(232);
+            res.WriteByte(0);//new
             res.WriteInt32(_monsterSpawn.Hp.current); //Current HP
             res.WriteInt32(_monsterSpawn.Hp.max); //Max HP
             res.WriteInt32(numStatusEffects); // cmp to 0x80 = 128
@@ -77,6 +82,7 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt32(0); // status effect ID. set to i
                 res.WriteInt32(0); //1 on 0 off
                 res.WriteInt32(0);
+                res.WriteInt32(0);//new
             }
 
             return res;
