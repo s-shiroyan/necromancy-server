@@ -7,19 +7,32 @@ namespace Necromancy.Server.Systems.Items
     public class ItemService
     {
         private readonly Character _character;
+        private readonly IItemDao _itemDao;
+
         public ItemService(Character character)
         {
+            _itemDao = new ItemDao();
             _character = character;
         }
+
+        public ItemService(Character character, IItemDao itemDao)
+        {
+            _itemDao = itemDao;
+            _character = character;
+        }
+
         public SpawnedItem Equip(ItemLocation location, ItemEquipSlot equipSlot)
         {
-            //_character.EquippedItems.Add()
+            
             throw new NotImplementedException();
+
+            //_character.EquippedItems.Add()
         }
         public SpawnedItem Unequip(ItemEquipSlot equipSlot)
         {
-            //_character.EquippedItems.Remove()
+            
             throw new NotImplementedException();
+            //_character.EquippedItems.Remove()
         }
         /// <summary>
         /// Creates an unidentified instance of the base item specified by ID in the next open bag slot.

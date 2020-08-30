@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `nec_ggate_spawn`
 
 --Inventory and Item Related tables
 
-CREATE IF NOT EXISTS TABLE "nec_item" (
+CREATE IF NOT EXISTS TABLE "nec_base_item" (
 	"id"	INTEGER NOT NULL,
 	"item_type"	TEXT NOT NULL,
 	"quality"	TEXT NOT NULL,
@@ -442,23 +442,42 @@ CREATE IF NOT EXISTS TABLE "nec_item" (
 	PRIMARY KEY("id")
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item_spawn` (
-	`id`	                INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`character_id`	        INTEGER NOT NULL,
-	`item_id`	            INTEGER NOT NULL,
-	`quantity`	            INTEGER NOT NULL,
-	`current_durability`	INTEGER NOT NULL,
-    `storage_type`          INTEGER NOT NULL,   --ToDo identify Union location and avatar location bytes
-	`bag`	                INTEGER NOT NULL,	
-	`slot`	                INTEGER NOT NULL,	
-    `state`	                INTEGER NOT NULL,	--equipped, soulbound, at auction, in shop. placeholder for bitmask.
-	CONSTRAINT `fk_nec_item_spawn_item_id` FOREIGN KEY(`item_id`) REFERENCES `nec_item_library`(`id`)
+CREATE TABLE "nec_spawned_item" (
+	"id"	INTEGER NOT NULL,
+	"character_id"	INTEGER NOT NULL,
+	"zone"	INTEGER NOT NULL,
+	"bag"	INTEGER NOT NULL,
+	"slot"	INTEGER NOT NULL,
+	"base_id"	INTEGER NOT NULL,
+	"quantity"	INTEGER NOT NULL DEFAULT 1,
+	"unidentified_name"	TEXT,
+	"is_identified"	INTEGER NOT NULL DEFAULT 1,
+	"is_cursed"	INTEGER NOT NULL DEFAULT 0,
+	"is_blessed"	INTEGER NOT NULL DEFAULT 0,
+	"current_equip_slot"	INTEGER NOT NULL DEFAULT 0,
+	"current_durability"	INTEGER NOT NULL DEFAULT 0,
+	"maximum_durability"	INTEGER NOT NULL DEFAULT 0,
+	"enhancement_level"	INTEGER NOT NULL DEFAULT 0,
+	"special_forge_level"	INTEGER NOT NULL DEFAULT 0,
+	"physical"	INTEGER NOT NULL DEFAULT 0,
+	"magical"	INTEGER NOT NULL DEFAULT 0,
+	"hardness"	INTEGER NOT NULL DEFAULT 0,
+	"gem_slot_1_type"	INTEGER NOT NULL DEFAULT 0,
+	"gem_slot_2_type"	INTEGER NOT NULL DEFAULT 0,
+	"gem_slot_3_type"	INTEGER NOT NULL DEFAULT 0,
+	"gem_id_slot_1"	INTEGER,
+	"gem_id_slot_2"	INTEGER,
+	"gem_id_slot_3"	INTEGER,
+	"enchant_id"	INTEGER NOT NULL DEFAULT 0,
+	"gp"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
+	FOREIGN KEY("base_id") REFERENCES "nec_base_item"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
-CREATE TABLE IF NOT EXISTS `nec_item_character_bag` (
-	`id`	    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`char_id`	INTEGER NOT NULL,
-	`slot`      INTEGER NOT NULL,
-	`size`	    INTEGER NOT NULL,
-	CONSTRAINT `fk_nec_item_character_bag_character_id` FOREIGN KEY(`char_id`) REFERENCES `nec_character`(`id`)
+CREATE UNIQUE INDEX "item_location" ON "nec_spawned_item" (
+	"character_id",
+	"zone",
+	"bag",
+	"slot"
 );

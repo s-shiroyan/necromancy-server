@@ -24,7 +24,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int instanceID = packet.Data.ReadInt32();
-            Logger.Debug($"{client.Character.Name} is {client.Character.Alignmentid}");
+            Logger.Debug($"{client.Character.Name} is {client.Character.AlignmentId}");
 
 
             IBuffer res = null;

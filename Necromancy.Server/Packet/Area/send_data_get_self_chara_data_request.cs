@@ -16,19 +16,12 @@ namespace Necromancy.Server.Packet.Area
     {
         private static readonly NecLogger Logger =
             LogProvider.Logger<NecLogger>(typeof(send_data_get_self_chara_data_request));
-
-        public send_data_get_self_chara_data_request(NecServer server) : base(server)
-        {
-        }
-
+        public send_data_get_self_chara_data_request(NecServer server) : base(server) { }
         public override ushort Id => (ushort) AreaPacketId.send_data_get_self_chara_data_request;
-
         public override void Handle(NecClient client, NecPacket packet)
         {
             LoadItems(client);
             SendDataGetSelfCharaData(client);
-            IBuffer res2 = BufferProvider.Provide();
-            Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
         }
 
         private void SendDataGetSelfCharaData(NecClient client)
@@ -37,8 +30,8 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_4953B0 - characteristics
             //Traits
-            res.WriteUInt32(client.Character.Raceid); //race
-            res.WriteUInt32(client.Character.Sexid);
+            res.WriteUInt32(client.Character.RaceId); //race
+            res.WriteUInt32(client.Character.SexId);
             res.WriteByte(client.Character.HairId); //hair
             res.WriteByte(client.Character.HairColorId); //color
             res.WriteByte(client.Character.FaceId); //face
@@ -66,12 +59,12 @@ namespace Necromancy.Server.Packet.Area
 
             // total stat level includes bonus'?
             res.WriteUInt16(client.Character.Strength); // str
-            res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short) (client.Character.dexterity + 3)); // dex
-            res.WriteUInt16(client.Character.agility); // agi
-            res.WriteUInt16(client.Character.intelligence); // int
-            res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short) (client.Character.luck + 4)); // luk
+            res.WriteUInt16(client.Character.Vitality); // vit
+            res.WriteInt16((short) (client.Character.Dexterity + 3)); // dex
+            res.WriteUInt16(client.Character.Agility); // agi
+            res.WriteUInt16(client.Character.Intelligence); // int
+            res.WriteUInt16(client.Character.Piety); // pie
+            res.WriteInt16((short) (client.Character.Luck + 4)); // luk
 
             // mag atk atrb
             res.WriteInt16(5); // fire
@@ -110,7 +103,7 @@ namespace Necromancy.Server.Packet.Area
 
             // gold and alignment?
             res.WriteInt64(client.Character.AdventureBagGold); // gold
-            res.WriteUInt32(client.Character.Alignmentid); // AlignmentId
+            res.WriteUInt32(client.Character.AlignmentId); // AlignmentId
             res.WriteInt32(6000); // lawful
             res.WriteInt32(5000); // neutral
             res.WriteInt32(6100); // chaos
@@ -123,12 +116,12 @@ namespace Necromancy.Server.Packet.Area
 
             // characters stats
             res.WriteUInt16(client.Character.Strength); // str
-            res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short) (client.Character.dexterity)); // dex
-            res.WriteUInt16(client.Character.agility); // agi
-            res.WriteUInt16(client.Character.intelligence); // int
-            res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short) (client.Character.luck)); // luk
+            res.WriteUInt16(client.Character.Vitality); // vit
+            res.WriteInt16((short) (client.Character.Dexterity)); // dex
+            res.WriteUInt16(client.Character.Agility); // agi
+            res.WriteUInt16(client.Character.Intelligence); // int
+            res.WriteUInt16(client.Character.Piety); // pie
+            res.WriteInt16((short) (client.Character.Luck)); // luk
 
             // nothing
             res.WriteInt16(1);
@@ -191,7 +184,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(790); // soul point bar value (percenage of current/max)
             res.WriteInt32(120); // max soul points
             res.WriteByte(client.Character.criminalState); // 0 is white,1 yellow 2 red 3+ skull
-            res.WriteByte((byte)client.Character.beginnerProtection); //Beginner protection (bool)
+            res.WriteByte((byte)client.Character.BeginnerProtection); //Beginner protection (bool)
             res.WriteByte(50); //Level cap
             res.WriteByte(1);
             res.WriteByte(2);
@@ -224,26 +217,47 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(1); //Bool
 
             //sub_483420
-            int numEntries = 19;
-            res.WriteInt32(numEntries); //has to be less than 19(max equipment slots)
+            int numOfEquippedItems = 0;
+            res.WriteInt32(numOfEquippedItems); //has to be less than 19(max equipment slots)
 
-            //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, client.Character, numEntries);
-
-
-            //sub_483420
-            res.WriteInt32(numEntries); //has to be less than 19
-
-            //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, client.Character, numEntries);
+            for (int i = 0; i < numOfEquippedItems; i++)
+            {
+                res.WriteInt32(0); //TODO figure out what the fuck this is for Item display type? something with spagetti load equipment
+            }
 
             //sub_483420
-            res.WriteInt32(numEntries);
-
-            LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
+            res.WriteInt32(numOfEquippedItems); //has to be less than 19
+            
+            for (int i = 0; i < numOfEquippedItems; i++)
+            { //todo textures
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0); //bool
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
 
             //sub_483420
-            numEntries = 1;
+            res.WriteInt32(numOfEquippedItems);
+
+            for (int i = 0; i < numOfEquippedItems; i++)
+            {                
+                res.WriteInt32(0); //bitmask per equipment slot
+            }
+
+            //sub_483420
+            int numEntries = 1;
             res.WriteInt32(numEntries); //has to be less than 128
 
             //sub_485A70
@@ -263,16 +277,10 @@ namespace Necromancy.Server.Packet.Area
             List<SpawnedItem> ownedItems = itemService.GetOwnedItems();
             foreach (SpawnedItem ownedItem in ownedItems)
             {
-                if ((ownedItem.Statuses & ItemStatuses.Identified) != 0)
-                {
-                    RecvItemInstance recvItemInstance = new RecvItemInstance(client, ownedItem);
-                    Router.Send(recvItemInstance);
-                }
-                else
-                {
-                    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(client, ownedItem);
-                    Router.Send(recvItemInstanceUnidentified);
-                }
+                PacketResponse pResp;
+                if (ownedItem.IsIdentified) pResp = new RecvItemInstance(client, ownedItem);
+                else pResp = new RecvItemInstanceUnidentified(client, ownedItem);
+                Router.Send(pResp);
             }
         }
 

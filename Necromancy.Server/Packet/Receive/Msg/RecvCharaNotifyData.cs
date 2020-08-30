@@ -24,37 +24,24 @@ namespace Necromancy.Server.Packet.Receive.Msg
             res.WriteInt32(_character.Id); //  Character ID
             res.WriteFixedString(_character.Name, 91); // 0x5B | 91x 1 byte
 
-            res.WriteInt32(0); // 0 = Alive | 1 = Dead
+            res.WriteInt32(0); // 0 = Alive | 1 = Dead  probably not 0 but probably a bitmask for status
             res.WriteInt32(_character.Level); //character level stat
             res.WriteInt32(1); //TODO (unknown)
             res.WriteUInt32(_character.ClassId); //class stat 
 
-            res.WriteUInt32(_character.Raceid);
-            res.WriteUInt32(_character.Sexid);
+            res.WriteUInt32(_character.RaceId);
+            res.WriteUInt32(_character.SexId);
             res.WriteByte(_character.HairId);
             res.WriteByte(_character.HairColorId);
             res.WriteByte(_character.FaceId);
-            
-            res.WriteInt32(ItemEquipDisplayType.KATANA_1H); //TODO
-            res.WriteInt32(ItemEquipDisplayType.KATANA_1H);
-            res.WriteInt32(ItemEquipDisplayType.quiver);
 
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            for (int i = 0; i < 19; i++)
+            byte numOfEquippedItems = (byte)_character.EquippedItems.Count;
+            for (int i = 0; i < numOfEquippedItems; i++)
             {
+                res.WriteInt32(0); //TODO figure out what the fuck this is for Item display type? something with spagetti load equipment
+            }
+            for (int i = 0; i < numOfEquippedItems; i++)
+            { //todo textures
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
@@ -72,12 +59,12 @@ namespace Necromancy.Server.Packet.Receive.Msg
                 res.WriteByte(0);
                 res.WriteByte(0);
             }
-            for (int i = 0; i < 19; i++)
-                res.WriteInt32(0);
-            for (int i = 0; i < 19; i++)
-                res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteInt32(0);
+            for (int i = 0; i < numOfEquippedItems; i++)
+                res.WriteInt32(0); //TODOequipslot?
+            for (int i = 0; i < numOfEquippedItems; i++)
+                res.WriteInt32(0); //TODOupgrade level?
+            res.WriteByte(numOfEquippedItems); //number of equpped items
+            res.WriteInt32(0); //map id
             return res;
         }
     }

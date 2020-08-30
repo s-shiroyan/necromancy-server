@@ -44,8 +44,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             LoadEquip.EquipSlotBitMask(res14, _character, numEntries);
 
             //Traits
-            res14.WriteUInt32(_character.Raceid); //race
-            res14.WriteUInt32(_character.Sexid);
+            res14.WriteUInt32(_character.RaceId); //race
+            res14.WriteUInt32(_character.SexId);
             res14.WriteByte(_character.HairId); //hair
             res14.WriteByte(_character.HairColorId); //color
             res14.WriteByte(_character.FaceId); //face

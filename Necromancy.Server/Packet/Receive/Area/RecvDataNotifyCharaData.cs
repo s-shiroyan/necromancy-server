@@ -51,8 +51,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_4835C0
             res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
-            res.WriteUInt32(_character.Raceid); 
-            res.WriteUInt32(_character.Sexid);
+            res.WriteUInt32(_character.RaceId); 
+            res.WriteUInt32(_character.SexId);
             res.WriteByte(_character.HairId); 
             res.WriteByte(_character.HairColorId);
             res.WriteByte(_character.FaceId); 
@@ -63,7 +63,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_read_byte
             res.WriteByte(_character.criminalState); //Criminal name icon
             //sub_494890
-            res.WriteByte((byte) _character.beginnerProtection); //Bool Beginner Protection
+            res.WriteByte((byte) _character.BeginnerProtection); //Bool Beginner Protection
             //sub_4835E0
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920

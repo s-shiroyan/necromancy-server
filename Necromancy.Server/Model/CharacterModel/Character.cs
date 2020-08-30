@@ -29,25 +29,25 @@ namespace Necromancy.Server.Model
         public CharacterState State { get; set; }
 
         // TODO sort this messy class out...
-        public uint Raceid { get; set; }
-        public uint Sexid { get; set; }
+        public uint RaceId { get; set; }
+        public uint SexId { get; set; }
         public byte HairId { get; set; }
         public byte HairColorId { get; set; }
         public byte FaceId { get; set; }
-        public uint Alignmentid { get; set; }
+        public uint AlignmentId { get; set; }
         public ushort Strength { get; set; }
-        public ushort vitality { get; set; }
-        public ushort dexterity { get; set; }
-        public ushort agility { get; set; }
-        public ushort intelligence { get; set; }
-        public ushort piety { get; set; }
-        public ushort luck { get; set; }        
+        public ushort Vitality { get; set; }
+        public ushort Dexterity { get; set; }
+        public ushort Agility { get; set; }
+        public ushort Intelligence { get; set; }
+        public ushort Piety { get; set; }
+        public ushort Luck { get; set; }        
 
         public uint ClassId { get; set; }
-        public bool hadDied { get; set; }
+        public bool HasDied { get; set; }
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
-        public int beginnerProtection { get; set; }
+        public int BeginnerProtection { get; set; }
 
 
         //Movement Related
@@ -75,7 +75,8 @@ namespace Necromancy.Server.Model
         public int stepCount { get; set; }
         public long AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
-        public int[] EquipId { get; set; }
+        public int[] EquipId { get; set; } //TODO what the fuck is this?
+        public Dictionary<ItemEquipSlot, SpawnedItem> EquippedItems { get; private set; }
         public uint activeSkillInstance { get; set; }
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
@@ -145,13 +146,13 @@ namespace Necromancy.Server.Model
             takeover = false;
             skillStartCast = 0;
             battleAnim = 0;
-            hadDied = false;
+            HasDied = false;
             State = CharacterState.NormalForm;
             helperText = true;
             helperTextBlacksmith = true;
             helperTextDonkey = true;
             helperTextCloakRoom = true;
-            beginnerProtection = 1;
+            BeginnerProtection = 1;
             currentEvent = null;
             secondInnAccess = false;
             _characterActive = true;
@@ -166,6 +167,8 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
             stepCount = 0;
+
+            EquippedItems = new Dictionary<ItemEquipSlot, SpawnedItem>();
         }
 
         public bool characterActive

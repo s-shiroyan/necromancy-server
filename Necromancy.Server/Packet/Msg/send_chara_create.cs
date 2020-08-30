@@ -52,6 +52,7 @@ namespace Necromancy.Server.Packet.Msg
             }
 
             Character character = new Character();
+            Server.Instances.AssignInstance(character);
             character.MapId = map.Id;
             character.X = map.X;
             character.Y = map.Y;
@@ -63,19 +64,19 @@ namespace Necromancy.Server.Packet.Msg
             character.Slot = character_slot_id;
             character.Name = character_name;
 
-            character.Raceid = race_id;
-            character.Sexid = sex_id;
+            character.RaceId = race_id;
+            character.SexId = sex_id;
             character.HairId = hair_id;
             character.HairColorId = hair_color_id;
             character.FaceId = face_id;
-            character.Alignmentid = alignment_id;
+            character.AlignmentId = alignment_id;
             character.Strength = strength;
-            character.vitality = vitality;
-            character.dexterity = dexterity;
-            character.agility = agility;
-            character.intelligence = intelligence;
-            character.piety = piety;
-            character.luck = luck;
+            character.Vitality = vitality;
+            character.Dexterity = dexterity;
+            character.Agility = agility;
+            character.Intelligence = intelligence;
+            character.Piety = piety;
+            character.Luck = luck;
             character.ClassId = class_id;            
 
             //----------------------------------------------------------
@@ -87,8 +88,6 @@ namespace Necromancy.Server.Packet.Msg
                 client.Close();
                 return;
             }
-            
-            Server.Instances.AssignInstance(character);
 
             CreateSkillTreeItems(client, character, class_id);
             CreateShortcutBars(client, character, class_id);

@@ -233,8 +233,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
                     //Traits
-                    res14.WriteUInt32(character2.Raceid); //race
-                    res14.WriteUInt32(character2.Sexid);
+                    res14.WriteUInt32(character2.RaceId); //race
+                    res14.WriteUInt32(character2.SexId);
                     res14.WriteByte(character2.HairId); //hair
                     res14.WriteByte(character2.HairColorId); //color
                     res14.WriteByte(character2.FaceId); //face

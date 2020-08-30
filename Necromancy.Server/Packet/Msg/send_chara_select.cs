@@ -72,8 +72,8 @@ namespace Necromancy.Server.Packet.Msg
             deadBody.Y = character.Y;
             deadBody.Z = character.Z;
             deadBody.Heading = character.Heading;
-            deadBody.RaceId = character.Raceid;
-            deadBody.SexId = character.Sexid;
+            deadBody.RaceId = character.RaceId;
+            deadBody.SexId = character.SexId;
             deadBody.HairStyle = character.HairId;
             deadBody.HairColor = character.HairColorId;
             deadBody.FaceId = character.FaceId;
