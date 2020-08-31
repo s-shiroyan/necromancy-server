@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Necromancy.Server.Systems.Items
+namespace Necromancy.Server.Systems.Item
 {
     public enum ItemExceptionType
     {

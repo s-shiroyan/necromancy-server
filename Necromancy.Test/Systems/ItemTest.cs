@@ -1,6 +1,6 @@
 
 using Necromancy.Server.Model;
-using Necromancy.Server.Systems.Items;
+using Necromancy.Server.Systems.Item;
 using System;
 using System.Collections.Generic;
 using System.Data;

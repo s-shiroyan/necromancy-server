@@ -1,6 +1,6 @@
 
 
-namespace Necromancy.Server.Systems.Items
+namespace Necromancy.Server.Systems.Item
 {
     public enum GemType
     {

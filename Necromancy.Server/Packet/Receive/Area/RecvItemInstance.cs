@@ -2,7 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Systems.Items;
+using Necromancy.Server.Systems.Item;
 using System;
 
 namespace Necromancy.Server.Packet.Receive

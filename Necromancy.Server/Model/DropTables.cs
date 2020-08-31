@@ -3,7 +3,7 @@ using Arrowgene.Logging;
 using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
-using Necromancy.Server.Systems.Items;
+using Necromancy.Server.Systems.Item;
 
 namespace Necromancy.Server.Model
 {

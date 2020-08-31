@@ -6,7 +6,7 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Model.Stats;
-using Necromancy.Server.Systems.Items;
+using Necromancy.Server.Systems.Item;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model

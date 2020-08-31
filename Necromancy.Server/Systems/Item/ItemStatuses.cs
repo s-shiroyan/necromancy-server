@@ -1,6 +1,6 @@
 using System;
 
-namespace Necromancy.Server.Systems.Items
+namespace Necromancy.Server.Systems.Item
 {
     [Flags]
     public enum ItemStatuses

@@ -35,5 +35,6 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Model\ItemModel\" />
+      <Folder Include="Systems\Character\" />
     </ItemGroup>
 </Project>

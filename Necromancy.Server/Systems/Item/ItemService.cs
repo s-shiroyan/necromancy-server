@@ -2,7 +2,7 @@ using Necromancy.Server.Model;
 using System;
 using System.Collections.Generic;
 
-namespace Necromancy.Server.Systems.Items
+namespace Necromancy.Server.Systems.Item
 {
     public class ItemService
     {
@@ -39,7 +39,7 @@ namespace Necromancy.Server.Systems.Items
         /// </summary>
         /// <param name="baseId">The ID of the base item being spawned.</param>
         /// <returns>An new instance of the base item that is unidentified. Name will be "? <c>ItemType</c>"</returns>
-        /// <exception cref="Necromancy.Server.Systems.Items.ItemException">Thrown when inventory is full or base ID does not exist.</exception>
+        /// <exception cref="Necromancy.Server.Systems.Item.ItemException">Thrown when inventory is full or base ID does not exist.</exception>
         public SpawnedItem SpawnUnidentifiedItem(int baseId)
         {
             throw new NotImplementedException();

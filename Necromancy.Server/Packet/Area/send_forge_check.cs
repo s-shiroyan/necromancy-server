@@ -3,7 +3,7 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
-using Necromancy.Server.Systems.Items;
+using Necromancy.Server.Systems.Item;
 
 namespace Necromancy.Server.Packet.Area
 {
