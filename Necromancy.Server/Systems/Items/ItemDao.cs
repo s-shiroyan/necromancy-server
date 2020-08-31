@@ -376,13 +376,26 @@ namespace Necromancy.Server.Systems.Items
             AND
                 slot = @slot";
 
-        
+        private const string SqlSelectSpawnedItemByIds = @"
+            SELECT
+                *
+            FROM
+                spawned_item
+            WHERE
+                id IN @ids";
+
+
         public SpawnedItem InsertSpawnedItem(int baseId)
         {
             throw new NotImplementedException();
         }
 
         public SpawnedItem SelectSpawnedItem(int spawnId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public SpawnedItem SelectSpawnedItems(int[] spawnIds)
         {
             throw new NotImplementedException();
         }
