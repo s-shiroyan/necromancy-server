@@ -59,6 +59,11 @@ namespace Necromancy.Server.Data.Setting
                 // Ignoring Comment
                 return;
             }
+            if (line.StartsWith(','))
+            {
+                // Ignoring null ID
+                return;
+            }
 
             string[] properties = line.Split(",");
             if (properties.Length <= 0)
