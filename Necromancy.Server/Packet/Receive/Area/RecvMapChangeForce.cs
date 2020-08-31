@@ -23,8 +23,12 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
+            //sub_484B00 map ip and connection
             res.WriteInt32(_map.Id); //MapSerialID
             res.WriteInt32(_map.Id); //MapID
+            res.WriteInt32(_map.Id); //MapID
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new bool
             res.WriteFixedString(_setting.DataAreaIpAddress, 65); //IP
             res.WriteUInt16(_setting.AreaPort); //Port
             if (_mapPosition == null)
