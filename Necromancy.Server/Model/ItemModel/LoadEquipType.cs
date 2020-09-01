@@ -2,13 +2,13 @@ namespace Necromancy.Server.Model
 {
     public enum LoadEquipType
     {
-        ARMOR = 25,
-        OTHER = 27,
         NONE = 0,
+        KNUCKLE = 0,
         TRUMP = 1,
-        DAGGER = 2,
-        SWORD_1H = 4,
+        DAGGER = 1,
+        FOIL = 2,
         RAPIER = 3,
+        SWORD_1H = 4,
         SWORD_2H = 5,
         KATANA_1H = 6,
         KATANA_2H = 7,
@@ -30,7 +30,9 @@ namespace Necromancy.Server.Model
         BOLT = 23,
         BULLET = 24,
         PROTECTOR = 25, //PROTCT
+        ARMOR = 25,
         ACCESSORY = 26, //ACCRY
+        OTHER = 27,
         HELMET = ARMOR,
         HAT = ARMOR,
         HOOD = ARMOR,
@@ -51,13 +53,13 @@ namespace Necromancy.Server.Model
         BELT = ACCESSORY,
         DRUG = OTHER, //MEDICINE
         SKILLCHIP = OTHER, //SKLCHP
-        BAG = OTHER,
+        BAG = ACCESSORY,
         LOSTSOUL = OTHER, //LSTSOL
         EVENT = OTHER,
         FORGESTONE = OTHER, //FG_STN
         TALKRING_MAKEKIT = OTHER, //TOKRNG
-        MASTER_TALKRING = OTHER, //TOKRING
-        TALKRING = OTHER, //TOKRNG
+        MASTER_TALKRING = ACCESSORY, //TOKRING
+        TALKRING = ACCESSORY, //TOKRNG
         FORGEGUARDSTONE = OTHER, //FG_GRD
         GEM = OTHER, //GEM
         GEM_PIECE = OTHER, //GEM
@@ -65,9 +67,9 @@ namespace Necromancy.Server.Model
         MAP_FRAGMENT = OTHER, //MAP PC
         OTHERS = OTHER, //OTHER
         AVATAR = ARMOR,
-        ALLCHT = OTHER,
+        ALLCHT = ACCESSORY,
         BUFF = OTHER,
-        LEATHER = OTHER, //L.SHOES
+        LEATHER = ARMOR, //L.SHOES
         FORGETICKET = OTHER, //FG_TKT
         FORGE_SP_SUPPORT = OTHER, //特殊鍛錬万能素材
         MATERIAL = OTHER, //JP ONLY
