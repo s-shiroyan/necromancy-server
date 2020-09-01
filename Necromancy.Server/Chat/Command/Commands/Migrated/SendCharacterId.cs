@@ -27,6 +27,9 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteUInt32(client.Character.InstanceId);
             res.WriteFixedString($"{client.Soul.Name}", 49);
             res.WriteFixedString($"{client.Character.Name}", 37);
+            res.WriteInt32(1);//new
+            res.WriteInt32(2);//new
+            res.WriteInt32(3);//new
             res.WriteFixedString($"{Message}", 769);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_chat_notify_message, res, ServerType.Area);
         }
