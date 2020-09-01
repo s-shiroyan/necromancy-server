@@ -46,15 +46,21 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte((byte)_inventoryItem.Item.Id.ToString()[1]);
             res.WriteByte((byte)_inventoryItem.Item.Id.ToString()[2]);
             res.WriteByte(0); //texture related
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
 
-            res.WriteByte((byte)_client.Character.Alignmentid);
+            //res.WriteByte((byte)_client.Character.Alignmentid);
 
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
             res.WriteByte(_inventoryItem.BagId); // 0~2
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
             res.WriteInt64(_client.Character.Alignmentid);
+            res.WriteInt16(0);//new
             res.WriteUInt32(_client.Character.Alignmentid);
+
+            res.WriteFixedString("", 16);
+
             return res;
         }
     }

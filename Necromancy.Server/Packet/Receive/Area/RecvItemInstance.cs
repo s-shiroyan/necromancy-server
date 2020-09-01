@@ -31,6 +31,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items. 
             res.WriteInt32((int)_inventoryItem.Item.EquipmentSlotType); //spirit eq mask???
+            res.WriteInt32(0);//new
             res.WriteByte(3); //enchantment level
             res.WriteByte((byte)_client.Character.Alignmentid);
             res.WriteCString($"{_inventoryItem.Item.Id}"); // _inventoryItem.Item.Name
@@ -39,6 +40,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteByte((byte)_client.Character.Alignmentid);
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+
             int numEntries = 2;
             res.WriteInt32(numEntries); // less than or equal to 2
             for (int i = 0; i < numEntries; i++)
@@ -57,12 +59,94 @@ namespace Necromancy.Server.Packet.Receive.Area
             }
 
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
-            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            res.WriteInt64(0);//new
             res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
             res.WriteInt32(1); //1 here lables the item "Gaurd".   no effect from higher numbers
             res.WriteInt16(1);
 
+            numEntries = 5; //new
+            res.WriteInt32(numEntries); // less than or equal to 5
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(0);//new
+                res.WriteByte(0);//new
+                res.WriteByte(0);//new
+                res.WriteInt16(0);//new
+                res.WriteInt16(0);//new
+            }
 
+            res.WriteInt64(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            numEntries = 5; //new
+            res.WriteInt32(numEntries); // less than or equal to 5
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteInt32(0);//new
+                res.WriteByte(0);//new
+                res.WriteByte(0);//new
+                res.WriteInt16(0);//new
+                res.WriteInt16(0);//new
+            }
+
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteByte(0);//new
+            res.WriteByte(0);//new
+
+            res.WriteInt64(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+
+            res.WriteInt16(0);//new
 
             return res;
         }
