@@ -77,13 +77,13 @@ namespace Necromancy.Server.Packet.Receive.Area
             }
 
             res.WriteInt64(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
+            res.WriteInt16(0);//new
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
@@ -94,8 +94,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
-            numEntries = 5; //new
-            res.WriteInt32(numEntries); // less than or equal to 5
+
             for (int i = 0; i < numEntries; i++)
             {
                 res.WriteInt32(0);//new
@@ -105,48 +104,34 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt16(0);//new
             }
 
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteByte(0);//new
-            res.WriteByte(0);//new
+            res.WriteInt16(-2);//new
+            res.WriteInt16(-1);//new
+            res.WriteByte(1);//new
+            res.WriteByte(2);//new
 
-            res.WriteInt64(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-
+            res.WriteInt64(-1);//new
             res.WriteInt16(0);//new
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
             res.WriteInt16(0);//new
             res.WriteInt16(0);//new
 
-            res.WriteInt16(0);//new
             res.WriteInt32(0);//new
             res.WriteInt32(0);//new
             res.WriteInt16(0);//new
             res.WriteInt16(0);//new
 
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
+            numEntries = 5;
+            for (int i = 0; i < 5; i++)
+            {
+                res.WriteInt16(0);//new
+                res.WriteInt32(0);//new
+                res.WriteInt32(0);//new
+                res.WriteInt16(0);//new
+                res.WriteInt16(0);//new
+            }
 
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-
-            res.WriteInt16(0);//new
+            res.WriteInt16(69);//new
 
             return res;
         }
