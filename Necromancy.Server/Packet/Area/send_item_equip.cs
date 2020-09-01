@@ -134,7 +134,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(MagAttack); //Equip Bonus Mag Attack
             res.WriteInt16(PhysDef); //Equip bonus Phys Def
             res.WriteInt16(MagDef); //Equip bonus Mag Def
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
         }
     }
 }

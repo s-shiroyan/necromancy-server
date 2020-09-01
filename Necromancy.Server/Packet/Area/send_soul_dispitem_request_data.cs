@@ -29,8 +29,8 @@ namespace Necromancy.Server.Packet.Area
             res19.WriteInt32(Util.GetRandomNumber(62000001, 62000015)); //soul_dispitem.csv
             Router.Send(client, (ushort)AreaPacketId.recv_soul_dispitem_notify_data, res19, ServerType.Area);
 
-            //LoadInventory(client);
-            //LoadCloakRoom(client);
+            LoadInventory(client);
+            LoadCloakRoom(client);
             //LoadBattleStats(client);
         }
 
@@ -65,7 +65,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt16(MagAttack); //Equip Bonus Mag Attack
             res.WriteInt16(PhysDef); //Equip bonus Phys Def
             res.WriteInt16(MagDef); //Equip bonus Mag Def
-            Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_chara_update_battle_base_param, res, ServerType.Area);
         }
 
         public void LoadInventory(NecClient client)
