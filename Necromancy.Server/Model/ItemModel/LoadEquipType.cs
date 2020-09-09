@@ -14,11 +14,11 @@ namespace Necromancy.Server.Model
         KATANA_2H = 7,
         AXE_1H = 8,
         AXE_2H = 9,
+        SPEAR = 10,
         CLUB_1H = 11,
         CLUB_2H = 12,
         WAND_1H = 13,
         WAND_2H = 14,
-        SPEAR = 10,
         BOW = 15,
         CROSSBOW = 16,
         GUN = 17,
@@ -29,8 +29,8 @@ namespace Necromancy.Server.Model
         ARROW = 22,
         BOLT = 23,
         BULLET = 24,
-        PROTECTOR = 25, //PROTCT
         ARMOR = 25,
+        PROTECTOR = 25, //PROTCT
         ACCESSORY = 26, //ACCRY
         OTHER = 27,
         HELMET = ARMOR,

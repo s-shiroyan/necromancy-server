@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
 using Necromancy.Server.Common;
@@ -47,35 +49,32 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
-            Item item = Server.Items[itemId];
-            Character character = client.Character;
-            if (character == null)
+            int[] DonkeyItems = new int[] {100101,100102,100103,100104,100105,100106,100107,100108,100109,100110,100111,100112,100113,100114,100115,100116,100181,100191,100192,100193,100201,100202,100203,100204,100205,100206,100207,100208,100209,100210,100211,100212,100213,100214,100301,100302,100303,100304,100305,100306,100307,100308,100401,100402,100403,100404,100405,100406,100407,100408};
+            int numItems = DonkeyItems.Count();
+
+            for (int i = 0; i < numItems*5; i++)
             {
-                responses.Add(ChatResponse.CommandError(client, "Character is null"));
-                return;
+                Item item = Server.Items[100101];
+                // Create InventoryItem
+                InventoryItem inventoryItem = new InventoryItem();
+                inventoryItem.Id = item.Id + i;
+                inventoryItem.ItemId = item.Id;
+                inventoryItem.Quantity = 1;
+                inventoryItem.CurrentDurability = item.Durability;
+                inventoryItem.CharacterId = client.Character.Id;
+                inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+                inventoryItem.State = 0;
+                inventoryItem.StorageType = (int)BagType.AvatarInventory;
+                client.Character.Inventory.AddAvatarItem(inventoryItem);
+                inventoryItem.Item.ItemType = (ItemType)(i);
+                inventoryItem.Item.Name = $"ItemType + {i}"; 
+
+                RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+                Router.Send(recvItemInstance, client);
+                RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
+                Router.Send(recvItemInstanceUnidentified, client);
+                responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
             }
-
-            // Create InventoryItem
-            InventoryItem inventoryItem = new InventoryItem();
-            inventoryItem.Item = item;
-            inventoryItem.ItemId = item.Id;
-            inventoryItem.Quantity = 1;
-            inventoryItem.CurrentDurability = item.Durability;
-            inventoryItem.CharacterId = character.Id;
-            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-            inventoryItem.State = 0;
-
-            client.Character.Inventory.AddInventoryItem(inventoryItem);
-            if (!Server.Database.InsertInventoryItem(inventoryItem))
-            {
-                responses.Add(ChatResponse.CommandError(client, "Could not save InventoryItem to Database"));
-                return;
-            }
-
-            RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-            Router.Send(recvItemInstance, client);
-            responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
-
         
         }
     }

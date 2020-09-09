@@ -42,14 +42,14 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
             
             res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Torso Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Pants Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Hands Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Feet Tex)
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // alternate model?  equip_ref.csv
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // id-n alternate tex?
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // id-c alternate tex?
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // id-s alternate tex?
             res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // separate in assembly
+            res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // separate in assembly
 
 
             res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
@@ -57,11 +57,11 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt16(_inventoryItem.BagSlotIndex);
             res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
             res.WriteInt64(_inventoryItem.Id);
-            res.WriteUInt32(_client.Character.Alignmentid);//new
-            res.WriteInt16(1);//new
-            res.WriteUInt32(_client.Character.Alignmentid);
+            res.WriteUInt32(1);//new
+            res.WriteInt16(5);//new
+            res.WriteUInt32(1);
 
-            res.WriteFixedString("test", 16);
+            res.WriteFixedString($"{_inventoryItem.Item.Name}", 16);
 
             return res;
         }

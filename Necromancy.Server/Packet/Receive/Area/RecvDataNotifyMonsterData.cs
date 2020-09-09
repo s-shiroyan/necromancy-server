@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Receive.Area
 
         protected override IBuffer ToBuffer()
         {
-            int numEntries = 02; //Max of 16 Equipment Slots for Monster.  cmp to 0x10
+            int numEntries = 16; //Max of 16 Equipment Slots for Monster.  cmp to 0x10
             int numStatusEffects = 0x80; //Statuses effects. Max 128
 
             if (_monsterSpawn.ModelId > 52000 /*CharacterModelUpperLimit*/)

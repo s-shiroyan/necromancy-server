@@ -9,7 +9,7 @@ namespace Necromancy.Server.Data.Setting
     public abstract class CsvReader<T>
     {
         private const int BufferSize = 128;
-
+        //public static readonly Encoding encodingShiftJis = Encoding.GetEncoding(932);
         private static readonly ILogger Logger = LogProvider.Logger(typeof(CsvReader<T>));
 
         public CsvReader()

@@ -503,8 +503,8 @@ namespace Necromancy.Server.Data
             //byte sub = 0xC4;
 
             // Uncomment for JP client
-            // dl = 0x67;
-            // sub = 0xC7;
+             dl = 0x67;
+             sub = 0xC7;
 
             buffer.Position = 12;
             IBuffer outBuffer = new StreamBuffer();
@@ -568,7 +568,7 @@ namespace Necromancy.Server.Data
             byte al = 0;
 
             //Uncomment for US Steam Client
-            byte dl = 0xA6;
+            //byte dl = 0xA6;
             byte add = 0x21;
 
             //Uncomment for US Sunset Client.
@@ -580,8 +580,8 @@ namespace Necromancy.Server.Data
             //byte sub = 0xC4;
 
             // Uncomment for JP client
-            // dl = 0x67;
-            // sub = 0xC7;
+             byte dl = 0x67;
+             byte sub = 0xC7;
 
             //Uncomment for beta client
             //dl = 0x7D;
