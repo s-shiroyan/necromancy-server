@@ -1,0 +1,64 @@
+0x00497420 location for opcode section, 965 opcodes, 
+---------------------------------------------------------------
+recv_battle_report_notify_partner_damage_hp = 0x11EE,
+	res.WriteInt32()//objectId
+	res.WriteInt32()//Damage
+---------------------------------------------------------------
+recv_gem_set_spall_r()  = 0x1273
+	res.WriteInt32()//errcheck
+---------------------------------------------------------------
+recv_soul_partner_storage_cash_shop_close_r = 0x1448
+	res.WriteInt32()//errcheck
+---------------------------------------------------------------
+recv_soul_partner_summon_cast_cancel_notify = 0x15C7
+	//No Structure
+---------------------------------------------------------------
+recv_roguemap_notify_chapter_complete = 0x15E8
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+		res.WriteUInt32(0);
+
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+
+	res.WriteByte(0);
+
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	res.WriteInt64(0);
+	---------------------------------------------------------------
+recv_challengemap_stage_update_param = 0x165
+	res.WriteUInt32(0);
+	res.WriteUInt32(0);
+	---------------------------------------------------------------
+recv_gamepot_casino_update_cash = 0x1716
+	res.WriteInt64(0);
+	res.WriteInt64(0);
+	---------------------------------------------------------------
+	0x1777
+0050A6F9          | 68 A0F3EE00      | push wizpatch.EEF3A0               | EEF3A0:L"network::proto_area_implement_client::recv_package_item_check_r() [ res = %d ]\n"
+	res.WriteUInt32(0);
+	---------------------------------------------------------------
+0x184C
+0050D730          | 68 E076EF00      | push wizpatch.EF76E0               | EF76E0:L"network::proto_area_implement_client::recv_soul_partner_create_partner_effect_end()\n"
+	//No structure
+	---------------------------------------------------------------
+0x1855
+0050D461          | 68 E06BEF00      | push wizpatch.EF6BE0               | EF6BE0:L"network::proto_area_implement_client::recv_soul_partner_summon_start_notify() charaid:%d, objectid:%d, serialid:%lld, baseid:%d, slot:%d, sg:%d, is_awakening:%d, avatar_id:%d\n"
+	

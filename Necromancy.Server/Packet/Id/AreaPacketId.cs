@@ -635,7 +635,6 @@ namespace Necromancy.Server.Packet.Id
         recv_storage_deposit_money_r = 0x6539,
         recv_storage_draw_item2_r = 0xD43D,
         recv_storage_drawmoney = 0x79A9,
-        recv_sv_conf_option_change = 0xAEE9,
         recv_sv_conf_option_change_r = 0xAEE9,
         recv_sv_conf_option_request_r = 0x1DA,
         recv_talkring_create_masterring_r = 0xCAB1,
