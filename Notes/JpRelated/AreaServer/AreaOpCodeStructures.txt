@@ -19,15 +19,15 @@ recv_roguemap_notify_chapter_complete = 0x15E8
 	res.WriteUInt32(0);
 	res.WriteUInt32(0);
 
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
 
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
-		res.WriteUInt32(0);
+		for (int i = 0; i < 0x4; i++)
+		{
+			res.WriteInt32(0);
+		}
+		for (int i = 0; i < 0x4; i++)
+		{
+			res.WriteInt32(0);
+		}
 
 	res.WriteByte(0);
 	res.WriteByte(0);
@@ -63,7 +63,6 @@ recv_gamepot_casino_update_cash = 0x1716
 0050D461          | 68 E06BEF00      | push wizpatch.EF6BE0               | EF6BE0:L"network::proto_area_implement_client::recv_soul_partner_summon_start_notify() charaid:%d, objectid:%d, serialid:%lld, baseid:%d, slot:%d, sg:%d, is_awakening:%d, avatar_id:%d\n"
 	---------------------------------------------------------------
 0x1ACA
-00506470 <wizpatc | 68 C05AEE00      | push wizpatch.EE5AC0             | EE5AC0:L"network::proto_area_implement_client::recv_event_quest_list_begin()\n"
 00506470 <wizpatc | 68 C05AEE00      | push wizpatch.EE5AC0             | EE5AC0:L"network::proto_area_implement_client::recv_event_quest_list_begin()\n"
             IBuffer res = BufferProvider.Provide();
             int numEntries = 0x2;
@@ -150,15 +149,208 @@ recv_gamepot_casino_update_cash = 0x1716
             }
             Router.Send(client, (ushort)0x1ACA, res, ServerType.Area);	
 	---------------------------------------------------------------
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	0x1B22
+00508730          | 68 68A9EE00      | push wizpatch.EEA968           | EEA968:L"network::proto_area_implement_client::recv_chara_arrange_notify_close()\n"
+//no structure
+	---------------------------------------------------------------
+	0x1D39
+0050DDE8          | 68 E091EF00      | push wizpatch.EF91E0                     | EF91E0:L"network::proto_area_implement_client::recv_roguemap_entry_close_r() [ res = %d ]\n"
+	res.WriteInt32(0);
+	---------------------------------------------------------------	
+	0x1D96
+	0050E129          | 68 C09FEF00      | push wizpatch.EF9FC0                     | EF9FC0:L"network::proto_area_implement_client::recv_roguemap_notify_stage_complete() stage_rank:%d is_rank_update:%d chapters_qt:%d\n"
+int numEntries = 0x2;
+
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteInt32(numEntries);//less than 0xE
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                for (int i = 0; i < 0x4; i++)
+                {
+                    res.WriteInt32(0);
+                }
+                for (int i = 0; i < 0x4; i++)
+                {
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+	---------------------------------------------------------------	
+	0x1E8F
+0050CE50          | 68 6054EF00      | push wizpatch.EF5460                     | EF5460:L"network::proto_area_implement_client::recv_challengemap_notify_area_member_cancel()\n"
+//no structure
+	---------------------------------------------------------------	
+	0x1E99
+	0050DAF0          | 68 7085EF00      | push wizpatch.EF8570                     | EF8570:L"network::proto_area_implement_client::recv_soul_partner_library_notify_close()\n"
+//no structure
+	---------------------------------------------------------------	
+0x1EF6
+0050D518          | 68 006FEF00      | push wizpatch.EF6F00                     | EF6F00:L"network::proto_area_implement_client::recv_soul_partner_status_update_bonus_ability_r() [ res = %d ]\n"
+	res.WriteInt32(0);
+	---------------------------------------------------------------	
+0x2069
+	00506500 <wizpatc | 68 E05BEE00      | push wizpatch.EE5BE0                     | EE5BE0:L"network::proto_area_implement_client::recv_event_quest_list_get_order_list_r()\n"
+	            IBuffer res = BufferProvider.Provide();
+            int numEntries = 0x2;
+
+            res.WriteInt32(numEntries); //less than 0x1E
+
+            if (numEntries == 0)
+            {
+                res.WriteInt32(0);
+            }
+            else
+            {
+                for (int j = 0; j < numEntries; j++)
+                {
+                    //sub_4936D0
+                    res.WriteInt32(0);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteFixedString("Test", 0x61);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteFixedString("SecondTest", 0x61);
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+
+                    for (int i = 0; i < 0xA; i++)
+                    {
+                        //sub 493640
+                        res.WriteInt32(0);
+                        res.WriteFixedString("", 0x10);
+                        res.WriteInt16(0);
+                        res.WriteInt32(0);
+                        res.WriteByte(0);
+                        res.WriteInt16(0);
+                    }
+
+                    res.WriteByte(0);
+
+                    for (int i = 0; i < 0xC; i++)
+                    {
+                        //sub 493640
+                        res.WriteInt32(0);
+                        res.WriteFixedString("", 0x10);
+                        res.WriteInt16(0);
+                        res.WriteInt32(0);
+                        res.WriteByte(0);
+                        res.WriteInt16(0);
+                    }
+
+                    res.WriteByte(0);
+
+                    res.WriteInt32(0);
+                    //Ret
+
+                    res.WriteFixedString("", 0x181);
+                    res.WriteFixedString("", 0x181);
+                    for (int i = 0; i < 0x5; i++)
+                    {
+                        res.WriteByte(0);
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                        res.WriteInt32(0);
+                    }
+                    res.WriteByte(0);
+                    res.WriteByte(0);
+                    res.WriteInt16(0);
+                    res.WriteInt16(0);
+                    res.WriteInt32(0);
+                }
+                //Ret
+                res.WriteInt32(0);
+            }
+                Router.Send(client, (ushort)0x2069, res, ServerType.Area);
+	---------------------------------------------------------------	
+	0x20C7			
+	0050D138          | 68 805FEF00      | push wizpatch.EF5F80                     | EF5F80:L"network::proto_area_implement_client::recv_challengemap_notify_area_ranking() area_qt:%d\n"
+	IBuffer res = BufferProvider.Provide();
+	int numEntries = 0x2;
+	res.WriteInt32(numEntries); //less than 0x8
+
+	for (int k = 0; k < numEntries; k++)
+	{
+		//sub 495A00
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteInt16(0);
+
+		res.WriteByte(0);
+
+		res.WriteFixedString("Test", 0x61);
+		res.WriteFixedString("Test2", 0x61);
+		res.WriteFixedString("Test3", 0x181);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteInt16(0);
+		res.WriteInt64(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+
+		res.WriteByte(0);
+
+		res.WriteInt32(0);
+
+		res.WriteInt32(0);
+		//sub_495940
+		res.WriteInt32(0);
+		res.WriteFixedString("Test4", 0x31);
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("Test4", 0x5B);
+		for (int i = 0; i < 0x3; i++)
+		{
+			res.WriteInt64(0);
+		}
+
+		for (int j = 0; j < 0x64; j++)
+		{
+			//sub_495940
+			res.WriteInt32(0);
+			res.WriteFixedString("Test4", 0x31);
+			res.WriteInt32(0);
+			res.WriteInt32(0);
+			res.WriteFixedString("Test4", 0x5B);
+			for (int i = 0; i < 0x3; i++)
+			{
+				res.WriteInt64(0);
+			}
+		}
+	}
+	Router.Send(client, (ushort)0x20C7, res, ServerType.Area);
+---------------------------------------------------------------
+	0x2129
+00506CE8          | 68 2070EE00      | push wizpatch.EE7020                     | EE7020:L"network::proto_area_implement_client::recv_event_treasurebox_begin() itemid_qt : %d\n"
+		IBuffer res = BufferProvider.Provide();
+		int numEntries = 0x2;
+		res.WriteInt32(numEntries); //less than 0x10
+		for (int j = 0; j < numEntries; j++)
+		{
+			res.WriteInt32(0);
+		}
+		Router.Send(client, (ushort)0x2129, res, ServerType.Area);
+
 	
 	
 	
