@@ -27,10 +27,15 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
             int numEntries = 0x2;
-
+            //res.WriteByte(0); //less than 0x10
             //res.WriteInt32(0);
+            //res.WriteByte(0); //0x3 loop broken up
+            //res.WriteByte(0);
+            //res.WriteByte(0);
 
-            Router.Send(client, (ushort)0x1B22, res, ServerType.Area);
+            //res.WriteFloat(0);
+
+            Router.Send(client, (ushort)0x2964, res, ServerType.Area);
 
 
         }

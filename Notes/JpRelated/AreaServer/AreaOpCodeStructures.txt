@@ -350,12 +350,55 @@ int numEntries = 0x2;
 			res.WriteInt32(0);
 		}
 		Router.Send(client, (ushort)0x2129, res, ServerType.Area);
-
-	
-	
-	
-	
-	
+---------------------------------------------------------------
+0x233B
+0050B6D8          | 68 E019EF00      | push wizpatch.EF19E0                     | EF19E0:L"network::proto_area_implement_client::recv_soul_fragment_unset_skill_r() [ res = %d ]\n"
+		res.WriteInt32(0);
+---------------------------------------------------------------
+0x24CE
+0050D580          | 68 A870EF00      | push wizpatch.EF70A8                     | EF70A8:L"network::proto_area_implement_client::recv_soul_partner_status_levelup_complete()\n"
+//No Structure
+---------------------------------------------------------------
+0x254D
+0050D0CC          | 68 E05DEF00      | push wizpatch.EF5DE0                     | EF5DE0:L"network::proto_area_implement_client::recv_challengemap_result_start() point:%lld, stage_point:%lld\n"
+		res.WriteByte(0); 
+		res.WriteInt64(1);
+		res.WriteInt64(1);
+---------------------------------------------------------------
+0x256F
+00503DB5          | 68 180BEE00      | push wizpatch.EE0B18                     | EE0B18:L"network::proto_area_implement_client::recv_battle_attack_long_reload_start_r() result : %d, rigid : %f\n"
+		res.WriteInt32(0);
+		res.WriteFloat(0);	
+---------------------------------------------------------------	
+0x2584
+00508C50          | 68 50B4EE00      | push wizpatch.EEB450                     | EEB450:L"network::proto_area_implement_client::recv_item_scroll_close_r()\n"
+	res.WriteInt32(0);
+---------------------------------------------------------------
+0x2592
+00504EA9          | 68 782EEE00      | push wizpatch.EE2E78                     | EE2E78:L"network::proto_area_implement_client::recv_item_update_long_num() id %llu, long_num %d\n"
+		res.WriteInt64(0);
+		res.WriteByte(0);
+---------------------------------------------------------------
+0x2867
+004FF881          | 68 E030ED00      | push wizpatch.ED30E0                     | ED30E0:L"network::proto_area_implement_client::recv_data_notify_npc_update_minimap_icon() serialid %d, onoff %d\n"
+		res.WriteInt32(0);
+		res.WriteByte(0);
+---------------------------------------------------------------
+0x2875
+0050D2FC          | 68 0067EF00      | push wizpatch.EF6700                     | EF6700:L"network::proto_area_implement_client::recv_soul_partner_nurture_update_count() serialid:%lld\n"
+		res.WriteInt64(0);
+		res.WriteByte(0); //0x3 loop broken up
+		res.WriteByte(0);
+		res.WriteByte(0);
+---------------------------------------------------------------
+0x287B
+00508C00          | 68 C0B3EE00      | push wizpatch.EEB3C0                     | EEB3C0:L"network::proto_area_implement_client::recv_item_scroll_notify_close()\n"
+//No Structure
+---------------------------------------------------------------
+0x2964
+0050DDC0          | 68 4891EF00      | push wizpatch.EF9148                     | EF9148:L"network::proto_area_implement_client::recv_roguemap_entry_notify_close()\n"
+//No Structure	
+---------------------------------------------------------------
 	
 	
 	
