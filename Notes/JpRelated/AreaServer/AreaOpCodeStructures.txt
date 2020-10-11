@@ -739,12 +739,101 @@ int numEntries = 0x2;
             res.WriteInt32(0);
             res.WriteInt32(0);
 ---------------------------------------------------------------			
+0x3C9D
+00508AF8              | 68 F8B1EE00      | push wizpatch.EEB1F8                     | EEB1F8:L"network::proto_area_implement_client::recv_forge_parameter_execute_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x3CC6
+0050D38C              | 68 0869EF00      | push wizpatch.EF6908                     | EF6908:L"network::proto_area_implement_client::recv_soul_partner_summon_cast_start_r() ret:%d, cast_time:%f\n"
+            res.WriteInt32(0);
+            res.WriteFloat(0);
+---------------------------------------------------------------
+0x3D18
+00508771              | 68 A8AAEE00      | push wizpatch.EEAAA8                     | EEAAA8:L"network::proto_area_implement_client::recv_chara_arrange_notify_parts()\n"
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteCString("What");
+            res.WriteInt32(0);
+            res.WriteCString("What");			
+---------------------------------------------------------------
+0x3E09
+00508CA9              | 68 D8B4EE00      | push wizpatch.EEB4D8                     | EEB4D8:L"network::proto_area_implement_client::recv_item_scroll_enchant_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            //4964E0
+            res.WriteInt64(0);
+            int numEntries3 = 0x3; //must be 0x3
+            for (int i = 0; i < numEntries3; i++)
+            {
+                //4929F0
+                res.WriteInt64(0);
+                //4929a0
+                res.WriteInt16(0);
 
+                int numEntries4 = 0x2; //must be 0x2
+                for (int j = 0; j < numEntries4; j++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    int numEntries5 = 0x2; //must be 0x2
+                    for (int k = 0; k < numEntries5; k++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                int numEntries2 = 0x5; //must be 0x5
+                for (int j = 0; j < numEntries2; j++)
+                {
+                    res.WriteInt16(0);
 
-
-
-
-
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    int numEntries5 = 0x2; //must be 0x2
+                    for (int k = 0; k < numEntries5; k++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+            }
+---------------------------------------------------------------
+0x3EA
+00504928              | 68 6023EE00      | push wizpatch.EE2360                     | EE2360:L"network::proto_area_implement_client::recv_item_update_gem_param() id : %llu, gemsocket_qt : %u\n"
+            res.WriteInt64(0);
+            res.WriteInt32(numEntries); //less than 0x3
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                int numEntries5 = 0x2; //must be 0x2
+                for (int k = 0; k < numEntries5; k++)
+                {
+                    res.WriteInt32(0);
+                }
+            }
+---------------------------------------------------------------
+0x3F8D
+00508F98              | 68 30BAEE00      | push wizpatch.EEBA30                     | EEBA30:L"network::proto_area_implement_client::recv_forge_gem_shift_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x3FB7
+0050755C              | 68 E0171001      | push wizpatch.11017E0                    |
+//Error!!!  maybe try values other than 0...
+---------------------------------------------------------------
+0x4064
+0050A228              | 68 80E4EE00      | push wizpatch.EEE480                     | EEE480:L"network::proto_area_implement_client::recv_party_mentor_create_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4111
+0050B9E8              | 68 1026EF00      | push wizpatch.EF2610                     | EF2610:L"network::proto_area_implement_client::recv_union_amenity_notify_point() point = %d\n\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4112
+00508E78              | 68 68B8EE00      | push wizpatch.EEB868                     | EEB868:L"network::proto_area_implement_client::recv_item_scroll_export_execute_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+			
 
 
 
