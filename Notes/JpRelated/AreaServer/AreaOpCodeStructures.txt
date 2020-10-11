@@ -624,4 +624,136 @@ int numEntries = 0x2;
             for (int i = 0; i < 100; i++)
             { res.WriteInt64(0); } //This is a really complicated loop.  5 groups of int64 written 20 times each.
 ---------------------------------------------------------------			
-	
+0x35F6
+0050DA88              | 68 8083EF00      | push wizpatch.EF8380                     | EF8380:L"network::proto_area_implement_client::recv_soul_partner_library_partner() partner_qt:%d\n"
+            res.WriteInt32(numEntries); //Less than 0x19
+
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                int numEntries2 = 0x7; //must be 0x7
+                //495f20
+                for (int k = 0; k < numEntries2; k++)
+                {
+                    res.WriteInt16(0);
+                }
+                int numEntries3 = 0x5; //must be 0x5
+                for (int k = 0; k < numEntries3; k++)
+                {
+                    res.WriteInt32(0);
+                }
+
+            }
+---------------------------------------------------------------
+0x369D
+0050E440              | 68 30A9EF00      | push wizpatch.EFA930                     | EFA930:L"network::proto_area_implement_client::recv_class_advancement_notify_week_exp_reset()\n"
+//no Structure
+---------------------------------------------------------------
+0x3763
+0050D718              | 68 2876EF00      | push wizpatch.EF7628                     | EF7628:L"network::proto_area_implement_client::recv_soul_partner_create_partner_end() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x37FC
+0050B2B8              | 68 080DEF00      | push wizpatch.EF0D08                     | EF0D08:L"network::proto_area_implement_client::recv_gem_spall_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x392E
+0050383A              | 68 E8F7ED00      | push wizpatch.EDF7E8                     | EDF7E8:L"network::proto_area_implement_client::recv_chara_update_identical_attach_time() identicalid : %d, diff : %d, per : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x3967
+0050E077              | 68 289DEF00      | push wizpatch.EF9D28                     | EF9D28:L"network::proto_area_implement_client::recv_roguemap_set_map_fragment_chipicon_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x39B5
+00504D58              | 68 382CEE00      | push wizpatch.EE2C38                     | EE2C38:L"network::proto_area_implement_client::recv_item_requirement_unequip_notify() itemid %llu, eqmask %d\n"
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x3A5D
+0050D4C6              | 68 406DEF00      | push wizpatch.EF6D40                     | EF6D40:L"network::proto_area_implement_client::recv_soul_partner_summon_end_notify() charaid:%d, objectid:%d, serialid:%lld, baseid:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+            res.WriteCString("What");
+---------------------------------------------------------------
+0x3B1B
+00508A98              | 68 50B1EE00      | push wizpatch.EEB150                     | EEB150:L"network::proto_area_implement_client::recv_forge_parameter_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+
+            int numEntries2 = 0x5; //Must be 5.  not a loop in assm.
+            for (int i = 0; i < numEntries2; i++)
+            {
+                //492810
+                res.WriteInt64(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+
+                int numEntries3 = 0x5; //must be 0x5
+                for (int k = 0; k < numEntries3; k++)
+                {
+                    res.WriteInt32(0);
+                }
+                int numEntries4 = 0x5; //must be 0x5
+                for (int k = 0; k < numEntries4; k++)
+                {
+                    res.WriteInt32(0);
+                }
+                int numEntries5 = 0x5; //must be 0x5
+                for (int k = 0; k < numEntries5; k++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("Ok", 0x2);
+                    res.WriteInt16(0);
+                    res.WriteInt16(0);
+                }
+            }			
+---------------------------------------------------------------
+0x3B78
+0050E300              | 68 60A5EF00      | push wizpatch.EFA560                     | EFA560:L"network::proto_area_implement_client::recv_class_advancement_notify_reset_all() job:%d, exp:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
