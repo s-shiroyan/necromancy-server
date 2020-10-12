@@ -894,10 +894,156 @@ int numEntries = 0x2;
 00507AA8              | 68 3092EE00      | push wizpatch.EE9230                     | EE9230:L"network::proto_area_implement_client::recv_challengemap_point_shop_buy_r() [ res = %d ]\n"
             res.WriteInt32(0);
 ---------------------------------------------------------------
+0x484E
+0050CA99              | 68 8848EF00      | push wizpatch.EF4888                     | EF4888:L"network::proto_area_implement_client::recv_auction_deregist_search_equipment_cond_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4918
+00505B60              | 68 884BEE00      | push wizpatch.EE4B88                     | EE4B88:L"network::proto_area_implement_client::recv_event_block_message_end()\n"
+//No structure
+---------------------------------------------------------------
+0x4935
+0050D553              | 68 D06FEF00      | push wizpatch.EF6FD0                     | EF6FD0:L"network::proto_area_implement_client::recv_soul_partner_status_levelup_start() serialid:%lld, lv:%d, bp:%d\n"
+            int numEntries = 0x2;
+            //sub_495C70
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteFixedString("Xeno", 0x61);
+            res.WriteFixedString("Xeno", 0x5B);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x7; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteByte(0);
+            }
+
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteInt32(0);
+            }
+
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteByte(0);
+            }
+            //-----endsub
+            res.WriteInt32(numEntries); //less than 5
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteByte(0);
+            }
+---------------------------------------------------------------
+0x4986
+00501028              | 68 1868ED00      | push wizpatch.ED6818                     | ED6818:L"network::proto_area_implement_client::recv_chara_notify_map_fragment_chipdata() mapserialid : %d, fieldid : %d, complete_rate %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x49B7
+0050DF32              | 68 4097EF00      | push wizpatch.EF9740                     | EF9740:L"network::proto_area_implement_client::recv_roguemap_update_point() point:%lld\n"
+            res.WriteInt64(0);
+---------------------------------------------------------------			
+0x4A03
+0050D101              | 68 B05EEF00      | push wizpatch.EF5EB0                     | EF5EB0:L"network::proto_area_implement_client::recv_challengemap_ranking_start() selfid:%lld, ranking_num:%lld\n"
+            int numEntries = 0x2;
+
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x31);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x5B);
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteInt64(0);
+            }
+
+            res.WriteInt32(numEntries);  //Less than 0x64
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteFixedString("Xeno", 0x31);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteFixedString("Xeno", 0x5B);
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt64(0);
+                }
+            }
+---------------------------------------------------------------
+0x4A64
+0050CAF8              | 68 5049EF00      | push wizpatch.EF4950                     | EF4950:L"network::proto_area_implement_client::recv_auction_regist_search_item_cond_r() [ res = %d ]\n"
+            res.WriteInt32(0);           
+---------------------------------------------------------------
+0x4BC1
+0050E359              | 68 20A6EF00      | push wizpatch.EFA620                     | EFA620:L"network::proto_area_implement_client::recv_class_advancement_notify_param() reset_cnt:%d\n"
+            int numEntries = 0x2;
+
+            res.WriteByte(0);
+            res.WriteInt32(numEntries);   // less than 0xA        
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                for (int i = 0; i < 0x8; i++)
+                {
+                    res.WriteInt64(0);
+                }
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                }
+            }
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4C27
+0050DBC0 <wizpatch.su | 68 9889EF00      | push wizpatch.EF8998                     | EF8998:L"network::proto_area_implement_client::recv_soul_partner_notify_expedition_end()\n"
+            res.WriteByte(0);
+            res.WriteCString("What");
+---------------------------------------------------------------
+0x4C3
+005086F8              | 68 30A8EE00      | push wizpatch.EEA830                     | EEA830:L"network::proto_area_implement_client::recv_gamepot_casino_close_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
 
 
 
 
+			
 
 
 
