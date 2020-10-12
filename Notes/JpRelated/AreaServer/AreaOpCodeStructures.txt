@@ -1039,12 +1039,78 @@ int numEntries = 0x2;
 005086F8              | 68 30A8EE00      | push wizpatch.EEA830                     | EEA830:L"network::proto_area_implement_client::recv_gamepot_casino_close_r() [ res = %d ]\n"
             res.WriteInt32(0);
 ---------------------------------------------------------------
+0x4C8A
+004FEFC5              | 68 181FED00      | push wizpatch.ED1F18                     | ED1F18:L"network::proto_area_implement_client::recv_self_soul_venturer_medal_notify() charaname %s, VENTURER_MEDAL_TYPE %d, value %d, add %d\n"
+            res.WriteCString("What");
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4D12
+007D3590 <wizpatch.su | C2 0800          | ret 8                                    | //No Structure
+            res.WriteUInt32(client.Character.InstanceId);
+            res.WriteInt32(0);			
+---------------------------------------------------------------
+0x4DEA
+005058D0 <wizpatch.su | 68 5048EE00      | push wizpatch.EE4850                     | EE4850:L"network::proto_area_implement_client::recv_event_sync_slot()\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4E17
+00509D38              | 68 70D9EE00      | push wizpatch.EED970                     | EED970:L"network::proto_area_implement_client::recv_party_regist_party_recruit_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x4ED0
+0050C5A0 <wizpatch.su | 68 E83FEF00      | push wizpatch.EF3FE8                     | EF3FE8:L"network::proto_area_implement_client::recv_auction_notify_open_item_start()\n"
+//No Structure
+---------------------------------------------------------------
+0xEF49
+00508ED0 <wizpatch.su | 68 18B9EE00      | push wizpatch.EEB918                     | EEB918:L"network::proto_area_implement_client::recv_item_update_scroll()\n"
+            res.WriteInt64(0);
 
+            res.WriteInt64(0);
+            //sub4929A0
+            res.WriteInt16(0);
+            for (int i = 0; i < 0x2; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            for (int k = 0; k < 0x5; k++)
+            {
+                res.WriteInt16(0);
+                //sub492940
 
-
-
-			
-
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x2; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                
+            }
+---------------------------------------------------------------
+0x5072
+00508BB0 <wizpatch.su | 68 30B3EE00      | push wizpatch.EEB330                     | EEB330:L"network::proto_area_implement_client::recv_item_scroll_notify_open()\n"
+//No Structure
+---------------------------------------------------------------
+0x50E
+00504E39              | 68 C02DEE00      | push wizpatch.EE2DC0                     | EE2DC0:L"network::proto_area_implement_client::recv_item_update_long_spec() id %llu, long_spec %d\n"
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x50E6
+0050CDA0              | 68 E050EF00      | push wizpatch.EF50E0                     | EF50E0:L"network::proto_area_implement_client::recv_challengemap_area_notify_close()\n"
+//No Structure	
+---------------------------------------------------------------
+0x5118
+00503E88              | 68 580DEE00      | push wizpatch.EE0D58                     | EE0D58:L"network::proto_area_implement_client::recv_battle_attack_long_update_load_num() num : %d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------		
 
 
 
