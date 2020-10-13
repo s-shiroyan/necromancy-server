@@ -1171,13 +1171,54 @@ int numEntries = 0x2;
 0050CEB0              | 68 6056EF00      | push wizpatch.EF5660                     | EF5660:L"network::proto_area_implement_client::recv_challengemap_area_end()\n"
 //No Structure
 ---------------------------------------------------------------
-
-
-
-
-
-
-
+0x5948
+00507678              | 68 F885EE00      | push wizpatch.EE85F8                     | EE85F8:L"network::proto_area_implement_client::recv_rogue_point_shop_sell_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x59AC
+$+58493  00509FB0 <wiz | 68 C0DEEE00      | push wizpatch.EEDEC0                     | EEDEC0:L"network::proto_area_implement_client::recv_party_notify_cancel_party_auto_recruit()\n"
+//No Structure
+---------------------------------------------------------------
+0x5B37
+$+5BDFB  0050D918       | 68 407CEF00      | push wizpatch.EF7C40                     | EF7C40:L"network::proto_area_implement_client::recv_soul_partner_storage_merge_start_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x5B5B
+$+5C1D3  0050DCF0 <wizp | 68 188FEF00      | push wizpatch.EF8F18                     | EF8F18:L"network::proto_area_implement_client::recv_soul_partner_expedition_cash_shop_notify_close()\n"
+//No Structure
+---------------------------------------------------------------
+0x5C1C
+$+59F2C  0050BA49       | 68 9027EF00      | push wizpatch.EF2790                     | EF2790:L"network::proto_area_implement_client::recv_union_amenity_notify_detach() slot = %d, id = %d\n"
+            res.WriteByte(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x5C6D
+$+50D43  00502860       | 68 D0BDED00      | push wizpatch.EDBDD0                     | EDBDD0:L"network::proto_area_implement_client::recv_battle_report_notify_gauge_end() objectid:%d type:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x5F44
+$+569C4  005084E1       | 68 B8A3EE00      | push wizpatch.EEA3B8                     | EEA3B8:L"network::proto_area_implement_client::recv_cash_shop_arrange_notify_parts()\n"
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteCString("What");
+            res.WriteInt32(0);
+            res.WriteCString("What");
+---------------------------------------------------------------
+0x5F75
+$+53B0B  00505628       | 68 0842EE00      | push wizpatch.EE4208                     | EE4208:L"network::proto_area_implement_client::recv_event_stand_alone_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x623E
+$+5BD32  0050D84F       | 68 B079EF00      | push wizpatch.EF79B0                     | EF79B0:L"network::proto_area_implement_client::recv_soul_partner_storage_move_partner_r() result:%d, cost:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x6448
+$+5C174  0050DC91       | 68 A08CEF00      | push wizpatch.EF8CA0                     | EF8CA0:L"network::proto_area_implement_client::recv_soul_partner_expedition_result_get_all_r() result:%d get_flag:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
 
 
 
