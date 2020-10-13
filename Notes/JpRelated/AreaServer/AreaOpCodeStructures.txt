@@ -1219,6 +1219,133 @@ $+5C174  0050DC91       | 68 A08CEF00      | push wizpatch.EF8CA0               
             res.WriteInt32(0);
             res.WriteInt16(0);
 ---------------------------------------------------------------
+0x64B1
+$+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510                     | EDE510:L"network::proto_area_implement_client::recv_chara_update_sync_lv() sync_level : %d\n"
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x6519
+0050CE90 <wizpatch.sub_ | 68 D055EF00      | push wizpatch.EF55D0                             | EF55D0:L"network::proto_area_implement_client::recv_challengemap_area_start()\n"
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x31);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x5B);
+            for (int j = 0; j < 0x3; j++)
+            {
+                res.WriteInt64(0);
+            }
+
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x6555
+0050D4F8                | 68 406EEF00      | push wizpatch.EF6E40                             | EF6E40:L"network::proto_area_implement_client::recv_soul_partner_status_update_name_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x6592
+0050D27B                | 68 0864EF00      | push wizpatch.EF6408                             | EF6408:L"network::proto_area_implement_client::recv_soul_partner_status_notify_open() partners_qt:%d, cost:%d, extend_slot_state:%d, summon_cooltime:%d, summon_cooltime_base:%d, is_create:%d, avatar_flag:%lld\n"
+            res.WriteInt32(numEntries); //less than 0x5 
+            for (int j = 0; j < numEntries; j++)
+            {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int k = 0; k < 0x7; k++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+            }
+
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0x6706
+0050E4E1                | 68 88AAEF00      | push wizpatch.EFAA88                             | EFAA88:L"network::proto_area_implement_client::recv_login_news_url_notify()\n"
+            res.WriteByte(0);
+            res.WriteCString("What");
+---------------------------------------------------------------
+0x67A0
+00508578                | 68 F0A4EE00      | push wizpatch.EEA4F0                             | EEA4F0:L"network::proto_area_implement_client::recv_cash_shop_arrange_buy_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+0x6873
+0050CE08                | 68 E052EF00      | push wizpatch.EF52E0                             | EF52E0:L"network::proto_area_implement_client::recv_challengemap_notify_area_create() [ res = %d ]\n"			
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+0x6939
+0050DAD0                | 68 D884EF00      | push wizpatch.EF84D8                             | EF84D8:L"network::proto_area_implement_client::recv_soul_partner_library_open_end()\n"
+//No Structure			
+---------------------------------------------------------------
+0x6AFD
+00506B00                | 68 C86BEE00      | push wizpatch.EE6BC8                             | EE6BC8:L"network::proto_area_implement_client::recv_quest_notify_reset_reward_flag()\n"
+            res.WriteInt32(0);
+            res.WriteCString("What");			
+---------------------------------------------------------------
+0x6B4C
+00508FC9                | 68 D8BAEE00      | push wizpatch.EEBAD8                             | EEBAD8:L"network::proto_area_implement_client::recv_forge_gem_shift_execute_r() [ res = %d ]\n"			
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+
+
+
+
 
 
 
