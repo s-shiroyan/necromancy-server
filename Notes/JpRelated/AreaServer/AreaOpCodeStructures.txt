@@ -1328,14 +1328,70 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 00508FC9                | 68 D8BAEE00      | push wizpatch.EEBAD8                             | EEBAD8:L"network::proto_area_implement_client::recv_forge_gem_shift_execute_r() [ res = %d ]\n"			
             res.WriteInt32(0);
 ---------------------------------------------------------------			
-			
-			
-			
-			
-			
-			
-			
-			
+0x6ED7
+00508710                | 68 D8A8EE00      | push wizpatch.EEA8D8                             | EEA8D8:L"network::proto_area_implement_client::recv_chara_arrange_notify_open()\n"
+//no structure			
+---------------------------------------------------------------
+0x6F21
+0050DB18                | 68 1086EF00      | push wizpatch.EF8610                             | EF8610:L"network::proto_area_implement_client::recv_soul_partner_equip_avatar_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x7201
+00504BF2                | 68 7028EE00      | push wizpatch.EE2870                             | EE2870:L"network::proto_area_implement_client::recv_self_bonus_money_notify() bonus money %lld\n"			
+            res.WriteInt64(0);
+---------------------------------------------------------------			
+0x72F0
+0050CE30                | 68 9853EF00      | push wizpatch.EF5398                             | EF5398:L"network::proto_area_implement_client::recv_challengemap_notify_area_member() areaid:%d, stageno:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+---------------------------------------------------------------
+0x7356
+005010A8                | 68 D869ED00      | push wizpatch.ED69D8                             | ED69D8:L"network::proto_area_implement_client::recv_map_fragment_chipdata() mapserialid : %d, chips_qt : %d, complete_rate : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(numEntries); //less than 0x190 
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+            }
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x739D
+0050BA19                | 68 C026EF00      | push wizpatch.EF26C0                             | EF26C0:L"network::proto_area_implement_client::recv_union_amenity_notify_attach() slot = %d, id = %d, time = %d\n"
+        res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x740D
+005035C1                | 68 D8EDED00      | push wizpatch.EDEDD8                             | EDEDD8:L"network::proto_area_implement_client::recv_chara_update_skill_attr_mp_cost_per() attr : %d, per : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x7494
+00507A71                | 68 6891EE00      | push wizpatch.EE9168                             | EE9168:L"network::proto_area_implement_client::recv_challengemap_point_shop_notify_item() idx %d, serial %d\n"
+            res.WriteInt16(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x10);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x7646
+0050BF30                | 68 E82FEF00      | push wizpatch.EF2FE8                             | EF2FE8:L"network::proto_area_implement_client::recv_xigncode_packet_sv()\n"			
+            res.WriteInt32(numEntries); //less than or = 0xA00 
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteByte(0);
+            }			
+---------------------------------------------------------------			
+0x7A08
+00502899                | 68 98BEED00      | push wizpatch.EDBE98                             | EDBE98:L"network::proto_area_implement_client::recv_battle_report_notify_gauge_update() objectid:%d type:%d per:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+---------------------------------------------------------------			
 			
 			
 			
