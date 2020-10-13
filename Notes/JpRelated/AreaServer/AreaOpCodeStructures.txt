@@ -1111,6 +1111,72 @@ int numEntries = 0x2;
 00503E88              | 68 580DEE00      | push wizpatch.EE0D58                     | EE0D58:L"network::proto_area_implement_client::recv_battle_attack_long_update_load_num() num : %d\n"
             res.WriteInt32(0);
 ---------------------------------------------------------------		
+0x527E
+00503CB8              | 68 1809EE00      | push wizpatch.EE0918                     | EE0918:L"network::proto_area_implement_client::recv_battle_attack_long_start_r() [ res = %d ]\n"
+            int numEntries = 0x2;
+            res.WriteInt32(0);
+            res.WriteInt32(numEntries); //less than 0x4 
+            for (int i = 0; i < numEntries; i++)
+            {
+                res.WriteFloat(0);
+            }
+---------------------------------------------------------------			
+0x52BB
+0050DFA8              | 68 7899EF00      | push wizpatch.EF9978                     | EF9978:L"network::proto_area_implement_client::recv_roguemap_update_gate_clear_count() count:%d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+0x53AB
+0050C5F0 <wizpatch.su | 68 8840EF00      | push wizpatch.EF4088                     | EF4088:L"network::proto_area_implement_client::recv_auction_notify_open_item_end()\n"
+//No Structure
+---------------------------------------------------------------
+0x5418
+005074DC              | E8 BFDD0300      | call <wizpatch.sub_5452A0>               | //I didn't see a string.  try again with all strings set as BP.
+            res.WriteInt16(1);
+            res.WriteUInt32(client.Character.InstanceId);
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+            res.WriteByte(2);
+            res.WriteFixedString("Xeno", 0x10);
+            res.WriteInt32(23);
+            res.WriteInt16(1);
+---------------------------------------------------------------
+0x54C8
+0050CB58              | 68 104AEF00      | push wizpatch.EF4A10                     | EF4A10:L"network::proto_area_implement_client::recv_auction_deregist_search_item_cond_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x5596
+0050D948              | 68 007DEF00      | push wizpatch.EF7D00                     | EF7D00:L"network::proto_area_implement_client::recv_soul_partner_storage_card_select_r() result:%d, cost:%lld\n"
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0x55C0
+0050DE21              | 68 8892EF00      | push wizpatch.EF9288                     | EF9288:L"network::proto_area_implement_client::recv_roguemap_entry_notify_party_member_entry() objectid:%d stageid:%d floor:%d channel:%d\n"
+            res.WriteUInt32(client.Character.InstanceId);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+---------------------------------------------------------------
+0x5629
+00507129              | 68 A87EEE00      | push wizpatch.EE7EA8                     | EE7EA8:L"network::proto_area_implement_client::recv_shop_notify_remove_item() idx %u\n"
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x588F
+00506B50              | 68 686CEE00      | push wizpatch.EE6C68                     | EE6C68:L"network::proto_area_implement_client::recv_quest_notify_order_bonus_rate()\n"
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+---------------------------------------------------------------
+0x5896
+0050CEB0              | 68 6056EF00      | push wizpatch.EF5660                     | EF5660:L"network::proto_area_implement_client::recv_challengemap_area_end()\n"
+//No Structure
+---------------------------------------------------------------
+
+
+
+
+
+
 
 
 
