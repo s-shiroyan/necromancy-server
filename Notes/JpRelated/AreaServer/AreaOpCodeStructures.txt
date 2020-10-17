@@ -1841,6 +1841,101 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 0050CF20                | 68 5858EF00      | push wizpatch.EF5858                                 | EF5858:L"network::proto_area_implement_client::recv_challengemap_notify_interval_skip()\n"
 //No Structure
 ---------------------------------------------------------------
+0x8714
+0050D351                | 68 5068EF00      | push wizpatch.EF6850                                 | EF6850:L"network::proto_area_implement_client::recv_soul_partner_update_cost() maxcost:%d, cost:%d\n"
+            res.WriteByte(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x894B
+005070F5                | 68 B87DEE00      | push wizpatch.EE7DB8                                 | EE7DB8:L"network::proto_area_implement_client::recv_shop_notify_update_item_num() idx %u, buy_limit_num %lld, buy_rest_num %lld\n"
+            res.WriteByte(0);
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0x89A7
+00508757                | 68 00AAEE00      | push wizpatch.EEAA00                                 | EEAA00:L"network::proto_area_implement_client::recv_chara_arrange_close_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x89E1
+0050D1A0                | 68 A861EF00      | push wizpatch.EF61A8                                 | EF61A8:L"network::proto_area_implement_client::recv_challengemap_notify_reset_reward_flag()\n"
+//No Structure
+---------------------------------------------------------------
+0x8AD1
+00503C09                | 68 2806EE00      | push wizpatch.EE0628                                 | EE0628:L"network::proto_area_implement_client::recv_chara_update_notify_form() objectid : %d\n"
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x8C12
+0050B260 <wizpatch.sub_ | 68 880CEF00      | push wizpatch.EF0C88                                 | EF0C88:L"network::proto_area_implement_client::recv_gem_spall_info()\n"
+
+            //sub 496470
+            for (int j = 0; j < 0x3; j++)
+            {
+                for (int k = 0; k < 0x2; k++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteFixedString("Xeno", 0x10);
+                }
+                res.WriteInt16(0);
+            }
+            res.WriteInt16(0);
+            res.WriteInt64(0);
+            //end sub
+---------------------------------------------------------------
+0x8D01
+0050E206                | 68 08A3EF00      | push wizpatch.EFA308                                 | EFA308:L"network::proto_area_implement_client::recv_class_advancement_notify_add_exp() job:%d, exp:%d, exp_bonus:%d, is_mentor:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0x8D20
+00508480 <wizpatch.sub_ | 68 20A3EE00      | push wizpatch.EEA320                                 | EEA320:L"network::proto_area_implement_client::recv_cash_shop_arrange_notify_open()\n"
+            res.WriteInt16(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x8EC8
+0050CFCC                | 68 705AEF00      | push wizpatch.EF5A70                                 | EF5A70:L"network::proto_area_implement_client::recv_challengemap_stage_update_point() point:%lld, point_bonus:%lld\n"
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0x8F1E
+0050DEE4                | 68 9095EF00      | push wizpatch.EF9590                                 | EF9590:L"network::proto_area_implement_client::recv_roguemap_notify_data() point:%lld chapter:%d chapter_num:%d monster_defeat_count:%d gate_clear_count:%d treasure_count:%d dead_count:%d tm_elapsed:%d tm_chapter_elapsed:%d\n"
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
