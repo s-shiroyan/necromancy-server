@@ -1391,14 +1391,456 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteByte(0);
+---------------------------------------------------------------
+0x7AE7
+0050D7AD                | 68 9077EF00      | push wizpatch.EF7790                             | EF7790:L"network::proto_area_implement_client::recv_soul_partner_storage_open() mode:%d, partners_qt:%d, storage_qt:%d, storage_other_qt:%d, expedition_qt:%d, cost:%d, extend_slot_state:%d, expedition_slot_state:%d, storage_num:%d, is_expedition:%d, maps_qt:%d, week_bonus_qt:%d\n"			
+            int numEntries = 0x2;
+            res.WriteInt32(0);
+            res.WriteInt32(numEntries); //less than 5
+            for (int k = 0; k < numEntries; k++)
+            
+                {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x7; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+                //-----endsub
+            }
+            res.WriteInt32(numEntries); //less than 0xC8
+            for (int k = 0; k < numEntries; k++)
+
+            {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x7; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+                //-----endsub
+            }
+            res.WriteInt32(numEntries); //less than 0x32
+            for (int k = 0; k < numEntries; k++)
+
+            {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x7; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+                //-----endsub
+            }
+            res.WriteInt32(numEntries); //less than 0x3
+            //495fD0
+            for (int k = 0; k < numEntries; k++)
+            {
+                res.WriteFixedString("Xeno", 0x61);
+                for (int l = 0; l < 0x5; l++) //must be 5
+                
+                    {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x7; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+                //-----endsub
+                }
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+            }//end 495FD0
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            res.WriteInt32(numEntries); //less than 0x40
+            //496190
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int k = 0; k < 0x7; k++)
+                {
+                    res.WriteInt16(0);
+                }
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int k = 0; k < 0xA; k++)
+                {
+                    //4960C0
+                    res.WriteInt64(0);
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    res.WriteFixedString("Shoot me", 0x10);
+                }
+                res.WriteInt16(0);
+            }//end 496190
+
+            res.WriteInt32(numEntries); //less than 0x7
+            //4962B0
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteInt16(0);
+            }			
 ---------------------------------------------------------------			
-			
-			
-			
-			
-			
+0x7B73
+0050CF40                | 68 F858EF00      | push wizpatch.EF58F8                             | EF58F8:L"network::proto_area_implement_client::recv_challengemap_notify_interval_result()\n"
+//No Structure
+---------------------------------------------------------------
+0x7BA9
+00508E18                | 68 B8B7EE00      | push wizpatch.EEB7B8                                 | EEB7B8:L"network::proto_area_implement_client::recv_item_scroll_export_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x10);
+            res.WriteInt64(0);
+
+            for (int j = 0; j < 0x5; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteFixedString("Xeno", 0x10);
+                res.WriteInt64(0);
+            }			
+---------------------------------------------------------------
+0x7DD5
+0050D6D0                | 68 E074EF00      | push wizpatch.EF74E0                                 | EF74E0:L"network::proto_area_implement_client::recv_soul_partner_create_partner_open()\n"
+//No Structure			
+---------------------------------------------------------------
+0x7FF2
+0050E3A0 <wizpatch.sub_ | 68 D8A6EF00      | push wizpatch.EFA6D8                                 | EFA6D8:L"network::proto_area_implement_client::recv_class_advancement_notify_skill_param()\n"
+            res.WriteInt32(numEntries); //less than 0x40
+            //4962B0
+            for (int j = 0; j < numEntries; j++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+                res.WriteByte(0);
+
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
 
 
+            }
+---------------------------------------------------------------
+0x8040
+0050D205                | 68 5062EF00      | push wizpatch.EF6250                                 | EF6250:L"network::proto_area_implement_client::recv_soul_partner_status_open_r() partners_qt:%d, select_serialid:%lld, cost:%d, extend_slot_state:%d, summon_cooltime:%d, summon_cooltime_base:%d, is_create:%d, avatar_flag:%lld\n"
+           int numEntries = 0x2;
+            res.WriteInt32(numEntries); //less than 0x5
+            for (int k = 0; k < numEntries; k++)
+            {
+                //sub_495C70
+                res.WriteInt32(0);
+                res.WriteInt64(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteInt32(0);
+                    res.WriteInt32(0);
+                    for (int j = 0; j < 0x7; j++)
+                    {
+                        res.WriteInt16(0);
+                    }
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+
+                for (int i = 0; i < 0x3; i++)
+                {
+                    res.WriteByte(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteInt32(0);
+                }
+
+                for (int i = 0; i < 0x5; i++)
+                {
+                    res.WriteByte(0);
+                }
+                //-----endsub
+            }
+
+            res.WriteInt64(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0x80A7
+00502088                | 68 80A0ED00      | push wizpatch.EDA080                                 | EDA080:L"network::proto_area_implement_client::recv_battle_report_action_steal_money() result : %d, objectid : %d, money : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+---------------------------------------------------------------
+0x8433
+0050DD77                | 68 D88FEF00      | push wizpatch.EF8FD8                                 | EF8FD8:L"network::proto_area_implement_client::recv_roguemap_entry_open() stage_qt:%d continue_stageid:%d continue_floor:%d continue_charaname:%s continue_chara_lv:%d continue_chara_job:%d\n"
+			int numEntries = 0x2;
+            res.WriteInt32(numEntries); //less than 0xA
+            for (int k = 0; k < numEntries; k++)
+            {
+                //SUB 496800
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x61);
+                res.WriteFixedString("Xeno", 0x301);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0xA; j++) //must be 0xA
+                {
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                //End Sub 496800
+            }
+            for (int k = 0; k < 0x2; k++)
+            {
+                //sub 496AB0
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteByte(0);
+                res.WriteFixedString("Xeno", 0x5B);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0xA; j++)
+                {
+                    res.WriteInt32(0);
+                }
+                res.WriteByte(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+
+                res.WriteInt32(0);//suspect
+
+            }
+---------------------------------------------------------------
+0x85D8
+0050D008                | 68 485BEF00      | push wizpatch.EF5B48                                 | EF5B48:L"network::proto_area_implement_client::recv_challengemap_stage_point_notify() value:%lld, add:%d\n"
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------			
+0x86B3
+0050CF20                | 68 5858EF00      | push wizpatch.EF5858                                 | EF5858:L"network::proto_area_implement_client::recv_challengemap_notify_interval_skip()\n"
+//No Structure
+---------------------------------------------------------------
 
 
 
