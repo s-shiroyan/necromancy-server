@@ -1921,6 +1921,56 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             res.WriteInt32(0);
             res.WriteInt32(0);
 ---------------------------------------------------------------
+0x8FAC
+0050DA20                | 68 9081EF00      | push wizpatch.EF8190                                 | EF8190:L"network::proto_area_implement_client::recv_soul_partner_skill_start_cast()\n"
+//No Structure
+---------------------------------------------------------------
+0x9045
+0050DC37                | 68 F88AEF00      | push wizpatch.EF8AF8                                 | EF8AF8:L"network::proto_area_implement_client::recv_soul_partner_notify_sg() page:%d serialid:%lld sg:%d sg_healmax_time:%d\n"
+            res.WriteByte(0);
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x927C
+0050E490                | 68 E0A9EF00      | push wizpatch.EFA9E0                                 | EFA9E0:L"network::proto_area_implement_client::recv_class_advancement_notify_learn_all()\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x942B
+00503D50                | 68 880AEE00      | push wizpatch.EE0A88                                 | EE0A88:L"network::proto_area_implement_client::recv_battle_attack_long_cancel()\n"
+//No Structure
+---------------------------------------------------------------
+0x9454
+00501384                | 50               | push eax                          |  //NO String
+            res.WriteInt32(0);
+            res.WriteFixedString("ok", 0x2);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x9497
+005078B9                | 68 908CEE00      | push wizpatch.EE8C90              | EE8C90:L"network::proto_area_implement_client::recv_venturer_medal_shop_notify_open() medal_item_num %d\n"
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x94B9
+00507505                | 75 15            | jne wizpatch.50751C               | //No String   ... 010EFFD8 Ð±C.¶...1.test.face/main/world_map/110.dds...................... 
+            res.WriteInt16(1);
+            res.WriteInt64(20000002);
+            res.WriteInt64(2);
+---------------------------------------------------------------
+0x9585
+00502188                | 68 20A5ED00      | push wizpatch.EDA520              | EDA520:L"network::proto_area_implement_client::recv_battle_report_notify_target_bonus() objectid : %d, skillbaseid : %d, buffid : %d\n"
+---------------------------------------------------------------
+0x95CD
+00501CB0 <wizpatch.sub_ | 68 7890ED00      | push wizpatch.ED9078              | ED9078:L"network::proto_area_implement_client::recv_battle_report_action_attack_long_exec()\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0x9634
+005059DD                | 68 8049EE00      | push wizpatch.EE4980              | EE4980:L"network::proto_area_implement_client::recv_event_challenge_script_play() label : %s\n"
+            res.WriteCString("What");
+---------------------------------------------------------------
+
+
+
 
 
 
