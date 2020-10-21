@@ -2054,6 +2054,72 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             res.WriteByte(0);
             res.WriteCString("What");
 ---------------------------------------------------------------
+0xA190
+0050C7F0                   | 68 B043EF00      | push wizpatch.EF43B0              | EF43B0:L"network::proto_area_implement_client::recv_auction_notify_update_exhibit_state() exhibitid:%d, state:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0); 
+---------------------------------------------------------------			
+0xA33D
+0050E299                   | 68 B0A4EF00      | push wizpatch.EFA4B0              | EFA4B0:L"network::proto_area_implement_client::recv_class_advancement_reset_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xA3E7
+0050D9A8                   | 68 887EEF00      | push wizpatch.EF7E88              | EF7E88:L"network::proto_area_implement_client::recv_soul_partner_storage_card_start_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xA5A
+00501D30                   | 68 3893ED00      | push wizpatch.ED9338              | ED9338:L"network::proto_area_implement_client::recv_battle_report_action_attack_long_reload_cancel()\n"
+//No structure
+---------------------------------------------------------------
+0xA5A4
+005036F9                   | 68 A8F2ED00      | push wizpatch.EDF2A8              | EDF2A8:L"network::proto_area_implement_client::recv_chara_update_job_attr_category_time_per() job : %d, category : %d, per : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xA5A5
+005058A8                   | 68 A047EE00      | push wizpatch.EE47A0              | EE47A0:L"network::proto_area_implement_client::recv_event_notify_slot_item() itembaseid : %d\n"
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0x10);
+---------------------------------------------------------------
+0xA5EC
+005032F9                   | 68 60E4ED00      | push wizpatch.EDE460              | EDE460:L"network::proto_area_implement_client::recv_chara_update_mentor_lv() mentor_level : %d\n"
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0x5A52
+00501398                   | 68 D873ED00      | push wizpatch.ED73D8              | ED73D8:L"network::proto_area_implement_client::recv_skill_tree_lost_equip() skill_treeid : %d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xA6A4
+00502C52                   | 68 D0CDED00      | push wizpatch.EDCDD0              | EDCDD0:L"network::proto_area_implement_client::recv_roulette_update_settings() rate : %d, speed_per : %d\n"
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xA6D5
+0050A328                   | 68 A8E9EE00      | push wizpatch.EEE9A8              | EEE9A8:L"network::proto_area_implement_client::recv_storage_open_cash_shop_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

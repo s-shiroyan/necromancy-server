@@ -27,10 +27,10 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
             int numEntries = 0x2;
-            res.WriteInt16(1);
-            res.WriteInt64(20000002);
-            res.WriteInt64(2);
-            Router.Send(client, (ushort)0x94B9, res, ServerType.Area);
+            res.WriteInt32(0);
+            res.WriteInt32(0); 
+
+            Router.Send(client, (ushort)0xA190, res, ServerType.Area);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
