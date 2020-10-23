@@ -1,4 +1,4 @@
-0x00516D00 location for opcode section, 135 opcodes, 
+0x00516D00 location for opcode section, 135 opcodes, 136 strings (1 dupe?)
 ---------------------------------------------------------------
 recv_ = 0x7DB1
 	no structure
@@ -341,167 +341,566 @@ recv_ = 0xA0E8
 	res.WriteInt32(0);
 ---------------------------------------------------------------
 recv_ = 0xA535 
-	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 ---------------------------------------------------------------
 recv_ = 0xA57C
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x5B);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	for(int i = 0; i < 0x19; i++) //item stuff
+		res.WriteInt32(0);
+		
+	for(int i = 0; i < 0x19; i++) //Item stuff
+	{
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteInt32(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0); //bool
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		res.WriteByte(0);
+		
+		res.WriteByte(0);
+		res.WriteByte(0);
+	}
+	
+	for(int i = 0; i < 0x19; i++) //item stuff
+		res.WriteInt32(0);
+	
+	for(int i = 0; i < 0x19; i++) //item stuff
+		res.WriteInt32(0);
+		
+	for(int i = 0; i < 0x19; i++) //
+		res.WriteByte(0);
+		
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteFixedString("", 0x5B);
 	
 ---------------------------------------------------------------
-cmp eax, 0xA68E
+recv_ = 0xA68E
+	res.WriteInt32(0);
+	for(int i = 0; i < 8; i++)
+	{
+		res.WriteByte(0);
+		res.WriteFixedString("", 0x31);
+		res.WriteByte(0);
+		res.WriteByte(0); //bool
+	}
+	res.WriteInt32(0);
+	res.WriteByte(0); //bool
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0xA878
+	res.WriteInt16(0);
+---------------------------------------------------------------
+recv_ = 0xAAB5
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31);
+	res.WriteFixedString("", 0x5B);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x9D50
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x9D6A
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x9DE2
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x9BFE
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8FB2
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8E0A
+	no structure
+---------------------------------------------------------------
+recv_ = 0x8D52
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31);
+	res.WriteFixedString("", 0x5B);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x8D74
+	res.WriteCString("");
+	res.WriteCString("");
+	res.WriteInt16(0);
+---------------------------------------------------------------
+recv_ = 0x91EE
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x95E6
+	res.WriteCString("");
+	res.WriteCString("");
+	res.WriteInt16(0);
+---------------------------------------------------------------
+recv_ = 0x95FE
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8EEE
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8BB1
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8CFE
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x8D24
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x61); //size is 0x61
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x181); //size is 0x181
 ---------------------------------------------------------------
-cmp eax, 0xA878
+recv_ = 0x853F
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x5E08
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x542B
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x4CD5
+	no structure
+---------------------------------------------------------------
+recv_ = 0x4426
+	res.WriteInt32(0);
+	res.WriteCString("");
+	res.WriteCString("");
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x3B93
+	res.WriteInt64(0);
+---------------------------------------------------------------
+recv_ = 0x4090
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteCString("");
+	res.WriteInt32(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x7205
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteFixedString("", 0x61); //size is 0x61
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
 ---------------------------------------------------------------
-cmp eax, 0xAAB5
+recv_ = 0x689B
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x64B5
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteCString("");
+	res.WriteCString("");
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x5F0A
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x5F9A
+	no structure
+---------------------------------------------------------------
+recv_ = 0x7646
+	int numEntries = 0xA00;
+	res.WriteInt32(numEntries); //Less than or equal to 0xA00
+	for(int i = 0; i < numEntries; i++)
+		res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x73D7
+	no structure
+---------------------------------------------------------------
+recv_ = 0x755C
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x7566
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 	
+	res.WriteInt32(0);
+	res.WriteByte(0); //bool
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
 ---------------------------------------------------------------
-sub eax, 0x9D50
+recv_ = 0x7A60
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x7AC9
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteFixedString("", 0x61); //size is 0x61
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
 ---------------------------------------------------------------
-sub eax, 0x1A
+recv_ = 0x7C40
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x6A10
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x6AC0
+	res.WriteInt32(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x6C94
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x680C
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x5B32
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x5652
+	res.WriteInt32(0);
+	res.WriteByte(0); //bool
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x557F
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x55FF
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x51EB
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x5315
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
 	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x61); //size is 0x61
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x181); //size is 0x181
 ---------------------------------------------------------------
-sub eax, 0x78
+recv_ = 0x5386
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x446D
+	res.WriteInt32(0);
+	int numEntries = 0x64;
+	res.WriteInt32(numEntries);//Less than or equal to 0x64
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x25); //Fixed string of size 0x25
+		res.WriteFixedString("", 0xC1); //Fixed string of size 0xC1
+	}
+---------------------------------------------------------------
+recv_ = 0x2DE8
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x213A
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1E68
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1D09
+	res.WriteInt32(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x1DC4
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+---------------------------------------------------------------
+recv_ = 0x3310
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x2E98
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x31B4
+	res.WriteInt32(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x32FA
+	no structure
+---------------------------------------------------------------
+recv_ = 0x348C
+	no structure
+---------------------------------------------------------------
+recv_ = 0x377B
+	res.WriteInt32(0);
+	res.WriteCString("");
+---------------------------------------------------------------
+recv_ = 0x3784
+	res.WriteByte(0); //bool
+	res.WriteInt32(0);
+	res.WriteInt64(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x2264
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x2C1C
+	res.WriteInt32(0);
 	
----------------------------------------------------------------
-cmp eax, 0x9BFE
----------------------------------------------------------------
-cmp eax, 0x8FB2
----------------------------------------------------------------
-cmp eax, 0x8E0A
----------------------------------------------------------------
-sub eax, 0x8D52
----------------------------------------------------------------
-sub eax, 0x22
----------------------------------------------------------------
-sub eax, 0x91EE
----------------------------------------------------------------
-sub eax, 0x3F8
----------------------------------------------------------------
-sub eax, 0x18
----------------------------------------------------------------
-cmp eax, 0x8EEE
----------------------------------------------------------------
-sub eax, 0x8BB1
----------------------------------------------------------------
-sub eax, 0x14D
----------------------------------------------------------------
-sub eax, 0x26
----------------------------------------------------------------
-cmp eax, 0x853F
----------------------------------------------------------------
-cmp eax, 0x5E08
----------------------------------------------------------------
-cmp eax, 0x542B
----------------------------------------------------------------
-cmp eax, 0x4CD5
----------------------------------------------------------------
-cmp eax, 0x4426
----------------------------------------------------------------
-cmp eax, 0x3B93
----------------------------------------------------------------
-cmp eax, 0x4090
----------------------------------------------------------------
-cmp eax, 0x7205
----------------------------------------------------------------
-cmp eax, 0x689B
----------------------------------------------------------------
-cmp eax, 0x64B5
----------------------------------------------------------------
-cmp eax, 0x5F0A
----------------------------------------------------------------
-cmp eax, 0x5F9A
----------------------------------------------------------------
-cmp eax, 0x7646
----------------------------------------------------------------
-sub eax, 0x73D7
----------------------------------------------------------------
-sub eax, 0x185
----------------------------------------------------------------
-sub eax, 0xA
----------------------------------------------------------------
-sub eax, 0x7A60
----------------------------------------------------------------
-sub eax, 0x69
----------------------------------------------------------------
-sub eax, 0x177
----------------------------------------------------------------
-cmp eax, 0x6A10
----------------------------------------------------------------
-cmp eax, 0x6AC0
----------------------------------------------------------------
-cmp eax, 0x6C94
----------------------------------------------------------------
-cmp eax, 0x680C
----------------------------------------------------------------
-cmp eax, 0x5B32
----------------------------------------------------------------
-cmp eax, 0x5652
----------------------------------------------------------------
-cmp eax, 0x557F
----------------------------------------------------------------
-cmp eax, 0x55FF
----------------------------------------------------------------
-sub eax, 0x51EB
----------------------------------------------------------------
-sub eax, 0x12A
----------------------------------------------------------------
-sub eax, 0x71
----------------------------------------------------------------
-cmp eax, 0x446D
----------------------------------------------------------------
-cmp eax, 0x2DE8
----------------------------------------------------------------
-cmp eax, 0x213A
----------------------------------------------------------------
-cmp eax, 0x1E68
----------------------------------------------------------------
-cmp eax, 0x1D09
----------------------------------------------------------------
-cmp eax, 0x1DC4
----------------------------------------------------------------
-cmp eax, 0x3310
----------------------------------------------------------------
-cmp eax, 0x2E98
----------------------------------------------------------------
-cmp eax, 0x31B4
----------------------------------------------------------------
-cmp eax, 0x32FA
----------------------------------------------------------------
-sub eax, 0x348C
----------------------------------------------------------------
-sub eax, 0x2EF
----------------------------------------------------------------
-sub eax, 0x9
----------------------------------------------------------------
-cmp eax, 0x2264
----------------------------------------------------------------
-cmp eax, 0x2C1C
----------------------------------------------------------------
-cmp eax, 0x2D92
----------------------------------------------------------------
-cmp eax, 0x1EC8
----------------------------------------------------------------
-cmp eax, 0x1688
----------------------------------------------------------------
-cmp eax, 0x1274
----------------------------------------------------------------
-cmp eax, 0xE51
----------------------------------------------------------------
-cmp eax, 0xEF7
----------------------------------------------------------------
-sub eax, 0x1817
----------------------------------------------------------------
-sub eax, 0x14
----------------------------------------------------------------
-sub eax, 0x10A
----------------------------------------------------------------
-cmp eax, 0x1421
----------------------------------------------------------------
-cmp eax, 0x763
----------------------------------------------------------------
-cmp eax, 0xAD3
----------------------------------------------------------------
-cmp eax, 0xB7D
----------------------------------------------------------------
-cmp eax, 0x482
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //Fixed string of size 0x31
+	res.WriteFixedString("", 0x5B); //Fixed string of size 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x61); //Fixed string of size 0x61
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x2D92
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1EC8
+	res.WriteInt32(0);
+	int numEntries = 0x64;
+	res.WriteInt32(numEntries);//Less than or equal to 0x64
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x10); //Fixed string of size 0x10
+	}
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x10); //Fixed string of size 0x10
+	res.WriteByte(0);
+---------------------------------------------------------------
+recv_ = 0x1688
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteByte(0); //bool
+	res.WriteByte(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1274
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0xE51
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ =  0xEF7
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1817
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteFixedString("", 0x31); //size is 0x31
+	res.WriteFixedString("", 0x5B); //size is 0x5B
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0);
+	
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteFixedString("", 0x61); //size is 0x61
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x182B
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x1935
+	res.WriteInt32(0);
+	int numEntries = 0x3E8;
+	res.WriteInt32(numEntries);//Less than or equal to 0x3E8
+	for(int i = 0; i < numEntries; i++)
+	{
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x31); //Fixed string of size 0x31
+		res.WriteFixedString("", 0x5B); //Fixed string of size 0x5B
+		res.WriteInt32(0);
+		res.WriteFixedString("", 0x49); //Fixed string of size 0x49
+		res.WriteFixedString("", 0x49); //Fixed string of size 0x49
+		res.WriteInt32(0);
+	}
+---------------------------------------------------------------
+recv_ = 0x1421
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x763
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0xAD3
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0xB7D
+	res.WriteInt32(0);
+---------------------------------------------------------------
+recv_ = 0x482
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteInt32(0);
+	res.WriteByte(0);
+	res.WriteByte(0); //Bool
+	res.WriteFixedString("", 0x41); //Fixed string of size 0x41
+	res.WriteInt16(0);
+	
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteFloat(0);
+	res.WriteByte(0);
