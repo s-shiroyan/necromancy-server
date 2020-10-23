@@ -1067,7 +1067,7 @@ int numEntries = 0x2;
 0xEF49
 00508ED0 <wizpatch.su | 68 18B9EE00      | push wizpatch.EEB918                     | EEB918:L"network::proto_area_implement_client::recv_item_update_scroll()\n"
             res.WriteInt64(0);
-
+			//sub_4929F0
             res.WriteInt64(0);
             //sub4929A0
             res.WriteInt16(0);
@@ -2278,6 +2278,164 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             }
             //end sub
 ---------------------------------------------------------------
+0xB565
+0050CA38                   | 68 C047EF00      | push wizpatch.EF47C0                      | EF47C0:L"network::proto_area_implement_client::recv_auction_regist_search_equipment_cond_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xB695
+005087A8                   | 68 40ABEE00      | push wizpatch.EEAB40                      | EEAB40:L"network::proto_area_implement_client::recv_chara_arrange_update_form_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xB700
+0050DA40                   | 68 2882EF00      | push wizpatch.EF8228                      | EF8228:L"network::proto_area_implement_client::recv_soul_partner_skill_exec()\n"
+//No Structure
+---------------------------------------------------------------
+0xB911
+0050D97C                   | 68 D07DEF00      | push wizpatch.EF7DD0                      | EF7DD0:L"network::proto_area_implement_client::recv_soul_partner_storage_card_cancel_r() cost:%lld\n"
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0xB98A
+0050B748                   | 68 F01BEF00      | push wizpatch.EF1BF0                      | EF1BF0:L"network::proto_area_implement_client::recv_motion_start() motionid : %d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xBAEB
+00503531                   | 68 78EBED00      | push wizpatch.EDEB78                      | EDEB78:L"network::proto_area_implement_client::recv_chara_update_skill_trap_cooltime() diff : %d, per : %d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xBB83
+005076D9                   | 68 B086EE00      | push wizpatch.EE86B0                      | EE86B0:L"network::proto_area_implement_client::recv_rogue_point_shop_identify_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xBC1B
+0050DA08                   | 68 D880EF00      | push wizpatch.EF80D8                      | EF80D8:L"network::proto_area_implement_client::recv_soul_partner_storage_notify() storage_num:%d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xBD88
+00508D69                   | 68 40B6EE00      | push wizpatch.EEB640                      | EEB640:L"network::proto_area_implement_client::recv_item_scroll_sub_enchant_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+
+            //sub_496540
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteInt32(0);
+            }
+            //4929F0
+            res.WriteInt64(0);
+            //sub4929A0
+            res.WriteInt16(0);
+            for (int i = 0; i < 0x2; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            for (int k = 0; k < 0x5; k++)
+            {
+                res.WriteInt16(0);
+                //sub492940
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+
+            }
+            //4929F0
+            res.WriteInt64(0);
+            //sub4929A0
+            res.WriteInt16(0);
+            for (int i = 0; i < 0x2; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            for (int k = 0; k < 0x5; k++)
+            {
+                res.WriteInt16(0);
+                //sub492940
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+
+            }
+
+            //4929F0
+            res.WriteInt64(0);
+            //sub4929A0
+            res.WriteInt16(0);
+            for (int i = 0; i < 0x2; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            for (int k = 0; k < 0x5; k++)
+            {
+                res.WriteInt16(0);
+                //sub492940
+
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x2; j++)
+                {
+                    res.WriteInt16(0);
+                }
+
+            }
+            //end   sub_496540
+---------------------------------------------------------------
+0xBE46
+00506BB0 <wizpatch.sub_506 | 68 006DEE00      | push wizpatch.EE6D00                      | EE6D00:L"network::proto_area_implement_client::recv_quest_notify_work_bonus_rate()\n"
+            int numEntries = 0x2;
+            res.WriteInt32(numEntries); //less than 0x1E
+            for (int k = 0; k < numEntries; k++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+            }
+            res.WriteInt32(numEntries); //less than 0x14
+            for (int k = 0; k < numEntries; k++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+            }
+---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
