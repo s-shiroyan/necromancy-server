@@ -2658,12 +2658,92 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 0050DAB0                   | 68 3884EF00      | push wizpatch.EF8438             | EF8438:L"network::proto_area_implement_client::recv_soul_partner_library_open_start()\n"
 //no structure
 ---------------------------------------------------------------
+0xD84E
+00501358                   | 68 2073ED00      | push wizpatch.ED7320             | ED7320:L"network::proto_area_implement_client::recv_skill_tree_update_cooltime() cooltimeid : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xD875
+00508B50 <wizpatch.sub_508 | 68 A8B2EE00      | push wizpatch.EEB2A8             | EEB2A8:L"network::proto_area_implement_client::recv_item_update_parameter()\n"
+            res.WriteInt64(0);
+            
+            //492810
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+            res.WriteInt16(0);
 
-
-
-
-
-
+            int numEntries3 = 0x5; //must be 0x5
+            for (int k = 0; k < numEntries3; k++)
+            {
+                res.WriteInt32(0);
+            }
+            int numEntries4 = 0x5; //must be 0x5
+            for (int k = 0; k < numEntries4; k++)
+            {
+                res.WriteInt32(0);
+            }
+            int numEntries5 = 0x5; //must be 0x5
+            for (int k = 0; k < numEntries5; k++)
+            {
+                res.WriteInt32(0);
+                res.WriteFixedString("Ok", 0x2);
+                res.WriteInt16(0);
+                res.WriteInt16(0);
+            }
+---------------------------------------------------------------
+0xD94F
+005025B6                   | 68 30B5ED00      | push wizpatch.EDB530             | EDB530:L"network::proto_area_implement_client::recv_battle_report_notify_partner_exp() serialid : %lld, exp_value : %d, exp_add : %d, is_lvup : %d, is_lvcap : %d\n"
+            res.WriteInt64(0);
+            res.WriteCString("What");
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0xD9E0
+00505F30 <wizpatch.sub_505 | 6A FF            | push FFFFFFFF                    |
+00505F32                   | 68 A900E000      | push <wizpatch.sub_E000A9>       |			
+00505F7D                   | 68 5050EE00      | push wizpatch.EE5050             | EE5050:L"network::proto_area_implement_client::recv_warning_system_message() text : %s\n"
+            res.WriteCString("What");
+---------------------------------------------------------------
+0xDAF1
+00500E01                   | 68 7863ED00      | push wizpatch.ED6378             | ED6378:L"network::proto_area_implement_client::recv_map_chip_data() mapserialid:%d, chips_qt:%d, x_num:%d, y_num:%d\n"
+            int numEntries = 0x2;
+            res.WriteInt32(0);
+            res.WriteInt32(numEntries); //less than 0x190
+            for (int k = 0; k < numEntries; k++)
+            {
+                res.WriteInt32(0);
+            }
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xDB36
+0050D2B0                   | 68 A065EF00      | push wizpatch.EF65A0             | EF65A0:L"network::proto_area_implement_client::recv_soul_partner_status_notify_close()\n"
+//no structure
+---------------------------------------------------------------
+0xDBFD
+00508D09                   | 68 88B5EE00      | push wizpatch.EEB588             | EEB588:L"network::proto_area_implement_client::recv_item_scroll_enchant_execute_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xDF15
+00503561                   | 68 40ECED00      | push wizpatch.EDEC40             | EDEC40:L"network::proto_area_implement_client::recv_chara_update_skill_trap_casttime() diff : %d, per : %d\n"
+            res.WriteInt16(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xDFAA
+0050CE78                   | 68 1055EF00      | push wizpatch.EF5510             | EF5510:L"network::proto_area_implement_client::recv_challengemap_area_select_member_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xDFB
+0050D188                   | 68 E860EF00      | push wizpatch.EF60E8             | EF60E8:L"network::proto_area_implement_client::recv_challengemap_area_ranking_close_r() [ res = %d ]\n"
 
 
 
