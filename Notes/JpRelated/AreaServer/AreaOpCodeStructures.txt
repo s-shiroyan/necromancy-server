@@ -166,6 +166,7 @@ int numEntries = 0x2;
             res.WriteInt32(numEntries);//less than 0xE
             for (int j = 0; j < numEntries; j++)
             {
+			//sub_496710
                 res.WriteInt32(0);
                 res.WriteInt32(0);
                 res.WriteInt32(0);
@@ -2592,6 +2593,72 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 0050CD20                   | 68 B84EEF00      | push wizpatch.EF4EB8                                    | EF4EB8:L"network::proto_area_implement_client::recv_challengemap_ticket_notify_close()\n"
 //no structure
 ---------------------------------------------------------------
+0xD026
+0050B248                   | 68 D00BEF00      | push wizpatch.EF0BD0                                    | EF0BD0:L"network::proto_area_implement_client::recv_gem_cancel_spall_support_item_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xD134
+0050DE68                   | 68 4094EF00      | push wizpatch.EF9440                                    | EF9440:L"network::proto_area_implement_client::recv_roguemap_entry_new_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xD18D
+0050D160                   | 68 3860EF00      | push wizpatch.EF6038                                    | EF6038:L"network::proto_area_implement_client::recv_challengemap_area_ranking_notify_close()\n"
+//no structure
+---------------------------------------------------------------
+0xD22E
+00507A39                   | 68 8890EE00      | push wizpatch.EE9088                                    | EE9088:L"network::proto_area_implement_client::recv_challengemap_point_shop_notify_open() MAC_Point %llu, item_num %u\n"
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xD23D
+0050E3F0                   | 68 88A8EF00      | push wizpatch.EFA888                                    | EFA888:L"network::proto_area_implement_client::recv_class_advancement_notify_cnt_reset()\n"
+//no structure
+---------------------------------------------------------------
+0xD2FC
+0050DCB8                   | 68 808DEF00      | push wizpatch.EF8D80                                    | EF8D80:L"network::proto_area_implement_client::recv_soul_partner_expedition_cash_shop_open_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xD49E
+00506D18                   | 68 D070EE00      | push wizpatch.EE70D0                                    | EE70D0:L"network::proto_area_implement_client::recv_event_treasurebox_select_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xD726
+0050B790                   | 68 001DEF00      | push wizpatch.EF1D00                                    | EF1D00:L"network::proto_area_implement_client::recv_motion_notify() objectid : %d, motionid : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xD802
+0050E18A                   | 68 B8A0EF00      | push wizpatch.EFA0B8                                    | EFA0B8:L"network::proto_area_implement_client::recv_roguemap_notify_retire() monster_defeat_count:%d gate_clear_count:%d treasure_count:%d dead_count:%d reward_medal_gold:%d reward_medal_silver:%d reward_point:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+
+            for (int i = 0; i < 0x4; i++)
+            {
+                res.WriteInt32(0);
+            }
+            for (int i = 0; i < 0x4; i++)
+            {
+                res.WriteInt32(0);
+            }
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            //end_sub_496710
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0xD84
+0050DAB0                   | 68 3884EF00      | push wizpatch.EF8438             | EF8438:L"network::proto_area_implement_client::recv_soul_partner_library_open_start()\n"
+//no structure
+---------------------------------------------------------------
+
 
 
 
