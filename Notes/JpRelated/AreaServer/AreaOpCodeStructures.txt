@@ -2744,7 +2744,98 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 ---------------------------------------------------------------
 0xDFB
 0050D188                   | 68 E860EF00      | push wizpatch.EF60E8             | EF60E8:L"network::proto_area_implement_client::recv_challengemap_area_ranking_close_r() [ res = %d ]\n"
+---------------------------------------------------------------
+0xDFBA
+0050D890                   | 68 807AEF00      | push wizpatch.EF7A80             | EF7A80:L"network::proto_area_implement_client::recv_soul_partner_storage_merge_select_r() err:%d, add_exp:%d, cost:%lld\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+---------------------------------------------------------------
+0xE040
+0050D321                   | 68 C067EF00      | push wizpatch.EF67C0                   | EF67C0:L"network::proto_area_implement_client::recv_soul_partner_nurture_talk()\n"
+            //sub_495C70
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteFixedString("Xeno", 0x61);
+            res.WriteFixedString("Xeno", 0x5B);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
 
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x7; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteByte(0);
+            }
+
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteInt32(0);
+            }
+
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteByte(0);
+            }
+            //-----endsub
+---------------------------------------------------------------
+0xE088
+0050DB88                   | 68 3888EF00      | push wizpatch.EF8838                   | EF8838:L"network::proto_area_implement_client::recv_soul_partner_expedition_start_r() result:%d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE09F
+0050A759                   | 68 40F4EE00      | push wizpatch.EEF440                   | EEF440:L"network::proto_area_implement_client::recv_package_money_check_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE203
+00501D10                   | 68 8092ED00      | push wizpatch.ED9280                   | ED9280:L"network::proto_area_implement_client::recv_battle_report_action_attack_long_reload_exec()\n"
+//no structure
+---------------------------------------------------------------
+0xE27F
+00509F58                   | 68 00DEEE00      | push wizpatch.EEDE00                   | EEDE00:L"network::proto_area_implement_client::recv_party_cancel_party_auto_recruit_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE32B
+0050D3D8                   | 68 806AEF00      | push wizpatch.EF6A80                   | EF6A80:L"network::proto_area_implement_client::recv_soul_partner_summon_exec_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE456
+0050DF60                   | 68 E097EF00      | push wizpatch.EF97E0                   | EF97E0:L"network::proto_area_implement_client::recv_roguemap_update_elapsed_time() tm_elapsed:%d tm_chapter_elapsed:%d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE4EC
+0050DA68                   | 68 B882EF00      | push wizpatch.EF82B8                   | EF82B8:L"network::proto_area_implement_client::recv_soul_partner_update_use_active_skill_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE5AB
+00502310                   | 68 00ACED00      | push wizpatch.EDAC00                   | EDAC00:L"network::proto_area_implement_client::recv_battle_report_notify_partner_damage_mp() objectid : %d, damage : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
 
 
 
