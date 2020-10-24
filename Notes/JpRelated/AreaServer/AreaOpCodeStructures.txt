@@ -2547,9 +2547,51 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 0050D9C8                   | 68 487FEF00      | push wizpatch.EF7F48                                    | EF7F48:L"network::proto_area_implement_client::recv_soul_partner_storage_cash_shop_open_r() [ res = %d ]\n"
             res.WriteInt32(0);
 ---------------------------------------------------------------
-
-
-
+0xC822
+00500F01                   | 68 8865ED00      | push wizpatch.ED6588                                    | ED6588:L"network::proto_area_implement_client::recv_minimap_update_object_view() view_type : %d, onoff : %d\n"
+            res.WriteInt32(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0xC866
+00503509                   | 68 C8EAED00      | push wizpatch.EDEAC8                                    | EDEAC8:L"network::proto_area_implement_client::recv_chara_update_skill_ap_cost_cut() onoff : %d\n"
+            res.WriteByte(0);
+---------------------------------------------------------------
+0xC90D
+00501A40                   | 68 B087ED00      | push wizpatch.ED87B0                                    | ED87B0:L"network::proto_area_implement_client::recv_chara_change_model_end()\n"
+//No structure
+---------------------------------------------------------------
+0xC9CC
+0050E239                   | 68 00A4EF00      | push wizpatch.EFA400                                    | EFA400:L"network::proto_area_implement_client::recv_class_advancement_learn_r() [ res = %d ]\n"
+            res.WriteInt32(0); //throws last chance if 0.
+---------------------------------------------------------------
+0xCA77
+00503860 <wizpatch.sub_503 | 68 D8F8ED00      | push wizpatch.EDF8D8                                    | EDF8D8:L"network::proto_area_implement_client::recv_chara_update_skill_build_flag()\n"
+            res.WriteInt32(numEntries); //less than 0x4
+            for (int k = 0; k < numEntries; k++)
+            {
+                res.WriteInt64(0);
+            }
+---------------------------------------------------------------
+0xCD86
+005098F8                   | 68 B8CDEE00      | push wizpatch.EECDB8                                    | EECDB8:L"network::proto_area_implement_client::recv_stall_deregist_item_all_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xCD96
+0050B670 <wizpatch.sub_50B | 68 F017EF00      | push wizpatch.EF17F0                                    | EF17F0:L"network::proto_area_implement_client::recv_job_change_open_cash_shop_r()\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xCF14
+0050DFE8                   | 68 D89AEF00      | push wizpatch.EF9AD8                                    | EF9AD8:L"network::proto_area_implement_client::recv_roguemap_update_dead_count() count:%d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xCF76
+0050A308                   | 68 F8E8EE00      | push wizpatch.EEE8F8                                    | EEE8F8:L"network::proto_area_implement_client::recv_storage_update_view_page_r() [ res = %d ]\n"
+            res.WriteInt32(0);//throws last chance if 0.
+---------------------------------------------------------------
+0xCFC3
+0050CD20                   | 68 B84EEF00      | push wizpatch.EF4EB8                                    | EF4EB8:L"network::proto_area_implement_client::recv_challengemap_ticket_notify_close()\n"
+//no structure
+---------------------------------------------------------------
 
 
 
