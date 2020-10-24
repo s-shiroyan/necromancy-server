@@ -2836,6 +2836,70 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             res.WriteInt32(0);
             res.WriteInt32(0);
 ---------------------------------------------------------------
+0xE694
+004FF608                   | 68 802EED00      | push wizpatch.ED2E80                   | ED2E80:L"network::proto_area_implement_client::recv_chara_target_object_fix() objectid : %d\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xE6CA
+00503591                   | 68 08EDED00      | push wizpatch.EDED08                   | EDED08:L"network::proto_area_implement_client::recv_chara_update_skill_attr_ap_cost_per() attr : %d, per : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xE6DE
+00503CF5                   | 68 C809EE00      | push wizpatch.EE09C8                   | EE09C8:L"network::proto_area_implement_client::recv_battle_attack_long_exec_r() result : %d, rigid : %f\n"
+            res.WriteInt32(0);
+            res.WriteFloat(0);
+---------------------------------------------------------------			
+0xE77A
+00504DC9                   | 68 082DEE00      | push wizpatch.EE2D08                   | EE2D08:L"network::proto_area_implement_client::recv_item_update_long_range() id %llu, long_range %d\n"
+            res.WriteInt64(0);
+            res.WriteInt16(0);
+---------------------------------------------------------------
+0xE889
+005079AA                   | 68 208FEE00      | push wizpatch.EE8F20                   | EE8F20:L"network::proto_area_implement_client::recv_venturer_medal_shop_notify_remove_item() idx %d\n"
+            res.WriteInt16(1); //last chance if shop does not contain item idx
+---------------------------------------------------------------
+0xE8F2
+00504C81                   | 68 282AEE00      | push wizpatch.EE2A28                   | EE2A28:L"network::proto_area_implement_client::recv_item_chara_post_notify() serial %d, num %d\n"
+            res.WriteInt32(0);
+            res.WriteByte(0);
+---------------------------------------------------------------
+0xE947
+0050DC68                   | 68 E08BEF00      | push wizpatch.EF8BE0                   | EF8BE0:L"network::proto_area_implement_client::recv_soul_partner_expedition_result_get_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xEA49
+00509FC3                   | 68 70DFEE00      | push wizpatch.EEDF70                   | EEDF70:L"network::proto_area_implement_client::recv_party_notify_party_auto_recruit()\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteCString("What");
+            res.WriteCString("What");
+---------------------------------------------------------------
+0xEB12
+00501A21                   | 68 F086ED00      | push wizpatch.ED86F0                   | ED86F0:L"network::proto_area_implement_client::recv_chara_change_model_start() modelid: %d scale:%d\n\n"
+            res.WriteInt32(0); //neat!
+            res.WriteInt16(100);
+---------------------------------------------------------------
+0xEB79
+00502370                   | 68 C0ADED00      | push wizpatch.EDADC0                   | EDADC0:L"network::proto_area_implement_client::recv_battle_report_notify_partner_damage_ac() objectid : %d, damage : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
