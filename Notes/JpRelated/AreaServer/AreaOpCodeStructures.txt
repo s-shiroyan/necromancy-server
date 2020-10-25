@@ -2977,53 +2977,100 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
 00503C39                   | 68 D806EE00      | push wizpatch.EE06D8                   | EE06D8:L"network::proto_area_implement_client::recv_chara_skill_combo_free() attr_bit : %d\n"
             res.WriteByte(0);
 ---------------------------------------------------------------
+0xF656
+00509BF0                   | 68 A0D6EE00      | push wizpatch.EED6A0                   | EED6A0:L"network::proto_area_implement_client::recv_party_notify_member_recruit()\n"
+            //sub_4942F0
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteFixedString("Xeno", 0xB5);
+            //end_sub
+---------------------------------------------------------------
+0xF72B
+0050DCD8                   | 68 488EEF00      | push wizpatch.EF8E48                   | EF8E48:L"network::proto_area_implement_client::recv_soul_partner_expedition_cash_shop_close_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xF935
+00506900 <wizpatch.sub_506 | 68 6867EE00      | push wizpatch.EE6768                   | EE6768:L"network::proto_area_implement_client::recv_quest_get_rogue_mission_quest_history_r()\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);			
+---------------------------------------------------------------
+0xF954
+00501CF0                   | 68 D091ED00      | push wizpatch.ED91D0                   | ED91D0:L"network::proto_area_implement_client::recv_battle_report_action_attack_long_reload()\n"
+//no Structure
+---------------------------------------------------------------
+0xFAD9
+0050D6F0                   | 68 8075EF00      | push wizpatch.EF7580                   | EF7580:L"network::proto_area_implement_client::recv_soul_partner_create_partner_parameter()\n"
+            //sub_495C70
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteFixedString("Xeno", 0x61);
+            res.WriteFixedString("Xeno", 0x5B);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt32(0);
 
+            res.WriteInt32(0);
+            res.WriteInt16(0);
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt16(0);
 
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteInt32(0);
+                res.WriteInt32(0);
+                for (int j = 0; j < 0x7; j++)
+                {
+                    res.WriteInt16(0);
+                }
+            }
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
 
+            for (int i = 0; i < 0x3; i++)
+            {
+                res.WriteByte(0);
+            }
 
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteInt32(0);
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            for (int i = 0; i < 0x5; i++)
+            {
+                res.WriteByte(0);
+            }
+            //-----endsub
+            res.WriteByte(0);
+---------------------------------------------------------------
+0xFDCB
+005075FA                   | 50               | push eax                               |
+//No String weird one again. probably get a string by setting a value
+005075C5                   | 75 15            | jne wizpatch.5075DC  
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+            res.WriteInt64(0);
+            res.WriteInt64(0);                  |
+---------------------------------------------------------------
+0xFF0B
+0050DE48                   | 68 9093EF00      | push wizpatch.EF9390                   | EF9390:L"network::proto_area_implement_client::recv_roguemap_entry_ready_new_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+0xFF2A
+005004C0                   | 68 B050ED00      | push wizpatch.ED50B0                   | ED50B0:L"network::proto_area_implement_client::recv_local_object_notify_state() objectid : %d, state : %d\n"
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+---------------------------------------------------------------
+Fin 10.24.2020 10:04
 
