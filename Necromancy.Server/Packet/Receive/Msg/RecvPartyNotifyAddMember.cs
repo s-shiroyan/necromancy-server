@@ -16,10 +16,11 @@ namespace Necromancy.Server.Packet.Receive.Msg
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
+
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteFixedString("", 0x31); //soul name?
-            res.WriteFixedString("", 0x5B); //character name?
+            res.WriteFixedString("", 0x31); //Fixed string of size 0x31
+            res.WriteFixedString("", 0x5B); //Fixed string of size 0x5B
             res.WriteInt32(0);
             res.WriteByte(0);
             res.WriteByte(0);
@@ -33,10 +34,12 @@ namespace Necromancy.Server.Packet.Receive.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteFixedString("", 0x61); // size is 0x61
-            res.WriteFloat(1);
-            res.WriteFloat(1);
-            res.WriteFloat(1);
+            res.WriteFixedString("", 0x61); //Fixed string of size 0x61
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
+            res.WriteFloat(0);
             res.WriteByte(0);
             res.WriteByte(0);
             res.WriteByte(0);

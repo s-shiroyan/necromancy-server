@@ -21,20 +21,23 @@ namespace Necromancy.Server.Packet.Receive.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            for (int i = 0; i < 4; i++)
+
+            for (int i = 0; i < 6; i++)
             {
                 res.WriteInt32(0);
                 res.WriteInt32(0);
-                res.WriteFixedString("", 0x31); //size is 0x31
-                res.WriteFixedString("", 0x5B); //size is 0x5B
+                res.WriteFixedString("", 0x31);
+                res.WriteFixedString("", 0x5B);
                 res.WriteInt32(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
-                res.WriteByte(0);//bool
+                res.WriteByte(0);
+                res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteByte(0);
             }
             res.WriteByte(0);
+            res.WriteByte(0); //Bool
             return res;
         }
     }

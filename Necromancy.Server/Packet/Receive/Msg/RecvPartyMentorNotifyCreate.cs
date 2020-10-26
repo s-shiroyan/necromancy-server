@@ -5,17 +5,17 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Msg
 {
-    public class RecvUnionNotifyGrowth : PacketResponse
+    public class RecvPartyMentorNotifyCreate : PacketResponse
     {
-        public RecvUnionNotifyGrowth()
-            : base((ushort) MsgPacketId.recv_union_notify_growth, ServerType.Msg)
+        public RecvPartyMentorNotifyCreate()
+            : base((ushort) MsgPacketId.recv_party_mentor_notify_create, ServerType.Msg)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            //missing
+            
             return res;
         }
     }

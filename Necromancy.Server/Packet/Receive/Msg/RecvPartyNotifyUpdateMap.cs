@@ -19,7 +19,9 @@ namespace Necromancy.Server.Packet.Receive.Msg
             res.WriteInt32(0);
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteCString("");// max of 0x61 (character name i think)
+            res.WriteCString("");
+            res.WriteInt32(0);
+            res.WriteByte(0);
             return res;
         }
     }

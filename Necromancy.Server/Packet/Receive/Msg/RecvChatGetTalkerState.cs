@@ -5,10 +5,10 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Msg
 {
-    public class RecvPartyNotifyApply : PacketResponse
+    public class RecvChatGetTalkerState : PacketResponse
     {
-        public RecvPartyNotifyApply()
-            : base((ushort) MsgPacketId.recv_party_notify_apply, ServerType.Msg)
+        public RecvChatGetTalkerState()
+            : base((ushort) MsgPacketId.recv_chat_get_talker_state_r, ServerType.Msg)
         {
         }
 
@@ -17,15 +17,7 @@ namespace Necromancy.Server.Packet.Receive.Msg
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(0);
             res.WriteInt32(0);
-            res.WriteFixedString("", 0x31);
-            res.WriteFixedString("", 0x5B);
             res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
             return res;
         }
     }

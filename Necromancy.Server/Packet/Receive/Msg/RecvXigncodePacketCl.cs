@@ -5,10 +5,10 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Msg
 {
-    public class RecvUnionNotifyGrowth : PacketResponse
+    public class RecvXigncodePacketCl : PacketResponse
     {
-        public RecvUnionNotifyGrowth()
-            : base((ushort) MsgPacketId.recv_union_notify_growth, ServerType.Msg)
+        public RecvXigncodePacketCl()
+            : base((ushort) MsgPacketId.recv_xigncode_packet_cl, ServerType.Msg)
         {
         }
 
