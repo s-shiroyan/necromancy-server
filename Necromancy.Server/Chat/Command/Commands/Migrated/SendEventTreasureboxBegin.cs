@@ -31,12 +31,12 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res1.WriteInt32(100101);
             }
 
-            Router.Send(client, (ushort) AreaPacketId.recv_event_tresurebox_begin, res1, ServerType.Area);
+            //no_JP Router.Send(client, (ushort) AreaPacketId.recv_event_tresurebox_begin, res1, ServerType.Area);
 
 
             IBuffer res4 = BufferProvider.Provide();
             res4.WriteInt32(0); // 1 = Error reported by SV,  1 = sucess
-            Router.Send(client, (ushort) AreaPacketId.recv_event_tresurebox_select_r, res4, ServerType.Area);
+            //no_JP Router.Send(client, (ushort) AreaPacketId.recv_event_tresurebox_select_r, res4, ServerType.Area);
 
 
             /*   IBuffer res4 = BufferProvider.Provide();

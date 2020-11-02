@@ -170,7 +170,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     }
 
                     res.WriteByte(2);
-                    Router.Send(client, (ushort) AreaPacketId.recv_event_quest_order, res, ServerType.Area);
+                    //no_JP Router.Send(client, (ushort) AreaPacketId.recv_event_quest_order, res, ServerType.Area);
                     break;
 
                 case "mission":

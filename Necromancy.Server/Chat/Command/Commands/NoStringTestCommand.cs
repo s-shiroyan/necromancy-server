@@ -28,9 +28,9 @@ namespace Necromancy.Server.Chat.Command.Commands
             IBuffer res = BufferProvider.Provide();
             int numEntries = 0x2;
             res.WriteInt32(0);
-            res.WriteInt32(0); 
+            res.WriteInt32(0);
 
-            Router.Send(client, (ushort)0xA190, res, ServerType.Area);
+            Router.Send(client, (ushort)0xFF2A, res, ServerType.Area);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;
@@ -39,6 +39,7 @@ namespace Necromancy.Server.Chat.Command.Commands
     }
     //res.WriteInt32(numEntries); //less than 0x1E 
     //res.WriteInt32(0);
+    //res.WriteInt64(0); 
     //res.WriteInt16(0); 
     //res.WriteByte(0);
     //res.WriteFixedString("Xeno", 0x10);
