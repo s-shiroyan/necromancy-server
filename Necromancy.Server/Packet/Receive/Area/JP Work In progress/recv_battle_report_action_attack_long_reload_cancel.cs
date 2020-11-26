@@ -5,20 +5,18 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class RecvSkillTreeGain : PacketResponse
+    public class recv_battle_report_action_attack_long_reload_cancel : PacketResponse
     {
-        public RecvSkillTreeGain()
-            : base((ushort)AreaPacketId.recv_skill_tree_gain, ServerType.Area)
+        public recv_battle_report_action_attack_long_reload_cancel()
+            : base((ushort) AreaPacketId.recv_battle_report_action_attack_long_reload_cancel, ServerType.Area)
         {
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);//Level?
-            res.WriteByte(0); //Bool
-            res.WriteByte(0); //Bool
+            //No structure
+
             return res;
         }
     }

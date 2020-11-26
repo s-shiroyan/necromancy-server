@@ -605,7 +605,7 @@ namespace Necromancy.Server.Packet.Id
         recv_skill_start_cast_r = 0xE4B2,
         recv_skill_start_cast_self = 0xC542,
         recv_skill_start_item_cast_r = 0xEE43,
-        //NoJP recv_skill_tree_gain = 0x8395,
+        recv_skill_tree_gain = 0x8395,
         recv_skill_tree_lost = 0x2A3F,
         recv_skill_tree_notify = 0x1C0A,
         recv_soul_dispitem_notify_data = 0x15B0,
