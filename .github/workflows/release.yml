@@ -20,9 +20,9 @@ jobs:
         id: build_release
         run: |
           NEC_VERSION_FILE=${{ github.workspace }}/necromancy.version
-          NEC_VERSION=`cat $NEC_VERSION_FILE`
-          echo "NEC_VERSION=$NEC_VERSION" >> $GITHUB_ENV
-          echo "NEC_VERSION_E=$(echo ${GITHUB_SHA | cut -c1-8)}" >> $GITHUB_ENV
+          NEC_VERSION=$(<"$VERSION_FILE")
+          echo 'NEC_VERSION=$NEC_VERSION' >> $GITHUB_ENV
+          echo 'NEC_VERSION_E=$(echo ${GITHUB_SHA | cut -c1-8)}' >> $GITHUB_ENV
           mkdir ./release
           for NEC_RUNTIME in win-x86 win-x64 linux-x64 osx-x64; do
               # Server
