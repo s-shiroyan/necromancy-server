@@ -23,7 +23,7 @@ jobs:
         id: build_release
         run: |
           ls ${{ github.workspace }}
-          NEC_VERSION_FILE=${{ github.workspace }}/necromancy.version
+          NEC_VERSION_FILE="${{ github.workspace }}/necromancy.version"
           NEC_VERSION=$(<"$VERSION_FILE")
           echo 'NEC_VERSION=$NEC_VERSION' >> $GITHUB_ENV
           echo 'NEC_VERSION_E=$(echo ${GITHUB_SHA | cut -c1-8)}' >> $GITHUB_ENV
