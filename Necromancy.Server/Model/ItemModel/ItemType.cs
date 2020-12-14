@@ -80,7 +80,7 @@ namespace Necromancy.Server.Model
         PARTNER_CARD = 80, //partner card
         PARTNER_NURTURE_FOOD = 81, //partner experience points
         PARTNER_NURTURE_PLAY = 82, //partner intimact
-        //EVENT = 83, //seasonal event
+        EVENT = 83, //seasonal event
         SEASON_EVENT = 83, //seasonal event
         TREASURE_KYE = 84, //key
         DEPUS = 85, //confidential 
