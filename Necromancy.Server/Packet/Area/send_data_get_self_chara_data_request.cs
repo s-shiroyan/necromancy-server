@@ -186,7 +186,7 @@ namespace Necromancy.Server.Packet.Area
             //sub_read_int32 skill point
             res.WriteInt32(101); // skill point
 
-            res.WriteInt64(0);//new Might be chara state and gm status
+            res.WriteInt64((long)client.Character.State);//new Might be chara state and gm status
 
             //sub_483420 character state like alive/dead/invis
             //res.WriteInt32((int)client.Character.State); //-254 GM

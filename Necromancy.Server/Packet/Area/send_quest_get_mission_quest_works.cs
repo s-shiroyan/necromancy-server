@@ -19,8 +19,8 @@ namespace Necromancy.Server.Packet.Area
 
             res.WriteInt32(0);
 
-            int numEntries = 0x1E;
-            res.WriteInt32(numEntries);//less than or equal to 0x1E
+            int numEntries = 0x1; //0x1E
+            res.WriteInt32(numEntries);//less than or equal to 0x1E   Character.MissionQuests.Count;
 
             for(int i = 0; i < numEntries; i++)
             {
@@ -32,15 +32,15 @@ namespace Necromancy.Server.Packet.Area
                 res.WriteInt32(1);
                 res.WriteFixedString("Death", 97);//Client name
                 res.WriteByte(0); //bool
-                res.WriteByte(0); //Bool for if the mission can be abandoned or not.
+                res.WriteByte(1); //Bool for if the mission can be abandoned or not.
                 res.WriteInt32(1);
                 res.WriteInt32(50); //EXP
                 res.WriteInt32(75); //Gold Pieces
                 res.WriteInt32(100); //Skill Points
-                res.WriteInt32(0);//new
-                res.WriteInt32(0);//new
-                res.WriteInt32(0);//new
-                res.WriteInt32(0);//new
+                res.WriteInt32(1);//new
+                res.WriteInt32(2);//new
+                res.WriteInt32(3);//new
+                res.WriteInt32(4);//new
 
                 //loop x 10
                 //Some  sort of ITEM info
@@ -50,10 +50,10 @@ namespace Necromancy.Server.Packet.Area
                 {
                     res.WriteInt32(10200101); //Item icon ID
                     res.WriteFixedString("quest1", 16); //Item name?
-                    res.WriteInt16(0); //Quantity
+                    res.WriteInt16(1); //Quantity
                     res.WriteUInt32(odd); //Status
-                    res.WriteByte(0);//new
-                    res.WriteInt16(0);//new
+                    res.WriteByte(1);//new
+                    res.WriteInt16(11);//new
                     bitShift = bitShift << 1;
                     odd += 2;
                 }

@@ -51,20 +51,20 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); //face
 
                 res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
-                res.WriteByte(character.HairId); //hair
-                res.WriteByte(character.HairColorId); //color
-                res.WriteByte(character.FaceId); //face
+                res.WriteByte(0); //hair
+                res.WriteByte(0); //color
+                res.WriteByte(0); //face
 
                 res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
                 res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Torso Tex)
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Pants Tex)
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Hands Tex)
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Feet Tex)
+                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
                 res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
-                res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
                 i++;
             }
             while (i < numEntries)//Must have 25 on recv_chara_notify_data
@@ -87,8 +87,8 @@ namespace Necromancy.Server.Common
                 res.WriteByte(0); // testing (Theory Feet Tex)
                 res.WriteByte(0); //Alternate texture for item model 
 
-                res.WriteByte(1); // separate in assembly
-                res.WriteByte(1); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
                 i++;
             }
 
