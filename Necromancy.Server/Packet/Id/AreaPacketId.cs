@@ -5,7 +5,7 @@ namespace Necromancy.Server.Packet.Id
 
     public enum AreaPacketId : ushort
     {
-        // Recv OP Codes - Switch: 0x495B88 - ordered alphabetically 
+        // Recv OP Codes - Switch: 0x00497420 - ordered alphabetically 
         recv_0x916 = 0x916,
         //NoJP recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos
         recv_0x10DA = 0x10DA, // Crash
