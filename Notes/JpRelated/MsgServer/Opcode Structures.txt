@@ -97,8 +97,8 @@ recv_chara_get_createinfo_r = 0xAF33
 		res.WriteByte(0);
 	}
 	
-	res.WriteInt32(0x8C); //0x96
-	for (int i = 0; i < 0x8C; i++)//(int32 above)
+	res.WriteInt32(0x1); //Less than or equal to 0x96
+	for (int i = 0; i < 0x1; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
 		res.WriteInt32(0);
@@ -132,8 +132,8 @@ recv_chara_get_createinfo_r = 0xAF33
 		res.WriteByte(0);
 	}
 	
-	res.WriteInt32(14);//Less than or equal to 0xF
-	for (int i = 0; i < 14; i++)//(int32 above)
+	res.WriteInt32(4);//Less than or equal to 0xF
+	for (int i = 0; i < 4; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
 		res.WriteByte(0);
