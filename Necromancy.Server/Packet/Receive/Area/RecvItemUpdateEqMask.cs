@@ -34,14 +34,14 @@ namespace Necromancy.Server.Packet.Receive.Area
 
             res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
             res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Torso Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Pants Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Hands Tex)
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // testing (Theory Feet Tex)
+            res.WriteByte(1); // testing (Theory Torso Tex)
+            res.WriteByte(1); // testing (Theory Pants Tex)
+            res.WriteByte(1); // testing (Theory Hands Tex)
+            res.WriteByte(1); // testing (Theory Feet Tex)
             res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
-            res.WriteByte((byte)Util.GetRandomNumber(1, 5)); // separate in assembly
+            res.WriteByte(0); // separate in assembly
+            res.WriteByte(0); // separate in assembly
 
             return res;
         }
