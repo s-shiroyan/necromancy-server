@@ -27,14 +27,15 @@ namespace Necromancy.Server.Common
             //sub_483660 
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
-                res.WriteInt32((int)inventoryItem.Item.LoadEquipType);
-                Logger.Debug($"Loading {inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}");
+                res.WriteInt32((int)inventoryItem.Item.ItemType);
+                Logger.Debug($"Loading {i}:{inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}  | {inventoryItem.Item.Name}");
                 i++;
             }
             while (i < numEntries)
             {
                 //sub_483660   
                 res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                Logger.Debug($"Loading {i}: blank");
                 i++;
             }
         }
