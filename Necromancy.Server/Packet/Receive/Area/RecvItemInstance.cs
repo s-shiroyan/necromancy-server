@@ -21,49 +21,50 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong)_inventoryItem.Id);
-            res.WriteInt32(_inventoryItem.Item.Id); //item Icon  
-            res.WriteByte(_inventoryItem.Quantity);
-            res.WriteUInt32(_client.Character.Alignmentid);
-            res.WriteFixedString($"{_inventoryItem.Item.ItemType}", 0x10);
-            res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
-            res.WriteByte(_inventoryItem.BagId); // 0~2
-            res.WriteInt16(_inventoryItem.BagSlotIndex);
-            res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items. 
-            res.WriteInt32((int)_inventoryItem.Item.EquipmentSlotType); //spirit eq mask???
-            res.WriteInt32(0);//new
-            res.WriteByte(3); //enchantment level
-            res.WriteByte((byte)_client.Character.Alignmentid);
-            res.WriteCString($"{_inventoryItem.Item.Id}"); // _inventoryItem.Item.Name
-            res.WriteInt16((short)_client.Character.Alignmentid);
-            res.WriteInt16((short)_client.Character.Alignmentid);
-            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
-            res.WriteByte((byte)_client.Character.Alignmentid);
-            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            res.WriteUInt64((ulong)_inventoryItem.Id);      //SPAWN ID
+            res.WriteInt32(_inventoryItem.Item.Id);         //BASE ID
+            res.WriteByte(_inventoryItem.Quantity);         //QUANTITY
+            res.WriteUInt32(_client.Character.Alignmentid); //STATUSES
+            res.WriteFixedString($"{_inventoryItem.Item.ItemType}", 0x10); //UNKNOWN - ITEM TYPE?
+            res.WriteByte(_inventoryItem.StorageType);      // STORAGE ZONE
+            res.WriteByte(_inventoryItem.BagId);            //BAG
+            res.WriteInt16(_inventoryItem.BagSlotIndex);    //SLOT
+            res.WriteInt32(_inventoryItem.State);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
+            res.WriteInt32(99); //spirit eq mask??? PREV DURABILITY
+            res.WriteInt32(0);  //new
+            res.WriteByte(0);   //ENHANCEMENT LEVEL?
+            res.WriteByte((byte)_client.Character.Alignmentid); //SPECIAL FORGE LEVEL?
+            res.WriteCString($"{_inventoryItem.Item.Id}"); // unknown
+            res.WriteInt16(0); //PHYSICAL
+            res.WriteInt16(0); //MAGICAL
+            res.WriteInt32(100); //MAX DURABILITY
+            res.WriteByte(5); //HARDNESS
+            res.WriteInt32(0); //UNKNOWN
 
+            const int MAX_WHATEVER_SLOTS = 2;
             int numEntries = 2;
-            res.WriteInt32(numEntries); // less than or equal to 2
-            for (int i = 0; i < numEntries; i++)
+            res.WriteInt32(numEntries);                  //less than or equal to 2?
+            for (int j = 0; j < numEntries; j++)
             {
-                res.WriteUInt32(_client.Character.Alignmentid); //Shop related? "can not equip items listed in your shop"
+                res.WriteInt32((byte)0);                 //unknown
             }
 
-            numEntries = 3; //gem SLOTS
-            res.WriteInt32(numEntries); // Count of Gem Slots. less than or equal to 3
-            for (int i = 0; i < numEntries; i++)
+            int numOfGemSlots = 1;
+            res.WriteInt32(numOfGemSlots); //number of gem slots
+            for (int j = 0; j < numOfGemSlots; j++)
             {
-                res.WriteByte((byte)(Util.GetRandomNumber(0, 2))); //Gem in slot : yes or no
-                res.WriteInt32(i + 1); //slot type 1 round, 2 triangle, 3 diamond
-                res.WriteInt32(1111);// theory GEM ID 1
-                res.WriteInt32(2222);// theory gem id 2.  Diamonds were two Gems combined to one
+                res.WriteByte(0); //IS FILLED
+                res.WriteInt32(0); //GEM TYPE
+                res.WriteInt32(0); // GEM BASE ID
+                res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine 
             }
 
             res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteInt64(0);//new
             res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
-            res.WriteInt32(1); //1 here lables the item "Gaurd".   no effect from higher numbers
-            res.WriteInt16(1);
+            res.WriteInt32(1); //ENCHANT ID
+            res.WriteInt16(1); //GP
 
             numEntries = 5; //new
             res.WriteInt32(numEntries); // less than or equal to 5
@@ -133,7 +134,7 @@ namespace Necromancy.Server.Packet.Receive.Area
 
             res.WriteInt16(69);//new
 
-            return res;
+            return res;            
         }
     }
 }
