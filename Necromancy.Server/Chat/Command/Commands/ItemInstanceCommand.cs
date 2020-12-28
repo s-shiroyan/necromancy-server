@@ -34,13 +34,13 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt64(10001);      //SPAWN ID
-            res.WriteInt32(10001);         //BASE ID
+            res.WriteInt32(100101);         //BASE ID
             res.WriteByte(1);         //QUANTITY
             res.WriteUInt32(1); //STATUSES
             res.WriteFixedString("HELMET", 0x10); //UNKNOWN - ITEM TYPE?
-            res.WriteByte(1);      // STORAGE ZONE
+            res.WriteByte(0);      // STORAGE ZONE
             res.WriteByte(0);            //BAG
-            res.WriteInt16(0);    //SLOT
+            res.WriteInt16(2);    //SLOT
             res.WriteInt32(1);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
             res.WriteInt32(99); //spirit eq mask??? PREV DURABILITY
             res.WriteInt32(0);  //new
