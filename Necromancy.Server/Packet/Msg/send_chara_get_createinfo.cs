@@ -17,20 +17,20 @@ namespace Necromancy.Server.Packet.Msg
         {
             IBuffer res = BufferProvider.Provide();
 
-            res.WriteUInt32(0x80);
-            for (int i = 0; i < 0x80; i++)
+            res.WriteUInt32(0x6);//Hair type; Higher than 6 will cause a crash
+            for (int i = 0; i < 0x6; i++)
             {
                 res.WriteByte((byte)i);
             }
 
-            res.WriteUInt32(0x80);
-            for (int i = 0; i < 0x80; i++)
+            res.WriteUInt32(0x6);//Hair color; Higher than 6 will cause a crash
+            for (int i = 0; i < 0x6; i++)
             {
                 res.WriteByte((byte)i);
             }
 
-            res.WriteUInt32(0x80);
-            for (int i = 0; i < 0x80; i++)
+            res.WriteUInt32(0x5);//Face type; Higher than 5 will break the faces when going to the last one, and higher than 6 will cause a crash
+            for (int i = 0; i < 0x5; i++)
             {
                 res.WriteByte((byte)i);
             }

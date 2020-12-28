@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             TimeSpan differenceJoined = DateTime.Today.ToUniversalTime() - DateTime.UnixEpoch;
             int DateAttackedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
-            int numEntries = 19; //Max of 19 Equipment Slots for Character Player
+            int numEntries = 0x19; //Max of 19 Equipment Slots for Character Player
             int numStatusEffects = 0x80; //Statuses effects. Max 128
 
             IBuffer res = BufferProvider.Provide();
@@ -35,7 +35,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteFloat(_character.Z);
             res.WriteByte(_character.Heading);
             res.WriteInt32(_character.Level); //Player level (main gui)
-            res.WriteUInt32((uint)_character.State);
+            res.WriteInt16(99);
+            res.WriteInt64((uint)_character.State);
             res.WriteInt16((short)_character.Hp.max); //Player max hp (main gui)
 
             res.WriteInt32(numEntries); // Number of equipment Slots
@@ -54,6 +55,11 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
             LoadEquip.BasicTraits(res, _character);
+
+            //weird 64 loop
+            for (int i = 0; i < 100; i++)
+            { res.WriteInt64(0); }
+
             //sub_483420
             res.WriteUInt32(_character.partyId); // party id?
             //sub_4837C0
@@ -66,6 +72,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32(_character.movementPose); //pose, 1 = sitting, 0 = standing
             //sub_483920
             res.WriteInt32(88888888); //???
+            //sub_491A00
+            res.WriteByte(0); //newjp
             //sub_483440
             res.WriteInt16(_character.Level); //Player level (stat gui)
             //sub_read_byte
@@ -84,10 +92,12 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt32(0); //Status effect ID
                 res.WriteInt32(DateAttackedCalculation);
                 res.WriteInt32(DateAttackedCalculation +100);
+                res.WriteInt32(9999999); //new
             }
 
             //sub_481AA0
             res.WriteCString("" /*_character.comment*/); //Comment string
+            res.WriteInt32(0);
             return res;
         }
     }

@@ -39,16 +39,19 @@ recv_union_request_set_info_r = 0x1C6
 	res.WriteInt32(0);
 ---------------------------------------------------------------
 recv_chara_get_createinfo_r = 0xAF33
-	res.WriteInt32(8);
+	res.WriteInt32(8);//Less than or equal to 0x80
 	for (int i = 0; i < 8; i++)//(int32 above)
 		res.WriteByte(0);
-	res.WriteInt32(8);
+		
+	res.WriteInt32(8);//Less than or equal to 0x80
 	for (int i = 0; i < 8; i++)//(int32 above)
 		res.WriteByte(0);
-	res.WriteInt32(8);
+		
+	res.WriteInt32(8);//Less than or equal to 0x80
 	for (int i = 0; i < 8; i++)//(int32 above)
 		res.WriteByte(0);
-	res.WriteInt32(5);
+		
+	res.WriteInt32(5);//Less than or equal to 0x5
 	for (int i = 0; i < 5; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
@@ -58,24 +61,27 @@ recv_chara_get_createinfo_r = 0xAF33
 		for (int j = 0; j < 7; j++)
 			res.WriteInt16(0);
 	}
-	res.WriteInt32(10);
-	for (int i = 0; i < 10; i++)//(int32 above)
+	
+	res.WriteInt32(0x10);//Less than or equal to 0x10
+	for (int i = 0; i < 0x10; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
 		res.WriteInt32(0);
-		res.WriteByte(0);
-		for (int j = 0; j < 19; j++)
+		res.WriteByte(0);//Bool
+		for (int j = 0; j < 0x19; j++)
 			res.WriteInt32(0);
-		for (int k = 0; k < 19; k++)
+		for (int k = 0; k < 0x19; k++)
 		{
 			res.WriteInt32(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			
 			res.WriteInt32(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0); //bool
@@ -84,29 +90,33 @@ recv_chara_get_createinfo_r = 0xAF33
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			res.WriteByte(0);
 		}
-		for (int l = 0; l < 19; l++)
+		for (int l = 0; l < 0x19; l++)
 			res.WriteInt32(0);
 		res.WriteByte(0);
 	}
-	res.WriteInt32(0x8C); //0x8C is too much for the packet size
-	for (int i = 0; i < 0x8C; i++)//(int32 above)
+	
+	res.WriteInt32(0x1); //Less than or equal to 0x96
+	for (int i = 0; i < 0x1; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
 		res.WriteInt32(0);
 		res.WriteInt32(0);
-		for (int j = 0; j < 19; j++)
+		for (int j = 0; j < 0x19; j++)
 			res.WriteInt32(0);
-		for (int k = 0; k < 19; k++)
+		for (int k = 0; k < 0x19; k++)
 		{
 			res.WriteInt32(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			
 			res.WriteInt32(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);//bool
@@ -115,13 +125,15 @@ recv_chara_get_createinfo_r = 0xAF33
 			res.WriteByte(0);
 			res.WriteByte(0);
 			res.WriteByte(0);
+			res.WriteByte(0);
 		}
-		for (int l = 0; l < 19; l++)
+		for (int l = 0; l < 0x19; l++)
 			res.WriteInt32(0);
 		res.WriteByte(0);
 	}
-	res.WriteInt32(14);
-	for (int i = 0; i < 14; i++)//(int32 above)
+	
+	res.WriteInt32(4);//Less than or equal to 0xF
+	for (int i = 0; i < 4; i++)//(int32 above)
 	{
 		res.WriteInt32(0);
 		res.WriteByte(0);
@@ -135,6 +147,7 @@ recv_chara_get_createinfo_r = 0xAF33
 		res.WriteInt32(0);
 		res.WriteInt32(0);
 		res.WriteByte(0);
+	}
 ---------------------------------------------------------------
 recv_party_notify_update_maxap = 0x96DB
 	res.WriteInt32(0);
