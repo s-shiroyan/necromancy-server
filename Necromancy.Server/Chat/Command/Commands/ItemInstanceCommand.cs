@@ -33,20 +33,20 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
 
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong)_inventoryItem.Id);      //SPAWN ID
-            res.WriteInt32(_inventoryItem.Item.Id);         //BASE ID
-            res.WriteByte(_inventoryItem.Quantity);         //QUANTITY
-            res.WriteUInt32(_client.Character.Alignmentid); //STATUSES
-            res.WriteFixedString($"{_inventoryItem.Item.ItemType}", 0x10); //UNKNOWN - ITEM TYPE?
-            res.WriteByte(_inventoryItem.StorageType);      // STORAGE ZONE
-            res.WriteByte(_inventoryItem.BagId);            //BAG
-            res.WriteInt16(_inventoryItem.BagSlotIndex);    //SLOT
-            res.WriteInt32(_inventoryItem.State);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
+            res.WriteUInt64(10001);      //SPAWN ID
+            res.WriteInt32(10001);         //BASE ID
+            res.WriteByte(1);         //QUANTITY
+            res.WriteUInt32(1); //STATUSES
+            res.WriteFixedString("HELMET", 0x10); //UNKNOWN - ITEM TYPE?
+            res.WriteByte(1);      // STORAGE ZONE
+            res.WriteByte(0);            //BAG
+            res.WriteInt16(0);    //SLOT
+            res.WriteInt32(1);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
             res.WriteInt32(99); //spirit eq mask??? PREV DURABILITY
             res.WriteInt32(0);  //new
             res.WriteByte(0);   //ENHANCEMENT LEVEL?
-            res.WriteByte((byte)_client.Character.Alignmentid); //SPECIAL FORGE LEVEL?
-            res.WriteCString($"{_inventoryItem.Item.Id}"); // unknown
+            res.WriteByte(0); //SPECIAL FORGE LEVEL?
+            res.WriteCString("MAYBE LORE"); // unknown
             res.WriteInt16(0); //PHYSICAL
             res.WriteInt16(0); //MAGICAL
             res.WriteInt32(100); //MAX DURABILITY
@@ -71,7 +71,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine 
             }
 
-            res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+            res.WriteInt32(0);
             //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteInt64(0);//new
             res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
@@ -146,7 +146,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             res.WriteInt16(69);//new
 
-            Router.Send(client,)
+            Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
 
             //if (command.Length < 1)
             //{
@@ -187,7 +187,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             //    inventoryItem.Item.Name = $"ItemType + {i}"; 
 
             //    RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-                Router.Send(recvItemInstance, client);
+            //Router.Send(recvItemInstance, client);
             //    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
             //    Router.Send(recvItemInstanceUnidentified, client);
             //    responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
