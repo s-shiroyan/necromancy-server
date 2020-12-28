@@ -52,15 +52,15 @@ namespace Necromancy.Server.Packet.Msg
             wo_4E3700_Prokul_Male(res);//Holds Male Porkul model details
             wo_4E3700_Porkul_Female(res);//Holds Female Porkul model details
 
-            res.WriteUInt32(0x0);//cmp to 0x96
-            /*wo_4E37F0_HumanMaleClassGear(res);
+            res.WriteUInt32(0x8);//cmp to 0x96
+            wo_4E37F0_HumanMaleClassGear(res);
             wo_4E37F0_HumanFemaleClassGear(res);
             wo_4E37F0_ElfMaleClassGear(res);
             wo_4E37F0_ElfFemaleClassGear(res);
             wo_4E37F0_DwarfMaleClassGear(res);
             wo_4E37F0_GnomeFemaleClassGear(res);
             wo_4E37F0_PorkulMaleClassGear(res);
-            wo_4E37F0_PorkulFemaleClassGear(res);*/
+            wo_4E37F0_PorkulFemaleClassGear(res);
 
             res.WriteUInt32(4);//cmp to 0xF
             wo_4E0970_Fighter(res);//Holds Stats and info for Fighter Class(need to fix bonus HP+MP+Stats)
@@ -1287,7 +1287,7 @@ namespace Necromancy.Server.Packet.Msg
 
                 int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0, 0, 0, 0, 0, 0, 0 };
 
-                for (int i = 0; i < 19; i++)
+                for (int i = 0; i < 0x19; i++)
                 {
                     res.WriteInt32(SoltContainer[xxx]);
 
