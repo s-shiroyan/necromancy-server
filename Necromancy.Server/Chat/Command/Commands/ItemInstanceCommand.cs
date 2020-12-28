@@ -34,16 +34,16 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt64(10001);      //SPAWN ID
-            res.WriteInt32(100101);         //BASE ID
+            res.WriteInt32(100102);         //BASE ID
             res.WriteByte(1);         //QUANTITY
             res.WriteUInt32(1); //STATUSES
-            res.WriteFixedString("HELMET", 0x10); //UNKNOWN - ITEM TYPE?
+            res.WriteFixedString("", 0x10); //UNKNOWN - ITEM TYPE?
             res.WriteByte(0);      // STORAGE ZONE
             res.WriteByte(0);            //BAG
             res.WriteInt16(2);    //SLOT
-            res.WriteInt32(1);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
+            res.WriteInt32(0);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
             res.WriteInt32(99); //spirit eq mask??? PREV DURABILITY
-            res.WriteInt32(0);  //new
+            res.WriteInt32(100101);  //new
             res.WriteByte(0);   //ENHANCEMENT LEVEL?
             res.WriteByte(0); //SPECIAL FORGE LEVEL?
             res.WriteCString("MAYBE LORE"); // unknown
@@ -51,7 +51,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt16(0); //MAGICAL
             res.WriteInt32(100); //MAX DURABILITY
             res.WriteByte(5); //HARDNESS
-            res.WriteInt32(0); //UNKNOWN
+            res.WriteInt32(100101); //UNKNOWN
 
             const int MAX_WHATEVER_SLOTS = 2;
             int numEntries = 2;
@@ -71,7 +71,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine 
             }
 
-            res.WriteInt32(0);
+            res.WriteInt32(100101);
             //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
             res.WriteInt64(0);//new
             res.WriteInt16(0xff); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
@@ -82,69 +82,69 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(numEntries); // less than or equal to 5
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(0);//new
+                res.WriteInt32(100101);//new
                 res.WriteByte(0);//new
                 res.WriteByte(0);//new
                 res.WriteInt16(0);//new
                 res.WriteInt16(0);//new
             }
 
-            res.WriteInt64(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
+            res.WriteInt64(100101);//new
+            res.WriteInt16(2);//new
+            res.WriteInt16(3);//new
+            res.WriteInt16(4);//new
+            res.WriteInt16(5);//new
+            res.WriteInt16(6);//new
+            res.WriteInt16(7);//new
+            res.WriteInt16(8);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(0);//new
-                res.WriteByte(0);//new
-                res.WriteByte(0);//new
-                res.WriteInt16(0);//new
-                res.WriteInt16(0);//new
+                res.WriteInt32(100101);//new
+                res.WriteByte(20);//new
+                res.WriteByte(21);//new
+                res.WriteInt16(22);//new
+                res.WriteInt16(23);//new
             }
 
-            res.WriteInt16(-2);//new
-            res.WriteInt16(-1);//new
-            res.WriteByte(1);//new
-            res.WriteByte(2);//new
+            res.WriteInt16(24);//new
+            res.WriteInt16(25);//new
+            res.WriteByte(26);//new
+            res.WriteByte(27);//new
 
-            res.WriteInt64(-1);//new
-            res.WriteInt16(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
+            res.WriteInt64(100101);//new
+            res.WriteInt16(29);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt16(32);//new
+            res.WriteInt16(33);//new
 
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt16(0);//new
-            res.WriteInt16(0);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt32(100101);//new
+            res.WriteInt16(36);//new
+            res.WriteInt16(37);//new
 
             numEntries = 5;
             for (int i = 0; i < 5; i++)
             {
-                res.WriteInt16(0);//new
-                res.WriteInt32(0);//new
-                res.WriteInt32(0);//new
-                res.WriteInt16(0);//new
-                res.WriteInt16(0);//new
+                res.WriteInt16(38);//new
+                res.WriteInt32(100101);//new
+                res.WriteInt32(100101);//new
+                res.WriteInt16(41);//new
+                res.WriteInt16(42);//new
             }
 
-            res.WriteInt16(69);//new
+            res.WriteInt16(43);//new
 
             Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
 
