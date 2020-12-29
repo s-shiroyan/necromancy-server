@@ -50,11 +50,6 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyData(NecClient client)
         {
             List<Character> characters = Database.SelectCharactersBySoulId(client.Soul.Id);
-            /*if (characters == null || characters.Count <= 0)
-            {
-                Logger.Debug(client, "No characters found");
-                return;
-            }*/
 
             foreach (Character character in characters)
             {

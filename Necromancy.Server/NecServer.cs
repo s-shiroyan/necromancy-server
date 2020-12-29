@@ -509,6 +509,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_storage_deposit_money(this));
             _areaConsumer.AddHandler(new send_union_storage_move_item(this));
             _areaConsumer.AddHandler(new send_union_storage_draw_money(this));
+            _areaConsumer.AddHandler(new send_chara_update_battle_target(this));
         }
     }
 }
