@@ -669,15 +669,15 @@ namespace Necromancy.Server.Packet.Area
         {
             if (client.Character.helperTextCloakRoom)
             {
-                IBuffer res2 = BufferProvider.Provide();
-                res2.WriteCString($"{npcSpawn.Name}"); //Name
-                res2.WriteCString($"{npcSpawn.Title}"); //Title (inside chat box)
-                res2.WriteCString(
-                    "Welcome! We take care of your belongings and money."); //Text block
-                Router.Send(client, (ushort) AreaPacketId.recv_event_message_no_object, res2, ServerType.Area);
+                string name, title, text;
+                name = npcSpawn.Name;
+                title = npcSpawn.Title;
+                text = "Welcome! We take care of your belongings and money.";
+                RecvEventMessageNoObject eventText = new RecvEventMessageNoObject(name, title, text);
+                Router.Send(eventText, client);
 
-                IBuffer res6 = BufferProvider.Provide();
-                Router.Send(client, (ushort) AreaPacketId.recv_event_sync, res6, ServerType.Area);
+                RecvEventSync eventSync = new RecvEventSync();
+                Router.Send(eventSync, client);
 
                 client.Character.helperTextCloakRoom = false;
             }
@@ -685,7 +685,6 @@ namespace Necromancy.Server.Packet.Area
             {
                 RecvEventSoulStorageOpen openStorage = new RecvEventSoulStorageOpen(client);
                 Router.Send(openStorage, client);
-                //Router.Send(client, (ushort) AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
             }
         }
 
