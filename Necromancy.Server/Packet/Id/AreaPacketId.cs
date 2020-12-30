@@ -1377,7 +1377,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_partner_summon_exec = 0x0,
         send_soul_partner_update_use_active_skill = 0x0,
         send_stall_deregist_item_all = 0x0,
-        send_storage_open_cash_shop = 0x0,
+        send_storage_open_cash_shop = 0xCE8C,
         send_storage_rename = 0x0,
         send_storage_update_auto_sort = 0x0,
         send_storage_update_view_page = 0x0,

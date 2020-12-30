@@ -10,7 +10,6 @@ using System.Linq;
 using Arrowgene.Logging;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.ItemModel;
-using Necromancy.Server.Packet.Receive;
 using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Data.Setting;
 
@@ -684,10 +683,9 @@ namespace Necromancy.Server.Packet.Area
             }
             else
             {
-                IBuffer res4 = BufferProvider.Provide();
-                //recv_event_soul_storage_open = 0x3DD0, 
-                res4.WriteInt64(client.Soul.WarehouseGold); // Gold in the storage
-                Router.Send(client, (ushort) AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
+                RecvEventSoulStorageOpen openStorage = new RecvEventSoulStorageOpen(client);
+                Router.Send(openStorage, client);
+                //Router.Send(client, (ushort) AreaPacketId.recv_event_soul_storage_open, res4, ServerType.Area);
             }
         }
 
