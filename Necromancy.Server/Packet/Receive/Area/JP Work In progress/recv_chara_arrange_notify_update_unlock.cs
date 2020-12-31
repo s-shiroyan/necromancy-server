@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             for (int i = 0; i < 100; i++)
-            { res.WriteInt64(0); } //This is a really complicated loop.  5 groups of int64 written 20 times each.
+            { res.WriteInt64(i); } //This is a really complicated loop.  5 groups of int64 written 20 times each.
             return res;
         }
     }

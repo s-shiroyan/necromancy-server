@@ -174,7 +174,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     //recv_chara_notify_stateflag = 0x23D3, 
                     IBuffer res11 = BufferProvider.Provide();
                     res11.WriteUInt32(character2.InstanceId);
-                    res11.WriteInt32(y);
+                    res11.WriteInt64(y);
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
                     responses.Add(ChatResponse.CommandError(client,
                         $"setting charaState to {y} for character {character2.Name}"));
