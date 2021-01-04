@@ -34,7 +34,10 @@ namespace Necromancy.Server.Chat.Command.Commands
             {
                 case "open":
                     recv_chara_arrange_notify_open openArrange = new recv_chara_arrange_notify_open();
+                    recv_chara_arrange_notify_update_unlock unlockArrange1 = new recv_chara_arrange_notify_update_unlock();
+                    Router.Send(unlockArrange1, client);
                     Router.Send(openArrange, client);
+
                     break;
 
                 case "update":
