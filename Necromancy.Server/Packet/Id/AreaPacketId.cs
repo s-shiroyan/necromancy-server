@@ -363,8 +363,6 @@ namespace Necromancy.Server.Packet.Id
         recv_event_system_message = 0x561,
         recv_event_system_message_timer = 0xAE27,
         recv_event_system_message_timer_end = 0x5016,
-        //NoJP recv_event_tresurebox_begin = 0xBD7E,
-        //NoJP recv_event_tresurebox_select_r = 0x494,
         recv_event_union_storage_close_r = 0xBB65,
         recv_event_union_storage_open = 0x1105,
         recv_event_union_storage_update_money = 0x7D21,
@@ -1091,8 +1089,8 @@ namespace Necromancy.Server.Packet.Id
         send_event_soul_storage_close = 0x26D2,
         send_event_sync_r = 0x701D,
         send_event_system_message_timer_r = 0xF9B8,
-        send_event_tresurebox_end = 0x5F7A,
-        send_event_tresurebox_select = 0x92, //opcode not found   TODO
+        send_event_treasurebox_end = 0x989D, //used to be 0x5F7A
+        send_event_treasurebox_select = 0x92,
         send_event_union_storage_close = 0xA2A5,
         send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found
@@ -1292,8 +1290,6 @@ namespace Necromancy.Server.Packet.Id
         send_event_quest_list_report_select = 0x0,
         send_event_stand_alone = 0x309C,
         send_event_sync_slot_r = 0x0,
-        send_event_treasurebox_end = 0x0,
-        send_event_treasurebox_select = 0x0,
         send_forge_gem_shift_check1 = 0x0,
         send_forge_gem_shift_check2 = 0x0,
         send_forge_gem_shift_execute = 0x0,
