@@ -185,6 +185,8 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new RTestCommand(this));
+            Chat.CommandHandler.AddCommand(new BattleCommand(this));
             Chat.CommandHandler.AddCommand(new ArrangeCommand(this));
             Chat.CommandHandler.AddCommand(new ItemInstanceCommand(this));
             Chat.CommandHandler.AddCommand(new HonorCommand(this));

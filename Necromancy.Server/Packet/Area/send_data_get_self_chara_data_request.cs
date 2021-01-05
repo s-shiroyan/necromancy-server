@@ -190,27 +190,24 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_494AC0
             res.WriteByte(client.Soul.Level); // soul level
-            //res.WriteInt32(22); // current soul points
-            res.WriteInt64(22);//new might replace the above
-            //res.WriteInt32(790); // soul point bar value (percenage of current/max)
-            res.WriteInt64(790);//new
-            //res.WriteInt32(120); // max soul points
-            res.WriteInt64(120);//new
+            res.WriteInt64(22);// Current Soul Points
+            res.WriteInt64(90);//new
+            res.WriteInt64(120);// Max soul points
             res.WriteByte(client.Character.criminalState); // 0 is white,1 yellow 2 red 3+ skull
             res.WriteByte((byte)client.Character.beginnerProtection); //Beginner protection (bool)
-            res.WriteByte(50); //Level cap
+            res.WriteByte(110); //Level cap
             res.WriteByte(1);
             res.WriteByte(2);
             res.WriteByte(3);
             res.WriteByte(0);//new
 
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
+            res.WriteInt32(2);//new
+            res.WriteInt32(3);//new
+            res.WriteInt32(4);//new
+            res.WriteInt32(5);//new
 
-            res.WriteInt32(0);//new
+            res.WriteInt32(6);//new
 
             //sub_read_3-int16 unknown
             res.WriteInt16(50); // HP Consumption Rate?
@@ -243,30 +240,30 @@ namespace Necromancy.Server.Packet.Area
 
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 1", 73); //new
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 2", 73); //new
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 3", 73); //new
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 4", 73); //new
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 5", 73); //new
 
             res.WriteInt64(5678);//new
-            res.WriteInt32(0);//new
+            res.WriteInt32(1);//new
             res.WriteFixedString($"unknown 6", 73); //new
 
-            res.WriteInt32(0);//new
+            res.WriteInt32(0);//new //swirly effect?
 
             //sub_483420
             int numEntries = 0x19;
@@ -294,10 +291,10 @@ namespace Necromancy.Server.Packet.Area
             //sub_485A70
             for (int k = 0; k < numEntries; k++) //status buffs / debuffs
             {
-                res.WriteInt32(2); //status
-                res.WriteInt32(1); //time start?
-                res.WriteInt32(2); //time end?
-                res.WriteInt32(3); //new
+                res.WriteInt32(0); //instanceID or unique ID
+                res.WriteInt32(0); //Buff.SerialId
+                res.WriteInt32(0); //Buff.EffectId
+                res.WriteInt32(9999999); //new
             }
 
             res.WriteByte(0);//new
