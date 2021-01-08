@@ -31,7 +31,7 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            const int NUMBER = 20;
+            const int NUMBER = 9;
             for(int i = 0; i < NUMBER; i++) { 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteUInt64((ulong)(10001 + i));        //SPAWN ID
@@ -39,7 +39,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteByte(1);                           //QUANTITY
                 res.WriteUInt32((uint)2);           //STATUSES
                 res.WriteFixedString("", 0x10);     //UNKNOWN - ITEM TYPE?
-                res.WriteByte(0);               //STORAGE ZONE
+                res.WriteByte((byte)i);               //STORAGE ZONE
                 res.WriteByte(0);            //BAG
                 res.WriteInt16((short)i);       //V|SLOT
                 res.WriteInt32(0);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
@@ -142,8 +142,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 numEntries = 5;
                 for (int j = 0; j < 5; j++)
                 {
-                    res.WriteInt16((short)(20 + i));          //Item Scroll Sub ID
-                    res.WriteInt32(j);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                    res.WriteInt16((short)(20));          //Item Scroll Sub ID
+                    res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
                     res.WriteInt32(7);                  //enchantment effect statement, 100,1250,{stringID
                     res.WriteInt16((short)3);           //enchantment effect value            
                     res.WriteInt16((short)i);           //unknown
