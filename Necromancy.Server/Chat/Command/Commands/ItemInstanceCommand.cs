@@ -33,121 +33,125 @@ namespace Necromancy.Server.Chat.Command.Commands
         {
             const int NUMBER = 20;
             for(int i = 0; i < NUMBER; i++) { 
-            IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong)(10001 + i));      //SPAWN ID
-            res.WriteInt32(100101 + i);         //BASE ID
-            res.WriteByte(1);         //QUANTITY
-            res.WriteUInt32((uint)2); //STATUSES
-            res.WriteFixedString("", 0x10); //UNKNOWN - ITEM TYPE?
-            res.WriteByte(0);      // STORAGE ZONE
-            res.WriteByte(0);            //BAG
-            res.WriteInt16((short)i);    //SLOT
-            res.WriteInt32(0);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
-            res.WriteInt32(0); //spirit eq mask??? PREV DURABILITY
-            res.WriteInt32(0);  //new
-            res.WriteByte((byte)i);   //ENHANCEMENT LEVEL?
-            res.WriteByte(0); //SPECIAL FORGE LEVEL?
-            res.WriteCString("MAYBE LORE"); // unknown
-            res.WriteInt16(0); //PHYSICAL
-            res.WriteInt16(0); //MAGICAL
-            res.WriteInt32(0); //MAX DURABILITY
-            res.WriteByte(5); //HARDNESS
-            res.WriteInt32(0); //UNKNOWN
+                IBuffer res = BufferProvider.Provide();
+                res.WriteUInt64((ulong)(10001 + i));        //SPAWN ID
+                res.WriteInt32(100101 + i);                  //BASE ID
+                res.WriteByte(1);                           //QUANTITY
+                res.WriteUInt32((uint)2);           //STATUSES
+                res.WriteFixedString("", 0x10);     //UNKNOWN - ITEM TYPE?
+                res.WriteByte(0);               //STORAGE ZONE
+                res.WriteByte(0);            //BAG
+                res.WriteInt16((short)i);       //V|SLOT
+                res.WriteInt32(0);           //bit mask. This indicates where to put items. PREV EQUIP SLOT
+                res.WriteInt32(0);              //V|EQUIP SLOT
+                res.WriteInt32(5);              //V|CURRENT DURABILITY
+                res.WriteByte((byte)5);   //ENHANCEMENT LEVEL
+                res.WriteByte(2); //SPECIAL FORGE LEVEL?
+                res.WriteCString("MAYBE LORE"); // unknown
+                res.WriteInt16(5);              //V|PHYSICAL
+                res.WriteInt16(5);              //V|MAGICAL
+                res.WriteInt32(5);              //V|MAX DURABILITY
+                res.WriteByte(5);               //V|HARDNESS
+                res.WriteInt32(13); //UNKNOWN
 
-            const int MAX_WHATEVER_SLOTS = 2;
-            int numEntries = 2;
-            res.WriteInt32(numEntries);                  //less than or equal to 2?
-            for (int j = 0; j < numEntries; j++)
-            {
-                res.WriteInt32((byte)0);                 //unknown
-            }
+                const int MAX_WHATEVER_SLOTS = 2;
+                int numEntries = 2;
+                res.WriteInt32(numEntries);                  //less than or equal to 2?
+                for (int j = 0; j < numEntries; j++)
+                {
+                    res.WriteInt32((byte)14);                 //unknown
+                }
 
-            int numOfGemSlots = 1;
-            res.WriteInt32(numOfGemSlots); //number of gem slots
-            for (int j = 0; j < numOfGemSlots; j++)
-            {
-                res.WriteByte(0); //IS FILLED
-                res.WriteInt32(0); //GEM TYPE
-                res.WriteInt32(0); // GEM BASE ID
-                res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine 
-            }
+                int numOfGemSlots = 1;
+                res.WriteInt32(numOfGemSlots); //number of gem slots
+                for (int j = 0; j < numOfGemSlots; j++)
+                {
+                    res.WriteByte(0); //IS FILLED
+                    res.WriteInt32(0); //GEM TYPE
+                    res.WriteInt32(0); // GEM BASE ID
+                    res.WriteInt32(0);                       //maybe gem item 2 id for diamon 2 gem combine 
+                }
 
-            res.WriteInt32(0);
-            //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
-            res.WriteInt64(0);//new
-            res.WriteInt16(0xFF); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
-            res.WriteInt32(1); //ENCHANT ID
-            res.WriteInt16(1); //GP
+                res.WriteInt32(15);
+                //res.WriteInt32((0b1 >> _inventoryItem.BagSlotIndex));
+                res.WriteInt64(16);//new
+                res.WriteInt16(0xFF); //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
+                res.WriteInt32(0); 
+                res.WriteInt16(5);     //GP
 
-            numEntries = 5; //new
-            res.WriteInt32(numEntries); // less than or equal to 5
-            for (int j = 0; j < numEntries; j++)
-            {
-                res.WriteInt32(9);//new
-                res.WriteByte(9);//new
-                res.WriteByte(9);//new
-                res.WriteInt16(9);//new
-                res.WriteInt16(9);//new
-            }
+                numEntries = 5; //new
+                res.WriteInt32(numEntries); // less than or equal to 5
+                for (int j = 0; j < numEntries; j++)
+                {
+                    res.WriteInt32(10);//new
+                    res.WriteByte(10);//new
+                    res.WriteByte(10);//new
+                    res.WriteInt16(10);//new
+                    res.WriteInt16(10);//new
+                }
 
-            res.WriteInt64(1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt16((short)1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
+                res.WriteInt64(40);//new
+                res.WriteInt16((short)0);//+def
+                res.WriteInt16((short)0);//+mag def
+                res.WriteInt16((short)0);//new
+                res.WriteInt16((short)0);//+durab
+                res.WriteInt16((short)0);//+gp
+                res.WriteInt16((short)0);//new
+                res.WriteInt16((short)0);//new
+                res.WriteInt32(0);//new
+                res.WriteInt32(0);//new
+                res.WriteInt32(0);//new
+                res.WriteInt32(0);//new
 
-            for (int j = 0; j < numEntries; j++)
-            {
-                res.WriteInt32(i);//new
-                res.WriteByte((byte)i);//new
-                res.WriteByte((byte)i);//new
-                res.WriteInt16((short)i);//new
-                res.WriteInt16((short)i);//new
-            }
+                res.WriteInt32(0);//Main Enchantment? 100,98,{stringID
+                res.WriteInt32(0);//+charm res
+                res.WriteInt32(0);//+confus res
+                res.WriteInt32(0);//+fear res
+                res.WriteInt32(0);//+bind res
+                res.WriteInt32(3);//Main Enchantment value?
 
-            res.WriteInt16((short)i);//new
-            res.WriteInt16((short)i);//new
-            res.WriteByte((byte)i);//new
-            res.WriteByte((byte)i);//new
+                for (int j = 0; j < numEntries; j++)
+                {
+                    res.WriteInt32(j);//new
+                    res.WriteByte((byte)10);//new
+                    res.WriteByte((byte)10);//new
+                    res.WriteInt16((short)10);//new
+                    res.WriteInt16((short)10);//new
+                }
 
-            res.WriteInt64(i);//new
-            res.WriteInt16((short)i);//new
-            res.WriteInt32(i);//new
-            res.WriteInt32(i);//new
-            res.WriteInt16((short)i);//new
-            res.WriteInt16((short)i);//new
+                res.WriteInt16((short)44);//new
+                res.WriteInt16((short)45);//new
+                res.WriteByte((byte)46);//new
+                res.WriteByte((byte)47);//new
 
-            res.WriteInt32(1);//new
-            res.WriteInt32(1);//new
-            res.WriteInt16(1);//new
-            res.WriteInt16(1);//new
+                res.WriteInt64(12);//new
 
-            numEntries = 5;
-            for (int j = 0; j < 5; j++)
-            {
-                res.WriteInt16(1);//new
-                res.WriteInt32(1);//new
-                res.WriteInt32(1);//new
-                res.WriteInt16(1);//new
-                res.WriteInt16(1);//new
-            }
+                //base enchant display on bottom
+                res.WriteInt16((short)20);  //Item Scroll Base ID
 
-            res.WriteInt16(1);//new
+                res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                res.WriteInt32(7);                  //enchantment effect statement, 100,1250,{stringID
+                res.WriteInt16((short)3);           //enchantment effect value            
+                res.WriteInt16((short)i);           //unknown
 
-            Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
+                res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                res.WriteInt32(8);                  //enchantment effect statement, 100,1250,{stringID
+                res.WriteInt16((short)4);           //enchantment effect value            
+                res.WriteInt16((short)(i * 2));     //unknown            
+
+                numEntries = 5;
+                for (int j = 0; j < 5; j++)
+                {
+                    res.WriteInt16((short)(20 + i));          //Item Scroll Sub ID
+                    res.WriteInt32(j);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                    res.WriteInt32(7);                  //enchantment effect statement, 100,1250,{stringID
+                    res.WriteInt16((short)3);           //enchantment effect value            
+                    res.WriteInt16((short)i);           //unknown
+                }
+
+                res.WriteInt16(2);                  //enchant max cost allowance
+
+                Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
         }
         //if (command.Length < 1)
         //{
