@@ -60,6 +60,7 @@ namespace Necromancy.Server.Packet.Area
                 Router.Send(client, (ushort)AreaPacketId.recv_item_move_r, res, ServerType.Area);
 
                 SendItemPlace(client, inventoryItem.Id, toStoreType, toBagId, toSlot);
+                Logger.Debug($"Moved Item {inventoryItem.Item.Name}:{inventoryItem.Item.ItemType}:InstanceId {inventoryItem.Id}:SerialId {inventoryItem.ItemId}");
                 if (!Server.Database.UpdateInventoryItem(inventoryItem))
                 {
                     Logger.Error("Could not update InventoryItem in Database");

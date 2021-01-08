@@ -185,6 +185,9 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new RTestCommand(this));
+            Chat.CommandHandler.AddCommand(new BattleCommand(this));
+            Chat.CommandHandler.AddCommand(new ArrangeCommand(this));
             Chat.CommandHandler.AddCommand(new ItemInstanceCommand(this));
             Chat.CommandHandler.AddCommand(new HonorCommand(this));
             Chat.CommandHandler.AddCommand(new SummonCommand(this));
@@ -509,6 +512,8 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_storage_deposit_money(this));
             _areaConsumer.AddHandler(new send_union_storage_move_item(this));
             _areaConsumer.AddHandler(new send_union_storage_draw_money(this));
+            _areaConsumer.AddHandler(new send_chara_update_battle_target(this));
+            _areaConsumer.AddHandler(new send_storage_open_cash_shop(this));
         }
     }
 }

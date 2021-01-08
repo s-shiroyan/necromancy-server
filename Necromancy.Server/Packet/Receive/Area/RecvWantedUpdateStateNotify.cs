@@ -7,7 +7,9 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvWantedUpdateStateNotify : PacketResponse
     {
-        public RecvWantedUpdateStateNotify()
+        private int _instanceId; //???
+        private int _wantedState; //???
+        public RecvWantedUpdateStateNotify(int instanceId, int wantedState)
             : base((ushort) AreaPacketId.recv_wanted_update_state_notify, ServerType.Area)
         {
         }
@@ -15,8 +17,8 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(_instanceId);
+            res.WriteInt32(_wantedState);
             return res;
         }
     }

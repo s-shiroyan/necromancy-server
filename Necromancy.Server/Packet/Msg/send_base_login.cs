@@ -71,7 +71,7 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteInt32(0); //  Error
             for (int i = 0; i < SoulCount; i++)
             {
-                //if (souls.Count > i)
+                if (souls.Count > i)
                 {
                     Soul soul = souls[0];
                     res.WriteByte(1);
@@ -79,13 +79,13 @@ namespace Necromancy.Server.Packet.Msg
                     res.WriteByte(soul.Level);
                     res.WriteByte(1); // bool - if use value 1, can't join in msg server character list
                 }
-                /*else
+                else
                 {
                     res.WriteByte(0);
                     res.WriteFixedString(String.Empty, 49); // Soul Name
                     res.WriteByte(0); // Soul Level
                     res.WriteByte(0); // bool - if use value 1, can't join in msg server character list
-                }*/
+                }
             }
             res.WriteInt32(1);
             res.WriteByte(1); // bool

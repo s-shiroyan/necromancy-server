@@ -28,11 +28,17 @@ namespace Necromancy.Server.Model
         public CharacterState State { get; set; }
 
         // TODO sort this messy class out...
+        
+        //Basic traits
         public uint Raceid { get; set; }
         public uint Sexid { get; set; }
         public byte HairId { get; set; }
         public byte HairColorId { get; set; }
         public byte FaceId { get; set; }
+        public uint ClassId { get; set; }
+
+
+        //Stats
         public uint Alignmentid { get; set; }
         public ushort Strength { get; set; }
         public ushort vitality { get; set; }
@@ -41,12 +47,13 @@ namespace Necromancy.Server.Model
         public ushort intelligence { get; set; }
         public ushort piety { get; set; }
         public ushort luck { get; set; }
+        public BaseStat Hp;
+        public BaseStat Mp;
+        public BaseStat Od;
 
-        public uint ClassId { get; set; }
-        public bool hadDied { get; set; }
-        public uint DeadBodyInstanceId { get; set; }
-        public int Channel { get; set; }
-        public int beginnerProtection { get; set; }
+        //Model
+        public int activeModel;
+        public short modelScale;
 
 
         //Movement Related
@@ -79,13 +86,7 @@ namespace Necromancy.Server.Model
         public bool castingSkill { get; set; }
         public uint eventSelectReadyCode { get; set; }
         public int eventSelectExecCode { get; set; }
-
         public int eventSelectExtraSelectionCode { get; set; }
-
-        public BaseStat Hp;
-        public BaseStat Mp;
-        public BaseStat Od;
-
         public bool takeover { get; set; }
         public int skillStartCast { get; set; }
         public bool helperText { get; set; }
@@ -97,6 +98,11 @@ namespace Necromancy.Server.Model
         public bool secondInnAccess { get; set; }
 
         public uint killerInstanceId { get; private set; }
+        public bool hadDied { get; set; }
+        public uint DeadBodyInstanceId { get; set; }
+        public int Channel { get; set; }
+        public int beginnerProtection { get; set; }
+
 
         //public bool playerDead { get; set; }
         public uint partyId { get; set; }
@@ -128,6 +134,8 @@ namespace Necromancy.Server.Model
             Slot = 0;
             Name = null;
             Level = 0;
+            activeModel = 0;
+            modelScale = 100;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;
             Hp = new BaseStat(1000, 1000);

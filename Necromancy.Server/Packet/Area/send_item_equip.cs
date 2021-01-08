@@ -102,6 +102,10 @@ namespace Necromancy.Server.Packet.Area
             RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(inventoryItem);
             Router.Send(recvItemUpdateEqMask, client);
 
+            //notify other players of your new look
+            RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
+            Router.Send(client.Map, myCharacterData, client);
+
             res.WriteInt32((int) ItemActionResultType.Ok);
             Router.Send(client, (ushort) AreaPacketId.recv_item_equip_r, res, ServerType.Area);
 

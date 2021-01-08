@@ -2,6 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Model.ItemModel;
 
 namespace Necromancy.Server.Packet.Msg
 {
@@ -52,15 +53,15 @@ namespace Necromancy.Server.Packet.Msg
             wo_4E3700_Prokul_Male(res);//Holds Male Porkul model details
             wo_4E3700_Porkul_Female(res);//Holds Female Porkul model details
 
-            res.WriteUInt32(0x0);//cmp to 0x96
-            /*wo_4E37F0_HumanMaleClassGear(res);
+            res.WriteUInt32(0x20);//cmp to 0x96
+            wo_4E37F0_HumanMaleClassGear(res);
             wo_4E37F0_HumanFemaleClassGear(res);
             wo_4E37F0_ElfMaleClassGear(res);
             wo_4E37F0_ElfFemaleClassGear(res);
             wo_4E37F0_DwarfMaleClassGear(res);
             wo_4E37F0_GnomeFemaleClassGear(res);
             wo_4E37F0_PorkulMaleClassGear(res);
-            wo_4E37F0_PorkulFemaleClassGear(res);*/
+            wo_4E37F0_PorkulFemaleClassGear(res);
 
             res.WriteUInt32(4);//cmp to 0xF
             wo_4E0970_Fighter(res);//Holds Stats and info for Fighter Class(need to fix bonus HP+MP+Stats)
@@ -159,7 +160,8 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -216,7 +218,8 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -273,7 +276,8 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -330,7 +334,8 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -388,7 +393,8 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -447,7 +453,8 @@ namespace Necromancy.Server.Packet.Msg
 
             res.WriteByte(1);//bool
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -505,7 +512,8 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -563,7 +571,8 @@ namespace Necromancy.Server.Packet.Msg
             res.WriteByte(1);//bool
 
 
-            int[] WeaponContainer = new int[] { 14, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 22, 22, 0, 0, 0, 0, 0, 0 };
+            int[] WeaponContainer = new int[] { 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, (int)ItemType.SHOES,
+                                                0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.HELMET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.GLOVES, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             int x = 0;
             int xx = 0;
             int xxx = 0;
@@ -615,17 +624,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_HumanMaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
                 
                 res.WriteInt32(0);//race
                 res.WriteInt32(0);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3 , 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4 , 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -729,17 +742,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_HumanFemaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(0);//race
                 res.WriteInt32(1);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -844,17 +861,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_ElfMaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(1);//race
                 res.WriteInt32(0);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -959,17 +980,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_ElfFemaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(1);//race
                 res.WriteInt32(1);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -1074,17 +1099,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_DwarfMaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(2);//race
                 res.WriteInt32(0);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -1189,17 +1218,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_GnomeFemaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(4);//race
                 res.WriteInt32(1);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -1287,7 +1320,7 @@ namespace Necromancy.Server.Packet.Msg
 
                 int[] SoltContainer = new int[] { 1, 2, 16, 8, 32, 64, 128, 4, 0, 0, 0, 0, 16, 128, 64, 32, 8, 4, 0, 0, 0, 0, 0, 0, 0 };
 
-                for (int i = 0; i < 19; i++)
+                for (int i = 0; i < 0x19; i++)
                 {
                     res.WriteInt32(SoltContainer[xxx]);
 
@@ -1304,17 +1337,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_PorkulMaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(3);//race
                 res.WriteInt32(0);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
@@ -1419,17 +1456,21 @@ namespace Necromancy.Server.Packet.Msg
         private void wo_4E37F0_PorkulFemaleClassGear(IBuffer res)
         {
             int classSlot = 0;
-            for (int load = 3/*0*/; load < 4; load++)
+            for (int load = 0; load < 4; load++)
             {
 
                 res.WriteInt32(3);//race
                 res.WriteInt32(1);//gender
                 res.WriteInt32(classSlot);//class
 
-                int[] WeaponContainer0 = new int[] { 3, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer1 = new int[] { 4, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer2 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
-                int[] WeaponContainer3 = new int[] { 13, 21, 25, 25, 25, 25, 25, 27, 27, 27, 27, 27, 25, 25, 25, 25, 25, 21, 21, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer0 = new int[] { (int)ItemType.SWORD_1H, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer1 = new int[] { (int)ItemType.DAGGER, (int)ItemType.SHIELD_SMALL, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS,
+                                                     (int)ItemType.SHOES, (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer2 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] WeaponContainer3 = new int[] { (int)ItemType.WAND_2H, 0, 0, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0, (int)ItemType.ARMOR_TOPS, (int)ItemType.SHOES,
+                                                     (int)ItemType.BRACLET, (int)ItemType.ARMOR_BOTTOMS, (int)ItemType.HELMET, 0, 0, 0, 0, 0, 0, 0, 0 };
 
                 int x = 0;
                 int xx = 0;
