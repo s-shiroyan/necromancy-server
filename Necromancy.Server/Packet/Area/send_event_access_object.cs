@@ -221,25 +221,37 @@ namespace Necromancy.Server.Packet.Area
                 res7.WriteInt32(nameIdx[i]); //Stage ID from Stage.CSV
                 res7.WriteInt32(
                     mapIDs[i]); //Map ID.  Cross Refrences Dungeun_info.csv to get X/Y value for map icon, and dungeun description. 
-                res7.WriteInt32(partySize[i]); //max players
-                res7.WriteInt16(levels[i]);
                 ; //Recommended Level
+                res7.WriteInt16(levels[i]);//reordered for jp?
+                res7.WriteInt32(partySize[i]); //max players
                 //sub_4834C0
                 res7.WriteByte(19);
-                for (int j = 0; j < 0x80; j++) //j max 0x80
+                for (int k = 0; k < 5; k++)
                 {
-                    res7.WriteInt32(mapIDs[i]);
-                    res7.WriteFixedString($"Channel-{j}",
-                        0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
-                    res7.WriteByte(1); //bool 1 | 0
-                    res7.WriteUInt16(0xFFFF); //Max players  -  Comment from other recv
-                    res7.WriteInt16(7); //Current players  - Comment from other recv
-                    res7.WriteByte(3);
-                    res7.WriteByte(6); //channel Emoticon - 6 for a Happy Face
-                }
+                    res7.WriteByte(3);//new Bool
+                    res7.WriteByte(3);//new
+                    res7.WriteInt16(7);//new
+                    res7.WriteInt16(7);//new
+                    res7.WriteInt32(7);//new
 
-                res7.WriteByte(6); //Number or Channels  - comment from other recv
+                    for (int j = 0; j < 0x80; j++) //j max 0x80
+                    {
+                        res7.WriteInt32(mapIDs[i]);
+                        res7.WriteFixedString($"Channel-{j}",
+                            0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
+                        res7.WriteByte(1); //bool 1 | 0
+                        //res7.WriteByte(3);//Max players  -  Comment from other recv
+                        res7.WriteInt16(7); //Current players  - Comment from other recv
+                        res7.WriteInt16(0);//new
+                        res7.WriteByte(3);
+                        //res7.WriteByte(6); //channel Emoticon - 6 for a Happy Face
+                    }
+                    res7.WriteByte(6); //new
+                }
+                
+                res7.WriteByte(6); //Number or Channels - comment from other recv
             }
+            res7.WriteInt32(0);
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_select_map_and_channel, res7, ServerType.Area);
         }
