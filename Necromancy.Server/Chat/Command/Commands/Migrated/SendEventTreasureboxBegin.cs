@@ -28,7 +28,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res1.WriteInt32(numEntries);
             for (int i = 0; i < numEntries; i++)
             {
-                res1.WriteInt32(100101);
+                res1.WriteInt32(10001 + i);
             }
 
             Router.Send(client, (ushort) AreaPacketId.recv_event_treasurebox_begin, res1, ServerType.Area);
