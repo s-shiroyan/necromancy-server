@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             //Error!!!  maybe try values other than 0...
-            //forgot this structure too.   nice! real nice. back to xdbg you go
+            res.WriteInt16(0);
 
             return res;
         }

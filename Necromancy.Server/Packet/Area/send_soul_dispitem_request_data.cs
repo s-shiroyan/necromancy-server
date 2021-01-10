@@ -32,8 +32,14 @@ namespace Necromancy.Server.Packet.Area
             LoadInventory(client);
             LoadCloakRoom(client);
             //LoadBattleStats(client);
+            LoadHonor(client);
         }
 
+        public void LoadHonor(NecClient client)
+        {
+            RecvGetHonor recvGetHonor = new RecvGetHonor(1 /*Adventurer Hopeful*/,client.Character.InstanceId, 1 /*alreadyKnown*/);
+            Router.Send(recvGetHonor, client);
+        }
         public void LoadBattleStats(NecClient client)
         {
             short PhysAttack = 0;

@@ -78,6 +78,7 @@ namespace Necromancy.Server.Data.Setting
             Load(Map, "map.csv", new MapCsvReader(Strings));
             Load(ModelCommon, "model_common.csv", new ModelCommonCsvReader(Monster, ModelAtr));
             Load(Honor, "honor.csv", new HonorCsvReader());
+            Logger.Debug($"Number of Honor titles found. {Honor.Count}");
             return this;
         }
 
