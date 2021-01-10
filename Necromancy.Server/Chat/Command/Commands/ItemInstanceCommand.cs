@@ -31,19 +31,19 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            const int NUMBER = 20;
+            const int NUMBER = 1;
             for(int i = 0; i < NUMBER; i++) { 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteUInt64((ulong)(10001 + i));        //V|SPAWN ID
-                res.WriteInt32(10502101 + i);               //V|BASE ID
+                res.WriteInt32(10300202);               //V|BASE ID
                 res.WriteByte(1);                           //V|QUANTITY
                 res.WriteUInt32((uint)2);                   //V|STATUSES
                 res.WriteFixedString("赤", 0x10);             //UNKNOWN - ITEM TYPE? decrypt key?
                 res.WriteByte((byte)0);                     //V|ZONE
                 res.WriteByte(0);                           //V|BAG
-                res.WriteInt16((short)i);                   //V|SLOT
+                res.WriteInt16((short)1);                   //V|SLOT
                 res.WriteInt32(0);                     //unknown
-                res.WriteInt32(0);                          //V|EQUIP SLOT
+                res.WriteInt32(1);                          //V|EQUIP SLOT
                 res.WriteInt32(5);                          //V|CURRENT DURABILITY
                 res.WriteByte((byte)7);                     //v|ENHANCEMENT LEVEL
                 res.WriteByte(2);                           //SPECIAL FORGE LEVEL?
@@ -68,8 +68,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     res.WriteByte(0);       //IS FILLED
                     res.WriteInt32(1);      //GEM TYPE
-                    res.WriteInt32(0);      // GEM BASE ID
-                    res.WriteInt32(0);      //maybe gem item 2 id for diamon 2 gem combine 
+                    res.WriteInt32(0);      //GEM BASE ID
+                    res.WriteInt32(0);      //unknown maybe gem item 2 id for diamon 2 gem combine 
                 }
 
                 res.WriteInt32(0);              //V|PROTECT UNTIL DATE IN SECONDS
@@ -82,11 +82,11 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt32(numEntries); // less than or equal to 5 - must be 5 or crashes as of now
                 for (int j = 0; j < numEntries; j++)
                 {
-                    res.WriteInt32(0);  //unknown
-                    res.WriteByte((byte)0);   //unknown
-                    res.WriteByte((byte)0);   //unknown
-                    res.WriteInt16((short)0);  //unknown
-                    res.WriteInt16((short)0);  //unknown
+                    res.WriteInt32(801011);  //unknown
+                    res.WriteByte((byte)10);   //unknown
+                    res.WriteByte((byte)10);   //unknown
+                    res.WriteInt16((short)10);  //unknown
+                    res.WriteInt16((short)10);  //unknown
                 }
 
                 res.WriteInt64(801011);              //unknown
