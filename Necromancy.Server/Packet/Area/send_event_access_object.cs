@@ -240,11 +240,9 @@ namespace Necromancy.Server.Packet.Area
                         res7.WriteFixedString($"Channel-{j}",
                             0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
                         res7.WriteByte(1); //bool 1 | 0
-                        //res7.WriteByte(3);//Max players  -  Comment from other recv
                         res7.WriteInt16(7); //Current players  - Comment from other recv
                         res7.WriteInt16(0);//new
                         res7.WriteByte(3);
-                        //res7.WriteByte(6); //channel Emoticon - 6 for a Happy Face
                     }
                     res7.WriteByte(6); //new
                 }

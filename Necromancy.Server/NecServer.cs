@@ -514,6 +514,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_storage_draw_money(this));
             _areaConsumer.AddHandler(new send_chara_update_battle_target(this));
             _areaConsumer.AddHandler(new send_storage_open_cash_shop(this));
+            _areaConsumer.AddHandler(new send_event_treasurebox_select(this));
         }
     }
 }
