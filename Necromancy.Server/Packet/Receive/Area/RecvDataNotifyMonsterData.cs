@@ -59,7 +59,7 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt64(2 ^ i);
             }
 
-            res.WriteInt32(0b10000000); //BITMASK for Monster State
+            res.WriteInt32(0b00000000); //BITMASK for Monster State
             //0bxxxxxxx1 - 1 Dead / 0 Alive  | 
             //0bxxxxxx1x - 1 crouching / 0 standing
             //0bxxxxx1xx - 
@@ -68,9 +68,9 @@ namespace Necromancy.Server.Packet.Receive.Area
             //0bxx1xxxxx - 
             //0bx1xxxxxx - 1 Aggro Battle  / 0 Normal    | (for when you join a map and the monster is in battle)
             //0b1xxxxxxx - 
-            res.WriteInt64(1); // item Id ?
-            res.WriteInt64(1); // item Id ?
-            res.WriteInt64(1); // item Id ?
+            res.WriteInt64(10001); // item Id ?
+            res.WriteInt64(10002); // item Id ?
+            res.WriteInt64(10003); // item Id ?
             res.WriteByte(231);
             res.WriteByte(232);
             res.WriteByte(0);//new

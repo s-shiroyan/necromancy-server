@@ -17,7 +17,15 @@ namespace Necromancy.Server.Chat.Command.Commands
             List<ChatResponse> responses)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(-10);
+            res.WriteInt64(10003);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(2);            
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+
+
+            //IBuffer res = BufferProvider.Provide();
+            //res.WriteInt32(-10);
             /*
                 LOOT	-1	It is carrying nothing
                 LOOT	-10	No one can be looted nearby
@@ -25,7 +33,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 LOOT	-1500	No permission to loot
             */
 
-            Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
+            
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

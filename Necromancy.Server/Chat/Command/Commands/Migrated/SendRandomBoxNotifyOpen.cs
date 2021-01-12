@@ -26,7 +26,7 @@ namespace Necromancy.Server.Chat.Command.Commands
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt64(itemId); // ?
+                res.WriteInt64(10001 + i); // ?
             }
 
             res.WriteInt32(itemId); // Show item name                                                   

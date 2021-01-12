@@ -31,19 +31,23 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            const int NUMBER = 1;
+
+            int charId = client.Character.Id;
+            Logger.Debug(charId.ToString());
+            const int NUMBER = 10;
             for(int i = 0; i < NUMBER; i++) { 
                 IBuffer res = BufferProvider.Provide();
-                res.WriteUInt64((ulong)(10001 + i));        //V|SPAWN ID
-                res.WriteInt32(10300202);               //V|BASE ID
+                ulong instanceId = (ulong)(10001 + i);
+                res.WriteUInt64(instanceId);        //V|SPAWN ID
+                res.WriteInt32(100101 + i);               //V|BASE ID
                 res.WriteByte(1);                           //V|QUANTITY
-                res.WriteUInt32((uint)2);                   //V|STATUSES
+                res.WriteInt32(2);                   //V|STATUSES
                 res.WriteFixedString("赤", 0x10);             //UNKNOWN - ITEM TYPE? decrypt key?
-                res.WriteByte((byte)0);                     //V|ZONE
+                res.WriteByte((byte)(66));                     //V|ZONE 66- treasure box
                 res.WriteByte(0);                           //V|BAG
-                res.WriteInt16((short)1);                   //V|SLOT
-                res.WriteInt32(0);                     //unknown
-                res.WriteInt32(1);                          //V|EQUIP SLOT
+                res.WriteInt16((short)i);                   //V|SLOT
+                res.WriteInt32(charId);                     //unknown
+                res.WriteInt32(0);                          //V|EQUIP SLOT
                 res.WriteInt32(5);                          //V|CURRENT DURABILITY
                 res.WriteByte((byte)7);                     //v|ENHANCEMENT LEVEL
                 res.WriteByte(2);                           //SPECIAL FORGE LEVEL?
@@ -73,12 +77,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 }
 
                 res.WriteInt32(0);              //V|PROTECT UNTIL DATE IN SECONDS
-                res.WriteInt64(0);         //unknown
+                res.WriteInt64(Int64.MaxValue);         //unknown
                 res.WriteInt16(0xFF);           //0 = green (in shop for sale)  0xFF = normal /*item.ShopStatus*/
                 res.WriteInt32(i);         //unknown - 1 is guard
                 res.WriteInt16(15);             //V|GP
 
                 numEntries = 5; //new
+                //equip skill related
                 res.WriteInt32(numEntries); // less than or equal to 5 - must be 5 or crashes as of now
                 for (int j = 0; j < numEntries; j++)
                 {
@@ -89,7 +94,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res.WriteInt16((short)10);  //unknown
                 }
 
-                res.WriteInt64(801011);              //unknown
+                res.WriteInt64(Int64.MaxValue);              //unknown
                 res.WriteInt16((short)0);       //V|+PHYSICAL
                 res.WriteInt16((short)0);       //V|+MAGICAL
                 res.WriteInt16((short)0);       //V|+WEIGHT IN THOUSANTHS, DISPLAYS AS HUNDREDTHS
@@ -126,7 +131,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteByte((byte)0);        //V|Number of loads - need better translation
                 res.WriteByte((byte)0);        //Soul Partner card type color, pulled from str_table 100,1197,add 1 to sent value to find match
 
-                res.WriteInt64(0);//UNKNOWN
+                res.WriteInt64(Int64.MaxValue);//UNKNOWN
 
                 //base enchant display on bottom
                 res.WriteInt16((short)20);  //Base Enchant Scroll ID
@@ -155,51 +160,15 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt16(2);                  //enchant max cost allowance
 
                 Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
-        }
-        //if (command.Length < 1)
-        //{
-        //    responses.Add(ChatResponse.CommandError(client, "To few arguments"));
-        //    return;
-        //}
 
-        //if (!int.TryParse(command[0], out int itemId))
-        //{
-        //    responses.Add(ChatResponse.CommandError(client, $"Invalid Number: {command[0]}"));
-        //    return;
-        //}
-
-        //if (!Server.Items.ContainsKey(itemId))
-        //{
-        //    responses.Add(ChatResponse.CommandError(client, $"ItemId: '{itemId}' does not exist"));
-        //    return;
-        //}
-
-        //int[] DonkeyItems = new int[] {100101,100102,100103,100104,100105,100106,100107,100108,100109,100110,100111,100112,100113,100114,100115,100116,100181,100191,100192,100193,100201,100202,100203,100204,100205,100206,100207,100208,100209,100210,100211,100212,100213,100214,100301,100302,100303,100304,100305,100306,100307,100308,100401,100402,100403,100404,100405,100406,100407,100408};
-        //int numItems = DonkeyItems.Count();
-
-        //for (int i = 0; i < numItems*5; i++)
-        //{
-        //    Item item = Server.Items[100101];
-        //    // Create InventoryItem
-        //    InventoryItem inventoryItem = new InventoryItem();
-        //    inventoryItem.Id = item.Id + i;
-        //    inventoryItem.ItemId = item.Id;
-        //    inventoryItem.Quantity = 1;
-        //    inventoryItem.CurrentDurability = item.Durability;
-        //    inventoryItem.CharacterId = client.Character.Id;
-        //    inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-        //    inventoryItem.State = 0;
-        //    inventoryItem.StorageType = (int)BagType.AvatarInventory;
-        //    client.Character.Inventory.AddAvatarItem(inventoryItem);
-        //    inventoryItem.Item.ItemType = (ItemType)(i);
-        //    inventoryItem.Item.Name = $"ItemType + {i}"; 
-
-        //    RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-        //Router.Send(recvItemInstance, client);
-        //    RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
-        //    Router.Send(recvItemInstanceUnidentified, client);
-        //    responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
-        //}
+                res = BufferProvider.Provide();
+                res.WriteUInt64(instanceId);
+                res.WriteByte(0);
+                res.WriteByte(0);
+                res.WriteInt16((short)i);
+                //Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+            }
+       
 
     }
     }
