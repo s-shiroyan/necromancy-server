@@ -107,8 +107,8 @@ namespace Necromancy.Server.Chat.Command.Commands
                     IBuffer res = BufferProvider.Provide();
                     res.WriteInt32(200101);
                     res.WriteCString("Dagger");
-                    res.WriteByte(0);
-                    Router.Send(client, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
+                    res.WriteByte(20);
+                    Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
                     break;
 
                 case "partygetmoney":
