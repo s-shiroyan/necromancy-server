@@ -1121,7 +1121,7 @@ namespace Necromancy.Server.Packet.Id
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
         send_job_change = 0x121, //opcode not found
-        send_job_change_close = 0x122, //opcode not found   TODO
+        send_job_change_close = 0x5659,
         send_job_change_select_bonuspoint = 0x123, //opcode not found
         send_logout_cancel_request = 0xB224, 
         send_logout_start_request = 0x38FC, 
@@ -1309,7 +1309,7 @@ namespace Necromancy.Server.Packet.Id
         send_item_scroll_sub_enchant_check = 0x0,
         send_item_scroll_sub_enchant_execute = 0x0,
         send_job_change_notify_info = 0x0,
-        send_login_news_get_url = 0x0,
+        send_login_news_get_url = 0xD692,
         send_login_news_update_conf = 0x0,
         send_mail_open = 0x0,
         send_motion_end_cl = 0x0,
