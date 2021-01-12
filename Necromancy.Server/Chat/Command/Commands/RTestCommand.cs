@@ -8,6 +8,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
+using Necromancy.Server.Packet.Receive.Msg;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -43,7 +44,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 catch
                 {
                     responses.Add(ChatResponse.CommandError(client, $"no value specified. setting x to 1"));
-                    return;
+                    //return;
                 }
 
             }
@@ -98,6 +99,21 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "lootaccess":
                     RecvLootAccessObject lootAcess = new RecvLootAccessObject();
                     Router.Send(client.Map, lootAcess);
+                    break;
+
+                case "partygetitem":
+                    RecvPartyNotifyGetItem recvPartyNotifyGetItem = new RecvPartyNotifyGetItem(client.Character.InstanceId);
+                    Router.Send(recvPartyNotifyGetItem, client);
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(200101);
+                    res.WriteCString("Dagger");
+                    res.WriteByte(0);
+                    Router.Send(client, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
+                    break;
+
+                case "partygetmoney":
+                    RecvPartyNotifyGetMoney recvPartyNotifyGetMoney = new RecvPartyNotifyGetMoney(client.Character.InstanceId);
+                    Router.Send(client.Map, recvPartyNotifyGetMoney);
                     break;
 
 
