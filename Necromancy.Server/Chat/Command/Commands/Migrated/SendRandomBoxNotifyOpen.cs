@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Packet.Receive.Area;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -22,23 +24,37 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(numEntries); //less than or equal to 10
 
             // Weapon
-            int itemId = 10800405;
+            int itemId = 90031008;
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt64(10001 + i); // ?
+                res.WriteInt64(ItemGenerator(itemId,client,i)); // item instance ID per slot
             }
+            res.WriteInt32(itemId); // Show item name as RBox title. grabs string from itemInfo.csv
+            Router.Send(client, (ushort) AreaPacketId.recv_random_box_notify_open, res, ServerType.Area); // Trying to spawn item in this boxe, maybe i need the item instance ?
 
-            res.WriteInt32(itemId); // Show item name                                                   
+        }
 
+        public long ItemGenerator (int itemId, NecClient client,int i)
+        {
+            Item item = Server.Items[itemId];
+            InventoryItem inventoryItem = new InventoryItem();
+            inventoryItem.Id = 50000 + i;
+            inventoryItem.Item = item;
+            inventoryItem.ItemId = item.Id;
+            inventoryItem.Quantity = 1;
+            inventoryItem.CurrentDurability = item.Durability;
+            inventoryItem.CharacterId = client.Character.Id;
+            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
+            inventoryItem.State = 0;
+            inventoryItem.StorageType = (int)BagType.AvatarInventory;
+            client.Character.Inventory.AddAvatarItem(inventoryItem);
 
-            Router.Send(client, (ushort) AreaPacketId.recv_random_box_notify_open, res,
-                ServerType.Area); // Trying to spawn item in this boxe, maybe i need the item instance ?
-
-            IBuffer res1 = BufferProvider.Provide();
-            res1.WriteInt64(0);
-            res1.WriteInt32(itemId);
-            Router.Send(client, (ushort) AreaPacketId.recv_item_update_state, res1, ServerType.Area);
+            RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
+            Router.Send(recvItemInstance, client);
+            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
+            Router.Send(recvItemInstanceUnidentified, client);
+            return inventoryItem.Id;
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

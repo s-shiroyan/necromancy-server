@@ -15,8 +15,8 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteFixedString("Xeno", 0x10);
+            res.WriteInt32(10390001);
+            res.WriteFixedString("DAGGER", 0x10);
             return res;
         }
     }

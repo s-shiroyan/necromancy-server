@@ -29,6 +29,8 @@ namespace Necromancy.Server.Model.ItemModel
         RoyalBag = 2,
         Warehouse = 3,
         WarehouseSp = 10,
-        AvatarInventory = 12
+        AvatarInventory = 12,
+        PurchaseBag = 14,
+        TreasureBox = 66,
     }
 }

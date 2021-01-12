@@ -26,13 +26,14 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
 
             IBuffer res = BufferProvider.Provide();
-            int numEntries = 0x2;
-            res.WriteInt32(0);
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)0xFF2A, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x2B7A, res, ServerType.Area);
         }
-
+        //strings tested:0xFB79,recv_0xFA0B,recv_0xF024,recv_0xEEB7,recv_0xE7CF,recv_0xDA4A,recv_0xD909,recv_0xCF29,recv_0xC055,
+        //recv_0xB684(disconnect),recv_0xB586,recv_0x97D9(battleRep), recv_0x916,recv_0x8549,recv_0x8487,recv_0x8364,recv_0x7B86,
+        //recv_0x7697,recv_0x755C,recv_0x735E,recv_0x692A,recv_0x50D1,recv_0x4CF3,recv_0x4ABB,recv_0x3C1F,recv_0x3A0E,recv_0x218A,
+        //recv_0x1489(disconnect),recv_0x4D12,recv_0x2B7A
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "nstest";
         public override string HelpText => "usage: `/nstest` - Quickly test a non string protocol.";

@@ -89,8 +89,16 @@ namespace Necromancy.Server.Chat.Command.Commands
                     RecvWantedUpdateStateNotify wantedStateNotify = new RecvWantedUpdateStateNotify((int)client.Character.InstanceId, x);
                     Router.Send(client.Map, wantedStateNotify);
                     break;
-                    
 
+                case "jailmoney":
+                    RecvWantedJailUpdateMoney jailMoney = new RecvWantedJailUpdateMoney();
+                    Router.Send(client.Map, jailMoney);
+                    break;
+
+                case "lootaccess":
+                    RecvLootAccessObject lootAcess = new RecvLootAccessObject();
+                    Router.Send(client.Map, lootAcess);
+                    break;
 
 
                 default: //you don't know what you're doing do you?

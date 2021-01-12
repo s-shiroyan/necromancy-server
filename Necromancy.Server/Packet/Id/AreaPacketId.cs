@@ -1090,7 +1090,7 @@ namespace Necromancy.Server.Packet.Id
         send_event_sync_r = 0x701D,
         send_event_system_message_timer_r = 0xF9B8,
         send_event_treasurebox_end = 0x989D, //used to be 0x5F7A
-        send_event_treasurebox_select = 0x92,
+        send_event_treasurebox_select = 0x957E,
         send_event_union_storage_close = 0xA2A5,
         send_forge_check = 0x8D0A,
         send_forge_execute = 0x95, //opcode not found

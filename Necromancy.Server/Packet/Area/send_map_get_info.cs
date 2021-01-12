@@ -80,6 +80,8 @@ namespace Necromancy.Server.Packet.Area
                 RecvDataNotifyMapLink mapLink = new RecvDataNotifyMapLink(mapTran.InstanceId, mapTran.ReferencePos, mapTran.MaplinkOffset, mapTran.MaplinkWidth, mapTran.MaplinkColor, mapTran.MaplinkHeading);
                 Router.Send(mapLink, client);
 
+                //un-comment for debugging maplinks to visualize the left and right Reference Positions
+                /*
                 GGateSpawn gGateSpawn = new GGateSpawn();
                 Server.Instances.AssignInstance(gGateSpawn);
                 gGateSpawn.X = mapTran.LeftPos.X;
@@ -111,6 +113,7 @@ namespace Necromancy.Server.Packet.Area
 
                 gGateData = new RecvDataNotifyGGateData(gGateSpawn);
                 Router.Send(gGateData, client);
+                */
             }
 
             // ToDo this should be a database lookup
