@@ -15,11 +15,14 @@ namespace Necromancy.Server.Model.ItemModel
         private Dictionary<byte, InventoryItem[]> _cloakRoom;
         private Dictionary<byte, InventoryItem[]> _avatar;
         private Dictionary<byte, InventoryItem[]> _unionStorage;
+        private Dictionary<byte, InventoryItem[]> _treasureBox;
+
 
         private const int bagSize = 24; //temporary
         private const int cloakRoomTabSize = 32;
         private const int avatarTabSize = 50;
         private const int unionTabSize = 50;
+        private const int treasureBoxSize = 10;
 
         private Logger logger;
         public Inventory()
@@ -38,6 +41,8 @@ namespace Necromancy.Server.Model.ItemModel
             _avatar.Add(2, new InventoryItem[avatarTabSize]);
             _unionStorage = new Dictionary<byte, InventoryItem[]>();
             _unionStorage.Add(0, new InventoryItem[unionTabSize]);
+            _treasureBox = new Dictionary<byte, InventoryItem[]>();
+            _treasureBox.Add(0, new InventoryItem[treasureBoxSize]);
 
             _storageContainers = new Dictionary<byte, Dictionary<byte, InventoryItem[]>>();
             _storageContainers.Add(0, _inventory);
@@ -45,6 +50,8 @@ namespace Necromancy.Server.Model.ItemModel
             _storageContainers.Add(3, _cloakRoom);
             _storageContainers.Add(12, _avatar);
             _storageContainers.Add(0x51, _unionStorage);
+            _storageContainers.Add(66, _treasureBox);
+
         }
         public void Equip(InventoryItem inventoryItem)
         {
@@ -267,11 +274,32 @@ namespace Necromancy.Server.Model.ItemModel
             return false;
         }
 
+
         public bool AddAvatarItem(InventoryItem inventoryItem)
         {
             foreach (byte bagId in _avatar.Keys)
             {
                 InventoryItem[] bag = _avatar[bagId];
+                for (short bagSlotIndex = 0; bagSlotIndex < bag.Length; bagSlotIndex++)
+                {
+                    if (bag[bagSlotIndex] == null)
+                    {
+                        bag[bagSlotIndex] = inventoryItem;
+                        inventoryItem.BagId = bagId;
+                        inventoryItem.BagSlotIndex = bagSlotIndex;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool AddTreasureBoxItem(InventoryItem inventoryItem)
+        {
+            foreach (byte bagId in _treasureBox.Keys)
+            {
+                InventoryItem[] bag = _treasureBox[bagId];
                 for (short bagSlotIndex = 0; bagSlotIndex < bag.Length; bagSlotIndex++)
                 {
                     if (bag[bagSlotIndex] == null)

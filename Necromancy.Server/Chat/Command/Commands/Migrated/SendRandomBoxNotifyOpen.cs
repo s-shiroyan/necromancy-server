@@ -24,7 +24,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             res.WriteInt32(numEntries); //less than or equal to 10
 
             // Weapon
-            int itemId = 90031008;
+            int itemId = 200101;
 
             for (int i = 0; i < numEntries; i++)
             {
@@ -47,7 +47,7 @@ namespace Necromancy.Server.Chat.Command.Commands
             inventoryItem.CharacterId = client.Character.Id;
             inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
             inventoryItem.State = 0;
-            inventoryItem.StorageType = (int)BagType.AvatarInventory;
+            inventoryItem.StorageType = (int)BagType.TreasureBox;
             client.Character.Inventory.AddAvatarItem(inventoryItem);
 
             RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
