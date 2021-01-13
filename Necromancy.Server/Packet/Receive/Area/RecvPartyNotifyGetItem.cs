@@ -7,22 +7,20 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvPartyNotifyGetItem : PacketResponse
     {
-        private uint _instanceId; //???
+        private uint _charaInstanceId; //???
 
-        public RecvPartyNotifyGetItem(uint instanceId)
+        public RecvPartyNotifyGetItem(uint charaInstanceId)
             : base((ushort) AreaPacketId.recv_party_notify_get_item, ServerType.Area)
         {
-            _instanceId = instanceId;
+            _charaInstanceId = charaInstanceId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt32(_instanceId);
-
-            res.WriteCString("SecretDesu");
-
-            res.WriteByte(1);
+            res.WriteUInt32(_charaInstanceId);
+            res.WriteCString(" Area really long item name");
+            res.WriteByte(55);
             return res;
         }
     }

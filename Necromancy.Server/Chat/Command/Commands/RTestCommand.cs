@@ -102,11 +102,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "partygetitem":
+                    //arearecv
                     RecvPartyNotifyGetItem recvPartyNotifyGetItem = new RecvPartyNotifyGetItem(client.Character.InstanceId);
                     Router.Send(recvPartyNotifyGetItem, client);
+                    //message recv
                     IBuffer res = BufferProvider.Provide();
-                    res.WriteInt32(200101);
-                    res.WriteCString("Dagger");
+                    res.WriteUInt32(client.Character.InstanceId);
+                    res.WriteCString(" a Dagger or any long string named object ");
                     res.WriteByte(20);
                     Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
                     break;
