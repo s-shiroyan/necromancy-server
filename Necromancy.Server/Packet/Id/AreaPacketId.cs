@@ -1282,7 +1282,7 @@ namespace Necromancy.Server.Packet.Id
         send_chara_update_battle_target = 0x4B3F,
         send_class_advancement_learn = 0x1239,
         send_class_advancement_reset = 0x0,
-        send_echo = 0x0,
+        send_echo = 0xCFCD,
         send_event_challenge_script_play_r = 0x0,
         send_event_quest_list_end = 0x0,
         send_event_quest_list_get_order_list = 0x0,

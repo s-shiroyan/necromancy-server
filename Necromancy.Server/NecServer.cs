@@ -517,6 +517,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_event_treasurebox_select(this));
             _areaConsumer.AddHandler(new send_job_change_close(this));
             _areaConsumer.AddHandler(new send_login_news_get_url(this));
+            _areaConsumer.AddHandler(new send_echo(this));
         }
     }
 }
