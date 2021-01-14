@@ -518,6 +518,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_job_change_close(this));
             _areaConsumer.AddHandler(new send_login_news_get_url(this));
             _areaConsumer.AddHandler(new send_echo(this));
+            _areaConsumer.AddHandler(new send_soul_partner_status_open(this));
         }
     }
 }

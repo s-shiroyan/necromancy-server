@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x3A0E = 0x3A0E, // Doesn't crash
         recv_0x3C1F = 0x3C1F,
         recv_0x3C81 = 0x3C81, // Crash
-        //NoJP recv_0x3F2F = 0x3F2F, // Crash
+        recv_0x3F2F = 0x3F2F, // Crash
         //NoJP recv_0x488D = 0x488D, // Crash
         recv_0x4978 = 0x4978, // Crash
         //NoJP recv_0x4981 = 0x4981, // Crash
@@ -1352,7 +1352,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_partner_skill_start_cast_r = 0x0,
         send_soul_partner_status_close = 0x0,
         send_soul_partner_status_levelup_end = 0x0,
-        send_soul_partner_status_open = 0x0,
+        send_soul_partner_status_open = 0x6A47,
         send_soul_partner_status_update_bonus_ability = 0x0,
         send_soul_partner_status_update_name = 0x0,
         send_soul_partner_storage_card_cancel = 0x0,
