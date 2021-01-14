@@ -28,7 +28,7 @@ namespace Necromancy.Server.Common
             foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
             {
                 res.WriteInt32((int)inventoryItem.Item.ItemType);
-                Logger.Debug($"Loading {i}:{inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}  | {inventoryItem.Item.Name}");
+                //Logger.Debug($"Loading {i}:{inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}  | {inventoryItem.Item.Name}");
                 i++;
             }
             while (i < numEntries)

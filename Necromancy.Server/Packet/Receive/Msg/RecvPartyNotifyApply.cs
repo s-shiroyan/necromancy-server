@@ -23,10 +23,10 @@ namespace Necromancy.Server.Packet.Receive.Msg
             res.WriteFixedString($"{_client.Character.Name}", 0x5B);
             res.WriteUInt32(_client.Character.ClassId);
             res.WriteByte(_client.Character.Level);
-            res.WriteByte(_client.Character.criminalState); //Criminal Status
-            res.WriteByte(0);
+            res.WriteByte(_client.Soul.Level);
+            res.WriteByte((byte)(_client.Character.criminalState+5)); //Criminal Status
             res.WriteByte(0); //Beginner Protection (bool) 
-            res.WriteByte(0); //Membership Status
+            res.WriteByte(3); //Membership Status
             res.WriteByte(0);
             return res;
         }

@@ -20,16 +20,15 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            int PartyLeaderInstanceId = packet.Data.ReadInt32();
+            int errorCheck = packet.Data.ReadInt32();
             uint targetPartyInstanceId = packet.Data.ReadUInt32();
-            Logger.Debug($"{client.Character.Name}Applied to party {targetPartyInstanceId} with party leader {PartyLeaderInstanceId}");
+            Logger.Debug($"{client.Character.Name}Applied to party {targetPartyInstanceId} with sys_msg {errorCheck}. 0 is good");
 
             Party myParty = Server.Instances.GetInstance(targetPartyInstanceId) as Party;
             NecClient myPartyLeaderClient = Server.Clients.GetByCharacterInstanceId(myParty.PartyLeaderId);
 
-
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt32(0);
+            res.WriteInt32(errorCheck);
             Router.Send(client, (ushort) AreaPacketId.recv_party_apply_r, res, ServerType.Area);
 
             RecvPartyNotifyApply recvPartyNotifyApply = new RecvPartyNotifyApply(client);

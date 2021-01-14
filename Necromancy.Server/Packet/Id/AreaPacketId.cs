@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x3A0E = 0x3A0E, // Doesn't crash
         recv_0x3C1F = 0x3C1F,
         recv_0x3C81 = 0x3C81, // Crash
-        //NoJP recv_0x3F2F = 0x3F2F, // Crash
+        recv_0x3F2F = 0x3F2F, // Crash //nojp?
         //NoJP recv_0x488D = 0x488D, // Crash
         recv_0x4978 = 0x4978, // Crash
         //NoJP recv_0x4981 = 0x4981, // Crash

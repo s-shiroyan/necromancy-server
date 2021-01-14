@@ -18,12 +18,12 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(1);
 
-            int numEntries = 0xC8;
+            int numEntries = 1 /*client.RefusalList.Count()*/;
             res.WriteInt32(numEntries);//less than or equal to 0xC8
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(3);
+                res.WriteInt32(i);
                 res.WriteFixedString("soul name", 49);
             }
 
@@ -31,7 +31,7 @@ namespace Necromancy.Server.Packet.Area
 
             for (int i = 0; i < numEntries; i++)
             {
-                res.WriteInt32(3);
+                res.WriteInt32(i);
                 res.WriteFixedString("soul name", 49);
             }
 
