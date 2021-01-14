@@ -39,11 +39,11 @@ namespace Necromancy.Server.Packet.Msg
         private void SendNotifyDataComplete(NecClient client)
         {
             IBuffer res2 = BufferProvider.Provide();
-            res2.WriteByte(0); //bool
-            res2.WriteUInt32(0); //prisonment settings??  .. Slot of character in prison and something else.
-            res2.WriteInt64(0);
-            res2.WriteByte(0);
-            res2.WriteUInt32(0);
+            res2.WriteByte(0); //bool Result
+            res2.WriteUInt32(0); //Wanted_dead_CharaId - for when a char got sent to prison.  Slot of character in prison
+            res2.WriteInt64(0b11111111); //Soul Premium Flags
+            res2.WriteByte(5/*client.Soul.CrimeLevel*/); //Crime Level
+            res2.WriteUInt32(1); //Soul State
             Router.Send(client, (ushort) MsgPacketId.recv_chara_notify_data_complete, res2, ServerType.Msg);
         }
 

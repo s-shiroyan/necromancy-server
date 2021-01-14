@@ -11,20 +11,22 @@ namespace Necromancy.Server.Packet.Receive.Area
         private readonly Map _map;
         private readonly MapPosition _mapPosition;
         private readonly NecSetting _setting;
+        private readonly NecClient _client;
 
-        public RecvMapChangeForce(Map map, MapPosition mapPosition, NecSetting setting)
+        public RecvMapChangeForce(Map map, MapPosition mapPosition, NecSetting setting, NecClient client)
             : base((ushort) AreaPacketId.recv_map_change_force, ServerType.Area)
         {
             _map = map;
             _mapPosition = mapPosition;
             _setting = setting;
+            _client = client;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
             //sub_484B00 map ip and connection
-            res.WriteInt32(_map.Id); //MapSerialID
+            res.WriteUInt32(_client.Character.InstanceId); //MapSerialID
             res.WriteInt32(_map.Id); //MapID
             res.WriteInt32(_map.Id); //MapID
             res.WriteByte(0);//new

@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
 
         public void LoadHonor(NecClient client)
         {
-            RecvGetHonor recvGetHonor = new RecvGetHonor(1 /*Adventurer Hopeful*/,client.Character.InstanceId, 1 /*alreadyKnown*/);
+            RecvGetHonor recvGetHonor = new RecvGetHonor(10010101 /*novice monster hunter*/,client.Character.InstanceId, 1 /*alreadyKnown*/);
             Router.Send(recvGetHonor, client);
         }
         public void LoadBattleStats(NecClient client)

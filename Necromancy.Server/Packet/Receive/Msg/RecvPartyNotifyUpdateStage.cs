@@ -7,18 +7,26 @@ namespace Necromancy.Server.Packet.Receive.Msg
 {
     public class RecvPartyNotifyUpdateStage : PacketResponse
     {
-        public RecvPartyNotifyUpdateStage()
+        private uint _charaInstanceId;
+        private int _dungeonId;
+        private byte _floor;
+        private int _chapterId;
+        public RecvPartyNotifyUpdateStage(uint charaInstanceId, int dungeonId, byte floor, int chapterId)
             : base((ushort) MsgPacketId.recv_party_notify_update_stage, ServerType.Msg)
         {
+            _charaInstanceId = charaInstanceId;
+            _dungeonId = dungeonId;
+            _floor = floor;
+            _chapterId = chapterId;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteInt32(0);
+            res.WriteUInt32(_charaInstanceId);  //chara instance id
+            res.WriteInt32(_dungeonId); //dungeon id (almost the same as map id, but multi level/map dungeons have 1 dungeon id, but 8 map IDs)
+            res.WriteByte(_floor); //dungeon lvl (pew pew pew... no wait.  probably the floor you're on)
+            res.WriteInt32(_chapterId); //chapter id
             return res;
         }
     }
