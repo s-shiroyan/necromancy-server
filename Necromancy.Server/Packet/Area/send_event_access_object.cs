@@ -605,17 +605,21 @@ namespace Necromancy.Server.Packet.Area
                     _character.Inventory.AddAvatarItem(inventoryItem);
 
                     RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-                    Router.Send(recvItemInstance, client);
+                    //Router.Send(recvItemInstance, client);
                     RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
-                    Router.Send(recvItemInstanceUnidentified, client);
+                    //Router.Send(recvItemInstanceUnidentified, client);
 
-                    itemStats(inventoryItem, client);
+                    //itemStats(inventoryItem, client);
 
 
                     res = BufferProvider.Provide();
+                    res.SetPositionStart();
                     res.WriteByte((byte)i); //idx
                     res.WriteInt32(DonkeyItems[i]); // item Serial id
                     res.WriteInt64(DonkeyPrices[i]); // item price
+                    res.WriteInt64(69); // new
+                    res.WriteInt64(692); // new
+                    res.WriteByte(1); //Bool new
                     res.WriteFixedString($"{inventoryItem.Item.Name}", 0x10); // ?
                     Router.Send(client, (ushort)AreaPacketId.recv_shop_notify_item, res, ServerType.Area);
 
@@ -623,7 +627,7 @@ namespace Necromancy.Server.Packet.Area
 
                 IBuffer res5 = BufferProvider.Provide();
                 res5.WriteCString($"{npcSpawn.Name}'s Goods");
-                Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
+                //Router.Send(client, (ushort)AreaPacketId.recv_shop_title_push, res5, ServerType.Area);
             }
         }
         private void AuctionHouse(NecClient client, NpcSpawn npcSpawn)

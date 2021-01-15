@@ -33,7 +33,7 @@ namespace Necromancy.Server.Packet.Area
             //Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
 
             res = BufferProvider.Provide();
-            res.WriteInt32(0);
+            res.WriteInt32(instanceID);
             Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res, ServerType.Area);
             //LOOT, -1, I don't have anything. , SYSTEM_WARNING,
             //LOOT, -10, no route target, SYSTEM_WARNING,
