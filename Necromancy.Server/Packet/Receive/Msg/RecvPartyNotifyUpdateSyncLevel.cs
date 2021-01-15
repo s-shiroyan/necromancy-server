@@ -7,16 +7,18 @@ namespace Necromancy.Server.Packet.Receive.Msg
 {
     public class RecvPartyNotifyUpdateSyncLevel : PacketResponse
     {
-        public RecvPartyNotifyUpdateSyncLevel()
+        private NecClient _client;
+        public RecvPartyNotifyUpdateSyncLevel(NecClient client)
             : base((ushort) MsgPacketId.recv_party_notify_update_sync_level, ServerType.Msg)
         {
+            _client = client;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteUInt32(_client.Character.InstanceId); 
+            res.WriteInt32(_client.Character.Level); //Level Limit
             return res;
         }
     }
