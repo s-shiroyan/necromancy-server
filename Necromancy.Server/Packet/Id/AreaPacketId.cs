@@ -1317,7 +1317,7 @@ namespace Necromancy.Server.Packet.Id
         send_package_item_check = 0x0,
         send_package_money_check = 0x0,
         send_party_cancel_party_auto_recruit = 0x0,
-        send_party_mentor_create = 0x0,
+        send_party_mentor_create = 0xC3EF,
         send_party_mentor_remove = 0x0,
         send_party_regist_party_auto_recruit = 0x0,
         send_quest_get_rogue_mission_quest_works = 0xDDD8,
