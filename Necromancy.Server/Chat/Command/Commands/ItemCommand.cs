@@ -74,6 +74,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 return;
             }
 
+            RecvSituationStart sitStart = new RecvSituationStart();
+            //Router.Send(sitStart, client);
+
             RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem,client);
             Router.Send(recvItemInstance, client);
             RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem,client);
@@ -81,6 +84,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             responses.Add(ChatResponse.CommandInfo(client, $"item {item.Id} in slot {inventoryItem.BagSlotIndex} in bag {inventoryItem.BagId}"));
             ConfigureItem(client, inventoryItem, itemLibrarySetting);
 
+            RecvSituationEnd sitEnd = new RecvSituationEnd();
+            //Router.Send(sitEnd, client);
         }
 
         public void RecvItemInstance(NecClient client, InventoryItem inventoryItem)
