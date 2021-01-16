@@ -6,9 +6,9 @@ namespace Necromancy.Server.Systems.Item
 {
     public interface IItemDao
     {
-        public ItemInstance InsertSpawnedItem(int baseId);
-        //public ItemInstance SelectSpawnedItem(int spawnId);
-        //public ItemInstance SelectSpawnedItem(int characterId, ItemLocation);
+        public SpawnedItem InsertSpawnedItem(int baseId);
+        public SpawnedItem SelectSpawnedItem(int spawnId);
+        public SpawnedItem SelectSpawnedItem(int characterId, ItemLocation);
         
     }
 }

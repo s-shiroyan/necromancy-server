@@ -6,9 +6,9 @@ namespace Necromancy.Server.Systems.Item
 {
     public class GemSlot
     {
-        private ItemInstance _gem;
+        private SpawnedItem _gem;
         public GemType Type{ get; set; }
-        public ItemInstance Gem { 
+        public SpawnedItem Gem { 
             get {
                 return _gem;
             }

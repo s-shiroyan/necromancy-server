@@ -21,14 +21,14 @@ namespace Necromancy.Server.Systems.Item
             _character = character;
         }
 
-        public ItemInstance Equip(ItemLocation location, ItemEquipSlot equipSlot)
+        public SpawnedItem Equip(ItemLocation location, ItemEquipSlot equipSlot)
         {
             
             throw new NotImplementedException();
 
             //_character.EquippedItems.Add()
         }
-        public ItemInstance Unequip(ItemEquipSlot equipSlot)
+        public SpawnedItem Unequip(ItemEquipSlot equipSlot)
         {
             
             throw new NotImplementedException();
@@ -40,23 +40,23 @@ namespace Necromancy.Server.Systems.Item
         /// <param name="baseId">The ID of the base item being spawned.</param>
         /// <returns>An new instance of the base item that is unidentified. Name will be "? <c>ItemType</c>"</returns>
         /// <exception cref="Necromancy.Server.Systems.Item.ItemException">Thrown when inventory is full or base ID does not exist.</exception>
-        public ItemInstance SpawnUnidentifiedItem(int baseId)
+        public SpawnedItem SpawnUnidentifiedItem(int baseId)
         {
             throw new NotImplementedException();
         }
-        public ItemInstance SpawnIdentifiedItem(int baseId)
+        public SpawnedItem SpawnIdentifiedItem(int baseId)
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> GetIdentifiedItems(params long[] spawnIds)
+        public List<SpawnedItem> GetIdentifiedItems(params long[] spawnIds)
         {            
             throw new NotImplementedException();
         }
-        public ItemInstance GetIdentifiedItem(ItemLocation location)
+        public SpawnedItem GetIdentifiedItem(ItemLocation location)
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> GetOwnedItems()
+        public List<SpawnedItem> GetOwnedItems()
         {
             throw new NotImplementedException();
         }
@@ -68,11 +68,11 @@ namespace Necromancy.Server.Systems.Item
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> Move(ItemLocation from, ItemLocation to, byte quantity)
+        public List<SpawnedItem> Move(ItemLocation from, ItemLocation to, byte quantity)
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> Repair(List<ItemLocation> locations)
+        public List<SpawnedItem> Repair(List<ItemLocation> locations)
         {
             throw new NotImplementedException();
         }
