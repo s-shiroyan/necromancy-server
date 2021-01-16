@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Chat.Command.Commands

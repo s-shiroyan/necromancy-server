@@ -1,14 +1,13 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdateEqMask : PacketResponse
     {
-        private readonly InventoryItem _inventoryItem;
+        private readonly Item _inventoryItem;
 
         public RecvItemUpdateEqMask(InventoryItem inventoryItem)
             : base((ushort) AreaPacketId.recv_item_update_eqmask, ServerType.Area)

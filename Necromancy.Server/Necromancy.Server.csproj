@@ -31,7 +31,7 @@
     </ItemGroup>
     <ItemGroup>
       <ContentWithTargetPath Remove="Client\Data\Settings\item_decrypted.csv" />
-      <ContentWithTargetPath Remove="Database\Script\data_item.sql" />
+      <ContentWithTargetPath Remove="Database\Script\data_item_library.sql" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Model\ItemModel\" />

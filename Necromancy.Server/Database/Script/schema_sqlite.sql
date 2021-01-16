@@ -287,12 +287,12 @@ CREATE TABLE IF NOT EXISTS `nec_ggate_spawn`
 
 --Inventory and Item Related tables
 
-CREATE IF NOT EXISTS TABLE "nec_base_item" (
-	"id"	INTEGER NOT NULL,
+CREATE TABLE "nec_item_library" (
+	"id"	INTEGER NOT NULL UNIQUE,
 	"item_type"	TEXT NOT NULL,
 	"quality"	TEXT NOT NULL,
 	"1"	TEXT,
-	"max_slots"	INTEGER NOT NULL,
+	"max_stack_size"	INTEGER,
 	"3"	TEXT,
 	"es_hand_r"	INTEGER NOT NULL DEFAULT 0,
 	"es_hand_"	INTEGER NOT NULL DEFAULT 0,
@@ -389,7 +389,7 @@ CREATE IF NOT EXISTS TABLE "nec_base_item" (
 	"96"	TEXT,
 	"status_malus"	TEXT,
 	"status_percent"	INTEGER,
-	"99"	TEXT,
+	"num_of_bag_slots"	TEXT,
 	"object_type"	TEXT NOT NULL DEFAULT 'NONE',
 	"equip_slot"	TEXT,
 	"102"	TEXT,
@@ -431,13 +431,15 @@ CREATE IF NOT EXISTS TABLE "nec_base_item" (
 	"field141"	TEXT,
 	"grade"	                        INTEGER NOT NULL DEFAULT 0,
 	"hardness"	                    INTEGER NOT NULL DEFAULT 0,
+	"unknown"	TEXT,
+	"scroll_id"	TEXT,  
 	"physical"	                    INTEGER NOT NULL DEFAULT 0,
 	"magical"	                    INTEGER NOT NULL DEFAULT 0,
 	"weight"	                    INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("id")
 );
 
-CREATE TABLE "nec_spawned_item" (
+CREATE TABLE "nec_item_instance" (
 	"id"	INTEGER NOT NULL,
 	"character_id"	INTEGER NOT NULL,
 	"zone"	INTEGER NOT NULL,
@@ -467,10 +469,10 @@ CREATE TABLE "nec_spawned_item" (
 	"gp"	INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
-	FOREIGN KEY("base_id") REFERENCES "nec_base_item"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
+	FOREIGN KEY("id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
-CREATE UNIQUE INDEX "item_location" ON "nec_spawned_item" (
+CREATE UNIQUE INDEX "item_location" ON "nec_item_instance" (
 	"character_id",
 	"zone",
 	"bag",

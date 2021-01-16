@@ -8,7 +8,7 @@ namespace Necromancy.Server.Systems.Item
     {
         public SpawnedItem InsertSpawnedItem(int baseId);
         public SpawnedItem SelectSpawnedItem(int spawnId);
-        public SpawnedItem SelectSpawnedItem(int characterId, ItemLocation);
+        public SpawnedItem SelectSpawnedItem(int characterId, ItemLocation itemLocation);
         
     }
 }
