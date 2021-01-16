@@ -17,13 +17,11 @@ namespace Necromancy.Server.Chat.Command.Commands
             List<ChatResponse> responses)
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(100000000000);
+            res.WriteInt64(999999999);
             res.WriteByte(0);//bool
-            Router.Send(client, (ushort)AreaPacketId.recv_self_exp_notify, res, ServerType.Area);
+            //Router.Send(client, (ushort)AreaPacketId.recv_self_exp_notify, res, ServerType.Area);
 
-            res = BufferProvider.Provide();
-            res.WriteInt64(10000);
-            //Router.Send(client, (ushort)AreaPacketId.recv_self_money_notify, res, ServerType.Area);
+           
 
              res = BufferProvider.Provide();
             res.WriteInt32(1);
@@ -71,7 +69,72 @@ namespace Necromancy.Server.Chat.Command.Commands
                 LOOT	-1500	No permission to loot
             */
 
+            res = BufferProvider.Provide();
+            res.WriteInt64(10001);
+            res.WriteInt64(10002);
+            res.WriteInt64(10003);
+            res.WriteInt64(10004);
+            res.WriteInt64(10005);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0xFDCB, res, ServerType.Area);
 
+            res = BufferProvider.Provide();
+            res.WriteInt32(100101);
+            res.WriteByte(1);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0xEEB7, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt32(100101);
+            res.WriteCString("helo"); //0x31
+            res.WriteCString("derp"); //0x5B
+            res.WriteByte(2);
+            res.WriteInt32(100101);
+            res.WriteInt32(100101);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x9CA1, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt32(100101);
+            res.WriteByte(1);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x7B86, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt32(100101);
+            res.WriteInt32(100101);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x7697, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt32(100101);
+            res.WriteInt32(100101);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x755C, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(2);
+            res.WriteFloat(5);
+            res.WriteCString("halp");//0x31
+            res.WriteCString("derp");//0x5B	
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x531B, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt16(1);
+            res.WriteUInt32(5);
+            res.WriteInt64(10001);
+            res.WriteInt64(10001);
+            res.WriteInt64(10001);
+            res.WriteByte(1);
+            res.WriteFixedString("Test", 0x10);
+            res.WriteInt32(23);
+            res.WriteInt16(1);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x5418, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt32(2);
+            Router.Send(client, (ushort)AreaPacketId.recv_situation_start, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            res.WriteInt64(90000000);
+            Router.Send(client, (ushort)AreaPacketId.recv_self_bonus_money_notify, res, ServerType.Area);
+            res = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res, ServerType.Area);
         }
 
         public override AccountStateType AccountState => AccountStateType.User;

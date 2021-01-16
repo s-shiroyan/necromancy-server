@@ -31,22 +31,26 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
+            IBuffer res = BufferProvider.Provide();
+            
 
-            int charId = client.Character.Id;
-            Logger.Debug(charId.ToString());
             const int NUMBER = 10;
-            for(int i = 0; i < NUMBER; i++) { 
-                IBuffer res = BufferProvider.Provide();
+            for(int i = 0; i < NUMBER; i++) {
+                res = BufferProvider.Provide();
+                res.WriteInt32(2);
+                Router.Send(client, (ushort)AreaPacketId.recv_situation_start, res, ServerType.Area);
+
+                res = BufferProvider.Provide();
                 ulong instanceId = (ulong)(10001 + i);
                 res.WriteUInt64(instanceId);        //V|SPAWN ID
                 res.WriteInt32(100101 + i);               //V|BASE ID
                 res.WriteByte(1);                           //V|QUANTITY
                 res.WriteInt32(2);                   //V|STATUSES
                 res.WriteFixedString("赤", 0x10);             //UNKNOWN - ITEM TYPE? decrypt key?
-                res.WriteByte((byte)(66));                     //V|ZONE 66- treasure box
+                res.WriteByte((byte)(0));                     //V|ZONE 66- treasure box
                 res.WriteByte(0);                           //V|BAG
                 res.WriteInt16((short)i);                   //V|SLOT
-                res.WriteInt32(charId);                     //unknown
+                res.WriteInt32(0);                     //unknown
                 res.WriteInt32(0);                          //V|EQUIP SLOT
                 res.WriteInt32(5);                          //V|CURRENT DURABILITY
                 res.WriteByte((byte)7);                     //v|ENHANCEMENT LEVEL
@@ -162,14 +166,19 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Router.Send(client, (ushort)AreaPacketId.recv_item_instance, res, ServerType.Area);
 
                 res = BufferProvider.Provide();
+                Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res, ServerType.Area);
+
+                res = BufferProvider.Provide();
                 res.WriteUInt64(instanceId);
                 res.WriteByte(0);
                 res.WriteByte(0);
                 res.WriteInt16((short)i);
                 //Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
             }
-       
 
-    }
+            
+
+
+        }
     }
 }

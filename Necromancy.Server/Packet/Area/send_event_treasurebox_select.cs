@@ -21,16 +21,26 @@ namespace Necromancy.Server.Packet.Area
             byte fromBagId = packet.Data.ReadByte();
             short fromSlot = packet.Data.ReadInt16();
 
+
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(10003);
-            res.WriteByte(0);
-            res.WriteByte(0);
-            res.WriteInt16(2);
-            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+            res.WriteInt32(0);
+            Router.Send(client.Map, (ushort) AreaPacketId.recv_event_treasurebox_select_r, res, ServerType.Area);
+
 
             res = BufferProvider.Provide();
             res.WriteInt32(0);
-            Router.Send(client.Map, (ushort) AreaPacketId.recv_event_treasurebox_select_r, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_situation_start, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            res.WriteInt64(10002);
+            res.WriteByte(0);
+            res.WriteByte(0);
+            res.WriteInt16(3);
+            Router.Send(client, (ushort)AreaPacketId.recv_item_update_place, res, ServerType.Area);
+
+            res = BufferProvider.Provide();
+            Router.Send(client, (ushort)AreaPacketId.recv_situation_end, res, ServerType.Area);
+
         }
     }
 }
