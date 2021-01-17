@@ -38,47 +38,49 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort)AreaPacketId.recv_0xEDE7, res, ServerType.Area);
 
 
+
+
             //one int32 section
             res.WriteInt32(0);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_0x218A, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x2B7A, res, ServerType.Area); Thread.Sleep(400);
-            //Router.Send(client, (ushort)AreaPacketId.recv_0x1489, res, ServerType.Area);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x3A0E, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x3C1F, res, ServerType.Area); Thread.Sleep(400);
-            //Router.Send(client, (ushort)AreaPacketId.recv_0x3F2F, res, ServerType.Area); Thread.Sleep(400); //causes crash
+            Router.Send(client, (ushort)MsgPacketId.recv_0x6C94, res, ServerType.Msg);
+            Router.Send(client, (ushort)MsgPacketId.recv_0x831C, res, ServerType.Msg);
 
-            Router.Send(client, (ushort)AreaPacketId.recv_0x4CF3, res, ServerType.Area);Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x50D1, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x735E, res, ServerType.Area); Thread.Sleep(400);
-            //Router.Send(client, (ushort)AreaPacketId.recv_0x7B86, res, ServerType.Area); Thread.Sleep(400);  //causes crash
-            Router.Send(client, (ushort)AreaPacketId.recv_0x8364, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x8487, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x8549, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x916, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xB586, res, ServerType.Area); Thread.Sleep(400);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x218A, res, ServerType.Area); Thread.Sleep(2000); //007B4D90 <wizp | C2 0400          | ret 4
+            Router.Send(client, (ushort)AreaPacketId.recv_0x2B7A, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x3A0E, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x3C1F, res, ServerType.Area); Thread.Sleep(2000);
+            //Router.Send(client, (ushort)AreaPacketId.recv_0x3F2F, res, ServerType.Area); Thread.Sleep(2000); //Not a JP Op code
 
-            Router.Send(client, (ushort)AreaPacketId.recv_0xC055, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x8549, res, ServerType.Area); Thread.Sleep(400);
-            //Router.Send(client, (ushort)AreaPacketId.recv_0xCF29, res, ServerType.Area); Thread.Sleep(400);  //causes crash
-            Router.Send(client, (ushort)AreaPacketId.recv_0xD909, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xDA4A, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xE7CF, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xF024, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xFA0B, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xFB79, res, ServerType.Area); Thread.Sleep(400);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x4CF3, res, ServerType.Area);Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x50D1, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x735E, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x8364, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x8487, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x8549, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x916, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xB586, res, ServerType.Area); Thread.Sleep(2000);
+
+            Router.Send(client, (ushort)AreaPacketId.recv_0xC055, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x8549, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xD909, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xDA4A, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xE7CF, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xF024, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xFA0B, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xFB79, res, ServerType.Area); Thread.Sleep(2000);
 
             //double int32 section
-            res = BufferProvider.Provide(); Thread.Sleep(400);
-            res.WriteInt32(0); Thread.Sleep(400);
-            res.WriteInt32(0); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x4D12, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x1489, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x692A, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x755C, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x7697, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0x97D9, res, ServerType.Area); Thread.Sleep(400);
-            Router.Send(client, (ushort)AreaPacketId.recv_0xCF29, res, ServerType.Area); Thread.Sleep(400);
+            res = BufferProvider.Provide(); Thread.Sleep(2000);
+            res.WriteInt32(0); Thread.Sleep(2000);
+            res.WriteInt32(0); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x4D12, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x1489, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x692A, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x755C, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x7697, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x97D9, res, ServerType.Area); Thread.Sleep(2000);
+            Router.Send(client, (ushort)AreaPacketId.recv_0xCF29, res, ServerType.Area); Thread.Sleep(2000);
 
 
 
@@ -87,26 +89,21 @@ namespace Necromancy.Server.Chat.Command.Commands
             res = BufferProvider.Provide();
             res.WriteUInt32(client.Character.InstanceId);
             res.WriteInt16(0); 
-            Router.Send(client, (ushort)AreaPacketId.recv_0x4ABB, res, ServerType.Area); Thread.Sleep(400);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x4ABB, res, ServerType.Area); Thread.Sleep(2000);
 
             //int32 byte section
             res = BufferProvider.Provide(); 
             res.WriteUInt32(client.Character.InstanceId);
             res.WriteByte(0);
-            //Router.Send(client, (ushort)AreaPacketId.recv_0xB586, res, ServerType.Area); Thread.Sleep(400);   //causes crash
-            Router.Send(client, (ushort)AreaPacketId.recv_0xEEB7, res, ServerType.Area); Thread.Sleep(400);
+            Router.Send(client, (ushort)AreaPacketId.recv_0x7B86, res, ServerType.Area); Thread.Sleep(2000);
 
+            Router.Send(client, (ushort)AreaPacketId.recv_0xEEB7, res, ServerType.Area); Thread.Sleep(2000);
 
-            //int32 cstring section
-            res = BufferProvider.Provide();
-            res.WriteUInt32(client.Character.InstanceId);
-            res.WriteCString("This is just a tribute!!!");//find max size
-            //Router.Send(client, (ushort)AreaPacketId.recv_0xB684, res, ServerType.Area); Thread.Sleep(400);  //causes crash
 
             //cstring section
-            res = BufferProvider.Provide(); Thread.Sleep(400);
-            res.WriteCString("This is not the greatest"); Thread.Sleep(400);//find max size
-            //Router.Send(client, (ushort)AreaPacketId.recv_0xB586, res, ServerType.Area); Thread.Sleep(400);  //causes crash
+            res = BufferProvider.Provide(); Thread.Sleep(2000);
+            res.WriteCString("This is not the greatest test in the world! ohh no, this is just a Tribuuuute"); Thread.Sleep(2000);//find max size
+            Router.Send(client, (ushort)AreaPacketId.recv_0xE983, res, ServerType.Area); 
 
 
         }
