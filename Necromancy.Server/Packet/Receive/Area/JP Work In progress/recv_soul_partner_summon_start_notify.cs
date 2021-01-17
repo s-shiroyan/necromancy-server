@@ -16,6 +16,15 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             //  Dude you forgot to write down the structure.  ...... go find it again in xdbg.....
+            res.WriteInt32(0);
+            res.WriteInt32(0);
+            res.WriteInt64(0);
+            res.WriteInt32(0);
+            res.WriteCString("Failboat"); 
+            res.WriteByte(0);
+            res.WriteInt32(0);
+            res.WriteByte(0);
+            res.WriteByte(0);
             return res;
         }
     }

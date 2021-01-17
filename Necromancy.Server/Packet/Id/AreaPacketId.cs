@@ -7,7 +7,7 @@ namespace Necromancy.Server.Packet.Id
     {
         // Recv OP Codes - Switch: 0x00497420 - ordered alphabetically 
         recv_0x916 = 0x916,
-        //NoJP recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos
+        //NoJP recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos  Moved to message
         recv_0x10DA = 0x10DA, // Crash
         recv_0x1489 = 0x1489, // Crash
         recv_0x166B = 0x166B, // Crash

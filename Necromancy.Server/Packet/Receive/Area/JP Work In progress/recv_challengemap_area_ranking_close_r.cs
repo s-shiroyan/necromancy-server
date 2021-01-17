@@ -15,6 +15,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
             //4th miss.  check xdbg
             return res;
         }

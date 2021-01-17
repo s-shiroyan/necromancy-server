@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Msg
             HONOR,  2,  You may not change your equipped title while your character is lost,SYSTEM_WARNING,
              */
 
-            //Router.Send(client, (ushort) AreaPacketId.recv_equip_honor_r, res, ServerType.Area);
+            Router.Send(client, (ushort) AreaPacketId.recv_equip_honor_r, res, ServerType.Area);
 
             res = BufferProvider.Provide();
             res.WriteUInt32(client.Character.InstanceId);
