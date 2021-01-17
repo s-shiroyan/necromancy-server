@@ -71,6 +71,20 @@ namespace Necromancy.Server.Systems.Item
         public int EnchantId { get; set; }
 
         public short GP { get; set; }
+        /// <summary>
+        /// Item is provided with 'Protect' status until this date in seconds. 
+        /// Maximum year is 2038 because it is an integer.
+        /// </summary>
+        public int ProtectUntil { get; set; }
+
+        public short PlusPhysical { get; set; }
+        public short PlusMagical { get; set; }
+        public short PlusWeight { get; set; }
+        public short PlusDurability { get; set; }
+        public short PlusGP { get; set; }
+        public short PlusRangedEff { get; set; }
+        public short PlusReserviorEff { get; set; }
+
 
         /// <summary>
         /// Helper function to check if the item is identified or not.
