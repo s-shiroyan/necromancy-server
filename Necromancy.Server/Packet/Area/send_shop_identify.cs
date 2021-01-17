@@ -23,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
 
             ItemLocation location = new ItemLocation(zone, bag, slot);
             ItemService itemService = new ItemService(client.Character);
-            SpawnedItem identifiedItem;
+            ItemInstance identifiedItem;
             int error = 0;
 
             try {  

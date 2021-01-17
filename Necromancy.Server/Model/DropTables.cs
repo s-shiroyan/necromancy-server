@@ -85,7 +85,7 @@ namespace Necromancy.Server.Model
                     return null;
                 }
 
-                BaseItem item = new BaseItem(); //  Need to get fully populated Item repository
+                ItemBase item = new ItemBase(); //  Need to get fully populated Item repository
            //     item.IconType = 45;
            //     item.ItemType = 1;
                 dropItem = new DropItem(1, item);
@@ -157,10 +157,10 @@ namespace Necromancy.Server.Model
 
     public class DropItem
     {
-        public BaseItem Item;
+        public ItemBase Item;
         public int NumItems;
 
-        public DropItem(int numItems, BaseItem item)
+        public DropItem(int numItems, ItemBase item)
         {
             Item = item;
             NumItems = numItems;

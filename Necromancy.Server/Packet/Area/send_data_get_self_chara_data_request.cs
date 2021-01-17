@@ -4,7 +4,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 using System.Collections.Generic;
@@ -24,7 +23,7 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            LoadInventory(client);
+            //LoadInventory(client);
 
             SendDataGetSelfCharaData(client);
 
@@ -67,12 +66,12 @@ namespace Necromancy.Server.Packet.Area
 
             // total stat level includes bonus'?
             res.WriteUInt16(client.Character.Strength); // str
-            res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short) (client.Character.dexterity + 3)); // dex
-            res.WriteUInt16(client.Character.agility); // agi
-            res.WriteUInt16(client.Character.intelligence); // int
-            res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short) (client.Character.luck + 4)); // luk
+            res.WriteUInt16(client.Character.Vitality); // vit
+            res.WriteInt16((short) (client.Character.Dexterity + 3)); // dex
+            res.WriteUInt16(client.Character.Agility); // agi
+            res.WriteUInt16(client.Character.Intelligence); // int
+            res.WriteUInt16(client.Character.Piety); // pie
+            res.WriteInt16((short) (client.Character.Luck + 4)); // luk
 
             // mag atk atrb
             res.WriteInt16(5); // fire
@@ -111,7 +110,7 @@ namespace Necromancy.Server.Packet.Area
 
             // gold and alignment?
             res.WriteInt64(client.Character.AdventureBagGold); // gold
-            res.WriteUInt32(client.Character.Alignmentid); // AlignmentId
+            res.WriteUInt32(client.Character.AlignmentId); // AlignmentId
             res.WriteInt32(6000); // lawful
             res.WriteInt32(5000); // neutral
             res.WriteInt32(6100); // chaos
@@ -124,12 +123,12 @@ namespace Necromancy.Server.Packet.Area
 
             // characters stats
             res.WriteUInt16(client.Character.Strength); // str
-            res.WriteUInt16(client.Character.vitality); // vit
-            res.WriteInt16((short) (client.Character.dexterity)); // dex
-            res.WriteUInt16(client.Character.agility); // agi
-            res.WriteUInt16(client.Character.intelligence); // int
-            res.WriteUInt16(client.Character.piety); // pie
-            res.WriteInt16((short) (client.Character.luck)); // luk
+            res.WriteUInt16(client.Character.Vitality); // vit
+            res.WriteInt16((short) (client.Character.Dexterity)); // dex
+            res.WriteUInt16(client.Character.Agility); // agi
+            res.WriteUInt16(client.Character.Intelligence); // int
+            res.WriteUInt16(client.Character.Piety); // pie
+            res.WriteInt16((short) (client.Character.Luck)); // luk
 
             // nothing
             res.WriteInt16(1);
@@ -270,19 +269,19 @@ namespace Necromancy.Server.Packet.Area
             res.WriteInt32(numEntries); //has to be less than 0x19(max equipment slots)
 
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, client.Character, numEntries);
+            //LoadEquip.SlotSetup(res, client.Character, numEntries);
 
 
             //sub_483420
             res.WriteInt32(numEntries); //has to be less than 0x19
 
             //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, client.Character, numEntries);
+            //EquipItems(res, client.Character, numEntries);
 
             //sub_483420
             res.WriteInt32(numEntries);
 
-            LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
+            //LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
 
             //sub_483420
             numEntries = 1;
@@ -304,23 +303,23 @@ namespace Necromancy.Server.Packet.Area
         }
 
 
-        public void LoadInventory(NecClient client)
-        {
-            //populate soul and character inventory from database.
-            List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterIdEquipped(client.Character.Id);
-            foreach (InventoryItem inventoryItem in inventoryItems)
-            {
-                Item item = Server.Items[inventoryItem.ItemId];
-                inventoryItem.Item = item;
-                if (inventoryItem.State > 0 & inventoryItem.State < 262145) //this is redundant. could be removed for  better performance. 
-                {
-                    client.Character.Inventory.Equip(inventoryItem);
-                    inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-                }
+        //public void LoadInventory(NecClient client)
+        //{
+        //    //populate soul and character inventory from database.
+        //    List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterIdEquipped(client.Character.Id);
+        //    foreach (InventoryItem inventoryItem in inventoryItems)
+        //    {
+        //        Item item = Server.Items[inventoryItem.ItemId];
+        //        inventoryItem.Item = item;
+        //        if (inventoryItem.State > 0 & inventoryItem.State < 262145) //this is redundant. could be removed for  better performance. 
+        //        {
+        //            client.Character.Inventory.Equip(inventoryItem);
+        //            inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
 
     }
 }

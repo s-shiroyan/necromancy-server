@@ -45,12 +45,12 @@ namespace Necromancy.Server.Packet.Receive.Area
 
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.SlotSetup(res, _character, numEntries);
+            //LoadEquip.SlotSetup(res, _character, numEntries);
 
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
             //Consolidated Frequently Used Code
-            LoadEquip.EquipItems(res, _character, numEntries);
+            //LoadEquip.EquipItems(res, _character, numEntries);
 
             //Equipment bitmask 
             res.WriteInt32(numEntries); // cmp to 0x10 = 16

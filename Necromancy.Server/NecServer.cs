@@ -32,7 +32,6 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Discord;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
@@ -54,7 +53,6 @@ namespace Necromancy.Server
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
         public MapLookup Maps { get; }
-        public Dictionary<int, Item> Items { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
@@ -80,7 +78,6 @@ namespace Necromancy.Server
             Instances = new InstanceGenerator(this);
             Clients = new ClientLookup();
             Maps = new MapLookup();
-            Items = new Dictionary<int, Item>();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
@@ -114,7 +111,6 @@ namespace Necromancy.Server
             );
 
             LoadChatCommands();
-            LoadDatabaseObjects();
             LoadHandler();
         }
 
@@ -255,25 +251,25 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new GetCommand(this));
         }
 
-        private void LoadDatabaseObjects()
-        {
-            List<MapData> maps = Database.SelectMaps();
-            foreach (MapData mapData in maps)
-            {
-                Map map = new Map(mapData, this);
-                Maps.Add(map);
-            }
+        //private void LoadDatabaseObjects()
+        //{
+        //    List<MapData> maps = Database.SelectMaps();
+        //    foreach (MapData mapData in maps)
+        //    {
+        //        Map map = new Map(mapData, this);
+        //        Maps.Add(map);
+        //    }
 
-            Logger.Info($"Maps: {maps.Count}");
+        //    Logger.Info($"Maps: {maps.Count}");
 
-            List<Item> items = Database.SelectItems();
-            foreach (Item item in items)
-            {
-                Items.Add(item.Id, item);
-            }
+        //    List<Item> items = Database.SelectItems();
+        //    foreach (Item item in items)
+        //    {
+        //        Items.Add(item.Id, item);
+        //    }
 
-            Logger.Info($"Items: {items.Count}");
-        }
+        //    Logger.Info($"Items: {items.Count}");
+        //}
 
         private void LoadHandler()
         {
@@ -484,7 +480,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_add_item(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive_event(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
-            _areaConsumer.AddHandler(new Send_shop_repair(this));
+            _areaConsumer.AddHandler(new send_shop_repair(this));
             _areaConsumer.AddHandler(new send_storage_draw_item(this));
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND

@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
             ItemZone zone = (ItemZone) packet.Data.ReadByte();
             byte bag = packet.Data.ReadByte();
             short slot = packet.Data.ReadInt16();
-            ItemEquipSlot equipSlot = (ItemEquipSlot) packet.Data.ReadByte();
+            ItemEquipSlots equipSlot = (ItemEquipSlots) packet.Data.ReadByte();
             
             Logger.Debug($"storageType:{zone} bagId:{bag} bagSlotIndex:{slot} equipBit:{equipSlot}");
 
@@ -29,7 +29,7 @@ namespace Necromancy.Server.Packet.Area
 
             try
             {
-                SpawnedItem equippedItem = itemService.Equip(location, equipSlot);                
+                ItemInstance equippedItem = itemService.Equip(location, equipSlot);                
                 RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(client, equippedItem);
                 Router.Send(recvItemUpdateEqMask);
             }

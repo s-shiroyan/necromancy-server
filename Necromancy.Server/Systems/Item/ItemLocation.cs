@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Necromancy.Server.Systems.Item
 {
-    public class ItemLocation
+    public readonly struct ItemLocation
     {
         public ItemLocation(ItemZone zone, byte bag, short slot)
         {
@@ -13,8 +13,8 @@ namespace Necromancy.Server.Systems.Item
             Slot = slot;
         }
 
-        public ItemZone Zone { get; private set; }
-        public byte Bag { get; private set; }
-        public short Slot { get; private set; }
+        public ItemZone Zone { get; }
+        public byte Bag { get; }
+        public short Slot { get; }
     }
 }

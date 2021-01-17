@@ -5,11 +5,17 @@ using System.Text;
 namespace Necromancy.Server.Systems.Item
 {
     [Flags]
-    public enum ItemRequiredClasses
+    public enum Classes
     {
         Fighter,
         Thief,
         Mage,
-        Priest
+        Priest,
+        Samurai,
+        Bishop,
+        Ninja,
+        Lord,
+        Clown,
+        Alchemist
     }
 }

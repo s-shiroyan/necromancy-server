@@ -24,11 +24,11 @@ namespace Necromancy.Test.Systems
         public void TestSpawnUnidentified()
         {
             const int VALID_BASE_ID = 5;
-            SpawnedItem newUnidentifiedItem;
+            ItemInstance newUnidentifiedItem;
 
             newUnidentifiedItem = _itemService.SpawnUnidentifiedItem(VALID_BASE_ID);
 
-            Assert.Equal(VALID_BASE_ID, newUnidentifiedItem.BaseId);
+            Assert.Equal(VALID_BASE_ID, newUnidentifiedItem.BaseID);
         }
 
         [Fact]

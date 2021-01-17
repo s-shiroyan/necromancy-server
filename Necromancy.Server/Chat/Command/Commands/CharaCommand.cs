@@ -222,15 +222,15 @@ namespace Necromancy.Server.Chat.Command.Commands
                     int numEntries = 19;
                     res14.WriteInt32(numEntries); //less than or equal to 19
                     //Consolidated Frequently Used Code
-                    LoadEquip.SlotSetup(res14, character2, numEntries);
+                    //LoadEquip.SlotSetup(res14, character2, numEntries);
 
                     res14.WriteInt32(numEntries);
                     //Consolidated Frequently Used Code
-                    LoadEquip.EquipItems(res14, character2, numEntries);
+                    //LoadEquip.EquipItems(res14, character2, numEntries);
 
                     res14.WriteInt32(numEntries);
                     //Consolidated Frequently Used Code
-                    LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
+                    //LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
                     //Traits
                     res14.WriteUInt32(character2.RaceId); //race

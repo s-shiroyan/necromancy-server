@@ -8,24 +8,32 @@ namespace Necromancy.Server.Systems.Item
     {
         public const int MAX_GEM_SLOTS = 3;
 
-        public ItemInstance(long spawnId, ItemLocation location)
+        /// <summary>
+        /// An instance of a base item. Holds mostly changable values.
+        /// </summary>
+        /// <param name="instanceId">Item's generated ID from the database.</param>
+        /// <param name="location">The location of the item.</param>
+        public ItemInstance(ulong instanceId, ItemLocation location)
         {
-            SpawnId = spawnId;
+            InstanceID = instanceId;
             Location = location;
         }
-
         /// <summary>
-        /// ID Generated when item is spawned.
+        /// ID Generated when item is created from a base item template.
         /// </summary>
-        public long SpawnId { get; private set; }
+        public ulong InstanceID { get; private set; }
         /// <summary>
-        /// Owner's character's ID.
+        /// Owner's character ID.
         /// </summary>
-        public int OwnerID { get; set; }
+        public uint OwnerID { get; set; }
         /// <summary>
-        /// Item's displayed name when unidentified. Typically "? <c>ItemType</c>".
+        /// Item's displayed name when unidentified. Always "? <c>ItemType</c>".
         /// </summary>
-        public string UnidentifiedName { get; set; }
+        public string UnidentifiedName { 
+            get {
+                return "? " + Type.ToString();
+            }
+        }
 
         public byte Quantity { get; set; }
 
@@ -33,7 +41,7 @@ namespace Necromancy.Server.Systems.Item
 
         public ItemLocation Location { get; private set; }
 
-        public ItemEquipSlot CurrentEquipSlot { get; set; }
+        public ItemEquipSlots CurrentEquipSlot { get; set; }
         /// <summary>
         /// Current durability remaining of the item.
         /// </summary>
@@ -43,6 +51,8 @@ namespace Necromancy.Server.Systems.Item
 
         public byte SpecialForgeLevel { get; set; }
 
+        public string TalkRingName { get; set; }
+
         public short Physical { get; set; }
 
         public short Magical { get; set; }
@@ -50,6 +60,11 @@ namespace Necromancy.Server.Systems.Item
         public int MaximumDurability { get; set; }
 
         public byte Hardness { get; set; }
+
+        /// <summary>
+        /// Weight in thousandths.
+        /// </summary>
+        public int Weight { get; set; }
         
         public GemSlot[] GemSlots { get; set; }
 
@@ -57,6 +72,9 @@ namespace Necromancy.Server.Systems.Item
 
         public short GP { get; set; }
 
+        /// <summary>
+        /// Helper function to check if the item is identified or not.
+        /// </summary>
         public bool IsIdentified { 
             get
             {

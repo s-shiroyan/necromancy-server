@@ -20,10 +20,10 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            ItemEquipSlot equipSlot = (ItemEquipSlot) packet.Data.ReadInt32(); 
+            ItemEquipSlots equipSlot = (ItemEquipSlots) packet.Data.ReadInt32(); 
             
             ItemService itemService = new ItemService(client.Character);
-            SpawnedItem unequippedItem;
+            ItemInstance unequippedItem;
             int error = 0;
 
             try

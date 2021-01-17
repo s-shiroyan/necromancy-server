@@ -2,31 +2,32 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Item;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdateEqMask : PacketResponse
     {
-        private readonly Item _inventoryItem;
+        private readonly ItemInstance _itemInstance;
 
-        public RecvItemUpdateEqMask(InventoryItem inventoryItem)
+        public RecvItemUpdateEqMask(NecClient client, ItemInstance itemInstance)
             : base((ushort) AreaPacketId.recv_item_update_eqmask, ServerType.Area)
         {
-            _inventoryItem = inventoryItem;
+            _itemInstance = itemInstance;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong) _inventoryItem.Id);
-            res.WriteInt32((int) _inventoryItem.CurrentEquipmentSlotType);
+            res.WriteUInt64(_itemInstance.InstanceID);
+            res.WriteInt32((int)_itemInstance.CurrentEquipSlot);
 
-            res.WriteInt32(_inventoryItem.Item.Id); //Sets your Item ID per Iteration
+            res.WriteInt32(_itemInstance.BaseID); //Sets your Item ID per Iteration
             res.WriteByte(0); //hair
             res.WriteByte(0); //color
             res.WriteByte(0); //face
 
-            res.WriteInt32(_inventoryItem.Item.Id); //testing (Theory, Icon related)
+            res.WriteInt32(_itemInstance.BaseID); //testing (Theory, Icon related)
             res.WriteByte(0); //hair
             res.WriteByte(0); //color
             res.WriteByte(0); //face

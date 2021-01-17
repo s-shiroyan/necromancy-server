@@ -35,8 +35,8 @@ namespace Necromancy.Server.Packet.Area
                 RecvSelfMoneyNotify recvSelfMoneyNotify = new RecvSelfMoneyNotify(client, currentGold);
                 Router.Send(recvSelfMoneyNotify);
 
-                List<SpawnedItem> repairedItems = itemService.Repair(itemLocations);
-                foreach (SpawnedItem repairedItem in repairedItems)
+                List<ItemInstance> repairedItems = itemService.Repair(itemLocations);
+                foreach (ItemInstance repairedItem in repairedItems)
                 {
                     RecvItemUpdateDurability recvItemUpdateDurability = new RecvItemUpdateDurability(client, repairedItem);
                     Router.Send(recvItemUpdateDurability);

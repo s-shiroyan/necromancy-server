@@ -8,8 +8,8 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdatePlace : PacketResponse
     {
-        private readonly SpawnedItem _movedItem;
-        public RecvItemUpdatePlace(NecClient client, SpawnedItem movedItem)
+        private readonly ItemInstance _movedItem;
+        public RecvItemUpdatePlace(NecClient client, ItemInstance movedItem)
             : base((ushort) AreaPacketId.recv_item_update_place, ServerType.Area)
         {
             _movedItem = movedItem;
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(_movedItem.SpawnId);
+            res.WriteUInt64(_movedItem.InstanceID);
             res.WriteByte((byte)_movedItem.Location.Zone);
             res.WriteByte(_movedItem.Location.Bag);
             res.WriteInt16(_movedItem.Location.Slot);

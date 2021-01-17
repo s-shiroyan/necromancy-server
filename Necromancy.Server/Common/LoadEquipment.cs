@@ -12,8 +12,8 @@ namespace Necromancy.Server.Common
 
         public static void BasicTraits(IBuffer res, Character myCharacter)
         {
-            res.WriteUInt32(myCharacter.Raceid); //race
-            res.WriteUInt32(myCharacter.Sexid);
+            res.WriteUInt32(myCharacter.RaceId); //race
+            res.WriteUInt32(myCharacter.SexId);
             res.WriteByte(myCharacter.HairId); //hair
             res.WriteByte(myCharacter.HairColorId); //color
             res.WriteByte(myCharacter.FaceId); //face

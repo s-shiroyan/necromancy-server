@@ -29,8 +29,8 @@ namespace Necromancy.Server.Model
         // TODO sort this messy class out...
         
         //Basic traits
-        public uint Raceid { get; set; }
-        public uint Sexid { get; set; }
+        public uint RaceId { get; set; }
+        public uint SexId { get; set; }
         public byte HairId { get; set; }
         public byte HairColorId { get; set; }
         public byte FaceId { get; set; }
@@ -38,14 +38,14 @@ namespace Necromancy.Server.Model
 
 
         //Stats
-        public uint Alignmentid { get; set; }
+        public uint AlignmentId { get; set; }
         public ushort Strength { get; set; }
-        public ushort vitality { get; set; }
-        public ushort dexterity { get; set; }
-        public ushort agility { get; set; }
-        public ushort intelligence { get; set; }
-        public ushort piety { get; set; }
-        public ushort luck { get; set; }
+        public ushort Vitality { get; set; }
+        public ushort Dexterity { get; set; }
+        public ushort Agility { get; set; }
+        public ushort Intelligence { get; set; }
+        public ushort Piety { get; set; }
+        public ushort Luck { get; set; }
         public BaseStat Hp;
         public BaseStat Mp;
         public BaseStat Od;
@@ -77,7 +77,7 @@ namespace Necromancy.Server.Model
         public int MapId { get; set; }
 
         //Temporary Value Holders
-        public int stepCount { get; set; }
+        public int StepCount { get; set; }
         public long AdventureBagGold { get; set; }
         public byte soulFormState { get; set; }
         public int[] EquipId { get; set; }
@@ -97,7 +97,7 @@ namespace Necromancy.Server.Model
         public bool secondInnAccess { get; set; }
 
         public uint killerInstanceId { get; private set; }
-        public bool hadDied { get; set; }
+        public bool HasDied { get; set; }
         public uint DeadBodyInstanceId { get; set; }
         public int Channel { get; set; }
         public int beginnerProtection { get; set; }
@@ -143,7 +143,7 @@ namespace Necromancy.Server.Model
             takeover = false;
             skillStartCast = 0;
             battleAnim = 0;
-            hadDied = false;
+            HasDied = false;
             State = CharacterState.NormalForm;
             helperText = true;
             helperTextBlacksmith = true;
@@ -163,7 +163,7 @@ namespace Necromancy.Server.Model
             criminalState = 0;
             helperTextAbdul = true;
             mapChange = false;
-            stepCount = 0;
+            StepCount = 0;
 
             //Inventory = new Inventory();
         }

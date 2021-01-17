@@ -8,8 +8,8 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdateDurability : PacketResponse
     {
-        private readonly SpawnedItem _durabilityChangedItem;
-        public RecvItemUpdateDurability(NecClient client, SpawnedItem durabilityChangedItem)
+        private readonly ItemInstance _durabilityChangedItem;
+        public RecvItemUpdateDurability(NecClient client, ItemInstance durabilityChangedItem)
             : base((ushort) AreaPacketId.recv_item_update_durability, ServerType.Area)
         {
             _durabilityChangedItem = durabilityChangedItem;
@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(_durabilityChangedItem.SpawnId);
+            res.WriteUInt64(_durabilityChangedItem.InstanceID);
             res.WriteInt32(_durabilityChangedItem.CurrentDurability);
             return res;
         }

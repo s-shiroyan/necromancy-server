@@ -6,7 +6,6 @@ using Necromancy.Server.Common;
 using Necromancy.Server.Data.Setting;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
 
@@ -54,23 +53,23 @@ namespace Necromancy.Server.Packet.Msg
             foreach (Character character in characters)
             {
                 //populate soul and character inventory from database.
-                List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(character.Id); //to-do. leverage SQL query to grab items where state > 0
-                foreach (InventoryItem inventoryItem in inventoryItems)
-                {
-                    Item item = Server.Items[inventoryItem.ItemId];
-                    inventoryItem.Item = item;
-                    if (inventoryItem.State > 0  & inventoryItem.State < 262145)
-                    {
-                        character.Inventory.Equip(inventoryItem);
-                        inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
-                        inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
-                    }
-                }
-                if (character.Inventory._equippedItems.Count > 25)
-                {
-                    Logger.Error($"Character {character.Name} has too many equipment entries"); 
-                    continue;  // skip if more than 19 equipped items.  corrupt DB entries in itemSpawn
-                }
+                //List<InventoryItem> inventoryItems = Server.Database.SelectInventoryItemsByCharacterId(character.Id); //to-do. leverage SQL query to grab items where state > 0
+                //foreach (InventoryItem inventoryItem in inventoryItems)
+                //{
+                //    Item item = Server.Items[inventoryItem.ItemId];
+                //    inventoryItem.Item = item;
+                //    if (inventoryItem.State > 0  & inventoryItem.State < 262145)
+                //    {
+                //        character.Inventory.Equip(inventoryItem);
+                //        inventoryItem.CurrentEquipmentSlotType = inventoryItem.Item.EquipmentSlotType;
+                //        inventoryItem.Item.LoadEquipType = (LoadEquipType)Enum.Parse(typeof(LoadEquipType), inventoryItem.Item.ItemType.ToString());
+                //    }
+                //}
+                //if (character.Inventory._equippedItems.Count > 25)
+                //{
+                //    Logger.Error($"Character {character.Name} has too many equipment entries"); 
+                //    continue;  // skip if more than 19 equipped items.  corrupt DB entries in itemSpawn
+                //}
 
                 IBuffer res = BufferProvider.Provide();
 
@@ -84,17 +83,17 @@ namespace Necromancy.Server.Packet.Msg
                 res.WriteUInt32(character.ClassId); //class stat 
 
                 //Consolidated Frequently Used Code
-                LoadEquip.BasicTraits(res, character);
-                LoadEquip.SlotSetup(res, character, 0x19);
-                LoadEquip.EquipItems(res, character, 0x19);
-                LoadEquip.EquipSlotBitMask(res, character, 0x19);
-                LoadEquip.SlotUpgradeLevel(res, character, 0x19);
+                //LoadEquip.BasicTraits(res, character);
+                //LoadEquip.SlotSetup(res, character, 0x19);
+                //LoadEquip.EquipItems(res, character, 0x19);
+                //LoadEquip.EquipSlotBitMask(res, character, 0x19);
+                //LoadEquip.SlotUpgradeLevel(res, character, 0x19);
 
-                for (int i = 0; i < 0x19; i++)
-                    res.WriteByte(1);
+                //for (int i = 0; i < 0x19; i++)
+                //    res.WriteByte(1);
 
 
-                res.WriteByte((byte)character.Inventory._equippedItems.Count);
+                //res.WriteByte((byte)character.Inventory._equippedItems.Count);
 
                 res.WriteInt32(character.MapId); //Map your character is on
                 res.WriteInt32(0);//??? probably map area related

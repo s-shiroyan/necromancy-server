@@ -1,40 +1,40 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Item;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemInstanceUnidentified : PacketResponse
     {
-        private readonly InventoryItem _inventoryItem;
+        private readonly ItemInstance _itemInstance;
         private readonly NecClient _client;
 
-        public RecvItemInstanceUnidentified(InventoryItem inventoryItem,NecClient client)
+        public RecvItemInstanceUnidentified(NecClient client, ItemInstance itemInstance)
             : base((ushort) AreaPacketId.recv_item_instance_unidentified, ServerType.Area)
         {
-            _inventoryItem = inventoryItem;
+            _itemInstance = itemInstance;
             _client = client;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64((ulong) _inventoryItem.Id); //item instance ID
-            res.WriteCString(_inventoryItem.Item.Name); //item name 
-            res.WriteInt32((int) _inventoryItem.Item.ItemType); //item type
-            res.WriteInt32((int) _inventoryItem.Item.EquipmentSlotType); //equipment slot type
-            res.WriteByte(_inventoryItem.Quantity);
+            res.WriteUInt64((ulong) _itemInstance.InstanceID);              //item instance ID
+            res.WriteCString(_itemInstance.UnidentifiedName);               //unidentified item name 
+            res.WriteInt32((int) _itemInstance.Type);                       //item type
+            res.WriteInt32((int) _itemInstance.EquipAllowedSlots);          //allowed equipment slots
+            res.WriteByte(_itemInstance.Quantity);
 
-            res.WriteInt32((int)Status.Normal); //statuses bitmask /* 10001003 Put The Item Unidentified. 0 put the item Identified 1-2-4-8-16 follow this patterns (8 cursed, 16 blessed)*/
+            res.WriteInt32((int)_itemInstance.Statuses);                    //statuses
             //BEGIN ITEM  UPDATE EQUMASK SECTION
-            res.WriteInt32(_inventoryItem.Item.Id); //Sets your Item ID per Iteration
+            res.WriteInt32(_itemInstance.BaseID); //Sets your Item ID per Iteration
             res.WriteByte(0); //hair
             res.WriteByte(0); //color
             res.WriteByte(0); //face
 
-            res.WriteInt32(_inventoryItem.Item.Id); //testing (Theory, Icon related)
+            res.WriteInt32(_itemInstance.BaseID); //testing (Theory, Icon related)
             res.WriteByte(0); //hair
             res.WriteByte(0); //color
             res.WriteByte(0); //face
@@ -52,16 +52,16 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // separate in assembly
 
 
-            res.WriteByte(_inventoryItem.StorageType); // 0 = adventure bag. 1 = character equipment 2 = Royal bag.
-            res.WriteByte(_inventoryItem.BagId); // 0~2
-            res.WriteInt16(_inventoryItem.BagSlotIndex);
-            res.WriteInt32(_inventoryItem.State); //bit mask. This indicates where to put items.   e.g. 01 head 010 arm 0100 feet etc (0 for not equipped) TODO - change State in database to be this bitmask value
-            res.WriteInt64(_inventoryItem.Id);
-            res.WriteUInt32(1);//new
-            res.WriteInt16(5);//new
-            res.WriteUInt32(1);
+            res.WriteByte((byte)_itemInstance.Location.Zone); 
+            res.WriteByte(_itemInstance.Location.Bag); 
+            res.WriteInt16(_itemInstance.Location.Slot);
+            res.WriteInt32((int)_itemInstance.CurrentEquipSlot); //CURRENT EQUIP SLOT
+            res.WriteInt64(0); //unknown
+            res.WriteUInt32(1);//unknown
+            res.WriteInt16(5);//unknown
+            res.WriteUInt32(1); //unknown
 
-            res.WriteFixedString($"{_inventoryItem.Item.Name}", 16);
+            res.WriteFixedString($"", 16); //unknown
 
             return res;
         }

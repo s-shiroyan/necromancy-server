@@ -37,7 +37,7 @@ namespace Necromancy.Server.Packet.Area
 
             try
             {
-                List<SpawnedItem> movedItems = itemService.Move(fromLoc, toLoc, quantity);
+                List<ItemInstance> movedItems = itemService.Move(fromLoc, toLoc, quantity);
                 PacketResponse pResp;
                 if (movedItems.Count == 1) pResp = new RecvItemUpdatePlace(client, movedItems[0]);
                 else pResp = new RecvItemUpdatePlaceChange(client, movedItems[0], movedItems[1]);

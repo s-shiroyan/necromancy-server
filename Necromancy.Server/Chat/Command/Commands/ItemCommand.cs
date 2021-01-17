@@ -57,18 +57,18 @@ namespace Necromancy.Server.Chat.Command.Commands
             }
 
             ItemService itemService = new ItemService(client.Character);
-            SpawnedItem spawnedItem;
+            ItemInstance itemInstance;
 
             try
             {
                 PacketResponse pResp;
-                if (IsIdentified) { 
-                    spawnedItem = itemService.SpawnIdentifiedItem(itemId);
-                    pResp = new RecvItemInstance(client, spawnedItem);                    
+                if (IsIdentified) {
+                    itemInstance = itemService.SpawnIdentifiedItem(itemId);
+                    pResp = new RecvItemInstance(client, itemInstance);                    
                 } else
                 {
-                    spawnedItem = itemService.SpawnUnidentifiedItem(itemId);
-                    pResp = new RecvItemInstanceUnidentified(client, spawnedItem);                    
+                    itemInstance = itemService.SpawnUnidentifiedItem(itemId);
+                    pResp = new RecvItemInstanceUnidentified(client, itemInstance);                    
                 }
                 Router.Send(pResp);
             } catch (ItemException e) { responses.Add(ChatResponse.CommandError(client, e.Message)); }            

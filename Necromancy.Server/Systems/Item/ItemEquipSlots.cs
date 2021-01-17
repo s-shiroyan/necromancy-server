@@ -3,7 +3,7 @@ using System;
 namespace Necromancy.Server.Systems.Item
 {
     [Flags]
-    public enum ItemEquipSlot
+    public enum ItemEquipSlots
     {
         None        = 0,
         RightHand   = 1 << 0,
