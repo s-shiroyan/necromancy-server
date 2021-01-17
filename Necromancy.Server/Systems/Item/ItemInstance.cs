@@ -83,7 +83,14 @@ namespace Necromancy.Server.Systems.Item
         public short PlusDurability { get; set; }
         public short PlusGP { get; set; }
         public short PlusRangedEff { get; set; }
-        public short PlusReserviorEff { get; set; }
+        public short PlusReservoirEff { get; set; }
+
+        //Update once better translation available
+        public short RangedEffDist { get; set; }
+        public short ReservoirLoadPerf { get; set; }
+        public byte NumOfLoads { get; set; }
+
+        public byte SPCardColor { get; set; }
 
 
         /// <summary>

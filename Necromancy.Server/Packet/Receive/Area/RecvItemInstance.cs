@@ -86,7 +86,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt16(_itemInstance.PlusDurability);               //+DURABILITY
             res.WriteInt16(_itemInstance.PlusGP);                       //+GP
             res.WriteInt16(_itemInstance.PlusRangedEff);                //+Ranged Efficiency
-            res.WriteInt16(_itemInstance.PlusReserviorEff);             //+Resevior Efficiency
+            res.WriteInt16(_itemInstance.PlusReservoirEff);             //+Resevior Efficiency
 
             //UNIQUE EFFECTS
             res.WriteInt32(0);  //V|EFFECT1 TYPE - 0 IS NONE - PULLED FROM STR_TABLE?
@@ -111,10 +111,10 @@ namespace Necromancy.Server.Packet.Receive.Area
                 res.WriteInt16((short)1);//UNKNOWN
             }
 
-            res.WriteInt16((short)0);      //V|Ranged Efficiency/distance - need better translation
-            res.WriteInt16((short)0);      //V|Resevior/loading Efficiency/performance - need better translation
-            res.WriteByte((byte)0);        //V|Number of loads - need better translation
-            res.WriteByte((byte)0);        //Soul Partner card type color, pulled from str_table 100,1197,add 1 to sent value to find match
+            res.WriteInt16(_itemInstance.RangedEffDist);            //Ranged Efficiency/distance - need better translation
+            res.WriteInt16(_itemInstance.ReservoirLoadPerf);        //Resevior/loading Efficiency/performance - need better translation
+            res.WriteByte(_itemInstance.NumOfLoads);                //Number of loads - need better translation
+            res.WriteByte(_itemInstance.SPCardColor);               //Soul Partner card type color, pulled from str_table 100,1197,add 1 to sent value to find match
 
             res.WriteInt64(Int64.MaxValue);//UNKNOWN
 
