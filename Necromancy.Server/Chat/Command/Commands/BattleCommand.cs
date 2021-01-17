@@ -63,7 +63,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "97d9":
-                    Recv0x97D9 o97d9 = new Recv0x97D9();
+                    RecvBattleReportNoactNotifyHealAp o97d9 = new RecvBattleReportNoactNotifyHealAp();
                     brList.Add(o97d9);
                     break;
 

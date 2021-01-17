@@ -5,10 +5,10 @@ using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
-    public class Recv0xC055 : PacketResponse
+    public class RecvCharaStatusSetCommentR : PacketResponse
     {
-        public Recv0xC055()
-            : base((ushort) AreaPacketId.recv_0xC055, ServerType.Area)
+        public RecvCharaStatusSetCommentR()
+            : base((ushort) AreaPacketId.recv_chara_status_set_comment_r, ServerType.Area)
         {
         }
 
