@@ -469,7 +469,7 @@ CREATE TABLE "nec_item_instance" (
 	"gp"	INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
-	FOREIGN KEY("id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
+	FOREIGN KEY("base_id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
 CREATE UNIQUE INDEX "item_location" ON "nec_item_instance" (
