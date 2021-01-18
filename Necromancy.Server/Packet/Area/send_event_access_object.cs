@@ -241,9 +241,9 @@ namespace Necromancy.Server.Packet.Area
                     {
                         res7.WriteInt32(mapIDs[i]);
                         res7.WriteFixedString($"Channel-{j}", 0x61); //Channel Names.  Variables let you know what Loop Iteration you're on
-                        res7.WriteByte(1); //bool 1 | 0 something important. must be 1 to render map channel info
-                        res7.WriteInt16(1); //Current players  - Comment from other recv
-                        res7.WriteInt16(20);//Max Players
+                        res7.WriteByte(0); //Channel Full bool.   0 no, 1 yes
+                        res7.WriteInt16((short)Util.GetRandomNumber(0, 50)); //Current players for 'fullness bar'
+                        res7.WriteInt16((short)Util.GetRandomNumber(0, 40));//Max Players 'for fullness bar'
                         res7.WriteByte((byte)Util.GetRandomNumber(0,6)); //channel Emoticon - 6 for a Happy Face
                     }
                     res7.WriteByte(5); //number of channels to display
@@ -1116,8 +1116,8 @@ namespace Necromancy.Server.Packet.Area
 
         };
 
-        short[] levels = new short[] {1, 3, 5, 7, 9, 11, 12, 12, 14, 16, 16, 17, 18, 19, 20, 22, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99 };
-        int[] partySize = new int[] {2, 3, 4, 5, 5, 5, 5, 4, 5, 4, 5, 3, 4, 5, 2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+        short[] levels = new short[] {1, 3, 5, 7, 9, 11, 12, 12, 14, 16, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 99, 99, 99 };
+        int[] partySize = new int[] {2, 3, 4, 5, 5, 5, 5, 4, 5, 4, 5, 3, 4, 5, 2, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, };
 
         int[] nameIdx = new int[]
         {
