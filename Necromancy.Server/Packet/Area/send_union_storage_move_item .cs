@@ -17,10 +17,10 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort) AreaPacketId.send_union_storage_move_item;
         public override void Handle(NecClient client, NecPacket packet)
         {
-            ItemZone fromZone = (ItemZone) packet.Data.ReadByte();
+            ItemZoneType fromZone = (ItemZoneType) packet.Data.ReadByte();
             byte fromBag = packet.Data.ReadByte();
             short fromSlot = packet.Data.ReadInt16();
-            ItemZone toZone = (ItemZone) packet.Data.ReadByte();
+            ItemZoneType toZone = (ItemZoneType) packet.Data.ReadByte();
             byte toBag = packet.Data.ReadByte();
             short toSlot = packet.Data.ReadInt16();
             byte quantity = packet.Data.ReadByte();

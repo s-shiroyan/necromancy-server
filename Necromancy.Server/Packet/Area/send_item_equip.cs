@@ -16,7 +16,7 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort) AreaPacketId.send_item_equip;
         public override void Handle(NecClient client, NecPacket packet)
         {
-            ItemZone zone = (ItemZone) packet.Data.ReadByte();
+            ItemZoneType zone = (ItemZoneType) packet.Data.ReadByte();
             byte bag = packet.Data.ReadByte();
             short slot = packet.Data.ReadInt16();
             ItemEquipSlots equipSlot = (ItemEquipSlots) packet.Data.ReadByte();

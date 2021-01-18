@@ -14,7 +14,7 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort) AreaPacketId.send_shop_sell;
         public override void Handle(NecClient client, NecPacket packet)
         {
-            ItemZone zone = (ItemZone) packet.Data.ReadByte();
+            ItemZoneType zone = (ItemZoneType) packet.Data.ReadByte();
             byte bag = packet.Data.ReadByte();
             short slot = packet.Data.ReadInt16();
             long saleGold = packet.Data.ReadInt64(); //irrelevant, check sale price server side

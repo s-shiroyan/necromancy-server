@@ -6,7 +6,7 @@ namespace Necromancy.Server.Systems.Item
 {
     public readonly struct ItemLocation : IEquatable<ItemLocation>
     {
-        public ItemLocation(ItemZone zone, byte bag, short slot)
+        public ItemLocation(ItemZoneType zone, byte bag, short slot)
         {
             Zone = zone;
             Bag = bag;
@@ -14,7 +14,7 @@ namespace Necromancy.Server.Systems.Item
             _hashcode = ((int) zone << 24) + (bag << 16) + slot;
         }
 
-        public ItemZone Zone { get; }
+        public ItemZoneType Zone { get; }
         public byte Bag { get; }
         public short Slot { get; }
 

@@ -1,4 +1,4 @@
-namespace Necromancy.Server.Model
+namespace Necromancy.Server.Systems.Item
 {
     public enum ItemType
     {

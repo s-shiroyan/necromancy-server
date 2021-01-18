@@ -18,7 +18,7 @@ namespace Necromancy.Server.Packet.Area
             int repairCount = packet.Data.ReadInt32();
             for (int i = 0; i < repairCount; i++)
             {
-                ItemZone zone = (ItemZone)packet.Data.ReadByte();
+                ItemZoneType zone = (ItemZoneType)packet.Data.ReadByte();
                 byte bag = packet.Data.ReadByte();
                 short slot = packet.Data.ReadInt16();
 

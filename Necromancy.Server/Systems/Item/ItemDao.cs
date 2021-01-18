@@ -419,7 +419,7 @@ namespace Necromancy.Server.Systems.Item
 
         private ItemInstance MakeItemInstance(DbDataReader reader)
         {
-            ItemZone zone = (ItemZone) reader.GetByte("zone");
+            ItemZoneType zone = (ItemZoneType) reader.GetByte("zone");
             byte bag = reader.GetByte("bag");
             short slot = reader.GetInt16("slot");
             ItemLocation itemLocation = new ItemLocation(zone, bag, slot);
