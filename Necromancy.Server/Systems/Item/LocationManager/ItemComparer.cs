@@ -6,11 +6,7 @@ namespace Necromancy.Server.Systems.Item.LocationManager
 {
     class ItemComparer : IComparer<ItemInstance>
     {
-        public static ItemComparer Instance { get; } = new ItemComparer();
-        // Explicit static constructor to tell C# compiler
-        // not to mark type as beforefieldinit
-        static ItemComparer() { }
-        private ItemComparer() { }      
+        public static readonly ItemComparer Instance = new ItemComparer();
         public int Compare(ItemInstance x, ItemInstance y)
         {
             //move empty to the back

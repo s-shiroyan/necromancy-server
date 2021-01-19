@@ -388,6 +388,19 @@ namespace Necromancy.Server.Systems.Item
             WHERE
                 id IN @ids";
 
+        private const string SqlInsertItemInstance = @"
+            INSERT INTO 
+	            nec_item_instance
+		        (
+			        owner_id,
+			        zone,
+			        container,
+			        slot,
+			        base_id
+		        )		
+            VALUES
+	            (@owner_id,@zone,@container,@slot,@base_id)";
+
 
         public ItemInstance InsertItemInstance(int baseId)
         {
@@ -592,6 +605,20 @@ namespace Necromancy.Server.Systems.Item
         public List<ItemInstance> SelectOwnedInventoryItems(int characterId)
         {
             throw new NotImplementedException();
+        }
+
+        public List<ItemInstance> InsertItemInstances(int ownerId, ItemLocation[] itemLocations, int[] baseId)
+        {
+            List<ItemInstance> itemInstances = null;
+            ExecuteNonQuery(SqlSelectItemInstanceById,
+                command =>
+                {
+                    command.Parameters.
+                }, reader =>
+                {
+                    itemInstance = MakeItemInstance(reader);
+                });
+            return itemInstances;
         }
     }
 }

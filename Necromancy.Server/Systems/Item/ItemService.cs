@@ -49,6 +49,13 @@ namespace Necromancy.Server.Systems.Item
         {
             throw new NotImplementedException();
         }
+        public List<ItemInstance> SpawnItemInstances(ItemZoneType itemZoneType, int[] baseIds)
+        {
+            if (_character.ItemLocationManager.GetTotalFreeSpace(itemZoneType) < baseIds.Length) throw new ItemException(ItemExceptionType.InventoryFull);
+            ItemLocation[] nextOpenLocations = _character.ItemLocationManager.NextOpenSlots(itemZoneType, baseIds.Length);
+            List<ItemInstance> itemInstances = _itemDao.InsertItemInstances(_character.Id, nextOpenLocations, baseIds);
+            return itemInstances;
+        }
         public List<ItemInstance> GetIdentifiedItems(params long[] spawnIds)
         {            
             throw new NotImplementedException();

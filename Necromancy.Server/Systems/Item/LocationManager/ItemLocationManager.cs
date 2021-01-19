@@ -78,5 +78,31 @@ namespace Necromancy.Server.Systems.Item.LocationManager
                     }
             }
         }
+
+        public ItemLocation NextOpenSlot(ItemZoneType itemZoneType)
+        {
+            int nextContainerWithSpace = ZoneMap[itemZoneType].NextContainerWithSpace;
+            if (nextContainerWithSpace != ItemZone.NO_CONTAINERS_WITH_SPACE)
+            {
+                int nextOpenSlot = ZoneMap[itemZoneType].GetContainer(nextContainerWithSpace).NextOpenSlot;
+                if(nextOpenSlot != Container.NO_OPEN_SLOTS)
+                {
+                    ItemLocation itemLocation = new ItemLocation(itemZoneType, (byte)nextContainerWithSpace, (short) nextOpenSlot);
+                    return itemLocation;
+                }
+            }
+            return new ItemLocation(ItemZoneType.InvalidZone, 0, 0);
+        }
+
+        public ItemLocation[] NextOpenSlots(ItemZoneType itemZoneType, int amount)
+        {
+            if (amount > ZoneMap[itemZoneType].TotalFreeSpace) throw new ArgumentOutOfRangeException("Not enough open slots");
+            return ZoneMap[itemZoneType].GetNextXFreeSpaces(itemZoneType, amount);
+        }
+
+        public int GetTotalFreeSpace(ItemZoneType itemZoneType)
+        {
+            return ZoneMap[itemZoneType].TotalFreeSpace;
+        }
     }
 }

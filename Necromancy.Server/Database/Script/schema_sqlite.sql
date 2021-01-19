@@ -441,13 +441,12 @@ CREATE TABLE "nec_item_library" (
 
 CREATE TABLE "nec_item_instance" (
 	"id"	INTEGER NOT NULL,
-	"character_id"	INTEGER NOT NULL,
+	"owner_id"	INTEGER NOT NULL,
 	"zone"	INTEGER NOT NULL,
-	"bag"	INTEGER NOT NULL,
+	"container"	INTEGER NOT NULL,
 	"slot"	INTEGER NOT NULL,
 	"base_id"	INTEGER NOT NULL,
 	"quantity"	INTEGER NOT NULL DEFAULT 1,
-	"unidentified_name"	TEXT,
 	"is_identified"	INTEGER NOT NULL DEFAULT 1,
 	"is_cursed"	INTEGER NOT NULL DEFAULT 0,
 	"is_blessed"	INTEGER NOT NULL DEFAULT 0,
@@ -468,13 +467,13 @@ CREATE TABLE "nec_item_instance" (
 	"enchant_id"	INTEGER NOT NULL DEFAULT 0,
 	"gp"	INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("character_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
+	FOREIGN KEY("owner_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
 	FOREIGN KEY("base_id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
 CREATE UNIQUE INDEX "item_location" ON "nec_item_instance" (
-	"character_id",
+	"owner_id",
 	"zone",
-	"bag",
+	"container",
 	"slot"
 );
