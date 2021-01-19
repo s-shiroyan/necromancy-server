@@ -6,24 +6,24 @@ namespace Necromancy.Server.Systems.Item
 {
     public readonly struct ItemLocation : IEquatable<ItemLocation>
     {
-        public ItemLocation(ItemZoneType zone, byte bag, short slot)
+        public ItemLocation(ItemZoneType zoneType, byte container, short slot)
         {
-            Zone = zone;
-            Bag = bag;
+            ZoneType = zoneType;
+            Container = container;
             Slot = slot;
-            _hashcode = ((int) zone << 24) + (bag << 16) + slot;
+            _hashcode = ((int) zoneType << 24) + (container << 16) + slot;
         }
 
-        public ItemZoneType Zone { get; }
-        public byte Bag { get; }
+        public ItemZoneType ZoneType { get; }
+        public byte Container { get; }
         public short Slot { get; }
 
         private readonly int _hashcode;
 
         public bool Equals(ItemLocation other)
         {
-            if(other.Zone != Zone)  return false;
-            if(other.Bag  != Bag)   return false;
+            if(other.ZoneType != ZoneType)  return false;
+            if(other.Container  != Container)   return false;
             if(other.Slot != Slot)  return false;
             return true;
         }

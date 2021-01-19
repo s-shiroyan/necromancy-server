@@ -52,8 +52,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte((byte)Util.GetRandomNumber(0, 0)); // separate in assembly
 
 
-            res.WriteByte((byte)_itemInstance.Location.Zone); 
-            res.WriteByte(_itemInstance.Location.Bag); 
+            res.WriteByte((byte)_itemInstance.Location.ZoneType); 
+            res.WriteByte(_itemInstance.Location.Container); 
             res.WriteInt16(_itemInstance.Location.Slot);
             res.WriteInt32((int)_itemInstance.CurrentEquipSlot); //CURRENT EQUIP SLOT
             res.WriteInt64(0); //unknown

@@ -1,4 +1,5 @@
 using Necromancy.Server.Model;
+using Necromancy.Server.Systems.Item.LocationManager;
 using System;
 using System.Collections.Generic;
 
@@ -56,9 +57,27 @@ namespace Necromancy.Server.Systems.Item
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> GetOwnedItems()
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>A list of items in your adventure bag, bag slot, royal bag, and avatar inventory.</returns>
+        public void LoadOwnedInventoryItems()
         {
-            throw new NotImplementedException();
+            List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
+            //load bags first
+            foreach(ItemInstance item in ownedItems)
+            {
+                if (item.Type == ItemType.BAG) _character.ItemLocationManager.PutItem(item.Location, item);
+            }
+            foreach (ItemInstance item in ownedItems)
+            {
+                if (item.Type != ItemType.BAG) _character.ItemLocationManager.PutItem(item.Location, item);
+            }
+        }
+        public void Sort(ItemZoneType zone, byte container)
+        {
+
         }
         public long Drop(ItemLocation location, byte quantity)
         {

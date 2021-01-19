@@ -21,12 +21,12 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt64(_movedItem.InstanceID);
-            res.WriteByte((byte)_movedItem.Location.Zone);
-            res.WriteByte(_movedItem.Location.Bag);
+            res.WriteByte((byte)_movedItem.Location.ZoneType);
+            res.WriteByte(_movedItem.Location.Container);
             res.WriteInt16(_movedItem.Location.Slot);
             res.WriteUInt64(_movedItemSwap.InstanceID);
-            res.WriteByte((byte)_movedItemSwap.Location.Zone);
-            res.WriteByte(_movedItemSwap.Location.Bag);
+            res.WriteByte((byte)_movedItemSwap.Location.ZoneType);
+            res.WriteByte(_movedItemSwap.Location.Container);
             res.WriteInt16(_movedItemSwap.Location.Slot);
             return res;
         }

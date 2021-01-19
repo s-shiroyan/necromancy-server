@@ -19,7 +19,7 @@ namespace Necromancy.Server.Packet.Area
         {
         }
 
-        public override ushort Id => (ushort) AreaPacketId.send_data_get_self_chara_data_request;
+        public override ushort Id => (ushort)AreaPacketId.send_data_get_self_chara_data_request;
 
         public override void Handle(NecClient client, NecPacket packet)
         {
@@ -28,7 +28,7 @@ namespace Necromancy.Server.Packet.Area
             SendDataGetSelfCharaData(client);
 
             IBuffer res2 = BufferProvider.Provide();
-            Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_request_r, res2, ServerType.Area);
         }
 
         private void SendDataGetSelfCharaData(NecClient client)
@@ -37,9 +37,15 @@ namespace Necromancy.Server.Packet.Area
 
             //sub_4953B0 - characteristics
             //Consolidated Frequently Used Code
-            LoadEquip.BasicTraits(res, client.Character);
-
-            for (int i = 0; i < 100; i++)
+            //LoadEquip.BasicTraits(res, character);
+            res.WriteUInt32(client.Character.RaceId); //race
+            res.WriteUInt32(client.Character.SexId);
+            res.WriteByte(client.Character.HairId); //hair
+            res.WriteByte(client.Character.HairColorId); //color
+            res.WriteByte(client.Character.FaceId); //face
+            res.WriteByte(1);//unknown
+            res.WriteByte(2);//unknown
+            for (int j = 0; j < 100; j++)
                 res.WriteInt64(0);
 
             //sub_484720 - combat/leveling info
@@ -67,11 +73,11 @@ namespace Necromancy.Server.Packet.Area
             // total stat level includes bonus'?
             res.WriteUInt16(client.Character.Strength); // str
             res.WriteUInt16(client.Character.Vitality); // vit
-            res.WriteInt16((short) (client.Character.Dexterity + 3)); // dex
+            res.WriteInt16((short)(client.Character.Dexterity + 3)); // dex
             res.WriteUInt16(client.Character.Agility); // agi
             res.WriteUInt16(client.Character.Intelligence); // int
             res.WriteUInt16(client.Character.Piety); // pie
-            res.WriteInt16((short) (client.Character.Luck + 4)); // luk
+            res.WriteInt16((short)(client.Character.Luck + 4)); // luk
 
             // mag atk atrb
             res.WriteInt16(5); // fire
@@ -124,11 +130,11 @@ namespace Necromancy.Server.Packet.Area
             // characters stats
             res.WriteUInt16(client.Character.Strength); // str
             res.WriteUInt16(client.Character.Vitality); // vit
-            res.WriteInt16((short) (client.Character.Dexterity)); // dex
+            res.WriteInt16((short)(client.Character.Dexterity)); // dex
             res.WriteUInt16(client.Character.Agility); // agi
             res.WriteUInt16(client.Character.Intelligence); // int
             res.WriteUInt16(client.Character.Piety); // pie
-            res.WriteInt16((short) (client.Character.Luck)); // luk
+            res.WriteInt16((short)(client.Character.Luck)); // luk
 
             // nothing
             res.WriteInt16(1);
@@ -270,19 +276,95 @@ namespace Necromancy.Server.Packet.Area
 
             //Consolidated Frequently Used Code
             //LoadEquip.SlotSetup(res, client.Character, numEntries);
-
+            numEntries = 0x19;
+            int i = 0;
+            //sub_483660 
+            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
+            //{
+            //    res.WriteInt32((int)inventoryItem.Item.ItemType);
+            //    //Logger.Debug($"Loading {i}:{inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}  | {inventoryItem.Item.Name}");
+            //    i++;
+            //}
+            while (i < numEntries)
+            {
+                //sub_483660   
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                Logger.Debug($"Loading {i}: blank");
+                i++;
+            }
 
             //sub_483420
             res.WriteInt32(numEntries); //has to be less than 0x19
 
             //Consolidated Frequently Used Code
             //EquipItems(res, client.Character, numEntries);
+            i = 0;
+            //sub_4948C0
+            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
+            //{
+            //    res.WriteInt32(inventoryItem.Item.Id); //Sets your Item ID per Iteration
+            //    res.WriteByte(0); //hair
+            //    res.WriteByte(0); //color
+            //    res.WriteByte(0); //face
 
+            //    res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
+            //    res.WriteByte(0); //hair
+            //    res.WriteByte(0); //color
+            //    res.WriteByte(0); //face
+
+            //    res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+            //    res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+            //    res.WriteByte(0); // testing (Theory Torso Tex)
+            //    res.WriteByte(0); // testing (Theory Pants Tex)
+            //    res.WriteByte(0); // testing (Theory Hands Tex)
+            //    res.WriteByte(0); // testing (Theory Feet Tex)
+            //    res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
+
+            //    res.WriteByte(0); // separate in assembly
+            //    res.WriteByte(0); // separate in assembly
+            //    i++;
+            //}
+            while (i < numEntries)//Must have 25 on recv_chara_notify_data
+            {
+                res.WriteInt32(0); //Sets your Item ID per Iteration
+                res.WriteByte(0); // 
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteInt32(0); //testing (Theory, Icon related)
+                res.WriteByte(0); //
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(0); //Alternate texture for item model 
+
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                i++;
+            }
             //sub_483420
             res.WriteInt32(numEntries);
 
             //LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
-
+            i = 0;
+            //sub_483420 
+            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
+            //{
+            //    res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
+            //    i++;
+            //}
+            while (i < numEntries)
+            {
+                //sub_483420   
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                i++;
+            }
             //sub_483420
             numEntries = 1;
             res.WriteInt32(numEntries); //has to be less than 128
@@ -299,7 +381,7 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(0);//new
             res.WriteByte(0);//new bool
 
-            Router.Send(client, (ushort) AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
+            Router.Send(client, (ushort)AreaPacketId.recv_data_get_self_chara_data_r, res, ServerType.Area);
         }
 
 

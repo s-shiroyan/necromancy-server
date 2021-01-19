@@ -111,6 +111,7 @@ namespace Necromancy.Server
             );
 
             LoadChatCommands();
+            LoadDatabaseObjects();
             LoadHandler();
         }
 
@@ -251,25 +252,25 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new GetCommand(this));
         }
 
-        //private void LoadDatabaseObjects()
-        //{
-        //    List<MapData> maps = Database.SelectMaps();
-        //    foreach (MapData mapData in maps)
-        //    {
-        //        Map map = new Map(mapData, this);
-        //        Maps.Add(map);
-        //    }
+        private void LoadDatabaseObjects()
+        {
+            List<MapData> maps = Database.SelectMaps();
+            foreach (MapData mapData in maps)
+            {
+                Map map = new Map(mapData, this);
+                Maps.Add(map);
+            }
 
-        //    Logger.Info($"Maps: {maps.Count}");
+            //Logger.Info($"Maps: {maps.Count}");
 
-        //    List<Item> items = Database.SelectItems();
-        //    foreach (Item item in items)
-        //    {
-        //        Items.Add(item.Id, item);
-        //    }
+            //List<Item> items = Database.SelectItems();
+            //foreach (Item item in items)
+            //{
+            //    Items.Add(item.Id, item);
+            //}
 
-        //    Logger.Info($"Items: {items.Count}");
-        //}
+            //Logger.Info($"Items: {items.Count}");
+        }
 
         private void LoadHandler()
         {

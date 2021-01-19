@@ -11,85 +11,72 @@ namespace Necromancy.Server.Systems.Item.LocationManager
     /// </summary>
     public class ItemLocationManager
     {
-        /// <summary>
-        /// A Dictionary of all items that have been published to the client with the item's instance ID as the key.<br/>
-        /// </summary>
-        private readonly Dictionary<ulong, ItemInstance> PublishedItems = new Dictionary<ulong, ItemInstance>();
+        private const int MAX_CONTAINERS_ADV_BAG = 8;
+        private const int MAX_CONTAINER_SIZE_ADV_BAG = 24;
 
-        //TODO FIX TEMP VALUES
-        private const int SLOT_MAX_ADV_BAG      = 5;
-        private const int SLOT_MAX_ROYAL_BAG    = 1;
-        private const int SLOT_MAX_WAREHOUSE    = 10;
-        private const int SLOT_MAX_BAG_SLOT     = 1;
-        private const int SLOT_MAX_WARHOUSE_SP  = 5;
-        private const int SLOT_MAX_AVAT_INV     = 1;
-        private const int SLOT_MAX_TREASURE_BOX = 1;
+        private const int MAX_CONTAINERS_AVATAR = 9;
+        private const int MAX_CONTAINER_SIZE_AVATAR = 50;
 
-        private const int BAG_SIZE_MAX_ADV_BAG      = 24;
-        private const int BAG_SIZE_MAX_ROYAL_BAG    = 24;
-        private const int BAG_SIZE_MAX_WAREHOUSE    = 40;
-        private const int BAG_SIZE_MAX_BAG_SLOT     = 5;
-        private const int BAG_SIZE_MAX_WARHOUSE_SP  = 40;
-        private const int BAG_SIZE_MAX_AVAT_INV     = 24;
-        private const int BAG_SIZE_MAX_TREASURE_BOX = 10;
+        private const int MAX_CONTAINERS_BAG_SLOT = 1;
+        private const int MAX_CONTAINER_SIZE_BAG_SLOT = 7;
 
-        private Dictionary<ItemZoneType, ItemZone> ZoneMap = new Dictionary<ItemZoneType, ItemZone>();
-        private List<ItemInstance> _ListNormalEquipment = new List<ItemInstance>(14);
-        
-        public void AddPublishedItem(ItemInstance itemInstance)
-        {
-            PublishedItems.Add(itemInstance.InstanceID, itemInstance);          
-        }
+        private const int MAX_CONTAINERS_ROYAL_BAG = 1;
+        private const int MAX_CONTAINER_SIZE_ROYAL_BAG = 24;
 
-        public void RemovePublishedItem(ItemInstance itemInstance)
-        {
-            PublishedItems.Remove(itemInstance.InstanceID);
-        }
+        private const int MAX_CONTAINERS_TREASURE_BOX = 1;
+        private const int MAX_CONTAINER_SIZE_TREASURE_BOX = 10;
+
+        private Dictionary<ItemZoneType, ItemZone> ZoneMap = new Dictionary<ItemZoneType, ItemZone>();        
 
         public ItemLocationManager()
         {
-            ZoneMap.Add(ItemZoneType.AdventureBag,      new IZAdventureBag());
-            ZoneMap.Add(ItemZoneType.RoyalBag,          new IZRoyalBag());
-            ZoneMap.Add(ItemZoneType.Warehouse,         new IZWarehouse());
-            ZoneMap.Add(ItemZoneType.BagSlot,           new IZBagSlot());
-            ZoneMap.Add(ItemZoneType.WarehouseSp,       new IZWarehouseSP());
-            ZoneMap.Add(ItemZoneType.AvatarInventory,   new IZAvatarInventory());
-            ZoneMap.Add(ItemZoneType.TreasureBox,       new IZTreasureBox());
+            ZoneMap.Add(ItemZoneType.AdventureBag,      new ItemZone(MAX_CONTAINERS_ADV_BAG, MAX_CONTAINER_SIZE_ADV_BAG));
+            ZoneMap.Add(ItemZoneType.RoyalBag,          new ItemZone(MAX_CONTAINERS_ROYAL_BAG, MAX_CONTAINER_SIZE_ROYAL_BAG));
+            ZoneMap.Add(ItemZoneType.BagSlot,           new ItemZone(MAX_CONTAINERS_BAG_SLOT, MAX_CONTAINER_SIZE_BAG_SLOT));
+            ZoneMap.Add(ItemZoneType.AvatarInventory,   new ItemZone(MAX_CONTAINERS_AVATAR, MAX_CONTAINER_SIZE_AVATAR));
+            ZoneMap.Add(ItemZoneType.TreasureBox,       new ItemZone(MAX_CONTAINERS_TREASURE_BOX, MAX_CONTAINER_SIZE_TREASURE_BOX));
         }
 
         public ItemInstance GetItem(ItemLocation itemLocation)
         {
-            return ZoneMap[itemLocation.Zone].GetItem(itemLocation.Bag, itemLocation.Slot);
+            return ZoneMap[itemLocation.ZoneType].GetContainer(itemLocation.Container).GetItem(itemLocation.Slot);
         }
 
-
-        public void PutItem(ItemLocation itemLocation, ItemInstance itemInstance)
+        public void PutItem(ItemLocation loc, ItemInstance item)
         {
-
-        }
-
-        public ItemInstance GetItem(ulong instanceId)
-        {
-            return PublishedItems[instanceId];
-        }
-
-        public void AutoSort(ItemZoneType itemZoneType)
-        {
-            ZoneMap[itemZoneType].AutoSort();
-        }
-
-        public bool IsValidLocation(ItemLocation itemLocation)
-        {
-            if (!ZoneMap.ContainsKey(itemLocation.Zone)) return false;
-            else
+            switch (loc.ZoneType)
             {
-                return ZoneMap[itemLocation.Zone].IsValidLocation(itemLocation.Bag, itemLocation.Slot);
+                case ItemZoneType.BagSlot:
+                    {
+                        ZoneMap[ItemZoneType.AdventureBag].PutContainer(loc.Slot + 1, item.BagSize);
+                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).PutItem(loc.Slot, item);
+                        break;
+                    }
+                default:
+                    {
+                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).PutItem(loc.Slot, item);
+                        break;
+                    }
+
             }
         }
-
-
         
-
-        
+        public void RemoveItem(ItemLocation loc)
+        {
+            switch (loc.ZoneType)
+            {
+                case ItemZoneType.BagSlot:
+                    {
+                        ZoneMap[ItemZoneType.AdventureBag].RemoveContainer(loc.Slot + 1);
+                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).RemoveItem(loc.Slot);
+                        break;
+                    }
+                default:
+                    {
+                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).RemoveItem(loc.Slot);
+                        break;
+                    }
+            }
+        }
     }
 }
