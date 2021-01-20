@@ -18,20 +18,20 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             ItemZoneType fromZone = (ItemZoneType) packet.Data.ReadByte();
-            byte fromBag = packet.Data.ReadByte();
+            byte fromContainer = packet.Data.ReadByte();
             short fromSlot = packet.Data.ReadInt16();
             ItemZoneType toZone = (ItemZoneType) packet.Data.ReadByte();
-            byte toBag = packet.Data.ReadByte();
+            byte toContainer = packet.Data.ReadByte();
             short toSlot = packet.Data.ReadInt16();
             byte quantity = packet.Data.ReadByte();
 
             Logger.Debug($"fromStoreType byte [{fromZone}] toStoreType byte [{toZone}]");
-            Logger.Debug($"fromBagId byte [{fromBag}] toBagId byte [{toBag}]");
+            Logger.Debug($"fromContainerId byte [{fromContainer}] toBagId byte [{toContainer}]");
             Logger.Debug($"fromSlot byte [{fromSlot}] toSlot[{ toSlot}]");
             Logger.Debug($"itemCount [{quantity}]");
 
-            ItemLocation fromLoc = new ItemLocation(fromZone, fromBag, fromSlot);
-            ItemLocation toLoc = new ItemLocation(toZone, toBag, toSlot);
+            ItemLocation fromLoc = new ItemLocation(fromZone, fromContainer, fromSlot);
+            ItemLocation toLoc = new ItemLocation(toZone, toContainer, toSlot);
             ItemService itemService = new ItemService(client.Character);
             int error = 0;
 

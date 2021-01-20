@@ -228,6 +228,14 @@ namespace Necromancy.Server.Systems.Item
             AND 
                 zone IN (0,2,8,12)"; //adventure bag, royal bag, bag slot, avatar inventory
 
+        private const string SqlUpdateItemLocations = @"
+            UPDATE 
+                nec_item_instance 
+            SET 
+                zone = @zone AND container = @container AND slot = @slot 
+            WHERE 
+                id = @id";
+
         private const string SqlInsertItemInstances = @"
             INSERT INTO 
 	            nec_item_instance
@@ -301,6 +309,51 @@ namespace Necromancy.Server.Systems.Item
         public ItemInstance SelectItemInstance(int characterId, ItemLocation itemLocation)
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateItemLocations(ulong[] instanceIds, ItemLocation[] locs)
+        {
+            int size = instanceIds.Length;
+            try
+            {
+                using DbConnection conn = GetSQLConnection();
+                conn.Open();
+                using DbCommand command = conn.CreateCommand();
+                command.CommandText = SqlUpdateItemLocations;
+                for (int i = 0; i < size; i++)
+                {
+                    command.Parameters.Clear();
+                    AddParameter(command, "@zone", (byte)locs[i].ZoneType);
+                    AddParameter(command, "@container", locs[i].Container);
+                    AddParameter(command, "@slot", locs[i].Slot);
+                    AddParameter(command, "@id", instanceIds[i]);
+                    //AddParameter(command, "@quantity", spawnParams[i].Quantity); TODO
+
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Query: {SqlUpdateItemLocations}");
+                Exception(ex);
+            }
+        }
+
+        public List<ItemInstance> SelectOwnedInventoryItems(int ownerId)
+        {
+            List<ItemInstance> ownedInventoryItems = new List<ItemInstance>();
+            ExecuteReader(SqlSelectOwnedInventoryItems,
+                command =>
+                {
+                    AddParameter(command, "@owner_id", ownerId);
+                }, reader =>
+                {
+                    while (reader.Read())
+                    {
+                        ownedInventoryItems.Add(MakeItemInstance(reader));
+                    }
+                });
+            return ownedInventoryItems;
         }
 
         public List<ItemInstance> InsertItemInstances(int ownerId, ItemLocation[] locs, int[] baseId, ItemSpawnParams[] spawnParams)
@@ -551,22 +604,6 @@ namespace Necromancy.Server.Systems.Item
             return itemInstance;
         }
 
-        public List<ItemInstance> SelectOwnedInventoryItems(int ownerId)
-        {
-            List<ItemInstance> ownedInventoryItems = new List<ItemInstance>();
-            ExecuteReader(SqlSelectOwnedInventoryItems,
-                command =>
-                {
-                    AddParameter(command, "@owner_id", ownerId);
-                }, reader =>
-                {
-                    while (reader.Read()){
-                        ownedInventoryItems.Add(MakeItemInstance(reader));
-                    }
-                });
-            return ownedInventoryItems;
-        }
-
-
+        
     }
 }

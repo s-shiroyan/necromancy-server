@@ -35,13 +35,23 @@ namespace Necromancy.Server.Systems.Item
 
             ZoneMap.Add(ItemZoneType.RoyalBag,          new ItemZone(MAX_CONTAINERS_ROYAL_BAG, MAX_CONTAINER_SIZE_ROYAL_BAG));
             ZoneMap.Add(ItemZoneType.BagSlot,           new ItemZone(MAX_CONTAINERS_BAG_SLOT, MAX_CONTAINER_SIZE_BAG_SLOT));
+            ZoneMap[ItemZoneType.BagSlot].PutContainer(0, MAX_CONTAINER_SIZE_BAG_SLOT);
+
             ZoneMap.Add(ItemZoneType.AvatarInventory,   new ItemZone(MAX_CONTAINERS_AVATAR, MAX_CONTAINER_SIZE_AVATAR));
             ZoneMap.Add(ItemZoneType.TreasureBox,       new ItemZone(MAX_CONTAINERS_TREASURE_BOX, MAX_CONTAINER_SIZE_TREASURE_BOX));
         }
 
-        public ItemInstance GetItem(ItemLocation itemLocation)
+        public ItemInstance GetItem(ItemLocation loc)
         {
-            return ZoneMap[itemLocation.ZoneType].GetContainer(itemLocation.Container).GetItem(itemLocation.Slot);
+            return ZoneMap[loc.ZoneType].GetContainer(loc.Container).GetItem(loc.Slot);
+        }
+
+        public bool HasItem(ItemLocation loc)
+        {
+            if (!ZoneMap.ContainsKey(loc.ZoneType)) return false;
+            if (ZoneMap[loc.ZoneType].GetContainer(loc.Container) == null) return false;
+            if (ZoneMap[loc.ZoneType].GetContainer(loc.Container).GetItem(loc.Slot) == null) return false;
+            return true;
         }
 
         public void PutItem(ItemLocation loc, ItemInstance item)

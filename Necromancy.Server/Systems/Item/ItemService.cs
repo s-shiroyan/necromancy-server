@@ -101,7 +101,33 @@ namespace Necromancy.Server.Systems.Item
         }
         public List<ItemInstance> Move(ItemLocation from, ItemLocation to, byte quantity)
         {
-            throw new NotImplementedException();
+            //todo check quantity
+            List<ItemInstance> movedItems = new List<ItemInstance>();            
+            ItemInstance fromItem = _character.ItemManager.GetItem(from);
+            movedItems.Add(fromItem);
+            if(_character.ItemManager.HasItem(to))
+            {
+                ItemInstance toItem = _character.ItemManager.GetItem(to);
+                _character.ItemManager.RemoveItem(to);
+                _character.ItemManager.RemoveItem(from);
+                _character.ItemManager.PutItem(to, fromItem);
+                _character.ItemManager.PutItem(from, toItem);
+                movedItems.Add(toItem);
+            }
+            else
+            {
+                _character.ItemManager.RemoveItem(from);
+                _character.ItemManager.PutItem(to, fromItem);
+            }
+            ulong[] instanceIds = new ulong[movedItems.Count];
+            ItemLocation[] locs = new ItemLocation[2]; 
+            for (int i = 0; i < movedItems.Count; i++)
+            {
+                instanceIds[i] = movedItems[i].InstanceID;
+                locs[i] = movedItems[i].Location;
+            }
+            _itemDao.UpdateItemLocations(instanceIds, locs);
+            return movedItems;
         }
         public List<ItemInstance> Repair(List<ItemLocation> locations)
         {
