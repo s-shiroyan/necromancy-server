@@ -1,5 +1,4 @@
 using System;
-using System;
 using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Arrowgene.Logging;

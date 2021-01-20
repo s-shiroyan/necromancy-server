@@ -132,7 +132,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt16(0);     //unknown            
 
             //sub enchantment, values hidden unless viewed at enchant shop maybe
-            numEntries = 0;
+            numEntries = 5;
             for (int j = 0; j < numEntries; j++)
             {
                 res.WriteInt16(0);          //Sub Enchant Scroll ID

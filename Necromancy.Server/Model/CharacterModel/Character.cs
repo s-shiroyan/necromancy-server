@@ -166,7 +166,7 @@ namespace Necromancy.Server.Model
             mapChange = false;
             StepCount = 0;
 
-            //ItemLocationManager = new ItemLocationManager();
+            ItemLocationManager = new ItemLocationManager();
         }
 
         public bool characterActive

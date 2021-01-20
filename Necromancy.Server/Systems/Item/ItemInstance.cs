@@ -51,7 +51,7 @@ namespace Necromancy.Server.Systems.Item
 
         public byte SpecialForgeLevel { get; set; }
 
-        public string TalkRingName { get; set; }
+        public string TalkRingName = "";
 
         public short Physical { get; set; }
 
@@ -65,8 +65,8 @@ namespace Necromancy.Server.Systems.Item
         /// Weight in thousandths.
         /// </summary>
         public int Weight { get; set; }
-        
-        public GemSlot[] GemSlots { get; set; }
+
+        public GemSlot[] GemSlots { get; set; } = new GemSlot[0];
 
         public int EnchantId { get; set; }
 

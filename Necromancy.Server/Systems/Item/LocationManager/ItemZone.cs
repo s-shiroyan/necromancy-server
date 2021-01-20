@@ -49,6 +49,8 @@ namespace Necromancy.Server.Systems.Item.LocationManager
         {
             MaxContainers = maxContainers;
             MaxContainerSize = maxContainerSize;
+            _containers = new Container[MaxContainers];
+            PutContainer(0, MaxContainerSize);
         }
 
         public int NextContainerWithSpace
@@ -89,7 +91,7 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             {
                 if (_containers[i] != null && !_containers[i].IsFull){
                     int nextOpenSlot = _containers[i].NextOpenSlot;
-                    while(nextOpenSlot != Container.NO_OPEN_SLOTS)
+                    while(index < amount)
                     {
                         freeSpaces[index] = new ItemLocation(itemZoneType, (byte) i, (short) nextOpenSlot);
                         index++;

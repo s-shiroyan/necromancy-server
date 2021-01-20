@@ -13,7 +13,7 @@ namespace Necromancy.Server.Systems
     //TODO MOVE UNDER /DATABASE
     public class DatabaseAccessObject
     {
-        private static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseAccessObject));
+        protected static readonly ILogger Logger = LogProvider.Logger(typeof(DatabaseAccessObject));
 
         protected const int NO_ROWS_AFFECTED = 0;
         
@@ -34,6 +34,11 @@ namespace Necromancy.Server.Systems
             sqLiteConnStrBuilder.ForeignKeys = true;
             sqLiteConnStrBuilder.Flags = sqLiteConnStrBuilder.Flags & SQLiteConnectionFlags.StrictConformance;
             return sqLiteConnStrBuilder.ConnectionString;
+        }
+
+        protected DbConnection GetSQLConnection()
+        {
+            return new SQLiteConnection(_sqLiteConnectionString);
         }
 
         public int ExecuteNonQuery(string query, Action<DbCommand> nonQueryAction)

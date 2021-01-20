@@ -80,7 +80,7 @@ namespace Necromancy.Server.Systems.Item
         public bool IsTradableAfterUse { get; set; }
         public bool IsStealable { get; set; }
         public bool IsGoldBorder { get; set; }
-        public string Lore { get; set; }
+        public string Lore = "";
         public int IconId { get; set; }
 
     }
