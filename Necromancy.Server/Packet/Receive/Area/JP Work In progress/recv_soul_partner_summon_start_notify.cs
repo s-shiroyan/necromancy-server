@@ -16,15 +16,15 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             IBuffer res = BufferProvider.Provide();
             //  Dude you forgot to write down the structure.  ...... go find it again in xdbg.....
-            res.WriteInt32(0);
-            res.WriteInt32(0);
-            res.WriteInt64(0);
-            res.WriteInt32(0);
+            res.WriteInt32(200000002);  //chara instance id
+            res.WriteInt32(100001);  //object id
+            res.WriteInt64(100001);  //serial id
+            res.WriteInt32(100001);  //base id
             res.WriteCString("Failboat"); 
-            res.WriteByte(0);
-            res.WriteInt32(0);
-            res.WriteByte(0);
-            res.WriteByte(0);
+            res.WriteByte(1); //Slot
+            res.WriteInt32(5); // SG 
+            res.WriteByte(1); //is awakening
+            res.WriteByte(31); //Avatar ID
             return res;
         }
     }

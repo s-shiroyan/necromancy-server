@@ -137,7 +137,8 @@ namespace Necromancy.Server.Packet.Area
                         {x => x == 74013071, () => SendGetWarpTarget(client, ggateSpawn)},
                         {x => x == 74013161, () => SendGetWarpTarget(client, ggateSpawn)},
                         {x => x == 74013271, () => SendGetWarpTarget(client, ggateSpawn)},
-
+                        {x => x == 7500001, () => ModelLibraryWarp(client, ggateSpawn)},
+                        {x => (x == 7500001) || (x == 7500002) || (x == 7500003) || (x == 7500004),() => MapHomeWarp(client, ggateSpawn)},
                         {x => x < 900000100, () => WorkInProgressGGate(client, ggateSpawn) }
                     };
 
@@ -304,7 +305,6 @@ namespace Necromancy.Server.Packet.Area
             }
         }
 
-        // I added these to Npc database for now, should it be handled differently?????
         private void SendGetWarpTarget(NecClient client, GGateSpawn ggateSpawn)
         {
             client.Character.eventSelectExecCode = -1;
@@ -961,6 +961,56 @@ namespace Necromancy.Server.Packet.Area
             res11.WriteUInt32(npcSpawn.InstanceId);
             Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res11,
                 ServerType.Area); // It's the windows that contain the multiple choice            
+        }
+
+        private void ModelLibraryWarp(NecClient client, GGateSpawn ggateSpawn)
+        {
+
+            IBuffer res = BufferProvider.Provide();
+            res.WriteCString("US NPC Models"); //Length 0x601         
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res,ServerType.Area); // It's the first choice        
+            res = BufferProvider.Provide();
+            res.WriteCString("Monsters"); //Length 0x601         
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res, ServerType.Area); // It's the second choice
+            res = BufferProvider.Provide();
+            res.WriteCString("Giant Monsters"); //Length 0x601         
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res, ServerType.Area); // It's the third choice
+            res = BufferProvider.Provide();
+            res.WriteCString("Colossal Monsters"); //Length 0x601         
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res, ServerType.Area); // It's the fourth choice
+            res = BufferProvider.Provide();
+            res.WriteCString("US Gimmicks"); //Length 0x601         
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_push, res, ServerType.Area); // It's the fifth choice
+
+            res = BufferProvider.Provide();
+            res.WriteCString("Select area to travel to"); // It's the title dude
+            res.WriteUInt32(ggateSpawn.InstanceId); // 
+            Router.Send(client, (ushort)AreaPacketId.recv_event_select_exec, res, ServerType.Area); //
+        }
+
+        private void MapHomeWarp(NecClient client, GGateSpawn ggateSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            res.WriteCString("etc/warp_samemap"); // find max size 
+            res.WriteUInt32(client.Character.InstanceId); //newJp
+            Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
+            Task.Delay(TimeSpan.FromMilliseconds(1500)).ContinueWith
+            (t1 =>
+                {
+                    res = BufferProvider.Provide();
+                    res.WriteUInt32(client.Character.InstanceId);
+                    res.WriteFloat(client.Map.X);
+                    res.WriteFloat(client.Map.Y);
+                    res.WriteFloat(client.Map.Z);
+                    res.WriteByte(client.Character.Heading);
+                    res.WriteByte(client.Character.movementAnim);
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                }
+            );
+            res = BufferProvider.Provide();
+            res.WriteByte(0);
+            Router.Send(client, (ushort)AreaPacketId.recv_event_end, res, ServerType.Area);
+
         }
 
 

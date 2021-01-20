@@ -172,6 +172,19 @@ namespace Necromancy.Server.Chat.Command.Commands
                     Router.Send(client, (ushort)0x2716, res, ServerType.Area);
                     break;
 
+                    
+                case "partnersummon":
+                    recv_soul_partner_summon_start_notify recv_soul_partner_summon_start_notify = new recv_soul_partner_summon_start_notify();
+                    Router.Send(client.Map, recv_soul_partner_summon_start_notify);
+                    recv_soul_partner_summon_exec_r recv_soul_partner_summon_exec_r = new recv_soul_partner_summon_exec_r();
+                    Router.Send(client.Map, recv_soul_partner_summon_exec_r);
+                    recv_soul_partner_unlock_avatar recv_soul_partner_unlock_avatar = new recv_soul_partner_unlock_avatar();
+                    Router.Send(client.Map, recv_soul_partner_unlock_avatar);
+                    recv_soul_partner_notify_avatar recv_soul_partner_notify_avatar = new recv_soul_partner_notify_avatar();
+                    Router.Send(client.Map, recv_soul_partner_notify_avatar);
+                    
+                    break;
+
 
                 default: //you don't know what you're doing do you?
                     Logger.Error($"There is no recv of type : {command[0]} ");

@@ -115,6 +115,7 @@ namespace Necromancy.Server.Packet.Area
                             {x => x == 74013071, () => ChangeMap(client, ggateSpawn.SerialId)},
                             {x => x == 74013161, () => ChangeMap(client, ggateSpawn.SerialId)},
                             {x => x == 74013271, () => ChangeMap(client, ggateSpawn.SerialId)},
+                            {x => x == 7500001, () => ModelLibraryWarp(client, ggateSpawn)},
 
                             {x => x < 900000100, () => Logger.Debug("Yea, Work in progress still.")}
                         };
@@ -713,6 +714,85 @@ namespace Necromancy.Server.Packet.Area
 
 
             RecvEventEnd(client); //End The Event 
+        }
+
+        private void ModelLibraryWarp(NecClient client, GGateSpawn ggateSpawn)
+        {
+            IBuffer res = BufferProvider.Provide();
+            switch (client.Character.eventSelectExecCode)
+            {
+                case 0:
+                    res = BufferProvider.Provide();
+                    res.WriteCString($"Seriously?! Walk across the bridge. Why so Lazy?"); // Length 0xC01
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res, ServerType.Area); // show system message on middle of the screen.
+
+                    break;
+                case 1:
+                    res = BufferProvider.Provide();
+                    res.WriteCString("etc/warp_samemap"); // find max size 
+                    res.WriteUInt32(client.Character.InstanceId); //newJp
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
+                    Task.Delay(TimeSpan.FromMilliseconds(1500)).ContinueWith
+                    (t1 =>
+                        {
+                            res = BufferProvider.Provide();
+                            res.WriteUInt32(client.Character.InstanceId);
+                            res.WriteFloat(1574);
+                            res.WriteFloat(26452);
+                            res.WriteFloat(-1145);
+                            res.WriteByte(client.Character.Heading);
+                            res.WriteByte(client.Character.movementAnim);
+                            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                        }
+                    );
+                    break;
+                case 2:
+                    res = BufferProvider.Provide();
+                    res.WriteCString("etc/warp_samemap"); // find max size
+                    res.WriteUInt32(client.Character.InstanceId); //newJp
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
+                    Task.Delay(TimeSpan.FromMilliseconds(1500)).ContinueWith
+                    (t1 =>
+                        {
+                            res = BufferProvider.Provide();
+                            res.WriteUInt32(client.Character.InstanceId);
+                            res.WriteFloat(21);
+                            res.WriteFloat(39157);
+                            res.WriteFloat(-1838);
+                            res.WriteByte(client.Character.Heading);
+                            res.WriteByte(client.Character.movementAnim);
+                            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                        }
+                    );
+                    break;
+                case 3:
+                    res = BufferProvider.Provide();
+                    res.WriteCString("etc/warp_samemap"); // find max size
+                    res.WriteUInt32(client.Character.InstanceId); //newJp
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
+                    Task.Delay(TimeSpan.FromMilliseconds(1500)).ContinueWith
+                    (t1 =>
+                        {
+                            res = BufferProvider.Provide();
+                            res.WriteUInt32(client.Character.InstanceId);
+                            res.WriteFloat(0);
+                            res.WriteFloat(47829);
+                            res.WriteFloat(-2538);
+                            res.WriteByte(client.Character.Heading);
+                            res.WriteByte(client.Character.movementAnim);
+                            Router.Send(client.Map, (ushort)AreaPacketId.recv_object_point_move_notify, res, ServerType.Area);
+                        }
+                    );
+                    break;
+                case 4:
+                    res = BufferProvider.Provide();
+                    res.WriteCString($"Turn around genius"); // Length 0xC01
+                    Router.Send(client, (ushort)AreaPacketId.recv_event_system_message, res, ServerType.Area); // show system message on middle of the screen.
+                    break;
+
+            }
+            RecvEventEnd(client); //End The Event 
+
         }
 
         public void itemStats(InventoryItem inventoryItem, NecClient client)
