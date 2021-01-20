@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Necromancy.Server.Systems.Item.LocationManager
+namespace Necromancy.Server.Systems.Item
 {
     /// <summary>
     /// Holds item cache in memory.<br/> <br/>
     /// Stores information about published items, and their locations. <b>Does not validate any actions.</b>
     /// </summary>
-    public class ItemLocationManager
+    public class ItemManager
     {
         private const int MAX_CONTAINERS_ADV_BAG = 8;
         private const int MAX_CONTAINER_SIZE_ADV_BAG = 24;
@@ -26,11 +26,13 @@ namespace Necromancy.Server.Systems.Item.LocationManager
         private const int MAX_CONTAINERS_TREASURE_BOX = 1;
         private const int MAX_CONTAINER_SIZE_TREASURE_BOX = 10;
 
-        private Dictionary<ItemZoneType, ItemZone> ZoneMap = new Dictionary<ItemZoneType, ItemZone>();        
+        private Dictionary<ItemZoneType, ItemZone> ZoneMap = new Dictionary<ItemZoneType, ItemZone>();
 
-        public ItemLocationManager()
+        public ItemManager()
         {
             ZoneMap.Add(ItemZoneType.AdventureBag,      new ItemZone(MAX_CONTAINERS_ADV_BAG, MAX_CONTAINER_SIZE_ADV_BAG));
+            ZoneMap[ItemZoneType.AdventureBag].PutContainer(0, MAX_CONTAINER_SIZE_ADV_BAG);
+
             ZoneMap.Add(ItemZoneType.RoyalBag,          new ItemZone(MAX_CONTAINERS_ROYAL_BAG, MAX_CONTAINER_SIZE_ROYAL_BAG));
             ZoneMap.Add(ItemZoneType.BagSlot,           new ItemZone(MAX_CONTAINERS_BAG_SLOT, MAX_CONTAINER_SIZE_BAG_SLOT));
             ZoneMap.Add(ItemZoneType.AvatarInventory,   new ItemZone(MAX_CONTAINERS_AVATAR, MAX_CONTAINER_SIZE_AVATAR));
@@ -44,6 +46,8 @@ namespace Necromancy.Server.Systems.Item.LocationManager
 
         public void PutItem(ItemLocation loc, ItemInstance item)
         {
+            item.Location = loc;
+
             switch (loc.ZoneType)
             {
                 case ItemZoneType.BagSlot:
@@ -57,12 +61,14 @@ namespace Necromancy.Server.Systems.Item.LocationManager
                         ZoneMap[loc.ZoneType].GetContainer(loc.Container).PutItem(loc.Slot, item);
                         break;
                     }
-
             }
         }
         
         public void RemoveItem(ItemLocation loc)
         {
+            ItemInstance item = GetItem(loc);
+            if (item != null) item.Location = ItemLocation.InvalidLocation;
+
             switch (loc.ZoneType)
             {
                 case ItemZoneType.BagSlot:
@@ -79,7 +85,14 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             }
         }
 
-        public ItemLocation NextOpenSlot(ItemZoneType itemZoneType)
+        public ItemLocation PutItemInNextOpenSlot(ItemZoneType itemZoneType, ItemInstance item)
+        {
+            ItemLocation nextOpenSlot = NextOpenSlot(itemZoneType);
+            if (!nextOpenSlot.Equals(ItemLocation.InvalidLocation)) PutItem(nextOpenSlot, item);
+            return nextOpenSlot;
+        }
+
+        private ItemLocation NextOpenSlot(ItemZoneType itemZoneType)
         {
             int nextContainerWithSpace = ZoneMap[itemZoneType].NextContainerWithSpace;
             if (nextContainerWithSpace != ItemZone.NO_CONTAINERS_WITH_SPACE)
@@ -91,9 +104,8 @@ namespace Necromancy.Server.Systems.Item.LocationManager
                     return itemLocation;
                 }
             }
-            return new ItemLocation(ItemZoneType.InvalidZone, 0, 0);
+            return ItemLocation.InvalidLocation;
         }
-
         public ItemLocation[] NextOpenSlots(ItemZoneType itemZoneType, int amount)
         {
             if (amount > ZoneMap[itemZoneType].TotalFreeSpace) throw new ArgumentOutOfRangeException("Not enough open slots");

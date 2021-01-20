@@ -5,7 +5,7 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Model.Stats;
-using Necromancy.Server.Systems.Item.LocationManager;
+using Necromancy.Server.Systems.Item;
 using Necromancy.Server.Tasks;
 
 namespace Necromancy.Server.Model
@@ -118,7 +118,7 @@ namespace Necromancy.Server.Model
         public bool _characterActive { get; private set; }
 
         //Inventory
-        public ItemLocationManager ItemLocationManager { get; }
+        public ItemManager ItemManager { get; } = new ItemManager();
 
         public Character()
         {
@@ -165,8 +165,6 @@ namespace Necromancy.Server.Model
             helperTextAbdul = true;
             mapChange = false;
             StepCount = 0;
-
-            ItemLocationManager = new ItemLocationManager();
         }
 
         public bool characterActive

@@ -1,5 +1,5 @@
 using Necromancy.Server.Model;
-using Necromancy.Server.Systems.Item.LocationManager;
+using Necromancy.Server.Systems.Item;
 using System;
 using System.Collections.Generic;
 
@@ -51,12 +51,12 @@ namespace Necromancy.Server.Systems.Item
         }
         public List<ItemInstance> SpawnItemInstances(ItemZoneType itemZoneType, int[] baseIds, ItemSpawnParams[] spawnParams)
         {
-            if (_character.ItemLocationManager.GetTotalFreeSpace(itemZoneType) < baseIds.Length) throw new ItemException(ItemExceptionType.InventoryFull);
-            ItemLocation[] nextOpenLocations = _character.ItemLocationManager.NextOpenSlots(itemZoneType, baseIds.Length);
+            if (_character.ItemManager.GetTotalFreeSpace(itemZoneType) < baseIds.Length) throw new ItemException(ItemExceptionType.InventoryFull);
+            ItemLocation[] nextOpenLocations = _character.ItemManager.NextOpenSlots(itemZoneType, baseIds.Length);
             List<ItemInstance> itemInstances = _itemDao.InsertItemInstances(_character.Id, nextOpenLocations, baseIds, spawnParams);
             foreach(ItemInstance item in itemInstances)
             {
-                _character.ItemLocationManager.PutItem(item.Location, item);
+                _character.ItemManager.PutItem(item.Location, item);
             }
             return itemInstances;
         }
@@ -79,11 +79,11 @@ namespace Necromancy.Server.Systems.Item
             //load bags first
             foreach(ItemInstance item in ownedItems)
             {
-                if (item.Type == ItemType.BAG) _character.ItemLocationManager.PutItem(item.Location, item);
+                if (item.Type == ItemType.BAG) _character.ItemManager.PutItem(item.Location, item);
             }
             foreach (ItemInstance item in ownedItems)
             {
-                if (item.Type != ItemType.BAG) _character.ItemLocationManager.PutItem(item.Location, item);
+                if (item.Type != ItemType.BAG) _character.ItemManager.PutItem(item.Location, item);
             }
         }
         public void Sort(ItemZoneType zone, byte container)

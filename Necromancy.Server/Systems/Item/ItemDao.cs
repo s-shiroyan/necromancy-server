@@ -8,7 +8,7 @@ using System.Data.SQLite;
 
 namespace Necromancy.Server.Systems.Item
 {
-    public class ItemDao : DatabaseAccessObject, IItemDao
+    class ItemDao : DatabaseAccessObject, IItemDao
     {
         private const string SqlSpawnedView = @"
             DROP VIEW IF EXISTS item_instance;
@@ -371,15 +371,15 @@ namespace Necromancy.Server.Systems.Item
         }
 
         private ItemInstance MakeItemInstance(DbDataReader reader)
-        {
+        {    
+            ulong instanceId = (ulong)reader.GetInt64("id");
+            ItemInstance itemInstance = new ItemInstance(instanceId);
+
             ItemZoneType zone = (ItemZoneType)reader.GetByte("zone");
             byte bag = reader.GetByte("container");
             short slot = reader.GetInt16("slot");
             ItemLocation itemLocation = new ItemLocation(zone, bag, slot);
-
-            ulong instanceId = (ulong)reader.GetInt64("id");
-
-            ItemInstance itemInstance = new ItemInstance(instanceId, itemLocation);
+            itemInstance.Location = itemLocation;
 
             itemInstance.BaseID = reader.GetInt32("base_id");
 

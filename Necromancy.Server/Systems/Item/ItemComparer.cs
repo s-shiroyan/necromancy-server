@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Necromancy.Server.Systems.Item.LocationManager
+namespace Necromancy.Server.Systems.Item
 {
     class ItemComparer : IComparer<ItemInstance>
     {

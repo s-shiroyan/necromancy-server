@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Necromancy.Server.Systems.Item.LocationManager
+namespace Necromancy.Server.Systems.Item
 {
     class ItemZone
     {
@@ -50,7 +50,6 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             MaxContainers = maxContainers;
             MaxContainerSize = maxContainerSize;
             _containers = new Container[MaxContainers];
-            PutContainer(0, MaxContainerSize);
         }
 
         public int NextContainerWithSpace
@@ -82,18 +81,19 @@ namespace Necromancy.Server.Systems.Item.LocationManager
         {
             return _containers[index] != null;
         }
-        
+
         public ItemLocation[] GetNextXFreeSpaces(ItemZoneType itemZoneType, int amount)
         {
             ItemLocation[] freeSpaces = new ItemLocation[amount];
             int index = 0;
             for (int i = 0; i < MaxContainers; i++)
             {
-                if (_containers[i] != null && !_containers[i].IsFull){
+                if (_containers[i] != null && !_containers[i].IsFull)
+                {
                     int nextOpenSlot = _containers[i].NextOpenSlot;
-                    while(index < amount)
+                    while (index < amount)
                     {
-                        freeSpaces[index] = new ItemLocation(itemZoneType, (byte) i, (short) nextOpenSlot);
+                        freeSpaces[index] = new ItemLocation(itemZoneType, (byte)i, (short)nextOpenSlot);
                         index++;
                         nextOpenSlot = _containers[i].GetNextOpenSlot(nextOpenSlot);
                     }
@@ -101,5 +101,6 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             }
             return freeSpaces;
         }
+
     }
 }

@@ -6,6 +6,7 @@ namespace Necromancy.Server.Systems.Item
 {
     public readonly struct ItemLocation : IEquatable<ItemLocation>
     {
+        public static readonly ItemLocation InvalidLocation = new ItemLocation(ItemZoneType.InvalidZone,0,0);
         public ItemLocation(ItemZoneType zoneType, byte container, short slot)
         {
             ZoneType = zoneType;

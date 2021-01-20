@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Necromancy.Server.Systems.Item.LocationManager
+namespace Necromancy.Server.Systems.Item
 {
     class Container
     {
@@ -32,17 +32,7 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             _slots = new ItemInstance[size];
             Size = size;
         }
-        public bool IsEmpty
-        {
-            get
-            {
-                foreach (ItemInstance item in _slots)
-                {
-                    if (item != null) return false;
-                }
-                return true;
-            }
-        }
+
         public int NextOpenSlot
         {
             get
@@ -74,7 +64,12 @@ namespace Necromancy.Server.Systems.Item.LocationManager
         {
             return _slots[slot] != null;
         }
-
+        public void Sort()
+        {
+            if (IsSorted) return;
+            Array.Sort(_slots, ItemComparer.Instance);
+            IsSorted = true;
+        }
         public int GetNextOpenSlot(int startSlot)
         {
             for (int i = startSlot + 1; i < Size; i++)
@@ -83,11 +78,5 @@ namespace Necromancy.Server.Systems.Item.LocationManager
             }
             return NO_OPEN_SLOTS;
         }
-        public void Sort()
-        {
-            if (IsSorted) return;
-            Array.Sort(_slots, ItemComparer.Instance);
-            IsSorted = true;
-        }        
     }
 }

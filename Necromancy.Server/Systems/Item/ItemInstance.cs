@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Necromancy.Server.Systems.Item
 {
@@ -12,11 +10,9 @@ namespace Necromancy.Server.Systems.Item
         /// An instance of a base item. Holds mostly changable values.
         /// </summary>
         /// <param name="instanceId">Item's generated ID from the database.</param>
-        /// <param name="location">The location of the item.</param>
-        public ItemInstance(ulong instanceId, ItemLocation location)
+        public ItemInstance(ulong instanceId)
         {
             InstanceID = instanceId;
-            Location = location;
         }
         /// <summary>
         /// ID Generated when item is created from a base item template.
@@ -39,7 +35,7 @@ namespace Necromancy.Server.Systems.Item
 
         public ItemStatuses Statuses { get; set; }
 
-        public ItemLocation Location { get; private set; }
+        public ItemLocation Location { get; set; } = ItemLocation.InvalidLocation;
 
         public ItemEquipSlots CurrentEquipSlot { get; set; }
         /// <summary>
