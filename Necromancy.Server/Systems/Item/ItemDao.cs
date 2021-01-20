@@ -218,6 +218,16 @@ namespace Necromancy.Server.Systems.Item
             WHERE
                 id IN ({0})";
 
+        private const string SqlSelectOwnedInventoryItems = @"
+            SELECT 
+                * 
+            FROM 
+                item_instance 
+            WHERE 
+                owner_id = @owner_id 
+            AND 
+                zone IN (0,2,8,12)"; //adventure bag, royal bag, bag slot, avatar inventory
+
         private const string SqlInsertItemInstances = @"
             INSERT INTO 
 	            nec_item_instance
@@ -541,9 +551,20 @@ namespace Necromancy.Server.Systems.Item
             return itemInstance;
         }
 
-        public List<ItemInstance> SelectOwnedInventoryItems(int characterId)
+        public List<ItemInstance> SelectOwnedInventoryItems(int ownerId)
         {
-            throw new NotImplementedException();
+            List<ItemInstance> ownedInventoryItems = new List<ItemInstance>();
+            ExecuteReader(SqlSelectOwnedInventoryItems,
+                command =>
+                {
+                    AddParameter(command, "@owner_id", ownerId);
+                }, reader =>
+                {
+                    while (reader.Read()){
+                        ownedInventoryItems.Add(MakeItemInstance(reader));
+                    }
+                });
+            return ownedInventoryItems;
         }
 
 

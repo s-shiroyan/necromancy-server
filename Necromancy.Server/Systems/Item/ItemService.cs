@@ -73,7 +73,7 @@ namespace Necromancy.Server.Systems.Item
         /// 
         /// </summary>
         /// <returns>A list of items in your adventure bag, bag slot, royal bag, and avatar inventory.</returns>
-        public void LoadOwnedInventoryItems()
+        public List<ItemInstance> LoadOwnedInventoryItems()
         {
             List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
             //load bags first
@@ -85,6 +85,7 @@ namespace Necromancy.Server.Systems.Item
             {
                 if (item.Type != ItemType.BAG) _character.ItemManager.PutItem(item.Location, item);
             }
+            return ownedItems;
         }
         public void Sort(ItemZoneType zone, byte container)
         {
