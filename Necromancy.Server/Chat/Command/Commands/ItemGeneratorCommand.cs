@@ -59,9 +59,14 @@ namespace Necromancy.Server.Chat.Command.Commands
             itemIds[7] = 50100511;
             itemIds[8] = 50100512;
             itemIds[9] = 50100513;
-
+            ItemSpawnParams[] spawmParams = new ItemSpawnParams[size];
+            for (int i = 0; i < size; i++)
+            {
+                spawmParams[i] = new ItemSpawnParams();
+                spawmParams[i].ItemStatuses = ItemStatuses.Identified;
+            }
             ItemService itemService = new ItemService(client.Character);
-            List<ItemInstance> items = itemService.SpawnItemInstances(ItemZoneType.AdventureBag, itemIds);
+            List<ItemInstance> items = itemService.SpawnItemInstances(ItemZoneType.AdventureBag, itemIds, spawmParams);
             RecvSituationStart recvSituationStart = new RecvSituationStart();
             RecvSituationEnd recvSituationEnd = new RecvSituationEnd();
             Logger.Debug(items.Count.ToString());

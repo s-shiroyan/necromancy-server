@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteUInt64(_itemInstance.InstanceID);                  //INSTANCE ID
             res.WriteInt32(_itemInstance.BaseID);                       //BASE ID
             res.WriteByte(_itemInstance.Quantity);                      //QUANTITY
-            res.WriteUInt32(_client.Character.AlignmentId);             //STATUSES
+            res.WriteInt32((int)_itemInstance.Statuses);             //STATUSES
             res.WriteFixedString("", 0x10);                             //UNKNOWN - ITEM TYPE?
             res.WriteByte((byte)_itemInstance.Location.ZoneType);           //STORAGE ZONE
             res.WriteByte(_itemInstance.Location.Container);                  //BAG

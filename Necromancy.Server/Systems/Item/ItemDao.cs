@@ -22,9 +22,7 @@ namespace Necromancy.Server.Systems.Item
                     slot,
                     base_id,
                     quantity,
-                    is_identified,
-                    is_cursed,
-                    is_blessed,
+                    statuses,
                     current_equip_slot,
                     current_durability,
                     maximum_durability,
@@ -228,10 +226,32 @@ namespace Necromancy.Server.Systems.Item
 			        zone,
 			        container,
 			        slot,
-			        base_id
+			        base_id,
+                    statuses,
+                    quantity,
+                    gem_slot_1_type,
+                    gem_slot_2_type,
+                    gem_slot_3_type,
+                    gem_id_slot_1,
+                    gem_id_slot_2,
+                    gem_id_slot_3
 		        )		
             VALUES
-	            (@owner_id,@zone,@container,@slot,@base_id);
+	            (
+                    @owner_id,
+                    @zone,
+                    @container,
+                    @slot,
+                    @base_id,
+                    @statuses,
+                    @quantity,
+                    @gem_slot_1_type,
+                    @gem_slot_2_type,
+                    @gem_slot_3_type,
+                    @gem_id_slot_1,
+                    @gem_id_slot_2,
+                    @gem_id_slot_3
+                );
             SELECT last_insert_rowid()";
 
 
@@ -273,9 +293,9 @@ namespace Necromancy.Server.Systems.Item
             throw new NotImplementedException();
         }
 
-        public List<ItemInstance> InsertItemInstances(int ownerId, ItemLocation[] itemLocations, int[] baseId)
+        public List<ItemInstance> InsertItemInstances(int ownerId, ItemLocation[] locs, int[] baseId, ItemSpawnParams[] spawnParams)
         {
-            int size = itemLocations.Length;
+            int size = locs.Length;
             List<ItemInstance> itemInstances = new List<ItemInstance>(size);
             try
             {
@@ -288,10 +308,43 @@ namespace Necromancy.Server.Systems.Item
                 {
                     command.Parameters.Clear();
                     AddParameter(command, "@owner_id", ownerId);
-                    AddParameter(command, "@zone", (byte)itemLocations[i].ZoneType);
-                    AddParameter(command, "@container", itemLocations[i].Container);
-                    AddParameter(command, "@slot", itemLocations[i].Slot);
+                    AddParameter(command, "@zone", (byte)locs[i].ZoneType);
+                    AddParameter(command, "@container", locs[i].Container);
+                    AddParameter(command, "@slot", locs[i].Slot);
                     AddParameter(command, "@base_id", baseId[i]);
+                    AddParameter(command, "@statuses", (int)spawnParams[i].ItemStatuses);
+                    AddParameter(command, "@quantity", spawnParams[i].Quantity);
+
+                    if (spawnParams[i].GemSlots.Length > 0) 
+                        AddParameter(command, "@gem_slot_1_type", (int)spawnParams[i].GemSlots[0].Type);
+                    else
+                        AddParameter(command, "@gem_slot_1_type", 0);
+
+                    if (spawnParams[i].GemSlots.Length > 1) 
+                        AddParameter(command, "@gem_slot_2_type", (int)spawnParams[i].GemSlots[1].Type);
+                    else
+                        AddParameter(command, "@gem_slot_2_type",0);
+
+                    if (spawnParams[i].GemSlots.Length > 2) 
+                        AddParameter(command, "@gem_slot_3_type", (int)spawnParams[i].GemSlots[2].Type);
+                    else
+                        AddParameter(command, "@gem_slot_3_type",0);
+
+                    if (spawnParams[i].GemSlots.Length > 0) 
+                        AddParameter(command, "@gem_id_slot_1", (int)spawnParams[i].GemSlots[0].Type);
+                    else
+                        AddParameterNull(command, "@gem_id_slot_1");
+
+                    if (spawnParams[i].GemSlots.Length > 1) 
+                        AddParameter(command, "@gem_id_slot_2", (int)spawnParams[i].GemSlots[1].Type);
+                    else
+                        AddParameterNull(command, "@gem_id_slot_2");
+
+                    if (spawnParams[i].GemSlots.Length > 2)
+                        AddParameter(command, "@gem_id_slot_3", (int)spawnParams[i].GemSlots[2].Type);
+                    else
+                        AddParameterNull(command, "@gem_id_slot_3");
+
                     lastIds[i] = (long)command.ExecuteScalar();
                 }
 
@@ -332,9 +385,7 @@ namespace Necromancy.Server.Systems.Item
 
             itemInstance.Quantity = reader.GetByte("quantity");
 
-            if (reader.GetBoolean("is_identified")) itemInstance.Statuses |= ItemStatuses.Identified;
-            if (reader.GetBoolean("is_cursed")) itemInstance.Statuses |= ItemStatuses.Cursed;
-            if (reader.GetBoolean("is_blessed")) itemInstance.Statuses |= ItemStatuses.Blessed;
+            itemInstance.Statuses = (ItemStatuses)reader.GetInt32("statuses");
 
             itemInstance.CurrentEquipSlot = (ItemEquipSlots)reader.GetInt32("current_equip_slot");
 

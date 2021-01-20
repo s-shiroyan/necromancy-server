@@ -166,5 +166,10 @@ namespace Necromancy.Server.Systems
         {
             AddParameter(command, name, value, DbType.Boolean);
         }
+
+        protected void AddParameterNull(DbCommand command, string name)
+        {
+            AddParameter(command, name, DBNull.Value, DbType.Object);
+        }
     }
 }
