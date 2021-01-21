@@ -6,7 +6,7 @@ namespace Necromancy.Server.Systems.Item
 {
     class Container
     {
-        public  const int NO_OPEN_SLOTS = -1;
+        public const int NO_OPEN_SLOTS = -1;
         private readonly ItemInstance[] _slots;
         public int Size { get; }
         public int Count { get; private set; }
@@ -46,6 +46,8 @@ namespace Necromancy.Server.Systems.Item
         }
         public void PutItem(int slot, ItemInstance item)
         {
+            if (_slots[slot] != null)
+                _slots[slot].Location = ItemLocation.InvalidLocation;
             _slots[slot] = item;
             Count++;
             IsSorted = false;
@@ -56,10 +58,12 @@ namespace Necromancy.Server.Systems.Item
         }
         public void RemoveItem(int slot)
         {
+            if (_slots[slot] != null)
+                _slots[slot].Location = ItemLocation.InvalidLocation;
             _slots[slot] = null;
             Count--;
             IsSorted = false;
-        }        
+        }
         public bool HasItem(int slot)
         {
             return _slots[slot] != null;
@@ -68,6 +72,11 @@ namespace Necromancy.Server.Systems.Item
         {
             if (IsSorted) return;
             Array.Sort(_slots, ItemComparer.Instance);
+            for (int i = 0; i < Count; i++)
+            {
+                if (_slots[i] != null)
+                    _slots[i].Location = new ItemLocation(_slots[i].Location.ZoneType, _slots[i].Location.Container, (short)i);
+            }
             IsSorted = true;
         }
         public int GetNextOpenSlot(int startSlot)

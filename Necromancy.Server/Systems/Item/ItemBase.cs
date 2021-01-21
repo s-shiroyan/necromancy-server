@@ -9,8 +9,8 @@ namespace Necromancy.Server.Systems.Item
     {        
         public int BaseID { get; set; }
         public ItemType Type { get; set; }
-        public ItemQualities Quality { get; set; }    
-        public byte MaxStackSize { get; set; }
+        public ItemQualities Quality { get; set; }
+        public byte MaxStackSize { get; set; } = 1;
         public ItemEquipSlots EquipAllowedSlots { get; set; }    
         public Races RequiredRaces { get; set; }
         public Classes RequiredClasses { get; set; }

@@ -21,7 +21,7 @@ namespace Necromancy.Server.Systems.Item
         /// <summary>
         /// Owner's character ID.
         /// </summary>
-        public uint OwnerID { get; set; }
+        public int OwnerID { get; internal set; }
         /// <summary>
         /// Item's displayed name when unidentified. Always "? <c>ItemType</c>".
         /// </summary>
@@ -31,62 +31,62 @@ namespace Necromancy.Server.Systems.Item
             }
         }
 
-        public byte Quantity { get; set; }
+        public byte Quantity { get; set; } = 1;
 
-        public ItemStatuses Statuses { get; set; }
+        public ItemStatuses Statuses { get; internal set; }
 
         public ItemLocation Location { get; set; } = ItemLocation.InvalidLocation;
 
-        public ItemEquipSlots CurrentEquipSlot { get; set; }
+        public ItemEquipSlots CurrentEquipSlot { get; internal set; }
         /// <summary>
         /// Current durability remaining of the item.
         /// </summary>
-        public int CurrentDurability { get; set; }
+        public int CurrentDurability { get; internal set; }
 
-        public byte EnhancementLevel { get; set; }
+        public byte EnhancementLevel { get; internal set; }
 
-        public byte SpecialForgeLevel { get; set; }
+        public byte SpecialForgeLevel { get; internal set; }
 
         public string TalkRingName = "";
 
-        public short Physical { get; set; }
+        public short Physical { get; internal set; }
 
-        public short Magical { get; set; }
+        public short Magical { get; internal set; }
 
-        public int MaximumDurability { get; set; }
+        public int MaximumDurability { get; internal set; }
 
-        public byte Hardness { get; set; }
+        public byte Hardness { get; internal set; }
 
         /// <summary>
         /// Weight in thousandths.
         /// </summary>
-        public int Weight { get; set; }
+        public int Weight { get; internal set; }
 
-        public GemSlot[] GemSlots { get; set; } = new GemSlot[0];
+        public GemSlot[] GemSlots { get; internal set; } = new GemSlot[0];
 
-        public int EnchantId { get; set; }
+        public int EnchantId { get; internal set; }
 
-        public short GP { get; set; }
+        public short GP { get; internal set; }
         /// <summary>
         /// Item is provided with 'Protect' status until this date in seconds. 
         /// Maximum year is 2038 because it is an integer.
         /// </summary>
-        public int ProtectUntil { get; set; }
+        public int ProtectUntil { get; internal set; }
 
-        public short PlusPhysical { get; set; }
-        public short PlusMagical { get; set; }
-        public short PlusWeight { get; set; }
-        public short PlusDurability { get; set; }
-        public short PlusGP { get; set; }
-        public short PlusRangedEff { get; set; }
-        public short PlusReservoirEff { get; set; }
+        public short PlusPhysical { get; internal set; }
+        public short PlusMagical { get; internal set; }
+        public short PlusWeight { get; internal set; }
+        public short PlusDurability { get; internal set; }
+        public short PlusGP { get; internal set; }
+        public short PlusRangedEff { get; internal set; }
+        public short PlusReservoirEff { get; internal set; }
 
         //Update once better translation available
-        public short RangedEffDist { get; set; }
-        public short ReservoirLoadPerf { get; set; }
-        public byte NumOfLoads { get; set; }
+        public short RangedEffDist { get; internal set; }
+        public short ReservoirLoadPerf { get; internal set; }
+        public byte NumOfLoads { get; internal set; }
 
-        public byte SPCardColor { get; set; }
+        public byte SPCardColor { get; internal set; }
 
 
         /// <summary>
@@ -98,5 +98,6 @@ namespace Necromancy.Server.Systems.Item
                 return ((ItemStatuses.Identified & Statuses) != 0) && ((ItemStatuses.Unidentified & Statuses) == 0);
             } 
         }
+        
     }
 }

@@ -10,7 +10,9 @@ namespace Necromancy.Server.Systems.Item
         public List<ItemInstance> InsertItemInstances(int ownerId, ItemLocation[] locs, int[] baseId, ItemSpawnParams[] spawnParams);
         public ItemInstance SelectItemInstance(long instanceId);
         public ItemInstance SelectItemInstance(int characterId, ItemLocation itemLocation);
+        public void DeleteItemInstance(ulong instanceIds);
         public void UpdateItemLocations(ulong[] instanceIds, ItemLocation[] locs);
+        public void UpdateItemQuantities(ulong[] instanceIds, byte[] quantities);
         public List<ItemInstance> SelectOwnedInventoryItems(int ownerId);
         
     }

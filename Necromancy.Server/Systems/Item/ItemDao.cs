@@ -228,11 +228,25 @@ namespace Necromancy.Server.Systems.Item
             AND 
                 zone IN (0,2,8,12)"; //adventure bag, royal bag, bag slot, avatar inventory
 
-        private const string SqlUpdateItemLocations = @"
+        private const string SqlUpdateItemLocation = @"
             UPDATE 
                 nec_item_instance 
             SET 
                 zone = @zone AND container = @container AND slot = @slot 
+            WHERE 
+                id = @id";
+
+        private const string SqlUpdateItemQuantity = @"
+            UPDATE 
+                nec_item_instance 
+            SET 
+                quantity = @quantity 
+            WHERE 
+                id = @id";
+
+        private const string SqlDeleteItemInstance = @"
+            DELETE FROM 
+                nec_item_instance 
             WHERE 
                 id = @id";
 
@@ -305,6 +319,14 @@ namespace Necromancy.Server.Systems.Item
         {
             throw new NotImplementedException();
         }
+        public void DeleteItemInstance(ulong instanceId)
+        {
+            ExecuteNonQuery(SqlDeleteItemInstance,
+                command =>
+                {
+                    AddParameter(command, "@id", instanceId);
+                });
+        }
 
         public ItemInstance SelectItemInstance(int characterId, ItemLocation itemLocation)
         {
@@ -319,7 +341,7 @@ namespace Necromancy.Server.Systems.Item
                 using DbConnection conn = GetSQLConnection();
                 conn.Open();
                 using DbCommand command = conn.CreateCommand();
-                command.CommandText = SqlUpdateItemLocations;
+                command.CommandText = SqlUpdateItemLocation;
                 for (int i = 0; i < size; i++)
                 {
                     command.Parameters.Clear();
@@ -327,16 +349,39 @@ namespace Necromancy.Server.Systems.Item
                     AddParameter(command, "@container", locs[i].Container);
                     AddParameter(command, "@slot", locs[i].Slot);
                     AddParameter(command, "@id", instanceIds[i]);
-                    //AddParameter(command, "@quantity", spawnParams[i].Quantity); TODO
 
                     command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                Logger.Error($"Query: {SqlUpdateItemLocations}");
+                Logger.Error($"Query: {SqlUpdateItemLocation}");
                 Exception(ex);
             }
+        }
+
+        public void UpdateItemQuantities(ulong[] instanceIds, byte[] quantities)
+        {
+            int size = instanceIds.Length;
+            try
+            {
+                using DbConnection conn = GetSQLConnection();
+                conn.Open();
+                using DbCommand command = conn.CreateCommand();
+                command.CommandText = SqlUpdateItemQuantity;
+                for (int i = 0; i < size; i++)
+                {
+                    command.Parameters.Clear();
+                    AddParameter(command, "@quantity", quantities[i]);
+                    AddParameter(command, "@id", instanceIds[i]);
+                    command.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Query: {SqlUpdateItemQuantity}");
+                Exception(ex);
+            }            
         }
 
         public List<ItemInstance> SelectOwnedInventoryItems(int ownerId)

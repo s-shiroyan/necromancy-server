@@ -43,6 +43,7 @@ namespace Necromancy.Server.Systems.Item
 
         public ItemInstance GetItem(ItemLocation loc)
         {
+            if (loc.Equals(ItemLocation.InvalidLocation)) return null;
             return ZoneMap[loc.ZoneType].GetContainer(loc.Container).GetItem(loc.Slot);
         }
 
@@ -56,6 +57,7 @@ namespace Necromancy.Server.Systems.Item
 
         public void PutItem(ItemLocation loc, ItemInstance item)
         {
+            RemoveItem(item.Location);
             item.Location = loc;
 
             switch (loc.ZoneType)
@@ -78,6 +80,7 @@ namespace Necromancy.Server.Systems.Item
         {
             ItemInstance item = GetItem(loc);
             if (item != null) item.Location = ItemLocation.InvalidLocation;
+            else return;
 
             switch (loc.ZoneType)
             {
