@@ -40,7 +40,15 @@ namespace Necromancy.Server.Chat.Command.Commands
                     res36.WriteCString("Trade_Union");
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_notify_union_data, res36, ServerType.Area);
                     break;
+                case "mant":
+                    res36.WriteInt32(0);
+                    for (int i = 0; i < 0x10; i++)
+                    {
+                        res36.WriteByte(0);
+                    }
 
+                    Router.Send(client, (ushort)AreaPacketId.recv_union_mantle_open, res36, ServerType.Area);
+                    break;
                 case "xunion":
                     res36.WriteUInt32(client.Character.InstanceId);
                     res36.WriteInt32(0 /*client.Character.UnionId*/);
