@@ -57,8 +57,8 @@ namespace Necromancy.Server.Chat.Command.Commands
             itemIds[5] = 50100506;
             itemIds[6] = 50100507;
             itemIds[7] = 50100511;
-            itemIds[8] = 50100512;
-            itemIds[9] = 50100513;
+            itemIds[8] = 90012001; //royal bag 16 slots
+            itemIds[9] = 90012002; //deluxe royal bag - 24 slots??
             ItemSpawnParams[] spawmParams = new ItemSpawnParams[size];
             for (int i = 0; i < size; i++)
             {

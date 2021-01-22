@@ -25,10 +25,15 @@ namespace Necromancy.Server.Packet.Area
             short toSlot = packet.Data.ReadInt16();
             byte quantity = packet.Data.ReadByte();
 
-            Logger.Debug($"fromStoreType byte [{fromZone}] toStoreType byte [{toZone}]");
-            Logger.Debug($"fromContainerId byte [{fromContainer}] toBagId byte [{toContainer}]");
+            Logger.Debug($"fromZoneType byte [{fromZone}] toZoneType byte [{toZone}]");
+            Logger.Debug($"fromContainerId byte [{fromContainer}] toContainerId byte [{toContainer}]");
             Logger.Debug($"fromSlot byte [{fromSlot}] toSlot[{ toSlot}]");
             Logger.Debug($"itemCount [{quantity}]");
+
+            if(toZone == ItemZoneType.UNKNOWN1){
+                RecvItemMove recvItemMoved = new RecvItemMove(client, 0);
+                Router.Send(recvItemMoved);
+            }
 
             ItemLocation fromLoc = new ItemLocation(fromZone, fromContainer, fromSlot);
             ItemLocation toLoc = new ItemLocation(toZone, toContainer, toSlot);

@@ -42,7 +42,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res = BufferProvider.Provide();
                 ulong instanceId = (ulong)(10001 + i);
                 res.WriteUInt64(instanceId);        //V|SPAWN ID
-                res.WriteInt32(100101 + i);               //V|BASE ID
+                res.WriteInt32(81101000 + i);               //V|BASE ID
                 res.WriteByte(1);                           //V|QUANTITY
                 res.WriteInt32(2);                   //V|STATUSES
                 res.WriteFixedString("赤", 0x10);             //UNKNOWN - ITEM TYPE? decrypt key?
@@ -137,23 +137,23 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res.WriteInt64(Int64.MaxValue);//UNKNOWN
 
                 //base enchant display on bottom
-                res.WriteInt16((short)20);  //Base Enchant Scroll ID
+                res.WriteInt16((short)0);  //Base Enchant Scroll ID
 
-                res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
-                res.WriteInt32(7);                  //enchantment effect statement, 100,1250,{stringID
-                res.WriteInt16((short)3);           //enchantment effect value            
-                res.WriteInt16((short)i);           //unknown
+                res.WriteInt32(0);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                res.WriteInt32(0);                  //enchantment effect statement, 100,1250,{stringID
+                res.WriteInt16((short)0);           //enchantment effect value            
+                res.WriteInt16((short)0);           //unknown
 
-                res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
-                res.WriteInt32(8);                  //enchantment effect statement, 100,1250,{stringID
-                res.WriteInt16((short)4);           //enchantment effect value            
-                res.WriteInt16((short)(i * 2));     //unknown            
+                res.WriteInt32(0);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
+                res.WriteInt32(0);                  //enchantment effect statement, 100,1250,{stringID
+                res.WriteInt16((short)0);           //enchantment effect value            
+                res.WriteInt16((short)0);     //unknown            
 
                 //sub enchantment, values hidden unless viewed at enchant shop maybe
                 numEntries = 5;
                 for (int j = 0; j < 5; j++)
                 {
-                    res.WriteInt16((short)(20));          //Sub Enchant Scroll ID
+                    res.WriteInt16((short)(0));          //Sub Enchant Scroll ID
                     res.WriteInt32(1);                  //misc field for displaying enchant removal / extraction I think: 0 - off, 1 - on, 5 percent sign, 6 remove, 7- extract
                     res.WriteInt32(7);                  //enchantment effect statement, 100,1250,{stringID
                     res.WriteInt16((short)3);           //enchantment effect value            

@@ -28,9 +28,6 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>Client\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
         </ContentWithTargetPath>
-    </ItemGroup>   
-    <ItemGroup>
-      <ContentWithTargetPath Remove="Client\Data\Settings\item_decrypted.csv" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Model\ItemModel\" />

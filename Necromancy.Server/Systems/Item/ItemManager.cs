@@ -11,8 +11,11 @@ namespace Necromancy.Server.Systems.Item
     /// </summary>
     public class ItemManager
     {
-        private const int MAX_CONTAINERS_ADV_BAG = 8;
+        private const int MAX_CONTAINERS_ADV_BAG = 1;
         private const int MAX_CONTAINER_SIZE_ADV_BAG = 24;
+
+        private const int MAX_CONTAINERS_EQUIPPED_BAGS = 7;
+        private const int MAX_CONTAINER_EQUIPPED_BAGS = 24;
 
         private const int MAX_CONTAINERS_AVATAR = 9;
         private const int MAX_CONTAINER_SIZE_AVATAR = 50;
@@ -33,7 +36,9 @@ namespace Necromancy.Server.Systems.Item
             ZoneMap.Add(ItemZoneType.AdventureBag,      new ItemZone(MAX_CONTAINERS_ADV_BAG, MAX_CONTAINER_SIZE_ADV_BAG));
             ZoneMap[ItemZoneType.AdventureBag].PutContainer(0, MAX_CONTAINER_SIZE_ADV_BAG);
 
-            ZoneMap.Add(ItemZoneType.RoyalBag,          new ItemZone(MAX_CONTAINERS_ROYAL_BAG, MAX_CONTAINER_SIZE_ROYAL_BAG));
+            ZoneMap.Add(ItemZoneType.EquippedBags, new ItemZone(MAX_CONTAINERS_EQUIPPED_BAGS, MAX_CONTAINER_EQUIPPED_BAGS));
+
+            ZoneMap.Add(ItemZoneType.PremiumBag,          new ItemZone(MAX_CONTAINERS_ROYAL_BAG, MAX_CONTAINER_SIZE_ROYAL_BAG));
             ZoneMap.Add(ItemZoneType.BagSlot,           new ItemZone(MAX_CONTAINERS_BAG_SLOT, MAX_CONTAINER_SIZE_BAG_SLOT));
             ZoneMap[ItemZoneType.BagSlot].PutContainer(0, MAX_CONTAINER_SIZE_BAG_SLOT);
 
@@ -64,7 +69,7 @@ namespace Necromancy.Server.Systems.Item
             {
                 case ItemZoneType.BagSlot:
                     {
-                        ZoneMap[ItemZoneType.AdventureBag].PutContainer(loc.Slot + 1, item.BagSize);
+                        ZoneMap[ItemZoneType.EquippedBags].PutContainer(loc.Slot, item.BagSize);
                         ZoneMap[loc.ZoneType].GetContainer(loc.Container).PutItem(loc.Slot, item);
                         break;
                     }
