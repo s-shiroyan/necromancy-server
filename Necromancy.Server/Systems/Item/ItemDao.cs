@@ -639,8 +639,8 @@ namespace Necromancy.Server.Systems.Item
             itemInstance.IconId = reader.GetInt32("icon");
 
             itemInstance.TalkRingName = "";
-
-            //itemInstance.BagSize = reader.GetByte("num_of_bag_slots");
+            //TODO fix all the data types once mysql is implemented
+            itemInstance.BagSize = (byte)reader.GetInt32("num_of_bag_slots");
 
             //grade,
             //weight
