@@ -30,11 +30,6 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"fromSlot byte [{fromSlot}] toSlot[{ toSlot}]");
             Logger.Debug($"itemCount [{quantity}]");
 
-            if(toZone == ItemZoneType.UNKNOWN1){
-                RecvItemMove recvItemMoved = new RecvItemMove(client, 0);
-                Router.Send(recvItemMoved);
-            }
-
             ItemLocation fromLoc = new ItemLocation(fromZone, fromContainer, fromSlot);
             ItemLocation toLoc = new ItemLocation(toZone, toContainer, toSlot);
             ItemService itemService = new ItemService(client.Character);
