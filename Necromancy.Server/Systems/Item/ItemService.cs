@@ -125,9 +125,26 @@ namespace Necromancy.Server.Systems.Item
             _itemDao.UpdateItemLocations(instanceIds, itemLocations);
             return sortedItems;
         }
-        public long Drop(ItemLocation location, byte quantity)
-        {
-            throw new NotImplementedException();
+        public ulong Drop(ItemLocation location, byte quantity)
+        {   
+            ItemInstance item = _character.ItemManager.GetItem(location);
+            ulong instanceId = item.InstanceID;
+            if (item is null) throw new ItemException(ItemExceptionType.Generic);
+            if (item.Quantity < quantity) throw new ItemException(ItemExceptionType.Amount);
+            
+            if (item.Quantity == quantity)
+            {
+                _itemDao.DeleteItemInstance(instanceId);
+            } else 
+            {
+                ulong[] instanceIds = new ulong[1];
+                byte[] quantities = new byte[1];
+                instanceIds[0] = instanceId;
+                item.Quantity -= quantity;
+                quantities[0] = item.Quantity;
+                _itemDao.UpdateItemQuantities(instanceIds, quantities);
+            }
+            return instanceId;
         }
         public long Sell(ItemLocation location, byte quantity)
         {

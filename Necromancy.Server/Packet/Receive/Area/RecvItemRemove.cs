@@ -7,8 +7,8 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemRemove : PacketResponse
     {
-        private readonly long _spawnId;
-        public RecvItemRemove(NecClient client, long spawnId)
+        private readonly ulong _spawnId;
+        public RecvItemRemove(NecClient client, ulong spawnId)
             : base((ushort) AreaPacketId.recv_item_remove, ServerType.Area)
         {
             _spawnId = spawnId;
@@ -17,7 +17,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteInt64(_spawnId); 
+            res.WriteUInt64(_spawnId); 
             return res;
         }
     }
