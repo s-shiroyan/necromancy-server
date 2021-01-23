@@ -253,5 +253,24 @@ namespace Necromancy.Test.Systems
             Assert.Equal(itemInstance.Location, toLoc);
             Assert.Equal(quantity, itemInstance.Quantity);
         }
+
+        [Fact]
+        public void TestItemMoveEmptyBagOutOfSlot()
+        {
+            const ulong bagId = 534577777;
+            const int quantity = 1;
+            ItemInstance bag = new ItemInstance(bagId);
+            ItemLocation bagLoc = new ItemLocation(ItemZoneType.BagSlot, 0, 0);
+            _dummyCharacter.ItemManager.PutItem(bagLoc, bag);
+            ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
+
+            _itemService.Move(bagLoc, toLoc, quantity, out ItemService.MoveType moveType);
+
+            Assert.Equal(ItemService.MoveType.Place, moveType);
+            Assert.Null(_dummyCharacter.ItemManager.GetItem(bagLoc));
+            Assert.Equal(bagId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
+            Assert.Equal(bag.Location, toLoc);
+            Assert.Equal(quantity, bag.Quantity);
+        }
     }
 }

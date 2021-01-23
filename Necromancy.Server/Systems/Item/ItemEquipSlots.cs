@@ -14,7 +14,7 @@ namespace Necromancy.Server.Systems.Item
         Legs        = 1 << 5,
         Arms        = 1 << 6,
         Feet        = 1 << 7,
-        Cape        = 1 << 8,
+        Cloak       = 1 << 8,
         Ring        = 1 << 9,
         Earring     = 1 << 10,
         Necklace    = 1 << 11,
@@ -25,6 +25,7 @@ namespace Necromancy.Server.Systems.Item
         AvatarLegs  = 1 << 16,
         AvatarArms  = 1 << 17,
         AvatarFeet  = 1 << 18,
-        TwoHanded   = RightHand | LeftHand
+        AvatarCloak = 1 << 19,
+        TwoHanded   = RightHand | LeftHand        
     }
 }

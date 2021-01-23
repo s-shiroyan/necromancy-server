@@ -71,8 +71,9 @@ namespace Necromancy.Server.Systems.Item
 
         public string ObjectType = "NONE"; //TODO
         public string EquipSlot2 = "WhoKnows"; //TODO
-        public string IconType = "eh"; //TODO
+        //public string IconType = "eh"; //TODO
         public byte BagSize { get; set; }
+        public bool IsUseableInTown { get; set; }
         public bool IsStorable { get; set; }
         public bool IsDiscardable { get; set; }
         public bool IsSellable { get; set; }

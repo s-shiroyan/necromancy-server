@@ -89,17 +89,41 @@ namespace Necromancy.Server.Systems.Item
             //load bags first
             foreach (ItemInstance item in ownedItems)
             {
-                if (item.Type == ItemType.BAG) _character.ItemManager.PutItem(item.Location, item);
+                if (item.Location.ZoneType == ItemZoneType.BagSlot)
+                {
+                    ItemLocation location = item.Location; //only needed on load inventory because item's location is already populated and it is not in the manager
+                    item.Location = ItemLocation.InvalidLocation; //only needed on load inventory because item's location is already populated and it is not in the manager
+                    _character.ItemManager.PutItem(location, item);
+                }
             }
             foreach (ItemInstance item in ownedItems)
             {
-                if (item.Type != ItemType.BAG) _character.ItemManager.PutItem(item.Location, item);
+                
+                if (item.Location.ZoneType != ItemZoneType.BagSlot) {
+                    ItemLocation location = item.Location; //only needed on load inventory because item's location is already populated and it is not in the manager
+                    item.Location = ItemLocation.InvalidLocation; //only needed on load inventory because item's location is already populated and it is not in the manager
+                    _character.ItemManager.PutItem(location, item);
+                }
             }
             return ownedItems;
         }
-        public void Sort(ItemZoneType zone, byte container)
+        public ItemInstance[] Sort(ItemZoneType zone, byte container, short[] fromSlots, short[] toSlots, short[] quantities)
         {
-
+            ItemInstance[] sortedItems = new ItemInstance[fromSlots.Length];
+            ulong[] instanceIds = new ulong[fromSlots.Length];
+            ItemLocation[] itemLocations = new ItemLocation[fromSlots.Length];
+            for (int i =0; i < fromSlots.Length; i++)
+            {
+                sortedItems[i] = _character.ItemManager.RemoveItem(new ItemLocation(zone, container, fromSlots[i]));
+                instanceIds[i] = sortedItems[i].InstanceID;
+            }
+            for (int i = 0; i < fromSlots.Length; i++)
+            {
+                itemLocations[i] = new ItemLocation(zone, container, toSlots[i]);
+                _character.ItemManager.PutItem(itemLocations[i], sortedItems[i]);
+            }
+            _itemDao.UpdateItemLocations(instanceIds, itemLocations);
+            return sortedItems;
         }
         public long Drop(ItemLocation location, byte quantity)
         {

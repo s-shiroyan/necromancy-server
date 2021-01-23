@@ -63,6 +63,7 @@ namespace Necromancy.Server.Systems.Item
                     es_avatar_legs,
                     es_avatar_arms,
                     es_avatar_feet,
+                    es_avatar_mantle,
                     req_hum_m,
                     req_hum_f,
                     req_elf_m,
@@ -93,6 +94,7 @@ namespace Necromancy.Server.Systems.Item
                     req_lvl,
 					'51',
                     '52',
+                    '53',
                     phys_slash,
                     phys_strike,
                     phys_pierce,
@@ -145,7 +147,7 @@ namespace Necromancy.Server.Systems.Item
                     '102',
                     '103',
                     '104',
-                    icon_type,
+                    no_use_in_town,
                     no_storage,
                     no_discard,
                     no_sell,
@@ -168,18 +170,20 @@ namespace Necromancy.Server.Systems.Item
                     field128,
                     field129,
                     field130,
-                    field131,
-                    field132,
-                    field133,
-                    field134,
+                    req_samurai,
+                    req_ninja,
+                    req_bishop,
+                    req_lord,
                     field135,
                     field136,
                     field137,
                     field138,
                     field139,
-                    field140,
-                    field141,
+                    req_clown,
+                    req_alchemist,
                     grade,
+                    nec_item_instance.hardness,
+                    scroll_id
                     weight 
                 FROM 
                     nec_item_instance 
@@ -226,13 +230,13 @@ namespace Necromancy.Server.Systems.Item
             WHERE 
                 owner_id = @owner_id 
             AND 
-                zone IN (0,2,8,12)"; //adventure bag, royal bag, bag slot, avatar inventory
+                zone IN (0,1,2,8,12)"; //adventure bag, equipped bags,royal bag, bag slot, avatar inventory
 
         private const string SqlUpdateItemLocation = @"
             UPDATE 
                 nec_item_instance 
             SET 
-                zone = @zone AND container = @container AND slot = @slot 
+                zone = @zone, container = @container, slot = @slot 
             WHERE 
                 id = @id";
 
@@ -532,7 +536,7 @@ namespace Necromancy.Server.Systems.Item
             if (reader.GetBoolean("es_legs")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Legs;
             if (reader.GetBoolean("es_arms")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Arms;
             if (reader.GetBoolean("es_feet")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Feet;
-            if (reader.GetBoolean("es_mantle")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Cape;
+            if (reader.GetBoolean("es_mantle")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Cloak;
             if (reader.GetBoolean("es_ring")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Ring;
             if (reader.GetBoolean("es_earring")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Earring;
             if (reader.GetBoolean("es_necklace")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Necklace;
@@ -540,9 +544,10 @@ namespace Necromancy.Server.Systems.Item
             if (reader.GetBoolean("es_talkring")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Talkring;
             if (reader.GetBoolean("es_avatar_head")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarHead;
             if (reader.GetBoolean("es_avatar_body")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarTorso;
-            if (reader.GetBoolean("es_avatar_legs")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Legs;
-            if (reader.GetBoolean("es_avatar_arms")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Arms;
-            if (reader.GetBoolean("es_avatar_feet")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.Feet;
+            if (reader.GetBoolean("es_avatar_legs")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarLegs;
+            if (reader.GetBoolean("es_avatar_arms")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarArms;
+            if (reader.GetBoolean("es_avatar_feet")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarFeet;
+            if (reader.GetBoolean("es_avatar_feet")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.AvatarCloak;
 
             if (reader.GetBoolean("req_hum_m")) itemInstance.RequiredRaces |= Races.HumanMale;
             if (reader.GetBoolean("req_hum_f")) itemInstance.RequiredRaces |= Races.HumanFemale;
@@ -557,7 +562,7 @@ namespace Necromancy.Server.Systems.Item
             if (reader.GetBoolean("req_thief")) itemInstance.RequiredClasses |= Classes.Thief;
             if (reader.GetBoolean("req_mage")) itemInstance.RequiredClasses |= Classes.Mage;
             if (reader.GetBoolean("req_priest")) itemInstance.RequiredClasses |= Classes.Priest;
-            //if (reader.GetBoolean("req_samurai")) itemInstance.RequiredClasses |= Classes.Samurai;
+            //if (reader.GetBoolean("req_samurai")) itemInstance.RequiredClasses |= Classes.Samurai; TODO ENABLE ONCE YOU REBUILD DATABASE
             //if (reader.GetBoolean("req_bishop")) itemInstance.RequiredClasses |= Classes.Bishop;
             //if (reader.GetBoolean("req_ninja")) itemInstance.RequiredClasses |= Classes.Ninja;
             //if (reader.GetBoolean("req_lord")) itemInstance.RequiredClasses |= Classes.Lord;
@@ -577,6 +582,7 @@ namespace Necromancy.Server.Systems.Item
             itemInstance.RequiredLuck = reader.GetByte("req_luk");
 
             itemInstance.RequiredSoulRank = reader.GetByte("req_soul_rank");
+            //todo max soul rank
             itemInstance.RequiredLevel = reader.GetByte("req_lvl");
 
             itemInstance.PhysicalSlash = reader.GetByte("phys_slash");
@@ -623,8 +629,8 @@ namespace Necromancy.Server.Systems.Item
 
             itemInstance.ObjectType = reader.GetString("object_type"); //not sure what this is for
             itemInstance.EquipSlot2 = reader.GetString("equip_slot"); //not sure what this is for
-            //itemInstance.IconType = reader.GetString("icon_type"); //not sure what this is for
-
+            
+            itemInstance.IsUseableInTown = !reader.GetBoolean("no_use_in_town"); //not sure what this is for
             itemInstance.IsStorable = !reader.GetBoolean("no_storage");
             itemInstance.IsDiscardable = !reader.GetBoolean("no_discard");
             itemInstance.IsSellable = !reader.GetBoolean("no_sell");
@@ -640,7 +646,7 @@ namespace Necromancy.Server.Systems.Item
 
             itemInstance.TalkRingName = "";
             //TODO fix all the data types once mysql is implemented
-            itemInstance.BagSize = (byte)reader.GetInt32("num_of_bag_slots");
+            itemInstance.BagSize = reader.GetByte("num_of_bag_slots");
 
             //grade,
             //weight

@@ -7,7 +7,7 @@ namespace Necromancy.Server.Systems.Item
     {
         InvalidZone     = 255,
         AdventureBag    = 0,
-        EquippedBags    = 1, //invisible?
+        EquippedBags    = 1, 
         PremiumBag      = 2,
         Warehouse       = 3,
         UNKNOWN4        = 4,

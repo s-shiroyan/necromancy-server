@@ -62,7 +62,8 @@ namespace Necromancy.Server.Systems.Item
 
         public void PutItem(ItemLocation loc, ItemInstance item)
         {
-            RemoveItem(item.Location);
+
+            RemoveItem(item);
             item.Location = loc;
 
             switch (loc.ZoneType)
@@ -79,28 +80,37 @@ namespace Necromancy.Server.Systems.Item
                         break;
                     }
             }
-        }
-        
-        public void RemoveItem(ItemLocation loc)
-        {
-            ItemInstance item = GetItem(loc);
-            if (item != null) item.Location = ItemLocation.InvalidLocation;
-            else return;
 
-            switch (loc.ZoneType)
+        }
+        public void RemoveItem(ItemInstance item)
+        {
+            if (item.Location.Equals(ItemLocation.InvalidLocation)) return;            
+
+            switch (item.Location.ZoneType)
             {
                 case ItemZoneType.BagSlot:
                     {
-                        ZoneMap[ItemZoneType.AdventureBag].RemoveContainer(loc.Slot + 1);
-                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).RemoveItem(loc.Slot);
+                        ZoneMap[ItemZoneType.EquippedBags].RemoveContainer(item.Location.Slot);
+                        ZoneMap[item.Location.ZoneType]?.GetContainer(item.Location.Container)?.RemoveItem(item.Location.Slot);
                         break;
                     }
                 default:
                     {
-                        ZoneMap[loc.ZoneType].GetContainer(loc.Container).RemoveItem(loc.Slot);
+
+                        ZoneMap[item.Location.ZoneType]?.GetContainer(item.Location.Container)?.RemoveItem(item.Location.Slot);
                         break;
                     }
             }
+
+            item.Location = ItemLocation.InvalidLocation;
+        }
+
+
+        public ItemInstance RemoveItem(ItemLocation loc)
+        {
+            ItemInstance item = GetItem(loc);
+            if (item != null) RemoveItem(item);
+            return item;
         }
 
         public ItemLocation PutItemInNextOpenSlot(ItemZoneType itemZoneType, ItemInstance item)
