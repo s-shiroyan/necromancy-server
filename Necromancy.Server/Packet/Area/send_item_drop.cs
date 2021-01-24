@@ -23,8 +23,8 @@ namespace Necromancy.Server.Packet.Area
             int error = 0;
 
             try { 
-                ulong spawnId = itemService.Drop(location, quantity);
-                RecvItemRemove recvItemRemove = new RecvItemRemove(client, spawnId);
+                ItemInstance item = itemService.Drop(location, quantity);
+                RecvItemRemove recvItemRemove = new RecvItemRemove(client, item);
                 Router.Send(recvItemRemove);
             } catch(ItemException e) { error = (int) e.ExceptionType; }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Xunit;
+using static Necromancy.Server.Systems.Item.ItemService;
 
 namespace Necromancy.Test.Systems
 {
@@ -104,9 +105,12 @@ namespace Necromancy.Test.Systems
             _dummyCharacter.ItemManager.PutItem(fromLoc,itemInstance);
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
 
-            _itemService.Move(fromLoc, toLoc, quantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, quantity);
 
-            Assert.Equal(ItemService.MoveType.Place, moveType);
+            Assert.Equal(MoveType.Place, moveResult.Type);
+            Assert.Null(moveResult.OriginItem);
+            Assert.Equal(instanceId, moveResult.DestItem.InstanceID);
+
             Assert.Null(_dummyCharacter.ItemManager.GetItem(fromLoc));
             Assert.Equal(instanceId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
             Assert.Equal(itemInstance.Location, toLoc);
@@ -125,19 +129,19 @@ namespace Necromancy.Test.Systems
             _dummyCharacter.ItemManager.PutItem(fromLoc, itemOriginal);
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
 
-            List<ItemInstance> movedItems = _itemService.Move(fromLoc, toLoc, moveQuantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, moveQuantity);
 
-            Assert.Equal(ItemService.MoveType.PlaceQuantity, moveType);
+            Assert.Equal(MoveType.PlaceQuantity, moveResult.Type);
+            Assert.Equal(instanceId, moveResult.OriginItem.InstanceID);
 
-            Assert.Equal(2, movedItems.Count);
             Assert.Equal(fromLoc, itemOriginal.Location);
             Assert.Equal(startQuantity - moveQuantity, itemOriginal.Quantity);
             Assert.NotNull(_dummyCharacter.ItemManager.GetItem(fromLoc));
             Assert.Equal(instanceId, _dummyCharacter.ItemManager.GetItem(fromLoc).InstanceID);
 
-            Assert.Equal(itemOriginal.BaseID, movedItems[1].BaseID);
-            Assert.Equal(toLoc, movedItems[1].Location);
-            Assert.Equal(moveQuantity, movedItems[1].Quantity);
+            Assert.Equal(itemOriginal.BaseID, moveResult.DestItem.BaseID);
+            Assert.Equal(toLoc, moveResult.DestItem.Location);
+            Assert.Equal(moveQuantity, moveResult.DestItem.Quantity);
             Assert.NotNull(_dummyCharacter.ItemManager.GetItem(toLoc));
         }
 
@@ -162,9 +166,12 @@ namespace Necromancy.Test.Systems
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
             _dummyCharacter.ItemManager.PutItem(toLoc, toItem);
 
-            _itemService.Move(fromLoc, toLoc, fromQuantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, fromQuantity);
 
-            Assert.Equal(ItemService.MoveType.Swap, moveType);
+            Assert.Equal(MoveType.Swap, moveResult.Type);
+            Assert.Equal(fromId, moveResult.DestItem.InstanceID);
+            Assert.Equal(toId, moveResult.OriginItem.InstanceID);
+
             Assert.Equal(fromItem.Location, toLoc);
             Assert.Equal(fromId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
             Assert.Equal(fromQuantity, fromItem.Quantity);
@@ -193,9 +200,12 @@ namespace Necromancy.Test.Systems
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
             _dummyCharacter.ItemManager.PutItem(toLoc, toItem);
 
-            _itemService.Move(fromLoc, toLoc, moveQuantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, moveQuantity);
 
-            Assert.Equal(ItemService.MoveType.AddQuantity, moveType);
+            Assert.Equal(MoveType.AddQuantity, moveResult.Type);
+            Assert.Equal(fromId, moveResult.OriginItem.InstanceID);
+            Assert.Equal(toId, moveResult.DestItem.InstanceID);
+
             Assert.Equal(fromId, _dummyCharacter.ItemManager.GetItem(fromLoc).InstanceID);
             Assert.Equal(fromQuantity - moveQuantity, fromItem.Quantity);
             Assert.Equal(toId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
@@ -221,37 +231,44 @@ namespace Necromancy.Test.Systems
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
             _dummyCharacter.ItemManager.PutItem(toLoc, toItem);
 
-            _itemService.Move(fromLoc, toLoc, fromQuantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, fromQuantity);
 
-            Assert.Equal(ItemService.MoveType.AllQuantity, moveType);
+            Assert.Equal(MoveType.AllQuantity, moveResult.Type);
+            Assert.Null(moveResult.OriginItem);
+            Assert.Equal(toId, moveResult.DestItem.InstanceID);
+
             Assert.Null(_dummyCharacter.ItemManager.GetItem(fromLoc));
             Assert.Equal(fromQuantity + toQuantity, toItem.Quantity);
             Assert.Equal(toId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
         }
 
         [Fact]
-        public void TestItemMovePlaceEquippedBag()
+        public void TestItemMovePlaceInEquippedBag()
         {
             const ulong instanceId = 756366;
             const ulong bagId = 534577777;
+            const byte bagSize = 10;
             const int quantity = 1;
             ItemInstance itemInstance = new ItemInstance(instanceId);            
             ItemLocation fromLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 0);
             _dummyCharacter.ItemManager.PutItem(fromLoc, itemInstance);
 
             ItemInstance equippedBag = new ItemInstance(bagId);
-            equippedBag.BagSize = 10;
+            equippedBag.BagSize = bagSize;
             ItemLocation bagLocation = new ItemLocation(ItemZoneType.BagSlot, 0, 0);
             _dummyCharacter.ItemManager.PutItem(bagLocation, equippedBag);
             ItemLocation toLoc = new ItemLocation(ItemZoneType.EquippedBags, 0, 1);
 
-            _itemService.Move(fromLoc, toLoc, quantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(fromLoc, toLoc, quantity);
 
-            Assert.Equal(ItemService.MoveType.Place, moveType);
+            Assert.Equal(MoveType.Place, moveResult.Type);
+            Assert.Equal(instanceId, moveResult.DestItem.InstanceID);
+
             Assert.Null(_dummyCharacter.ItemManager.GetItem(fromLoc));
             Assert.Equal(instanceId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
             Assert.Equal(itemInstance.Location, toLoc);
             Assert.Equal(quantity, itemInstance.Quantity);
+            Assert.Equal(bagSize - 1, _dummyCharacter.ItemManager.GetTotalFreeSpace(ItemZoneType.EquippedBags));
         }
 
         [Fact]
@@ -264,9 +281,11 @@ namespace Necromancy.Test.Systems
             _dummyCharacter.ItemManager.PutItem(bagLoc, bag);
             ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
 
-            _itemService.Move(bagLoc, toLoc, quantity, out ItemService.MoveType moveType);
+            MoveResult moveResult = _itemService.Move(bagLoc, toLoc, quantity);            
 
-            Assert.Equal(ItemService.MoveType.Place, moveType);
+            Assert.Equal(ItemService.MoveType.Place, moveResult.Type);
+            Assert.Equal(bagId, moveResult.DestItem.InstanceID);
+
             Assert.Null(_dummyCharacter.ItemManager.GetItem(bagLoc));
             Assert.Equal(bagId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
             Assert.Equal(bag.Location, toLoc);

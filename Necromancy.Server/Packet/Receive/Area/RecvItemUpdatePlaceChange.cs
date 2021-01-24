@@ -8,26 +8,26 @@ namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemUpdatePlaceChange : PacketResponse
     {
-        private readonly ItemInstance _movedItem;
-        private readonly ItemInstance _movedItemSwap;
-        public RecvItemUpdatePlaceChange(NecClient client, ItemInstance movedItem, ItemInstance movedItemSwap)
+        private readonly ItemInstance _originItem;
+        private readonly ItemInstance _destItem;
+        public RecvItemUpdatePlaceChange(NecClient client, ItemInstance originItem, ItemInstance destItem)
             : base((ushort) AreaPacketId.recv_item_update_place_change, ServerType.Area)
         {
-            _movedItem = movedItem;
-            _movedItemSwap = movedItemSwap;
+            _originItem = originItem;
+            _destItem = destItem;
             Clients.Add(client);
         }
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64(_movedItem.InstanceID);
-            res.WriteByte((byte)_movedItem.Location.ZoneType);
-            res.WriteByte(_movedItem.Location.Container);
-            res.WriteInt16(_movedItem.Location.Slot);
-            res.WriteUInt64(_movedItemSwap.InstanceID);
-            res.WriteByte((byte)_movedItemSwap.Location.ZoneType);
-            res.WriteByte(_movedItemSwap.Location.Container);
-            res.WriteInt16(_movedItemSwap.Location.Slot);
+            res.WriteUInt64(_originItem.InstanceID);
+            res.WriteByte((byte)_originItem.Location.ZoneType);
+            res.WriteByte(_originItem.Location.Container);
+            res.WriteInt16(_originItem.Location.Slot);
+            res.WriteUInt64(_destItem.InstanceID);
+            res.WriteByte((byte)_destItem.Location.ZoneType);
+            res.WriteByte(_destItem.Location.Container);
+            res.WriteInt16(_destItem.Location.Slot);
             return res;
         }
     }

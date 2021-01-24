@@ -7,6 +7,7 @@ using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Systems.Item;
 using System.Collections.Generic;
+using static Necromancy.Server.Systems.Item.ItemService;
 
 namespace Necromancy.Server.Packet.Area
 {
@@ -37,16 +38,17 @@ namespace Necromancy.Server.Packet.Area
 
             try
             {
-                List<ItemInstance> movedItems = itemService.Move(fromLoc, toLoc, quantity, out ItemService.MoveType moveType);
-                PacketResponse pResp;
-                if (movedItems.Count == 1) pResp = new RecvItemUpdatePlace(client, movedItems[0]);
-                else pResp = new RecvItemUpdatePlaceChange(client, movedItems[0], movedItems[1]);
-                Router.Send(pResp);
+                MoveResult moveResult = itemService.Move(fromLoc, toLoc, quantity);
+                List<PacketResponse> responses = itemService.GetMoveResponses(client, moveResult);
+                foreach (PacketResponse response in responses)
+                {
+                    Router.Send(response);
+                }
             }
             catch (ItemException e) { error = (int) e.ExceptionType; }
 
             RecvItemMove recvItemMove = new RecvItemMove(client, error);
             Router.Send(recvItemMove);
-        }        
+        }
     }
 }

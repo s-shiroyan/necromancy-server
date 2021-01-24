@@ -38,6 +38,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "bags":
                     spawnBags(client);
                     break;
+                case "a_darkmerchant":
+                    spawnAvatarDarkMerchant(client);
+                    break;
                 default:
                     responses.Add(ChatResponse.CommandError(client, $"Invalid Package: {command[0]}"));
                     return;
@@ -45,10 +48,20 @@ namespace Necromancy.Server.Chat.Command.Commands
             
         }
 
+        private void spawnAvatarDarkMerchant(NecClient client)
+        {
+            int[] itemIds = new int[5];
+            itemIds[0] = 162502;
+            itemIds[1] = 262502;
+            itemIds[2] = 362502;
+            itemIds[3] = 462502;
+            itemIds[4] = 562502;
+            SendItems(client, itemIds);
+        }
+
         private void spawnBags(NecClient client)
         {
-            int size = 10;
-            int[] itemIds = new int[size];
+            int[] itemIds = new int[10];
             itemIds[0] = 50100501;
             itemIds[1] = 50100502;
             itemIds[2] = 50100503;
@@ -59,8 +72,14 @@ namespace Necromancy.Server.Chat.Command.Commands
             itemIds[7] = 50100511;
             itemIds[8] = 90012001; //royal bag 16 slots
             itemIds[9] = 90012002; //deluxe royal bag - 24 slots??
-            ItemSpawnParams[] spawmParams = new ItemSpawnParams[size];
-            for (int i = 0; i < size; i++)
+            
+            SendItems(client, itemIds);
+        }
+
+        private void SendItems(NecClient client, int[] itemIds)
+        {
+            ItemSpawnParams[] spawmParams = new ItemSpawnParams[itemIds.Length];
+            for (int i = 0; i < itemIds.Length; i++)
             {
                 spawmParams[i] = new ItemSpawnParams();
                 spawmParams[i].ItemStatuses = ItemStatuses.Identified;
@@ -69,7 +88,6 @@ namespace Necromancy.Server.Chat.Command.Commands
             List<ItemInstance> items = itemService.SpawnItemInstances(ItemZoneType.AdventureBag, itemIds, spawmParams);
             RecvSituationStart recvSituationStart = new RecvSituationStart();
             RecvSituationEnd recvSituationEnd = new RecvSituationEnd();
-            Logger.Debug(items.Count.ToString());
             IBuffer res = BufferProvider.Provide();
             res.WriteInt32(2);
             Router.Send(client, (ushort)AreaPacketId.recv_situation_start, res, ServerType.Area);

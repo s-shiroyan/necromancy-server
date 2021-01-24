@@ -68,17 +68,7 @@ namespace Necromancy.Server.Systems.Item
         {
             return _slots[slot] != null;
         }
-        public void Sort()
-        {
-            if (IsSorted) return;
-            Array.Sort(_slots, ItemComparer.Instance);
-            for (int i = 0; i < Count; i++)
-            {
-                if (_slots[i] != null)
-                    _slots[i].Location = new ItemLocation(_slots[i].Location.ZoneType, _slots[i].Location.Container, (short)i);
-            }
-            IsSorted = true;
-        }
+
         public int GetNextOpenSlot(int startSlot)
         {
             for (int i = startSlot + 1; i < Size; i++)

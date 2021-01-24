@@ -1,4 +1,6 @@
 using Necromancy.Server.Model;
+using Necromancy.Server.Packet;
+using Necromancy.Server.Packet.Receive.Area;
 using Necromancy.Server.Systems.Item;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,27 @@ namespace Necromancy.Server.Systems.Item
         private readonly Character _character;
         private readonly IItemDao _itemDao;
 
+        public class MoveResult
+        {
+            /// <summary>
+            /// The type of move that is done. Determines which server responses to send back.
+            /// </summary>
+            public MoveType Type { get; internal set; } = MoveType.None;
+            /// <summary>
+            /// The item that is at the location moved from. Can be null if there is no item swapped.
+            /// </summary>
+            public ItemInstance OriginItem { get; internal set; }
+            /// <summary>
+            /// The item that is at the destination. Will not be null unless an error occurs.
+            /// </summary>
+            public ItemInstance DestItem { get; internal set; }
+            public MoveResult() { }
+
+            public MoveResult(MoveType moveType)
+            {
+                Type = moveType;
+            }
+        }
         public enum MoveType
         {
             Place,
@@ -34,16 +57,25 @@ namespace Necromancy.Server.Systems.Item
 
         public ItemInstance Equip(ItemLocation location, ItemEquipSlots equipSlot)
         {
-
-            throw new NotImplementedException();
-
-            //_character.EquippedItems.Add()
+            ItemInstance item = _character.ItemManager.GetItem(location);
+            item.CurrentEquipSlot = equipSlot;
+            if (_character.EquippedItems.ContainsKey(equipSlot)){
+                _character.EquippedItems[equipSlot] = item;
+            } else
+            {
+                _character.EquippedItems.Add(equipSlot, item);
+            }
+            _itemDao.UpdateItemEquipMask(item.InstanceID, equipSlot);
+            return item;
         }
         public ItemInstance Unequip(ItemEquipSlots equipSlot)
         {
 
-            throw new NotImplementedException();
-            //_character.EquippedItems.Remove()
+            ItemInstance item = _character.EquippedItems[equipSlot];
+            _character.EquippedItems.Remove(equipSlot);
+            item.CurrentEquipSlot = ItemEquipSlots.None;
+            _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
+            return item;
         }
         /// <summary>
         /// Creates an unidentified instance of the base item specified by ID in the next open bag slot.
@@ -82,7 +114,7 @@ namespace Necromancy.Server.Systems.Item
         /// <summary>
         /// 
         /// </summary>
-        /// <returns>A list of items in your adventure bag, bag slot, royal bag, and avatar inventory.</returns>
+        /// <returns>A list of items in your adventure bag, equipped bags, bag slot, premium bag, and avatar inventory.</returns>
         public List<ItemInstance> LoadOwnedInventoryItems()
         {
             List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
@@ -98,11 +130,16 @@ namespace Necromancy.Server.Systems.Item
             }
             foreach (ItemInstance item in ownedItems)
             {
-                
-                if (item.Location.ZoneType != ItemZoneType.BagSlot) {
+
+                if (item.Location.ZoneType != ItemZoneType.BagSlot)
+                {
                     ItemLocation location = item.Location; //only needed on load inventory because item's location is already populated and it is not in the manager
                     item.Location = ItemLocation.InvalidLocation; //only needed on load inventory because item's location is already populated and it is not in the manager
                     _character.ItemManager.PutItem(location, item);
+                }
+                if (item.CurrentEquipSlot != ItemEquipSlots.None)
+                {
+                    _character.EquippedItems.Add(item.CurrentEquipSlot, item);
                 }
             }
             return ownedItems;
@@ -112,7 +149,7 @@ namespace Necromancy.Server.Systems.Item
             ItemInstance[] sortedItems = new ItemInstance[fromSlots.Length];
             ulong[] instanceIds = new ulong[fromSlots.Length];
             ItemLocation[] itemLocations = new ItemLocation[fromSlots.Length];
-            for (int i =0; i < fromSlots.Length; i++)
+            for (int i = 0; i < fromSlots.Length; i++)
             {
                 sortedItems[i] = _character.ItemManager.RemoveItem(new ItemLocation(zone, container, fromSlots[i]));
                 instanceIds[i] = sortedItems[i].InstanceID;
@@ -125,17 +162,18 @@ namespace Necromancy.Server.Systems.Item
             _itemDao.UpdateItemLocations(instanceIds, itemLocations);
             return sortedItems;
         }
-        public ulong Drop(ItemLocation location, byte quantity)
-        {   
+        public ItemInstance Drop(ItemLocation location, byte quantity)
+        {
             ItemInstance item = _character.ItemManager.GetItem(location);
             ulong instanceId = item.InstanceID;
             if (item is null) throw new ItemException(ItemExceptionType.Generic);
             if (item.Quantity < quantity) throw new ItemException(ItemExceptionType.Amount);
-            
+
             if (item.Quantity == quantity)
             {
                 _itemDao.DeleteItemInstance(instanceId);
-            } else 
+            }
+            else
             {
                 ulong[] instanceIds = new ulong[1];
                 byte[] quantities = new byte[1];
@@ -144,52 +182,46 @@ namespace Necromancy.Server.Systems.Item
                 quantities[0] = item.Quantity;
                 _itemDao.UpdateItemQuantities(instanceIds, quantities);
             }
-            return instanceId;
+            return item;
         }
         public long Sell(ItemLocation location, byte quantity)
         {
             throw new NotImplementedException();
         }
-        public List<ItemInstance> Move(ItemLocation from, ItemLocation to, byte quantity, out MoveType moveType)
+        public MoveResult Move(ItemLocation from, ItemLocation to, byte quantity)
         {
-            List<ItemInstance> movedItems = new List<ItemInstance>();
             ItemInstance fromItem = _character.ItemManager.GetItem(from);
             bool hasToItem = _character.ItemManager.HasItem(to);
             ItemInstance toItem = _character.ItemManager.GetItem(to);
+            MoveResult moveResult = new MoveResult();
 
             //check possible errors. these should only occur if client is compromised
             if (fromItem is null || quantity == 0) throw new ItemException(ItemExceptionType.Generic);
             if (quantity > fromItem.Quantity) throw new ItemException(ItemExceptionType.Amount);
             if (quantity > 1 && hasToItem && toItem.BaseID != fromItem.BaseID) throw new ItemException(ItemExceptionType.BagLocation);
-            
-            moveType = MoveType.None;
+
             if (!hasToItem && quantity == fromItem.Quantity)
             {
-                movedItems = MoveItemPlace(to, fromItem);
-                moveType = MoveType.Place;
+                moveResult = MoveItemPlace(to, fromItem);
             }
             else if (!hasToItem && quantity < fromItem.Quantity)
             {
-                movedItems = MoveItemPlaceQuantity(to, fromItem, quantity);
-                moveType = MoveType.PlaceQuantity;
+                moveResult = MoveItemPlaceQuantity(to, fromItem, quantity);
             }
             else if (hasToItem && quantity == fromItem.Quantity && (fromItem.BaseID != toItem.BaseID || fromItem.Quantity == fromItem.MaxStackSize))
             {
-                movedItems = MoveItemSwap(from, to, fromItem, toItem);
-                moveType = MoveType.Swap;
-            } 
+                moveResult = MoveItemSwap(from, to, fromItem, toItem);
+            }
             else if (hasToItem && quantity < fromItem.Quantity && toItem.BaseID == fromItem.BaseID)
             {
-                movedItems = MoveItemAddQuantity(fromItem, toItem, quantity);
-                moveType = MoveType.AddQuantity;
+                moveResult = MoveItemAddQuantity(fromItem, toItem, quantity);
             }
             else if (hasToItem && quantity == fromItem.Quantity && toItem.BaseID == fromItem.BaseID && quantity <= (toItem.MaxStackSize - toItem.Quantity))
             {
-                movedItems = MoveItemAllQuantity(fromItem, toItem, quantity);
-                moveType = MoveType.AllQuantity;
+                moveResult = MoveItemAllQuantity(fromItem, toItem, quantity);
             }
-            
-            return movedItems;
+
+            return moveResult;
         }
 
         /// <summary>
@@ -197,20 +229,20 @@ namespace Necromancy.Server.Systems.Item
         /// </summary>
         /// <param name="to">Move to this location.</param>
         /// <param name="fromItem">Move this item.</param>
-        /// <returns>A list with a single element of the moved item.</returns>
-        private List<ItemInstance> MoveItemPlace(ItemLocation to, ItemInstance fromItem)
+        /// <returns>Result with origin item null and the destination the moved item.</returns>
+        private MoveResult MoveItemPlace(ItemLocation to, ItemInstance fromItem)
         {
-            List<ItemInstance> movedItem = new List<ItemInstance>();
+            MoveResult moveResult = new MoveResult(MoveType.Place);
             _character.ItemManager.PutItem(to, fromItem);
-            movedItem.Add(fromItem);
+            moveResult.DestItem = fromItem;
 
             ulong[] instanceIds = new ulong[1];
             ItemLocation[] locs = new ItemLocation[1];
-            instanceIds[0] = movedItem[0].InstanceID;
-            locs[0] = movedItem[0].Location;
+            instanceIds[0] = moveResult.DestItem.InstanceID;
+            locs[0] = moveResult.DestItem.Location;
             _itemDao.UpdateItemLocations(instanceIds, locs);
 
-            return movedItem;
+            return moveResult;
         }
         /// <summary>
         ///  Used when the there is an item already in the end location,the quantity moved is equal to the total quantity<br/>
@@ -220,25 +252,25 @@ namespace Necromancy.Server.Systems.Item
         /// <param name="to">Move to this location.</param>
         /// <param name="fromItem">Move this item.</param>
         /// <param name="toItem">Swap this item.</param>
-        /// <returns>A list with two elements containing the moved items.</returns>
-        private List<ItemInstance> MoveItemSwap(ItemLocation from, ItemLocation to, ItemInstance fromItem,  ItemInstance toItem)
+        /// <returns>Result with the origin item and destination item being the swapped items.</returns>
+        private MoveResult MoveItemSwap(ItemLocation from, ItemLocation to, ItemInstance fromItem, ItemInstance toItem)
         {
-            List<ItemInstance> movedItems = new List<ItemInstance>();
+            MoveResult moveResult = new MoveResult(MoveType.Swap);
             _character.ItemManager.PutItem(to, fromItem);
             _character.ItemManager.PutItem(from, toItem);
-            movedItems.Add(fromItem);
-            movedItems.Add(toItem);
+            moveResult.DestItem = fromItem;
+            moveResult.OriginItem = toItem;            
 
-            ulong[] instanceIds = new ulong[movedItems.Count];
+            ulong[] instanceIds = new ulong[2];
             ItemLocation[] locs = new ItemLocation[2];
-            for (int i = 0; i < movedItems.Count; i++)
-            {
-                instanceIds[i] = movedItems[i].InstanceID;
-                locs[i] = movedItems[i].Location;
-            }
+            instanceIds[0] = moveResult.OriginItem.InstanceID;
+            locs[0] = moveResult.OriginItem.Location;
+            instanceIds[1] = moveResult.DestItem.InstanceID;
+            locs[1] = moveResult.DestItem.Location;
+
             _itemDao.UpdateItemLocations(instanceIds, locs);
 
-            return movedItems;
+            return moveResult;
         }
 
         /// <summary>
@@ -246,14 +278,16 @@ namespace Necromancy.Server.Systems.Item
         /// </summary>
         /// <param name="to">Move to this location.</param>
         /// <param name="fromItem">Move a quantity from this item.</param>
-        /// <returns>A list with two elements containing the original item with less quantity and a new instance with the remaining amount.</returns>
-        private List<ItemInstance> MoveItemPlaceQuantity(ItemLocation to, ItemInstance fromItem, byte quantity)
+        /// <returns>Result containing the original item with less quantity and a new instance with the remaining amount at the destination.</returns>
+        private MoveResult MoveItemPlaceQuantity(ItemLocation to, ItemInstance fromItem, byte quantity)
         {
-            fromItem.Quantity -= quantity;
+            MoveResult moveResult = new MoveResult(MoveType.PlaceQuantity);
+            moveResult.OriginItem = fromItem;
+            moveResult.OriginItem.Quantity -= quantity;
 
             ItemSpawnParams spawnParam = new ItemSpawnParams();
             spawnParam.Quantity = quantity;
-            spawnParam.ItemStatuses = fromItem.Statuses;
+            spawnParam.ItemStatuses = moveResult.OriginItem.Statuses;
 
             const int size = 1;
             ItemLocation[] locs = new ItemLocation[size];
@@ -261,14 +295,14 @@ namespace Necromancy.Server.Systems.Item
             ItemSpawnParams[] spawnParams = new ItemSpawnParams[size];
 
             locs[0] = to;
-            baseIds[0] = fromItem.BaseID;
+            baseIds[0] = moveResult.OriginItem.BaseID;
             spawnParams[0] = spawnParam;
 
-            List<ItemInstance> movedItems = _itemDao.InsertItemInstances(fromItem.OwnerID, locs, baseIds, spawnParams);
-            _character.ItemManager.PutItem(to, movedItems[0]);
-            movedItems.Insert(0, fromItem);
+            List<ItemInstance> insertedItem = _itemDao.InsertItemInstances(fromItem.OwnerID, locs, baseIds, spawnParams);
+            _character.ItemManager.PutItem(to, insertedItem[0]);
+            moveResult.DestItem = insertedItem[0];
 
-            return movedItems;
+            return moveResult;
         }
 
         /// <summary>
@@ -278,27 +312,28 @@ namespace Necromancy.Server.Systems.Item
         /// <param name="fromItem">Item to subract quantity from.</param>
         /// <param name="toItem">Location of item to add quantity to.</param>
         /// <param name="quantity">Maximum amount to transfer.</param>
-        /// <returns>A list with two elements containing the original items with updated quantities.</returns>
-        private List<ItemInstance> MoveItemAddQuantity(ItemInstance fromItem,ItemInstance toItem, byte quantity)
+        /// <returns>Result containing the original items with updated quantities.</returns>
+        private MoveResult MoveItemAddQuantity(ItemInstance fromItem, ItemInstance toItem, byte quantity)
         {
-            int freeSpace = toItem.MaxStackSize - toItem.Quantity;
+            MoveResult moveResult = new MoveResult(MoveType.AddQuantity);
+            moveResult.OriginItem = fromItem;
+            moveResult.DestItem = toItem;
+
+            int freeSpace = moveResult.DestItem.MaxStackSize - moveResult.DestItem.Quantity;
             if (freeSpace < quantity)
-                quantity = (byte) freeSpace;
-            fromItem.Quantity -= quantity;
-            toItem.Quantity += quantity;
+                quantity = (byte)freeSpace;
+            moveResult.OriginItem.Quantity -= quantity;
+            moveResult.DestItem.Quantity += quantity;
 
             ulong[] instanceIds = new ulong[2];
             byte[] quantities = new byte[2];
-            instanceIds[0] = fromItem.InstanceID;
-            quantities[0] = fromItem.Quantity;
-            instanceIds[1] = toItem.InstanceID;
-            quantities[1] = toItem.Quantity;
+            instanceIds[0] = moveResult.OriginItem.InstanceID;
+            quantities[0] = moveResult.OriginItem.Quantity;
+            instanceIds[1] = moveResult.DestItem.InstanceID;
+            quantities[1] = moveResult.DestItem.Quantity;
             _itemDao.UpdateItemQuantities(instanceIds, quantities);
 
-            List<ItemInstance> movedItems = new List<ItemInstance>(2);
-            movedItems.Add(fromItem);
-            movedItems.Add(toItem);
-            return movedItems;
+            return moveResult;
         }
         /// <summary>
         /// Used if there is the same item at the end location that is not at max stack size and the quantity moved is less equal to the quantity of items in the original location.        
@@ -306,23 +341,23 @@ namespace Necromancy.Server.Systems.Item
         /// <param name="fromItem">Removed item.</param>
         /// <param name="toItem">Updated item.</param>
         /// <param name="quantity">Quantity to add to end item</param>
-        /// <returns>A list with one elements containing the end item with an updated quantity.</returns>
-        private List<ItemInstance> MoveItemAllQuantity(ItemInstance fromItem, ItemInstance toItem, byte quantity)
+        /// <returns>Result with the origin item null and the destination item with an updated quantity.</returns>
+        private MoveResult MoveItemAllQuantity(ItemInstance fromItem, ItemInstance toItem, byte quantity)
         {
-            List<ItemInstance> movedItems = new List<ItemInstance>(1);
-            toItem.Quantity += quantity;
-            movedItems.Add(toItem);
+            MoveResult moveResult = new MoveResult(MoveType.AllQuantity);
+            moveResult.DestItem = toItem;
+            moveResult.DestItem.Quantity += quantity;
             _character.ItemManager.RemoveItem(fromItem.Location);
 
             ulong[] instanceIds = new ulong[1];
             byte[] quantities = new byte[1];
-            instanceIds[0] = toItem.InstanceID;
-            quantities[0] = toItem.Quantity;
+            instanceIds[0] = moveResult.DestItem.InstanceID;
+            quantities[0] = moveResult.DestItem.Quantity;
             //TODO MAKE TRANSACTION
             _itemDao.DeleteItemInstance(fromItem.InstanceID);
             _itemDao.UpdateItemQuantities(instanceIds, quantities);
 
-            return movedItems;
+            return moveResult;
         }
 
         public List<ItemInstance> Repair(List<ItemLocation> locations)
@@ -336,6 +371,43 @@ namespace Necromancy.Server.Systems.Item
         public long AddGold(long amount)
         {
             throw new NotImplementedException();
+        }
+
+        public List<PacketResponse> GetMoveResponses(NecClient client, MoveResult moveResult)
+        {
+            List<PacketResponse> responses = new List<PacketResponse>();
+            switch (moveResult.Type)
+            {
+                case MoveType.Place:
+                    RecvItemUpdatePlace recvItemUpdatePlace = new RecvItemUpdatePlace(client, moveResult.DestItem);
+                    responses.Add(recvItemUpdatePlace);
+                    break;
+                case MoveType.Swap:
+                    RecvItemUpdatePlaceChange recvItemUpdatePlaceChange = new RecvItemUpdatePlaceChange(client, moveResult.OriginItem, moveResult.DestItem);
+                    responses.Add(recvItemUpdatePlaceChange);
+                    break;
+                case MoveType.PlaceQuantity:
+                    RecvItemUpdateNum recvItemUpdateNum = new RecvItemUpdateNum(client, moveResult.OriginItem);
+                    responses.Add(recvItemUpdateNum);
+                    RecvItemInstance recvItemInstance = new RecvItemInstance(client, moveResult.DestItem);
+                    responses.Add(recvItemInstance);
+                    break;
+                case MoveType.AddQuantity:
+                    RecvItemUpdateNum recvItemUpdateNum0 = new RecvItemUpdateNum(client, moveResult.OriginItem);
+                    responses.Add(recvItemUpdateNum0);
+                    RecvItemUpdateNum recvItemUpdateNum1 = new RecvItemUpdateNum(client, moveResult.DestItem);
+                    responses.Add(recvItemUpdateNum1);
+                    break;
+                case MoveType.AllQuantity:
+                    RecvItemRemove recvItemRemove = new RecvItemRemove(client, moveResult.OriginItem);
+                    responses.Add(recvItemRemove);
+                    RecvItemUpdateNum recvItemUpdateNum2 = new RecvItemUpdateNum(client, moveResult.DestItem);
+                    responses.Add(recvItemUpdateNum2);
+                    break;
+                case MoveType.None:                    
+                    break;
+            }
+            return responses;
         }
     }
 }

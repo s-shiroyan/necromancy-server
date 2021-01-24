@@ -2,22 +2,23 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Item;
 
 namespace Necromancy.Server.Packet.Receive.Area
 {
     public class RecvItemRemove : PacketResponse
     {
-        private readonly ulong _spawnId;
-        public RecvItemRemove(NecClient client, ulong spawnId)
+        private readonly ItemInstance _item;
+        public RecvItemRemove(NecClient client, ItemInstance item)
             : base((ushort) AreaPacketId.recv_item_remove, ServerType.Area)
         {
-            _spawnId = spawnId;
+            _item = item;
             Clients.Add(client);
         }
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt64(_spawnId); 
+            res.WriteUInt64(_item.InstanceID); 
             return res;
         }
     }

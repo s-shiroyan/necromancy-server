@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Arrowgene.Logging;
 using Necromancy.Server.Common.Instance;
 using Necromancy.Server.Database;
@@ -119,8 +120,9 @@ namespace Necromancy.Server.Model
 
         //Inventory
         public ItemManager ItemManager { get; } = new ItemManager();
+        public Dictionary<ItemEquipSlots, ItemInstance> EquippedItems {get;  } = new Dictionary<ItemEquipSlots, ItemInstance>();
 
-        public Character()
+    public Character()
         {
             InstanceId = InstanceGenerator.InvalidInstanceId;
             Id = IDatabase.InvalidDatabaseId;

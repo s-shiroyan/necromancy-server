@@ -248,6 +248,14 @@ namespace Necromancy.Server.Systems.Item
             WHERE 
                 id = @id";
 
+        private const string SqlUpdateItemEquipMask = @"
+            UPDATE 
+                nec_item_instance 
+            SET 
+                current_equip_slot = @current_equip_slot 
+            WHERE 
+                id = @id";
+
         private const string SqlDeleteItemInstance = @"
             DELETE FROM 
                 nec_item_instance 
@@ -328,6 +336,16 @@ namespace Necromancy.Server.Systems.Item
             ExecuteNonQuery(SqlDeleteItemInstance,
                 command =>
                 {
+                    AddParameter(command, "@id", instanceId);
+                });
+        }
+
+        public void UpdateItemEquipMask(ulong instanceId, ItemEquipSlots equipSlots)
+        {
+            ExecuteNonQuery(SqlUpdateItemEquipMask,
+                command =>
+                {
+                    AddParameter(command, "@current_equip_slot", (int)equipSlots);
                     AddParameter(command, "@id", instanceId);
                 });
         }
