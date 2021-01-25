@@ -41,11 +41,25 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "a_darkmerchant":
                     spawnAvatarDarkMerchant(client);
                     break;
+                case "charmed":
+                    SpawnCharmedGear(client);
+                    break;
                 default:
                     responses.Add(ChatResponse.CommandError(client, $"Invalid Package: {command[0]}"));
                     return;
             }
             
+        }
+
+        private void SpawnCharmedGear(NecClient client)
+        {
+            int[] itemIds = new int[5];
+            itemIds[0] = 120308;
+            itemIds[1] = 220308;
+            itemIds[2] = 320308;
+            itemIds[3] = 420308;
+            itemIds[4] = 520308;
+            SendItems(client, itemIds);
         }
 
         private void spawnAvatarDarkMerchant(NecClient client)

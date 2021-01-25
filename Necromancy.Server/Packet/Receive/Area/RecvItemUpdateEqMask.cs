@@ -24,21 +24,21 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32((int)_itemInstance.CurrentEquipSlot);
 
             res.WriteInt32(_itemInstance.BaseID); //Sets your Item ID per Iteration
-            res.WriteByte(0); //hair
-            res.WriteByte(0); //color
-            res.WriteByte(0); //face
+            res.WriteByte(00); //? TYPE data/chara/##/ 00 is character model, 01 is npc, 02 is monster
+            res.WriteByte(12); //Race and gender tens place is race 1= human, 2= elf 3=dwarf 4=gnome 5=porkul, ones is gender 1 = male 2 = female
+            res.WriteByte(00); //??item version
 
             res.WriteInt32(_itemInstance.BaseID); //testing (Theory, Icon related)
             res.WriteByte(0); //hair
             res.WriteByte(0); //color
             res.WriteByte(0); //face
 
-            res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-            res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-            res.WriteByte(1); // testing (Theory Torso Tex)
-            res.WriteByte(1); // testing (Theory Pants Tex)
-            res.WriteByte(1); // testing (Theory Hands Tex)
-            res.WriteByte(1); // testing (Theory Feet Tex)
+            res.WriteByte(45); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+            res.WriteByte(30); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+            res.WriteByte(00); // testing (Theory Torso Tex)
+            res.WriteByte(0); // testing (Theory Pants Tex)
+            res.WriteByte(0); // testing (Theory Hands Tex)
+            res.WriteByte(0); // testing (Theory Feet Tex)
             res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
             res.WriteByte(0); // separate in assembly
