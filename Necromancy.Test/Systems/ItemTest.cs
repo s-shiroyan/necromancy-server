@@ -56,6 +56,11 @@ namespace Necromancy.Test.Systems
                 throw new NotImplementedException();
             }
 
+            public void UpdateItemEquipMask(ulong instanceId, ItemEquipSlots equipSlots)
+            {
+                throw new NotImplementedException();
+            }
+
             public void UpdateItemLocations(ulong[] instanceIds, ItemLocation[] locs)
             {
                 //ignore
