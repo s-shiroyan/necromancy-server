@@ -543,7 +543,7 @@ namespace Necromancy.Server.Systems.Item
             itemInstance.EnchantId = reader.GetInt32("enchant_id");
             itemInstance.GP = reader.GetInt16("gp");
             itemInstance.Type = (ItemType)Enum.Parse(typeof(ItemType), reader.GetString("item_type"));
-            itemInstance.Quality = (ItemQualities)Enum.Parse(typeof(ItemType), reader.GetString("quality"),true);
+            itemInstance.Quality = (ItemQualities)Enum.Parse(typeof(ItemQualities), reader.GetString("quality"),true);
             itemInstance.MaxStackSize = reader.GetByte("max_stack_size");
 
             if (reader.GetBoolean("es_hand_r")) itemInstance.EquipAllowedSlots |= ItemEquipSlots.RightHand;

@@ -5,6 +5,7 @@ namespace Necromancy.Server.Systems.Item
     [Flags]
     public enum ItemQualities
     {
+        None        = 1 << 0,
         Poor        = 1 << 1,
         Normal      = 1 << 2,
         Good        = 1 << 3,
