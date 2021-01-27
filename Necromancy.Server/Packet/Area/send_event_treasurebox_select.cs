@@ -1,10 +1,8 @@
 using Arrowgene.Buffers;
 using Arrowgene.Logging;
-using Necromancy.Server.Chat;
 using Necromancy.Server.Common;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
@@ -29,27 +27,14 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug($"fromSlot byte [{fromSlot}]");
 
             IBuffer res = BufferProvider.Provide();
-
-            InventoryItem inventoryItem = client.Character.Inventory.GetInventoryItem(fromStoreType, fromBagId, fromSlot);
-            client.Character.Inventory.RemoveInventoryItem(inventoryItem);
-            if (inventoryItem == null)
-            {
-                Logger.Error("could not retrieve item from inventory");
-                return;
-            }
-            inventoryItem.StorageType = (int)BagType.AdventureBag;
-            client.Character.Inventory.AddInventoryItem(inventoryItem);
-
-            SendItemPlace(client, inventoryItem.Id, inventoryItem.StorageType, inventoryItem.BagId, inventoryItem.BagSlotIndex);
-            if (!Server.Database.InsertInventoryItem(inventoryItem))
-            {
-                Logger.Error("Could not save InventoryItem to Database");
-                return;
-            }
-
-            res = BufferProvider.Provide();
             res.WriteInt32(0);
             Router.Send(client.Map, (ushort) AreaPacketId.recv_event_treasurebox_select_r, res, ServerType.Area);
+
+            //insert logic to grab Item from Inventory based on above data.Read  here
+            long itemId = 0;
+            byte toStoreType = 0;
+            byte toBagId = 0;
+            short toSlot = 0;
 
 
             res = BufferProvider.Provide();

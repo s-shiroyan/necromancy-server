@@ -30,12 +30,12 @@ namespace Necromancy.Server.Packet.Area
             short toSlot = packet.Data.ReadInt16();
             byte quantity = packet.Data.ReadByte();
 
-            Logger.Debug($"fromStoreType byte [{fromZone}] toStoreType byte [{toZone}]");
-            Logger.Debug($"fromBagId byte [{fromBag}] toBagIdId byte [{toBagId}]");
+            Logger.Debug($"fromStoreType byte [{fromStoreType}] toStoreType byte [{toZone}]");
+            Logger.Debug($"fromBagId byte [{fromBagId}] toBagIdId byte [{toBagId}]");
             Logger.Debug($"fromSlot byte [{fromSlot}] toSlot [{toSlot}]");
             Logger.Debug($"itemCount [{quantity}]");
 
-            ItemLocation fromLoc = new ItemLocation(fromZone, fromBag, fromSlot);
+            ItemLocation fromLoc = new ItemLocation((ItemZoneType)fromStoreType, fromBagId, fromSlot);
             ItemLocation toLoc = new ItemLocation(toZone, toBagId, toSlot);
             ItemService itemService = new ItemService(client.Character);
             int error = 0;

@@ -149,14 +149,10 @@ namespace Necromancy.Server.Packet
         /// </summary>
         public void Send(PacketResponse response, List<NecClient> clientList)
         {
-            NecClient[] clients = new NecClient[clientList.Count];
-            int i = 0;
             foreach (NecClient client in clientList)
             {
-                clients[i] = client;
-                i++;
+                response.Clients.Add(client);              
             }
-            response.AddClients(clients);
             Send(response);
         }
 

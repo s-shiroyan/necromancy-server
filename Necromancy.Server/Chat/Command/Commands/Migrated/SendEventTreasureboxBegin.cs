@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
 
@@ -41,35 +40,10 @@ namespace Necromancy.Server.Chat.Command.Commands
             Router.Send(client, (ushort) AreaPacketId.recv_event_treasurebox_select_r, res4, ServerType.Area);
             
             int itemId = 200101;
-            ItemGenerator(itemId, client, 1);
-            ItemGenerator(itemId, client, 2);
-            ItemGenerator(itemId, client, 3);
             /*   IBuffer res4 = BufferProvider.Provide();
                res4.WriteByte(3);
                Router.Send(client, (ushort)AreaPacketId.recv_event_end, res4); */
         }
-        public long ItemGenerator(int itemId, NecClient client, int i)
-        {
-            Item item = Server.Items[itemId];
-            InventoryItem inventoryItem = new InventoryItem();
-            inventoryItem.Id = 50000 + i;
-            inventoryItem.Item = item;
-            inventoryItem.ItemId = item.Id;
-            inventoryItem.Quantity = 1;
-            inventoryItem.CurrentDurability = item.Durability;
-            inventoryItem.CharacterId = client.Character.Id;
-            inventoryItem.CurrentEquipmentSlotType = EquipmentSlotType.NONE;
-            inventoryItem.State = 0;
-            inventoryItem.StorageType = (int)BagType.TreasureBox;
-            client.Character.Inventory.AddTreasureBoxItem(inventoryItem);
-
-            RecvItemInstance recvItemInstance = new RecvItemInstance(inventoryItem, client);
-            Router.Send(recvItemInstance, client);
-            RecvItemInstanceUnidentified recvItemInstanceUnidentified = new RecvItemInstanceUnidentified(inventoryItem, client);
-            Router.Send(recvItemInstanceUnidentified, client);
-            return inventoryItem.Id;
-        }
-
 
         public override AccountStateType AccountState => AccountStateType.User;
         public override string Key => "tbox";

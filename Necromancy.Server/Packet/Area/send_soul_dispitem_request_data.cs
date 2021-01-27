@@ -50,9 +50,9 @@ namespace Necromancy.Server.Packet.Area
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt16((short)client.Character.Strength); //base Phys Attack
-            res.WriteInt16((short)client.Character.intelligence); //base Mag attack
-            res.WriteInt16((short)client.Character.dexterity); //base Phys Def
-            res.WriteInt16((short)client.Character.piety); //base Mag Def
+            res.WriteInt16((short)client.Character.Intelligence); //base Mag attack
+            res.WriteInt16((short)client.Character.Dexterity); //base Phys Def
+            res.WriteInt16((short)client.Character.Piety); //base Mag Def
 
             res.WriteInt16(PhysAttack); //Equip Bonus Phys attack
             res.WriteInt16(MagAttack); //Equip Bonus Mag Attack
