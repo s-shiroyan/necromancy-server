@@ -123,6 +123,23 @@ namespace Necromancy.Test.Systems
         }
 
         [Fact]
+        public void TestItemMovePlaceInvalidQuantity()
+        {
+            const ulong instanceId = 756366;
+            const byte startQuantity = 5;
+            const byte moveQuantity = 10;
+            ItemInstance itemInstance = new ItemInstance(instanceId);
+            itemInstance.Quantity = startQuantity;
+            ItemLocation fromLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 0);
+            _dummyCharacter.ItemManager.PutItem(fromLoc, itemInstance);
+            ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
+
+            ItemException e = Assert.Throws<ItemException>(() => _itemService.Move(fromLoc, toLoc, moveQuantity));
+
+            Assert.Equal(ItemExceptionType.Amount, e.ExceptionType);
+        }
+
+        [Fact]
         public void TestItemMovePlaceQuantity()
         {
             const ulong instanceId = 756366;
@@ -218,6 +235,35 @@ namespace Necromancy.Test.Systems
         }
 
         [Fact]
+        public void TestItemMoveAddQuantityWrongItem()
+        {
+            const ulong toId = 234987915;
+            const int baseToId = 1234;
+            const ulong fromId = 34151555;
+            const int baseFromId = 5678;
+            const int fromQuantity = 10;
+            const int toQuantity = 30;
+            const int moveQuantity = fromQuantity - 1;
+
+            ItemInstance fromItem = new ItemInstance(fromId);
+            fromItem.Quantity = fromQuantity;
+            fromItem.BaseID = baseFromId;
+            ItemLocation fromLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 0);
+            _dummyCharacter.ItemManager.PutItem(fromLoc, fromItem);
+
+            ItemInstance toItem = new ItemInstance(toId);
+            toItem.MaxStackSize = toQuantity + moveQuantity + 5;
+            toItem.Quantity = toQuantity;
+            toItem.BaseID = baseToId;
+            ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
+            _dummyCharacter.ItemManager.PutItem(toLoc, toItem);
+
+            ItemException e = Assert.Throws<ItemException>(() => _itemService.Move(fromLoc, toLoc, moveQuantity));
+
+            Assert.Equal(ItemExceptionType.BagLocation, e.ExceptionType);
+        }
+
+        [Fact]
         public void TestItemMovePlaceAllQuantity()
         {
             const ulong fromId = 34151555;
@@ -295,6 +341,29 @@ namespace Necromancy.Test.Systems
             Assert.Equal(bagId, _dummyCharacter.ItemManager.GetItem(toLoc).InstanceID);
             Assert.Equal(bag.Location, toLoc);
             Assert.Equal(quantity, bag.Quantity);
+        }
+
+        [Fact]
+        public void TestItemMoveNonEmptyBagOutOfSlot()
+        {
+            const ulong bagId = 534577777;
+            const ulong itemInBagId = 5117;
+            const int quantity = 1;
+
+            ItemInstance bag = new ItemInstance(bagId);
+            bag.BagSize = 8;
+            ItemLocation bagLoc = new ItemLocation(ItemZoneType.BagSlot, 0, 0);
+            _dummyCharacter.ItemManager.PutItem(bagLoc, bag);
+
+            ItemInstance itemInBag = new ItemInstance(itemInBagId);
+            ItemLocation itemInBagLoc = new ItemLocation(ItemZoneType.EquippedBags, 0, 0);
+            _dummyCharacter.ItemManager.PutItem(itemInBagLoc, itemInBag);
+
+            ItemLocation toLoc = new ItemLocation(ItemZoneType.AdventureBag, 0, 1);
+
+            ItemException e = Assert.Throws<ItemException>(() => _itemService.Move(bagLoc, toLoc, quantity));
+
+            Assert.Equal(ItemExceptionType.BagLocation, e.ExceptionType);
         }
     }
 }
