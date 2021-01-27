@@ -43,9 +43,9 @@ namespace Necromancy.Server.Chat.Command.Commands
                 {
                     res.WriteInt32(honorSettings[i]);
                     res.WriteUInt32(client.Character.InstanceId);
-                    res.WriteByte(1); // bool	New Title 0:Yes  1:No	
+                    res.WriteByte(0); // bool	New Title 0:Yes  1:No	
                 }
-                //Router.Send(client, (ushort)AreaPacketId.recv_get_honor_notify, res, ServerType.Area);
+                Router.Send(client, (ushort)AreaPacketId.recv_get_honor_notify, res, ServerType.Area);
             }
             else if (!int.TryParse(command[0], out x))
             {

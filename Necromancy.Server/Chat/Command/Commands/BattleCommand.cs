@@ -9,6 +9,7 @@ using Necromancy.Server.Model;
 using Necromancy.Server.Packet;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
+using Necromancy.Server.Packet.Receive.Msg;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -62,8 +63,23 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
 
                 case "97d9":
-                    Recv0x97D9 o97d9 = new Recv0x97D9();
+                    RecvBattleReportNoactNotifyHealAp o97d9 = new RecvBattleReportNoactNotifyHealAp();
                     brList.Add(o97d9);
+                    break;
+
+                case "partygetitem":
+                    RecvPartyNotifyGetItem recvPartyNotifyGetItem = new RecvPartyNotifyGetItem(client.Character.InstanceId);
+                    Router.Send(recvPartyNotifyGetItem, client);
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteInt32(200101);
+                    res.WriteCString("Dagger");
+                    res.WriteByte(20);
+                    Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
+                    break;
+
+                case "partygetmoney":
+                    RecvPartyNotifyGetMoney recvPartyNotifyGetMoney = new RecvPartyNotifyGetMoney(client.Character.InstanceId);
+                    Router.Send(client.Map, recvPartyNotifyGetMoney);
                     break;
 
 
@@ -79,7 +95,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     break;
             }
             //always end your battle reports
-            brList.Add(brEnd);
+            //brList.Add(brEnd);
             Router.Send(_client.Map, brList);
         }
 

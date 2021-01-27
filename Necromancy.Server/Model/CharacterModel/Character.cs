@@ -55,6 +55,7 @@ namespace Necromancy.Server.Model
         //Model
         public int activeModel;
         public short modelScale;
+        public short deadType;
 
 
         //Movement Related
@@ -137,6 +138,7 @@ namespace Necromancy.Server.Model
             Name = null;
             Level = 0;
             activeModel = 0;
+            deadType = 0;
             modelScale = 100;
             AdventureBagGold = 80706050;
             eventSelectExecCode = -1;

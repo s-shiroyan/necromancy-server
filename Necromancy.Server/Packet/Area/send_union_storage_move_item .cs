@@ -18,21 +18,25 @@ namespace Necromancy.Server.Packet.Area
         public override ushort Id => (ushort) AreaPacketId.send_union_storage_move_item;
         public override void Handle(NecClient client, NecPacket packet)
         {
-            ItemZoneType fromZone = (ItemZoneType) packet.Data.ReadByte();
-            byte fromBag = packet.Data.ReadByte();
+            IBuffer res = BufferProvider.Provide();
+            res.WriteInt32(0);
+            Router.Send(client, (ushort) AreaPacketId.recv_union_storage_move_item_r, res, ServerType.Area);
+
+            byte fromStoreType = packet.Data.ReadByte();
+            byte fromBagId = packet.Data.ReadByte();
             short fromSlot = packet.Data.ReadInt16();
             ItemZoneType toZone = (ItemZoneType) packet.Data.ReadByte();
-            byte toBag = packet.Data.ReadByte();
+            byte toBagId = packet.Data.ReadByte();
             short toSlot = packet.Data.ReadInt16();
             byte quantity = packet.Data.ReadByte();
 
             Logger.Debug($"fromStoreType byte [{fromZone}] toStoreType byte [{toZone}]");
-            Logger.Debug($"fromBagId byte [{fromBag}] toBagId byte [{toBag}]");
+            Logger.Debug($"fromBagId byte [{fromBag}] toBagIdId byte [{toBagId}]");
             Logger.Debug($"fromSlot byte [{fromSlot}] toSlot [{toSlot}]");
             Logger.Debug($"itemCount [{quantity}]");
 
             ItemLocation fromLoc = new ItemLocation(fromZone, fromBag, fromSlot);
-            ItemLocation toLoc = new ItemLocation(toZone, toBag, toSlot);
+            ItemLocation toLoc = new ItemLocation(toZone, toBagId, toSlot);
             ItemService itemService = new ItemService(client.Character);
             int error = 0;
 

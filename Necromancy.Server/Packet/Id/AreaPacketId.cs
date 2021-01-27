@@ -7,7 +7,7 @@ namespace Necromancy.Server.Packet.Id
     {
         // Recv OP Codes - Switch: 0x00497420 - ordered alphabetically 
         recv_0x916 = 0x916,
-        //NoJP recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos
+        //NoJP recv_0x1D09 = 0x1D09, //recv_party_notify_update_body_pos  Moved to message
         recv_0x10DA = 0x10DA, // Crash
         recv_0x1489 = 0x1489, // Crash
         recv_0x166B = 0x166B, // Crash
@@ -18,12 +18,12 @@ namespace Necromancy.Server.Packet.Id
         recv_0x3A0E = 0x3A0E, // Doesn't crash
         recv_0x3C1F = 0x3C1F,
         recv_0x3C81 = 0x3C81, // Crash
-        //NoJP recv_0x3F2F = 0x3F2F, // Crash
+        recv_0x3F2F = 0x3F2F, // Crash //nojp?
         //NoJP recv_0x488D = 0x488D, // Crash
         recv_0x4978 = 0x4978, // Crash
         //NoJP recv_0x4981 = 0x4981, // Crash
         recv_0x4ABB = 0x4ABB, // Crash
-        recv_0x4CF3 = 0x4CF3, // doesn't crash
+        recv_chara_status_set_look_switch_r = 0x4CF3, // doesn't crash
         recv_0x50D1 = 0x50D1, // Doesn't crash
         recv_0x531B = 0x531B, // Crash
         recv_0x5513 = 0x5513, // Crash
@@ -42,7 +42,7 @@ namespace Necromancy.Server.Packet.Id
         recv_0x8D62 = 0x8D62, // crash
         recv_0x8D92 = 0x8D92, // Crash
         recv_0x9201 = 0x9201, // Crash
-        recv_0x97D9 = 0x97D9, // Crash
+        recv_battle_report_noact_notify_heal_ap = 0x97D9, // Crash
         recv_0x9899 = 0x9899, // Crash
         recv_0x9CA1 = 0x9CA1, // Cause Crash
         recv_0xA8BB = 0xA8BB, // Cause Crash
@@ -50,18 +50,18 @@ namespace Necromancy.Server.Packet.Id
         recv_0xABC5 = 0xABC5, // Doesn't Crash
         //NoJP recv_0xB317 = 0xB317, // Cause Crash
         //NoJP recv_0xB39D = 0xB39D, // Cause Crash
-        recv_0xB586 = 0xB586, // Doesn't crash
+        recv_chara_status_set_comment_r = 0xB586, // Doesn't crash
         recv_0xB684 = 0xB684, // Cause crash
         recv_0xBA61 = 0xBA61, // Cause Crash
         recv_0xBF0D = 0xBF0D,
-        recv_0xC055 = 0xC055, // Doesn't crash
+        recv_trade_offer_r = 0xC055, // Doesn't crash
         recv_0xC078 = 0xC078, // cause Crash
         recv_0xCF29 = 0xCF29, // Cause crash
         recv_0xD04A = 0xD04A, // Cause crash
         recv_0xD1F6 = 0xD1F6, // Cause crash
         recv_0xD909 = 0xD909, // Doesn't crash
         recv_0xDA4A = 0xDA4A, // Doesn't crash
-        recv_0xE7CF = 0xE7CF,
+        recv_chara_status_access_end_r = 0xE7CF,
         recv_0xE983 = 0xE983,
         recv_0xEDE7 = 0xEDE7,
         recv_0xEE18 = 0xEE18, // Cause crash
@@ -319,7 +319,7 @@ namespace Necromancy.Server.Packet.Id
         recv_eo_update_end_trapid = 0xE8BF,
         recv_eo_update_second_trapid = 0x96EA,
         recv_eo_update_state = 0x28FD,
-        //NoJP recv_equip_honor_r = 0x92DE,
+        recv_equip_honor_r = 0x92DE,
         recv_escape_cancel = 0x8CC6,
         recv_escape_exec = 0xD0B7,
         recv_escape_start = 0xD68C,
@@ -333,7 +333,7 @@ namespace Necromancy.Server.Packet.Id
         recv_event_end = 0x99D,
         recv_event_message = 0x662F,
         recv_event_message_no_object = 0xCC37,
-        //NoJP recv_event_quest_order = 0x267B,
+        recv_event_quest_order = 0x267B,
         recv_event_quest_order_list_begin = 0x5CF8,
         recv_event_quest_report = 0xE07E,
         recv_event_quest_report_list_begin = 0x7004,
@@ -343,7 +343,7 @@ namespace Necromancy.Server.Packet.Id
         recv_event_removetrap_close = 0xA643,
         recv_event_removetrap_ident_trap_update = 0xB0E5,
         recv_event_removetrap_release_rate_close = 0xDCB6,
-        //NoJP recv_event_removetrap_release_rate_update = 0x26B8,
+        recv_event_removetrap_release_rate_update = 0x26B8,
         recv_event_removetrap_select_r = 0xFEB7,
         recv_event_removetrap_skill_r2 = 0xD400,
         recv_event_request_int = 0xB782,
@@ -439,7 +439,7 @@ namespace Necromancy.Server.Packet.Id
         recv_job_change_r = 0xA21E,
         recv_job_change_select_bonuspoint_r = 0x1837,
         recv_logout_cancel = 0x1198,
-        //NoJP recv_logout_cancel_request_r = 0x267D,
+        recv_logout_cancel_request_r = 0x267D,
         recv_logout_start = 0x58E7,
         recv_logout_start_request_r = 0x4C8B,
         recv_loot_access_object_r = 0x6023,
@@ -580,7 +580,7 @@ namespace Necromancy.Server.Packet.Id
         recv_shortcut_notify_regist = 0x8BB4,
         recv_shortcut_request_data_r = 0xA084,
         recv_shortcut_request_deregist_r = 0x42B6,
-        //NoJP recv_shortcut_request_regist_r = 0x27D6,
+        recv_shortcut_request_regist_r = 0x27D6,
         recv_situation_end = 0x124C,
         recv_situation_start = 0x1AA8,
         recv_sixthsense_trap_notify = 0xBA11,
@@ -676,7 +676,7 @@ namespace Necromancy.Server.Packet.Id
         recv_union_request_secede_result = 0x60E5,
         recv_union_storage_deposit_money_r = 0x8778,
         recv_union_storage_draw_money_r = 0x4440,
-        //NoJP recv_union_storage_move_item_r = 0x2790,
+        recv_union_storage_move_item_r = 0x2790,
         recv_wanted_entry_r = 0xDDD3,
         recv_wanted_jail_close_r = 0x7442,
         recv_wanted_jail_draw_point_r = 0xC54F,
@@ -873,6 +873,7 @@ namespace Necromancy.Server.Packet.Id
         recv_package_money_check_r = 0xE09F,
         recv_party_cancel_party_auto_recruit_r = 0xE27F,
         recv_party_mentor_create_r = 0x4064,
+        recv_party_mentor_remove_r = 0x2716,
         recv_party_notify_cancel_party_auto_recruit = 0x59AC,
         recv_party_notify_member_recruit = 0xF656,
         recv_party_notify_party_auto_recruit = 0xEA49,
@@ -1121,7 +1122,7 @@ namespace Necromancy.Server.Packet.Id
         send_item_use_item = 0x119, //opcode not found
         send_item_use_object = 0x120, //opcode not found
         send_job_change = 0x121, //opcode not found
-        send_job_change_close = 0x122, //opcode not found   TODO
+        send_job_change_close = 0x5659,
         send_job_change_select_bonuspoint = 0x123, //opcode not found
         send_logout_cancel_request = 0xB224, 
         send_logout_start_request = 0x38FC, 
@@ -1282,7 +1283,7 @@ namespace Necromancy.Server.Packet.Id
         send_chara_update_battle_target = 0x4B3F,
         send_class_advancement_learn = 0x1239,
         send_class_advancement_reset = 0x0,
-        send_echo = 0x0,
+        send_echo = 0xCFCD,
         send_event_challenge_script_play_r = 0x0,
         send_event_quest_list_end = 0x0,
         send_event_quest_list_get_order_list = 0x0,
@@ -1309,7 +1310,7 @@ namespace Necromancy.Server.Packet.Id
         send_item_scroll_sub_enchant_check = 0x0,
         send_item_scroll_sub_enchant_execute = 0x0,
         send_job_change_notify_info = 0x0,
-        send_login_news_get_url = 0x0,
+        send_login_news_get_url = 0xD692,
         send_login_news_update_conf = 0x0,
         send_mail_open = 0x0,
         send_motion_end_cl = 0x0,
@@ -1317,7 +1318,7 @@ namespace Necromancy.Server.Packet.Id
         send_package_item_check = 0x0,
         send_package_money_check = 0x0,
         send_party_cancel_party_auto_recruit = 0x0,
-        send_party_mentor_create = 0x0,
+        send_party_mentor_create = 0xC3EF,
         send_party_mentor_remove = 0x0,
         send_party_regist_party_auto_recruit = 0x0,
         send_quest_get_rogue_mission_quest_works = 0xDDD8,
@@ -1352,7 +1353,7 @@ namespace Necromancy.Server.Packet.Id
         send_soul_partner_skill_start_cast_r = 0x0,
         send_soul_partner_status_close = 0x0,
         send_soul_partner_status_levelup_end = 0x0,
-        send_soul_partner_status_open = 0x0,
+        send_soul_partner_status_open = 0x6A47,
         send_soul_partner_status_update_bonus_ability = 0x0,
         send_soul_partner_status_update_name = 0x0,
         send_soul_partner_storage_card_cancel = 0x0,

@@ -25,6 +25,8 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             int instanceID = packet.Data.ReadInt32();
+            //MonsterSpawn monster = client.Map.GetMonsterByInstanceId((uint) instanceID);
+            Logger.Debug($"{client.Character.Name} is trying to loot object {instanceID}");
 
             IBuffer res = BufferProvider.Provide();
             res.WriteInt64(1000);
@@ -34,7 +36,10 @@ namespace Necromancy.Server.Packet.Area
             IBuffer res2 = BufferProvider.Provide();
             res2.WriteInt32(0);
             Router.Send(client, (ushort) AreaPacketId.recv_loot_access_object_r, res2, ServerType.Area);
-
+            //LOOT, -1, I don't have anything. , SYSTEM_WARNING,
+            //LOOT, -10, no route target, SYSTEM_WARNING,
+            //LOOT, -207, There is no space in the inventory. , SYSTEM_WARNING,
+            //LOOT, -1500, no root authority. , SYSTEM_WARNING,
 
      
         }

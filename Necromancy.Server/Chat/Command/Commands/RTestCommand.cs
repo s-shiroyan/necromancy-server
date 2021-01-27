@@ -7,6 +7,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive.Area;
+using Necromancy.Server.Packet.Receive.Msg;
 
 namespace Necromancy.Server.Chat.Command.Commands
 {
@@ -42,7 +43,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 catch
                 {
                     responses.Add(ChatResponse.CommandError(client, $"no value specified. setting x to 1"));
-                    return;
+                    //return;
                 }
 
             }
@@ -97,6 +98,90 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "lootaccess":
                     RecvLootAccessObject lootAcess = new RecvLootAccessObject();
                     Router.Send(client.Map, lootAcess);
+                    break;
+
+                case "partygetitem":
+                    //arearecv
+                    RecvPartyNotifyGetItem recvPartyNotifyGetItem = new RecvPartyNotifyGetItem(client.Character.InstanceId);
+                    Router.Send(recvPartyNotifyGetItem, client);
+                    //message recv
+                    IBuffer res = BufferProvider.Provide();
+                    res.WriteUInt32(client.Character.InstanceId);
+                    res.WriteCString(" a Dagger or any long string named object ");
+                    res.WriteByte(20);
+                    Router.Send(client.Map, (ushort)MsgPacketId.recv_party_notify_get_item, res, ServerType.Msg);
+                    break;
+
+                case "partygetmoney":
+                    RecvPartyNotifyGetMoney recvPartyNotifyGetMoney = new RecvPartyNotifyGetMoney(client.Character.InstanceId);
+                    Router.Send(client.Map, recvPartyNotifyGetMoney);
+                    break;
+
+                case "partybuff":
+                    RecvPartyNotifyAttachBuff recvPartyNotifyAttachBuff = new RecvPartyNotifyAttachBuff();
+                    Router.Send(client.Map, recvPartyNotifyAttachBuff);
+                    break;
+
+                case "partydragon":
+                    RecvPartyNotifyUpdateDragon recvPartyNotifyUpdateDragon = new RecvPartyNotifyUpdateDragon(client.Character.InstanceId);
+                    Router.Send(client.Map, recvPartyNotifyUpdateDragon);
+                    break;
+
+                case "partymap":
+                    RecvPartyNotifyUpdateMap recvPartyNotifyUpdateMap = new RecvPartyNotifyUpdateMap(client);
+                    Router.Send(client.Map, recvPartyNotifyUpdateMap);
+                    break;
+
+                case "partysync":
+                    RecvPartyNotifyUpdateSyncLevel recvPartyNotifyUpdateSyncLevel = new RecvPartyNotifyUpdateSyncLevel(client);
+                    Router.Send(client.Map, recvPartyNotifyUpdateSyncLevel);
+                    break;
+
+
+                case "iobject":
+                    //SendDataNotifyItemObjectData
+                    // objectid : %d, stateflag : %d, type : %d\n
+                    res = BufferProvider.Provide();
+
+                    res.WriteInt32(12345); //object instance ID
+                    res.WriteFloat(client.Character.X); //Initial X
+                    res.WriteFloat(client.Character.Y); //Initial Y
+                    res.WriteFloat(client.Character.Z); //Initial Z
+
+                    res.WriteFloat(client.Character.X); //Final X
+                    res.WriteFloat(client.Character.Y); //Final Y
+                    res.WriteFloat(client.Character.Z); //Final Z
+                    res.WriteByte(client.Character.Heading); //View offset
+
+                    res.WriteInt32(0); // ?
+                    res.WriteUInt32(client.Character.InstanceId); // ?
+                    res.WriteUInt32(0); // ?
+
+                    res.WriteInt32(0b1); //object state. 1 = lootable .
+                    res.WriteInt32(2); //type
+
+                    Router.Send(client.Map, (ushort)AreaPacketId.recv_data_notify_itemobject_data, res, ServerType.Area);
+                    break;
+
+                case "o2716":
+                    res = BufferProvider.Provide();
+
+                    res.WriteUInt32(0); //errhceck
+
+                    Router.Send(client, (ushort)0x2716, res, ServerType.Area);
+                    break;
+
+                    
+                case "partnersummon":
+                    recv_soul_partner_summon_start_notify recv_soul_partner_summon_start_notify = new recv_soul_partner_summon_start_notify();
+                    Router.Send(client.Map, recv_soul_partner_summon_start_notify);
+                    recv_soul_partner_summon_exec_r recv_soul_partner_summon_exec_r = new recv_soul_partner_summon_exec_r();
+                    Router.Send(client.Map, recv_soul_partner_summon_exec_r);
+                    recv_soul_partner_unlock_avatar recv_soul_partner_unlock_avatar = new recv_soul_partner_unlock_avatar();
+                    Router.Send(client.Map, recv_soul_partner_unlock_avatar);
+                    recv_soul_partner_notify_avatar recv_soul_partner_notify_avatar = new recv_soul_partner_notify_avatar();
+                    Router.Send(client.Map, recv_soul_partner_notify_avatar);
+                    
                     break;
 
 

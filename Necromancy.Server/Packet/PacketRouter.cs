@@ -147,6 +147,22 @@ namespace Necromancy.Server.Packet
         /// <summary>
         /// Send a specific packet response.
         /// </summary>
+        public void Send(PacketResponse response, List<NecClient> clientList)
+        {
+            NecClient[] clients = new NecClient[clientList.Count];
+            int i = 0;
+            foreach (NecClient client in clientList)
+            {
+                clients[i] = client;
+                i++;
+            }
+            response.AddClients(clients);
+            Send(response);
+        }
+
+        /// <summary>
+        /// Send a specific packet response.
+        /// </summary>
         public void Send(PacketResponse response, params NecClient[] clients)
         {
             response.Clients.AddRange(clients);

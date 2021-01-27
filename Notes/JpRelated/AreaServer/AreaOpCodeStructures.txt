@@ -1,14 +1,14 @@
 0x00497420 location for opcode section, 965 opcodes, 
 ---------------------------------------------------------------
 recv_battle_report_notify_partner_damage_hp = 0x11EE,
-	res.WriteInt32()//objectId
-	res.WriteInt32()//Damage
+	res.WriteInt32(0)//objectId
+	res.WriteInt32(0)//Damage
 ---------------------------------------------------------------
 recv_gem_set_spall_r()  = 0x1273
-	res.WriteInt32()//errcheck
+	res.WriteInt32(0)//errcheck
 ---------------------------------------------------------------
 recv_soul_partner_storage_cash_shop_close_r = 0x1448
-	res.WriteInt32()//errcheck
+	res.WriteInt32(0)//errcheck
 ---------------------------------------------------------------
 recv_soul_partner_summon_cast_cancel_notify = 0x15C7
 	//No Structure
@@ -3073,4 +3073,8 @@ $+5183C  00503359       | 68 10E5ED00      | push wizpatch.EDE510               
             res.WriteInt32(0);
 ---------------------------------------------------------------
 Fin 10.24.2020 10:04
-
+0x2716
+0050A248       				| 68 28E5EE00      | push wizpatch.EEE528                 | EEE528:L"network::proto_area_implement_client::recv_party_mentor_remove_r() [ res = %d ]\n"
+            res.WriteInt32(0);
+---------------------------------------------------------------
+Updated 01.17.21 10:04

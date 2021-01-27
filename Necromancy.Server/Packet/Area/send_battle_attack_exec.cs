@@ -143,6 +143,23 @@ namespace Necromancy.Server.Packet.Area
                 perHp = (float) monsterSpawn.Hp.current / monsterSpawn.Hp.max * 100;
                 Logger.Debug($"CurrentHp [{monsterSpawn.Hp.current}] MaxHp[{monsterSpawn.Hp.max}] perHp[{perHp}]");
 
+                //just for fun. turn on inactive monsters
+                if(monsterSpawn.Active == false) 
+                { 
+                    monsterSpawn.Active = true;
+                    monsterSpawn.SpawnActive = true;
+                    if (!monsterSpawn.TaskActive)
+                    {
+                        Tasks.MonsterTask monsterTask = new Tasks.MonsterTask(_server, monsterSpawn);
+                        if (monsterSpawn.defaultCoords)
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords[0];
+                        else
+                            monsterTask.monsterHome = monsterSpawn.monsterCoords.Find(x => x.CoordIdx == 64);
+                        monsterTask.Start();
+                    }
+
+                }
+
                 DamageTheObject(client, monsterSpawn.InstanceId, damage, perHp);
             }
 

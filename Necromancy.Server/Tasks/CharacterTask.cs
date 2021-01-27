@@ -87,9 +87,10 @@ namespace Necromancy.Server.Tasks
             deadBody.Z = _client.Character.Z;
             deadBody.Heading = _client.Character.Heading;
             _client.Character.movementId = _client.Character.DeadBodyInstanceId;
+            _client.Character.deadType = 1;
 
             Thread.Sleep(5000);
-            _client.Character.HasDied = false; // quick switch to living state so your dead body loads with your gear
+            //_client.Character.HasDied = false; // quick switch to living state so your dead body loads with your gear
             //load your dead body on to the map for you to see in soul form. 
             //_client.Character.State = Model.CharacterModel.CharacterState.SoulForm;  //Mess with this after you finish inventory
             RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, _client.Character, _client);
