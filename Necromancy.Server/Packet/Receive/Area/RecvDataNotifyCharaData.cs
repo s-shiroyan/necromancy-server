@@ -23,8 +23,9 @@ namespace Necromancy.Server.Packet.Receive.Area
         {
             TimeSpan differenceJoined = DateTime.Today.ToUniversalTime() - DateTime.UnixEpoch;
             int DateAttackedCalculation = (int)Math.Floor(differenceJoined.TotalSeconds);
-            int numEntries = 0x19; //Max of 19 Equipment Slots for Character Player
+            int numEntries = 0x19; //Max of 25 Equipment Slots for Character Player
             int numStatusEffects = 0x80; //Statuses effects. Max 128
+            int i = 0;
 
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(_character.InstanceId);
@@ -40,24 +41,61 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt16(0); //??  Soul State?  Soul Form? turns you soul form if above 0   : ToDo. key to death and revival
 
             res.WriteInt32(numEntries); // Number of equipment Slots
-            //Consolidated Frequently Used Code
-            //LoadEquip.SlotSetup(res, _character, numEntries);
+            i = 0;
+            while (i < numEntries)
+            {
+                //sub_483660   
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                i++;
+            }
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
-            //Consolidated Frequently Used Code
-            //LoadEquip.EquipItems(res, _character, numEntries);
-            //sub_483420
-            res.WriteInt32(numEntries); // Number of equipment Slots
-            //Consolidated Frequently Used Code
-            //LoadEquip.EquipSlotBitMask(res, _character, numEntries);
+            i = 0;
+            while (i < numEntries)//Must have 25 on recv_chara_notify_data
+            {
+                res.WriteInt32(0); //Sets your Item ID per Iteration
+                res.WriteByte(0); // 
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
 
+                res.WriteInt32(0); //testing (Theory, Icon related)
+                res.WriteByte(0); //
+                res.WriteByte(0); // (theory bag)
+                res.WriteByte(0); // (theory Slot)
+
+                res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(00); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(0); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(0); //Alternate texture for item model 
+
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                i++;
+            }
+            //sub_483420
+            res.WriteInt32(numEntries); // Number of equipment Slots
+            i = 0;
+            while (i < numEntries)
+            {
+                //sub_483420   
+                res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                i++;
+            }
             //sub_4835C0
             res.WriteInt32(_character.charaPose); //1 here means crouching?
             //sub_484660
-            LoadEquip.BasicTraits(res, _character);
-
+            res.WriteUInt32(_character.RaceId); //race
+            res.WriteUInt32(_character.SexId);
+            res.WriteByte(_character.HairId); //hair
+            res.WriteByte(_character.HairColorId); //color
+            res.WriteByte(_character.FaceId); //face
+            res.WriteByte(1);//unknown
+            res.WriteByte(2);//unknown
             //weird 64 loop
-            for (int i = 0; i < 100; i++)
+            for (i = 0; i < 100; i++)
             { res.WriteInt64(0); }
 
             //sub_483420
@@ -87,7 +125,7 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_483420
             res.WriteInt32(numStatusEffects); //Number of Status Effects to display 128 Max
             //sub_485A70
-            for (int i = 0; i < numStatusEffects; i++)
+            for (i = 0; i < numStatusEffects; i++)
             {
                 res.WriteInt32(0); //instanceID or unique ID
                 res.WriteInt32(0); //Buff.SerialId
