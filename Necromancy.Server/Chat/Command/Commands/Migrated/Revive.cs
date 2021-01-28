@@ -34,6 +34,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 client.Character.Hp.toMax();
                 client.Character.movementId = client.Character.InstanceId;
                 client.Character.State = CharacterState.NormalForm;
+                client.Character.deadType = 0;
 
 
                 IBuffer res2 = BufferProvider.Provide();
@@ -59,7 +60,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 res3.WriteUInt32(client.Character.DeadBodyInstanceId);
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_object_disappear_notify, res3, ServerType.Area);
 
-                client.Character.hadDied = false;
+                client.Character.HasDied = false;
                 client.Character.Hp.depleted = false;
                 RecvDataNotifyCharaData cData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
                 Router.Send(client, cData.ToPacket());
@@ -74,10 +75,10 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                 IBuffer res = BufferProvider.Provide();
                 res.WriteInt32(1); // 0 = sucess to revive, 1 = failed to revive
-                Router.Send(client.Map, (ushort) AreaPacketId.recv_raisescale_request_revive_r, res, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_raisescale_request_revive_r, res, ServerType.Area);
 
                 IBuffer res5 = BufferProvider.Provide();
-                Router.Send(client.Map, (ushort) AreaPacketId.recv_self_lost_notify, res5, ServerType.Area);
+                Router.Send(client, (ushort) AreaPacketId.recv_self_lost_notify, res5, ServerType.Area);
             }*/
         }
 

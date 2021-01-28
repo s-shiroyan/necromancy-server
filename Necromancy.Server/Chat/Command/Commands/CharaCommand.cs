@@ -174,7 +174,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                     //recv_chara_notify_stateflag = 0x23D3, 
                     IBuffer res11 = BufferProvider.Provide();
                     res11.WriteUInt32(character2.InstanceId);
-                    res11.WriteInt32(y);
+                    res11.WriteInt64(y);
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_notify_stateflag, res11, ServerType.Area);
                     responses.Add(ChatResponse.CommandError(client,
                         $"setting charaState to {y} for character {character2.Name}"));
@@ -222,18 +222,22 @@ namespace Necromancy.Server.Chat.Command.Commands
                     int numEntries = 19;
                     res14.WriteInt32(numEntries); //less than or equal to 19
                     //Consolidated Frequently Used Code
-                    LoadEquip.SlotSetup(res14, character2, numEntries);
+                    //LoadEquip.SlotSetup(res14, character2, numEntries);
 
                     res14.WriteInt32(numEntries);
                     //Consolidated Frequently Used Code
-                    LoadEquip.EquipItems(res14, character2, numEntries);
+                    //LoadEquip.EquipItems(res14, character2, numEntries);
 
                     res14.WriteInt32(numEntries);
                     //Consolidated Frequently Used Code
-                    LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
+                    //LoadEquip.EquipSlotBitMask(res14, character2, numEntries);
 
-                    //Consolidated Frequently Used Code
-                    LoadEquip.BasicTraits(res14, character2);
+                    //Traits
+                    res14.WriteUInt32(character2.RaceId); //race
+                    res14.WriteUInt32(character2.SexId);
+                    res14.WriteByte(character2.HairId); //hair
+                    res14.WriteByte(character2.HairColorId); //color
+                    res14.WriteByte(character2.FaceId); //face
 
                     res14.WriteInt32(_deadBody
                         .ConnectionState); // 0 = bag, 1 for dead? (Can't enter soul form if this isn't 0 or 1 i think).
@@ -313,13 +317,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 case "string":
                     IBuffer res26 = BufferProvider.Provide();
                     //recv_charabody_notify_loot_item = 0x8CDE, // Parent = 0x8CC6 // Range ID = 01
-                    res26.WriteByte(0);
-                    res26.WriteByte(0);
-                    res26.WriteInt16(0);
+                    res26.WriteByte(0); //storage type
+                    res26.WriteByte(0); //bag
+                    res26.WriteInt16(5); //slot
 
-                    res26.WriteInt16((short) y);
-                    res26.WriteCString("adad"); // Length 0x31 
-                    res26.WriteCString("adad"); // Length 0x5B
+                    res26.WriteInt16((short) y); //Item count
+                    res26.WriteCString("PersonWhostoleIt"); // Length 0x31 
+                    res26.WriteCString("ItemStolenName"); // Length 0x5B
                     Router.Send(client, (ushort) AreaPacketId.recv_charabody_notify_loot_item, res26, ServerType.Area);
                     break;
 
@@ -451,9 +455,10 @@ namespace Necromancy.Server.Chat.Command.Commands
 
                 case "itemforth":
                     IBuffer res38 = BufferProvider.Provide();
-                    res38.WriteUInt32(client.Character.InstanceId); //item ID?
-                    res38.WriteInt32(10200101); //Owner going 'forth'  id?
-                    res38.WriteUInt32(client.Character.InstanceId); //item state setting?
+                    res38.WriteUInt32(200000002); //item ID?
+                    res38.WriteInt32(200101); //Owner going 'forth'  id?
+                    res38.WriteUInt32(200201); //item state setting?
+                    res38.WriteByte(1);//newJp
                     Router.Send(client.Map, (ushort) AreaPacketId.recv_chara_update_notify_item_forth, res38,
                         ServerType.Area);
                     break;

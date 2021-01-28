@@ -23,6 +23,7 @@ namespace Necromancy.Server.Packet.Area
                 client.Character.eventSelectExecCode = 1;
                 IBuffer res = BufferProvider.Provide();
                 res.WriteCString("inn/fadein"); // find max size 
+                res.WriteUInt32(client.Character.InstanceId); //newJp
                 Router.Send(client, (ushort)AreaPacketId.recv_event_script_play, res, ServerType.Area);
                 Task.Delay(TimeSpan.FromMilliseconds((int)(10 * 1000))).ContinueWith
                     (t1 =>

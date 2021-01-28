@@ -40,8 +40,14 @@ namespace Necromancy.Server.Packet.Msg
             res3.WriteUInt32(client.Character.InstanceId);
 
             //sub_4E4210_2341  // 
-            res3.WriteInt32(client.Character.MapId); //MapSerialID //passeed to Send_Map_Entry
-            res3.WriteInt32(client.Character.MapId); //MapID
+            //res3.WriteInt32(0);//client.Character.MapId); //MapSerialID //passeed to Send_Map_Entry
+            //res3.WriteInt32(0);//client.Character.MapId); //MapID
+
+            res3.WriteInt32(client.Character.MapId);
+            res3.WriteInt32(client.Character.MapId);
+            res3.WriteInt32(client.Character.MapId);
+            res3.WriteByte(0);
+            res3.WriteByte(0); //Bool
             res3.WriteFixedString(Settings.DataAreaIpAddress, 0x41); //IP
             res3.WriteUInt16(Settings.AreaPort); //Port
 
@@ -72,8 +78,8 @@ namespace Necromancy.Server.Packet.Msg
             deadBody.Y = character.Y;
             deadBody.Z = character.Z;
             deadBody.Heading = character.Heading;
-            deadBody.RaceId = character.Raceid;
-            deadBody.SexId = character.Sexid;
+            deadBody.RaceId = character.RaceId;
+            deadBody.SexId = character.SexId;
             deadBody.HairStyle = character.HairId;
             deadBody.HairColor = character.HairColorId;
             deadBody.FaceId = character.FaceId;

@@ -142,8 +142,8 @@ namespace Necromancy.Server.Packet.Area
             }
 
             //Logic to see if you are in range of a map transition
-            client.Character.stepCount++;
-            if (client.Character.stepCount % 4 == 0)
+            client.Character.StepCount++;
+            if (client.Character.StepCount % 4 == 0)
             {
                 CheckMapChange(client);
             }

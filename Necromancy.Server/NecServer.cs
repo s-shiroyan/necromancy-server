@@ -32,7 +32,6 @@ using Necromancy.Server.Database;
 using Necromancy.Server.Discord;
 using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
-using Necromancy.Server.Model.ItemModel;
 using Necromancy.Server.Model.MapModel;
 using Necromancy.Server.Model.Union;
 using Necromancy.Server.Packet;
@@ -54,7 +53,6 @@ namespace Necromancy.Server
         public PacketRouter Router { get; }
         public ClientLookup Clients { get; }
         public MapLookup Maps { get; }
-        public Dictionary<int, Item> Items { get; }
         public IDatabase Database { get; }
         public SettingRepository SettingRepository { get; }
         public ChatManager Chat { get; }
@@ -80,7 +78,6 @@ namespace Necromancy.Server
             Instances = new InstanceGenerator(this);
             Clients = new ClientLookup();
             Maps = new MapLookup();
-            Items = new Dictionary<int, Item>();
             Chat = new ChatManager(this);
             Router = new PacketRouter();
             SettingRepository = new SettingRepository(Setting.RepositoryFolder).Initialize();
@@ -185,7 +182,11 @@ namespace Necromancy.Server
 
         private void LoadChatCommands()
         {
+            Chat.CommandHandler.AddCommand(new RTestCommand(this));
+            Chat.CommandHandler.AddCommand(new BattleCommand(this));
+            Chat.CommandHandler.AddCommand(new ArrangeCommand(this));
             Chat.CommandHandler.AddCommand(new ItemInstanceCommand(this));
+            Chat.CommandHandler.AddCommand(new ItemGeneratorCommand(this));
             Chat.CommandHandler.AddCommand(new HonorCommand(this));
             Chat.CommandHandler.AddCommand(new SummonCommand(this));
             Chat.CommandHandler.AddCommand(new PlayersCommand(this));
@@ -200,33 +201,18 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new MonsterCommand(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstance(this));
             Chat.CommandHandler.AddCommand(new AdminConsoleRecvItemInstanceUnidentified(this));
-            Chat.CommandHandler.AddCommand(new AdminConsoleSelectPackageUpdate(this));
             Chat.CommandHandler.AddCommand(new ChangeFormMenu(this));
             Chat.CommandHandler.AddCommand(new Died(this));
-            Chat.CommandHandler.AddCommand(new GemNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new LogOut(this));
             Chat.CommandHandler.AddCommand(new OnHit(this));
             Chat.CommandHandler.AddCommand(new QuestStarted(this));
             Chat.CommandHandler.AddCommand(new Revive(this));
             Chat.CommandHandler.AddCommand(new SendAuctionNotifyOpen(this));
-            Chat.CommandHandler.AddCommand(new SendCharacterHome(this));
-            Chat.CommandHandler.AddCommand(new SendCharacterId(this));
             Chat.CommandHandler.AddCommand(new SendCharacterSave(this));
-            Chat.CommandHandler.AddCommand(new SendCharaUpdateEvent(this));
-            Chat.CommandHandler.AddCommand(new SendDataNotifiyGGateStoneData(this));
             Chat.CommandHandler.AddCommand(new SendDataNotifyItemObjectData(this));
             Chat.CommandHandler.AddCommand(new SendEventEnd(this));
             Chat.CommandHandler.AddCommand(new SendEventTreasureboxBegin(this));
-            Chat.CommandHandler.AddCommand(new SendItemUpdateState(this));
-            Chat.CommandHandler.AddCommand(new SendLootAccessObject(this));
-            Chat.CommandHandler.AddCommand(new SendMailOpenR(this));
             Chat.CommandHandler.AddCommand(new SendMapChangeForce(this));
-            Chat.CommandHandler.AddCommand(new SendMapCoord(this));
-            Chat.CommandHandler.AddCommand(new SendMapEntry(this));
-            Chat.CommandHandler.AddCommand(new SendMapLink(this));
-            Chat.CommandHandler.AddCommand(new SendMapMove(this));
-            Chat.CommandHandler.AddCommand(new SendMessageEvent(this));
-            Chat.CommandHandler.AddCommand(new SendMonsterStateUpdateNotify(this));
             Chat.CommandHandler.AddCommand(new SendRandomBoxNotifyOpen(this));
             Chat.CommandHandler.AddCommand(new SendSalvageNotifyBody(this));
             Chat.CommandHandler.AddCommand(new SendShopNotifyOpen(this));
@@ -235,8 +221,6 @@ namespace Necromancy.Server
             Chat.CommandHandler.AddCommand(new SendStallUpdateFeatureItem(this));
             Chat.CommandHandler.AddCommand(new SendTestEvent(this));
             Chat.CommandHandler.AddCommand(new SendTrapEvent(this));
-            Chat.CommandHandler.AddCommand(new SendUnionMantleOpen(this));
-            Chat.CommandHandler.AddCommand(new SendUnionOpenWindow(this));
             Chat.CommandHandler.AddCommand(new SendWantedJailOpen(this));
             Chat.CommandHandler.AddCommand(new SendWantedListOpen(this));
             Chat.CommandHandler.AddCommand(new SoulShop(this));
@@ -261,15 +245,15 @@ namespace Necromancy.Server
                 Maps.Add(map);
             }
 
-            Logger.Info($"Maps: {maps.Count}");
+            //Logger.Info($"Maps: {maps.Count}");
 
-            List<Item> items = Database.SelectItems();
-            foreach (Item item in items)
-            {
-                Items.Add(item.Id, item);
-            }
+            //List<Item> items = Database.SelectItems();
+            //foreach (Item item in items)
+            //{
+            //    Items.Add(item.Id, item);
+            //}
 
-            Logger.Info($"Items: {items.Count}");
+            //Logger.Info($"Items: {items.Count}");
         }
 
         private void LoadHandler()
@@ -481,7 +465,7 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_raisescale_add_item(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive_event(this));
             _areaConsumer.AddHandler(new send_raisescale_request_revive(this));
-            _areaConsumer.AddHandler(new Send_shop_repair(this));
+            _areaConsumer.AddHandler(new send_shop_repair(this));
             _areaConsumer.AddHandler(new send_storage_draw_item(this));
             _areaConsumer.AddHandler(new send_union_request_detail(this)); // ORIGINALLY A MSG SEND
             _areaConsumer.AddHandler(new send_friend_request_load_area(this)); // ORIGINALLY A MSG SEND
@@ -509,6 +493,15 @@ namespace Necromancy.Server
             _areaConsumer.AddHandler(new send_union_storage_deposit_money(this));
             _areaConsumer.AddHandler(new send_union_storage_move_item(this));
             _areaConsumer.AddHandler(new send_union_storage_draw_money(this));
+            _areaConsumer.AddHandler(new send_chara_update_battle_target(this));
+            _areaConsumer.AddHandler(new send_storage_open_cash_shop(this));
+            _areaConsumer.AddHandler(new send_event_treasurebox_select(this));
+            _areaConsumer.AddHandler(new send_job_change_close(this));
+            _areaConsumer.AddHandler(new send_login_news_get_url(this));
+            _areaConsumer.AddHandler(new send_echo(this));
+            _areaConsumer.AddHandler(new send_soul_partner_status_open(this));
+            _areaConsumer.AddHandler(new send_party_mentor_create(this));
+            _areaConsumer.AddHandler(new send_party_mentor_remove(this));
         }
     }
 }

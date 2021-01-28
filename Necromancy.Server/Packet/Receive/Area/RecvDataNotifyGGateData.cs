@@ -18,8 +18,7 @@ namespace Necromancy.Server.Packet.Receive.Area
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
-            res.WriteUInt32(_gGateSpawn
-                .InstanceId); // Unique Object ID.  Crash if already in use (dont use your character ID)
+            res.WriteUInt32(_gGateSpawn.InstanceId); // Unique Object ID.
             res.WriteInt32(_gGateSpawn.Id); // Serial ID for Interaction? from npc.csv????
             res.WriteByte(_gGateSpawn.Interaction); // 0 = Text, 1 = F to examine  , 2 or above nothing
             res.WriteCString(_gGateSpawn.Name); //"0x5B" //Name

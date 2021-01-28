@@ -21,15 +21,15 @@ namespace Necromancy.Server.Chat.Command.Commands
         public override void Execute(string[] command, NecClient client, ChatMessage message,
             List<ChatResponse> responses)
         {
-            if (client.Character.hadDied == true)
+            if (client.Character.HasDied == true)
             {
                 IBuffer res4 = BufferProvider.Provide();
                 Router.Send(client.Map, (ushort) AreaPacketId.recv_self_lost_notify, res4, ServerType.Area);
             }
 
-            if (client.Character.hadDied == false)
+            if (client.Character.HasDied == false)
             {
-                client.Character.hadDied =
+                client.Character.HasDied =
                     true; // setting before the Sleep so other monsters can't "kill you" while you're dieing
                 client.Character.Hp.Modify(-client.Character.Hp.current);
                 client.Character.State = CharacterState.SoulForm;
@@ -60,13 +60,13 @@ namespace Necromancy.Server.Chat.Command.Commands
                 Task.Delay(TimeSpan.FromMilliseconds((int) (5 * 1000))).ContinueWith
                 (t1 =>
                     {
-                        client.Character.hadDied =
+                        client.Character.HasDied =
                             false; // quick switch to living state so your dead body loads with your gear
                         //load your dead body on to the map for you to see in soul form. 
                         RecvDataNotifyCharaBodyData cBodyData = new RecvDataNotifyCharaBodyData(deadBody, client.Character, client);
                         Server.Router.Send(client, cBodyData.ToPacket());
 
-                        client.Character.hadDied = true; // back to dead so your soul appears with-out gear.
+                        client.Character.HasDied = true; // back to dead so your soul appears with-out gear.
                     }
                 );
 
