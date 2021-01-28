@@ -208,7 +208,7 @@ namespace Necromancy.Server.Model
         {
             client.Character.mapChange = true;
             Enter(client, mapPosition);
-            _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting), client);
+            _server.Router.Send(new RecvMapChangeForce(this, mapPosition, _server.Setting, client), client);
 
             // currently required to prevent disconnect by force changing
             _server.Router.Send(new RecvMapChangeSyncOk(), client);
@@ -244,7 +244,7 @@ namespace Necromancy.Server.Model
             client.Character.mapChange = false;
             ClientLookup.Add(client);
             Logger.Debug($"Client Lookup count is now : {ClientLookup.GetAll().Count}  for map  {this.Id} ");
-
+            Logger.Debug($"Character State for character {client.Character.Name} is {client.Character.State}");
             RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
             _server.Router.Send(this, myCharacterData, client);
             if (client.Union != null)

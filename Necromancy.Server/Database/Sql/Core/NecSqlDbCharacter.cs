@@ -9,27 +9,27 @@ namespace Necromancy.Server.Database.Sql.Core
         where TCom : DbCommand
     {
         private const string SqlInsertCharacter =
-            "INSERT INTO `nec_character` (`account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created`) VALUES (@account_id, @soul_id, @slot, @map_id, @x, @y, @z, @name, @race_id, @sex_id, @hair_id, @hair_color_id, @face_id, @alignment_id, @strength, @vitality, @dexterity, @agility, @intelligence, @piety, @luck, @class_id, @level, @shortcut_bar0_id, @shortcut_bar1_id, @shortcut_bar2_id, @shortcut_bar3_id, @shortcut_bar4_id, @created);";
+            "INSERT INTO `nec_character` (`account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created`) VALUES (@account_id, @soul_id, @slot, @map_id, @x, @y, @z, @name, @race_id, @sex_id, @hair_id, @hair_color_id, @face_id, @alignment_id, @strength, @vitality, @dexterity, @agility, @intelligence, @piety, @luck, @class_id, @level, @created);";
 
         private const string SqlSelectCharacterById =
-            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character` WHERE `id`=@id;";
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `id`=@id;";
 
         private const string SqlSelectCharactersByAccountId =
-            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character` WHERE `account_id`=@account_id;";
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `account_id`=@account_id;";
 
         private const string SqlSelectCharactersBySoulId =
-            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id;";
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id;";
 
         private const string SqlSelectCharacterBySlot =
-            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id AND `slot`=@slot;";
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character` WHERE `soul_id`=@soul_id AND `slot`=@slot;";
 
         private const string SqlUpdateCharacter =
-            "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `slot`=@slot, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `name`=@name, `race_id`=@race_id, `sex_id`=@sex_id, `hair_id`=@hair_id, `hair_color_id`=@hair_color_id, `face_id`=@face_id, `alignment_id`=@alignment_id, `strength`=@strength, `vitality`=@vitality, `dexterity`=@dexterity, `agility`=@agility, `intelligence`=@intelligence, `piety`=@piety, `luck`=@luck, `class_id`=@class_id, `level`=@level, `shortcut_bar0_id`=@shortcut_bar0_id, `shortcut_bar1_id`=@shortcut_bar1_id, `shortcut_bar2_id`=@shortcut_bar2_id, `shortcut_bar3_id`=@shortcut_bar3_id, `shortcut_bar4_id`=@shortcut_bar4_id, `created`=@created WHERE `id`=@id;";
+            "UPDATE `nec_character` SET `account_id`=@account_id, `soul_id`=@soul_id, `slot`=@slot, `map_id`=@map_id, `x`=@x, `y`=@y, `z`=@z, `name`=@name, `race_id`=@race_id, `sex_id`=@sex_id, `hair_id`=@hair_id, `hair_color_id`=@hair_color_id, `face_id`=@face_id, `alignment_id`=@alignment_id, `strength`=@strength, `vitality`=@vitality, `dexterity`=@dexterity, `agility`=@agility, `intelligence`=@intelligence, `piety`=@piety, `luck`=@luck, `class_id`=@class_id, `level`=@level, `created`=@created WHERE `id`=@id;";
 
         private const string SqlDeleteCharacter =
             "DELETE FROM `nec_character` WHERE `id`=@id;";
         private const string SqlSelectCharacters =
-            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `shortcut_bar0_id`, `shortcut_bar1_id`, `shortcut_bar2_id`, `shortcut_bar3_id`, `shortcut_bar4_id`, `created` FROM `nec_character`;";
+            "SELECT `id`, `account_id`, `soul_id`, `slot`, `map_id`, `x`, `y`, `z`, `name`, `race_id`, `sex_id`, `hair_id`, `hair_color_id`, `face_id`, `alignment_id`, `strength`, `vitality`, `dexterity`, `agility`, `intelligence`, `piety`, `luck`, `class_id`, `level`, `created` FROM `nec_character`;";
 
         public bool InsertCharacter(Character character)
         {
@@ -43,27 +43,21 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@y", character.Y);
                 AddParameter(command, "@z", character.Z);
                 AddParameter(command, "@name", character.Name);
-                AddParameter(command, "@race_id", character.Raceid);
-                AddParameter(command, "@sex_id", character.Sexid);
+                AddParameter(command, "@race_id", character.RaceId);
+                AddParameter(command, "@sex_id", character.SexId);
                 AddParameter(command, "@hair_id", character.HairId);
                 AddParameter(command, "@hair_color_id", character.HairColorId);
                 AddParameter(command, "@face_id", character.FaceId);
-                AddParameter(command, "@alignment_id", character.Alignmentid);
+                AddParameter(command, "@alignment_id", character.AlignmentId);
                 AddParameter(command, "@strength", character.Strength);
-                AddParameter(command, "@vitality", character.vitality);
-                AddParameter(command, "@dexterity", character.dexterity);
-                AddParameter(command, "@agility", character.agility);
-                AddParameter(command, "@intelligence", character.intelligence);
-                AddParameter(command, "@piety", character.piety);
-                AddParameter(command, "@luck", character.luck);
+                AddParameter(command, "@vitality", character.Vitality);
+                AddParameter(command, "@dexterity", character.Dexterity);
+                AddParameter(command, "@agility", character.Agility);
+                AddParameter(command, "@intelligence", character.Intelligence);
+                AddParameter(command, "@piety", character.Piety);
+                AddParameter(command, "@luck", character.Luck);
                 AddParameter(command, "@class_id", character.ClassId);
                 AddParameter(command, "@level", character.Level);
-                AddParameter(command, "@created", character.Created);
-                AddParameter(command, "@shortcut_bar0_id", character.shortcutBar0Id);
-                AddParameter(command, "@shortcut_bar1_id", character.shortcutBar1Id);
-                AddParameter(command, "@shortcut_bar2_id", character.shortcutBar2Id);
-                AddParameter(command, "@shortcut_bar3_id", character.shortcutBar3Id);
-                AddParameter(command, "@shortcut_bar4_id", character.shortcutBar4Id);
                 AddParameter(command, "@created", character.Created);
             }, out long autoIncrement);
             if (rowsAffected <= NoRowsAffected || autoIncrement <= NoAutoIncrement)
@@ -149,26 +143,21 @@ namespace Necromancy.Server.Database.Sql.Core
                 AddParameter(command, "@y", character.Y);
                 AddParameter(command, "@z", character.Z);
                 AddParameter(command, "@name", character.Name);
-                AddParameter(command, "@race_id", character.Raceid);
-                AddParameter(command, "@sex_id", character.Sexid);
+                AddParameter(command, "@race_id", character.RaceId);
+                AddParameter(command, "@sex_id", character.SexId);
                 AddParameter(command, "@hair_id", character.HairId);
                 AddParameter(command, "@hair_color_id", character.HairColorId);
                 AddParameter(command, "@face_id", character.FaceId);
-                AddParameter(command, "@alignment_id", character.Alignmentid);
+                AddParameter(command, "@alignment_id", character.AlignmentId);
                 AddParameter(command, "@strength", character.Strength);
-                AddParameter(command, "@vitality", character.vitality);
-                AddParameter(command, "@dexterity", character.dexterity);
-                AddParameter(command, "@agility", character.agility);
-                AddParameter(command, "@intelligence", character.intelligence);
-                AddParameter(command, "@piety", character.piety);
-                AddParameter(command, "@luck", character.luck);
+                AddParameter(command, "@vitality", character.Vitality);
+                AddParameter(command, "@dexterity", character.Dexterity);
+                AddParameter(command, "@agility", character.Agility);
+                AddParameter(command, "@intelligence", character.Intelligence);
+                AddParameter(command, "@piety", character.Piety);
+                AddParameter(command, "@luck", character.Luck);
                 AddParameter(command, "@class_id", character.ClassId);
                 AddParameter(command, "@level", character.Level);
-                AddParameter(command, "@shortcut_bar0_id", character.shortcutBar0Id);
-                AddParameter(command, "@shortcut_bar1_id", character.shortcutBar1Id);
-                AddParameter(command, "@shortcut_bar2_id", character.shortcutBar2Id);
-                AddParameter(command, "@shortcut_bar3_id", character.shortcutBar3Id);
-                AddParameter(command, "@shortcut_bar4_id", character.shortcutBar4Id);
                 AddParameter(command, "@created", character.Created);
                 AddParameter(command, "@id", character.Id);
             });
@@ -210,26 +199,21 @@ namespace Necromancy.Server.Database.Sql.Core
             character.Y = GetFloat(reader, "y");
             character.Z = GetFloat(reader, "z");
             character.Name = GetString(reader, "name");
-            character.Raceid = GetByte(reader, "race_id");
-            character.Sexid = GetByte(reader, "sex_id");
+            character.RaceId = GetByte(reader, "race_id");
+            character.SexId = GetByte(reader, "sex_id");
             character.HairId = GetByte(reader, "hair_id");
             character.HairColorId = GetByte(reader, "hair_color_id");
             character.FaceId = GetByte(reader, "face_id");
-            character.Alignmentid = GetByte(reader, "alignment_id");
+            character.AlignmentId = GetByte(reader, "alignment_id");
             character.Strength = GetByte(reader, "strength");
-            character.vitality = GetByte(reader, "vitality");
-            character.dexterity = GetByte(reader, "dexterity");
-            character.agility = GetByte(reader, "agility");
-            character.intelligence = GetByte(reader, "intelligence");
-            character.piety = GetByte(reader, "piety");
-            character.luck = GetByte(reader, "luck");
+            character.Vitality = GetByte(reader, "vitality");
+            character.Dexterity = GetByte(reader, "dexterity");
+            character.Agility = GetByte(reader, "agility");
+            character.Intelligence = GetByte(reader, "intelligence");
+            character.Piety = GetByte(reader, "piety");
+            character.Luck = GetByte(reader, "luck");
             character.ClassId = GetByte(reader, "class_id");
             character.Level = GetByte(reader, "level");
-            character.shortcutBar0Id = GetInt32(reader, "shortcut_bar0_id");
-            character.shortcutBar1Id = GetInt32(reader, "shortcut_bar1_id");
-            character.shortcutBar2Id = GetInt32(reader, "shortcut_bar2_id");
-            character.shortcutBar3Id = GetInt32(reader, "shortcut_bar3_id");
-            character.shortcutBar4Id = GetInt32(reader, "shortcut_bar4_id");
             return character;
         }
     }

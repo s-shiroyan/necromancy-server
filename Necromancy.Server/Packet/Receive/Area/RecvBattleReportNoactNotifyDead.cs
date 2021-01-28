@@ -8,22 +8,27 @@ namespace Necromancy.Server.Packet.Receive.Area
     public class RecvBattleReportNoactDead : PacketResponse
     {
         private readonly uint _instancedId;
-        private readonly int _state;
+        private readonly int _deadType;
+        private readonly int _lossRegion;
+        private readonly int _deathType;
 
-        public RecvBattleReportNoactDead(uint instancedId, int state)
+
+        public RecvBattleReportNoactDead(uint instancedId, int deadType)
             : base((ushort) AreaPacketId.recv_battle_report_noact_notify_dead, ServerType.Area)
         {
             _instancedId = instancedId;
-            _state = state;
+            _deadType = deadType;
+            _lossRegion = 1001010;
+            _deathType = 1;
         }
 
         protected override IBuffer ToBuffer()
         {
             IBuffer res = BufferProvider.Provide();
             res.WriteUInt32(_instancedId);
-            res.WriteInt32(_state); //Death int
-            res.WriteInt32(0);
-            res.WriteInt32(0);
+            res.WriteInt32(_deadType); //Dead int "Dead_type"
+            res.WriteInt32(_lossRegion); //Loss_region
+            res.WriteInt32(_deathType); //Death_Type
             return res;
         }
     }

@@ -1,6 +1,7 @@
 using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
+using Necromancy.Server.Model.CharacterModel;
 using Necromancy.Server.Packet.Id;
 
 namespace Necromancy.Server.Packet.Area
@@ -22,6 +23,8 @@ namespace Necromancy.Server.Packet.Area
 
             Router.Send(client.Map, (ushort) AreaPacketId.recv_dbg_battle_guard_end_notify, res, ServerType.Area,
                 client);
+            client.Character.ClearStateBit(CharacterState.BlockPose);
+
         }
     }
 }
