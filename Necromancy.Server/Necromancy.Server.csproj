@@ -30,9 +30,6 @@
         </ContentWithTargetPath>
     </ItemGroup>
     <ItemGroup>
-      <ContentWithTargetPath Remove="Client\Data\Settings\item_decrypted.csv" />
-    </ItemGroup>
-    <ItemGroup>
       <Folder Include="Model\ItemModel\" />
     </ItemGroup>
 </Project>
