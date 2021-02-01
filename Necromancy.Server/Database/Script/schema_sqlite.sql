@@ -471,10 +471,3 @@ CREATE TABLE "nec_item_instance" (
 	FOREIGN KEY("owner_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
 	FOREIGN KEY("base_id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
 );
-
-CREATE UNIQUE INDEX "item_location" ON "nec_item_instance" (
-	"owner_id",
-	"zone",
-	"container",
-	"slot"
-);

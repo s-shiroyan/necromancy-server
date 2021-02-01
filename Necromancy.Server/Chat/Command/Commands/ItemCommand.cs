@@ -56,22 +56,7 @@ namespace Necromancy.Server.Chat.Command.Commands
                 IsIdentified = false;
             }
 
-            ItemService itemService = new ItemService(client.Character);
-            ItemInstance itemInstance;
-
-            try
-            {
-                PacketResponse pResp;
-                if (IsIdentified) {
-                    itemInstance = itemService.SpawnIdentifiedItem(itemId);
-                    pResp = new RecvItemInstance(client, itemInstance);                    
-                } else
-                {
-                    itemInstance = itemService.SpawnUnidentifiedItem(itemId);
-                    pResp = new RecvItemInstanceUnidentified(client, itemInstance);                    
-                }
-                Router.Send(pResp);
-            } catch (ItemException e) { responses.Add(ChatResponse.CommandError(client, e.Message)); }            
+            throw new NotImplementedException();           
         }        
     }
 }
