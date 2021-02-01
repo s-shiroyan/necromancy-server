@@ -33,6 +33,12 @@ namespace Necromancy.Server.Systems.Item
                 Type = moveType;
             }
         }
+
+        internal ItemInstance GetIdentifiedItem(ItemLocation location)
+        {
+            throw new NotImplementedException();
+        }
+
         public enum MoveType
         {
             Place,
@@ -77,20 +83,7 @@ namespace Necromancy.Server.Systems.Item
             _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
             return item;
         }
-        /// <summary>
-        /// Creates an unidentified instance of the base item specified by ID in the next open bag slot.
-        /// </summary>
-        /// <param name="baseId">The ID of the base item being spawned.</param>
-        /// <returns>An new instance of the base item that is unidentified. Name will be "? <c>ItemType</c>"</returns>
-        /// <exception cref="Necromancy.Server.Systems.Item.ItemException">Thrown when inventory is full or base ID does not exist.</exception>
-        public ItemInstance SpawnUnidentifiedItem(int baseId)
-        {
-            throw new NotImplementedException();
-        }
-        public ItemInstance SpawnIdentifiedItem(int baseId)
-        {
-            throw new NotImplementedException();
-        }
+
         public List<ItemInstance> SpawnItemInstances(ItemZoneType itemZoneType, int[] baseIds, ItemSpawnParams[] spawnParams)
         {
             if (_character.ItemManager.GetTotalFreeSpace(itemZoneType) < baseIds.Length) throw new ItemException(ItemExceptionType.InventoryFull);
@@ -101,14 +94,6 @@ namespace Necromancy.Server.Systems.Item
                 _character.ItemManager.PutItem(item.Location, item);
             }
             return itemInstances;
-        }
-        public List<ItemInstance> GetIdentifiedItems(params long[] spawnIds)
-        {
-            throw new NotImplementedException();
-        }
-        public ItemInstance GetIdentifiedItem(ItemLocation location)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -143,28 +128,6 @@ namespace Necromancy.Server.Systems.Item
                 }
             }
             return ownedItems;
-        }
-        public ItemInstance[] Sort(ItemZoneType zone, byte container, short[] fromSlots, short[] toSlots, short[] quantities)
-        {
-            ItemInstance[] sortedItems = new ItemInstance[fromSlots.Length];
-            ulong[] instanceIds = new ulong[fromSlots.Length];
-            ItemLocation[] itemLocations = new ItemLocation[fromSlots.Length];
-            for (int i = 0; i < fromSlots.Length; i++)
-            {
-                ItemLocation loc = new ItemLocation(zone, container, fromSlots[i]);
-                if (!_character.ItemManager.HasItem(loc)) throw new ItemException(ItemExceptionType.Generic); //make sure there is an actual item at the location
-
-                sortedItems[i] = _character.ItemManager.RemoveItem(loc);
-                if(sortedItems[i].Quantity != quantities[i]) throw new ItemException(ItemExceptionType.Amount); //should never happen as quanties arent even checked besides compromised client
-                instanceIds[i] = sortedItems[i].InstanceID;
-            }
-            for (int i = 0; i < fromSlots.Length; i++)
-            {
-                itemLocations[i] = new ItemLocation(zone, container, toSlots[i]);
-                _character.ItemManager.PutItem(itemLocations[i], sortedItems[i]);
-            }
-            _itemDao.UpdateItemLocations(instanceIds, itemLocations);
-            return sortedItems;
         }
         public ItemInstance Remove(ItemLocation location, byte quantity)
         {
