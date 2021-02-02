@@ -30,6 +30,10 @@ namespace Necromancy.Server.Packet.Area
                 ItemInstance unequippedItem = itemService.Unequip(equipSlot);
                 RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(client, unequippedItem);
                 Router.Send(recvItemUpdateEqMask);
+
+                //notify other players of your new look
+                RecvDataNotifyCharaData myCharacterData = new RecvDataNotifyCharaData(client.Character, client.Soul.Name);
+                Router.Send(client.Map, myCharacterData, client);
             }
             catch (ItemException e) { error = (int) e.ExceptionType; }
 

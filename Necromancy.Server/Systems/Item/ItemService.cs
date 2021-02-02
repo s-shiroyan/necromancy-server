@@ -65,9 +65,11 @@ namespace Necromancy.Server.Systems.Item
         {
             ItemInstance item = _character.ItemManager.GetItem(location);
             item.CurrentEquipSlot = equipSlot;
-            if (_character.EquippedItems.ContainsKey(equipSlot)){
+            if (_character.EquippedItems.ContainsKey(equipSlot))
+            {
                 _character.EquippedItems[equipSlot] = item;
-            } else
+            } 
+            else
             {
                 _character.EquippedItems.Add(equipSlot, item);
             }
@@ -102,6 +104,8 @@ namespace Necromancy.Server.Systems.Item
         /// <returns>A list of items in your adventure bag, equipped bags, bag slot, premium bag, and avatar inventory.</returns>
         public List<ItemInstance> LoadOwnedInventoryItems()
         {
+            //Clear Equipped Items from send_data_get_self_chara_data_request
+            _character.EquippedItems.Clear();
             List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
             //load bags first
             foreach (ItemInstance item in ownedItems)
@@ -122,6 +126,20 @@ namespace Necromancy.Server.Systems.Item
                     item.Location = ItemLocation.InvalidLocation; //only needed on load inventory because item's location is already populated and it is not in the manager
                     _character.ItemManager.PutItem(location, item);
                 }
+                if (item.CurrentEquipSlot != ItemEquipSlots.None)
+                {
+                    _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                }
+            }
+            return ownedItems;
+        }
+
+        public List<ItemInstance> LoadEquipmentModels()
+        {
+            _character.EquippedItems.Clear();
+            List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
+            foreach (ItemInstance item in ownedItems)
+            {
                 if (item.CurrentEquipSlot != ItemEquipSlots.None)
                 {
                     _character.EquippedItems.Add(item.CurrentEquipSlot, item);

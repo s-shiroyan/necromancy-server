@@ -2,6 +2,7 @@ using Arrowgene.Buffers;
 using Necromancy.Server.Common;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
+using Necromancy.Server.Systems.Item;
 using System;
 
 namespace Necromancy.Server.Packet.Receive.Area
@@ -42,15 +43,48 @@ namespace Necromancy.Server.Packet.Receive.Area
 
             res.WriteInt32(numEntries); // Number of equipment Slots
             i = 0;
+            //sub_483660 
+            //foreach (InventoryItem inventoryItem in character.Inventory._equippedItems.Values)
+            foreach (ItemInstance itemInstance in _character.EquippedItems.Values)
+            {
+                res.WriteInt32((int)itemInstance.Type);
+                //Logger.Debug($"Loading {i}:{itemInstance.Type} | {itemInstance.UnidentifiedName}");
+                i++;
+            }
             while (i < numEntries)
             {
                 //sub_483660   
                 res.WriteInt32(0); //Must have 25 on recv_chara_notify_data
+                //Logger.Debug($"Loading {i}: blank");
                 i++;
             }
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
             i = 0;
+            foreach (ItemInstance itemInstance in _character.EquippedItems.Values)
+            {
+                res.WriteInt32(itemInstance.BaseID); //Item Base Model ID
+                res.WriteByte(00); //? TYPE data/chara/##/ 00 is character model, 01 is npc, 02 is monster
+                res.WriteByte((byte)(_character.RaceId * 10 + _character.SexId)); //Race and gender tens place is race 1= human, 2= elf 3=dwarf 4=gnome 5=porkul, ones is gender 1 = male 2 = female
+                res.WriteByte(16); //??item version
+
+                res.WriteInt32(itemInstance.BaseID); //testing (Theory, texture file related)
+                res.WriteByte(0); //hair
+                res.WriteByte(1); //color
+                res.WriteByte(0); //face
+
+                res.WriteByte(45); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte((byte)(_character.FaceId * 10));  //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(00); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(1); //Alternate texture for item model  0 normal : 1 Pink 
+
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                i++;
+            }
             while (i < numEntries)//Must have 25 on recv_chara_notify_data
             {
                 res.WriteInt32(0); //Sets your Item ID per Iteration
@@ -78,6 +112,11 @@ namespace Necromancy.Server.Packet.Receive.Area
             //sub_483420
             res.WriteInt32(numEntries); // Number of equipment Slots
             i = 0;
+            foreach (ItemInstance itemInstance in _character.EquippedItems.Values)
+            {
+                res.WriteInt32((int)itemInstance.CurrentEquipSlot); //bitmask per equipment slot
+                i++;
+            }
             while (i < numEntries)
             {
                 //sub_483420   
@@ -92,8 +131,8 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte(_character.HairId); //hair
             res.WriteByte(_character.HairColorId); //color
             res.WriteByte(_character.FaceId); //face
-            res.WriteByte(1);//unknown
-            res.WriteByte(2);//unknown
+            res.WriteByte(0);//voice?
+            res.WriteByte(0);//skinTone?
             //weird 64 loop
             for (i = 0; i < 100; i++)
             { res.WriteInt64(0); }

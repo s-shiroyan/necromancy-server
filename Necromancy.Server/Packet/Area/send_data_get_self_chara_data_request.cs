@@ -6,6 +6,7 @@ using Necromancy.Server.Logging;
 using Necromancy.Server.Model;
 using Necromancy.Server.Packet.Id;
 using Necromancy.Server.Packet.Receive;
+using Necromancy.Server.Systems.Item;
 using System.Collections.Generic;
 
 namespace Necromancy.Server.Packet.Area
@@ -23,7 +24,8 @@ namespace Necromancy.Server.Packet.Area
 
         public override void Handle(NecClient client, NecPacket packet)
         {
-            //LoadInventory(client);
+            ItemService itemService = new ItemService(client.Character);
+            List<ItemInstance> ownedItems = itemService.LoadOwnedInventoryItems();
 
             SendDataGetSelfCharaData(client);
 
@@ -43,8 +45,8 @@ namespace Necromancy.Server.Packet.Area
             res.WriteByte(client.Character.HairId); //hair
             res.WriteByte(client.Character.HairColorId); //color
             res.WriteByte(client.Character.FaceId); //face
-            res.WriteByte(1);//unknown
-            res.WriteByte(2);//unknown
+            res.WriteByte(0);//Voice?
+            res.WriteByte(0);//skinTone?
             for (int j = 0; j < 100; j++)
                 res.WriteInt64(0);
 
@@ -279,12 +281,12 @@ namespace Necromancy.Server.Packet.Area
             numEntries = 0x19;
             int i = 0;
             //sub_483660 
-            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
-            //{
-            //    res.WriteInt32((int)inventoryItem.Item.ItemType);
-            //    //Logger.Debug($"Loading {i}:{inventoryItem.CurrentEquipmentSlotType} | {inventoryItem.Item.LoadEquipType}  | {inventoryItem.Item.Name}");
-            //    i++;
-            //}
+            foreach (ItemInstance itemInstance in client.Character.EquippedItems.Values)
+            {
+                res.WriteInt32((int)itemInstance.Type);
+                Logger.Debug($"Loading {i}:{itemInstance.Type} | {itemInstance.UnidentifiedName}");
+                i++;
+            }
             while (i < numEntries)
             {
                 //sub_483660   
@@ -300,30 +302,30 @@ namespace Necromancy.Server.Packet.Area
             //EquipItems(res, client.Character, numEntries);
             i = 0;
             //sub_4948C0
-            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
-            //{
-            //    res.WriteInt32(inventoryItem.Item.Id); //Sets your Item ID per Iteration
-            //    res.WriteByte(0); //hair
-            //    res.WriteByte(0); //color
-            //    res.WriteByte(0); //face
+            foreach (ItemInstance itemInstance in client.Character.EquippedItems.Values)
+            {
+                res.WriteInt32(itemInstance.BaseID); //Item Base Model ID
+                res.WriteByte(00); //? TYPE data/chara/##/ 00 is character model, 01 is npc, 02 is monster
+                res.WriteByte(0/*(byte)(client.Character.RaceId * 10 + client.Character.SexId)*/); //Race and gender tens place is race 1= human, 2= elf 3=dwarf 4=gnome 5=porkul, ones is gender 1 = male 2 = female
+                res.WriteByte(0); //??item version
 
-            //    res.WriteInt32(inventoryItem.Item.Id); //testing (Theory, Icon related)
-            //    res.WriteByte(0); //hair
-            //    res.WriteByte(0); //color
-            //    res.WriteByte(0); //face
+                res.WriteInt32(itemInstance.BaseID); //testing (Theory, texture file related)
+                res.WriteByte(0); //hair
+                res.WriteByte(0); //color
+                res.WriteByte(0); //face
 
-            //    res.WriteByte(0); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
-            //    res.WriteByte(10); //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
-            //    res.WriteByte(0); // testing (Theory Torso Tex)
-            //    res.WriteByte(0); // testing (Theory Pants Tex)
-            //    res.WriteByte(0); // testing (Theory Hands Tex)
-            //    res.WriteByte(0); // testing (Theory Feet Tex)
-            //    res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
+                res.WriteByte(45); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
+                res.WriteByte(10/*(byte)(client.Character.FaceId * 10)*/);  //Face Style calls C:\Program Files (x86)\Steam\steamapps\common\Wizardry Online\data\chara\00\041\000\model\CM_00_041_10_010.nif.  must be 00 10, 20, 30, or 40 to work.
+                res.WriteByte(00); // testing (Theory Torso Tex)
+                res.WriteByte(0); // testing (Theory Pants Tex)
+                res.WriteByte(0); // testing (Theory Hands Tex)
+                res.WriteByte(0); // testing (Theory Feet Tex)
+                res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
-            //    res.WriteByte(0); // separate in assembly
-            //    res.WriteByte(0); // separate in assembly
-            //    i++;
-            //}
+                res.WriteByte(0); // separate in assembly
+                res.WriteByte(0); // separate in assembly
+                i++;
+            }
             while (i < numEntries)//Must have 25 on recv_chara_notify_data
             {
                 res.WriteInt32(0); //Sets your Item ID per Iteration
@@ -354,11 +356,11 @@ namespace Necromancy.Server.Packet.Area
             //LoadEquip.EquipSlotBitMask(res, client.Character, numEntries);
             i = 0;
             //sub_483420 
-            //foreach (InventoryItem inventoryItem in client.Character.Inventory._equippedItems.Values)
-            //{
-            //    res.WriteInt32((int)inventoryItem.Item.EquipmentSlotType); //bitmask per equipment slot
-            //    i++;
-            //}
+            foreach (ItemInstance itemInstance in client.Character.EquippedItems.Values)
+            {
+                res.WriteInt32((int)itemInstance.CurrentEquipSlot); //bitmask per equipment slot
+                i++;
+            }
             while (i < numEntries)
             {
                 //sub_483420   
