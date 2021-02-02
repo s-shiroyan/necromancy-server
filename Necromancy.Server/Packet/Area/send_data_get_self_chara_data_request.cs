@@ -25,7 +25,7 @@ namespace Necromancy.Server.Packet.Area
         public override void Handle(NecClient client, NecPacket packet)
         {
             ItemService itemService = new ItemService(client.Character);
-            List<ItemInstance> ownedItems = itemService.LoadOwnedInventoryItems();
+            List<ItemInstance> ownedItems = itemService.LoadEquipmentModels();
 
             SendDataGetSelfCharaData(client);
 

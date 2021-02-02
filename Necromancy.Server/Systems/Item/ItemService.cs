@@ -76,6 +76,27 @@ namespace Necromancy.Server.Systems.Item
             _itemDao.UpdateItemEquipMask(item.InstanceID, equipSlot);
             return item;
         }
+        public ItemInstance CheckAlreadyEquipped(ItemEquipSlots equipmentSlotType)
+        {
+            ItemInstance itemInstance = null;
+            if (equipmentSlotType == ItemEquipSlots.LeftHand | equipmentSlotType == ItemEquipSlots.RightHand)
+            {
+                if (_character.EquippedItems.ContainsKey(ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand))
+                {
+                    _character.EquippedItems.TryGetValue((ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand), out itemInstance);
+                }
+                else
+                {
+                    _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+                }
+            }
+            else
+            {
+                _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+            }
+            return itemInstance;
+        }
+        /// <returns></returns>
         public ItemInstance Unequip(ItemEquipSlots equipSlot)
         {
 
@@ -142,7 +163,16 @@ namespace Necromancy.Server.Systems.Item
             {
                 if (item.CurrentEquipSlot != ItemEquipSlots.None)
                 {
-                    _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                    if (!_character.EquippedItems.ContainsKey(item.CurrentEquipSlot))
+                    {
+                        _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                    }
+                    else
+                    {
+                        //Clean up duplicate equipped items since we don't have a unique constraint on table
+                        item.CurrentEquipSlot = ItemEquipSlots.None;
+                        _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
+                    }
                 }
             }
             return ownedItems;

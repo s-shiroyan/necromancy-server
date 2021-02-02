@@ -27,7 +27,9 @@ namespace Necromancy.Server.Packet.Area
             Logger.Debug(equipSlot.ToString());
             try
             {
-                ItemInstance unequippedItem = itemService.Unequip(equipSlot);
+                //ItemInstance unequippedItem = itemService.Unequip(equipSlot);
+                ItemInstance unequippedItem = itemService.CheckAlreadyEquipped(equipSlot);
+                unequippedItem = itemService.Unequip(unequippedItem.CurrentEquipSlot);
                 RecvItemUpdateEqMask recvItemUpdateEqMask = new RecvItemUpdateEqMask(client, unequippedItem);
                 Router.Send(recvItemUpdateEqMask);
 
