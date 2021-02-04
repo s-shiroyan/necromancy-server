@@ -65,15 +65,38 @@ namespace Necromancy.Server.Systems.Item
         {
             ItemInstance item = _character.ItemManager.GetItem(location);
             item.CurrentEquipSlot = equipSlot;
-            if (_character.EquippedItems.ContainsKey(equipSlot)){
+            if (_character.EquippedItems.ContainsKey(equipSlot))
+            {
                 _character.EquippedItems[equipSlot] = item;
-            } else
+            } 
+            else
             {
                 _character.EquippedItems.Add(equipSlot, item);
             }
             _itemDao.UpdateItemEquipMask(item.InstanceID, equipSlot);
             return item;
         }
+        public ItemInstance CheckAlreadyEquipped(ItemEquipSlots equipmentSlotType)
+        {
+            ItemInstance itemInstance = null;
+            if (equipmentSlotType == ItemEquipSlots.LeftHand | equipmentSlotType == ItemEquipSlots.RightHand)
+            {
+                if (_character.EquippedItems.ContainsKey(ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand))
+                {
+                    _character.EquippedItems.TryGetValue((ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand), out itemInstance);
+                }
+                else
+                {
+                    _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+                }
+            }
+            else
+            {
+                _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+            }
+            return itemInstance;
+        }
+        /// <returns></returns>
         public ItemInstance Unequip(ItemEquipSlots equipSlot)
         {
 
@@ -102,6 +125,8 @@ namespace Necromancy.Server.Systems.Item
         /// <returns>A list of items in your adventure bag, equipped bags, bag slot, premium bag, and avatar inventory.</returns>
         public List<ItemInstance> LoadOwnedInventoryItems()
         {
+            //Clear Equipped Items from send_data_get_self_chara_data_request
+            _character.EquippedItems.Clear();
             List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
             //load bags first
             foreach (ItemInstance item in ownedItems)
@@ -125,6 +150,29 @@ namespace Necromancy.Server.Systems.Item
                 if (item.CurrentEquipSlot != ItemEquipSlots.None)
                 {
                     _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                }
+            }
+            return ownedItems;
+        }
+
+        public List<ItemInstance> LoadEquipmentModels()
+        {
+            _character.EquippedItems.Clear();
+            List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
+            foreach (ItemInstance item in ownedItems)
+            {
+                if (item.CurrentEquipSlot != ItemEquipSlots.None)
+                {
+                    if (!_character.EquippedItems.ContainsKey(item.CurrentEquipSlot))
+                    {
+                        _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                    }
+                    else
+                    {
+                        //Clean up duplicate equipped items since we don't have a unique constraint on table
+                        item.CurrentEquipSlot = ItemEquipSlots.None;
+                        _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
+                    }
                 }
             }
             return ownedItems;
