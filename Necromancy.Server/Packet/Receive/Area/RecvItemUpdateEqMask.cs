@@ -25,13 +25,13 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteInt32((int)_itemInstance.CurrentEquipSlot);
 
             res.WriteInt32(_itemInstance.BaseID); //Item Base Model ID
-            res.WriteByte(00); //? TYPE data/chara/##/ 00 is character model, 01 is npc, 02 is monster
-            res.WriteByte(1/*(byte)(_client.Character.RaceId*10+_client.Character.SexId)*/); //Race and gender tens place is race 1= human, 2= elf 3=dwarf 4=gnome 5=porkul, ones is gender 1 = male 2 = female
-            res.WriteByte(16); //??item version
+            res.WriteByte(0); //Item Revision.  Calls .\data\item\105\model\EM_10500501_05.nif   (note the 05 at the end if set to 5)
+            res.WriteByte(0); /*(byte)(_client.Character.RaceId*10+_client.Character.SexId)*/ //??Race and gender tens place is race 1= human, 2= elf 3=dwarf 4=gnome 5=porkul, ones is gender 1 = male 2 = female
+            res.WriteByte(0); //??item version
 
             res.WriteInt32(_itemInstance.BaseID); //testing (Theory, texture file related)
             res.WriteByte(0); //hair
-            res.WriteByte(1); //color
+            res.WriteByte(0); //color
             res.WriteByte(0); //face
 
             res.WriteByte(45); // Hair style from  chara\00\041\000\model  45 = this file C:\WO\Chara\chara\00\041\000\model\CM_00_041_11_045.nif
@@ -40,9 +40,9 @@ namespace Necromancy.Server.Packet.Receive.Area
             res.WriteByte(0); // testing (Theory Pants Tex)
             res.WriteByte(0); // testing (Theory Hands Tex)
             res.WriteByte(0); // testing (Theory Feet Tex)
-            res.WriteByte(1); //Alternate texture for item model  0 normal : 1 Pink 
+            res.WriteByte(0); //Alternate texture for item model  0 normal : 1 Pink 
 
-            res.WriteByte(0); // separate in assembly
+            res.WriteByte(0); // Load Cape  1 yes 0 No.   Union Flag?
             res.WriteByte(0); // separate in assembly
 
             return res;

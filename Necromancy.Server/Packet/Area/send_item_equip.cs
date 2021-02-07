@@ -31,17 +31,19 @@ namespace Necromancy.Server.Packet.Area
             {
                 if (equipSlot.HasFlag(ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand)) //two handed weapon replaces 1h weapon and shield
                 {
-                    if (client.Character.EquippedItems.ContainsKey(ItemEquipSlots.RightHand))
-                    {
-                        ItemInstance itemRight = itemService.Unequip(ItemEquipSlots.RightHand);
+                    ItemInstance itemRight = itemService.CheckAlreadyEquipped(ItemEquipSlots.RightHand);
+                    if (itemRight != null)
+                    { 
+                        itemRight = itemService.Unequip(itemRight.CurrentEquipSlot);
                         itemRight.CurrentEquipSlot = ItemEquipSlots.None;
                         RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(client, itemRight);
                         Router.Send(recvItemUpdateEqMaskCurr, client);
                     }
-                    if (client.Character.EquippedItems.ContainsKey(ItemEquipSlots.LeftHand))
-                    {
-                        ItemInstance itemLeft = itemService.Unequip(ItemEquipSlots.LeftHand);
-                        itemLeft.CurrentEquipSlot = ItemEquipSlots.None;
+                    ItemInstance itemLeft = itemService.CheckAlreadyEquipped(ItemEquipSlots.LeftHand);
+                    if (itemLeft != null)
+                    { 
+                        itemLeft = itemService.Unequip(itemLeft.CurrentEquipSlot);
+                        itemRight.CurrentEquipSlot = ItemEquipSlots.None;
                         RecvItemUpdateEqMask recvItemUpdateEqMaskCurr = new RecvItemUpdateEqMask(client, itemLeft);
                         Router.Send(recvItemUpdateEqMaskCurr, client);
                     }

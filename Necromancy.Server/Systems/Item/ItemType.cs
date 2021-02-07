@@ -46,6 +46,7 @@ namespace Necromancy.Server.Systems.Item
         SABATONS = 49, // iron shoes
         SHOES = 50, // SHOES
         CLOAK = 51, // mantle 
+        MANTLE = CLOAK,
         RING = 52, //ring
         EARRING = 53, //earrings
         NECKLACE = 54, //NCKLCE necklace
