@@ -430,6 +430,7 @@ CREATE TABLE "nec_item_library" (
 	"field137"	TEXT,
 	"field138"	TEXT,
 	"field139"	TEXT,
+    "field140"	TEXT,
 	"req_clown"	INTEGER NOT NULL DEFAULT 0,
 	"req_alchemist"	INTEGER NOT NULL DEFAULT 0,
 	"grade"	                        INTEGER NOT NULL DEFAULT 0,
@@ -469,11 +470,4 @@ CREATE TABLE "nec_item_instance" (
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("owner_id") REFERENCES "nec_character"("id") ON DELETE CASCADE,
 	FOREIGN KEY("base_id") REFERENCES "nec_item_library"("id") ON UPDATE RESTRICT ON DELETE RESTRICT
-);
-
-CREATE UNIQUE INDEX "item_location" ON "nec_item_instance" (
-	"owner_id",
-	"zone",
-	"container",
-	"slot"
 );

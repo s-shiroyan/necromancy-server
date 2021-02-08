@@ -33,6 +33,12 @@ namespace Necromancy.Server.Systems.Item
                 Type = moveType;
             }
         }
+
+        internal ItemInstance GetIdentifiedItem(ItemLocation location)
+        {
+            throw new NotImplementedException();
+        }
+
         public enum MoveType
         {
             Place,
@@ -59,15 +65,38 @@ namespace Necromancy.Server.Systems.Item
         {
             ItemInstance item = _character.ItemManager.GetItem(location);
             item.CurrentEquipSlot = equipSlot;
-            if (_character.EquippedItems.ContainsKey(equipSlot)){
+            if (_character.EquippedItems.ContainsKey(equipSlot))
+            {
                 _character.EquippedItems[equipSlot] = item;
-            } else
+            } 
+            else
             {
                 _character.EquippedItems.Add(equipSlot, item);
             }
             _itemDao.UpdateItemEquipMask(item.InstanceID, equipSlot);
             return item;
         }
+        public ItemInstance CheckAlreadyEquipped(ItemEquipSlots equipmentSlotType)
+        {
+            ItemInstance itemInstance = null;
+            if (equipmentSlotType == ItemEquipSlots.LeftHand | equipmentSlotType == ItemEquipSlots.RightHand)
+            {
+                if (_character.EquippedItems.ContainsKey(ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand))
+                {
+                    _character.EquippedItems.TryGetValue((ItemEquipSlots.LeftHand | ItemEquipSlots.RightHand), out itemInstance);
+                }
+                else
+                {
+                    _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+                }
+            }
+            else
+            {
+                _character.EquippedItems.TryGetValue(equipmentSlotType, out itemInstance);
+            }
+            return itemInstance;
+        }
+        /// <returns></returns>
         public ItemInstance Unequip(ItemEquipSlots equipSlot)
         {
 
@@ -77,20 +106,7 @@ namespace Necromancy.Server.Systems.Item
             _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
             return item;
         }
-        /// <summary>
-        /// Creates an unidentified instance of the base item specified by ID in the next open bag slot.
-        /// </summary>
-        /// <param name="baseId">The ID of the base item being spawned.</param>
-        /// <returns>An new instance of the base item that is unidentified. Name will be "? <c>ItemType</c>"</returns>
-        /// <exception cref="Necromancy.Server.Systems.Item.ItemException">Thrown when inventory is full or base ID does not exist.</exception>
-        public ItemInstance SpawnUnidentifiedItem(int baseId)
-        {
-            throw new NotImplementedException();
-        }
-        public ItemInstance SpawnIdentifiedItem(int baseId)
-        {
-            throw new NotImplementedException();
-        }
+
         public List<ItemInstance> SpawnItemInstances(ItemZoneType itemZoneType, int[] baseIds, ItemSpawnParams[] spawnParams)
         {
             if (_character.ItemManager.GetTotalFreeSpace(itemZoneType) < baseIds.Length) throw new ItemException(ItemExceptionType.InventoryFull);
@@ -102,14 +118,6 @@ namespace Necromancy.Server.Systems.Item
             }
             return itemInstances;
         }
-        public List<ItemInstance> GetIdentifiedItems(params long[] spawnIds)
-        {
-            throw new NotImplementedException();
-        }
-        public ItemInstance GetIdentifiedItem(ItemLocation location)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// 
@@ -117,6 +125,8 @@ namespace Necromancy.Server.Systems.Item
         /// <returns>A list of items in your adventure bag, equipped bags, bag slot, premium bag, and avatar inventory.</returns>
         public List<ItemInstance> LoadOwnedInventoryItems()
         {
+            //Clear Equipped Items from send_data_get_self_chara_data_request
+            _character.EquippedItems.Clear();
             List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
             //load bags first
             foreach (ItemInstance item in ownedItems)
@@ -144,41 +154,47 @@ namespace Necromancy.Server.Systems.Item
             }
             return ownedItems;
         }
-        public ItemInstance[] Sort(ItemZoneType zone, byte container, short[] fromSlots, short[] toSlots, short[] quantities)
+
+        public List<ItemInstance> LoadEquipmentModels()
         {
-            ItemInstance[] sortedItems = new ItemInstance[fromSlots.Length];
-            ulong[] instanceIds = new ulong[fromSlots.Length];
-            ItemLocation[] itemLocations = new ItemLocation[fromSlots.Length];
-            for (int i = 0; i < fromSlots.Length; i++)
+            _character.EquippedItems.Clear();
+            List<ItemInstance> ownedItems = _itemDao.SelectOwnedInventoryItems(_character.Id);
+            foreach (ItemInstance item in ownedItems)
             {
-                sortedItems[i] = _character.ItemManager.RemoveItem(new ItemLocation(zone, container, fromSlots[i]));
-                instanceIds[i] = sortedItems[i].InstanceID;
+                if (item.CurrentEquipSlot != ItemEquipSlots.None)
+                {
+                    if (!_character.EquippedItems.ContainsKey(item.CurrentEquipSlot))
+                    {
+                        _character.EquippedItems.Add(item.CurrentEquipSlot, item);
+                    }
+                    else
+                    {
+                        //Clean up duplicate equipped items since we don't have a unique constraint on table
+                        item.CurrentEquipSlot = ItemEquipSlots.None;
+                        _itemDao.UpdateItemEquipMask(item.InstanceID, ItemEquipSlots.None);
+                    }
+                }
             }
-            for (int i = 0; i < fromSlots.Length; i++)
-            {
-                itemLocations[i] = new ItemLocation(zone, container, toSlots[i]);
-                _character.ItemManager.PutItem(itemLocations[i], sortedItems[i]);
-            }
-            _itemDao.UpdateItemLocations(instanceIds, itemLocations);
-            return sortedItems;
+            return ownedItems;
         }
-        public ItemInstance Drop(ItemLocation location, byte quantity)
+        public ItemInstance Remove(ItemLocation location, byte quantity)
         {
             ItemInstance item = _character.ItemManager.GetItem(location);
             ulong instanceId = item.InstanceID;
             if (item is null) throw new ItemException(ItemExceptionType.Generic);
             if (item.Quantity < quantity) throw new ItemException(ItemExceptionType.Amount);
 
-            if (item.Quantity == quantity)
+            item.Quantity -= quantity;
+            if (item.Quantity == 0)
             {
                 _itemDao.DeleteItemInstance(instanceId);
+                _character.ItemManager.RemoveItem(item);
             }
             else
             {
                 ulong[] instanceIds = new ulong[1];
                 byte[] quantities = new byte[1];
-                instanceIds[0] = instanceId;
-                item.Quantity -= quantity;
+                instanceIds[0] = instanceId;                
                 quantities[0] = item.Quantity;
                 _itemDao.UpdateItemQuantities(instanceIds, quantities);
             }
@@ -198,7 +214,8 @@ namespace Necromancy.Server.Systems.Item
             //check possible errors. these should only occur if client is compromised
             if (fromItem is null || quantity == 0) throw new ItemException(ItemExceptionType.Generic);
             if (quantity > fromItem.Quantity) throw new ItemException(ItemExceptionType.Amount);
-            if (quantity > 1 && hasToItem && toItem.BaseID != fromItem.BaseID) throw new ItemException(ItemExceptionType.BagLocation);
+            if (quantity > 1 && quantity < fromItem.Quantity && hasToItem && toItem.BaseID != fromItem.BaseID) throw new ItemException(ItemExceptionType.BagLocation);
+            if (fromItem.Location.ZoneType == ItemZoneType.BagSlot && !_character.ItemManager.IsEmptyContainer(ItemZoneType.EquippedBags, fromItem.Location.Slot)) throw new ItemException(ItemExceptionType.BagLocation);
 
             if (!hasToItem && quantity == fromItem.Quantity)
             {
